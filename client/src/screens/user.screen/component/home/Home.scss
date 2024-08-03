@@ -1,0 +1,170 @@
+.main-home {
+    width: 100%;
+    height: calc(100vh - 80px);
+    background-image: url(../../../../image/main-cover.jpg);
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    background-position: 100% right;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        .content {
+            align-items: center;
+            display: flex;
+            flex-direction: column;
+            height: 60%;
+            justify-content: space-between;
+            // position: absolute;
+            text-wrap: wrap;
+            right: 50px;
+            width: 45%;
+            bottom: 70px;
+
+            .main-title {
+                color: var(--u-gold);
+                font-size: 24px;
+                font-weight: 700;
+                height: fit-content;
+                text-align: center;
+                width: 98%;
+            }
+
+            .main-text {
+                color: var(--u-gold);
+                font-family: cursive;
+                font-size: 36px;
+                font-weight: 600;
+                margin-top: 30px;
+                text-align: center
+            }
+
+            .main-btn {
+                width: 90%;
+                height: 20%;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                list-style: none;
+
+                .main-li {
+                    align-items: center;
+                    background-color: var(--u-dark);
+                    border: 2px solid transparent;
+                    border-radius: 25px;
+                    color: var(--u-gold);
+                    cursor: pointer;
+                    display: flex;
+                    height: 90%;
+                    justify-content: center;
+                    width: 40%;
+                    font-size: 26px;
+                    font-weight: 800;
+
+                    &.mrl-auto {
+                        margin-left: auto !important;
+                        margin-right: auto !important;
+                    }
+
+                    a {
+                        display: inline-block;
+                        text-decoration: none;
+                        font-size: 26px;
+                        font-weight: 800;
+                        color: var(--u-gold);
+                        margin: 10px 0px;
+
+                    }
+
+                }
+            }
+        }
+    }
+}
+
+
+
+@media (max-width: 768px) {
+    .main-home {
+        background-image: url('../../../../image/main-cover-mob.jpg');
+        background-repeat: no-repeat;
+        background-size: 100vw 100vh;
+        background-position: center;
+
+        .container {
+            align-items: center;
+            display: flex;
+            justify-content: flex-start;
+            flex-direction: column;
+            flex-wrap: nowrap;
+
+            .content {
+                align-items: center;
+                display: flex;
+                flex-direction: column;
+                height: 40%;
+                justify-content: space-evenly;
+                position: static;
+                width: 93%;
+                margin-top: 100px;
+
+                .main-title {
+                    align-items: center;
+                    display: flex;
+                    font-size: 22px;
+                    font-weight: 800;
+                    height: fit-content;
+                    justify-content: center;
+                    width: 100%;
+                }
+
+                .main-text {
+                    font-size: 26px;
+                    font-weight: 600;
+                    text-align: center;
+                }
+
+                .main-btn {
+                    width: 90%;
+                    height: 20%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    list-style: none;
+
+                    .main-li {
+                        align-items: center;
+                        border: 2px solid transparent;
+                        border-radius: 25px;
+                        cursor: pointer;
+                        display: flex;
+                        font-size: 22px;
+                        font-weight: 800;
+                        height: 90%;
+                        justify-content: center;
+                        width: 45%;
+
+                        a {
+                            display: inline-block;
+                            text-decoration: none;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 400px) {
+    .main-home {
+        background-image: url('../../../../image/main-cover-mob.jpg');
+        background-position: top center;
+        background-repeat: no-repeat;
+        background-size: 100% 100vh;
+    }
+}
