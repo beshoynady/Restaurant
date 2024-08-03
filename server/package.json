@@ -1,10 +1,13 @@
 {
-  "name": "calma-server",
+  "name": "elbaron-bns-server",
   "version": "1.0.0",
-  "description": "",
+  "description": "elbaron-bns-server",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js",
+    "start": "pm2 start index.js --name \"elbaron-bns-server\"",
+    "stop": "pm2 stop elbaron-bns-server",
+    "restart": "pm2 restart elbaron-bns-server",
+    "logs": "pm2 logs elbaron-bns-server",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
