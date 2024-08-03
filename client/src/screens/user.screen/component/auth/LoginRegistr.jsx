@@ -206,7 +206,7 @@ const LoginRegistr = (props) => {
                         <select className="field" onChange={(e) => setdeliveryArea(e.target.value)}>
                           <option>اختر المنطقة</option>
                           {areas ? (
-                            areas.map((area, i) => (
+                            areas&&areas.map((area, i) => (
                               <option value={area._id} key={i}>{area.name}</option>
                             ))
                           ) : (

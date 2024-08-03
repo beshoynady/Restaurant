@@ -266,7 +266,7 @@ function App() {
         setAllProducts(productsList);
 
         // Filter products with discount
-        const proOffer = productsList.filter(pro => pro.discount > 0);
+        const proOffer = productsList&&productsList.filter(pro => pro.discount > 0);
         setProductsOffer(proOffer);
 
         // Filter products that have sizes with discount
@@ -302,13 +302,14 @@ function App() {
       if (response.status !== 200) {
         throw new Error('Failed to fetch categories.');
       }
-      const activeMenuCategories = await response.data.filter(menucategory => menucategory.status === true);
+      const allMenuCategories = response.data
+      const activeMenuCategories =  allMenuCategories&&allMenuCategories.filter(menucategory => menucategory.status === true);
       // Set fetched categories in the state
       console.log({ activeMenuCategories })
 
       setallMenuCategories(activeMenuCategories);
 
-      const mainCategory = activeMenuCategories.filter(menucategory => menucategory.isMain === true)[0]
+      const mainCategory = activeMenuCategories&&activeMenuCategories.filter(menucategory => menucategory.isMain === true)[0]
       if (mainCategory) {
         setMenuCategoryId(mainCategory._id)
       }
