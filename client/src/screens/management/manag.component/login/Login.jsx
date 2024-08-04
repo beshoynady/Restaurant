@@ -97,7 +97,6 @@ const Login = () => {
     }
   };
 
-
   
   return (
     <section className="body">
@@ -114,29 +113,29 @@ const Login = () => {
             </div>
           </div>
           <div className="d-flex flex-wrap align-items-center justify-content-between">
-            {/* {showCreateButton && ( */}
+            {showCreateButton ? (
               <div className="col-md-6 col-12 mt-3">
                 <button onClick={handleCreateFirstEmployee} className="btn btn-secondary">إنشاء أول موظف</button>
               </div>
-            {/* )  */}
-            {/* // : (
-            //   <div className="col-md-6 col-12">
-            //     <br />
-            //     <h3 className="header-title">سجل دخول</h3>
-            //     <form className="login-form" onSubmit={adminLogin}>
-            //       <div className="form-group w-100 h-auto px-3 d-flex align-items-center justify-content-start col-12">
-            //         <input type="text" className="form-control border-primary" placeholder="الهاتف" onChange={(e) => setPhone(e.target.value)} />
-            //       </div>
-            //       <div className="form-group w-100 h-auto px-3 d-flex align-items-center justify-content-start col-12">
-            //         <input type="password" className="form-control border-primary" placeholder="كلمة المرور" onChange={(e) => setPassword(e.target.value)} />
-            //       </div>
-            //       <div className="form-group w-100 h-auto px-3 d-flex align-items-center justify-content-start col-12">
-            //         <button type='submit' className="h-100 btn btn-primary btn-block">تسجيل دخول</button>
-            //       </div>
-            //     </form>
-            //   </div>
-            // ) */}
-            {/* } */}
+            ) 
+            : (
+              <div className="col-md-6 col-12">
+                <br />
+                <h3 className="header-title">سجل دخول</h3>
+                <form className="login-form" onSubmit={adminLogin}>
+                  <div className="form-group w-100 h-auto px-3 d-flex align-items-center justify-content-start col-12">
+                    <input type="text" className="form-control border-primary" placeholder="الهاتف" onChange={(e) => setPhone(e.target.value)} />
+                  </div>
+                  <div className="form-group w-100 h-auto px-3 d-flex align-items-center justify-content-start col-12">
+                    <input type="password" className="form-control border-primary" placeholder="كلمة المرور" onChange={(e) => setPassword(e.target.value)} />
+                  </div>
+                  <div className="form-group w-100 h-auto px-3 d-flex align-items-center justify-content-start col-12">
+                    <button type='submit' className="h-100 btn btn-primary btn-block">تسجيل دخول</button>
+                  </div>
+                </form>
+              </div>
+            ) 
+            }
             <div className="col-sm-6 hide-on-mobile">
               <div id="demo" className="carousel slide" data-ride="carousel">
                 {/* Indicators */}
