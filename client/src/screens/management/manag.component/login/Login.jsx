@@ -8,28 +8,22 @@ const Login = () => {
   const { getUserInfoFromToken } = useContext(detacontext);
   const apiUrl = process.env.REACT_APP_API_URL;
 
-  const [phone, setphone] = useState('');
-  const [password, setpassword] = useState('');
-  const [showCreateButton, setShowCreateButton] = useState(false); 
-  const [loading, setLoading] = useState(true); 
+  const [phone, setPhone] = useState('');
+  const [password, setPassword] = useState('');
+  const [showCreateButton, setShowCreateButton] = useState(false);
 
   const checkIfEmployeesExist = async () => {
     try {
       const response = await axios.get(apiUrl + '/api/employee');
       const employees = response.data;
-      console.log({employeeslength: employees.length})
-      if (employees.length === 0) {
-        setShowCreateButton(true);
-      } else {
-        setShowCreateButton(false);
-      }
+      console.log({ employeesLength: employees.length });
+      setShowCreateButton(employees.length === 0);
     } catch (error) {
       console.error('Error checking employees:', error);
       toast.error('حدث خطأ أثناء التحقق من الموظفين.');
-    } finally {
-      setLoading(false);
     }
   };
+
   useEffect(() => {
     checkIfEmployeesExist();
   }, []);
@@ -87,6 +81,8 @@ const Login = () => {
     try {
       const response = await axios.post(apiUrl + '/api/employee/create-first');
       toast.success('تم إنشاء أول موظف بنجاح');
+      // Refresh the employee check
+      checkIfEmployeesExist();
     } catch (error) {
       console.error('Error creating first employee:', error);
       toast.error('حدث خطأ أثناء إنشاء أول موظف.');
@@ -107,36 +103,36 @@ const Login = () => {
               </div>
             </div>
           </div>
-            <div className="d-flex flex-wrap align-items-center justify-content-between">
-            {showCreateButton? (
+          <div className="d-flex flex-wrap align-items-center justify-content-between">
+            {showCreateButton ? (
               <div className="col-md-12 col-12 mt-3">
                 <button onClick={handleCreateFirstEmployee} className="btn btn-secondary">إنشاء أول موظف</button>
               </div>
-            )
-            :(<div className="col-md-6 col-12">
-              <br />
-              <h3 className="header-title">سجل دخول</h3>
-              <form className="login-form" onSubmit={adminLogin}>
-                <div className="form-group w-100 h-auto px-3 d-flex align-itmes-center justify-content-start col-12">
-                  <input type="text" className="form-control border-primary" placeholder="الهاتف" onChange={(e) => setphone(e.target.value)} />
-                </div>
-                <div className="form-group w-100 h-auto px-3 d-flex align-itmes-center justify-content-start col-12">
-                  <input type="password" className="form-control border-primary" placeholder="كلمة المرور" onChange={(e) => setpassword(e.target.value)} />
-                </div>
-                <div className="form-group w-100 h-auto px-3 d-flex align-itmes-center justify-content-start col-12">
-                  <button type='submit' className="h-100 btn btn-primary btn-block">تسجيل دخول</button>
-                </div>
-              </form>
-            </div>)
-            }
+            ) : (
+              <div className="col-md-6 col-12">
+                <br />
+                <h3 className="header-title">سجل دخول</h3>
+                <form className="login-form" onSubmit={adminLogin}>
+                  <div className="form-group w-100 h-auto px-3 d-flex align-items-center justify-content-start col-12">
+                    <input type="text" className="form-control border-primary" placeholder="الهاتف" onChange={(e) => setPhone(e.target.value)} />
+                  </div>
+                  <div className="form-group w-100 h-auto px-3 d-flex align-items-center justify-content-start col-12">
+                    <input type="password" className="form-control border-primary" placeholder="كلمة المرور" onChange={(e) => setPassword(e.target.value)} />
+                  </div>
+                  <div className="form-group w-100 h-auto px-3 d-flex align-items-center justify-content-start col-12">
+                    <button type='submit' className="h-100 btn btn-primary btn-block">تسجيل دخول</button>
+                  </div>
+                </form>
+              </div>
+            )}
             <div className="col-sm-6 hide-on-mobile">
               <div id="demo" className="carousel slide" data-ride="carousel">
-                {/* <!-- Indicators --> */}
+                {/* Indicators */}
                 <ul className="carousel-indicators">
                   <li data-target="#demo" data-slide-to="0" className="active"></li>
                   <li data-target="#demo" data-slide-to="1"></li>
                 </ul>
-                {/* <!-- The slideshow --> */}
+                {/* The slideshow */}
                 <div className="carousel-inner">
                   <div className="carousel-item active">
                     <div className="slider-feature-card">
@@ -153,7 +149,7 @@ const Login = () => {
                     </div>
                   </div>
                 </div>
-                {/* <!-- Left and right controls --> */}
+                {/* Left and right controls */}
                 <a className="carousel-control-prev" href="#demo" data-slide="prev">
                   <span className="carousel-control-prev-icon"></span>
                 </a>
