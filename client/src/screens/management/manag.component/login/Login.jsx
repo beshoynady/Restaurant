@@ -17,16 +17,14 @@ const Login = () => {
       const response = await axios.get(apiUrl + '/api/employee');
       const employees = response.data;
       
-      // تحقق من حالة البيانات الفارغة
       if (employees.length === 0) {
         console.log('No employees found.');
-        setShowCreateButton(true); // أو قم بإجراء آخر حسب احتياجاتك
+        setShowCreateButton(true);
       } else {
         console.log('Employees found:', employees.length);
-        setShowCreateButton(false); // أو قم بإجراء آخر حسب احتياجاتك
+        setShowCreateButton(false);
       }
     } catch (error) {
-      // تحقق من نوع الخطأ وعرض الرسالة المناسبة
       if (error.message !== 'Network Error') {
         console.error('Error checking employees:', error);
         toast.error('حدث خطأ أثناء التحقق من الموظفين.');
