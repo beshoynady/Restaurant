@@ -6,10 +6,15 @@ const checkSubscription = async (req, res, next) => {
     const role = req.employee.role
 
     if (restaurants.length === 0) {
-      return res.status(404).json({ message: 'Restaurant not found' });
-    }
+      return next();    }
 
     const restaurant = restaurants[0];
+
+    const employees = await EmployeeModel.find();
+
+    if (employees.length === 0 || (employees.length === 1 && role === 'programer')) {
+      return next();
+    }
 
     const currentDate = new Date();
     if (currentDate > restaurant.subscriptionEnd && role !== 'programer') {

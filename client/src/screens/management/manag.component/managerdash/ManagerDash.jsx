@@ -620,7 +620,7 @@ const ManagerDash = () => {
   }, [update]);
 
   useEffect(() => {
-    getCashRegistersByEmployee(employeeLoginInfo&&employeeLoginInfo.id)
+    employeeLoginInfo&&getCashRegistersByEmployee(employeeLoginInfo?.id)
   }, []);
 
 

@@ -5,6 +5,45 @@ require('dotenv').config();
 
 const Joi = require('joi');
 
+
+const createFirstEmployee = async (req, res) => {
+    try {
+        const existingEmployeeCount = await EmployeeModel.countDocuments();
+        if (existingEmployeeCount > 0) {
+            return res.status(403).json({ message: 'An employee already exists. New employees cannot be created.' });
+        }
+
+        const defaultEmployeeData = {
+            fullname: "Beshoy Nady",
+            phone: "01122455010",
+            password: "Beshoy@88",
+            role: "programer",
+            username: "admin",
+            isActive: true,
+            isAdmin: true,
+            isVerified: true
+        };
+
+        if (!defaultEmployeeData.fullname || !defaultEmployeeData.phone || !defaultEmployeeData.password) {
+            return res.status(400).json({ message: 'Invalid input: Fullname, Phone, or Password missing' });
+        }
+
+        const hashedPassword = await bcrypt.hash(defaultEmployeeData.password, 10);
+
+        // إنشاء الموظف الأول
+        const newEmployee = await EmployeeModel.create({
+            ...defaultEmployeeData,
+            password: hashedPassword
+        });
+
+        res.status(201).json({ newEmployee });
+    } catch (err) {
+        res.status(500).json({ message: err.message, err });
+    }
+};
+
+
+
 const createEmployeeSchema = Joi.object({
     fullname: Joi.string().min(3).max(100).required(),
     numberID: Joi.string().length(14).when('role', {
@@ -267,7 +306,7 @@ const deleteEmployee = async (req, res) => {
 
 
 module.exports = {
-    createEmployee, getoneEmployee, loginEmployee,
+    createFirstEmployee, createEmployee, getoneEmployee, loginEmployee,
     // updateOrAddPayrollForMonth, paidPayrollForMonth, 
     getAllemployees, updateEmployee, deleteEmployee
 };
