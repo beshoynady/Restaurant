@@ -96,7 +96,6 @@ const employeeSchema = new mongoose.Schema({
   createdBy: {
     type: ObjectId,
     ref: 'Employee',
-    required: true,
   },
   updatedBy: {
     type: ObjectId,
