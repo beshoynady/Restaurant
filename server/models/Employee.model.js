@@ -107,32 +107,34 @@ const employeeSchema = new mongoose.Schema({
 });
 
 // Pre-save middleware to check role and adjust required fields
-employeeSchema.pre('save', function (next) {
-  if (this.role === 'programer') {
-    this.shift = undefined;
-    this.numberID = undefined;
-    this.basicSalary = undefined;
-    this.workingDays = undefined;
-    this.taxRate = undefined;
-    this.insuranceRate = undefined;
-  } else {
-    // Ensure required fields are present for other roles
-    if (!this.fullname) return next(new Error('Fullname is required'));
-    if (!this.username) return next(new Error('Username is required'));
-    if (!this.phone) return next(new Error('Phone number is required'));
-    if (!this.password) return next(new Error('Password is required'));
-    if (!this.shift) return next(new Error('Shift is required'));
-    if (!this.numberID) return next(new Error('Number ID is required'));
-    if (!this.basicSalary) return next(new Error('Basic Salary is required'));
-    if (!this.workingDays && this.workingDays !== 0) return next(new Error('Working Days are required'));
-    if (this.taxRate === undefined) return next(new Error('Tax Rate is required'));
-    if (this.insuranceRate === undefined) return next(new Error('Insurance Rate is required'));
-    if (this.isActive === undefined) return next(new Error('isActive is required'));
-  }
-  next();
-});
+// employeeSchema.pre('save', function (next) {
+//   if (this.role === 'programer') {
+//     this.shift = undefined;
+//     this.numberID = undefined;
+//     this.basicSalary = undefined;
+//     this.workingDays = undefined;
+//     this.taxRate = undefined;
+//     this.insuranceRate = undefined;
+//   } else {
+//     // Ensure required fields are present for other roles
+//     if (!this.fullname) return next(new Error('Fullname is required'));
+//     if (!this.username) return next(new Error('Username is required'));
+//     if (!this.phone) return next(new Error('Phone number is required'));
+//     if (!this.password) return next(new Error('Password is required'));
+//     if (!this.shift) return next(new Error('Shift is required'));
+//     if (!this.numberID) return next(new Error('Number ID is required'));
+//     if (!this.basicSalary) return next(new Error('Basic Salary is required'));
+//     if (!this.workingDays && this.workingDays !== 0) return next(new Error('Working Days are required'));
+//     if (this.taxRate === undefined) return next(new Error('Tax Rate is required'));
+//     if (this.insuranceRate === undefined) return next(new Error('Insurance Rate is required'));
+//     if (this.isActive === undefined) return next(new Error('isActive is required'));
+//   }
+//   next();
+// });
+
 
 // Create a model based on the schema
 const EmployeeModel = mongoose.model('Employee', employeeSchema);
 
 module.exports = EmployeeModel;
+
