@@ -64,9 +64,15 @@ app.use(cookieParser());
 // app.set('trust proxy', true);
 
 app.use(express.urlencoded({ extended: true }));
+// app.use(cors({
+//   origin: `${frontEnd}`,
+//   methods: ['GET', 'POST', 'PUT', 'UPDATE', 'DELETE'],
+//   credentials: true
+// }));
+
 app.use(cors({
-  origin: `${frontEnd}`,
-  methods: ['GET', 'POST', 'PUT', 'UPDATE', 'DELETE'],
+  origin: 'https://www.elbaronpark.sm-menu.tech', // استبدل بهذا النطاق
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true
 }));
 
