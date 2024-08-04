@@ -12,26 +12,26 @@ const Login = () => {
   const [password, setpassword] = useState('');
   const [showCreateButton, setShowCreateButton] = useState(false); 
   const [loading, setLoading] = useState(true); 
-  useEffect(() => {
-    const checkIfEmployeesExist = async () => {
-      try {
-        const response = await axios.get(apiUrl + '/api/employee');
-        const employees = response.data;
-        if (employees.length === 0) {
-          setShowCreateButton(true);
-        } else {
-          setShowCreateButton(false);
-        }
-      } catch (error) {
-        console.error('Error checking employees:', error);
-        toast.error('حدث خطأ أثناء التحقق من الموظفين.');
-      } finally {
-        setLoading(false);
-      }
-    };
 
+  const checkIfEmployeesExist = async () => {
+    try {
+      const response = await axios.get(apiUrl + '/api/employee');
+      const employees = response.data;
+      if (employees.length === 0) {
+        setShowCreateButton(true);
+      } else {
+        setShowCreateButton(false);
+      }
+    } catch (error) {
+      console.error('Error checking employees:', error);
+      toast.error('حدث خطأ أثناء التحقق من الموظفين.');
+    } finally {
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
     checkIfEmployeesExist();
-  }, [apiUrl]);
+  }, []);
 
   const adminLogin = async (e) => {
     e.preventDefault();
@@ -106,8 +106,13 @@ const Login = () => {
               </div>
             </div>
           </div>
-          <div className="d-flex flex-wrap align-items-center justify-content-between">
-            <div className="col-md-6 col-12">
+            <div className="d-flex flex-wrap align-items-center justify-content-between">
+            {showCreateButton? (
+              <div className="col-md-12 col-12 mt-3">
+                <button onClick={handleCreateFirstEmployee} className="btn btn-secondary">إنشاء أول موظف</button>
+              </div>
+            )
+            :(<div className="col-md-6 col-12">
               <br />
               <h3 className="header-title">سجل دخول</h3>
               <form className="login-form" onSubmit={adminLogin}>
@@ -121,14 +126,8 @@ const Login = () => {
                   <button type='submit' className="h-100 btn btn-primary btn-block">تسجيل دخول</button>
                 </div>
               </form>
-            </div>
-            {loading ? (
-              <div>Loading...</div>
-            ) : showCreateButton && (
-              <div className="col-md-12 col-12 mt-3">
-                <button onClick={handleCreateFirstEmployee} className="btn btn-secondary">إنشاء أول موظف</button>
-              </div>
-            )}
+            </div>)
+            }
             <div className="col-sm-6 hide-on-mobile">
               <div id="demo" className="carousel slide" data-ride="carousel">
                 {/* <!-- Indicators --> */}
