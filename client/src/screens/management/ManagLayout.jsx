@@ -9,11 +9,11 @@ import { ToastContainer } from 'react-toastify';
 const ManagLayout = () => {
   const { employeeLoginInfo } = useContext(detacontext);
 
-  const isLoggedIn = employeeLoginInfo?.isAdmin && employeeLoginInfo?.isActive;
+  // const isLoggedIn = employeeLoginInfo?.isAdmin && employeeLoginInfo?.isActive;
 
-  if (!isLoggedIn) {
-    return <Navigate to='/login' />;
-  }
+  // if (!isLoggedIn) {
+  //   return <Navigate to='/login' />;
+  // }
 
   return (
     <div className='manag-body'>
