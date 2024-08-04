@@ -8,7 +8,7 @@ const verifyJWT = (req, res, next) => {
   }
   const token = authHeader.split(" ")[1]; // ["Bearer","token"]x 
   
-  jwt.verify(token, process.env.jwt_secret_key, (err, decoded) => {
+  jwt.verify(token, process.env.JWT_SECRET_KEY, (err, decoded) => {
     if (err) return res.status(403).json({ message: "Forbidden" });
     req.user = decoded.userinfo.id;
     next();

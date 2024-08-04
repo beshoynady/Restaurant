@@ -89,7 +89,7 @@ const generateAccessToken = (user) => {
                 phone: user.phone,
             },
         },
-        process.env.jwt_secret_key,
+        process.env.JWT_SECRET_KEY,
         { expiresIn: process.env.jwt_expire }
     );
 };

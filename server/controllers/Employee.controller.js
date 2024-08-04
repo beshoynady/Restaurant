@@ -248,7 +248,7 @@ const loginEmployee = async (req, res) => {
                 role: findEmployee.role,
                 shift: findEmployee.shift
             },
-            process.env.jwt_secret_key,
+            process.env.JWT_SECRET_KEY,
             { expiresIn: '1y' } // صلاحية التوكن لمدة سنة
         );
 

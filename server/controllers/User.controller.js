@@ -44,7 +44,7 @@ const createuser = async (req, res) => {
                 id: newUser._id,
                 isActive: newUser.isActive,
             },
-        }, process.env.jwt_secret_key, { expiresIn: process.env.jwt_expire });
+        }, process.env.JWT_SECRET_KEY, { expiresIn: process.env.jwt_expire });
 
         res.status(201).json({ accessToken, newUser });
     } catch (err) {
