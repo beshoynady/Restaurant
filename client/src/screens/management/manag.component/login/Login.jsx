@@ -19,19 +19,15 @@ const Login = () => {
       
       if (employees.length === 0) {
         console.log('No employees found.');
-        setShowCreateButton(true);
       } else {
         console.log('Employees found:', employees.length);
         setShowCreateButton(false);
       }
     } catch (error) {
-      if (error.message !== 'Network Error') {
-        console.error('Error checking employees:', error);
-        toast.error('حدث خطأ أثناء التحقق من الموظفين.');
-      } else {
+      
+        setShowCreateButton(true);
         console.error('Network Error:', error);
         toast.error('حدث خطأ في الشبكة.');
-      }
     }
   };
   
@@ -116,11 +112,11 @@ const Login = () => {
             </div>
           </div>
           <div className="d-flex flex-wrap align-items-center justify-content-between">
-            {showCreateButton && (
+            {/* {showCreateButton && ( */}
               <div className="col-md-12 col-12 mt-3">
                 <button onClick={handleCreateFirstEmployee} className="btn btn-secondary">إنشاء أول موظف</button>
               </div>
-            ) 
+            {/* )  */}
             // : (
             //   <div className="col-md-6 col-12">
             //     <br />
@@ -138,7 +134,7 @@ const Login = () => {
             //     </form>
             //   </div>
             // )
-            }
+            {/* } */}
             <div className="col-sm-6 hide-on-mobile">
               <div id="demo" className="carousel slide" data-ride="carousel">
                 {/* Indicators */}
