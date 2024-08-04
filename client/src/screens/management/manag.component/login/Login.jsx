@@ -1,23 +1,46 @@
-import React, { useContext, useState } from 'react'
-import './Login.css'
-import { detacontext } from '../../../../App'
+import React, { useContext, useState, useEffect } from 'react';
+import './Login.css';
+import { detacontext } from '../../../../App';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 
-
 const Login = () => {
-
-  const { getUserInfoFromToken } = useContext(detacontext)
+  const { getUserInfoFromToken } = useContext(detacontext);
   const apiUrl = process.env.REACT_APP_API_URL;
 
-  const [phone, setphone] = useState('')
-  const [password, setpassword] = useState('')
+  const [phone, setphone] = useState('');
+  const [password, setpassword] = useState('');
+  const [showCreateButton, setShowCreateButton] = useState(false); // حالة لعرض الزر
+  const [loading, setLoading] = useState(true); // حالة لتحميل البيانات
 
+  useEffect(() => {
+    const checkIfEmployeesExist = async () => {
+      try {
+        // إرسال طلب GET للتحقق من الموظفين
+        const response = await axios.get(apiUrl + '/api/employee');
+        const employees = response.data;
 
+        // تعيين الحالة بناءً على عدد الموظفين
+        if (employees.length === 0) {
+          setShowCreateButton(true);
+        } else {
+          setShowCreateButton(false);
+        }
+      } catch (error) {
+        console.error('Error checking employees:', error);
+        toast.error('حدث خطأ أثناء التحقق من الموظفين.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    checkIfEmployeesExist();
+  }, [apiUrl]);
 
   const adminLogin = async (e) => {
     e.preventDefault();
-    console.log({phone, password,})
+    console.log({ phone, password });
+
     // Input validation
     if (!phone || !password) {
       toast.error('ادخل رقم الموبايل و الباسورد بشكل صحيح');
@@ -30,7 +53,7 @@ const Login = () => {
         phone,
         password,
       });
-      console.log(response)
+
       // Handle response
       if (response && response.data) {
         const { data } = response;
@@ -42,7 +65,6 @@ const Login = () => {
           localStorage.setItem('token_e', data.accessToken);
           // Retrieve user info from token if needed
           const userInfo = getUserInfoFromToken();
-          // console.log(userInfo);
         }
 
         // Redirect to management page if employee is active
@@ -64,7 +86,15 @@ const Login = () => {
     }
   };
 
-
+  const handleCreateFirstEmployee = async () => {
+    try {
+      const response = await axios.post(apiUrl + '/api/employee/create-first');
+      toast.success('تم إنشاء أول موظف بنجاح');
+    } catch (error) {
+      console.error('Error creating first employee:', error);
+      toast.error('حدث خطأ أثناء إنشاء أول موظف.');
+    }
+  };
 
   return (
     <section className="body">
@@ -96,6 +126,13 @@ const Login = () => {
                 </div>
               </form>
             </div>
+            {loading ? (
+              <div>Loading...</div>
+            ) : showCreateButton && (
+              <div className="col-md-12 col-12 mt-3">
+                <button onClick={handleCreateFirstEmployee} className="btn btn-secondary">إنشاء أول موظف</button>
+              </div>
+            )}
             <div className="col-sm-6 hide-on-mobile">
               <div id="demo" className="carousel slide" data-ride="carousel">
                 {/* <!-- Indicators --> */}
@@ -133,7 +170,7 @@ const Login = () => {
         </div>
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default Login
+export default Login;
