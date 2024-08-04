@@ -293,14 +293,19 @@ const getAllemployees = async (req, res) => {
 
 const deleteEmployee = async (req, res) => {
     try {
-        const id = await req.params.employeeId;
+        const id = req.params.employeeId;
         const employeedeleted = await EmployeeModel.findByIdAndDelete(id).exec();
 
-    } catch (error) {
-        res.status(500).json(error)
+        if (!employeedeleted) {
+            return res.status(404).json({ message: 'Employee not found' });
+        }
 
+        res.status(200).json({ message: 'Employee deleted successfully', employeedeleted });
+    } catch (error) {
+        res.status(500).json({ message: 'An error occurred while deleting the employee', error });
     }
-}
+};
+
 
 
 
