@@ -217,7 +217,7 @@ const getoneEmployee = async (req, res) => {
 
 const loginEmployee = async (req, res) => {
     try {
-        const { phone, password } = await req.body;
+        const { phone, password } = req.body;
 
         if (!phone || !password) {
             return res.status(400).json({ message: 'Phone number and password are required' });
@@ -240,7 +240,6 @@ const loginEmployee = async (req, res) => {
 
         const accessToken = jwt.sign(
             {
-
                 id: findEmployee._id,
                 username: findEmployee.username,
                 isAdmin: findEmployee.isAdmin,
@@ -259,10 +258,11 @@ const loginEmployee = async (req, res) => {
 
         res.status(200).json({ findEmployee, accessToken, message: 'Login successful' });
     } catch (error) {
-        console.error('Error logging in:', error);
+        console.error('Error logging in:', error);  // إضافة تسجيل الأخطاء
         res.status(500).json({ message: 'Internal server error', error });
     }
 };
+
 
 
 const getAllemployees = async (req, res) => {
