@@ -14,22 +14,21 @@ const Login = () => {
 
   const checkIfEmployeesExist = async () => {
     try {
-      const response = await axios.get(apiUrl + '/api/employee');
-      const employees = response.data;
-      
-      if (employees.length === 0) {
-        console.log('No employees found.');
-      } else {
-        console.log('Employees found:', employees.length);
-        setShowCreateButton(false);
-      }
+        const response = await axios.get(apiUrl + '/api/employee/count');
+        const { count } = response.data;
+
+        if (count === 0) {
+            console.log('No employees found.');
+            setShowCreateButton(true);
+        } else {
+            console.log('Employees found:', count);
+            setShowCreateButton(false);
+        }
     } catch (error) {
-      
-        setShowCreateButton(true);
         console.error('Network Error:', error);
         toast.error('حدث خطأ في الشبكة.');
     }
-  };
+};
 
 
   useEffect(() => {

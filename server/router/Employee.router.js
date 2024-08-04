@@ -1,12 +1,13 @@
 const express = require("express");
 const router = express.Router();
 const { createFirstEmployee, createEmployee, getoneEmployee, loginEmployee,
-    getAllemployees, updateEmployee, deleteEmployee } = require('../controllers/Employee.controller.js');
+    getAllemployees, getCountEmployees, updateEmployee, deleteEmployee } = require('../controllers/Employee.controller.js');
 
 const authenticateToken = require('../utlits/authenticate')
 const checkSubscription = require('../utlits/checkSubscription')
 
 router.route('/create-first').post(createFirstEmployee);
+router.route('/count').get(getCountEmployees);
 
 
 router.route('/').post(authenticateToken, checkSubscription, createEmployee)
