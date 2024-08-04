@@ -17,7 +17,7 @@ const Login = () => {
     try {
       const response = await axios.get(apiUrl + '/api/employee');
       const employees = response.data;
-      concole.log({employeeslength: employees.length})
+      console.log({employeeslength: employees.length})
       if (employees.length === 0) {
         setShowCreateButton(true);
       } else {
