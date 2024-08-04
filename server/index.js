@@ -49,7 +49,7 @@ dotenv.config();
 connectdb();
 
 const app = express();
-const frontEnd = process.env.FRONR_END
+const frontEnd = process.env.FRONT_END_URL
 
 // Security middleware
 app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
