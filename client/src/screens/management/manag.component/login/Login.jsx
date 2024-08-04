@@ -16,13 +16,27 @@ const Login = () => {
     try {
       const response = await axios.get(apiUrl + '/api/employee');
       const employees = response.data;
-      console.log({ employeesLength: employees.length });
-      setShowCreateButton(employees.length === 0);
+      
+      // تحقق من حالة البيانات الفارغة
+      if (employees.length === 0) {
+        console.log('No employees found.');
+        setShowCreateButton(true); // أو قم بإجراء آخر حسب احتياجاتك
+      } else {
+        console.log('Employees found:', employees.length);
+        setShowCreateButton(false); // أو قم بإجراء آخر حسب احتياجاتك
+      }
     } catch (error) {
-      console.error('Error checking employees:', error);
-      toast.error('حدث خطأ أثناء التحقق من الموظفين.');
+      // تحقق من نوع الخطأ وعرض الرسالة المناسبة
+      if (error.message !== 'Network Error') {
+        console.error('Error checking employees:', error);
+        toast.error('حدث خطأ أثناء التحقق من الموظفين.');
+      } else {
+        console.error('Network Error:', error);
+        toast.error('حدث خطأ في الشبكة.');
+      }
     }
   };
+  
 
   useEffect(() => {
     checkIfEmployeesExist();
