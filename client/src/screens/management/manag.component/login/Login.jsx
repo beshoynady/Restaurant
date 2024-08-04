@@ -10,17 +10,13 @@ const Login = () => {
 
   const [phone, setphone] = useState('');
   const [password, setpassword] = useState('');
-  const [showCreateButton, setShowCreateButton] = useState(false); // حالة لعرض الزر
-  const [loading, setLoading] = useState(true); // حالة لتحميل البيانات
-
+  const [showCreateButton, setShowCreateButton] = useState(false); 
+  const [loading, setLoading] = useState(true); 
   useEffect(() => {
     const checkIfEmployeesExist = async () => {
       try {
-        // إرسال طلب GET للتحقق من الموظفين
         const response = await axios.get(apiUrl + '/api/employee');
         const employees = response.data;
-
-        // تعيين الحالة بناءً على عدد الموظفين
         if (employees.length === 0) {
           setShowCreateButton(true);
         } else {
