@@ -9,11 +9,11 @@ const checkSubscription = require('../utlits/checkSubscription')
 router.route('/create-first').post(createFirstEmployee);
 
 
-router.route('/').post(authenticateToken, checkSubscription, createEmployee)
-// .get(authenticateToken, checkSubscription, getAllemployees);
+router.route('/').post(createEmployee)
+// .get(getAllemployees);
 .get(getAllemployees);
 
-router.route('/:employeeId').get(getoneEmployee).put(authenticateToken, checkSubscription, updateEmployee).delete(authenticateToken, checkSubscription, deleteEmployee);
+router.route('/:employeeId').get(getoneEmployee).put(updateEmployee).delete(deleteEmployee);
 
 router.route('/login').post(loginEmployee);
 
