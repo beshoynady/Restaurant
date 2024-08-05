@@ -21,30 +21,34 @@ const {
 
 
 
+const imagesDir = path.join(__dirname, '..', 'images');
+if (!fs.existsSync(imagesDir)) {
+  fs.mkdirSync(imagesDir, { recursive: true });
+}
+
+// Configure multer for file upload
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "images/");
+    cb(null, imagesDir); // Use the defined images directory
   },
   filename: function (req, file, cb) {
-    const uniqueSuffix = new Date().toISOString().replace(/:/g, "-");
-    cb(null, uniqueSuffix + file.originalname);
+    // Generate a unique suffix to prevent overwriting files
+    const uniqueSuffix = new Date().toISOString().replace(/:/g, '-') + '-' + file.originalname;
+    cb(null, uniqueSuffix);
   },
-})
+});
 
 const upload = multer({
   storage: storage,
   limits: {
-    fileSize: 1024 * 1024 ,
+    fileSize: 1024 * 1024, // 1 MB size limit
   },
   fileFilter: function (req, file, cb) {
-    if (
-      file.mimetype === "image/jpeg" ||
-      file.mimetype === "image/png" ||
-      file.mimetype === "image/jpg"
-    ) {
+    // Allow only specific image types
+    if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png' || file.mimetype === 'image/jpg') {
       cb(null, true);
     } else {
-      cb(new Error("Only JPEG, JPG, and PNG file types are allowed."));
+      cb(new Error('Only JPEG, JPG, and PNG file types are allowed.'));
     }
   },
 });
