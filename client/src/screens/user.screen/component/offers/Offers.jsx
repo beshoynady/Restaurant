@@ -61,7 +61,7 @@ export default function Offers() {
                         return (
                           <SwiperSlide key={size._id}>
                             <div className="offer-card">
-                              <img className='offer-img' src={defaultsImage} alt="Delicious soup" />
+                              <img className='offer-img' src={`${apiUrl}/images/${product.image}`} alt="Delicious soup" />
                               {size._id === productid && noteArea === true ?
                                 <form onSubmit={(e) => { addNoteToProduct(e, product._id, size._id); setnoteArea(!noteArea); }}
                                   className="position-absolute w-100 h-50 top-0 start-0 p-2 m-0 bg-white rounded-3 d-flex flex-column align-items-center justify-content-center overflow-hidden"
@@ -125,7 +125,7 @@ export default function Offers() {
                     return (
                       <SwiperSlide key={product._id}>
                         <div className="offer-card">
-                          <img className='offer-img' src={defaultsImage} alt="Delicious soup" />
+                          <img className='offer-img' src={`${apiUrl}/images/${product.image}`} alt="Delicious soup" />
                           {product._id === productid && noteArea === true ?
                           <form onSubmit={(e) => { addNoteToProduct(e, product._id, ''); setnoteArea(!noteArea); }} 
                           className="position-absolute w-100 h-50 top-0 start-0 p-2 m-0 bg-white rounded-3 d-flex flex-column align-items-center justify-content-center overflow-hidden"
@@ -193,7 +193,7 @@ export default function Offers() {
                         return (
                           <SwiperSlide key={size._id}>
                             <div className="card h-100">
-                              <img src={defaultsImage} alt="Delicious soup" className="card-img-top" />
+                              <img src={`${apiUrl}/images/${product.image}`} alt="Delicious soup" className="card-img-top" />
                               {size._id === productid && noteArea === true ? (
                                 <form
                                   onSubmit={(e) => {
@@ -321,7 +321,7 @@ export default function Offers() {
                     return (
                       <SwiperSlide key={product._id}>
                         <div className="card h-100">
-                          <img src={defaultsImage} alt="Delicious soup" className="card-img-top" />
+                          <img src={`${apiUrl}/images/${product.image}`} alt="Delicious soup" className="card-img-top" />
                           {product._id === productid && noteArea === true ? (
                             <form
                               onSubmit={(e) => {

@@ -128,7 +128,7 @@ const MenuCard = () => {
 
                         <div className="row g-0 h-100 m-0 p-0">
                           <div className="col-5 m-0 p-0 d-flex flex-nowrap flex-column justify-content-between">
-                            <img src={defaultsImage} className="h-75 w-100" alt="Delicious soup" />
+                            <img src={`${apiUrl}/images/${product.image}`} className="h-75 w-100" alt="Delicious soup" />
                             {product.available === true ? (
                               <>
                                 {itemId.includes(sizeId) && sizeId && product.sizes.filter(size => size._id === sizeId)[0]?.sizeQuantity > 0 ? (
@@ -311,7 +311,7 @@ const MenuCard = () => {
 
                         <div className="row g-0 h-100 p-0 m-0">
                           <div className="col-5 d-flex flex-column justify-content-between p-0 m-0">
-                            <img src={defaultsImage} className="h-75 w-100" alt="Delicious soup" />
+                            <img src={`${apiUrl}/images/${product.image}`} className="h-75 w-100" alt="Delicious soup" />
                             {product.available === true ? (
                               itemId.filter((i) => i === product._id).length > 0 && product.quantity > 0 ?
                                 (
