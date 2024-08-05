@@ -11,8 +11,7 @@ router.route('/count').get(getCountEmployees);
 
 
 router.route('/').post(authenticateToken, checkSubscription, createEmployee)
-    .get(getAllemployees);
-    // .get(authenticateToken, checkSubscription, getAllemployees);
+    .get(authenticateToken, checkSubscription, getAllemployees);
 
 router.route('/:employeeId').get(authenticateToken, checkSubscription, getoneEmployee)
     .put(authenticateToken, checkSubscription, updateEmployee)

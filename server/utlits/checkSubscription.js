@@ -1,4 +1,7 @@
 const RestaurantModel = require('../models/Restaurant.model');
+const EmployeeModel = require('../models/Employee.model')
+
+
 
 const checkSubscription = async (req, res, next) => {
   try {
@@ -13,7 +16,7 @@ const checkSubscription = async (req, res, next) => {
 
     const employees = await EmployeeModel.find();
 
-    if (employees.length === 0 || (employees.length === 1 && role === 'programer')) {
+    if (employees.length === 0 || (employees.length === 1 || role === 'programer')) {
       return next();
     }
 
