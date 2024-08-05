@@ -186,7 +186,7 @@ const deleteRestaurant = async (req, res) => {
         return res.status(200).json({ message: 'Restaurant deleted successfully' });
     } catch (error) {
         console.error('Error deleting restaurant:', error);
-        return res.status(500).json({ message: 'Server Error', error: error.message });
+        return res.status(500).json({ message: 'Server Error', error });
     }
 };
 
@@ -219,7 +219,7 @@ const updateSubscriptionDates = async (req, res) => {
         return res.status(200).json({ message: 'Subscription dates updated successfully', restaurant });
     } catch (error) {
         console.error('Error updating subscription dates:', error);
-        return res.status(500).json({ message: 'Server Error', error: error.message });
+        return res.status(500).json({ message: 'Server Error', error });
     }
 };
 

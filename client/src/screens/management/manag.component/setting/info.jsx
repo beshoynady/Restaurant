@@ -572,10 +572,12 @@ const Info = () => {
       return
     }
     if (employeeLoginInfo.role !== 'programer') {
+      toast.error('ليس لك صلاحية لتعديل بيانات الاشتراك');
       return
     }
     try {
-      const response = await axios.put(`${apiUrl}/api/restaurant/update-subscription/${restaurantId}`, { subscriptionStart, subscriptionEnd }, config);
+      const response = await axios.put(`${apiUrl}/api/restaurant/update-subscription/${restaurantId}`,
+        { subscriptionStart, subscriptionEnd }, config);
       if (response.status === 200) {
         toast.success('تمت تعديل بيانات الاشتراك بنجاح');
         getRestaurant();
@@ -583,6 +585,7 @@ const Info = () => {
         toast.error('حدث خطأ أثناء تعديل بيانات الاشتراك! حاول مرة أخرى.');
       }
     } catch (error) {
+      console.log({ updateSubscriptionDateserr: error })
       toast.error('فشل تعديل بيانات الاشتراك! حاول مرة أخرى');
     }
 
@@ -647,7 +650,7 @@ const Info = () => {
                     <div className="col-8">
                       <input type="date" className="form-control border-primary col-12" value={formatDate(subscriptionStart)}
                         onChange={(e) => setSubscriptionStart(e.target.value)} required
-                      readOnly={employeeLoginInfo.role !== 'programer'} 
+                        readOnly={employeeLoginInfo.role !== 'programer'}
                       />
                     </div>
                   </div>
