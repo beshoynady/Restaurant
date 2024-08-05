@@ -311,7 +311,7 @@ const DailyExpense = () => {
       getallDailyExpenses()
       return
     }
-    const filter =allDailyExpenses && allDailyExpenses.filter(exp => exp.expenseDescription.startsWith(DailyExpense) == true)
+    const filter =allDailyExpenses && allDailyExpenses.filter(exp => exp.expenseDescription.startsWith(DailyExpense) === true)
     setallDailyExpenses(filter)
   }
   const filterByExpense = (expenseId) => {
@@ -522,7 +522,7 @@ const DailyExpense = () => {
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">المصروف</label>
                   <select className="form-control border-primary"  name="category" id="category" form="carform" onChange={(e) => {
                     setexpenseId(e.target.value);
-                    setexpenseDescription(allExpenses.length > 0 ? allExpenses.find(ex => ex._id == e.target.value).description : "");
+                    setexpenseDescription(allExpenses.length > 0 ? allExpenses.find(ex => ex._id === e.target.value).description : "");
                   }}>
                     {allExpenses.length > 0 ? allExpenses.map((expense, i) => {
                       return <option value={expense._id} key={i} >{expense.description}</option>
@@ -577,7 +577,7 @@ const DailyExpense = () => {
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">المصروف</label>
                   <select className="form-control border-primary"  name="category" id="category" form="carform" onChange={(e) => {
                     setexpenseId(e.target.value);
-                    setexpenseDescription(allExpenses ? allExpenses.find(ex => ex._id == e.target.value).description : "");
+                    setexpenseDescription(allExpenses ? allExpenses.find(ex => ex._id === e.target.value).description : "");
                   }}>
                     <option value={expenseId} >{expenseDescription}</option>
                     {allExpenses ? allExpenses.map((expense, i) => {

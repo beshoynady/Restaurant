@@ -320,7 +320,7 @@ const Products = () => {
     if (!category) {
       getallproducts()
     }
-    const products = listofProducts.filter(product => product.category._id == category)
+    const products = listofProducts.filter(product => product.category._id === category)
     setlistofProducts(products)
   }
 
@@ -328,7 +328,7 @@ const Products = () => {
     if (!name) {
       getallproducts()
     }
-    const products = listofProducts.filter((pro) => pro.name.startsWith(name) == true)
+    const products = listofProducts.filter((pro) => pro.name.startsWith(name) === true)
     setlistofProducts(products)
   }
 

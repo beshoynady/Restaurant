@@ -147,7 +147,7 @@ const StockManag = () => {
         toast.error('رجاء تسجيل الدخول مره اخري');
         return
       }
-      const unit = movement == 'Purchase' ? largeUnit : smallUnit
+      const unit = movement === 'Purchase' ? largeUnit : smallUnit
 
       // Update the stock item's movement
       const changeItem = await axios.put(`${apiUrl}/api/stockitem/movement/${itemId}`, { newBalance, price, newcost, costOfPart }, config);
@@ -228,7 +228,7 @@ const StockManag = () => {
         return
       }
       const actionBy = employeeId;
-      const unit = movement == 'Purchase' ? largeUnit : smallUnit
+      const unit = movement === 'Purchase' ? largeUnit : smallUnit
 
       // Update the stock item's movement
       const changeItem = await axios.put(`${apiUrl}/api/stockitem/movement/${itemId}`, { newBalance, price, newcost, costOfPart }, config);
@@ -341,7 +341,7 @@ const StockManag = () => {
       getallStockaction()
       return
     }
-    const items = AllStockactions.filter((action) => action.itemId.itemName.startsWith(item) == true)
+    const items = AllStockactions.filter((action) => action.itemId.itemName.startsWith(item) === true)
     setAllStockactions(items)
   }
   const searchByaction = (action) => {
@@ -349,7 +349,7 @@ const StockManag = () => {
       getallStockaction()
       return
     }
-    const items = AllStockactions.filter((Stockactions) => Stockactions.movement == action)
+    const items = AllStockactions.filter((Stockactions) => Stockactions.movement === action)
     setAllStockactions(items)
   }
 
@@ -363,11 +363,11 @@ const StockManag = () => {
   }, [])
 
   // useEffect(() => {
-  //   if (movement == "Issuance" || movement == "Wastage") {
+  //   if (movement === "Issuance" || movement === "Wastage") {
   //     setnewBalance(Number(oldBalance) - Number(quantity / parts))
   //     setnewcost(Number(oldCost) - Number(cost))
   //     setcostOfPart(Number(price) / Number(parts))
-  //   } else if (movement == 'Purchase') {
+  //   } else if (movement === 'Purchase') {
   //     const calcNewBalance = Number(oldBalance) + Number(quantity)
   //     const calcNewCost = Number(oldCost) + Number(cost)
   //     const calcCostOfPart = Math.round((price / calcNewBalance) * 10) / 10;
@@ -376,7 +376,7 @@ const StockManag = () => {
   //     setnewcost(calcNewCost)
   //     setcostOfPart(calcCostOfPart)
 
-  //   } else if (movement == "Return") {
+  //   } else if (movement === "Return") {
   //     setnewBalance(Number(oldBalance) + Number(quantity / parts))
   //     setnewcost(Number(oldCost) + Number(cost))
   //     setcostOfPart(Number(price) / Number(parts))
@@ -640,7 +640,7 @@ const StockManag = () => {
 
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">{`سعر ${smallUnit}`}</label>
-                  {movement == "Issuance" || movement == "ReturnIssuance" || movement == "Wastage" || movement == "Damaged" ?
+                  {movement === "Issuance" || movement === "ReturnIssuance" || movement === "Wastage" || movement === "Damaged" ?
                     <input type='text' className="form-control border-primary" readOnly required Value={costOfPart} />
                     : <input type='Number' className="form-control border-primary" required onChange={(e) => { setprice(Number(e.target.value)); setcost(Number(e.target.value) * quantity) }} />
                   }
@@ -702,8 +702,8 @@ const StockManag = () => {
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الصنف</label>
                   <select className="form-control border-primary" name="" id="" onChange={(e) => {
                     setitemId(e.target.value);
-                    setlargeUnit(StockItems.filter(i => i._id == e.target.value)[0].largeUnit);
-                    setsmallUnit(StockItems.filter(i => i._id == e.target.value)[0].smallUnit);
+                    setlargeUnit(StockItems.filter(i => i._id === e.target.value)[0].largeUnit);
+                    setsmallUnit(StockItems.filter(i => i._id === e.target.value)[0].smallUnit);
                   }}>
                     <option value="">اختر الصنف</option>
                     {StockItems.map((item, i) => {
@@ -713,12 +713,12 @@ const StockManag = () => {
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الكمية</label>
-                  {movement == "Issuance" || movement === "ReturnIssuance" || movement == "Wastage" || movement == "Damaged" ?
+                  {movement === "Issuance" || movement === "ReturnIssuance" || movement === "Wastage" || movement === "Damaged" ?
                     <>
                       <input type='Number' className="form-control border-primary" required onChange={(e) => { setquantity(e.target.value); setcost(Number(e.target.value) * costOfPart) }} />
                       <input type='text' className="form-control border-primary" defaultValue={smallUnit} readOnly />
                     </>
-                    : movement == "Purchase" || movement == "ReturnPurchase" ? <>
+                    : movement === "Purchase" || movement === "ReturnPurchase" ? <>
                       <input type='Number' className="form-control border-primary" required onChange={(e) => { setquantity(e.target.value); }} />
                       <input type='text' className="form-control border-primary" defaultValue={largeUnit} readOnly />
                     </> : ''}
@@ -726,7 +726,7 @@ const StockManag = () => {
 
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">السعر</label>
-                  {movement == "Issuance" || movement === "ReturnIssuance" || movement == "Wastage" || movement == "Damaged" ?
+                  {movement === "Issuance" || movement === "ReturnIssuance" || movement === "Wastage" || movement === "Damaged" ?
                     <input type='Number' className="form-control border-primary" readOnly required defaultValue={price} />
                     : <input type='Number' className="form-control border-primary" required onChange={(e) => { setprice(Number(e.target.value)); setcost(e.target.value * quantity) }} />
                   }

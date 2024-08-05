@@ -35,7 +35,7 @@ const ReservationTables = () => {
 
   const clientByName = (allusers, name) => {
     setCustomerName(name);
-    const client = allusers.filter(user => user.username.startsWith(name) == true);
+    const client = allusers.filter(user => user.username.startsWith(name) === true);
     setFilteredClients(client)
     const userId = client._id
     setUserId(userId)
@@ -50,12 +50,12 @@ const ReservationTables = () => {
       getAllReservations()
       return
     }
-    const tables = allReservations.filter((reservation) => reservation.tableNumber.toString().startsWith(num) == true)
+    const tables = allReservations.filter((reservation) => reservation.tableNumber.toString().startsWith(num) === true)
     setallReservations(tables)
   }
 
   // const filterByStatus = (Status) => {
-  //   const filter = allReservations.filter(table => reservation.isValid == Status)
+  //   const filter = allReservations.filter(table => reservation.isValid === Status)
   //   settableFiltered(filter)
   // }
 

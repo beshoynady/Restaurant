@@ -40,7 +40,7 @@ const KitchenConsumption = () => {
     });
     let kitconsumption = null;
     if (kitconsumptionToday.length > 0) {
-      kitconsumption = kitconsumptionToday.find((item) => item.stockItemId == stockItemId);
+      kitconsumption = kitconsumptionToday.find((item) => item.stockItemId === stockItemId);
     }
     if (kitconsumption) {
       try {
@@ -281,7 +281,7 @@ const KitchenConsumption = () => {
       getKitchenConsumption()
       return
     }
-    const filter = KitchenConsumptionForView.filter((item) => item.stockItemName.startsWith(name) == true);
+    const filter = KitchenConsumptionForView.filter((item) => item.stockItemName.startsWith(name) === true);
     setKitchenConsumptionForView(filter);
   };
 
@@ -294,7 +294,7 @@ const KitchenConsumption = () => {
   // const filterByKitConsumCreatedAt = () => {
   //   console.log({datett:date})
   //   const filtered = allKitchenConsumption.filter((kitItem) => {
-  //     new Date(kitItem.createdAt).toISOString().split('T')[0] == date;
+  //     new Date(kitItem.createdAt).toISOString().split('T')[0] === date;
   //     console.log({createdAt:kitItem.createdAt})
   //     return itemDate === date;
   //   });
@@ -484,7 +484,7 @@ const KitchenConsumption = () => {
 
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الصنف</label>
-                  <select className="form-control border-primary"  name="category" id="category" form="carform" onChange={(e) => { setstockItemId(e.target.value); setunit(AllStockItems.filter(stock => stock._id == e.target.value)[0].smallUnit); setcreatedBy(employeeLoginInfo.id); setstockItemName(AllStockItems.filter(it => it._id == e.target.value)[0].itemName) }}>
+                  <select className="form-control border-primary"  name="category" id="category" form="carform" onChange={(e) => { setstockItemId(e.target.value); setunit(AllStockItems.filter(stock => stock._id === e.target.value)[0].smallUnit); setcreatedBy(employeeLoginInfo.id); setstockItemName(AllStockItems.filter(it => it._id === e.target.value)[0].itemName) }}>
                     <option>اختر الصنف</option>
                     {AllStockItems.map((StockItems, i) => {
                       return <option value={StockItems._id} key={i} >{StockItems.itemName}</option>

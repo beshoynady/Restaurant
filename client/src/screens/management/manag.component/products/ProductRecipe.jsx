@@ -43,12 +43,12 @@ const ProductRecipe = () => {
 
   const [productFilterd, setproductFilterd] = useState([])
   const getproductByCategory = (category) => {
-    const products = listofProducts.filter(product => product.category._id == category)
+    const products = listofProducts.filter(product => product.category._id === category)
     setproductFilterd(products)
   }
 
   // const searchByName = (name) => {
-  //   const products = listofProducts.filter((pro) => pro.name.startsWith(name) == true)
+  //   const products = listofProducts.filter((pro) => pro.name.startsWith(name) === true)
   //   setproductFilterd(products)
   // }
 
@@ -591,9 +591,9 @@ const ProductRecipe = () => {
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الاسم</label>
                   <select className="form-control border-primary" form="carform" onChange={(e) => { setitemId(e.target.value);
-                     setname(AllStockItems.find(s => s._id == e.target.value).itemName); 
-                     setunit(AllStockItems.find(s => s._id == e.target.value).smallUnit); 
-                     setcostofitem(AllStockItems.find(s => s._id == e.target.value).costOfPart) }}>
+                     setname(AllStockItems.find(s => s._id === e.target.value).itemName); 
+                     setunit(AllStockItems.find(s => s._id === e.target.value).smallUnit); 
+                     setcostofitem(AllStockItems.find(s => s._id === e.target.value).costOfPart) }}>
                     <option value="">اختر</option>
                     {AllStockItems && AllStockItems.map((item, i) => {
                       return (

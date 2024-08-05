@@ -165,7 +165,7 @@ const CategoryStock = () => {
       getallCategoryStock()
       return
     }
-    const categories = allCategoryStock.filter((Category) => Category.name.startsWith(CategoryStock) == true)
+    const categories = allCategoryStock.filter((Category) => Category.name.startsWith(CategoryStock) === true)
     setAllStockItems(categories)
   }
 

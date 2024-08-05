@@ -549,21 +549,21 @@ const PayRoll = () => {
   const filterEmployeesByJob = (role) => {
     getEmployees()
     if (ListOfEmployee.length > 0) {
-      const FilterEmployees = ListOfEmployee.filter(employee => employee.role == role)
+      const FilterEmployees = ListOfEmployee.filter(employee => employee.role === role)
       setListOfEmployee(FilterEmployees)
     }
   }
   const filterEmpByStatus = (status) => {
     console.log(status)
     getEmployees()
-    const filteredEmployees = ListOfEmployee.filter(employee => employee.isActive == status)
+    const filteredEmployees = ListOfEmployee.filter(employee => employee.isActive === status)
     console.log(filteredEmployees)
     setListOfEmployee(filteredEmployees)
 
   }
 
   const searchByName = (Name) => {
-    const employee = ListOfEmployee.filter((employee) => employee.fullname.startsWith(Name) == true)
+    const employee = ListOfEmployee.filter((employee) => employee.fullname.startsWith(Name) === true)
     setListOfEmployee(employee)
   }
 
@@ -679,16 +679,16 @@ const PayRoll = () => {
                     </thead>
                     <tbody>
                       {ListOfEmployee.length > 0 ? ListOfEmployee.map((employee, i) => {
-                        if (employee.isAdmin == true && currentPayRoll.length > 0) {
+                        if (employee.isAdmin === true && currentPayRoll.length > 0) {
                           return (
                             currentPayRoll.map((Roll, j) => {
-                              if (Roll.employeeId._id == employee._id) {
+                              if (Roll.employeeId._id === employee._id) {
                                 return (
                                   <tr key={i}>
                                     <td>{i + 1}</td>
                                     <td>{Roll.employeeName}</td>
                                     <td>{Roll.employeeId.role}</td>
-                                    <td>{shifts?.find(shift => shift._id == Roll.employeeId?.shift)?.shiftType}</td>
+                                    <td>{shifts?.find(shift => shift._id === Roll.employeeId?.shift)?.shiftType}</td>
                                     <td>{Roll.shiftHour}</td>
                                     <td>{Roll.basicSalary}</td>
                                     <td>{Roll.workingDays}</td>

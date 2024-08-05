@@ -181,7 +181,7 @@ const Tables = () => {
       getAllTable()
       return
     }
-    const tables = listoftable.filter((table) => table.tableNumber.toString().startsWith(num) == true)
+    const tables = listoftable.filter((table) => table.tableNumber.toString().startsWith(num) === true)
     setlistoftable(tables)
   }
   const filterByStatus = (Status) => {
@@ -189,7 +189,7 @@ const Tables = () => {
       getAllTable()
       return
     }
-    const filter = listoftable.filter(table => table.isValid == Status)
+    const filter = listoftable.filter(table => table.isValid === Status)
     setlistoftable(filter)
   }
 
@@ -432,11 +432,11 @@ const Tables = () => {
                 </div>
                 <div className="form-group px-3 d-flex align-itmes-center justify-content-start col-12  col-md-6  ">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">عدد المقاعد</label>
-                  <input type="Number" defaultValue={listoftable.length > 0 ? listoftable.find((table, i) => table._id == tableid).chairs : ''} className="form-control border-primary" required onChange={(e) => setchairs(e.target.value)} />
+                  <input type="Number" defaultValue={listoftable.length > 0 ? listoftable.find((table, i) => table._id === tableid).chairs : ''} className="form-control border-primary" required onChange={(e) => setchairs(e.target.value)} />
                 </div>
                 <div className="form-group px-3 d-flex align-itmes-center justify-content-start col-12  col-md-6  ">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الوصف</label>
-                  <textarea defaultValue={listoftable.length > 0 ? listoftable.find((table, i) => table._id == tableid).description : ""} className="form-control border-primary" required onChange={(e) => settabledesc(e.target.value)}></textarea>
+                  <textarea defaultValue={listoftable.length > 0 ? listoftable.find((table, i) => table._id === tableid).description : ""} className="form-control border-primary" required onChange={(e) => settabledesc(e.target.value)}></textarea>
                 </div>
                 <div className="form-group px-3 d-flex align-itmes-center justify-content-start col-12  col-md-6  ">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">متاح</label>

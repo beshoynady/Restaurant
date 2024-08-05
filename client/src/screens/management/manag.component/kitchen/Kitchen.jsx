@@ -88,7 +88,7 @@ const Kitchen = () => {
 
             // Update consumptionOrderActive
             productIngredients.forEach(item => {
-              const existingItemIndex = updatedConsumptionOrderActive.findIndex(con => con.itemId?._id == item.itemId?._id);
+              const existingItemIndex = updatedConsumptionOrderActive.findIndex(con => con.itemId?._id === item.itemId?._id);
               const amount = item.amount * product.quantity;
 
               if (existingItemIndex !== -1) {
@@ -113,7 +113,7 @@ const Kitchen = () => {
 
                 // Update consumptionOrderActive
                 extraIngredients.forEach(item => {
-                  const existingItemIndex = updatedConsumptionOrderActive.findIndex(con => con.itemId?._id == item.itemId?._id);
+                  const existingItemIndex = updatedConsumptionOrderActive.findIndex(con => con.itemId?._id === item.itemId?._id);
                   const amount = item.amount;
 
                   if (existingItemIndex !== -1) {
@@ -402,7 +402,7 @@ const Kitchen = () => {
         return
       }
       // البحث عن الطلب بالمعرف المحدد
-      const getorder = allOrders.find((order) => order._id == id);
+      const getorder = allOrders.find((order) => order._id === id);
       if (!getorder) {
         throw new Error('Order not found');
       }
@@ -414,7 +414,7 @@ const Kitchen = () => {
       }
 
       // البحث عن النوادل في القسم المحدد
-      const sectionWaiters = AllWaiters.filter((waiter) => waiter.sectionNumber == tablesectionNumber);
+      const sectionWaiters = AllWaiters.filter((waiter) => waiter.sectionNumber === tablesectionNumber);
       if (sectionWaiters.length === 0) {
         throw new Error('No waiters found in the specified section');
       }

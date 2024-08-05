@@ -32,7 +32,7 @@ const TablesPage = () => {
       setAllOrders(orders.data);
 
       // Filter active orders from all orders
-      const activeOrders = orders.data.filter((order) => order.isActive == true);
+      const activeOrders = orders.data.filter((order) => order.isActive === true);
       console.log({ activeOrders });
       // Set active orders
       setOrderActive(activeOrders);
@@ -77,7 +77,7 @@ const TablesPage = () => {
         {listoftable.map(table => (
           <div key={table.id} className="col-lg-2 col-md-4 col-sm-6 mb-4" style={{ border: '2px solid var(--light)' }}>
             <div className="text-center">
-              <span style={{ fontSize: '60px', color: activeTable.find(active => active.table == table._id) ? 'green' : 'red' }} className="material-symbols-outlined">
+              <span style={{ fontSize: '60px', color: activeTable.find(active => active.table === table._id) ? 'green' : 'red' }} className="material-symbols-outlined">
                 table_restaurant
               </span>
               <p style={{ fontSize: '30px', color: 'black' }}>{table.tableNumber}</p>

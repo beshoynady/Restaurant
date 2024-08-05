@@ -224,7 +224,7 @@ const Employees = () => {
       return
     }
     if (listOfEmployees.length > 0) {
-      const filteredEmployees = listOfEmployees.filter(employee => employee.role == role)
+      const filteredEmployees = listOfEmployees.filter(employee => employee.role === role)
       if (filteredEmployees) {
         setListOfEmployees(filteredEmployees)
       } else {
@@ -238,7 +238,7 @@ const Employees = () => {
       return
     }
     if (listOfEmployees.length > 0 && shift) {
-      const FilterEmployees = listOfEmployees.filter(employee => employee.shift._id == shift)
+      const FilterEmployees = listOfEmployees.filter(employee => employee.shift._id === shift)
       if (FilterEmployees) {
         setListOfEmployees(FilterEmployees)
       } else {
@@ -249,7 +249,7 @@ const Employees = () => {
   const getEmployeesByName = (name) => {
 
     if (listOfEmployees.length > 0 && name) {
-      const employee = listOfEmployees.filter((employee) => employee.fullname.startsWith(name) == true)
+      const employee = listOfEmployees.filter((employee) => employee.fullname.startsWith(name) === true)
       if (employee) {
         setListOfEmployees(employee)
       } else {

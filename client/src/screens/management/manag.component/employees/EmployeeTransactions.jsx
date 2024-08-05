@@ -366,7 +366,7 @@ const EmployeeTransactions = () => {
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الاسم</label>
                   <select className="form-control border-primary" form="carform" required onChange={(e) => {
-                    setemployeeName(allEmployees ? allEmployees.find(employee => employee._id == e.target.value).fullname : "");
+                    setemployeeName(allEmployees ? allEmployees.find(employee => employee._id === e.target.value).fullname : "");
                     setemployeeId(e.target.value);
                     getEmployeeTransactionsByEmp(e.target.value)
                   }}>
@@ -432,7 +432,7 @@ const EmployeeTransactions = () => {
               <div className="modal-body p-4 text-right">
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الاسم</label>
-                  <select className="form-control border-primary" form="carform" defaultValue={employeeName} required onChange={(e) => { setemployeeName(allEmployees.find(employee => employee._id == e.target.value).fullname); setemployeeId(e.target.value); filterEmployeeTransactions(e.target.value) }}>
+                  <select className="form-control border-primary" form="carform" defaultValue={employeeName} required onChange={(e) => { setemployeeName(allEmployees.find(employee => employee._id === e.target.value).fullname); setemployeeId(e.target.value); filterEmployeeTransactions(e.target.value) }}>
                     <option>اختر</option>
                     {allEmployees.length > 0 ? allEmployees.map(employee => {
                       return (

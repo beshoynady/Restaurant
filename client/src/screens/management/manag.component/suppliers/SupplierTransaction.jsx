@@ -510,8 +510,8 @@ const SupplierTransaction = () => {
                         <div className="form-group col-12 col-md-6">
                           <label className="form-label text-wrap text-right fw-bolder p-0 m-0">نوع المخزن</label>
                           <select className="form-control border-primary"  name="category" id="category" defaultValue={categoryId} form="carform" onChange={(e) => setcategoryId(e.target.value)}>
-                            <option>{AllCategoryStock.length>0?AllCategoryStock.filter(c=>c._id == categoryId)[0].name:''}</option>
-                            <option value={categoryId}>{categoryId !== "" ? AllCategoryStock.filter(c => c._id == categoryId)[0].name : ''}</option>
+                            <option>{AllCategoryStock.length>0?AllCategoryStock.filter(c=>c._id === categoryId)[0].name:''}</option>
+                            <option value={categoryId}>{categoryId !== "" ? AllCategoryStock.filter(c => c._id === categoryId)[0].name : ''}</option>
                             {AllCategoryStock.map((category, i) => {
                               return <option value={category._id} key={i} >{category.name}</option>
                             })

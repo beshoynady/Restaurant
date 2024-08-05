@@ -393,7 +393,7 @@ const AttendanceManagement = () => {
       return
     }
     if (allAttendanceRecords.length > 0) {
-      const filteredRecords = allAttendanceRecords.filter(record => record.employee.role == role)
+      const filteredRecords = allAttendanceRecords.filter(record => record.employee.role === role)
       if (filteredRecords) {
         setallAttendanceRecords(filteredRecords)
       } else {
@@ -408,7 +408,7 @@ const AttendanceManagement = () => {
       return
     }
     if (allAttendanceRecords.length > 0 && shift) {
-      const FilterEmployees = allAttendanceRecords.filter(record => record.shift._id == shift)
+      const FilterEmployees = allAttendanceRecords.filter(record => record.shift._id === shift)
       if (FilterEmployees) {
         setallAttendanceRecords(FilterEmployees)
       } else {
@@ -420,7 +420,7 @@ const AttendanceManagement = () => {
   const getEmployeesByName = (name) => {
 
     if (allAttendanceRecords.length > 0 && name) {
-      const employee = allAttendanceRecords.filter((record) => record.employee && record.employee.fullname.startsWith(name) == true || record.employee.username.startsWith(name) == true)
+      const employee = allAttendanceRecords.filter((record) => record.employee && record.employee.fullname.startsWith(name) === true || record.employee.username.startsWith(name) === true)
       if (employee) {
         setallAttendanceRecords(employee)
       } else {

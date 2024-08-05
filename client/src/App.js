@@ -122,10 +122,10 @@ function App() {
 
   // const [pagination, setpagination] = useState(5)
   const EditPagination = (e) => {
-    if (e.target.innerHTML == 'التالي') {
+    if (e.target.innerHTML === 'التالي') {
       setstartpagination(startpagination + 5)
       setendpagination(endpagination + 5)
-    } else if (e.target.innerHTML == 'السابق') {
+    } else if (e.target.innerHTML === 'السابق') {
       if (endpagination <= 5) {
         setstartpagination(0)
         setendpagination(5)
@@ -976,7 +976,7 @@ function App() {
       } else {
         // Create a new order
         const serial = allOrders && allOrders.length > 0 ? String(Number(allOrders[allOrders && allOrders.length - 1].serial) + 1).padStart(6, '0') : '000001';
-        const findUser = allUsers.find((u, i) => u._id == userId);
+        const findUser = allUsers.find((u, i) => u._id === userId);
         const user = findUser ? userId : null;
         const products = [...itemsInCart];
         const subTotal = costOrder;
@@ -1421,7 +1421,7 @@ function App() {
     setisLoading(!isLoading)
     try {
 
-      const tableorder = allOrders && allOrders.filter((order, i) => order.table && order.table._id == tableId);
+      const tableorder = allOrders && allOrders.filter((order, i) => order.table && order.table._id === tableId);
       const lasttableorder = tableorder.length > 0 ? tableorder[tableorder.length - 1] : [];
       const lasttableorderactive = lasttableorder.isActive;
       // console.log({ lasttableorder });
@@ -1998,11 +1998,11 @@ function App() {
         (startTime <= reservation.startTime && endTime >= reservation.endTime)
       );
 
-      if (filterReservationsByTime.length == 1 && filterReservationsByTime[0]._id == id) {
+      if (filterReservationsByTime.length === 1 && filterReservationsByTime[0]._id === id) {
         const response = await axios.put(`${apiUrl}/api/reservation/${id}`, {
           tableId, tableNumber, numberOfGuests, reservationDate, startTime, endTime, status
         })
-        if (response.status == 200) {
+        if (response.status === 200) {
           getAllReservations()
 
 
@@ -2038,7 +2038,7 @@ function App() {
       const response = await axios.put(`${apiUrl}/api/reservation/${id}`, {
         status
       })
-      if (response.status == 200) {
+      if (response.status === 200) {
         getAllReservations()
         toast.success('تم تاكيد الحجز بنجاح')
       } else {

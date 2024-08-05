@@ -187,7 +187,7 @@ const ManagerDash = () => {
         return ''
       }
       // البحث عن الطلب بالمعرف المحدد
-      const getorder = allOrders.find((order) => order._id == id);
+      const getorder = allOrders.find((order) => order._id === id);
       if (!getorder) {
         throw new Error('Order not found');
       }
@@ -199,7 +199,7 @@ const ManagerDash = () => {
       }
 
       // البحث عن النوادل في القسم المحدد
-      const sectionWaiters = AllWaiters.filter((waiter) => waiter.sectionNumber == tablesectionNumber);
+      const sectionWaiters = AllWaiters.filter((waiter) => waiter.sectionNumber === tablesectionNumber);
       if (sectionWaiters.length === 0) {
         throw new Error('No waiters found in the specified section');
       }
@@ -435,7 +435,7 @@ const ManagerDash = () => {
         toast.error('رجاء تسجيل الدخول مره اخري');
       }
       const res = await axios.get(apiUrl + '/api/order', config);
-      const order = res.data.find(o => o.serial == serial)
+      const order = res.data.find(o => o.serial === serial)
       if (order) {
 
         setorderdata(order)
@@ -1032,13 +1032,13 @@ const ManagerDash = () => {
                 </div>
 
                 {/* Customer Information */}
-                {orderType == 'Delivery' ? <div className="customer-info text-dark" style={{ margin: '20px' }}>
+                {orderType === 'Delivery' ? <div className="customer-info text-dark" style={{ margin: '20px' }}>
                   <h4>بيانات العميل</h4>
                   <p>الاسم: {orderdata.name}</p>
                   <p>الموبايل: {orderdata.phone}</p>
                   <p>العنوان: {orderdata.address}</p>
                   {/* <p>Delivery Man: {usertitle(deliveryMan)}</p> */}
-                </div> : orderType == 'Takeaway' ?
+                </div> : orderType === 'Takeaway' ?
                   <div className="customer-info text-dark" style={{ marginBottom: '20px' }}>
                     <h4>بيانات العميل</h4>
                     <p>الاسم: {orderdata.name}</p>

@@ -95,7 +95,7 @@ const Waiter = () => {
       const products = orderData.data.products.map((prod) => ({ ...prod, isDeleverd: true }));
       const status = 'Delivered';
       const updateOrder = await axios.put(`${apiUrl}/api/order/${id}`, { status, products });
-      if (updateOrder.status == 200) {
+      if (updateOrder.status === 200) {
         fetchInternalOrders()
         fetchPendingData();
         toast.success('Order has been delivered!');
@@ -115,7 +115,7 @@ const Waiter = () => {
       }
       const helpStatus = 'On the way';
       const res = await axios.put(`${apiUrl}/api/order/${id}`, { helpStatus });
-      if (res.status == 200) {
+      if (res.status === 200) {
         fetchInternalOrders();
         fetchPendingData();
         toast.success('Help is on the way!');
@@ -158,7 +158,7 @@ const Waiter = () => {
         ({ usertitle, employeeLoginInfo }) => {
           return (
             <div className='container-fluid d-flex flex-wrap align-content-start justify-content-around align-items-start h-100 overflow-auto bg-transparent py-5 px-3'>
-              {pendingPayments && pendingPayments.filter((order) => order.helpStatus == 'Send waiter' || order.helpStatus == 'On the way').map((order, i) => {
+              {pendingPayments && pendingPayments.filter((order) => order.helpStatus === 'Send waiter' || order.helpStatus === 'On the way').map((order, i) => {
                 return (
                   <div className="card text-white bg-success" style={{ width: "265px" }}>
                     <div className="card-body text-right d-flex justify-content-between p-0 m-1">
@@ -175,7 +175,7 @@ const Waiter = () => {
                     <ul className="list-group list-group-flush">
                       <li className="list-group-item bg-light text-dark d-flex justify-content-between align-items-center" key={i}>
                         <span style={{ fontSize: "18px" }}>طاولة : {order.table?.tableNumber}</span>
-                        <span className="badge bg-secondary rounded-pill" style={{ fontSize: "16px" }}>{order.help == 'Requests assistance' ? 'يحتاج المساعدة' : order.help == 'Requests bill' ? 'يطلب الحساب' : ''}</span>
+                        <span className="badge bg-secondary rounded-pill" style={{ fontSize: "16px" }}>{order.help === 'Requests assistance' ? 'يحتاج المساعدة' : order.help === 'Requests bill' ? 'يطلب الحساب' : ''}</span>
                       </li>
 
                     </ul>

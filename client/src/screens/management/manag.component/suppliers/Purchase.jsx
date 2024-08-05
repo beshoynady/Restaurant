@@ -374,10 +374,10 @@ const Purchase = () => {
   const handlePaidAmount = (amount) => {
     setPaidAmount(amount);
     setBalanceDue(Number(netAmount) - Number(amount));
-    if (amount == 0) {
+    if (amount === 0) {
       setPaymentStatus('unpaid');
       setpaymentType('credit');
-    } else if (amount == netAmount) {
+    } else if (amount === netAmount) {
       setPaymentStatus('paid');
       setpaymentType('cash');
     } else if (amount < netAmount) {

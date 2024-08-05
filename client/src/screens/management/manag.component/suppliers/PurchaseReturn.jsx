@@ -339,9 +339,9 @@ const PurchaseReturn = () => {
     setrefundedAmount(amount);
     setBalanceDue(Number(netAmount) - Number(amount));
 
-    if (amount == 0) {
+    if (amount === 0) {
       setreturnStatus('unreturned');
-    } else if (amount == netAmount) {
+    } else if (amount === netAmount) {
       setreturnStatus('fully_returned');
     } else if (amount < netAmount) {
       setreturnStatus('partially_returned');
@@ -561,7 +561,7 @@ const PurchaseReturn = () => {
       getAllPurchasesReturn()
     }
     getAllPurchasesReturn()
-    const filters = allPurchasesReturn.filter((PurchasesReturn) => PurchasesReturn.supplier._id == supplierId)
+    const filters = allPurchasesReturn.filter((PurchasesReturn) => PurchasesReturn.supplier._id === supplierId)
     setallPurchasesReturn(filters)
   }
 

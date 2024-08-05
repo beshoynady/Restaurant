@@ -54,7 +54,7 @@ const Orders = () => {
     }
     try {
       const res = await axios.get(apiUrl + '/api/order', config);
-      const order = res.data.find(order => order.serial == serial)
+      const order = res.data.find(order => order.serial === serial)
       if (order) {
         setorderData(order)
         setlistProductsOrder(order.products)

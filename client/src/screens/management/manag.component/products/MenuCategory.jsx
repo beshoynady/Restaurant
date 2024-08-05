@@ -128,7 +128,7 @@ const MenuCategory = () => {
 
   const searchByCategory = (category) => {
     if (category) {
-      const categories = allCategory ? allCategory.filter((Category) => Category.name.startsWith(category) == true) : []
+      const categories = allCategory ? allCategory.filter((Category) => Category.name.startsWith(category) === true) : []
       setallCategory(categories)
     } else {
       getallCategory()
@@ -366,7 +366,7 @@ const MenuCategory = () => {
                               <td>{category.name}</td>
                               <td>{category.order}</td>
                               <td>{category.status ? "متاحة" : "ليست متاحة"}</td>
-                              <td>{allProducts ? allProducts.filter((product) => product.category._id == category._id).length : 0}</td>
+                              <td>{allProducts ? allProducts.filter((product) => product.category._id === category._id).length : 0}</td>
                               <td>{category.createdBy ? category.createdBy.username : 'غير معروف'}</td>
                               <td>
                                 <a href="#editCategoryModal" className="edit" data-toggle="modal" onClick={() => handleCategoryData(category)}><i className="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
