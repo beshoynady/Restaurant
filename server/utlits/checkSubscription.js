@@ -24,7 +24,7 @@ const checkSubscription = async (req, res, next) => {
 
     next();
   } catch (error) {
-    res.status(500).json({ message: 'Server error', error });
+    res.status(500).json({ message: 'subscription error', error });
   }
 };
 
