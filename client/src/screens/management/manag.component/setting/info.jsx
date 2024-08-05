@@ -239,8 +239,8 @@ const Info = () => {
   const [takeAway, settakeAway] = useState('');
   const [deliveryService, setdeliveryService] = useState('');
   const [usesReservationSystem, setusesReservationSystem] = useState('');
-  const [salesTaxRate, setsalesTaxRate] = useState('');
-  const [serviceTaxRate, setserviceTaxRate] = useState('');
+  const [salesTaxRate, setsalesTaxRate] = useState(0);
+  const [serviceTaxRate, setserviceTaxRate] = useState(0);
 
   const [country, setCountry] = useState('');
   const [state, setState] = useState('');
@@ -562,20 +562,21 @@ const Info = () => {
 
 
 
-  const [subscriptionStart, setSubscriptionStart] = useState()
-  const [subscriptionEnd, setSubscriptionEnd] = useState()
+  const [subscriptionStart, setSubscriptionStart] = useState('');
+  const [subscriptionEnd, setSubscriptionEnd] = useState('');
+  
   const updateSubscriptionDates = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     if (!token) {
-      // Handle case where token is not available
       toast.error('رجاء تسجيل الدخول مره اخري');
-      return
+      return;
     }
     if (employeeLoginInfo.role !== 'programer') {
       toast.error('ليس لك صلاحية لتعديل بيانات الاشتراك');
-      return
+      return;
     }
     try {
+      const config = { headers: { Authorization: `Bearer ${token}` } };
       const response = await axios.put(`${apiUrl}/api/restaurant/update-subscription/${restaurantId}`,
         { subscriptionStart, subscriptionEnd }, config);
       if (response.status === 200) {
@@ -585,11 +586,11 @@ const Info = () => {
         toast.error('حدث خطأ أثناء تعديل بيانات الاشتراك! حاول مرة أخرى.');
       }
     } catch (error) {
-      console.log({ updateSubscriptionDateserr: error })
+      console.log({ updateSubscriptionDateserr: error.response ? error.response.data : error.message });
       toast.error('فشل تعديل بيانات الاشتراك! حاول مرة أخرى');
     }
-
-  }
+  };
+  
 
   const [remainingTime, setRemainingTime] = useState({ months: 0, days: 0 });
 
