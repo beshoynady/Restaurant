@@ -214,7 +214,7 @@ const updateSubscriptionDates = async (req, res) => {
         return res.status(404).json({ message: 'Restaurant not found' });
       }
   
-      return res.status(200).json({ message: 'Subscription dates updated successfully', restaurant });
+      return res.status(200).json({restaurant });
     } catch (error) {
       console.error('Error updating subscription dates:', error.message);
       return res.status(500).json({ message: 'Server Error', error: error.message });

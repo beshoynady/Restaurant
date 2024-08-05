@@ -30,7 +30,7 @@ const storage = multer.diskStorage({
 const upload = multer({
   storage: storage,
   limits: {
-    fileSize: 1024 * 1024 ,
+    fileSize: 1024 * 1024,
   },
   fileFilter: function (req, file, cb) {
     if (
@@ -48,7 +48,7 @@ const upload = multer({
 
 router.route('/')
   // .post(authenticateToken, checkSubscription, upload.single("image"), createRestaurant)
-  .post(authenticateToken, checkSubscription,createRestaurant)
+  .post(authenticateToken, checkSubscription, createRestaurant)
   .get(getAllRestaurants);
 
 router.route('/:id')
@@ -57,7 +57,8 @@ router.route('/:id')
   .put(authenticateToken, checkSubscription, updateRestaurant)
   .delete(authenticateToken, checkSubscription, deleteRestaurant);
 
-  router.put('/update-subscription/:id', authenticateToken, checkSubscription, updateSubscriptionDates);
+router.route('/update-subscription/:id')
+  .put(authenticateToken, checkSubscription, updateSubscriptionDates);
 
 
 module.exports = router;

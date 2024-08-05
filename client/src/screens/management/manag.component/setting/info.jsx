@@ -576,9 +576,10 @@ const Info = () => {
       return;
     }
     try {
-      const config = { headers: { Authorization: `Bearer ${token}` } };
       const response = await axios.put(`${apiUrl}/api/restaurant/update-subscription/${restaurantId}`,
         { subscriptionStart, subscriptionEnd }, config);
+        console.log({ response })
+
       if (response.status === 200) {
         toast.success('تمت تعديل بيانات الاشتراك بنجاح');
         getRestaurant();
