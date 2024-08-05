@@ -27,12 +27,10 @@ const createRestaurant = async (req, res) => {
             serviceTaxRate
         } = req.body;
 
-        // Validate required fields
-        if (!name || !description || !address || !website ) {
+        if (!name || !description || !address || !website) {
             return res.status(400).json({ message: 'All required fields must be provided' });
         }
 
-        // Create new restaurant instance
         const restaurant = new RestaurantModel({
             name,
             description,
@@ -56,9 +54,7 @@ const createRestaurant = async (req, res) => {
             serviceTaxRate
         });
 
-        // Save the restaurant to the database
         await restaurant.save();
-
         return res.status(201).json(restaurant);
     } catch (error) {
         console.error('Error creating restaurant:', error);
@@ -82,7 +78,6 @@ const getRestaurantById = async (req, res) => {
     try {
         const { id } = req.params;
 
-        // Validate restaurant ID
         if (!mongoose.Types.ObjectId.isValid(id)) {
             return res.status(400).json({ message: 'Invalid restaurant ID' });
         }
@@ -127,12 +122,10 @@ const updateRestaurant = async (req, res) => {
             serviceTaxRate
         } = req.body;
 
-        // Validate restaurant ID
         if (!mongoose.Types.ObjectId.isValid(id)) {
             return res.status(400).json({ message: 'Invalid restaurant ID' });
         }
 
-        // Update restaurant details
         const restaurant = await RestaurantModel.findByIdAndUpdate(id, {
             name,
             description,
@@ -172,7 +165,6 @@ const deleteRestaurant = async (req, res) => {
     try {
         const { id } = req.params;
 
-        // Validate restaurant ID
         if (!mongoose.Types.ObjectId.isValid(id)) {
             return res.status(400).json({ message: 'Invalid restaurant ID' });
         }
@@ -186,42 +178,40 @@ const deleteRestaurant = async (req, res) => {
         return res.status(200).json({ message: 'Restaurant deleted successfully' });
     } catch (error) {
         console.error('Error deleting restaurant:', error);
-        return res.status(500).json({ message: 'Server Error', error });
+        return res.status(500).json({ message: 'Server Error', error: error.message });
     }
 };
 
 // Update subscription dates for a restaurant by ID
 const updateSubscriptionDates = async (req, res) => {
     try {
-      const employee = req.employee; 
-      if (employee.role !== 'programer') {
-        return res.status(403).json({ message: 'Access denied. Only programmers can update subscription dates.' });
-      }
-  
-      const { id } = req.params;
-      const { subscriptionStart, subscriptionEnd } = req.body;
-  
-      if (!mongoose.Types.ObjectId.isValid(id)) {
-        return res.status(400).json({ message: 'Invalid restaurant ID' });
-      }
-  
-      const restaurant = await RestaurantModel.findByIdAndUpdate(id, {
-        subscriptionStart,
-        subscriptionEnd
-      }, { new: true});
-  
-      if (!restaurant) {
-        return res.status(404).json({ message: 'Restaurant not found' });
-      }
-  
-      return res.status(200).json({restaurant });
+        const employee = req.employee;
+        if (employee.role !== 'programer') {
+            return res.status(403).json({ message: 'Access denied. Only programmers can update subscription dates.' });
+        }
+
+        const { id } = req.params;
+        const { subscriptionStart, subscriptionEnd } = req.body;
+
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(400).json({ message: 'Invalid restaurant ID' });
+        }
+
+        const restaurant = await RestaurantModel.findByIdAndUpdate(id, {
+            subscriptionStart,
+            subscriptionEnd
+        }, { new: true });
+
+        if (!restaurant) {
+            return res.status(404).json({ message: 'Restaurant not found' });
+        }
+
+        return res.status(200).json({ restaurant });
     } catch (error) {
-      console.error('Error updating subscription dates:', error.message);
-      return res.status(500).json({ message: 'Server Error', error: error.message });
+        console.error('Error updating subscription dates:', error.message);
+        return res.status(500).json({ message: 'Server Error', error: error.message });
     }
-  };
-  
-  
+};
 
 module.exports = {
     createRestaurant,

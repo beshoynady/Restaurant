@@ -562,10 +562,12 @@ const Info = () => {
 
 
 
+  
   const [subscriptionStart, setSubscriptionStart] = useState('');
   const [subscriptionEnd, setSubscriptionEnd] = useState('');
   
   const updateSubscriptionDates = async (e) => {
+    console.log({subscriptionStart, subscriptionEnd})
     e.preventDefault();
     if (!token) {
       toast.error('رجاء تسجيل الدخول مره اخري');
@@ -578,8 +580,7 @@ const Info = () => {
     try {
       const response = await axios.put(`${apiUrl}/api/restaurant/update-subscription/${restaurantId}`,
         { subscriptionStart, subscriptionEnd }, config);
-        console.log({ response })
-
+        console.log({response})
       if (response.status === 200) {
         toast.success('تمت تعديل بيانات الاشتراك بنجاح');
         getRestaurant();
@@ -587,10 +588,11 @@ const Info = () => {
         toast.error('حدث خطأ أثناء تعديل بيانات الاشتراك! حاول مرة أخرى.');
       }
     } catch (error) {
-      console.log({ updateSubscriptionDateserr: error.response ? error.response.data : error.message });
+      console.error('Error updating subscription dates:', error.response ? error.response.data : error.message);
       toast.error('فشل تعديل بيانات الاشتراك! حاول مرة أخرى');
     }
   };
+  
   
 
   const [remainingTime, setRemainingTime] = useState({ months: 0, days: 0 });
