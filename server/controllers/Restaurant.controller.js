@@ -58,7 +58,7 @@ const createRestaurant = async (req, res) => {
         return res.status(201).json(restaurant);
     } catch (error) {
         console.error('Error creating restaurant:', error);
-        return res.status(500).json({ message: 'Server Error', error: error.message });
+        return res.status(500).json({ message: 'Server Error', error });
     }
 };
 
@@ -69,7 +69,7 @@ const getAllRestaurants = async (req, res) => {
         return res.status(200).json(restaurants);
     } catch (error) {
         console.error('Error fetching restaurants:', error);
-        return res.status(500).json({ message: 'Server Error', error: error.message });
+        return res.status(500).json({ message: 'Server Error', error });
     }
 };
 
@@ -91,7 +91,7 @@ const getRestaurantById = async (req, res) => {
         return res.status(200).json(restaurant);
     } catch (error) {
         console.error('Error fetching restaurant by ID:', error);
-        return res.status(500).json({ message: 'Server Error', error: error.message });
+        return res.status(500).json({ message: 'Server Error', error });
     }
 };
 
@@ -156,7 +156,7 @@ const updateRestaurant = async (req, res) => {
         return res.status(200).json(restaurant);
     } catch (error) {
         console.error('Error updating restaurant:', error);
-        return res.status(500).json({ message: 'Server Error', error: error.message });
+        return res.status(500).json({ message: 'Server Error', error });
     }
 };
 
@@ -178,7 +178,7 @@ const deleteRestaurant = async (req, res) => {
         return res.status(200).json({ message: 'Restaurant deleted successfully' });
     } catch (error) {
         console.error('Error deleting restaurant:', error);
-        return res.status(500).json({ message: 'Server Error', error: error.message });
+        return res.status(500).json({ message: 'Server Error', error });
     }
 };
 
@@ -209,7 +209,7 @@ const updateSubscriptionDates = async (req, res) => {
         return res.status(200).json({ restaurant });
     } catch (error) {
         console.error('Error updating subscription dates:', error.message);
-        return res.status(500).json({ message: 'Server Error', error: error.message });
+        return res.status(500).json({ message: 'Server Error', error });
     }
 };
 

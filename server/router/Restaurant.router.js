@@ -54,6 +54,6 @@ router.route('/:id')
   .delete(authenticateToken, checkSubscription, deleteRestaurant);
 
 router.route('/update-subscription/:id')
-  .put(authenticateToken, checkSubscription, updateSubscriptionDates);
+  .put(authenticateToken, updateSubscriptionDates);
 
 module.exports = router;

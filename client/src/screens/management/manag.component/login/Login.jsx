@@ -99,7 +99,7 @@ const Login = () => {
   
   return (
     <section className="body">
-      <div className="container">
+      <div className="container h-100">
         <div className="login-box">
           <div className="d-flex flex-wrap align-items-center justify-content-between">
             <div className="col-sm-6">

@@ -6,7 +6,8 @@ const checkSubscription = async (req, res, next) => {
     const role = req.employee.role
 
     if (restaurants.length === 0) {
-      return next();    }
+      return next();   
+     }
 
     const restaurant = restaurants[0];
 
