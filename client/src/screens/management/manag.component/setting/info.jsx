@@ -359,24 +359,39 @@ const Info = () => {
         website: website ? website : null,
         postal_code: postalCode ? postalCode : null
       };
+      
+      const requestData = {
+        name,
+        description,
+        address,
+        website,
+        image,
+        locationUrl,
+        aboutText,
+        dineIn,
+        takeAway,
+        deliveryService,
+        usesReservationSystem,
+        salesTaxRate,
+        serviceTaxRate
+      };
+      console.log({requestData})
+      let response;
       if (restaurantId) {
-        const response = await axios.put(`${apiUrl}/api/restaurant/${restaurantId}`, { name, description, address, website, image, locationUrl, aboutText, dineIn, takeAway, deliveryService, usesReservationSystem, salesTaxRate, serviceTaxRate }, config);
-        console.log({ response })
+        response = await axios.put(`${apiUrl}/api/restaurant/${restaurantId}`, requestData, config);
       } else {
-        // إرسال البيانات إلى الخادم باستخدام axios
-        const response = await axios.post(`${apiUrl}/api/restaurant/`, { name, description, address, website, image, locationUrl, aboutText, dineIn, takeAway, deliveryService, usesReservationSystem, salesTaxRate, serviceTaxRate }, config);
-        console.log({ response })
-        if (response.status === 201) {
-          toast.success('تمت إضافة المطعم بنجاح');
-          getRestaurant()
-        } else {
-          toast.error('حدث خطأ أثناء إضافة المطعم');
-        }
-
+        response = await axios.post(`${apiUrl}/api/restaurant/`, requestData, config);
+      }
+  
+      if (response.status === 200 || response.status === 201) {
+        toast.success(restaurantId ? 'تم تحديث المطعم بنجاح' : 'تمت إضافة المطعم بنجاح');
+        getRestaurant(); // تحديث البيانات أو إعادة توجيه المستخدم
+      } else {
+        toast.error('حدث خطأ أثناء معالجة الطلب');
       }
     } catch (error) {
-      toast.error('حدث خطأ أثناء إضافة المطعم');
       console.error('Error:', error);
+      toast.error('حدث خطأ أثناء إضافة/تحديث المطعم');
     }
   };
 

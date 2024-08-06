@@ -16,8 +16,6 @@ const restaurantSchema = new mongoose.Schema({
     image: {
         type: String,
         trim: true,
-        required: true,
-        default:null
     },
     locationUrl: {
         type: String,
