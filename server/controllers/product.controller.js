@@ -250,6 +250,32 @@ const updateProductWithoutImage = async (req, res) => {
   }
 };
 
+const getProduct = async (req, res) => {
+  try {
+    const productid = req.params.productid;
+    const product = await ProductModel.findById(productid)
+      .populate('category')
+      .populate('productRecipe')
+      .populate({
+        path: 'extras',
+        model: 'Product'
+      });
+
+    // Check if product is found
+    if (!product) {
+      // Return an object with product and an error flag
+      return { product: null, error: 'Product not found' };
+    }
+
+    // Return the product if found
+    return { product };
+  } catch (error) {
+    console.error('Error fetching product:', error);
+    return { product: null, error: 'Internal server error' };
+  }
+};
+
+
 
 // Delete a product by its ID
 const deleteProduct = async (req, res) => {
@@ -274,6 +300,7 @@ module.exports = {
   getAllProducts,
   getProductByCategory,
   getOneProduct,
+  getProduct,
   updateProduct,
   updateProductWithoutImage,
   deleteProduct

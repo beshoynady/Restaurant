@@ -12,6 +12,7 @@ const {
   getAllProducts,
   getProductByCategory,
   getOneProduct,
+  getProduct,
   updateProduct,
   updateProductWithoutImage,
   deleteProduct
@@ -71,7 +72,7 @@ const deleteOldImageMiddleware = async (req, res, next) => {
     }
 
     // استدعاء getOneProduct بشكل صحيح
-    const productResponse = await getOneProduct({ params: { productid: productId } }, res);
+    const productResponse = await getProduct({ params: { productid: productId } }, res);
     const product = productResponse.product;  // افترض أن getOneProduct تعيد product داخل response
 
     if (!product) {
@@ -102,8 +103,8 @@ router.route('/getproductbycategory/:categoryid')
 
 router.route('/:productid')
   .get(getOneProduct)
-  .put(authenticateToken, checkSubscription, upload.single("image"), updateProduct)
-  .delete(authenticateToken, checkSubscription, deleteProduct);
+  .put(authenticateToken, checkSubscription, upload.single("image"), deleteOldImageMiddleware, updateProduct)
+  .delete(authenticateToken, checkSubscription, deleteOldImageMiddleware, deleteProduct);
 
 router.route('/withoutimage/:productid')
   .put(authenticateToken, checkSubscription, updateProductWithoutImage);
