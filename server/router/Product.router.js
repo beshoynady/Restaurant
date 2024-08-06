@@ -5,7 +5,6 @@ const fs = require('fs');
 
 const router = express.Router();
 
-// استيراد الميدل وير
 const authenticateToken = require('../utlits/authenticate');
 const checkSubscription = require('../utlits/checkSubscription');
 const {
@@ -18,10 +17,10 @@ const {
   deleteProduct
 } = require("../controllers/product.controller");
 
-// تحديد مجلد الصور
+
+
 const imagesDir = path.join(__dirname, '..', 'images');
 
-// التحقق من وجود المجلد، وإذا لم يكن موجودًا، يتم إنشاؤه
 if (!fs.existsSync(imagesDir)) {
   fs.mkdirSync(imagesDir, { recursive: true });
 }
@@ -62,9 +61,10 @@ const deleteOldImage = (imagePath) => {
   }
 };
 
-// Middleware لحذف الصورة القديمة قبل رفع صورة جديدة
+// Middleware لحذف الصورة القديمة إذا كانت هناك صورة جديدة يتم رفعها
 const deleteOldImageMiddleware = async (req, res, next) => {
   try {
+    console.log('Middleware triggered');
     const productId = req.params.productid;
     if (!productId) {
       return res.status(400).json({ message: 'Product ID is missing' });
@@ -75,8 +75,10 @@ const deleteOldImageMiddleware = async (req, res, next) => {
       return res.status(404).json({ message: 'Product not found' });
     }
 
-    if (product.image) {
+    // إذا كانت الصورة موجودة وتم رفع صورة جديدة
+    if (product.image && req.file) {
       const oldImagePath = path.join(imagesDir, product.image);
+      console.log('Deleting old image:', oldImagePath);
       deleteOldImage(oldImagePath);
     }
 
@@ -96,7 +98,7 @@ router.route('/getproductbycategory/:categoryid')
 
 router.route('/:productid')
   .get(getOneProduct)
-  .put(authenticateToken, checkSubscription, upload.single("image"), updateProduct)
+  .put(authenticateToken, checkSubscription, upload.single("image"), deleteOldImageMiddleware, updateProduct)
   .delete(authenticateToken, checkSubscription, deleteOldImageMiddleware, deleteProduct);
 
 router.route('/withoutimage/:productid')
