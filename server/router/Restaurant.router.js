@@ -61,15 +61,14 @@ const deleteOldImageMiddleware = async (req, res, next) => {
     console.log('Middleware triggered');
     const restaurantId = req.params.id;
     if (!restaurantId) {
-      return res.status(400).json({ message: 'Product ID is missing' });
+      return res.status(400).json({ message: 'restaurant ID is missing' });
     }
 
-    // استدعاء getOneProduct بشكل صحيح
     const restaurantResponse = await getRestaurant(restaurantId);
     const restaurant = restaurantResponse.restaurant; 
 
     if (!restaurant) {
-      return res.status(404).json({ message: 'restaurant not found' });
+      return res.status(404).json({ message: 'restaurant not found to delete old image' });
     }
 
     if (restaurant.image && req.file) {

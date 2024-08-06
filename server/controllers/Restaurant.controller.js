@@ -97,23 +97,23 @@ const getRestaurantById = async (req, res) => {
 };
 const getRestaurant = async (restaurantId) => {
     try {
-
         if (!mongoose.Types.ObjectId.isValid(restaurantId)) {
-            return res.status(400).json({ message: 'Invalid restaurant ID' });
+            throw new Error('Invalid restaurant ID');
         }
 
         const restaurant = await RestaurantModel.findById(restaurantId);
 
         if (!restaurant) {
-            return res.status(404).json({ message: 'Restaurant not found' });
+            throw new Error('Restaurant not found');
         }
 
         return restaurant;
     } catch (error) {
         console.error('Error fetching restaurant by ID:', error);
-        return res.status(500).json({ message: 'Server Error', error });
+        throw error; // Propagate the error to be handled by the middleware
     }
 };
+
 
 // Update a restaurant by ID
 const updateRestaurant = async (req, res) => {
