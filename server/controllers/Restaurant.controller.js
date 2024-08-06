@@ -155,13 +155,7 @@ const updateRestaurant = async (req, res) => {
             return res.status(404).json({ message: 'Restaurant not found' });
         }
 
-        // تحديد الصورة الجديدة أو القديمة
-        let image;
-        if (req.file) {
-            image = req.file.filename; // صورة جديدة
-        } else {
-            image = existingRestaurant.image; // الاحتفاظ بالصورة القديمة
-        }
+        const image = req.file? req.file.filename : existingRestaurant.image
 
         // تحديث المطعم
         const restaurant = await RestaurantModel.findByIdAndUpdate(id, {

@@ -322,20 +322,20 @@ const Info = () => {
     const file = e.target.files[0];
     const maxSize = 1024 * 1024; // 1 MB
     const allowedTypes = ["image/jpeg", "image/jpg", "image/png"];
-  
+
     if (file) {
       // Check file size
       if (file.size > maxSize) {
         toast.error("Maximum file size exceeded (1 MB). Please select a smaller file.");
         return;
       }
-  
+
       // Check file type
       if (!allowedTypes.includes(file.type)) {
         toast.error("Invalid file type. Only JPEG, JPG, and PNG are allowed.");
         return;
       }
-  
+
       // If both checks pass, set the file
       setimage(file);
     } else {
@@ -359,7 +359,7 @@ const Info = () => {
         website: website ? website : null,
         postal_code: postalCode ? postalCode : null
       };
-      
+
       const requestData = {
         name,
         description,
@@ -375,14 +375,26 @@ const Info = () => {
         salesTaxRate,
         serviceTaxRate
       };
-      console.log({requestData})
+      console.log({ requestData })
       let response;
       if (restaurantId) {
-        response = await axios.put(`${apiUrl}/api/restaurant/${restaurantId}`, requestData, config);
+        response = await axios.put(`${apiUrl}/api/restaurant/${restaurantId}`, requestData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            ...config.headers,
+          }
+        });
+
       } else {
-        response = await axios.post(`${apiUrl}/api/restaurant/`, requestData, config);
+        response = await axios.post(`${apiUrl}/api/restaurant/`, requestData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            ...config.headers,
+          }
+        });
+
       }
-  
+
       if (response.status === 200 || response.status === 201) {
         toast.success(restaurantId ? 'تم تحديث المطعم بنجاح' : 'تمت إضافة المطعم بنجاح');
         getRestaurant(); // تحديث البيانات أو إعادة توجيه المستخدم
@@ -581,12 +593,12 @@ const Info = () => {
 
 
 
-  
+
   const [subscriptionStart, setSubscriptionStart] = useState('');
   const [subscriptionEnd, setSubscriptionEnd] = useState('');
-  
+
   const updateSubscriptionDates = async (e) => {
-    console.log({subscriptionStart, subscriptionEnd})
+    console.log({ subscriptionStart, subscriptionEnd })
     e.preventDefault();
     if (!token) {
       toast.error('رجاء تسجيل الدخول مره اخري');
@@ -599,7 +611,7 @@ const Info = () => {
     try {
       const response = await axios.put(`${apiUrl}/api/restaurant/update-subscription/${restaurantId}`,
         { subscriptionStart, subscriptionEnd }, config);
-        console.log({response})
+      console.log({ response })
       if (response.status === 200) {
         toast.success('تمت تعديل بيانات الاشتراك بنجاح');
         getRestaurant();
@@ -611,8 +623,8 @@ const Info = () => {
       toast.error('فشل تعديل بيانات الاشتراك! حاول مرة أخرى');
     }
   };
-  
-  
+
+
 
   const [remainingTime, setRemainingTime] = useState({ months: 0, days: 0 });
 
