@@ -88,7 +88,6 @@ const deleteOldImageMiddleware = async (req, res, next) => {
   }
 };
 
-// تعريف المسارات
 router.route('/')
   .post(authenticateToken, checkSubscription, upload.single("image"), createProduct)
   .get(getAllProducts);
