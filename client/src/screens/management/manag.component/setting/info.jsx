@@ -817,13 +817,9 @@ const Info = () => {
                     <label className="col-3 col-form-label p-0 m-0">اللوجو</label>
                     <div className="d-flex align-items-center col-9">
                       <input type="file" className="form-control me-3" onChange={(e) => handleFileUpload(e)} />
-                      {image ?
-                        <div className="d-flex align-items-center justify-content-center" style={{ width: '150px', height: '120px', backgroundColor: 'gray' }}>
-                        </div>
-                        : <div className="d-flex align-items-center justify-content-center" style={{ width: '150px', height: '120px', backgroundColor: 'gray' }}>
-                          <img src={`${apiUrl}/images/${image}`} alt="image" className="img-fluid" style={{ maxWidth: '100%', maxHeight: '100%' }} />
-                        </div>
-                      }
+                      <div className="d-flex align-items-center justify-content-center" style={{ width: '150px', height: '120px', backgroundColor: 'gray' }}>
+                        <img src={`${apiUrl}/images/${image}`} alt="image" className="img-fluid" style={{ maxWidth: '100%', maxHeight: '100%' }} />
+                      </div>
                     </div>
                   </div>
 
