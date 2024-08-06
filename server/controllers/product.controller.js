@@ -9,10 +9,7 @@ const createProduct = async (req, res) => {
     const { productname, productprice, productdescription, productcategoryid, available, hasSizes,
       sizes, hasExtras, isAddon, extras } = req.body;
 
-      
-      console.log('Uploaded File:', req.file);
-
-    const image = req.file ? req.file.filename : null;
+    const image = await req.file ? req.file.filename : null;
 
     // Check if required fields are provided in the request
     if (!productname || !productcategoryid) {
@@ -188,7 +185,7 @@ const updateProduct = async (req, res) => {
         isAddon,
         extras,
         // Use the new image name if provided
-        image: req.file ? req.file.filename : existingProduct.image,
+        image: await req.file ? req.file.filename : existingProduct.image,
         available
       },
       { new: true }
