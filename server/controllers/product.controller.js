@@ -122,7 +122,7 @@ const getOneProduct = async (req, res) => {
 
 
 // Update a product by its ID
-const updateProduct = async (req, res) => {
+const ++ = async (req, res) => {
   try {
     const productid = req.params.productid;
     const {
