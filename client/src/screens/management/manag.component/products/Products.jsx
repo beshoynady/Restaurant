@@ -161,7 +161,7 @@ const Products = () => {
       }
   
       // If both checks pass, set the file
-      setProductImg(file);
+      setproductimg(file);
     } else {
       toast.error("No file selected.");
     }
