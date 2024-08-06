@@ -96,8 +96,8 @@ router.route('/getproductbycategory/:categoryid')
 
 router.route('/:productid')
   .get(getOneProduct)
-  .put(authenticateToken, checkSubscription, upload.single("image"), updateProduct)
-  .delete(authenticateToken, checkSubscription, deleteProduct);
+  .put(authenticateToken, checkSubscription, upload.single("image"), deleteOldImageMiddleware, updateProduct)
+  .delete(authenticateToken, checkSubscription, deleteOldImageMiddleware, deleteProduct);
 
 router.route('/withoutimage/:productid')
   .put(authenticateToken, checkSubscription, updateProductWithoutImage);

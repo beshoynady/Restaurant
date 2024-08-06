@@ -55,10 +55,10 @@ const getAllProducts = async (req, res) => {
   try {
     // Retrieve all products and populate the 'category' and 'extras' fields
     const allProducts = await ProductModel.find({})
-    .populate('category')
-    .populate('sizes.sizeRecipe')
-    .populate('productRecipe')
-    .populate('extras');
+      .populate('category')
+      .populate('sizes.sizeRecipe')
+      .populate('productRecipe')
+      .populate('extras');
 
     // Check if any products are found
     if (allProducts.length === 0) {
@@ -80,13 +80,13 @@ const getProductByCategory = async (req, res) => {
   try {
     const categoryid = req.params.categoryid;
     const products = await ProductModel.find({ category: categoryid })
-    .populate('category')
-    .populate('sizes.sizeRecipe')
-    .populate('productRecipe')
-    .populate({
-      path: 'extras',
-      model: 'Product'
-    });
+      .populate('category')
+      .populate('sizes.sizeRecipe')
+      .populate('productRecipe')
+      .populate({
+        path: 'extras',
+        model: 'Product'
+      });
     res.status(200).json(products);
   } catch (err) {
     res.status(400).json(err);
@@ -151,44 +151,43 @@ const updateProduct = async (req, res) => {
       return res.status(400).json({ error: 'Invalid extras provided' });
     }
 
-    // If there is a new image uploaded, handle it
-    if (req.file) {
-      // Delete the old image file if it exists
-      const product = await ProductModel.findById(productid);
-      if (product && product.image) {
-        const oldImagePath = path.join(__dirname, '..', 'images', product.image);
-        fs.unlinkSync(oldImagePath);
-        console.log('Old image deleted successfully');
-      }
-    }
-
     // Check if the product exists
     const existingProduct = await ProductModel.findById(productid);
     if (!existingProduct) {
       return res.status(404).json({ message: 'Product not found' });
     }
 
-    // Update the product with new information
+    // Prepare the update object
+    const updateData = {
+      name: productname,
+      description: productdescription,
+      price: productprice,
+      category: productcategoryid,
+      discount: productdiscount,
+      priceAfterDiscount,
+      productRecipe,
+      hasSizes,
+      sizes,
+      hasExtras,
+      isAddon,
+      extras,
+      available
+    };
+
+    // Handle the image update
+    if (req.file) {
+      // If a new image is uploaded, update the image field
+      updateData.image = req.file.filename;
+    } else {
+      // If no new image is uploaded, retain the old image
+      updateData.image = existingProduct.image;
+    }
+
+    // Update the product in the database
     const updatedProduct = await ProductModel.findByIdAndUpdate(
-      { _id: productid },
-      {
-        name: productname,
-        description: productdescription,
-        price: productprice,
-        category: productcategoryid,
-        discount: productdiscount,
-        priceAfterDiscount,
-        productRecipe,
-        hasSizes,
-        sizes,
-        hasExtras,
-        isAddon,
-        extras,
-        // Use the new image name if provided
-        image: req.file ? req.file.filename : existingProduct.image,
-        available
-      },
-      { new: true }
+      productid,
+      updateData,
+      { new: true } // Return the updated document
     );
 
     // Return the updated product
@@ -199,6 +198,7 @@ const updateProduct = async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 };
+
 
 
 
