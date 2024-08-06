@@ -70,7 +70,10 @@ const deleteOldImageMiddleware = async (req, res, next) => {
       return res.status(400).json({ message: 'Product ID is missing' });
     }
 
-    const product = await getOneProduct(productId);
+    // استدعاء getOneProduct بشكل صحيح
+    const productResponse = await getOneProduct({ params: { productid: productId } }, res);
+    const product = productResponse.product;  // افترض أن getOneProduct تعيد product داخل response
+
     if (!product) {
       return res.status(404).json({ message: 'Product not found' });
     }
@@ -88,6 +91,7 @@ const deleteOldImageMiddleware = async (req, res, next) => {
     return res.status(500).json({ message: 'Internal server error' });
   }
 };
+
 
 router.route('/')
   .post(authenticateToken, checkSubscription, upload.single("image"), createProduct)
