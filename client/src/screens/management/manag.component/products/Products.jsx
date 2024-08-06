@@ -69,62 +69,66 @@ const Products = () => {
 
   const createProduct = async (e) => {
     e.preventDefault();
-
+  
     if (!token) {
-      // Handle case where token is not available
       toast.error('رجاء تسجيل الدخول مره اخري');
-      return
+      return;
     }
+  
     try {
       if (productPermission && !productPermission.create) {
-        toast.warn('ليس لك صلاحية لاضافه الاصناف')
-        return
+        toast.warn('ليس لك صلاحية لاضافه الاصناف');
+        return;
       }
-      // إعداد جسم الطلب
-      const requestBody = {
-        productname: productname,
-        productdescription: productdescription,
-        productcategoryid: productcategoryid,
-        available: available,
-        isAddon: isAddon,
-      };
-
-      // إضافة الأحجام إلى جسم الطلب إذا كانت موجودة
+  
+      // إعداد جسم الطلب باستخدام FormData
+      const formData = new FormData();
+      formData.append('productname', productname);
+      formData.append('productdescription', productdescription);
+      formData.append('productcategoryid', productcategoryid);
+      formData.append('available', available);
+      formData.append('isAddon', isAddon);
+  
       if (hasSizes) {
-        requestBody.hasSizes = hasSizes;
-        requestBody.sizes = sizes;
+        formData.append('hasSizes', hasSizes);
+        sizes.forEach((size, index) => {
+          formData.append(`sizes[${index}]`, size);
+        });
       } else {
-        // تضمين السعر في الطلب إذا لم تكن هناك أحجام
-        requestBody.productprice = productprice;
-
-        // تضمين الخصم في الطلب إذا كان موجودا
+        formData.append('productprice', productprice);
+  
         if (productdiscount > 0) {
-          requestBody.productdiscount = productdiscount;
+          formData.append('productdiscount', productdiscount);
           const priceAfterDiscount = productprice - productdiscount;
-          requestBody.priceAfterDiscount = priceAfterDiscount > 0 ? priceAfterDiscount : 0;
+          formData.append('priceAfterDiscount', priceAfterDiscount > 0 ? priceAfterDiscount : 0);
         }
       }
-
-      // إضافة الإضافات إلى جسم الطلب إذا كانت موجودة
+  
       if (hasExtras) {
-        requestBody.hasExtras = hasExtras;
-        requestBody.extras = extras;
+        formData.append('hasExtras', hasExtras);
+        extras.forEach((extra, index) => {
+          formData.append(`extras[${index}]`, extra);
+        });
       }
-
-      // التحقق من توفر صورة المنتج
+  
       if (productimg) {
-        requestBody.image = productimg;
-      }
-      else {
+        formData.append('image', productimg);
+      } else {
         toast.error('يجب إضافة صورة للمنتج');
-        // return;
+        return;
       }
-
-      console.log({ requestBody });
-
-      const response = await axios.post(apiUrl + '/api/product/', requestBody, config);
+  
+      console.log({ formData });
+  
+      const response = await axios.post(apiUrl + '/api/product/', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          ...config.headers,
+        }
+      });
+  
       console.log({ responsecreateproduct: response });
-
+  
       if (response.status === 201) {
         getallproducts();
         console.log(response.data);
@@ -134,12 +138,12 @@ const Products = () => {
       }
     } catch (error) {
       console.error("حدث خطأ أثناء إضافة المنتج! يرجى المحاولة مرة أخرى:", error);
-      // عرض إشعار الخطأ
       toast.error("فشل إنشاء المنتج. يرجى المحاولة مرة أخرى لاحقًا.", {
         position: toast.POSITION.TOP_RIGHT
       });
     }
   };
+  
 
 
   const handleFileUpload = (e) => {
@@ -166,6 +170,7 @@ const Products = () => {
       toast.error("No file selected.");
     }
   };
+  
   
 
   const [productInfo, setproductInfo] = useState({})

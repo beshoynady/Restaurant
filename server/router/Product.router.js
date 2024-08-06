@@ -38,7 +38,6 @@ const storage = multer.diskStorage({
   },
 });
 
-// إعداد multer بحدود حجم الملف وأنواع الملفات المسموح بها
 const upload = multer({
   storage: storage,
   limits: {
