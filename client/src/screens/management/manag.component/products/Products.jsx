@@ -115,10 +115,10 @@ const Products = () => {
       if (productimg) {
         requestBody.image = productimg;
       }
-      // else {
-      //   toast.error('يجب إضافة صورة للمنتج');
-      //   return;
-      // }
+      else {
+        toast.error('يجب إضافة صورة للمنتج');
+        // return;
+      }
 
       console.log({ requestBody });
 
@@ -144,23 +144,29 @@ const Products = () => {
 
   const handleFileUpload = (e) => {
     const file = e.target.files[0];
-    const maxSize = 1024 * 1024;
-    const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
-
-    if (file && file.size <= maxSize && allowedTypes.includes(file.type)) {
-      setproductimg(file);
-    } else {
-      let errorMessage = "Invalid file.";
-
-      if (file && !allowedTypes.includes(file.type)) {
-        errorMessage = "Invalid file type. Only JPEG, PNG, and GIF are allowed.";
-      } else if (file && file.size > maxSize) {
-        errorMessage = "Maximum file size exceeded (1 MB). Please select a smaller file.";
+    const maxSize = 1024 * 1024; // 1 MB
+    const allowedTypes = ["image/jpeg", "image/jpg", "image/png"];
+  
+    if (file) {
+      // Check file size
+      if (file.size > maxSize) {
+        toast.error("Maximum file size exceeded (1 MB). Please select a smaller file.");
+        return;
       }
-
-      toast.error(errorMessage);
+  
+      // Check file type
+      if (!allowedTypes.includes(file.type)) {
+        toast.error("Invalid file type. Only JPEG, JPG, and PNG are allowed.");
+        return;
+      }
+  
+      // If both checks pass, set the file
+      setProductImg(file);
+    } else {
+      toast.error("No file selected.");
     }
   };
+  
 
   const [productInfo, setproductInfo] = useState({})
   const handelEditProductModal = (product) => {
@@ -425,7 +431,7 @@ const Products = () => {
                 </div>
                 <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">التصنيف</label>
-                  <select className="form-control border-primary"  onChange={(e) => filterProductsByCategory(e.target.value)} >
+                  <select className="form-control border-primary" onChange={(e) => filterProductsByCategory(e.target.value)} >
                     <option value={""}>الكل</option>
                     {listofcategories.map((category, i) => {
                       return <option value={category._id} key={i} >{category.name}</option>
@@ -436,7 +442,7 @@ const Products = () => {
               <div className='col-12 d-flex align-items-center justify-content-between'>
                 <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">فلتر حسب الوقت</label>
-                  <select className="form-control border-primary"  onChange={(e) => setallOrders(filterByTime(e.target.value, allOrders))}>
+                  <select className="form-control border-primary" onChange={(e) => setallOrders(filterByTime(e.target.value, allOrders))}>
                     <option value="">اختر</option>
                     <option value="today">اليوم</option>
                     <option value="week">هذا الأسبوع</option>
@@ -599,7 +605,7 @@ const Products = () => {
 
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">التصنيف</label>
-                  <select className="form-control border-primary"  name="category" id="category" form="carform" onChange={(e) => setproductcategoryid(e.target.value)}>
+                  <select className="form-control border-primary" name="category" id="category" form="carform" onChange={(e) => setproductcategoryid(e.target.value)}>
                     <option defaultValue={productcategoryid}>اختر تصنيف</option>
                     {listofcategories.map((category, i) => {
                       return <option value={category._id} key={i} >{category.name}</option>
@@ -731,7 +737,7 @@ const Products = () => {
                 }
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">متاح</label>
-                  <select className="form-control border-primary"  name="category" id="category" form="carform" onChange={(e) => setavailable(e.target.value)}>
+                  <select className="form-control border-primary" name="category" id="category" form="carform" onChange={(e) => setavailable(e.target.value)}>
 
                     <option defaultValue={available} >اختر الحاله</option>
                     <option value={true} >متاح</option>
@@ -777,7 +783,7 @@ const Products = () => {
 
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">التصنيف</label>
-                  <select className="form-control border-primary"  name="category" id="category" form="carform" onChange={(e) => setproductcategoryid(e.target.value)}>
+                  <select className="form-control border-primary" name="category" id="category" form="carform" onChange={(e) => setproductcategoryid(e.target.value)}>
                     <option value={productInfo.category?._id} >{productInfo.category?.name}</option>
                     {listofcategories.map((category, i) => {
                       return <option value={category._id} key={i} >{category.name}</option>
@@ -913,7 +919,7 @@ const Products = () => {
                 }
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">متاح</label>
-                  <select className="form-control border-primary"  name="category" id="category" form="carform" onChange={(e) => setavailable(e.target.value)}>
+                  <select className="form-control border-primary" name="category" id="category" form="carform" onChange={(e) => setavailable(e.target.value)}>
                     <option value={true} >متاح</option>
                     <option value={false} >غير متاح</option>
                   </select>

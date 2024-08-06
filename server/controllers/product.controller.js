@@ -9,6 +9,9 @@ const createProduct = async (req, res) => {
     const { productname, productprice, productdescription, productcategoryid, available, hasSizes,
       sizes, hasExtras, isAddon, extras } = req.body;
 
+      
+      console.log('Uploaded File:', req.file);
+
     const image = req.file ? req.file.filename : null;
 
     // Check if required fields are provided in the request
