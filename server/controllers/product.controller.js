@@ -254,12 +254,6 @@ const getProduct = async (req, res) => {
   try {
     const productid = req.params.productid;
     const product = await ProductModel.findById(productid)
-      .populate('category')
-      .populate('productRecipe')
-      .populate({
-        path: 'extras',
-        model: 'Product'
-      });
 
     // Check if product is found
     if (!product) {

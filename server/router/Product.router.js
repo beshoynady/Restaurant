@@ -26,13 +26,11 @@ if (!fs.existsSync(imagesDir)) {
   fs.mkdirSync(imagesDir, { recursive: true });
 }
 
-// تكوين multer لتخزين الملفات
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, imagesDir); // استخدام المجلد المحدد
+    cb(null, imagesDir); 
   },
   filename: (req, file, cb) => {
-    // توليد لاحقة فريدة لتجنب الكتابة فوق الملفات
     const uniqueSuffix = new Date().toISOString().replace(/:/g, '-') + '-' + file.originalname;
     cb(null, uniqueSuffix);
   },
@@ -79,8 +77,36 @@ const deleteOldImageMiddleware = async (req, res, next) => {
       return res.status(404).json({ message: 'Product not found' });
     }
 
-    // إذا كانت الصورة موجودة وتم رفع صورة جديدة
     if (product.image && req.file) {
+      const oldImagePath = path.join(imagesDir, product.image);
+      console.log('Deleting old image:', oldImagePath);
+      deleteOldImage(oldImagePath);
+    }
+
+    next();
+  } catch (err) {
+    console.error('Error deleting old image', err);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+const deleteImageProductMiddleware = async (req, res, next) => {
+  try {
+    console.log('Middleware triggered');
+    const productId = req.params.productid;
+    if (!productId) {
+      return res.status(400).json({ message: 'Product ID is missing' });
+    }
+
+    // استدعاء getOneProduct بشكل صحيح
+    const productResponse = await getProduct({ params: { productid: productId } }, res);
+    const product = productResponse.product;  // افترض أن getOneProduct تعيد product داخل response
+
+    if (!product) {
+      return res.status(404).json({ message: 'Product not found' });
+    }
+
+    if (product.image) {
       const oldImagePath = path.join(imagesDir, product.image);
       console.log('Deleting old image:', oldImagePath);
       deleteOldImage(oldImagePath);
@@ -104,7 +130,7 @@ router.route('/getproductbycategory/:categoryid')
 router.route('/:productid')
   .get(getOneProduct)
   .put(authenticateToken, checkSubscription, upload.single("image"), deleteOldImageMiddleware, updateProduct)
-  .delete(authenticateToken, checkSubscription, deleteOldImageMiddleware, deleteProduct);
+  .delete(authenticateToken, checkSubscription, deleteImageProductMiddleware, deleteProduct);
 
 router.route('/withoutimage/:productid')
   .put(authenticateToken, checkSubscription, updateProductWithoutImage);
