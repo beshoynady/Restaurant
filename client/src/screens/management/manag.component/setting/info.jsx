@@ -701,7 +701,7 @@ const Info = () => {
                   </div>
 
                   <div className="form-group  h-auto px-3 d-flex align-items-center justify-content-start col-12 col-md-6 row">
-                    <label className="col-3 col-form-label p-0 m-0">باقي من الوقت</label>
+                    <label className="form-label col-3 p-0 m-0">باقي من الوقت</label>
                     <div className="col-9">
                       <input type="text" className="form-control border-primary col-12" value={`${remainingTime.months} شهر و ${remainingTime.days} يوم`} readOnly />
                     </div>
@@ -723,14 +723,14 @@ const Info = () => {
                 <h4 className="card-title">بيانات المطعم</h4>
                 <form className="form-sample row d-flex flex-wrap" onSubmit={handleCreateRestaurant}>
                   <div className="form-group h-auto px-3 d-flex flex-nowrap align-items-center justify-content-start col-12 col-md-6 ">
-                    <label className="col-3 col-form-label p-0 m-0">الاسم</label>
+                    <label className="form-label col-3 p-0 m-0">الاسم</label>
                     <div className="col-9">
                       <input type="text" className="form-control border-primary col-12" defaultValue={name} required onChange={(e) => setName(e.target.value)} />
                     </div>
                   </div>
 
                   <div className="form-group h-auto px-3 d-flex flex-nowrap align-items-center justify-content-start col-12 col-md-6 ">
-                    <label className="col-3 col-form-label p-0 m-0">الوصف</label>
+                    <label className="form-label col-3 p-0 m-0">الوصف</label>
                     <div className="col-9">
                       <textarea type="text" className="form-control border-primary col-12" defaultValue={description} required onChange={(e) => setDescription(e.target.value)} />
                     </div>
@@ -739,42 +739,42 @@ const Info = () => {
 
                   <p className="card-description col-12"> العنوان </p>
                   <div className="form-group h-auto px-3 d-flex flex-nowrap align-items-center justify-content-start col-12 col-md-6 ">
-                    <label className="col-3 col-form-label p-0 m-0">الدولة</label>
+                    <label className="form-label col-3 p-0 m-0">الدولة</label>
                     <div className="col-9">
                       <input type="text" className="form-control border-primary col-12" defaultValue={country} onChange={(e) => setCountry(e.target.value)} />
                     </div>
                   </div>
 
                   <div className="form-group h-auto px-3 d-flex flex-nowrap align-items-center justify-content-start col-12 col-md-6 ">
-                    <label className="col-3 col-form-label p-0 m-0">المحافظة</label>
+                    <label className="form-label col-3 p-0 m-0">المحافظة</label>
                     <div className="col-9">
                       <input type="text" className="form-control border-primary col-12" defaultValue={state} required onChange={(e) => setState(e.target.value)} />
                     </div>
                   </div>
 
                   <div className="form-group h-auto px-3 d-flex flex-nowrap align-items-center justify-content-start col-12 col-md-6 ">
-                    <label className="col-3 col-form-label p-0 m-0">المدينة</label>
+                    <label className="form-label col-3 p-0 m-0">المدينة</label>
                     <div className="col-9">
                       <input type="text" className="form-control border-primary col-12" defaultValue={city} required onChange={(e) => setCity(e.target.value)} />
                     </div>
                   </div>
 
                   <div className="form-group h-auto px-3 d-flex flex-nowrap align-items-center justify-content-start col-12 col-md-6 ">
-                    <label className="col-3 col-form-label p-0 m-0">العنوان</label>
+                    <label className="form-label col-3 p-0 m-0">العنوان</label>
                     <div className="col-9">
                       <input type="text" className="form-control border-primary col-12" defaultValue={street} required onChange={(e) => setStreet(e.target.value)} />
                     </div>
                   </div>
 
                   <div className="form-group h-auto px-3 d-flex flex-nowrap align-items-center justify-content-start col-12 col-md-6 ">
-                    <label className="col-3 col-form-label p-0 m-0">رابط المنيو</label>
+                    <label className="form-label col-3 p-0 m-0">رابط المنيو</label>
                     <div className="col-9">
                       <input type="text" className="form-control border-primary col-12" defaultValue={website} required onChange={(e) => setwebsite(e.target.value)} />
                     </div>
                   </div>
 
                   <div className="form-group h-auto px-3 d-flex flex-nowrap align-items-center justify-content-start col-12 col-md-6 ">
-                    <label className="col-3 col-form-label p-0 m-0">كود البريد</label>
+                    <label className="form-label col-3 p-0 m-0">كود البريد</label>
                     <div className="col-9">
                       <input type="text" className="form-control border-primary col-12" defaultValue={postalCode} onChange={(e) => setPostalCode(e.target.value)} />
                     </div>
@@ -783,20 +783,20 @@ const Info = () => {
 
 
                   <div className="form-group h-auto px-3 d-flex flex-nowrap align-items-center justify-content-start col-12 col-md-6 ">
-                    <label className="col-3 col-form-label p-0 m-0">رابط خريطه جوجل</label>
+                    <label className="form-label col-3 p-0 m-0">رابط خريطه جوجل</label>
                     <div className="col-9">
                       <input type="text" className="form-control border-primary col-12" defaultValue={locationUrl} required onChange={(e) => setlocationUrl(e.target.value)} />
                     </div>
                   </div>
                   <div className="form-group h-auto px-3 d-flex flex-nowrap align-items-center justify-content-start col-12 col-md-6 ">
-                    <label className="col-3 col-form-label p-0 m-0">about us</label>
+                    <label className="form-label col-3 p-0 m-0">about us</label>
                     <div className="col-9">
                       <textarea className="form-control border-primary col-12" defaultValue={aboutText} required onChange={(e) => setaboutText(e.target.value)} />
                     </div>
                   </div>
 
                   <div className="form-group h-auto px-3 d-flex flex-nowrap align-items-center justify-content-start col-12 col-md-6 ">
-                    <label className="col-3 col-form-label p-0 m-0">نسبة الضريبة (%)</label>
+                    <label className="form-label col-3 p-0 m-0">نسبة الضريبة (%)</label>
                     <div className="col-9">
                       <input type="number" className="form-control border-primary col-12" value={salesTaxRate} onChange={(e) => setsalesTaxRate(e.target.value)} required
                       />
@@ -804,21 +804,19 @@ const Info = () => {
                   </div>
 
                   <div className="form-group h-auto px-3 d-flex flex-nowrap align-items-center justify-content-start col-12 col-md-6 ">
-                    <label className="col-3 col-form-label p-0 m-0">نسبة الخدمة (%)</label>
+                    <label className="form-label col-3 p-0 m-0">نسبة الخدمة (%)</label>
                     <div className="col-9">
                       <input type="number" className="form-control border-primary col-12" value={serviceTaxRate} onChange={(e) => setserviceTaxRate(e.target.value)} required
                       />
                     </div>
                   </div>
 
-
-
                   <div className="form-group h-auto px-3 d-flex flex-nowrap align-items-center justify-content-start col-12 col-md-6 ">
-                    <label className="col-3 col-form-label p-0 m-0">اللوجو</label>
-                    <div className="d-flex align-items-center col-9">
-                      <input type="file" className="form-control me-3" onChange={(e) => handleFileUpload(e)} />
-                      <div className="d-flex align-items-center justify-content-center" style={{ width: '150px', height: '120px', backgroundColor: 'gray' }}>
-                        <img src={`${apiUrl}/images/${image}`} alt="image" className="img-fluid" style={{ maxWidth: '100%', maxHeight: '100%' }} />
+                    <label className="form-label col-3 p-0 m-0">اللوجو</label>
+                    <div className="d-flex flex-wrap align-items-center col-9">
+                      <input type="file" className="form-control" onChange={(e) => handleFileUpload(e)} />
+                      <div className="d-flex align-items-center justify-content-center w-100 mt-2" style={{height: '120px', backgroundColor: 'gray' }}>
+                        <img src={`${apiUrl}/images/${image}`} alt="image" className="img-fluid" style={{ width: '100%', height: '100%' }} />
                       </div>
                     </div>
                   </div>
