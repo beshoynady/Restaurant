@@ -231,7 +231,7 @@ const Info = () => {
 
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
-  const [logo, setLogo] = useState('');
+  const [image, setimage] = useState('');
   const [aboutText, setaboutText] = useState('');
   const [website, setwebsite] = useState('');
   const [locationUrl, setlocationUrl] = useState('');
@@ -320,22 +320,26 @@ const Info = () => {
 
   const handleFileUpload = (e) => {
     const file = e.target.files[0];
-    const maxSize = 1024 * 1024;
-    const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/gif"];
-
-    if (file && file.size <= maxSize && allowedTypes.includes(file.type)) {
-      console.log({ file })
-      setLogo(file);
-      toast.success('تم رفع الصوره بنجاح');
-    } else {
-      let errorMessage = "Invalid file.";
-
-      if (file && !allowedTypes.includes(file.type)) {
-        errorMessage = "Invalid file type. Only JPEG, PNG, and GIF are allowed.";
-      } else if (file && file.size > maxSize) {
-
-        errorMessage = "Maximum file size exceeded (1 MB). Please select a smaller file.";
+    const maxSize = 1024 * 1024; // 1 MB
+    const allowedTypes = ["image/jpeg", "image/jpg", "image/png"];
+  
+    if (file) {
+      // Check file size
+      if (file.size > maxSize) {
+        toast.error("Maximum file size exceeded (1 MB). Please select a smaller file.");
+        return;
       }
+  
+      // Check file type
+      if (!allowedTypes.includes(file.type)) {
+        toast.error("Invalid file type. Only JPEG, JPG, and PNG are allowed.");
+        return;
+      }
+  
+      // If both checks pass, set the file
+      setimage(file);
+    } else {
+      toast.error("No file selected.");
     }
   };
 
@@ -356,11 +360,11 @@ const Info = () => {
         postal_code: postalCode ? postalCode : null
       };
       if (restaurantId) {
-        const response = await axios.put(`${apiUrl}/api/restaurant/${restaurantId}`, { name, description, address, website, image: logo, locationUrl, aboutText, dineIn, takeAway, deliveryService, usesReservationSystem, salesTaxRate, serviceTaxRate }, config);
+        const response = await axios.put(`${apiUrl}/api/restaurant/${restaurantId}`, { name, description, address, website, image, locationUrl, aboutText, dineIn, takeAway, deliveryService, usesReservationSystem, salesTaxRate, serviceTaxRate }, config);
         console.log({ response })
       } else {
         // إرسال البيانات إلى الخادم باستخدام axios
-        const response = await axios.post(`${apiUrl}/api/restaurant/`, { name, description, address, website, image: logo, locationUrl, aboutText, dineIn, takeAway, deliveryService, usesReservationSystem, salesTaxRate, serviceTaxRate }, config);
+        const response = await axios.post(`${apiUrl}/api/restaurant/`, { name, description, address, website, image, locationUrl, aboutText, dineIn, takeAway, deliveryService, usesReservationSystem, salesTaxRate, serviceTaxRate }, config);
         console.log({ response })
         if (response.status === 201) {
           toast.success('تمت إضافة المطعم بنجاح');
@@ -500,7 +504,7 @@ const Info = () => {
         setName(restaurantData.name);
         setSubscriptionStart(restaurantData.subscriptionStart)
         setSubscriptionEnd(restaurantData.subscriptionEnd)
-        setLogo(restaurantData.logo);
+        setimage(restaurantData.image);
         setwebsite(restaurantData.website);
         setlocationUrl(restaurantData.locationUrl);
         setaboutText(restaurantData.aboutText);
@@ -786,11 +790,11 @@ const Info = () => {
                     <label className="col-3 col-form-label p-0 m-0">اللوجو</label>
                     <div className="d-flex align-items-center col-9">
                       <input type="file" className="form-control me-3" onChange={(e) => handleFileUpload(e)} />
-                      {logo ?
+                      {image ?
                         <div className="d-flex align-items-center justify-content-center" style={{ width: '150px', height: '120px', backgroundColor: 'gray' }}>
                         </div>
                         : <div className="d-flex align-items-center justify-content-center" style={{ width: '150px', height: '120px', backgroundColor: 'gray' }}>
-                          <img src={`${apiUrl}/images/${logo}`} alt="logo" className="img-fluid" style={{ maxWidth: '100%', maxHeight: '100%' }} />
+                          <img src={`${apiUrl}/images/${image}`} alt="image" className="img-fluid" style={{ maxWidth: '100%', maxHeight: '100%' }} />
                         </div>
                       }
                     </div>
