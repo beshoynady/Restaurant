@@ -65,7 +65,7 @@ const deleteOldImageMiddleware = async (req, res, next) => {
     }
 
     // استدعاء getOneProduct بشكل صحيح
-    const restaurantResponse = await getRestaurant({ params: { id: restaurantId } }, res);
+    const restaurantResponse = await getRestaurant(restaurantId);
     const restaurant = restaurantResponse.restaurant; 
 
     if (!restaurant) {

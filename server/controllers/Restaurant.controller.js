@@ -95,15 +95,14 @@ const getRestaurantById = async (req, res) => {
         return res.status(500).json({ message: 'Server Error', error });
     }
 };
-const getRestaurant = async (req, res) => {
+const getRestaurant = async (restaurantId) => {
     try {
-        const { id } = req.params;
 
-        if (!mongoose.Types.ObjectId.isValid(id)) {
+        if (!mongoose.Types.ObjectId.isValid(restaurantId)) {
             return res.status(400).json({ message: 'Invalid restaurant ID' });
         }
 
-        const restaurant = await RestaurantModel.findById(id);
+        const restaurant = await RestaurantModel.findById(restaurantId);
 
         if (!restaurant) {
             return res.status(404).json({ message: 'Restaurant not found' });
