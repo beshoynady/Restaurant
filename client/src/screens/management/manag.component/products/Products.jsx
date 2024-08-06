@@ -69,18 +69,18 @@ const Products = () => {
 
   const createProduct = async (e) => {
     e.preventDefault();
-
+  
     if (!token) {
       toast.error('رجاء تسجيل الدخول مره اخري');
       return;
     }
-
+  
     try {
       if (productPermission && !productPermission.create) {
         toast.warn('ليس لك صلاحية لاضافه الاصناف');
         return;
       }
-
+  
       // إعداد جسم الطلب باستخدام FormData
       const formData = new FormData();
       formData.append('productname', productname);
@@ -88,7 +88,7 @@ const Products = () => {
       formData.append('productcategoryid', productcategoryid);
       formData.append('available', available);
       formData.append('isAddon', isAddon);
-
+  
       if (hasSizes) {
         formData.append('hasSizes', hasSizes);
         sizes.forEach((size, index) => {
@@ -96,39 +96,39 @@ const Products = () => {
         });
       } else {
         formData.append('productprice', productprice);
-
+  
         if (productdiscount > 0) {
           formData.append('productdiscount', productdiscount);
           const priceAfterDiscount = productprice - productdiscount;
           formData.append('priceAfterDiscount', priceAfterDiscount > 0 ? priceAfterDiscount : 0);
         }
       }
-
+  
       if (hasExtras) {
         formData.append('hasExtras', hasExtras);
         extras.forEach((extra, index) => {
           formData.append(`extras[${index}]`, extra);
         });
       }
-
+  
       if (productimg) {
         formData.append('image', productimg);
       } else {
         toast.error('يجب إضافة صورة للمنتج');
         return;
       }
-
+  
       console.log({ formData });
-
+  
       const response = await axios.post(apiUrl + '/api/product/', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           ...config.headers,
         }
       });
-
+  
       console.log({ responsecreateproduct: response });
-
+  
       if (response.status === 201) {
         getallproducts();
         console.log(response.data);
@@ -143,35 +143,35 @@ const Products = () => {
       });
     }
   };
-
+  
 
 
   const handleFileUpload = (e) => {
     const file = e.target.files[0];
     const maxSize = 1024 * 1024; // 1 MB
     const allowedTypes = ["image/jpeg", "image/jpg", "image/png"];
-
+  
     if (file) {
       // Check file size
       if (file.size > maxSize) {
         toast.error("Maximum file size exceeded (1 MB). Please select a smaller file.");
         return;
       }
-
+  
       // Check file type
       if (!allowedTypes.includes(file.type)) {
         toast.error("Invalid file type. Only JPEG, JPG, and PNG are allowed.");
         return;
       }
-
+  
       // If both checks pass, set the file
       setproductimg(file);
     } else {
       toast.error("No file selected.");
     }
   };
-
-
+  
+  
 
   const [productInfo, setproductInfo] = useState({})
   const handelEditProductModal = (product) => {
@@ -194,74 +194,72 @@ const Products = () => {
   const [productid, setproductid] = useState("")
   const editProduct = async (e) => {
     e.preventDefault();
-
     if (!token) {
+      // Handle case where token is not available
       toast.error('رجاء تسجيل الدخول مره اخري');
-      return;
+      return
     }
-
     try {
       if (productPermission && !productPermission.update) {
-        toast.warn('ليس لك صلاحية لتعديل الاصناف');
-        return;
+        toast.warn('ليس لك صلاحية لتعديل الاصناف')
+        return
       }
+      // Prepare request body
+      const requestBody = {
+        productname: productname,
+        productdescription: productdescription,
+        productcategoryid: productcategoryid,
+        available: available,
+        isAddon: isAddon,
+      };
 
-      // إعداد جسم الطلب باستخدام FormData
-      const formData = new FormData();
-      formData.append('productname', productname);
-      formData.append('productdescription', productdescription);
-      formData.append('productcategoryid', productcategoryid);
-      formData.append('available', available);
-      formData.append('isAddon', isAddon);
-
+      // If product has sizes, include sizes in the request body
       if (hasSizes) {
-        formData.append('hasSizes', hasSizes);
-        sizes.forEach((size, index) => {
-          formData.append(`sizes[${index}]`, size);
-        });
+        requestBody.hasSizes = hasSizes;
+        requestBody.sizes = sizes;
       } else {
-        formData.append('productprice', productprice);
-        formData.append('productdiscount', productdiscount);
+        requestBody.productprice = productprice
+        requestBody.productdiscount = productdiscount;
         const priceAfterDiscount = productprice - productdiscount;
-        formData.append('priceAfterDiscount', priceAfterDiscount > 0 ? priceAfterDiscount : 0);
+        requestBody.priceAfterDiscount = priceAfterDiscount > 0 ? priceAfterDiscount : 0;
       }
 
       if (hasExtras) {
-        formData.append('hasExtras', hasExtras);
-        extras.forEach((extra, index) => {
-          formData.append(`extras[${index}]`, extra);
-        });
+        requestBody.hasExtras = hasExtras;
+        requestBody.extras = extras;
       }
+
 
       if (productimg) {
-        formData.append('image', productimg);
+        requestBody.image = productimg;
       }
 
-      console.log({ formData });
+      console.log({ requestBody })
 
-      // تحديد عنوان URL للتحديث بناءً على ما إذا كانت الصورة موجودة أم لا
-      const url = productimg ? `${apiUrl}/api/product/${productid}` : `${apiUrl}/api/product/withoutimage/${productid}`;
-
-      // إجراء طلب API لتحديث المنتج
-      const response = await axios.put(url, formData, {
+      // Perform the API request to update the product
+      const response = requestBody.image ?
+        await axios.put(`${apiUrl}/api/product/${productid}`, requestBody, {
         headers: {
           'Content-Type': 'multipart/form-data',
           ...config.headers,
-        }
-      });
+        }})
+        : await axios.put(`${apiUrl}/api/product/withoutimage/${productid}`, requestBody, config);
 
+      // Handle successful response
       console.log(response.data);
-
-      if (response.status === 200) {
+      if (response) {
+        // Refresh categories and products after successful update
         getallCategories();
         getallproducts();
 
+        // Show success toast
         toast.success('تم تحديث المنتج بنجاح.');
-      } else {
-        throw new Error('فشلت عملية تحديث المنتج. يرجى المحاولة مرة أخرى.');
       }
     } catch (error) {
-      console.error('حدث خطأ أثناء تحديث المنتج:', error);
+      // Handle errors
+      console.log(error);
+
+      // Show error toast
       toast.error('حدث خطأ أثناء تحديث المنتج. الرجاء المحاولة مرة أخرى.');
     }
   };
