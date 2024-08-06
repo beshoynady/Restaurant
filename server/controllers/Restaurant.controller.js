@@ -7,7 +7,6 @@ const createRestaurant = async (req, res) => {
         const {
             name,
             description,
-            logo,
             aboutText,
             address,
             locationUrl,
@@ -27,6 +26,8 @@ const createRestaurant = async (req, res) => {
             serviceTaxRate
         } = req.body;
 
+        const image = req.file ? req.file.filename : null;
+
         if (!name || !description || !address || !website) {
             return res.status(400).json({ message: 'All required fields must be provided' });
         }
@@ -34,7 +35,7 @@ const createRestaurant = async (req, res) => {
         const restaurant = new RestaurantModel({
             name,
             description,
-            logo,
+            image,
             aboutText,
             address,
             locationUrl,
@@ -94,6 +95,26 @@ const getRestaurantById = async (req, res) => {
         return res.status(500).json({ message: 'Server Error', error });
     }
 };
+const getRestaurant = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(400).json({ message: 'Invalid restaurant ID' });
+        }
+
+        const restaurant = await RestaurantModel.findById(id);
+
+        if (!restaurant) {
+            return res.status(404).json({ message: 'Restaurant not found' });
+        }
+
+        return restaurant;
+    } catch (error) {
+        console.error('Error fetching restaurant by ID:', error);
+        return res.status(500).json({ message: 'Server Error', error });
+    }
+};
 
 // Update a restaurant by ID
 const updateRestaurant = async (req, res) => {
@@ -102,7 +123,6 @@ const updateRestaurant = async (req, res) => {
         const {
             name,
             description,
-            logo,
             aboutText,
             address,
             locationUrl,
@@ -122,14 +142,30 @@ const updateRestaurant = async (req, res) => {
             serviceTaxRate
         } = req.body;
 
+        // التحقق من صحة معرّف المطعم
         if (!mongoose.Types.ObjectId.isValid(id)) {
             return res.status(400).json({ message: 'Invalid restaurant ID' });
         }
 
+        // البحث عن المطعم الموجود
+        const existingRestaurant = await RestaurantModel.findById(id);
+        if (!existingRestaurant) {
+            return res.status(404).json({ message: 'Restaurant not found' });
+        }
+
+        // تحديد الصورة الجديدة أو القديمة
+        let image;
+        if (req.file) {
+            image = req.file.filename; // صورة جديدة
+        } else {
+            image = existingRestaurant.image; // الاحتفاظ بالصورة القديمة
+        }
+
+        // تحديث المطعم
         const restaurant = await RestaurantModel.findByIdAndUpdate(id, {
             name,
             description,
-            logo,
+            image,
             aboutText,
             address,
             locationUrl,
@@ -153,12 +189,14 @@ const updateRestaurant = async (req, res) => {
             return res.status(404).json({ message: 'Restaurant not found' });
         }
 
+        // استجابة بنجاح
         return res.status(200).json(restaurant);
     } catch (error) {
         console.error('Error updating restaurant:', error);
         return res.status(500).json({ message: 'Server Error', error });
     }
 };
+
 
 // Delete a restaurant by ID
 const deleteRestaurant = async (req, res) => {
@@ -217,6 +255,7 @@ module.exports = {
     createRestaurant,
     getAllRestaurants,
     getRestaurantById,
+    getRestaurant,
     updateRestaurant,
     deleteRestaurant,
     updateSubscriptionDates

@@ -260,7 +260,7 @@ const getProduct = async (req, res) => {
       // Return an object with product and an error flag
       return { product: null, error: 'Product not found' };
     }
-
+    
     // Return the product if found
     return { product };
   } catch (error) {

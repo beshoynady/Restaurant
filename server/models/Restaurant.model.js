@@ -13,7 +13,7 @@ const restaurantSchema = new mongoose.Schema({
         trim: true,
         maxlength: 500
     },
-    logo: {
+    image: {
         type: String,
         trim: true,
         required: true,
