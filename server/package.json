@@ -1,7 +1,7 @@
 {
   "name": "elbaron-bns-server",
   "version": "1.0.0",
-  "description": "elbaron-bns-server",
+  "description": "Backend server for Elbaron BNS, providing APIs for managing products and user authentication.",
   "main": "index.js",
   "scripts": {
     "start": "pm2 start index.js --name \"elbaron-bns-server\"",
@@ -10,11 +10,11 @@
     "logs": "pm2 logs elbaron-bns-server",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "engines": {
-    "node": "v18.17.0"
-  },
+  "author": "Your Name <your.email@example.com>",
   "license": "ISC",
+  "engines": {
+    "node": ">=18.17.0"
+  },
   "dependencies": {
     "bcrypt": "^5.1.0",
     "cookie-parser": "^1.4.6",
@@ -32,8 +32,8 @@
     "path": "^0.12.7",
     "qrcode": "^1.5.3",
     "socket.io": "^4.7.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
   }
 }
-
-
-

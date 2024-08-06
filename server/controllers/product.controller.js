@@ -1,19 +1,33 @@
 const path = require("path");
 const fs = require('fs');
-
 const ProductModel = require('../models/Product.model.js');
 
-// Create a new product
+/**
+ * Create a new product
+ * @param {Object} req - Request object
+ * @param {Object} res - Response object
+ */
 const createProduct = async (req, res) => {
   try {
-    const { productname, productprice, productdescription, productcategoryid, available, hasSizes,
-      sizes, hasExtras, isAddon, extras } = req.body;
+    const {
+      productname,
+      productprice,
+      productdescription,
+      productcategoryid,
+      available,
+      hasSizes,
+      sizes,
+      hasExtras,
+      isAddon,
+      extras
+    } = req.body;
 
-    const image = await req.file ? req.file.filename : null;
+    // Retrieve the filename of the uploaded image
+    const image = req.file ? req.file.filename : null;
 
-    // Check if required fields are provided in the request
+    // Validate required fields
     if (!productname || !productcategoryid) {
-      return res.status(400).json({ error: 'Please provide name, price, and category of the product' });
+      return res.status(400).json({ error: 'Product name and category are required' });
     }
 
     // Validate 'sizes' array
@@ -41,90 +55,91 @@ const createProduct = async (req, res) => {
       image
     });
 
-    res.status(201).json(newProduct); // 201 for successful creation
+    res.status(201).json(newProduct); // 201 Created
   } catch (error) {
-    // Handle errors
-    console.error({ 'Error creating product:': error });
-    res.status(500).json({ error: 'An error occurred while processing the request', error });
+    console.error('Error creating product:', error);
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
 
-
-// Retrieve all products
+/**
+ * Retrieve all products
+ * @param {Object} req - Request object
+ * @param {Object} res - Response object
+ */
 const getAllProducts = async (req, res) => {
   try {
-    // Retrieve all products and populate the 'category' and 'extras' fields
+    // Retrieve and populate related fields
     const allProducts = await ProductModel.find({})
-    .populate('category')
-    .populate('sizes.sizeRecipe')
-    .populate('productRecipe')
-    .populate('extras');
+      .populate('category')
+      .populate('sizes.sizeRecipe')
+      .populate('productRecipe')
+      .populate('extras');
 
-    // Check if any products are found
     if (allProducts.length === 0) {
       return res.status(404).json({ message: 'No products found' });
     }
 
-    // Respond with the list of products
-    res.status(200).json(allProducts);
+    res.status(200).json(allProducts); // 200 OK
   } catch (error) {
-    // Handle errors
     console.error('Error fetching all products:', error);
-    res.status(500).json({ message: 'Internal server error', error });
+    res.status(500).json({ message: 'Internal server error' });
   }
 };
 
-
-// Retrieve products by category
+/**
+ * Retrieve products by category
+ * @param {Object} req - Request object
+ * @param {Object} res - Response object
+ */
 const getProductByCategory = async (req, res) => {
   try {
-    const categoryid = req.params.categoryid;
+    const { categoryid } = req.params;
     const products = await ProductModel.find({ category: categoryid })
-    .populate('category')
-    .populate('sizes.sizeRecipe')
-    .populate('productRecipe')
-    .populate({
-      path: 'extras',
-      model: 'Product'
-    });
-    res.status(200).json(products);
+      .populate('category')
+      .populate('sizes.sizeRecipe')
+      .populate('productRecipe')
+      .populate('extras');
+
+    res.status(200).json(products); // 200 OK
   } catch (err) {
-    res.status(400).json(err);
+    console.error('Error fetching products by category:', err);
+    res.status(500).json({ message: 'Internal server error' });
   }
 };
 
-// Retrieve a single product by its ID
+/**
+ * Retrieve a single product by its ID
+ * @param {Object} req - Request object
+ * @param {Object} res - Response object
+ */
 const getOneProduct = async (req, res) => {
   try {
-    const productid = req.params.productid;
+    const { productid } = req.params;
     const product = await ProductModel.findById(productid)
       .populate('category')
       .populate('productRecipe')
-      .populate({
-        path: 'extras',
-        model: 'Product'
-      });
+      .populate('extras');
 
-    // Check if product is found
     if (!product) {
       return res.status(404).json({ message: 'Product not found' });
     }
 
-    // Respond with the found product
-    res.status(200).json(product);
+    res.status(200).json(product); // 200 OK
   } catch (error) {
     console.error('Error fetching product:', error);
     res.status(500).json({ message: 'Internal server error' });
   }
 };
 
-
-
-
-// Update a product by its ID
+/**
+ * Update a product by its ID
+ * @param {Object} req - Request object
+ * @param {Object} res - Response object
+ */
 const updateProduct = async (req, res) => {
   try {
-    const productid = req.params.productid;
+    const { productid } = req.params;
     const {
       productname,
       productdescription,
@@ -151,26 +166,22 @@ const updateProduct = async (req, res) => {
       return res.status(400).json({ error: 'Invalid extras provided' });
     }
 
-    // If there is a new image uploaded, handle it
+    // Handle new image upload
     if (req.file) {
-      // Delete the old image file if it exists
+      // Delete old image if it exists
       const product = await ProductModel.findById(productid);
       if (product && product.image) {
         const oldImagePath = path.join(__dirname, '..', 'images', product.image);
-        fs.unlinkSync(oldImagePath);
-        console.log('Old image deleted successfully');
+        if (fs.existsSync(oldImagePath)) {
+          fs.unlinkSync(oldImagePath);
+          console.log('Old image deleted successfully');
+        }
       }
     }
 
-    // Check if the product exists
-    const existingProduct = await ProductModel.findById(productid);
-    if (!existingProduct) {
-      return res.status(404).json({ message: 'Product not found' });
-    }
-
-    // Update the product with new information
+    // Update product details
     const updatedProduct = await ProductModel.findByIdAndUpdate(
-      { _id: productid },
+      productid,
       {
         name: productname,
         description: productdescription,
@@ -184,28 +195,31 @@ const updateProduct = async (req, res) => {
         hasExtras,
         isAddon,
         extras,
-        // Use the new image name if provided
-        image: await req.file ? req.file.filename : existingProduct.image,
+        image: req.file ? req.file.filename : undefined,
         available
       },
       { new: true }
     );
 
-    // Return the updated product
-    res.status(200).json(updatedProduct);
+    if (!updatedProduct) {
+      return res.status(404).json({ message: 'Product not found' });
+    }
+
+    res.status(200).json(updatedProduct); // 200 OK
   } catch (error) {
-    // Handle errors
     console.error('Error updating product:', error);
     res.status(500).json({ message: 'Internal server error' });
   }
 };
 
-
-
-// Update a product by its ID without changing the image
+/**
+ * Update a product by its ID without changing the image
+ * @param {Object} req - Request object
+ * @param {Object} res - Response object
+ */
 const updateProductWithoutImage = async (req, res) => {
   try {
-    const productid = req.params.productid;
+    const { productid } = req.params;
     const {
       productname,
       productprice,
@@ -222,9 +236,8 @@ const updateProductWithoutImage = async (req, res) => {
       extras
     } = req.body;
 
-    // Update the product without changing the image
     const updatedProduct = await ProductModel.findByIdAndUpdate(
-      { _id: productid },
+      productid,
       {
         name: productname,
         description: productdescription,
@@ -232,8 +245,8 @@ const updateProductWithoutImage = async (req, res) => {
         category: productcategoryid,
         discount: productdiscount,
         priceAfterDiscount,
-        available,
         productRecipe,
+        available,
         hasSizes,
         sizes,
         hasExtras,
@@ -243,30 +256,45 @@ const updateProductWithoutImage = async (req, res) => {
       { new: true }
     );
 
-    res.status(200).json(updatedProduct);
+    if (!updatedProduct) {
+      return res.status(404).json({ message: 'Product not found' });
+    }
+
+    res.status(200).json(updatedProduct); // 200 OK
   } catch (error) {
-    // Handle errors
     console.error('Error updating product without image:', error);
     res.status(500).json({ message: 'Internal server error' });
   }
 };
 
-
-// Delete a product by its ID
+/**
+ * Delete a product by its ID
+ * @param {Object} req - Request object
+ * @param {Object} res - Response object
+ */
 const deleteProduct = async (req, res) => {
   try {
-    const productid = req.params.productid;
+    const { productid } = req.params;
     const product = await ProductModel.findById(productid);
 
     if (!product) {
       return res.status(404).json({ message: 'Product not found' });
     }
 
+    // Optionally delete the image associated with the product
+    if (product.image) {
+      const imagePath = path.join(__dirname, '..', 'images', product.image);
+      if (fs.existsSync(imagePath)) {
+        fs.unlinkSync(imagePath);
+        console.log('Product image deleted successfully');
+      }
+    }
+
     await ProductModel.findByIdAndDelete(productid);
-    res.status(200).json({ message: 'Product deleted successfully', deletedProduct: product });
-  } catch (err) {
-    console.error('Error deleting product:', err);
-    res.status(500).json({ message: 'Failed to delete product', error: err.message });
+    res.status(200).json({ message: 'Product deleted successfully', deletedProduct: product }); // 200 OK
+  } catch (error) {
+    console.error('Error deleting product:', error);
+    res.status(500).json({ message: 'Failed to delete product', error: error.message });
   }
 };
 
