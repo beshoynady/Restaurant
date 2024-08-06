@@ -120,9 +120,8 @@ const getOneProduct = async (req, res) => {
 
 
 
-
 // Update a product by its ID
-const ++ = async (req, res) => {
+const updateProduct = async (req, res) => {
   try {
     const productid = req.params.productid;
     const {
