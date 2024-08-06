@@ -97,7 +97,7 @@ router.route('/getproductbycategory/:categoryid')
 router.route('/:productid')
   .get(getOneProduct)
   .put(authenticateToken, checkSubscription, upload.single("image"), deleteOldImageMiddleware, updateProduct)
-  .delete(deleteProduct);
+  .delete(authenticateToken, checkSubscription, deleteProduct);
 
 router.route('/withoutimage/:productid')
   .put(authenticateToken, checkSubscription, updateProductWithoutImage);
