@@ -58,7 +58,6 @@ const Header = () => {
               </div>
               {restaurantData.logo?
               <img src={`${apiUrl}/images/${restaurantData.logo}`} alt={restaurantData.name} style={{height:'100%', width:'90px'}} />
-              :logo?<img src={logo} alt={restaurantData.name} style={{height:'100%', width:'90px'}} />
               :<a href="/" className='res-name'>{restaurantData.name}</a>
               }
             </div>
