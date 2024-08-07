@@ -26,7 +26,7 @@ const Reservation = () => {
 
   return (
     <div id='reservation' className='d-flex align-items-center flex-column justify-content-start'
-      style={{ height: 'calc(100vh - 80px)', marginTop: '80px', width: '100%', scrollMarginTop: '80px' }}>
+      style={{ height: 'calc(100vh - 80px)', marginTop: '80px', width: '100%', scrollMarginTop: '80px', borderRadius:"25px" }}>
       <div className='section-title mb-2'>
         <h2>حجز طاولة</h2>
       </div>

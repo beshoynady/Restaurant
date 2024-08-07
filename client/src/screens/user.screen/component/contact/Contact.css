@@ -30,6 +30,7 @@
   width: 48%;
   flex-direction: column;
   padding: 10px 0;
+  border-radius: 25px;
 }
 .contact .container .contact-content .left > h2 {
   font-size: 22px;
@@ -133,6 +134,7 @@
   justify-content: space-evenly;
   width: 48%;
   color: var(--white-color);
+  border-radius: 25px;
 }
 .contact .container .contact-content .right p {
   font-size: 24px;

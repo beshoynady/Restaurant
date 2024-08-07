@@ -39,28 +39,28 @@ const Footer = () => {
             <ul className="fa-ul" style={{ marginRight: "1.65em" }}>
               {restaurantData.address && (
                 <li className="mb-3">
-                  <span className="fa-li"><i className="fas fa-home"></i></span>
                   <span className="ms-2">
                     {`${restaurantData.address.state || ''} ${restaurantData.address.city || ''} ${restaurantData.address.street || ''}`}
                   </span>
+                  <span className="fa-li"><i className="fas fa-home"></i></span>
                 </li>
               )}
               {restaurantData.contact?.email && (
                 <li className="mb-3">
-                  <span className="fa-li"><i className="fas fa-envelope"></i></span>
                   <a className="ms-2" href={`mailto:${restaurantData.contact.email}`}>{restaurantData.contact.email}</a>
+                  <span className="fa-li"><i className="fas fa-envelope"></i></span>
                 </li>
               )}
               {restaurantData.contact?.phone && (
                 <li className="mb-3">
-                  <span className="fa-li"><i className="fas fa-phone"></i></span>
                   <a className="ms-2" href={`tel:${restaurantData.contact?.phone}`}>{restaurantData.contact?.phone}</a>
+                  <span className="fa-li"><i className="fas fa-phone"></i></span>
                 </li>
               )}
               {restaurantData.contact?.whatsapp && (
                 <li className="mb-3">
-                  <span className="fa-li"><i className="fab fa-whatsapp"></i></span>
                   <a className="ms-2" href={`https://api.whatsapp.com/send?phone=+2${restaurantData.contact?.whatsapp}`} target="_blank" rel="noreferrer">{restaurantData.contact?.whatsapp}</a>
+                  <span className="fa-li"><i className="fab fa-whatsapp"></i></span>
                 </li>
               )}
             </ul>
