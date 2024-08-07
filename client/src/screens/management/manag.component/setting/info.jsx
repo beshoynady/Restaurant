@@ -683,7 +683,7 @@ const Info = () => {
                   <div className="form-group  h-auto px-3 d-flex align-items-center justify-content-start col-12 col-md-6 row">
                     <label className="form-label col-form-label p-0 m-0">تاريخ بداية الاشتراك</label>
                     <div className="col-8">
-                      <input type="date" className="form-control border-primary col-12" value={formatDate(subscriptionStart)}
+                      <input type="date" className="form-control border-primary col-12 p-1" value={formatDate(subscriptionStart)}
                         onChange={(e) => setSubscriptionStart(e.target.value)} required
                         readOnly={employeeLoginInfo.role !== 'programer'}
                       />
@@ -693,7 +693,7 @@ const Info = () => {
                   <div className="form-group  h-auto px-3 d-flex align-items-center justify-content-start col-12 col-md-6 row">
                     <label className="form-label col-form-label p-0 m-0">تاريخ نهاية الاشتراك</label>
                     <div className="col-8">
-                      <input type="date" className="form-control border-primary col-12" value={formatDate(subscriptionEnd)}
+                      <input type="date" className="form-control border-primary col-12 p-1" value={formatDate(subscriptionEnd)}
                         onChange={(e) => { setSubscriptionEnd(e.target.value) }} required
                         readOnly={employeeLoginInfo.role !== 'programer'}
                       />
@@ -703,7 +703,7 @@ const Info = () => {
                   <div className="form-group  h-auto px-3 d-flex align-items-center justify-content-start col-12 col-md-6 row">
                     <label className="form-label col-3 p-0 m-0">باقي من الوقت</label>
                     <div className="col-9">
-                      <input type="text" className="form-control border-primary col-12" value={`${remainingTime.months} شهر و ${remainingTime.days} يوم`} readOnly />
+                      <input type="text" className="form-control border-primary col-12 p-1" value={`${remainingTime.months} شهر و ${remainingTime.days} يوم`} readOnly />
                     </div>
                   </div>
                   {employeeLoginInfo.role === 'programer' &&
@@ -725,14 +725,14 @@ const Info = () => {
                   <div className="form-group h-auto px-3 d-flex flex-nowrap align-items-center justify-content-start col-12 col-md-6 ">
                     <label className="form-label col-3 p-0 m-0">الاسم</label>
                     <div className="col-9">
-                      <input type="text" className="form-control border-primary col-12" defaultValue={name} required onChange={(e) => setName(e.target.value)} />
+                      <input type="text" className="form-control border-primary col-12 p-1" defaultValue={name} required onChange={(e) => setName(e.target.value)} />
                     </div>
                   </div>
 
                   <div className="form-group h-auto px-3 d-flex flex-nowrap align-items-center justify-content-start col-12 col-md-6 ">
                     <label className="form-label col-3 p-0 m-0">الوصف</label>
                     <div className="col-9">
-                      <textarea type="text" className="form-control border-primary col-12" defaultValue={description} required onChange={(e) => setDescription(e.target.value)} />
+                      <textarea type="text" className="form-control border-primary col-12 p-1" defaultValue={description} required onChange={(e) => setDescription(e.target.value)} />
                     </div>
                   </div>
 
@@ -741,42 +741,42 @@ const Info = () => {
                   <div className="form-group h-auto px-3 d-flex flex-nowrap align-items-center justify-content-start col-12 col-md-6 ">
                     <label className="form-label col-3 p-0 m-0">الدولة</label>
                     <div className="col-9">
-                      <input type="text" className="form-control border-primary col-12" defaultValue={country} onChange={(e) => setCountry(e.target.value)} />
+                      <input type="text" className="form-control border-primary col-12 p-1" defaultValue={country} onChange={(e) => setCountry(e.target.value)} />
                     </div>
                   </div>
 
                   <div className="form-group h-auto px-3 d-flex flex-nowrap align-items-center justify-content-start col-12 col-md-6 ">
                     <label className="form-label col-3 p-0 m-0">المحافظة</label>
                     <div className="col-9">
-                      <input type="text" className="form-control border-primary col-12" defaultValue={state} required onChange={(e) => setState(e.target.value)} />
+                      <input type="text" className="form-control border-primary col-12 p-1" defaultValue={state} required onChange={(e) => setState(e.target.value)} />
                     </div>
                   </div>
 
                   <div className="form-group h-auto px-3 d-flex flex-nowrap align-items-center justify-content-start col-12 col-md-6 ">
                     <label className="form-label col-3 p-0 m-0">المدينة</label>
                     <div className="col-9">
-                      <input type="text" className="form-control border-primary col-12" defaultValue={city} required onChange={(e) => setCity(e.target.value)} />
+                      <input type="text" className="form-control border-primary col-12 p-1" defaultValue={city} required onChange={(e) => setCity(e.target.value)} />
                     </div>
                   </div>
 
                   <div className="form-group h-auto px-3 d-flex flex-nowrap align-items-center justify-content-start col-12 col-md-6 ">
                     <label className="form-label col-3 p-0 m-0">العنوان</label>
                     <div className="col-9">
-                      <input type="text" className="form-control border-primary col-12" defaultValue={street} required onChange={(e) => setStreet(e.target.value)} />
+                      <input type="text" className="form-control border-primary col-12 p-1" defaultValue={street} required onChange={(e) => setStreet(e.target.value)} />
                     </div>
                   </div>
 
                   <div className="form-group h-auto px-3 d-flex flex-nowrap align-items-center justify-content-start col-12 col-md-6 ">
                     <label className="form-label col-3 p-0 m-0">رابط المنيو</label>
                     <div className="col-9">
-                      <input type="text" className="form-control border-primary col-12" defaultValue={website} required onChange={(e) => setwebsite(e.target.value)} />
+                      <input type="text" className="form-control border-primary col-12 p-1" defaultValue={website} required onChange={(e) => setwebsite(e.target.value)} />
                     </div>
                   </div>
 
                   <div className="form-group h-auto px-3 d-flex flex-nowrap align-items-center justify-content-start col-12 col-md-6 ">
                     <label className="form-label col-3 p-0 m-0">كود البريد</label>
                     <div className="col-9">
-                      <input type="text" className="form-control border-primary col-12" defaultValue={postalCode} onChange={(e) => setPostalCode(e.target.value)} />
+                      <input type="text" className="form-control border-primary col-12 p-1" defaultValue={postalCode} onChange={(e) => setPostalCode(e.target.value)} />
                     </div>
                   </div>
 
@@ -785,20 +785,20 @@ const Info = () => {
                   <div className="form-group h-auto px-3 d-flex flex-nowrap align-items-center justify-content-start col-12 col-md-6 ">
                     <label className="form-label col-3 p-0 m-0">رابط خريطه جوجل</label>
                     <div className="col-9">
-                      <input type="text" className="form-control border-primary col-12" defaultValue={locationUrl} required onChange={(e) => setlocationUrl(e.target.value)} />
+                      <input type="text" className="form-control border-primary col-12 p-1" defaultValue={locationUrl} required onChange={(e) => setlocationUrl(e.target.value)} />
                     </div>
                   </div>
                   <div className="form-group h-auto px-3 d-flex flex-nowrap align-items-center justify-content-start col-12 col-md-6 ">
                     <label className="form-label col-3 p-0 m-0">about us</label>
                     <div className="col-9">
-                      <textarea className="form-control border-primary col-12" defaultValue={aboutText} required onChange={(e) => setaboutText(e.target.value)} />
+                      <textarea className="form-control border-primary col-12 p-1" defaultValue={aboutText} required onChange={(e) => setaboutText(e.target.value)} />
                     </div>
                   </div>
 
                   <div className="form-group h-auto px-3 d-flex flex-nowrap align-items-center justify-content-start col-12 col-md-6 ">
                     <label className="form-label col-3 p-0 m-0">نسبة الضريبة (%)</label>
                     <div className="col-9">
-                      <input type="number" className="form-control border-primary col-12" value={salesTaxRate} onChange={(e) => setsalesTaxRate(e.target.value)} required
+                      <input type="number" className="form-control border-primary col-12 p-1" value={salesTaxRate} onChange={(e) => setsalesTaxRate(e.target.value)} required
                       />
                     </div>
                   </div>
@@ -806,7 +806,7 @@ const Info = () => {
                   <div className="form-group h-auto px-3 d-flex flex-nowrap align-items-center justify-content-start col-12 col-md-6 ">
                     <label className="form-label col-3 p-0 m-0">نسبة الخدمة (%)</label>
                     <div className="col-9">
-                      <input type="number" className="form-control border-primary col-12" value={serviceTaxRate} onChange={(e) => setserviceTaxRate(e.target.value)} required
+                      <input type="number" className="form-control border-primary col-12 p-1" value={serviceTaxRate} onChange={(e) => setserviceTaxRate(e.target.value)} required
                       />
                     </div>
                   </div>
@@ -815,13 +815,13 @@ const Info = () => {
                     <label className="form-label col-3 p-0 m-0">اللوجو</label>
                     <div className="d-flex flex-wrap align-items-center col-9">
                       <input type="file" className="form-control" onChange={(e) => handleFileUpload(e)} />
-                      <div className="d-flex align-items-center justify-content-center w-100 mt-2" style={{height: '120px', backgroundColor: 'gray' }}>
+                      <div className="d-flex align-items-center justify-content-center w-100 mt-2" style={{ height: '120px', backgroundColor: 'gray' }}>
                         <img src={`${apiUrl}/images/${image}`} alt="image" className="img-fluid" style={{ width: '100%', height: '100%' }} />
                       </div>
                     </div>
                   </div>
 
-                  <div className="col-12 col-md-6 d-flex flex-wrap">
+                  <div className="col-12 col-lg-6 d-flex flex-wrap">
                     <div className="form-check form-check-flat mb-2 mr-4 d-flex align-items-center w-50">
                       <input
                         type="checkbox"
@@ -877,7 +877,7 @@ const Info = () => {
                   <div className="card-body">
                     <h4 className="card-title">وسائل الدفع المقبوله</h4>
                     <p className="card-description">اختر وسائل الدفع المقبوله لدفع فواتير المطعم</p>
-                    <form className="forms-sample" onSubmit={handleAcceptedPayments}>
+                    <form className="forms-sample p-2" onSubmit={handleAcceptedPayments}>
                       <div className="d-flex flex-wrap align-items-center justify-content-between">
                         <div className="col-lg-12">
                           <div className="form-group d-flex flex-wrap">
@@ -910,7 +910,7 @@ const Info = () => {
                   <div className="card-body">
                     <h4 className="card-title">خدمات اضافيه</h4>
                     <p className="card-description">اختر الخدمات المتاحة التي يقدمها المطعم</p>
-                    <form className="forms-sample" onSubmit={handleFeatures}>
+                    <form className="forms-sample p-2" onSubmit={handleFeatures}>
                       <div className="d-flex flex-wrap align-items-center justify-content-between">
                         <div className="col-lg-12">
                           <div className="form-group d-flex flex-wrap">
@@ -942,14 +942,14 @@ const Info = () => {
 
 
           {/* contact  */}
-          <div className="col-md-6 d-flex align-items-stretch grid-margin">
+          <div className="col-lg-6 d-flex align-items-stretch grid-margin">
             <div className="row flex-grow">
-              <div className="col-12 stretch-card">
+              <div className="col-12 stretch-card mb-3">
                 <div className="card">
                   <div className="card-body">
                     <h4 className="card-title">بيانات التواصل</h4>
                     <p className="card-description"> ادخل بيانات التواصل المتاحة لديك </p>
-                    <form className="forms-sample" onSubmit={(e) => handleContactSocialmedia(e)}>
+                    <form className="forms-sample p-2" onSubmit={(e) => handleContactSocialmedia(e)}>
                       <div className="form-group  h-auto px-3 d-flex align-items-center justify-content-start col-12 " style={{ width: '100%' }}>
                         <label className='col-4 text-dark fs-5' htmlFor="phone">رقم الهاتف:</label>
                         <input type="text" className="form-control border-primary" id="phone" placeholder="ادخل رقم الهاتف" required defaultValue={phone} onChange={(e) => setPhone([e.target.value])} />
@@ -997,21 +997,21 @@ const Info = () => {
                     <p className="card-description">أضف المناطق وتكلفة التوصيل</p>
                     <div className="form-row mb-3">
                       <div className="col">
-                        <button type="button" className=" btn btn-success col-12 h-100 p-0 m-0 col-md-6 col-12 h-100 p-0 m-0 btn btn-block" onClick={addArea} style={{ width: '50%', height: '50px' }}>إضافة منطقة توصيل</button>
+                        <button type="button" className="btn btn-success col-6 p-2" onClick={addArea} >إضافة منطقة توصيل</button>
                       </div>
                     </div>
-                    <form className="forms-sample" onSubmit={(e) => handleDeliveryArea(e)}>
+                    <form className="forms-sample p-2" onSubmit={(e) => handleDeliveryArea(e)}>
                       {areas.map((area, index) => (
                         <div key={index} className="form-row mb-3 align-items-center">
-                          <div className="col-md-4 col-5 mb-2 mb-md-0">
-                            <input type="text" className="form-control border-primary col-12" placeholder="اسم المنطقة" defaultValue={area.name} onChange={(e) => handleAreasNameChange(index, e)} />
+                          <div className="col-8 mb-2 mb-md-0">
+                            <input type="text" className="form-control border-primary col-12 p-1" placeholder="اسم المنطقة" defaultValue={area.name} onChange={(e) => handleAreasNameChange(index, e)} />
                           </div>
-                          <div className="col-md-4 col-4 mb-2 mb-md-0">
-                            <input type="number" className="form-control border-primary col-12" placeholder="تكلفة التوصيل" defaultValue={Number(area.delivery_fee)} onChange={(e) => handleDeliveryCostChange(index, e)} />
+                          <div className="col-2 mb-2 mb-md-0">
+                            <input type="number" className="form-control border-primary col-12 p-1" placeholder="تكلفة التوصيل" defaultValue={Number(area.delivery_fee)} onChange={(e) => handleDeliveryCostChange(index, e)} />
                           </div>
-                          <div className="col-3 mb-2 mb-md-0">
+                          <div className="col-2 mb-2 mb-md-0">
                             <button type="button" className=" btn btn-danger col-12 h-100 p-0 m-0" onClick={() => removeArea(index, area._id)} style={{ height: '50px' }}>
-                              <i className="mdi mdi-delete" />
+                              <i className="mdi mdi-delete fs-3" />
                             </button>
                           </div>
                         </div>
@@ -1027,14 +1027,14 @@ const Info = () => {
             </div>
           </div>
 
-          <div className="col-md-6 d-flex align-items-stretch grid-margin">
+          <div className="col-lg-6 d-flex align-items-stretch grid-margin">
             <div className="row flex-grow">
-              <div className="col-12 stretch-card">
+              <div className="col-12 stretch-card mb-3">
                 <div className="card">
                   <div className="card-body">
                     <h4 className="card-title">مواعيد العمل </h4>
                     <p className="card-description">ادخل مواعيد العمل اليومية </p>
-                    <form className="forms-sample" onSubmit={(e) => handleOpeningHours(e)}>
+                    <form className="forms-sample p-2" onSubmit={(e) => handleOpeningHours(e)}>
                       <table className="table table-striped">
                         <thead>
                           <tr>
@@ -1047,7 +1047,7 @@ const Info = () => {
                         <tbody>
                           {daysOfWeek.map((day, index) => (
                             <tr key={index}>
-                              <td>{day}</td>
+                              <td className="col- text-center">{day}</td>
                               <td><input type="time" className="form-control" name={`openingTime${day}`} disabled={opening_hours && opening_hours[index]?.closed}
                                 value={opening_hours && opening_hours[index]?.from}
                                 onChange={(e) => handleSetFrom(index, e.target.value)} /></td>
@@ -1078,27 +1078,27 @@ const Info = () => {
                     <p className="card-description">أضف الورديات و وقت الحضور و الانصراف</p>
                     <div className="form-row mb-3">
                       <div className="col">
-                        <button type="button" className="btn btn-success  h-100 p-0" onClick={addShift} style={{ height: '50px' }}>إضافة وردية</button>
+                        <button type="button" className="btn btn-success col-6 p-2" onClick={addShift}>إضافة وردية</button>
                       </div>
                     </div>
-                    <form className="forms-sample" onSubmit={(e) => handleCreateShifts(e)}>
+                    <form className="forms-sample p-2" onSubmit={(e) => handleCreateShifts(e)}>
                       {shifts.map((shift, index) => (
                         <div key={index} className="form-row mb-3 align-items-center">
                           <div className="col-md-3 col-12 mb-2 mb-md-0">
-                            <input type="text" className="form-control border-primary col-12" placeholder="اسم الوردية" defaultValue={shift.shiftType} onChange={(e) => handleShiftTypeChange(index, e)} />
+                            <input type="text" className="form-control border-primary col-12 p-1" placeholder="اسم الوردية" defaultValue={shift.shiftType} onChange={(e) => handleShiftTypeChange(index, e)} />
                           </div>
                           <div className="col-md-3 col-6 mb-2 mb-md-0">
-                            <input type="time" className="form-control border-primary col-12" placeholder="ميعاد البدء" defaultValue={shift.startTime} onChange={(e) => handleStartTimeChange(index, e)} />
+                            <input type="time" className="form-control border-primary col-12 p-1" placeholder="ميعاد البدء" defaultValue={shift.startTime} onChange={(e) => handleStartTimeChange(index, e)} />
                           </div>
                           <div className="col-md-3 col-6 mb-2 mb-md-0">
-                            <input type="time" className="form-control border-primary col-12" placeholder="ميعاد الانتهاء" defaultValue={shift.endTime} onChange={(e) => handleEndTimeChange(index, e)} />
+                            <input type="time" className="form-control border-primary col-12 p-1" placeholder="ميعاد الانتهاء" defaultValue={shift.endTime} onChange={(e) => handleEndTimeChange(index, e)} />
                           </div>
                           <div className="col-md-2 col-6 mb-2 mb-md-0">
-                            <p className="form-control-plaintext">{`${shift.hours} ساعات`}</p>
+                            <p className="form-control-plaintext">{`${shift.hours > 0 ? shift.hours : 0} ساعات`}</p>
                           </div>
-                          <div className="col-md-1 col-6">
-                            <button type="button" className="btn btn-danger text-center  h-100  p-0 m-0" onClick={() => removeShift(index, shift._id)}>
-                              <i className="mdi mdi-delete" />
+                          <div className="col-md-1 col-6 m-0 p-0">
+                            <button type="button" className="btn btn-danger text-center w-100 h-100 p-0 m-0" onClick={() => removeShift(index, shift._id)}>
+                              <i className="mdi mdi-delete fs-3" />
                             </button>
                           </div>
                         </div>
@@ -1111,7 +1111,6 @@ const Info = () => {
                   </div>
                 </div>
               </div>
-
             </div>
           </div>
 
