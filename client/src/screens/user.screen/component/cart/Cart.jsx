@@ -56,23 +56,20 @@ const Cart = (props) => {
           <div className="slide-controler">
             <input type="radio" name="slide" id="order-radio" defaultChecked />
             <input type="radio" name="slide" id="invoice-radio" />
+            
             <label htmlFor="order-radio" className="slide order" onClick={() => {
               orderside.current.style.marginRight = "0%";
-              // ordersText.current.style.marginRight = "0%";
             }}>طلباتك الحالية</label>
             {id ? <label htmlFor="invoice-radio" className="slide invoice" onClick={() => {
               invoice(id);
               orderside.current.style.marginRight = "-50%";
-              // ordersText.current.style.marginRight = "-50%";
             }}>الفاتورة</label>
               : userLoginInfo ? <label htmlFor="invoice-radio" className="slide invoice" onClick={() => {
                 invoice(userLoginInfo.userinfo.id);
                 orderside.current.style.marginRight = "-50%";
-                // ordersText.current.style.marginRight = "-50%";
               }}>الفاتورة</label>
                 : <label htmlFor="invoice-radio" className="slide invoice" onClick={() => {
                   orderside.current.style.marginRight = "-50%";
-                  // ordersText.current.style.marginRight = "-50%";
                 }}>الفاتورة</label>}
             <div className="slider-tab">
 

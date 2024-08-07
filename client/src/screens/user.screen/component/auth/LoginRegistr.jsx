@@ -150,6 +150,7 @@ const LoginRegistr = (props) => {
                   <div className="slide-controls">
                     <input type="radio" name="slide" id="signup" />
                     <input type="radio" name="slide" id="login" defaultChecked />
+                    
                     <label htmlFor="login" className="slide login" onClick={() => {
                       loginForm.current.style.marginRight = "0%";
                     }}>دخول</label>
@@ -158,6 +159,7 @@ const LoginRegistr = (props) => {
                     }}>عضو جديد</label>
                     <div className="slider-tab"></div>
                   </div>
+
                   <div className="form-inner">
                     <form ref={loginForm} className="login" onSubmit={(e) => login(e, phone, password, getUserInfoFromToken)}>
                       <div className="field">
