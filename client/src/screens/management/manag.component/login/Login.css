@@ -21,12 +21,12 @@
 /* Styling for login box */
 .login-box {
     height: 85%;
+    height: 100%;
     display: flex;
     flex-wrap: wrap;
     background: #ffffff;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
 }
 
 .logo {
@@ -150,12 +150,16 @@
 }
 
 /* Hide carousel on mobile devices */
-.hide-on-mobile {
+/* .hide-on-mobile {
     display: none;
-}
+} */
 
 @media (min-width: 768px) {
-    .hide-on-mobile {
+    /* .hide-on-mobile {
         display: block;
-    }
+    } */
+     .login-body{
+        overflow-y: scroll;
+        height: auto;
+     }
 }

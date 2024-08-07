@@ -9,6 +9,7 @@ import menu from '../../../../image/emenu.jpg'
 import pos from '../../../../image/pos.jpg'
 
 const Login = () => {
+  
   const { getUserInfoFromToken } = useContext(detacontext);
   const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -78,7 +79,7 @@ const Login = () => {
     <section className="login-body">
       <div className="container h-100">
         <div className="login-box">
-          <div className="col-md-6 d-flex flex-wrap align-items-center justify-content-between">
+          <div className="col-12 col-md-6 d-flex flex-wrap align-items-center justify-content-between">
             <div className="d-flex flex-wrap align-items-center justify-content-center">
               <div className="logo">
                 <span className="logo-font">Smart</span> Menu
@@ -110,7 +111,7 @@ const Login = () => {
               </div>
             )}
           </div>
-          <div className="col-md-6 d-none d-md-block h-100">
+          <div className="col-12 col-md-6 d-flex align-items-center justify-content-center d-none d-md-block h-100">
             <div id="demo" className="carousel slide" data-ride="carousel">
               {/* Indicators */}
               <ul className="carousel-indicators">
