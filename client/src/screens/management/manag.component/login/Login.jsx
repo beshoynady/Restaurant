@@ -84,7 +84,9 @@ const Login = () => {
                 <span className="logo-font">Smart</span> Menu
               </div>
               <div className="app-description">
-                <p>أدخل رقم هاتفك وكلمة المرور للوصول إلى تطبيق Smart Menu الذي يمكنك من إدارة أقسام مطعمك بسهولة والتحكم الشامل في عملياته.</p>
+                <p>أدخل رقم هاتفك وكلمة المرور للوصول إلى تطبيق Smart Menu 
+                  <pr/>
+                  الذي يمكنك من إدارة أقسام مطعمك بسهولة والتحكم الشامل في عملياته.</p>
               </div>
             </div>
             {showCreateButton ? (
