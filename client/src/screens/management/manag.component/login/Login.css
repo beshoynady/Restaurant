@@ -1,18 +1,11 @@
 /* General body styling */
 .login-body {
-    background-color: #f0f2f5;
+    background-color: #c8deff;
     margin: 0;
     font-family: 'Arial', sans-serif;
     height: 100vh;
     width: 100%;
     overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.container {
-    height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -161,5 +154,9 @@
      .login-body{
         overflow-y: scroll;
         height: auto;
+     }
+     .login-box {
+        height: 100%;
+        width: 100%;
      }
 }

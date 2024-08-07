@@ -9,7 +9,7 @@ import menu from '../../../../image/emenu.jpg'
 import pos from '../../../../image/pos.jpg'
 
 const Login = () => {
-  
+
   const { getUserInfoFromToken } = useContext(detacontext);
   const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -77,90 +77,87 @@ const Login = () => {
 
   return (
     <section className="login-body">
-      <div className="container h-100">
-        <div className="login-box">
-          <div className="col-12 col-md-6 d-flex flex-wrap align-items-center justify-content-between">
-            <div className="d-flex flex-wrap align-items-center justify-content-center">
-              <div className="logo">
-                <span className="logo-font">Smart</span> Menu
-              </div>
-              <div className="app-description">
-                <p>أدخل رقم هاتفك وكلمة المرور للوصول إلى تطبيق Smart Menu 
-                  <pr/>
-                  الذي يمكنك من إدارة أقسام مطعمك بسهولة والتحكم الشامل في عملياته.</p>
-              </div>
+      <div className="login-box">
+        <div className="col-12 col-md-6 d-flex flex-wrap align-items-center justify-content-between">
+          <div className="d-flex flex-wrap align-items-center justify-content-center">
+            <div className="logo">
+              <span className="logo-font">Smart</span> Menu
             </div>
-            {showCreateButton ? (
-              <div className="col-12 d-flex flex-column flex-wrap align-items-center justify-content-center mt-3">
-                <button onClick={handleCreateFirstEmployee} className="btn btn-success p-3">خاص بالمبرمج</button>
-              </div>
-            ) : (
-              <div className="col-12 d-flex flex-column flex-wrap align-items-center justify-content-between">
-                <h3 className="header-title">سجل دخول</h3>
-                <form className="login-form" onSubmit={adminLogin}>
-                  <div className="form-group w-100 h-auto px-3 d-flex align-items-center justify-content-start col-12">
-                    <input type="text" className="form-control border-primary" placeholder="الهاتف" onChange={(e) => setPhone(e.target.value)} />
-                  </div>
-                  <div className="form-group w-100 h-auto px-3 d-flex align-items-center justify-content-start col-12">
-                    <input type="password" className="form-control border-primary" placeholder="كلمة المرور" onChange={(e) => setPassword(e.target.value)} />
-                  </div>
-                  <div className="form-group w-100 h-auto px-3 d-flex align-items-center justify-content-center col-12">
-                    <button type='submit' className="h-100 btn btn-primary btn-block">تسجيل دخول</button>
-                  </div>
-                </form>
-              </div>
-            )}
-          </div>
-          <div className="col-12 col-md-6 d-flex align-items-center justify-content-center d-none d-md-block h-100">
-            <div id="demo" className="carousel slide" data-ride="carousel">
-              {/* Indicators */}
-              <ul className="carousel-indicators">
-                <li data-target="#demo" data-slide-to="0" className="active"></li>
-                <li data-target="#demo" data-slide-to="1"></li>
-                <li data-target="#demo" data-slide-to="2"></li>
-              </ul>
-
-              {/* The slideshow */}
-              <div className="carousel-inner">
-                <div className="carousel-item active">
-                  <div className="slider-feature-card">
-                    <img className='d-block w-100 carousel-image' src={restaurant} alt="Smart Management" />
-                    <div className="carousel-caption d-none d-md-block">
-                      <h3 className="slider-title">إدارة المطعم بذكاء</h3>
-                      <p className="slider-description">إدارة مطعمك بشكل ذكي وحديث باستخدام تطبيق Smart Menu لتسهيل جميع عملياتك.</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="carousel-item">
-                  <div className="slider-feature-card">
-                    <img className='d-block w-100 carousel-image' src={menu} alt="Electronic Menu" />
-                    <div className="carousel-caption d-none d-md-block">
-                      <h3 className="slider-title">منيو إلكتروني سهل الإدارة</h3>
-                      <p className="slider-description">تحكم في قائمة الطعام إلكترونيًا بمرونة وسهولة مع تحديثات لحظية وإدارة فعالة.</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="carousel-item">
-                  <div className="slider-feature-card">
-                    <img className='d-block w-100 carousel-image' src={pos} alt="Cloud-Based Service" />
-                    <div className="carousel-caption d-none d-md-block">
-                      <h3 className="slider-title">خدمة سحابية متكاملة</h3>
-                      <p className="slider-description">استقبال وإرسال الطلبات عبر السحابة، مع تقديم تجربة سلسة ومتصلة باستخدام تطبيق Smart Menu.</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Left and right controls */}
-              <a className="carousel-control-prev" href="#demo" data-slide="prev">
-                <span className="carousel-control-prev-icon"></span>
-              </a>
-              <a className="carousel-control-next" href="#demo" data-slide="next">
-                <span className="carousel-control-next-icon"></span>
-              </a>
+            <div className="app-description">
+              <p>أدخل رقم هاتفك وكلمة المرور للوصول إلى تطبيق Smart Menu
+                <pr />
+                الذي يمكنك من إدارة أقسام مطعمك بسهولة والتحكم الشامل في عملياته.</p>
             </div>
           </div>
+          {showCreateButton ? (
+            <div className="col-12 d-flex flex-column flex-wrap align-items-center justify-content-center mt-3">
+              <button onClick={handleCreateFirstEmployee} className="btn btn-success p-3">خاص بالمبرمج</button>
+            </div>
+          ) : (
+            <div className="col-12 d-flex flex-column flex-wrap align-items-center justify-content-between">
+              <h3 className="header-title">سجل دخول</h3>
+              <form className="login-form" onSubmit={adminLogin}>
+                <div className="form-group w-100 h-auto px-3 d-flex align-items-center justify-content-start col-12">
+                  <input type="text" className="form-control border-primary" placeholder="الهاتف" onChange={(e) => setPhone(e.target.value)} />
+                </div>
+                <div className="form-group w-100 h-auto px-3 d-flex align-items-center justify-content-start col-12">
+                  <input type="password" className="form-control border-primary" placeholder="كلمة المرور" onChange={(e) => setPassword(e.target.value)} />
+                </div>
+                <div className="form-group w-100 h-auto px-3 d-flex align-items-center justify-content-center col-12">
+                  <button type='submit' className="h-100 btn btn-primary btn-block">تسجيل دخول</button>
+                </div>
+              </form>
+            </div>
+          )}
+        </div>
+        <div className="col-12 col-md-6 d-flex align-items-center justify-content-center d-none d-md-block h-100">
+          <div id="demo" className="carousel slide" data-ride="carousel">
+            {/* Indicators */}
+            <ul className="carousel-indicators">
+              <li data-target="#demo" data-slide-to="0" className="active"></li>
+              <li data-target="#demo" data-slide-to="1"></li>
+              <li data-target="#demo" data-slide-to="2"></li>
+            </ul>
 
+            {/* The slideshow */}
+            <div className="carousel-inner">
+              <div className="carousel-item active">
+                <div className="slider-feature-card">
+                  <img className='d-block w-100 carousel-image' src={restaurant} alt="Smart Management" />
+                  <div className="carousel-caption d-none d-md-block">
+                    <h3 className="slider-title">إدارة المطعم بذكاء</h3>
+                    <p className="slider-description">إدارة مطعمك بشكل ذكي وحديث باستخدام تطبيق Smart Menu لتسهيل جميع عملياتك.</p>
+                  </div>
+                </div>
+              </div>
+              <div className="carousel-item">
+                <div className="slider-feature-card">
+                  <img className='d-block w-100 carousel-image' src={menu} alt="Electronic Menu" />
+                  <div className="carousel-caption d-none d-md-block">
+                    <h3 className="slider-title">منيو إلكتروني سهل الإدارة</h3>
+                    <p className="slider-description">تحكم في قائمة الطعام إلكترونيًا بمرونة وسهولة مع تحديثات لحظية وإدارة فعالة.</p>
+                  </div>
+                </div>
+              </div>
+              <div className="carousel-item">
+                <div className="slider-feature-card">
+                  <img className='d-block w-100 carousel-image' src={pos} alt="Cloud-Based Service" />
+                  <div className="carousel-caption d-none d-md-block">
+                    <h3 className="slider-title">خدمة سحابية متكاملة</h3>
+                    <p className="slider-description">استقبال وإرسال الطلبات عبر السحابة، مع تقديم تجربة سلسة ومتصلة باستخدام تطبيق Smart Menu.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Left and right controls */}
+            <a className="carousel-control-prev" href="#demo" data-slide="prev">
+              <span className="carousel-control-prev-icon"></span>
+            </a>
+            <a className="carousel-control-next" href="#demo" data-slide="next">
+              <span className="carousel-control-next-icon"></span>
+            </a>
+          </div>
         </div>
       </div>
     </section>
