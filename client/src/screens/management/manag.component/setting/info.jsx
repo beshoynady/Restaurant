@@ -669,7 +669,7 @@ const Info = () => {
 
   return (
 
-    <div className="container" dir='rtl'>
+    <div className="container h-auto" dir='rtl'>
       <div className="content-wrapper">
         <div className="d-flex flex-wrap align-items-center justify-content-between" style={{ color: 'darkblue', fontWeight: '900', textAlign: 'center' }}>
 

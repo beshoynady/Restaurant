@@ -83,28 +83,28 @@
 }
 
 #invoice-radio:checked~label.invoice {
-  color: #fff;
+  color: var( --secondary-color);
   cursor: default;
   user-select: none;
-  background-color: var(--u-dark);
+  background-color: var(--primary-color);
 }
 
 #invoice-radio:checked~label.order {
-  color: #fff;
-  background-color: var(--u-gold);
+  color: var(--secondary-color);
+  background-color: var(--dark-color);
 
 }
 
 #order-radio:checked~label.invoice {
-  color: #fff;
-  background-color: var(--u-gold);
+  color: var(--secondary-color);
+  background-color: var(--dark-color);
 }
 
 #order-radio:checked~label.order {
-  color: #fff;
+  color: var( --secondary-color);
   cursor: default;
   user-select: none;
-  background-color: var(--u-dark);
+  background-color: var(--primary-color);
 }
 
 .cart-wrapper .cart-container {
