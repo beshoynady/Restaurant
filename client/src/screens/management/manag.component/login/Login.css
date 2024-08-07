@@ -32,7 +32,7 @@
 .logo {
     font-size: 3rem;
     font-weight: bold;
-    color: #333;
+    color: #000000;
     margin: 20px;
     text-align: center;
 }
@@ -127,6 +127,7 @@
 
 .carousel-caption {
     bottom: 20px;
+    background-color: #0000006b;
 }
 
 .carousel-control-prev-icon,
@@ -136,6 +137,7 @@
 
 
 .slider-title {
+    color: #3c9aff;
     font-size: 20px;
     font-weight: bold;
     margin: 10px 0;
@@ -143,7 +145,8 @@
 
 .slider-description {
     font-size: 18px;
-    color: #666;
+    font-weight: 900;
+    color: #ffffff;
 }
 
 /* Hide carousel on mobile devices */
