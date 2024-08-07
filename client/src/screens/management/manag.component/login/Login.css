@@ -1,6 +1,6 @@
 /* General body styling */
 .login-body {
-    background-color: #c8deff;
+    background-color: #f0f2f5;
     margin: 0;
     font-family: 'Arial', sans-serif;
     height: 100vh;
@@ -11,18 +11,22 @@
     justify-content: center;
 }
 
+.container {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 /* Styling for login box */
 .login-box {
     height: 85%;
-    height: 100%;
     display: flex;
     flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    justify-items: center;
     background: #ffffff;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
 }
 
 .logo {
@@ -133,7 +137,7 @@
 
 
 .slider-title {
-    color: #3c9aff;
+    color: #007bff;
     font-size: 20px;
     font-weight: bold;
     margin: 10px 0;
@@ -146,20 +150,12 @@
 }
 
 /* Hide carousel on mobile devices */
-/* .hide-on-mobile {
+.hide-on-mobile {
     display: none;
-} */
+}
 
 @media (min-width: 768px) {
-    /* .hide-on-mobile {
+    .hide-on-mobile {
         display: block;
-    } */
-     .login-body{
-        overflow-y: scroll;
-        height: auto;
-     }
-     .login-box {
-        height: 100%;
-        width: 100%;
-     }
+    }
 }
