@@ -75,7 +75,7 @@ const Login = () => {
       <div className="container h-100">
         <div className="login-box">
           <div className="col-md-6 d-flex flex-wrap align-items-center justify-content-between">
-            <div className="d-flex flex-wrap align-items-center justify-content-between">
+            <div className="d-flex flex-wrap align-items-center justify-content-center">
               <div className="logo">
                 <span className="logo-font">Smart</span> Menu
               </div>
@@ -104,36 +104,47 @@ const Login = () => {
               </div>
             )}
           </div>
-          <div className="col-md-6 h-100 hide-on-mobile">
+          <div className="col-md-6 d-none d-md-block h-100">
             <div id="demo" className="carousel slide" data-ride="carousel">
+              {/* Indicators */}
               <ul className="carousel-indicators">
                 <li data-target="#demo" data-slide-to="0" className="active"></li>
                 <li data-target="#demo" data-slide-to="1"></li>
                 <li data-target="#demo" data-slide-to="2"></li>
               </ul>
+
+              {/* The slideshow */}
               <div className="carousel-inner">
-                <div className="carousel-item w-100 h-100 active">
-                  <div className="slider-feature-card h-100">
-                    <img className='w-100 h-25' src="https://i.imgur.com/YMn8Xo1.png" alt="" />
-                    <h3 className="slider-title">إدارة المطعم بذكاء</h3>
-                    <p className="slider-description">قم بإدارة قوائم المطعم الإلكترونية بسهولة وفاعلية باستخدام تطبيق Smart Menu.</p>
+                <div className="carousel-item active">
+                  <div className="slider-feature-card">
+                    <img className='d-block w-100 carousel-image' src="https://via.placeholder.com/800x400?text=Smart+Restaurant+Management" alt="Smart Management" />
+                    <div className="carousel-caption d-none d-md-block">
+                      <h3 className="slider-title">إدارة المطعم بذكاء</h3>
+                      <p className="slider-description">إدارة مطعمك بشكل ذكي وحديث باستخدام تطبيق Smart Menu لتسهيل جميع عملياتك.</p>
+                    </div>
                   </div>
                 </div>
-                <div className="carousel-item w-100 h-100">
-                  <div className="slider-feature-card h-100">
-                    <img className='w-100 h-25' src="https://i.imgur.com/Yi5KXKM.png" alt="Feature 2" />
-                    <h3 className="slider-title">تحكم كامل بأعمالك</h3>
-                    <p className="slider-description">احصل على تقارير مفصلة وإدارة شاملة لأقسام مطعمك من خلال تطبيق Smart Menu.</p>
+                <div className="carousel-item">
+                  <div className="slider-feature-card">
+                    <img className='d-block w-100 carousel-image' src="https://via.placeholder.com/800x400?text=Digital+Menu+Management" alt="Electronic Menu" />
+                    <div className="carousel-caption d-none d-md-block">
+                      <h3 className="slider-title">منيو إلكتروني سهل الإدارة</h3>
+                      <p className="slider-description">تحكم في قائمة الطعام إلكترونيًا بمرونة وسهولة مع تحديثات لحظية وإدارة فعالة.</p>
+                    </div>
                   </div>
                 </div>
-                <div className="carousel-item w-100 h-100">
-                  <div className="slider-feature-card h-100">
-                    <img className='w-100 h-25' src="https://i.imgur.com/xyz.png" alt="Feature 3" /> {/* Replace with your new image */}
-                    <h3 className="slider-title">منيو إلكتروني متكامل</h3>
-                    <p className="slider-description">عرض شامل لقائمة الطعام بشكل إلكتروني مع تحديثات لحظية وسهولة في إدارة الأصناف.</p>
+                <div className="carousel-item">
+                  <div className="slider-feature-card">
+                    <img className='d-block w-100 carousel-image' src="https://via.placeholder.com/800x400?text=Cloud-Based+Service" alt="Cloud-Based Service" />
+                    <div className="carousel-caption d-none d-md-block">
+                      <h3 className="slider-title">خدمة سحابية متكاملة</h3>
+                      <p className="slider-description">استقبال وإرسال الطلبات عبر السحابة، مع تقديم تجربة سلسة ومتصلة باستخدام تطبيق Smart Menu.</p>
+                    </div>
                   </div>
                 </div>
               </div>
+
+              {/* Left and right controls */}
               <a className="carousel-control-prev" href="#demo" data-slide="prev">
                 <span className="carousel-control-prev-icon"></span>
               </a>
@@ -142,6 +153,7 @@ const Login = () => {
               </a>
             </div>
           </div>
+
         </div>
       </div>
     </section>

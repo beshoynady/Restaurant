@@ -9,17 +9,17 @@
     display: flex;
     align-items: center;
     justify-content: center;
-  }
-  
-  .container {
+}
+
+.container {
     height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
-  }
-  
-  /* Styling for login box */
-  .login-box {
+}
+
+/* Styling for login box */
+.login-box {
     height: 85%;
     display: flex;
     flex-wrap: wrap;
@@ -27,96 +27,130 @@
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     overflow: hidden;
-  }
-  
-  .logo {
+}
+
+.logo {
     font-size: 2rem;
     font-weight: bold;
     color: #333;
     margin: 20px;
     text-align: center;
-  }
-  
-  .logo-font {
+}
+
+.logo-font {
     color: #007bff;
-  }
-  
-  .app-description p {
+}
+
+.app-description p {
     margin: 0;
     color: #666;
     text-align: right;
-  }
-  
-  /* Styling for form section */
-  .login-form {
+}
+
+/* Styling for form section */
+.login-form {
     padding: 20px;
-  }
-  
-  .header-title {
+}
+
+.header-title {
     font-size: 1.5rem;
     font-weight: bold;
     color: #333;
     margin-bottom: 20px;
-  }
-  
-  .form-group {
+}
+
+.form-group {
     margin-bottom: 15px;
-  }
-  
-  .form-control {
+}
+
+.form-control {
     border-radius: 5px;
     border: 1px solid #007bff;
     padding: 10px;
     font-size: 1rem;
-  }
-  
-  .btn {
+}
+
+.btn {
     border-radius: 5px;
     padding: 10px;
     font-size: 1rem;
-  }
-  
-  .btn-primary {
+}
+
+.btn-primary {
     background-color: #007bff;
     border: none;
     color: white;
-  }
-  
-  .btn-success {
+}
+
+.btn-success {
     background-color: #28a745;
     border: none;
     color: white;
-  }
-  
-  .carousel-inner {
+}
+
+.carousel-inner {
     border-radius: 10px;
     overflow: hidden;
-  }
-  
-  .slider-feature-card {
+}
+
+.slider-feature-card {
     text-align: center;
     padding: 20px;
-  }
-  
-  .slider-title {
+}
+
+.carousel-image {
+    object-fit: cover;
+    height: 400px;
+    /* Adjust the height as needed */
+}
+
+.slider-feature-card {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    text-align: center;
+}
+
+.slider-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.slider-description {
+    font-size: 1rem;
+    color: #555;
+}
+
+.carousel-caption {
+    bottom: 20px;
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+
+.slider-title {
     font-size: 20px;
     font-weight: bold;
     margin: 10px 0;
-  }
-  
-  .slider-description {
+}
+
+.slider-description {
     font-size: 18px;
     color: #666;
-  }
-  
-  /* Hide carousel on mobile devices */
-  .hide-on-mobile {
+}
+
+/* Hide carousel on mobile devices */
+.hide-on-mobile {
     display: none;
-  }
-  
-  @media (min-width: 768px) {
+}
+
+@media (min-width: 768px) {
     .hide-on-mobile {
-      display: block;
+        display: block;
     }
-  }
-  
+}
