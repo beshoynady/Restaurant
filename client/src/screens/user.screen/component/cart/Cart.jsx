@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 
 import { useReactToPrint } from 'react-to-print';
 import './Cart.css'
-import defaultsImage from '../../.././../image/menu/soup.jpg'
+
 
 import html2pdf from 'html2pdf.js';
 
@@ -87,8 +87,7 @@ const Cart = (props) => {
                     <div className="card mb-3 w-100" key={index}>
                       <div className="row no-gutters w-100 m-0 p-0">
                         <div className="col-3">
-                          {/* <img src={item.image ? `${apiUrl}/images/${item.image}` : {defaultsImage}} className="card-img" alt={item.name} /> */}
-                          <img src={defaultsImage} className="card-img w-100" alt={item.name} style={{ maxHeight: '80px', heitgh: '100%' }} />
+                          <img src={`${apiUrl}/images/${item.image}`} className="card-img w-100" alt={item.name} style={{ maxHeight: '80px', heitgh: '100%' }} />
                         </div>
                         <div className="col-9">
                           <div className="card-body d-flex flex-column align-items-stretch  justify-content-start" style={{ padding: '4px' }}>

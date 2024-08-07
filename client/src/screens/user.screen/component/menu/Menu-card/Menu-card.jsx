@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { detacontext } from '../../../../../App';
 
 
-import defaultsImage from '../../../../../image/menu/soup.jpg'
+
 
 const MenuCard = () => {
   const apiUrl = process.env.REACT_APP_API_URL;

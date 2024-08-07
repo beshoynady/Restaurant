@@ -4,7 +4,7 @@ import { useReactToPrint } from 'react-to-print';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 
-import defaultsImage from '../../.././../image/menu/soup.jpg'
+
 
 import './POS.css'
 import POSCard from './POS-Card';

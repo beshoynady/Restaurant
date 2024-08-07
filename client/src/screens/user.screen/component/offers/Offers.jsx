@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 import { detacontext } from '../../../../App'
 import { ToastContainer, toast } from 'react-toastify';
 
-import defaultsImage from '../../../../image/menu/soup.jpg'
+ 
 
 // Import Swiper React components
 import { Swiper, SwiperSlide } from 'swiper/react';
