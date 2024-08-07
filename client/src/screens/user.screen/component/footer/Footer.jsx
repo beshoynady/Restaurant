@@ -7,7 +7,7 @@ const Footer = () => {
       {
         ({ restaurantData, askingForHelp, userLoginInfo, usertitle }) => {
           return (
-            <footer className="d-flex align-items-center flex-column justify-content-start text-white text-center bottom-0"
+            <footer className="w-100 d-flex align-items-center flex-column justify-content-start text-white text-center bottom-0"
               style={{ height: "calc(100vh - 80px)", scrollMarginTop: "80px", marginTop: '80px', backgroundColor: "#23242a" }}>
               <div className="container p-4">
                 <div className="row mt-4">

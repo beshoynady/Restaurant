@@ -177,15 +177,8 @@ form .field textarea:focus::placeholder {
   text-decoration: underline;
 }
 
-form .btn .btn-47 {
-  height: 150px;
-  width: 100%;
-  border-radius: 5px;
-  position: relative;
-  overflow: hidden;
-}
 
-form .btn .btn-47 .btn-layer {
+form .btn .btn-layer {
   height: 100%;
   width: 300%;
   position: absolute;
@@ -196,11 +189,11 @@ form .btn .btn-47 .btn-layer {
   ;
 }
 
-form .btn .btn-47:hover .h-100 btn btn-layer {
+form .btn:hover .h-100 .btn-layer {
   left: 0;
 }
 
-form .btn .btn-47 input[type="submit"] {
+form .btn input[type="submit"] {
   height: 100%;
   width: 100%;
   z-index: 1;
