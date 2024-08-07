@@ -1,15 +1,14 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, useContext } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { detacontext } from '../../../../App';
 import './Header.css';
 import Cart from '../cart/Cart';
 import LoginRegistr from '../auth/LoginRegistr';
-import logo from '../../../../image/logo.jpg';
 
 
 
 const Header = () => {
-
+  const {restaurantData,apiUrl, userLoginInfo, itemsInCart ,productsOffer, sizesOffer} = useContext(detacontext)
   const { id } = useParams();
   const [opencart, setopencart] = useState(false);
   const [openlogin, setopenlogin] = useState(false);
@@ -18,7 +17,7 @@ const Header = () => {
     try {
       // Remove user token from local storage
       localStorage.removeItem('token_u');
-
+      
       // Redirect to home page
       window.location.href = `https://${window.location.hostname}`;
     } catch (error) {
@@ -28,15 +27,15 @@ const Header = () => {
       alert('حدث خطأ أثناء تسجيل الخروج. يرجى المحاولة مرة أخرى.');
     }
   }
-
+  
   const navref = useRef();
 
   const toggleMobileMenu = () => {
     navref.current.classList.toggle("show");
   };
-
+  
   const [isScroll, setisScroll] = useState(false)
-
+  
   useEffect(() => {
     const handleScroll = () => {
       const scrollPosition = window.scrollY;
@@ -49,8 +48,6 @@ const Header = () => {
   }, []);
 
   return (
-    <detacontext.Consumer>
-      {({restaurantData,apiUrl, userLoginInfo, itemsInCart ,productsOffer, sizesOffer}) => (
         <header className={`header-client ${isScroll ? 'scroll' : ''}`}>
           <div className="container-lg">
             <div className='logo'>
@@ -101,8 +98,6 @@ const Header = () => {
             </div>
           </div>
         </header>
-      )}
-    </detacontext.Consumer>
   );
 };
 
