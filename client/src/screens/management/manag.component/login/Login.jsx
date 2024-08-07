@@ -84,7 +84,7 @@ const Login = () => {
               </div>
             </div>
             {showCreateButton ? (
-              <div className="col-12 mt-3">
+              <div className="col-12 d-flex flex-column flex-wrap align-items-center justify-content-center mt-3">
                 <button onClick={handleCreateFirstEmployee} className="btn btn-success p-3">خاص بالمبرمج</button>
               </div>
             ) : (
@@ -97,32 +97,40 @@ const Login = () => {
                   <div className="form-group w-100 h-auto px-3 d-flex align-items-center justify-content-start col-12">
                     <input type="password" className="form-control border-primary" placeholder="كلمة المرور" onChange={(e) => setPassword(e.target.value)} />
                   </div>
-                  <div className="form-group w-100 h-auto px-3 d-flex align-items-center justify-content-start col-12">
+                  <div className="form-group w-100 h-auto px-3 d-flex align-items-center justify-content-center col-12">
                     <button type='submit' className="h-100 btn btn-primary btn-block">تسجيل دخول</button>
                   </div>
                 </form>
               </div>
             )}
           </div>
-          <div className="col-md-6 hide-on-mobile">
+          <div className="col-md-6 h-100 hide-on-mobile">
             <div id="demo" className="carousel slide" data-ride="carousel">
               <ul className="carousel-indicators">
                 <li data-target="#demo" data-slide-to="0" className="active"></li>
                 <li data-target="#demo" data-slide-to="1"></li>
+                <li data-target="#demo" data-slide-to="2"></li>
               </ul>
               <div className="carousel-inner">
-                <div className="carousel-item active">
-                  <div className="slider-feature-card">
-                    <img src="https://i.imgur.com/YMn8Xo1.png" alt="" />
+                <div className="carousel-item w-100 h-100 active">
+                  <div className="slider-feature-card h-100">
+                    <img className='w-100 h-25' src="https://i.imgur.com/YMn8Xo1.png" alt="" />
                     <h3 className="slider-title">إدارة المطعم بذكاء</h3>
                     <p className="slider-description">قم بإدارة قوائم المطعم الإلكترونية بسهولة وفاعلية باستخدام تطبيق Smart Menu.</p>
                   </div>
                 </div>
-                <div className="carousel-item">
-                  <div className="slider-feature-card">
-                    <img src="https://i.imgur.com/Yi5KXKM.png" alt="" />
+                <div className="carousel-item w-100 h-100">
+                  <div className="slider-feature-card h-100">
+                    <img className='w-100 h-25' src="https://i.imgur.com/Yi5KXKM.png" alt="Feature 2" />
                     <h3 className="slider-title">تحكم كامل بأعمالك</h3>
                     <p className="slider-description">احصل على تقارير مفصلة وإدارة شاملة لأقسام مطعمك من خلال تطبيق Smart Menu.</p>
+                  </div>
+                </div>
+                <div className="carousel-item w-100 h-100">
+                  <div className="slider-feature-card h-100">
+                    <img className='w-100 h-25' src="https://i.imgur.com/xyz.png" alt="Feature 3" /> {/* Replace with your new image */}
+                    <h3 className="slider-title">منيو إلكتروني متكامل</h3>
+                    <p className="slider-description">عرض شامل لقائمة الطعام بشكل إلكتروني مع تحديثات لحظية وسهولة في إدارة الأصناف.</p>
                   </div>
                 </div>
               </div>
