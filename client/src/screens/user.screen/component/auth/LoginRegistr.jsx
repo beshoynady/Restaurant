@@ -7,6 +7,7 @@ const LoginRegistr = (props) => {
   const {getUserInfoFromToken} = useContext(detacontext)
   const apiUrl = process.env.REACT_APP_API_URL;
   const openlogin = props.openlogin;
+  
   const [openform, setopenform] = useState(props.openlogin);
   const [closelogin, setcloselogin] = useState(true);
 
