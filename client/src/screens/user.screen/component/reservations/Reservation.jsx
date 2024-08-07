@@ -1,6 +1,10 @@
 import React, { useState, useContext } from 'react';
 import { detacontext } from '../../../../App';
 
+
+
+
+
 const Reservation = () => {
 
   const { allTable, getAvailableTables, availableTableIds, createReservations, updateReservation, getAllReservations, allReservations, getReservationById, deleteReservation, userLoginInfo } = useContext(detacontext)

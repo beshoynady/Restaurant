@@ -5,6 +5,7 @@ import { detacontext } from '../../../../App'
 
 
 
+
 const Footer = () => {
 
   const { restaurantData } = useContext(detacontext)
