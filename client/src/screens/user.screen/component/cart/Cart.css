@@ -86,19 +86,25 @@
   color: #fff;
   cursor: default;
   user-select: none;
+  background-color: var(--u-dark);
 }
 
 #invoice-radio:checked~label.order {
-  color: #000;
+  color: #fff;
+  background-color: var(--u-gold);
+
 }
 
 #order-radio:checked~label.invoice {
-  color: #000;
+  color: #fff;
+  background-color: var(--u-gold);
 }
 
 #order-radio:checked~label.order {
+  color: #fff;
   cursor: default;
   user-select: none;
+  background-color: var(--u-dark);
 }
 
 .cart-wrapper .cart-container {

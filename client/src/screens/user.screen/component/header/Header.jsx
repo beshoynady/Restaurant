@@ -56,8 +56,8 @@ const Header = () => {
                 <span id='line-2'></span>
                 <span id='line-3'></span>
               </div>
-              {restaurantData.logo?
-              <img src={`${apiUrl}/images/${restaurantData.logo}`} alt={restaurantData.name} style={{height:'100%', width:'90px'}} />
+              {restaurantData.image?
+              <img src={`${apiUrl}/images/${restaurantData.image}`} alt={restaurantData.name} style={{height:'100%', width:'90px'}} />
               :<a href="/" className='res-name'>{restaurantData.name}</a>
               }
             </div>
