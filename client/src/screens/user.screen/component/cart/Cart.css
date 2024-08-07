@@ -83,7 +83,7 @@
 }
 
 #invoice-radio:checked~label.invoice {
-  color: var( --secondary-color);
+  color: var(--secondary-color);
   cursor: default;
   user-select: none;
   background-color: var(--primary-color);
@@ -101,7 +101,7 @@
 }
 
 #order-radio:checked~label.order {
-  color: var( --secondary-color);
+  color: var(--secondary-color);
   cursor: default;
   user-select: none;
   background-color: var(--primary-color);
