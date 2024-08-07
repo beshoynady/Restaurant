@@ -4,6 +4,10 @@ import { detacontext } from '../../../../App';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 
+import restaurant from '../../../../image/SmartRestaurant.jpg'
+import menu from '../../../../image/emenu.jpg'
+import pos from '../../../../image/pos.jpg'
+
 const Login = () => {
   const { getUserInfoFromToken } = useContext(detacontext);
   const apiUrl = process.env.REACT_APP_API_URL;
@@ -117,7 +121,7 @@ const Login = () => {
               <div className="carousel-inner">
                 <div className="carousel-item active">
                   <div className="slider-feature-card">
-                    <img className='d-block w-100 carousel-image' src="https://via.placeholder.com/800x400?text=Smart+Restaurant+Management" alt="Smart Management" />
+                    <img className='d-block w-100 carousel-image' src={restaurant} alt="Smart Management" />
                     <div className="carousel-caption d-none d-md-block">
                       <h3 className="slider-title">إدارة المطعم بذكاء</h3>
                       <p className="slider-description">إدارة مطعمك بشكل ذكي وحديث باستخدام تطبيق Smart Menu لتسهيل جميع عملياتك.</p>
@@ -126,7 +130,7 @@ const Login = () => {
                 </div>
                 <div className="carousel-item">
                   <div className="slider-feature-card">
-                    <img className='d-block w-100 carousel-image' src="https://via.placeholder.com/800x400?text=Digital+Menu+Management" alt="Electronic Menu" />
+                    <img className='d-block w-100 carousel-image' src={menu} alt="Electronic Menu" />
                     <div className="carousel-caption d-none d-md-block">
                       <h3 className="slider-title">منيو إلكتروني سهل الإدارة</h3>
                       <p className="slider-description">تحكم في قائمة الطعام إلكترونيًا بمرونة وسهولة مع تحديثات لحظية وإدارة فعالة.</p>
@@ -135,7 +139,7 @@ const Login = () => {
                 </div>
                 <div className="carousel-item">
                   <div className="slider-feature-card">
-                    <img className='d-block w-100 carousel-image' src="https://via.placeholder.com/800x400?text=Cloud-Based+Service" alt="Cloud-Based Service" />
+                    <img className='d-block w-100 carousel-image' src={pos} alt="Cloud-Based Service" />
                     <div className="carousel-caption d-none d-md-block">
                       <h3 className="slider-title">خدمة سحابية متكاملة</h3>
                       <p className="slider-description">استقبال وإرسال الطلبات عبر السحابة، مع تقديم تجربة سلسة ومتصلة باستخدام تطبيق Smart Menu.</p>
