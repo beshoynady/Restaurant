@@ -30,11 +30,11 @@ const Reservation = () => {
       <div className='section-title mb-2'>
         <h2>حجز طاولة</h2>
       </div>
-      <div className="col-12 col-md-10 p-2 " style={{
+      <div className="d-flex align-items-center justify-content-center col-12 col-md-10 p-2 " style={{
         backgroundColor: 'rgba(0, 0, 0, 0.7)',
         paddingBottom: '50px',
       }}>
-        <form className="w-100 d-flex text-white text-right" style={{ fontSize: '20px', fontWeight: '800', borderRadius: "25px" }}
+        <form className="w-100 d-flex flex-column align-items-center justify-content-center text-white text-right" style={{ fontSize: '20px', fontWeight: '800', borderRadius: "25px" }}
           onSubmit={(e) => createReservations(e, tableInfo.id, tableInfo.tableNumber, userId, numberOfGuests, customerName, customerPhone, reservationDate, startTime, endTime, reservationNote)}>
           <div className="d-flex flex-wrap align-items-center justify-content-between">
             <div className="col-md-8 mb-1">
