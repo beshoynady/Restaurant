@@ -358,17 +358,19 @@ table.table .avatar {
     font-weight: 600;
     color: #000;
     width: 100%;
+    padding: 0;
 }
 
 .modal textarea.form-control {
     resize: vertical;
 }
 
-.modal .btn {
+/* .modal .btn {
     border-radius: 5px;
     height: 50px !important;
     margin: auto;
-}
+
+} */
 
 .modal form label {
     font-weight: 600;
