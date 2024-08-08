@@ -69,18 +69,18 @@ const Products = () => {
 
   const createProduct = async (e) => {
     e.preventDefault();
-  
+
     if (!token) {
       toast.error('رجاء تسجيل الدخول مره اخري');
       return;
     }
-  
+
     try {
       if (productPermission && !productPermission.create) {
         toast.warn('ليس لك صلاحية لاضافه الاصناف');
         return;
       }
-  
+
       // إعداد جسم الطلب باستخدام FormData
       const formData = new FormData();
       formData.append('productname', productname);
@@ -88,7 +88,7 @@ const Products = () => {
       formData.append('productcategoryid', productcategoryid);
       formData.append('available', available);
       formData.append('isAddon', isAddon);
-  
+
       if (hasSizes) {
         formData.append('hasSizes', hasSizes);
         sizes.forEach((size, index) => {
@@ -96,39 +96,39 @@ const Products = () => {
         });
       } else {
         formData.append('productprice', productprice);
-  
+
         if (productdiscount > 0) {
           formData.append('productdiscount', productdiscount);
           const priceAfterDiscount = productprice - productdiscount;
           formData.append('priceAfterDiscount', priceAfterDiscount > 0 ? priceAfterDiscount : 0);
         }
       }
-  
+
       if (hasExtras) {
         formData.append('hasExtras', hasExtras);
         extras.forEach((extra, index) => {
           formData.append(`extras[${index}]`, extra);
         });
       }
-  
+
       if (productimg) {
         formData.append('image', productimg);
       } else {
         toast.error('يجب إضافة صورة للمنتج');
         return;
       }
-  
+
       console.log({ formData });
-  
+
       const response = await axios.post(apiUrl + '/api/product/', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           ...config.headers,
         }
       });
-  
+
       console.log({ responsecreateproduct: response });
-  
+
       if (response.status === 201) {
         getallproducts();
         console.log(response.data);
@@ -143,35 +143,35 @@ const Products = () => {
       });
     }
   };
-  
+
 
 
   const handleFileUpload = (e) => {
     const file = e.target.files[0];
     const maxSize = 1024 * 1024; // 1 MB
     const allowedTypes = ["image/jpeg", "image/jpg", "image/png"];
-  
+
     if (file) {
       // Check file size
       if (file.size > maxSize) {
         toast.error("Maximum file size exceeded (1 MB). Please select a smaller file.");
         return;
       }
-  
+
       // Check file type
       if (!allowedTypes.includes(file.type)) {
         toast.error("Invalid file type. Only JPEG, JPG, and PNG are allowed.");
         return;
       }
-  
+
       // If both checks pass, set the file
       setproductimg(file);
     } else {
       toast.error("No file selected.");
     }
   };
-  
-  
+
+
 
   const [productInfo, setproductInfo] = useState({})
   const handelEditProductModal = (product) => {
@@ -239,10 +239,11 @@ const Products = () => {
       // Perform the API request to update the product
       const response = requestBody.image ?
         await axios.put(`${apiUrl}/api/product/${productid}`, requestBody, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          ...config.headers,
-        }})
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            ...config.headers,
+          }
+        })
         : await axios.put(`${apiUrl}/api/product/withoutimage/${productid}`, requestBody, config);
 
       // Handle successful response
@@ -422,32 +423,32 @@ const Products = () => {
           <div class="table-filter print-hide">
             <div className="col-12 text-dark d-flex flex-wrap align-items-center justify-content-evenly p-0 m-0">
 
-                <div className="show-entries d-flex flex-wrap align-items-center justify-content-evenly col-2 p-0 m-0">
-                  <span>عرض</span>
-                  <select className="form-select border-primary col-6 px-1 py-2 m-0" onChange={(e) => { setstartpagination(0); setendpagination(e.target.value) }}>
-                    <option value={5}>5</option>
-                    <option value={10}>10</option>
-                    <option value={15}>15</option>
-                    <option value={20}>20</option>
-                    <option value={25}>25</option>
-                    <option value={30}>30</option>
-                  </select>
+              <div className="show-entries d-flex flex-wrap align-items-center justify-content-evenly col-2 p-0 m-0">
+                <span>عرض</span>
+                <select className="form-select border-primary col-6 px-1 py-2 m-0" onChange={(e) => { setstartpagination(0); setendpagination(e.target.value) }}>
+                  <option value={5}>5</option>
+                  <option value={10}>10</option>
+                  <option value={15}>15</option>
+                  <option value={20}>20</option>
+                  <option value={25}>25</option>
+                  <option value={30}>30</option>
+                </select>
 
-                </div>
-                <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
-                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الاسم</label>
-                  <input type="text" className="form-control border-primary m-0 p-2 h-100" onChange={(e) => searchByName(e.target.value)} />
-                </div>
-                <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
-                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0">التصنيف</label>
-                  <select className="form-control border-primary m-0 p-2 h-100" onChange={(e) => filterProductsByCategory(e.target.value)} >
-                    <option value={""}>الكل</option>
-                    {listofcategories.map((category, i) => {
-                      return <option value={category._id} key={i} >{category.name}</option>
-                    })}
-                  </select>
-                </div>
-              
+              </div>
+              <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
+                <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الاسم</label>
+                <input type="text" className="form-control border-primary m-0 p-2 h-100" onChange={(e) => searchByName(e.target.value)} />
+              </div>
+              <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
+                <label className="form-label text-wrap text-right fw-bolder p-0 m-0">التصنيف</label>
+                <select className="form-control border-primary m-0 p-2 h-100" onChange={(e) => filterProductsByCategory(e.target.value)} >
+                  <option value={""}>الكل</option>
+                  {listofcategories.map((category, i) => {
+                    return <option value={category._id} key={i} >{category.name}</option>
+                  })}
+                </select>
+              </div>
+
               <div className='col-12 d-flex align-items-center justify-content-between'>
                 <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">فلتر حسب الوقت</label>
@@ -623,92 +624,133 @@ const Products = () => {
                   </select>
                 </div>
                 <div className="form-group col-12 col-md-6">
-                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0">أحجام المنتج</label>
-                  <input type="checkbox" className="form-check-input form-check-input-lg" checked={hasSizes} onChange={handleCheckboxChange} />
+                  <label className="form-label text-wrap text-right fw-bolder">أحجام المنتج</label>
+                  <input
+                    type="checkbox"
+                    className="form-check-input form-check-input-lg"
+                    checked={hasSizes}
+                    onChange={handleCheckboxChange}
+                  />
                 </div>
+
                 {hasSizes ? (
-                  <div className="container w-100 p-0 m-0">
+                  <div className="container p-0">
                     {sizes.map((size, index) => (
-                      <div key={index} className="row col-12 mb-1">
-                        <div className="form-group w-100 h-auto px-3 d-flex flex-nowrap align-itmes-center justify-content-start col-12  col-md-4 " >
-                          <label className="form-label text-wrap text-right fw-bolder p-0 m-0">اسم الحجم</label>
-                          <input type="text" className="form-control border-primary m-0 p-2 h-100"
-                            value={size.sizeName}
-                            onChange={(e) =>
-                              setsizes((prevState) => {
-                                const newSizes = [...prevState];
-                                newSizes[index].sizeName = e.target.value;
-                                return newSizes;
-                              })
-                            }
-                          />
-                        </div>
-                        <div className="form-group w-100 h-auto px-3 d-flex flex-nowrap align-itmes-center justify-content-start col-12  col-md-4 ">
-                          <label className="form-label text-wrap text-right fw-bolder p-0 m-0">السعر</label>
-                          <input
-                            type="number" min={0}
-                            className="form-control border-primary col-4"
-                            value={size.sizePrice}
-                            onChange={(e) =>
-                              setsizes((prevState) => {
-                                const newSizes = [...prevState];
-                                newSizes[index].sizePrice = parseFloat(e.target.value);
-                                return newSizes;
-                              })
-                            }
-                          />
-                          <div className="input-group-prepend">
-                            <span className="input-group-text">جنية</span>
+                      <div key={index} className="row mb-3">
+                        <div className="col-12 col-md-4">
+                          <div className="form-group">
+                            <label className="form-label text-wrap text-right fw-bolder">اسم الحجم</label>
+                            <input
+                              type="text"
+                              className="form-control border-primary"
+                              value={size.sizeName}
+                              onChange={(e) =>
+                                setsizes((prevState) => {
+                                  const newSizes = [...prevState];
+                                  newSizes[index].sizeName = e.target.value;
+                                  return newSizes;
+                                })
+                              }
+                            />
                           </div>
                         </div>
-                        <div className="form-group w-100 h-auto px-3 d-flex flex-nowrap align-itmes-center justify-content-start col-12  col-md-4 ">
-                          <label className="form-label text-wrap text-right fw-bolder p-0 m-0">التخفيض</label>
-                          <input
-                            type="number" min={0} max={size.sizePrice}
-                            className="form-control border-primary col-4"
-                            value={size.sizeDiscount}
-                            onChange={(e) =>
-                              setsizes((prevState) => {
-                                const newSizes = [...prevState];
-                                newSizes[index].sizeDiscount = parseFloat(e.target.value);
-                                newSizes[index].sizePriceAfterDiscount = newSizes[index].sizePrice - parseFloat(e.target.value);
-                                return newSizes;
-                              })
-                            }
-                          />
-                          <div className="input-group-prepend">
-                            <span className="input-group-text">جنية</span>
+                        <div className="col-12 col-md-4">
+                          <div className="form-group">
+                            <label className="form-label text-wrap text-right fw-bolder">السعر</label>
+                            <div className="input-group">
+                              <input
+                                type="number"
+                                min={0}
+                                className="form-control border-primary"
+                                value={size.sizePrice}
+                                onChange={(e) =>
+                                  setsizes((prevState) => {
+                                    const newSizes = [...prevState];
+                                    newSizes[index].sizePrice = parseFloat(e.target.value);
+                                    return newSizes;
+                                  })
+                                }
+                              />
+                              <span className="input-group-text">جنيه</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="col-12 col-md-4">
+                          <div className="form-group">
+                            <label className="form-label text-wrap text-right fw-bolder">التخفيض</label>
+                            <div className="input-group">
+                              <input
+                                type="number"
+                                min={0}
+                                max={size.sizePrice}
+                                className="form-control border-primary"
+                                value={size.sizeDiscount}
+                                onChange={(e) =>
+                                  setsizes((prevState) => {
+                                    const newSizes = [...prevState];
+                                    newSizes[index].sizeDiscount = parseFloat(e.target.value);
+                                    newSizes[index].sizePriceAfterDiscount = newSizes[index].sizePrice - parseFloat(e.target.value);
+                                    return newSizes;
+                                  })
+                                }
+                              />
+                              <span className="input-group-text">جنيه</span>
+                            </div>
                           </div>
                         </div>
 
-                        <div className="col-12">
-                          {sizes.length === index + 1 || sizes.length === 0 ?
-                            <button type="button" className="h-100 btn btn-primary col-12 col-md-6" onClick={addSize}>إضافة حجم جديد</button>
-                            : ''
-                          }
-                          <button type="button" className="h-100 btn btn-danger col-12 col-md-6" onClick={() => removeSize(index)}>حذف الحجم</button>
+                        <div className="col-12 d-flex justify-content-between">
+                          {sizes.length === index + 1 || sizes.length === 0 ? (
+                            <button
+                              type="button"
+                              className="btn btn-primary col-12 col-md-6"
+                              onClick={addSize}
+                            >
+                              إضافة حجم جديد
+                            </button>
+                          ) : null}
+                          <button
+                            type="button"
+                            className="btn btn-danger col-12 col-md-6 mt-2 mt-md-0"
+                            onClick={() => removeSize(index)}
+                          >
+                            حذف الحجم
+                          </button>
                         </div>
                       </div>
                     ))}
-
-                    {/* <div className="col-12">
-                      <button type="button" className="btn w-100 btn-primary" onClick={addSize}>إضافة حجم جديد</button>
-                    </div> */}
                   </div>
-
                 ) : (
                   <>
                     <div className="form-group col-12 col-md-6">
-                      <label className="form-label text-wrap text-right fw-bolder p-0 m-0">السعر</label>
-                      <input type='number' className="form-control border-primary m-0 p-2 h-100" required onChange={(e) => setproductprice(e.target.value)} />
+                      <label className="form-label text-wrap text-right fw-bolder">السعر</label>
+                      <div className="input-group">
+                        <input
+                          type="number"
+                          className="form-control border-primary"
+                          required
+                          onChange={(e) => setproductprice(e.target.value)}
+                        />
+                        <span className="input-group-text">جنيه</span>
+                      </div>
                     </div>
                     <div className="form-group col-12 col-md-6">
-                      <label className="form-label text-wrap text-right fw-bolder p-0 m-0">التخفيض</label>
-                      <input type='number' min={0} max={productprice} className="form-control border-primary m-0 p-2 h-100" required onChange={(e) => setproductdiscount(e.target.value)} />
+                      <label className="form-label text-wrap text-right fw-bolder">التخفيض</label>
+                      <div className="input-group">
+                        <input
+                          type="number"
+                          min={0}
+                          max={productprice}
+                          className="form-control border-primary"
+                          required
+                          onChange={(e) => setproductdiscount(e.target.value)}
+                        />
+                        <span className="input-group-text">جنيه</span>
+                      </div>
                     </div>
                   </>
-                )
-                }
+                )}
+
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">هل هذا المنتج اضافه</label>
                   <input type="checkbox" className="form-check-input form-check-input-lg" checked={isAddon} onChange={handleIsAddonCheckboxChange} />
@@ -808,7 +850,7 @@ const Products = () => {
                   <div className="container">
                     {sizes.map((size, index) => (
                       <div key={index} className="row mb-3">
-                        <div className="form-group w-100 h-auto px-3 d-flex flex-nowrap align-itmes-center justify-content-start col-12  col-md-4 ">
+                        <div className="form-group col-12 col-md-6">
                           <label className="form-label text-wrap text-right fw-bolder p-0 m-0">اسم الحجم</label>
                           <input
                             type="text"
@@ -823,7 +865,7 @@ const Products = () => {
                             }
                           />
                         </div>
-                        <div className="form-group w-100 h-auto px-3 d-flex flex-nowrap align-itmes-center justify-content-start col-12  col-md-4 " >
+                        <div className="form-group col-12 col-md-6" >
                           <label className="form-label text-wrap text-right fw-bolder p-0 m-0">السعر</label>
                           <input
                             type="number"
@@ -841,11 +883,11 @@ const Products = () => {
                             <span className="input-group-text">جنية</span>
                           </div>
                         </div>
-                        <div className="form-group w-100 h-auto px-3 d-flex flex-nowrap align-itmes-center justify-content-start col-12  col-md-4 " >
+                        <div className="form-group col-12 col-md-6" >
                           <label className="form-label text-wrap text-right fw-bolder p-0 m-0">التخفيض</label>
                           <input
                             type="number"
-                            className="form-control border-primary col-4"
+                            className="form-control border-primary m-0 p-2 h-100"
                             value={size.sizeDiscount} min={0} max={size.sizePrice}
                             onChange={(e) =>
                               setsizes((prevState) => {
@@ -876,7 +918,7 @@ const Products = () => {
                   <>
                     <div className="form-group col-12 col-md-6">
                       <label className="form-label text-wrap text-right fw-bolder p-0 m-0">السعر</label>
-                      <input type='number' className="form-control border-primary col-4" defaultValue={productprice} placeholder={productprice} required onChange={(e) => setproductprice(e.target.value)} />
+                      <input type='number' className="form-control border-primary m-0 p-2 h-100" defaultValue={productprice} placeholder={productprice} required onChange={(e) => setproductprice(e.target.value)} />
                       <div className="input-group-prepend col-4">
                         <span className="input-group-text">جنية</span>
                       </div>
