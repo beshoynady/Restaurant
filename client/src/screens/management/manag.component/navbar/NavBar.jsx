@@ -111,7 +111,7 @@ const NavBar = () => {
     <detacontext.Consumer>
       {({ employeeLoginInfo, employeelogout }) => (
         <nav className="navbar w-100 navbar-expand-lg flex-row p-0 m-0 pr-2 sticky-top" style={{ height: '50px', backgroundColor: '#343a40' }}>
-          {/* <input type="checkbox" id="theme-toggle" hidden />
+          {/* <input type="checkbox" className="form-check-input form-check-input-lg" id="theme-toggle" hidden />
       <label htmlFor="theme-toggle" className="theme-toggle" onClick={toggleDir}></label> */}
           <div className="navbar-nav ms-auto flex-row">
             <div className="nav-item mx-1 dropdown">

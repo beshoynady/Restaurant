@@ -1055,7 +1055,7 @@ const Info = () => {
                                 value={opening_hours && opening_hours[index]?.to}
                                 onChange={(e) => handleSetTo(index, e.target.value)} /></td>
 
-                              <td><input type="checkbox" className="form-check-input" name={`closed${day}`}
+                              <td><input type="checkbox" className="form-check-input form-check-input-lg" name={`closed${day}`}
                                 checked={opening_hours[index]?.closed} onChange={(e) => handleCheckboxChange(index)} /></td>
                             </tr>
                           ))}

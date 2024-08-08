@@ -490,7 +490,7 @@ const Products = () => {
               <tr>
                 {/* <th>
                           <span className="custom-checkbox">
-                            <input type="checkbox" id="selectAll" />
+                            <input type="checkbox" className="form-check-input form-check-input-lg" id="selectAll" />
                             <label htmlFor="selectAll"></label>
                           </span>
                         </th> */}
@@ -520,7 +520,7 @@ const Products = () => {
                         <tr>
                           {/* <td>
             <span className="custom-checkbox">
-              <input type="checkbox" id={`checkbox${i}`} name="options[]" value="1" />
+              <input type="checkbox" className="form-check-input form-check-input-lg" id={`checkbox${i}`} name="options[]" value="1" />
               <label htmlFor={`checkbox${i}`}></label>
             </span>
           </td> */}
@@ -546,7 +546,7 @@ const Products = () => {
                           <tr key={j + i}>
                             {/* <td>
               <span className="custom-checkbox">
-                <input type="checkbox" id={`checkbox${j + i}`} name="options[]" value="1" />
+                <input type="checkbox" className="form-check-input form-check-input-lg" id={`checkbox${j + i}`} name="options[]" value="1" />
                 <label htmlFor={`checkbox${j + i}`}></label>
               </span>
             </td> */}
@@ -624,7 +624,7 @@ const Products = () => {
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">أحجام المنتج</label>
-                  <input type="checkbox" checked={hasSizes} onChange={handleCheckboxChange} />
+                  <input type="checkbox" className="form-check-input form-check-input-lg" checked={hasSizes} onChange={handleCheckboxChange} />
                 </div>
                 {hasSizes ? (
                   <div className="container w-100 p-0 m-0">
@@ -711,11 +711,11 @@ const Products = () => {
                 }
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">هل هذا المنتج اضافه</label>
-                  <input type="checkbox" checked={isAddon} onChange={handleIsAddonCheckboxChange} />
+                  <input type="checkbox" className="form-check-input form-check-input-lg" checked={isAddon} onChange={handleIsAddonCheckboxChange} />
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">هل له اضافات</label>
-                  <input type="checkbox" checked={hasExtras} onChange={handleIsHasExtrasCheckboxChange} />
+                  <input type="checkbox" className="form-check-input form-check-input-lg" checked={hasExtras} onChange={handleIsHasExtrasCheckboxChange} />
                 </div>
                 {hasExtras &&
                   <div className="form-group " style={{ fontSize: '16px', fontWeight: '900' }}>
@@ -802,7 +802,7 @@ const Products = () => {
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">أحجام المنتج</label>
-                  <input type="checkbox" checked={hasSizes} onChange={handleCheckboxChange} />
+                  <input type="checkbox" className="form-check-input form-check-input-lg" checked={hasSizes} onChange={handleCheckboxChange} />
                 </div>
                 {hasSizes ? (
                   <div className="container">
@@ -893,11 +893,11 @@ const Products = () => {
                 }
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">هل هذا المنتج اضافه</label>
-                  <input type="checkbox" checked={isAddon} onChange={handleIsAddonCheckboxChange} />
+                  <input type="checkbox" className="form-check-input form-check-input-lg" checked={isAddon} onChange={handleIsAddonCheckboxChange} />
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">هل له اضافات</label>
-                  <input type="checkbox" checked={hasExtras} onChange={handleIsHasExtrasCheckboxChange} />
+                  <input type="checkbox" className="form-check-input form-check-input-lg" checked={hasExtras} onChange={handleIsHasExtrasCheckboxChange} />
                 </div>
                 {hasExtras &&
                   <div className="form-group " style={{ fontSize: '16px', fontWeight: '900' }}>

@@ -200,7 +200,7 @@ const CustomerMessage = () => {
               <tr>
                 <th>
                   <span className="custom-checkbox">
-                    <input type="checkbox" id="selectAll" />
+                    <input type="checkbox" className="form-check-input form-check-input-lg" id="selectAll" />
                     <label htmlFor="selectAll"></label>
                   </span>
                 </th>
@@ -220,7 +220,7 @@ const CustomerMessage = () => {
                     <tr key={i}>
                       <td>
                         <span className="custom-checkbox">
-                          <input type="checkbox" id="checkbox1" name="options[]" value={message._id} onChange={handleCheckboxChange} />
+                          <input type="checkbox" className="form-check-input form-check-input-lg" id="checkbox1" name="options[]" value={message._id} onChange={handleCheckboxChange} />
                           <label htmlFor="checkbox1"></label>
                         </span>
                       </td>

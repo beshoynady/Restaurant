@@ -505,7 +505,7 @@ const StockManag = () => {
               <tr>
                 <th>
                   <span className="custom-checkbox">
-                    <input type="checkbox" id="selectAll" />
+                    <input type="checkbox" className="form-check-input form-check-input-lg" id="selectAll" />
                     <label htmlFor="selectAll"></label>
                   </span>
                 </th>
@@ -530,7 +530,7 @@ const StockManag = () => {
                     <tr key={i}>
                       <td>
                         <span className="custom-checkbox">
-                          <input type="checkbox" id="checkbox1" name="options[]" value="1" />
+                          <input type="checkbox" className="form-check-input form-check-input-lg" id="checkbox1" name="options[]" value="1" />
                           <label htmlFor="checkbox1"></label>
                         </span>
                       </td>
@@ -631,7 +631,7 @@ const StockManag = () => {
                 <>
                             <div className="form-group col-12 col-md-6">
                               <label className="form-label text-wrap text-right fw-bolder p-0 m-0">تاريخ الانتهاء</label>
-                              <input type="checkbox" checked={expirationDateEnabled} onChange={() => setExpirationDateEnabled(!expirationDateEnabled)} />
+                              <input type="checkbox" className="form-check-input form-check-input-lg" checked={expirationDateEnabled} onChange={() => setExpirationDateEnabled(!expirationDateEnabled)} />
                               {expirationDateEnabled &&
                                 <input type='date' className="form-control border-primary m-0 p-2 h-100" required onChange={(e) => { setexpirationDate(e.target.value); }} />}
                             </div>

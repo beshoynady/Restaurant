@@ -338,7 +338,7 @@ const MenuCategory = () => {
                       <tr>
                         {/* <th>
                           <span className="custom-checkbox">
-                            <input type="checkbox" id="selectAll" />
+                            <input type="checkbox" className="form-check-input form-check-input-lg" id="selectAll" />
                             <label htmlFor="selectAll"></label>
                           </span>
                         </th> */}
@@ -358,7 +358,7 @@ const MenuCategory = () => {
                             <tr key={i}>
                               {/* <td>
                                   <span className="custom-checkbox">
-                                    <input type="checkbox" id="checkbox1" name="options[]" value="1" />
+                                    <input type="checkbox" className="form-check-input form-check-input-lg" id="checkbox1" name="options[]" value="1" />
                                     <label htmlFor="checkbox1"></label>
                                   </span>
                                 </td> */}

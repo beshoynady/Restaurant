@@ -307,7 +307,7 @@ const Tables = () => {
               <tr>
                 <th>
                   <span className="custom-checkbox">
-                    <input type="checkbox" id="selectAll" />
+                    <input type="checkbox" className="form-check-input form-check-input-lg" id="selectAll" />
                     <label htmlFor="selectAll"></label>
                   </span>
                 </th>

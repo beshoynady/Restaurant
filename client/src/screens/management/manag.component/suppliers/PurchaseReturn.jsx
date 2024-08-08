@@ -707,7 +707,7 @@ const PurchaseReturn = () => {
           </div>
           <div className="table-filter print-hide">
             <div class="col-12 text-dark d-flex flex-wrap align-items-center justify-content-evenly p-0 m-0">
-              
+
               <div className="show-entries d-flex flex-wrap align-items-center justify-content-evenly col-2 p-0 m-0">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">عرض</label>
                 <select className="form-select border-primary col-6 px-1 py-2 m-0" onChange={(e) => { setstartpagination(0); setendpagination(e.target.value) }}>
@@ -784,7 +784,7 @@ const PurchaseReturn = () => {
               <tr>
                 {/* <th>
                   <label className="custom-checkbox">
-                    <input type="checkbox" id="selectAll" />
+                    <input type="checkbox" className="form-check-input form-check-input-lg" id="selectAll" />
                     <label htmlFor="selectAll"></label>
                   </label>
                 </th> */}
@@ -818,7 +818,7 @@ const PurchaseReturn = () => {
                     <tr key={i}>
                       {/* <td>
                         <label className="custom-checkbox">
-                          <input type="checkbox" id="checkbox1" name="options[]" value="1" />
+                          <input type="checkbox" className="form-check-input form-check-input-lg" id="checkbox1" name="options[]" value="1" />
                           <label htmlFor="checkbox1"></label>
                         </label>
                       </td> */}
