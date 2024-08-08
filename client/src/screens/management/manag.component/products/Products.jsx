@@ -436,11 +436,11 @@ const Products = () => {
                 </div>
                 <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الاسم</label>
-                  <input type="text" className="form-control border-primary" onChange={(e) => searchByName(e.target.value)} />
+                  <input type="text" className="form-control border-primary m-0 h-100 " onChange={(e) => searchByName(e.target.value)} />
                 </div>
                 <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">التصنيف</label>
-                  <select className="form-control border-primary" onChange={(e) => filterProductsByCategory(e.target.value)} >
+                  <select className="form-control border-primary m-0 h-100 " onChange={(e) => filterProductsByCategory(e.target.value)} >
                     <option value={""}>الكل</option>
                     {listofcategories.map((category, i) => {
                       return <option value={category._id} key={i} >{category.name}</option>
@@ -451,7 +451,7 @@ const Products = () => {
               <div className='col-12 d-flex align-items-center justify-content-between'>
                 <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">فلتر حسب الوقت</label>
-                  <select className="form-control border-primary" onChange={(e) => setallOrders(filterByTime(e.target.value, allOrders))}>
+                  <select className="form-control border-primary m-0 h-100 " onChange={(e) => setallOrders(filterByTime(e.target.value, allOrders))}>
                     <option value="">اختر</option>
                     <option value="today">اليوم</option>
                     <option value="week">هذا الأسبوع</option>
@@ -465,12 +465,12 @@ const Products = () => {
 
                   <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">من</label>
-                    <input type="date" className="form-control border-primary" onChange={(e) => setStartDate(e.target.value)} placeholder="اختر التاريخ" />
+                    <input type="date" className="form-control border-primary m-0 h-100 " onChange={(e) => setStartDate(e.target.value)} placeholder="اختر التاريخ" />
                   </div>
 
                   <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">إلى</label>
-                    <input type="date" className="form-control border-primary" onChange={(e) => setEndDate(e.target.value)} placeholder="اختر التاريخ" />
+                    <input type="date" className="form-control border-primary m-0 h-100 " onChange={(e) => setEndDate(e.target.value)} placeholder="اختر التاريخ" />
                   </div>
 
                   <div className="d-flex flex-nowrap justify-content-between col-3 p-0 m-0">
@@ -609,12 +609,12 @@ const Products = () => {
               <div className="modal-body p-4 text-right">
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الاسم</label>
-                  <input type="text" className="form-control border-primary" required onChange={(e) => setproductname(e.target.value)} />
+                  <input type="text" className="form-control border-primary m-0 h-100 " required onChange={(e) => setproductname(e.target.value)} />
                 </div>
 
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">التصنيف</label>
-                  <select className="form-control border-primary" name="category" id="category" form="carform" onChange={(e) => setproductcategoryid(e.target.value)}>
+                  <select className="form-control border-primary m-0 h-100 " name="category" id="category" form="carform" onChange={(e) => setproductcategoryid(e.target.value)}>
                     <option defaultValue={productcategoryid}>اختر تصنيف</option>
                     {listofcategories.map((category, i) => {
                       return <option value={category._id} key={i} >{category.name}</option>
@@ -632,7 +632,7 @@ const Products = () => {
                       <div key={index} className="row col-12 mb-1">
                         <div className="form-group w-100 h-auto px-3 d-flex flex-nowrap align-itmes-center justify-content-start col-12  col-md-4 " >
                           <label className="form-label text-wrap text-right fw-bolder p-0 m-0">اسم الحجم</label>
-                          <input type="text" className="form-control border-primary"
+                          <input type="text" className="form-control border-primary m-0 h-100 "
                             value={size.sizeName}
                             onChange={(e) =>
                               setsizes((prevState) => {
@@ -700,11 +700,11 @@ const Products = () => {
                   <>
                     <div className="form-group col-12 col-md-6">
                       <label className="form-label text-wrap text-right fw-bolder p-0 m-0">السعر</label>
-                      <input type='number' className="form-control border-primary" required onChange={(e) => setproductprice(e.target.value)} />
+                      <input type='number' className="form-control border-primary m-0 h-100 " required onChange={(e) => setproductprice(e.target.value)} />
                     </div>
                     <div className="form-group col-12 col-md-6">
                       <label className="form-label text-wrap text-right fw-bolder p-0 m-0">التخفيض</label>
-                      <input type='number' min={0} max={productprice} className="form-control border-primary" required onChange={(e) => setproductdiscount(e.target.value)} />
+                      <input type='number' min={0} max={productprice} className="form-control border-primary m-0 h-100 " required onChange={(e) => setproductdiscount(e.target.value)} />
                     </div>
                   </>
                 )
@@ -740,13 +740,13 @@ const Products = () => {
                           </div>
                         </div>
                       </div>
-                      : <input type="text" className="form-control border-primary" value='لا يوجد اي اضافات' />
+                      : <input type="text" className="form-control border-primary m-0 h-100 " value='لا يوجد اي اضافات' />
                     }
                   </div>
                 }
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">متاح</label>
-                  <select className="form-control border-primary" name="category" id="category" form="carform" onChange={(e) => setavailable(e.target.value)}>
+                  <select className="form-control border-primary m-0 h-100 " name="category" id="category" form="carform" onChange={(e) => setavailable(e.target.value)}>
 
                     <option defaultValue={available} >اختر الحاله</option>
                     <option value={true} >متاح</option>
@@ -755,13 +755,13 @@ const Products = () => {
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الصورة</label>
-                  <input type="file" className="form-control border-primary" onChange={(e) => handleFileUpload(e)} />
+                  <input type="file" className="form-control border-primary m-0 h-100 " onChange={(e) => handleFileUpload(e)} />
                 </div>
               </div>
 
               <div className="form-group col-12">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الوصف</label>
-                <textarea className="form-control border-primary" onChange={(e) => setproductdescription(e.target.value)}></textarea>
+                <textarea className="form-control border-primary m-0 h-100 " onChange={(e) => setproductdescription(e.target.value)}></textarea>
               </div>
 
               <div className="modal-footer d-flex flex-nowrap align-items-center justify-content-between m-0 p-1">
@@ -787,12 +787,12 @@ const Products = () => {
               <div className="modal-body p-4 text-right">
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الاسم</label>
-                  <input type="text" className="form-control border-primary" defaultValue={productInfo.name} required onChange={(e) => setproductname(e.target.value)} />
+                  <input type="text" className="form-control border-primary m-0 h-100 " defaultValue={productInfo.name} required onChange={(e) => setproductname(e.target.value)} />
                 </div>
 
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">التصنيف</label>
-                  <select className="form-control border-primary" name="category" id="category" form="carform" onChange={(e) => setproductcategoryid(e.target.value)}>
+                  <select className="form-control border-primary m-0 h-100 " name="category" id="category" form="carform" onChange={(e) => setproductcategoryid(e.target.value)}>
                     <option value={productInfo.category?._id} >{productInfo.category?.name}</option>
                     {listofcategories.map((category, i) => {
                       return <option value={category._id} key={i} >{category.name}</option>
@@ -812,7 +812,7 @@ const Products = () => {
                           <label className="form-label text-wrap text-right fw-bolder p-0 m-0">اسم الحجم</label>
                           <input
                             type="text"
-                            className="form-control border-primary"
+                            className="form-control border-primary m-0 h-100 "
                             value={size.sizeName}
                             onChange={(e) =>
                               setsizes((prevState) => {
@@ -883,7 +883,7 @@ const Products = () => {
                     </div>
                     <div className="form-group col-12 col-md-6">
                       <label className="form-label text-wrap text-right fw-bolder p-0 m-0">التخفيض</label>
-                      <input type='number' min={0} max={productprice} className="form-control border-primary" defaultValue={productdiscount} placeholder={productdiscount} required onChange={(e) => setproductdiscount(e.target.value)} />
+                      <input type='number' min={0} max={productprice} className="form-control border-primary m-0 h-100 " defaultValue={productdiscount} placeholder={productdiscount} required onChange={(e) => setproductdiscount(e.target.value)} />
                       <div className="input-group-prepend col-4">
                         <span className="input-group-text">جنية</span>
                       </div>
@@ -922,26 +922,26 @@ const Products = () => {
                           </div>
                         </div>
                       </div>
-                      : <input type="text" className="form-control border-primary" value='لا يوجد اي اضافات' />
+                      : <input type="text" className="form-control border-primary m-0 h-100 " value='لا يوجد اي اضافات' />
                     }
                   </div>
                 }
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">متاح</label>
-                  <select className="form-control border-primary" name="category" id="category" form="carform" onChange={(e) => setavailable(e.target.value)}>
+                  <select className="form-control border-primary m-0 h-100 " name="category" id="category" form="carform" onChange={(e) => setavailable(e.target.value)}>
                     <option value={true} >متاح</option>
                     <option value={false} >غير متاح</option>
                   </select>
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الصورة</label>
-                  <input type="file" className="form-control border-primary" onChange={(e) => handleFileUpload(e)} />
+                  <input type="file" className="form-control border-primary m-0 h-100 " onChange={(e) => handleFileUpload(e)} />
                 </div>
               </div>
 
               <div className="form-group col-12 col-md-6">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الوصف</label>
-                <textarea className="form-control border-primary" defaultValue={productdescription} required onChange={(e) => setproductdescription(e.target.value)}></textarea>
+                <textarea className="form-control border-primary m-0 h-100 " defaultValue={productdescription} required onChange={(e) => setproductdescription(e.target.value)}></textarea>
               </div>
 
               <div className="modal-footer d-flex flex-nowrap align-items-center justify-content-between m-0 p-1">

@@ -471,7 +471,7 @@ const AttendanceManagement = () => {
                 </div>
               <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">نوع السجل</label>
-                <select className="form-control border-primary"  onChange={(e) => searchByStatus(e.target.value)}>
+                <select className="form-control border-primary m-0 h-100 "  onChange={(e) => searchByStatus(e.target.value)}>
                   <option value="">الكل</option>
                   {listOfStatus.map((statu, i) => (
                     <option key={i} value={statu}>{listOfStatusAR[i]}</option>
@@ -480,11 +480,11 @@ const AttendanceManagement = () => {
               </div>
               <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الاسم</label>
-                <input type="text" className="form-control border-primary" onChange={(e) => getEmployeesByName(e.target.value)} />
+                <input type="text" className="form-control border-primary m-0 h-100 " onChange={(e) => getEmployeesByName(e.target.value)} />
               </div>
               <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الوظيفة</label>
-                <select className="form-control border-primary"  onChange={(e) => getEmployeesByJob(e.target.value)} >
+                <select className="form-control border-primary m-0 h-100 "  onChange={(e) => getEmployeesByJob(e.target.value)} >
                   <option value="all">الكل</option>
                   <option value="manager">مدير</option>
                   <option value="cashier">كاشير</option>
@@ -494,7 +494,7 @@ const AttendanceManagement = () => {
               </div>
               <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الشيفت</label>
-                <select className="form-control border-primary"  onChange={(e) => getRecordsByShift(e.target.value)} >
+                <select className="form-control border-primary m-0 h-100 "  onChange={(e) => getRecordsByShift(e.target.value)} >
                   <option value="all">الكل</option>
                   {shifts ? shifts.map((shift, i) =>
                     <option value={shift._id} key={i}>{shift.shiftType}</option>
@@ -505,7 +505,7 @@ const AttendanceManagement = () => {
               <div className='col-12 d-flex align-items-center justify-content-between'>
                 <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">فلتر حسب الوقت</label>
-                  <select className="form-control border-primary"  onChange={(e) => setallAttendanceRecords(filterByTime(e.target.value, allAttendanceRecords))}>
+                  <select className="form-control border-primary m-0 h-100 "  onChange={(e) => setallAttendanceRecords(filterByTime(e.target.value, allAttendanceRecords))}>
                     <option value="">اختر</option>
                     <option value="today">اليوم</option>
                     <option value="week">هذا الأسبوع</option>
@@ -519,12 +519,12 @@ const AttendanceManagement = () => {
 
                   <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">من</label>
-                    <input type="date" className="form-control border-primary" onChange={(e) => setStartDate(e.target.value)} placeholder="اختر التاريخ" />
+                    <input type="date" className="form-control border-primary m-0 h-100 " onChange={(e) => setStartDate(e.target.value)} placeholder="اختر التاريخ" />
                   </div>
 
                   <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">إلى</label>
-                    <input type="date" className="form-control border-primary" onChange={(e) => setEndDate(e.target.value)} placeholder="اختر التاريخ" />
+                    <input type="date" className="form-control border-primary m-0 h-100 " onChange={(e) => setEndDate(e.target.value)} placeholder="اختر التاريخ" />
                   </div>
 
                   <div className="d-flex flex-nowrap justify-content-between col-3 p-0 m-0">
@@ -641,7 +641,7 @@ const AttendanceManagement = () => {
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">تاريخ الحالي</label>
                     <input
                       type="text"
-                      className="form-control border-primary"
+                      className="form-control border-primary m-0 h-100 "
                       readOnly
                       name="currentDate"
                       defaultValue={formatDate(currentDate)}
@@ -650,7 +650,7 @@ const AttendanceManagement = () => {
                   <div className="form-group col-12 col-md-6">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الاسم</label>
                     <select
-                      className="form-control border-primary"
+                      className="form-control border-primary m-0 h-100 "
                       required
                       name="employee"
                       onChange={handleSelectEmployee}
@@ -665,7 +665,7 @@ const AttendanceManagement = () => {
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الشيفت</label>
                     <input
                       type="text"
-                      className="form-control border-primary"
+                      className="form-control border-primary m-0 h-100 "
                       readOnly
                       name="shift"
                       value={shift?.shiftType || ''}
@@ -675,7 +675,7 @@ const AttendanceManagement = () => {
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">تاريخ الوصول</label>
                     <input
                       type="datetime-local"
-                      className="form-control border-primary"
+                      className="form-control border-primary m-0 h-100 "
                       name="arrivalDate"
                       defaultValue={formatDate(new Date())}
                       onChange={handleArrivealDate}
@@ -684,7 +684,7 @@ const AttendanceManagement = () => {
                   <div className="form-group col-12 col-md-6">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">نوع السجل</label>
                     <select
-                      className="form-control border-primary"
+                      className="form-control border-primary m-0 h-100 "
                       required
                       name="status"
                       defaultValue={status}
@@ -700,7 +700,7 @@ const AttendanceManagement = () => {
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">دقائق التأخر</label>
                     <input
                       type="text"
-                      className="form-control border-primary"
+                      className="form-control border-primary m-0 h-100 "
                       name="lateMinutes"
                       readOnly
                       value={lateMinutes || ''}
@@ -709,7 +709,7 @@ const AttendanceManagement = () => {
                   <div className="form-group col-12">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">ملاحظات</label>
                     <textarea
-                      className="form-control border-primary"
+                      className="form-control border-primary m-0 h-100 "
                       name="notes"
                       value={notes}
                       onChange={(e) => setNotes(e.target.value)}
@@ -740,7 +740,7 @@ const AttendanceManagement = () => {
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الاسم</label>
                     <input
                       type="text"
-                      className="form-control border-primary"
+                      className="form-control border-primary m-0 h-100 "
                       readOnly
                       name="employee"
                       value={employeeName || ''}
@@ -750,7 +750,7 @@ const AttendanceManagement = () => {
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الشيفت</label>
                     <input
                       type="text"
-                      className="form-control border-primary"
+                      className="form-control border-primary m-0 h-100 "
                       readOnly
                       name="shift"
                       value={shift?.shiftType || ''}
@@ -760,7 +760,7 @@ const AttendanceManagement = () => {
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">تاريخ الانصراف</label>
                     <input
                       type="datetime-local"
-                      className="form-control border-primary"
+                      className="form-control border-primary m-0 h-100 "
                       name="departureDate"
                       defaultValue={formatDate(new Date())}
                       onChange={handleDepartureDate}
@@ -770,7 +770,7 @@ const AttendanceManagement = () => {
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">دقائق التجاوز</label>
                     <input
                       type="text"
-                      className="form-control border-primary"
+                      className="form-control border-primary m-0 h-100 "
                       name="overtimeMinutes"
                       readOnly
                       value={overtimeMinutes || ''}
@@ -779,7 +779,7 @@ const AttendanceManagement = () => {
                   <div className="form-group col-12">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">ملاحظات</label>
                     <textarea
-                      className="form-control border-primary"
+                      className="form-control border-primary m-0 h-100 "
                       name="notes"
                       value={notes}
                       onChange={(e) => setNotes(e.target.value)}
@@ -810,7 +810,7 @@ const AttendanceManagement = () => {
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">تاريخ الحالي</label>
                     <input
                       type="text"
-                      className="form-control border-primary"
+                      className="form-control border-primary m-0 h-100 "
                       readOnly
                       name="currentDate"
                       defaultValue={formatDate(currentDate)}
@@ -818,13 +818,13 @@ const AttendanceManagement = () => {
                   </div>
                   <div className="form-group col-12 col-md-6">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الاسم</label>
-                    <input type="text" className="form-control border-primary" readOnly defaultValue={recordToUpdate?.employee?.fullname || ''} />
+                    <input type="text" className="form-control border-primary m-0 h-100 " readOnly defaultValue={recordToUpdate?.employee?.fullname || ''} />
                   </div>
                   <div className="form-group col-12 col-md-6">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الشيفت</label>
                     <input
                       type="text"
-                      className="form-control border-primary"
+                      className="form-control border-primary m-0 h-100 "
                       readOnly
                       name="shift"
                       value={shift?.shiftType || ''}
@@ -834,7 +834,7 @@ const AttendanceManagement = () => {
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">تاريخ الوصول</label>
                     <input
                       type="datetime-local"
-                      className="form-control border-primary"
+                      className="form-control border-primary m-0 h-100 "
                       name="arrivalDate"
                       defaultValue={arrivalDate ? new Date(arrivalDate).toISOString().slice(0, 16) : ''}
                       onChange={handleArrivealDate}
@@ -844,7 +844,7 @@ const AttendanceManagement = () => {
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">تاريخ الانصراف</label>
                     <input
                       type="datetime-local"
-                      className="form-control border-primary"
+                      className="form-control border-primary m-0 h-100 "
                       name="departureDate"
                       defaultValue={departureDate ? new Date(departureDate).toISOString().slice(0, 16) : ''}
                       onChange={handleDepartureDate}
@@ -853,7 +853,7 @@ const AttendanceManagement = () => {
                   <div className="form-group col-12 col-md-6">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الحالة</label>
                     <select
-                      className="form-control border-primary"
+                      className="form-control border-primary m-0 h-100 "
                       required
                       name="status"
                       defaultValue={status}
@@ -869,7 +869,7 @@ const AttendanceManagement = () => {
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">دقائق التجاوز</label>
                     <input
                       type="text"
-                      className="form-control border-primary"
+                      className="form-control border-primary m-0 h-100 "
                       name="overtimeMinutes"
                       readOnly
                       value={overtimeMinutes || ''}
@@ -879,7 +879,7 @@ const AttendanceManagement = () => {
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">دقائق التأخر</label>
                     <input
                       type="text"
-                      className="form-control border-primary"
+                      className="form-control border-primary m-0 h-100 "
                       name="lateMinutes"
                       readOnly
                       value={lateMinutes || ''}
@@ -888,7 +888,7 @@ const AttendanceManagement = () => {
                   <div className="form-group col-12">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">ملاحظات</label>
                     <textarea
-                      className="form-control border-primary"
+                      className="form-control border-primary m-0 h-100 "
                       name="notes"
                       value={notes}
                       onChange={(e) => setNotes(e.target.value)}

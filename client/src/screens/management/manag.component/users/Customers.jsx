@@ -207,13 +207,13 @@ const Customers = () => {
               </div>
               <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الموبايل</label>
-                <input type="text" className="form-control border-primary" onChange={(e) => getCustomerByPhone(e.target.value)} />
+                <input type="text" className="form-control border-primary m-0 h-100 " onChange={(e) => getCustomerByPhone(e.target.value)} />
 
               </div>
               <div className='col-12 d-flex align-items-center justify-content-between'>
                 <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">فلتر حسب الوقت</label>
-                  <select className="form-control border-primary"  onChange={(e) => setallCustomers(filterByTime(e.target.value, allCustomers))}>
+                  <select className="form-control border-primary m-0 h-100 "  onChange={(e) => setallCustomers(filterByTime(e.target.value, allCustomers))}>
                     <option value="">اختر</option>
                     <option value="today">اليوم</option>
                     <option value="week">هذا الأسبوع</option>
@@ -227,12 +227,12 @@ const Customers = () => {
 
                   <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">من</label>
-                    <input type="date" className="form-control border-primary" onChange={(e) => setStartDate(e.target.value)} placeholder="اختر التاريخ" />
+                    <input type="date" className="form-control border-primary m-0 h-100 " onChange={(e) => setStartDate(e.target.value)} placeholder="اختر التاريخ" />
                   </div>
 
                   <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">إلى</label>
-                    <input type="date" className="form-control border-primary" onChange={(e) => setEndDate(e.target.value)} placeholder="اختر التاريخ" />
+                    <input type="date" className="form-control border-primary m-0 h-100 " onChange={(e) => setEndDate(e.target.value)} placeholder="اختر التاريخ" />
                   </div>
 
                   <div className="d-flex flex-nowrap justify-content-between col-3 p-0 m-0">
@@ -322,19 +322,19 @@ const Customers = () => {
               <div className="modal-body p-4 text-right">
                 <div className="form-group px-3 d-flex align-items-center justify-content-start col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الاسم</label>
-                  <input type="text" className="form-control border-primary" required pattern="[A-Za-z\u0600-\u06FF\s]+" name='name' onChange={handleInputChange} />
+                  <input type="text" className="form-control border-primary m-0 h-100 " required pattern="[A-Za-z\u0600-\u06FF\s]+" name='name' onChange={handleInputChange} />
                   <div className="invalid-feedback">الرجاء إدخال اسم صالح.</div>
                 </div>
 
                 <div className="form-group px-3 d-flex align-items-center justify-content-start col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الموبايل</label>
-                  <input type="text" className="form-control border-primary" required pattern="[0-9]{11}" name='phone' onChange={handleInputChange} />
+                  <input type="text" className="form-control border-primary m-0 h-100 " required pattern="[0-9]{11}" name='phone' onChange={handleInputChange} />
                   <div className="invalid-feedback">الرجاء إدخال رقم هاتف صالح (11 رقم).</div>
                 </div>
 
                 <div className="form-group px-3 d-flex align-items-center justify-content-start col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">المنطقة</label>
-                  <select name='deliveryArea' required className="form-control border-primary"   onChange={handleInputChange}>
+                  <select name='deliveryArea' required className="form-control border-primary m-0 h-100 "   onChange={handleInputChange}>
                     <option value="">اختر</option>
                     {Areas && Areas.map(area => (
                       <option key={area._id} value={area._id}>{area.name}</option>
@@ -343,13 +343,13 @@ const Customers = () => {
                 </div>
                 <div className="form-group px-3 d-flex align-items-center justify-content-start col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">العنوان</label>
-                  <input type="text" className="form-control border-primary" required pattern="[A-Za-z\u0600-\u06FF\s]+" name='address' value={customerData.address} onChange={handleInputChange} />
+                  <input type="text" className="form-control border-primary m-0 h-100 " required pattern="[A-Za-z\u0600-\u06FF\s]+" name='address' value={customerData.address} onChange={handleInputChange} />
                   <div className="invalid-feedback">الرجاء إدخال عنوان صالح.</div>
                 </div>
 
                 <div className="form-group px-3 d-flex align-items-center justify-content-start col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الحالة</label>
-                  <select name='isVarified' required className="form-control border-primary"   onChange={handleInputChange}>
+                  <select name='isVarified' required className="form-control border-primary m-0 h-100 "   onChange={handleInputChange}>
                     <option value="">اختر</option>
                     <option value={true}>متاح</option>
                     <option value={false}>ليس متاح</option>
@@ -358,7 +358,7 @@ const Customers = () => {
 
                 {/* <div className="form-group px-3 d-flex align-items-center justify-content-start col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الحالة</label>
-                  <select name='refusesOrders' required className="form-control border-primary"   onChange={handleInputChange}>
+                  <select name='refusesOrders' required className="form-control border-primary m-0 h-100 "   onChange={handleInputChange}>
                     <option value="">اختر</option>
                     <option value={true}>رفض اخر اوردر</option>
                     <option value={false}>لم يرفض الاوردر</option>
@@ -367,7 +367,7 @@ const Customers = () => {
 
                 <div className="form-group px-3 d-flex align-items-center justify-content-start col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">ملاحظات</label>
-                  <textarea className="form-control border-primary" name='notes' onChange={handleInputChange} />
+                  <textarea className="form-control border-primary m-0 h-100 " name='notes' onChange={handleInputChange} />
                   <div className="invalid-feedback">الرجاء إدخال ملاحظات صالحة.</div>
                 </div>
               </div>
@@ -393,19 +393,19 @@ const Customers = () => {
               <div className="modal-body p-4 text-right">
                 <div className="form-group px-3 d-flex align-items-center justify-content-start col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الاسم</label>
-                  <input type="text" className="form-control border-primary" required pattern="[A-Za-z\u0600-\u06FF\s]+" name='name' value={customerData.name} onChange={handleInputChange} />
+                  <input type="text" className="form-control border-primary m-0 h-100 " required pattern="[A-Za-z\u0600-\u06FF\s]+" name='name' value={customerData.name} onChange={handleInputChange} />
                   <div className="invalid-feedback">الرجاء إدخال اسم صالح.</div>
                 </div>
 
                 <div className="form-group px-3 d-flex align-items-center justify-content-start col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الموبايل</label>
-                  <input type="text" className="form-control border-primary" required pattern="[0-9]{11}" name='phone' value={customerData.phone} onChange={handleInputChange} />
+                  <input type="text" className="form-control border-primary m-0 h-100 " required pattern="[0-9]{11}" name='phone' value={customerData.phone} onChange={handleInputChange} />
                   <div className="invalid-feedback">الرجاء إدخال رقم هاتف صالح (11 رقم).</div>
                 </div>
 
                 <div className="form-group px-3 d-flex align-items-center justify-content-start col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">المنطقة</label>
-                  <select name='deliveryArea' required className="form-control border-primary"   value={customerData.deliveryArea} onChange={handleInputChange}>
+                  <select name='deliveryArea' required className="form-control border-primary m-0 h-100 "   value={customerData.deliveryArea} onChange={handleInputChange}>
                     <option value="">{Areas.find(area => area._id === customerData.deliveryArea)?.nema}</option>
                     {Areas && Areas.map(area => (
                       <option key={area._id} value={area._id}>{area.name}</option>
@@ -414,13 +414,13 @@ const Customers = () => {
                 </div>
                 <div className="form-group px-3 d-flex align-items-center justify-content-start col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">العنوان</label>
-                  <input type="text" className="form-control border-primary" required pattern="[A-Za-z\u0600-\u06FF\s]+" name='address' value={customerData.address} onChange={handleInputChange} />
+                  <input type="text" className="form-control border-primary m-0 h-100 " required pattern="[A-Za-z\u0600-\u06FF\s]+" name='address' value={customerData.address} onChange={handleInputChange} />
                   <div className="invalid-feedback">الرجاء إدخال عنوان صالح.</div>
                 </div>
 
                 <div className="form-group px-3 d-flex align-items-center justify-content-start col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">التوثيق</label>
-                  <select name='isVarified' required className="form-control border-primary"   value={customerData.isVarified} onChange={handleInputChange}>
+                  <select name='isVarified' required className="form-control border-primary m-0 h-100 "   value={customerData.isVarified} onChange={handleInputChange}>
                     <option value="">{customerData.isVarified ? 'موثق' : "غير موثق"}</option>
                     <option value={true}>موثق</option>
                     <option value={false}>غير موثق</option>
@@ -429,7 +429,7 @@ const Customers = () => {
 
                 <div className="form-group px-3 d-flex align-items-center justify-content-start col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">رفض الاوردرات</label>
-                  <select name='refusesOrders' required className="form-control border-primary"   value={customerData.refusesOrders} onChange={handleInputChange}>
+                  <select name='refusesOrders' required className="form-control border-primary m-0 h-100 "   value={customerData.refusesOrders} onChange={handleInputChange}>
                     <option value="">{customerData.refusesOrders ? 'رفض اوردر' : "لم يرفض الاوردر"}</option>
                     <option value={true}>رفض اوردر</option>
                     <option value={false}>لم يرفض الاوردر</option>
@@ -438,7 +438,7 @@ const Customers = () => {
 
                 <div className="form-group px-3 d-flex align-items-center justify-content-start col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">ملاحظات</label>
-                  <textarea className="form-control border-primary" name='notes' value={customerData.notes} onChange={handleInputChange} />
+                  <textarea className="form-control border-primary m-0 h-100 " name='notes' value={customerData.notes} onChange={handleInputChange} />
                   <div className="invalid-feedback">الرجاء إدخال ملاحظات صالحة.</div>
                 </div>
               </div>

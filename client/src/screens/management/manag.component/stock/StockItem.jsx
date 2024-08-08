@@ -313,12 +313,12 @@ const StockItem = () => {
 
               <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">اسم الصنف</label>
-                <input type="text" className="form-control border-primary" onChange={(e) => searchByitem(e.target.value)} />
+                <input type="text" className="form-control border-primary m-0 h-100 " onChange={(e) => searchByitem(e.target.value)} />
               </div>
 
               <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">نوع المخزن</label>
-                <select className="form-control border-primary" onChange={(e) => searchByCategory(e.target.value)} >
+                <select className="form-control border-primary m-0 h-100 " onChange={(e) => searchByCategory(e.target.value)} >
                   <option value={""}>الكل</option>
                   {AllCategoryStock.map((category, i) => {
                     return <option value={category._id} key={i} >{category.name}</option>
@@ -408,11 +408,11 @@ const StockItem = () => {
               <div className="modal-body p-4 text-right">
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">اسم الصنف</label>
-                  <input type="text" className="form-control border-primary" required onChange={(e) => setitemName(e.target.value)} />
+                  <input type="text" className="form-control border-primary m-0 h-100 " required onChange={(e) => setitemName(e.target.value)} />
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">نوع المخزن</label>
-                  <select className="form-control border-primary"  name="category" id="category" form="carform" onChange={(e) => setcategoryId(e.target.value)}>
+                  <select className="form-control border-primary m-0 h-100 "  name="category" id="category" form="carform" onChange={(e) => setcategoryId(e.target.value)}>
                     <option>اختر نوع المخزن</option>
                     {AllCategoryStock.map((category, i) => {
                       return <option value={category._id} key={i} >{category.name}</option>
@@ -422,35 +422,35 @@ const StockItem = () => {
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الوحدة الكبيرة</label>
-                  <input type='text' className="form-control border-primary" required onChange={(e) => setlargeUnit(e.target.value)}></input>
+                  <input type='text' className="form-control border-primary m-0 h-100 " required onChange={(e) => setlargeUnit(e.target.value)}></input>
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الوحدة الصغيره</label>
-                  <input type='text' className="form-control border-primary" required onChange={(e) => setsmallUnit(e.target.value)}></input>
+                  <input type='text' className="form-control border-primary m-0 h-100 " required onChange={(e) => setsmallUnit(e.target.value)}></input>
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">رصيد افتتاحي</label>
-                  <input type='Number' className="form-control border-primary" required onChange={(e) => setcurrentBalance(e.target.value)} />
+                  <input type='Number' className="form-control border-primary m-0 h-100 " required onChange={(e) => setcurrentBalance(e.target.value)} />
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الحد الادني</label>
-                  <input type='number' className="form-control border-primary" required onChange={(e) => { setminThreshold(e.target.value); }} />
+                  <input type='number' className="form-control border-primary m-0 h-100 " required onChange={(e) => { setminThreshold(e.target.value); }} />
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">السعر</label>
-                  <input type='Number' className="form-control border-primary" required onChange={(e) => { setprice(e.target.value) }} />
+                  <input type='Number' className="form-control border-primary m-0 h-100 " required onChange={(e) => { setprice(e.target.value) }} />
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">عدد الوحدات</label>
-                  <input type='Number' className="form-control border-primary" required onChange={(e) => { setparts(e.target.value); setcostOfPart(price / e.target.value) }} />
+                  <input type='Number' className="form-control border-primary m-0 h-100 " required onChange={(e) => { setparts(e.target.value); setcostOfPart(price / e.target.value) }} />
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">تكلفة الوحده</label>
-                  <input type='Number' className="form-control border-primary" required defaultValue={costOfPart} readOnly />
+                  <input type='Number' className="form-control border-primary m-0 h-100 " required defaultValue={costOfPart} readOnly />
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">التاريخ</label>
-                  <input type='text' className="form-control border-primary" Value={new Date().toLocaleDateString()} required readOnly />
+                  <input type='text' className="form-control border-primary m-0 h-100 " Value={new Date().toLocaleDateString()} required readOnly />
                 </div>
               </div>
               <div className="modal-footer d-flex flex-nowrap align-items-center justify-content-between m-0 p-1">
@@ -475,11 +475,11 @@ const StockItem = () => {
               <div className="modal-body p-4 text-right">
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">اسم الصنف</label>
-                  <input type="text" className="form-control border-primary" defaultValue={itemName} required onChange={(e) => setitemName(e.target.value)} />
+                  <input type="text" className="form-control border-primary m-0 h-100 " defaultValue={itemName} required onChange={(e) => setitemName(e.target.value)} />
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">نوع المخزن</label>
-                  <select className="form-control border-primary"  name="category" id="category" defaultValue={categoryId} form="carform" onChange={(e) => setcategoryId(e.target.value)}>
+                  <select className="form-control border-primary m-0 h-100 "  name="category" id="category" defaultValue={categoryId} form="carform" onChange={(e) => setcategoryId(e.target.value)}>
                     <option value={categoryId}>{categoryName}</option>
                     {AllCategoryStock.map((category, i) => {
                       return <option value={category._id} key={i} >{category.name}</option>
@@ -490,36 +490,36 @@ const StockItem = () => {
 
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الوحدة الكبيرة</label>
-                  <input type='text' className="form-control border-primary" defaultValue={largeUnit} required onChange={(e) => setlargeUnit(e.target.value)}></input>
+                  <input type='text' className="form-control border-primary m-0 h-100 " defaultValue={largeUnit} required onChange={(e) => setlargeUnit(e.target.value)}></input>
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الوحدة الصغيره</label>
-                  <input type='text' className="form-control border-primary" defaultValue={smallUnit} required onChange={(e) => setsmallUnit(e.target.value)}></input>
+                  <input type='text' className="form-control border-primary m-0 h-100 " defaultValue={smallUnit} required onChange={(e) => setsmallUnit(e.target.value)}></input>
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">رصيد افتتاحي</label>
-                  <input type='Number' className="form-control border-primary" defaultValue={currentBalance} required onChange={(e) => setcurrentBalance(e.target.value)} />
+                  <input type='Number' className="form-control border-primary m-0 h-100 " defaultValue={currentBalance} required onChange={(e) => setcurrentBalance(e.target.value)} />
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الحد الادني</label>
-                  <input type='number' className="form-control border-primary" required defaultValue={minThreshold} onChange={(e) => { setminThreshold(e.target.value); }} />
+                  <input type='number' className="form-control border-primary m-0 h-100 " required defaultValue={minThreshold} onChange={(e) => { setminThreshold(e.target.value); }} />
                 </div>
 
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">السعر</label>
-                  <input type='Number' className="form-control border-primary" defaultValue={price} required onChange={(e) => { setprice(e.target.value); setcostOfPart(e.target.value / Number(parts)) }} />
+                  <input type='Number' className="form-control border-primary m-0 h-100 " defaultValue={price} required onChange={(e) => { setprice(e.target.value); setcostOfPart(e.target.value / Number(parts)) }} />
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">عدد الوحدات</label>
-                  <input type='Number' className="form-control border-primary" defaultValue={parts} required onChange={(e) => { setparts(e.target.value); setcostOfPart(Number(price) / e.target.value) }} />
+                  <input type='Number' className="form-control border-primary m-0 h-100 " defaultValue={parts} required onChange={(e) => { setparts(e.target.value); setcostOfPart(Number(price) / e.target.value) }} />
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">تكلفة الوحده</label>
-                  <input type='Number' className="form-control border-primary" required defaultValue={costOfPart} readOnly />
+                  <input type='Number' className="form-control border-primary m-0 h-100 " required defaultValue={costOfPart} readOnly />
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">التاريخ</label>
-                  <input type='text' className="form-control border-primary" defaultValue={new Date().toLocaleDateString()} required readOnly />
+                  <input type='text' className="form-control border-primary m-0 h-100 " defaultValue={new Date().toLocaleDateString()} required readOnly />
                 </div>
               </div>
               <div className="modal-footer d-flex flex-nowrap align-items-center justify-content-between m-0 p-1">

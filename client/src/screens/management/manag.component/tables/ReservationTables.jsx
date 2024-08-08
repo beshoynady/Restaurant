@@ -148,7 +148,7 @@ const ReservationTables = () => {
 
               {/* <div className="form-group w-100 h-auto px-3 d-flex align-itmes-center justify-content-start col-12  col-12 col-md-6 ">
                         <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الحالة</label>
-                        <select className="form-control border-primary"  name="category" id="category" form="carform" onChange={(e) => filterByStatus(e.target.value)}>
+                        <select className="form-control border-primary m-0 h-100 "  name="category" id="category" form="carform" onChange={(e) => filterByStatus(e.target.value)}>
                           <option value="">اختر</option>
                           <option value={true} >متاح</option>
                           <option value={false} >غير متاح</option>
@@ -158,7 +158,7 @@ const ReservationTables = () => {
               <div className='col-12 d-flex align-items-center justify-content-between flex-wrap'>
                 <div className="filter-group d-flex align-items-center justify-content-between col-md-4 col-sm-12 p-0 mb-2">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">فلتر حسب الوقت</label>
-                  <select className="form-control border-primary"  onChange={(e) => setallReservations(filterByTime(e.target.value, allReservations))}>
+                  <select className="form-control border-primary m-0 h-100 "  onChange={(e) => setallReservations(filterByTime(e.target.value, allReservations))}>
                     <option value="">اختر</option>
                     <option value="today">اليوم</option>
                     <option value="week">هذا الأسبوع</option>
@@ -172,12 +172,12 @@ const ReservationTables = () => {
 
                   <div className="d-flex align-items-center me-2">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">من</label>
-                    <input type="date" className="form-control border-primary" onChange={(e) => setStartDate(e.target.value)} placeholder="اختر التاريخ" />
+                    <input type="date" className="form-control border-primary m-0 h-100 " onChange={(e) => setStartDate(e.target.value)} placeholder="اختر التاريخ" />
                   </div>
 
                   <div className="d-flex align-items-center me-2">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">إلى</label>
-                    <input type="date" className="form-control border-primary" onChange={(e) => setEndDate(e.target.value)} placeholder="اختر التاريخ" />
+                    <input type="date" className="form-control border-primary m-0 h-100 " onChange={(e) => setEndDate(e.target.value)} placeholder="اختر التاريخ" />
                   </div>
 
                   <div className="d-flex align-items-center">
@@ -222,7 +222,7 @@ const ReservationTables = () => {
                         <td>{formatTime(reservation.startTime)}</td>
                         <td>{formatTime(reservation.endTime)}</td>
                         <td>
-                          <select className="form-control border-primary"  name="status" id="status" onChange={(e) => confirmReservation(reservation._id, e.target.value)}>
+                          <select className="form-control border-primary m-0 h-100 "  name="status" id="status" onChange={(e) => confirmReservation(reservation._id, e.target.value)}>
                             <option >{translateStatus(reservation.status)}</option>
                             <option value='confirmed'>تاكيد</option>
                             <option value='awaiting confirmation'>انتظار التاكيد</option>

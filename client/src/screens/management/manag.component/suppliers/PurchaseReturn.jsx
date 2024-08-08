@@ -724,7 +724,7 @@ const PurchaseReturn = () => {
               </div>
               <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">رقم الفاتورة</label>
-                <select className="form-control border-primary"  onChange={(e) => searchByInvoice(e.target.value)} >
+                <select className="form-control border-primary m-0 h-100 "  onChange={(e) => searchByInvoice(e.target.value)} >
                   <option value="all">الكل</option>
                   {allPurchaseInvoice.map(PurchaseInvoice => {
                     return <option value={PurchaseInvoice._id}>{PurchaseInvoice.invoiceNumber}</option>;
@@ -733,7 +733,7 @@ const PurchaseReturn = () => {
               </div>
               <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">المورد</label>
-                <select className="form-control border-primary"  onChange={(e) => searchBySupplier(e.target.value)} >
+                <select className="form-control border-primary m-0 h-100 "  onChange={(e) => searchBySupplier(e.target.value)} >
                   <option value="all">الكل</option>
                   {AllSuppliers.map(Supplier => {
                     return <option value={Supplier._id}>{Supplier.name}</option>;
@@ -743,7 +743,7 @@ const PurchaseReturn = () => {
               <div className='col-12 d-flex align-items-center justify-content-between'>
                 <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">فلتر حسب الوقت</label>
-                  <select className="form-control border-primary"  onChange={(e) => setallPurchasesReturn(filterByTime(e.target.value, allPurchasesReturn))}>
+                  <select className="form-control border-primary m-0 h-100 "  onChange={(e) => setallPurchasesReturn(filterByTime(e.target.value, allPurchasesReturn))}>
                     <option value="">اختر</option>
                     <option value="today">اليوم</option>
                     <option value="week">هذا الأسبوع</option>
@@ -757,12 +757,12 @@ const PurchaseReturn = () => {
 
                   <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">من</label>
-                    <input type="date" className="form-control border-primary" onChange={(e) => setStartDate(e.target.value)} placeholder="اختر التاريخ" />
+                    <input type="date" className="form-control border-primary m-0 h-100 " onChange={(e) => setStartDate(e.target.value)} placeholder="اختر التاريخ" />
                   </div>
 
                   <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">إلى</label>
-                    <input type="date" className="form-control border-primary" onChange={(e) => setEndDate(e.target.value)} placeholder="اختر التاريخ" />
+                    <input type="date" className="form-control border-primary m-0 h-100 " onChange={(e) => setEndDate(e.target.value)} placeholder="اختر التاريخ" />
                   </div>
 
                   <div className="d-flex flex-nowrap justify-content-between col-3 p-0 m-0">
@@ -1279,7 +1279,7 @@ const PurchaseReturn = () => {
                               <div className="col-6">
                                 <div className="input-group mb-3 d-flex align-items-center justify-content-between flex-nowrap">
                                   <span className="input-group-text" htmlFor="supplierSelect">المورد</span>
-                                  <select readOnly className="form-control border-primary"  id="supplierSelect" onChange={(e) => handleSupplier(e.target.value)}>
+                                  <select readOnly className="form-control border-primary m-0 h-100 "  id="supplierSelect" onChange={(e) => handleSupplier(e.target.value)}>
                                     <option>اختر المورد</option>
                                     {AllSuppliers.map((supplier, i) => (
                                       <option value={supplier._id} key={i}>{supplier.name}</option>
@@ -1288,18 +1288,18 @@ const PurchaseReturn = () => {
                                 </div>
                                 <div className="input-group mb-3 d-flex align-items-center justify-content-between flex-nowrap">
                                   <span className="input-group-text col-4" htmlFor="notesInput">الرصيد</span>
-                                  <input type="text" className="form-control border-primary" id="notesInput" readOnly value={supplierInfo.currentBalance} />
+                                  <input type="text" className="form-control border-primary m-0 h-100 " id="notesInput" readOnly value={supplierInfo.currentBalance} />
                                 </div>
 
                               </div>
                               <div className="col-6">
                                 <div className="input-group mb-3 d-flex align-items-center justify-content-between flex-nowrap">
                                   <span className="input-group-text col-4" htmlFor="originalInvoiceInput">رقم الفاتورة</span>
-                                  <input type="text" className="form-control border-primary" required id="originalInvoiceInput" placeholder="رقم الفاتورة" onChange={(e) => setoriginalInvoice(e.target.value)} />
+                                  <input type="text" className="form-control border-primary m-0 h-100 " required id="originalInvoiceInput" placeholder="رقم الفاتورة" onChange={(e) => setoriginalInvoice(e.target.value)} />
                                 </div>
                                 <div className="input-group mb-3 d-flex align-items-center justify-content-between flex-nowrap">
                                   <span className="input-group-text col-4" htmlFor="returnDateInput">تاريخ الفاتورة</span>
-                                  <input type="date" className="form-control border-primary" required id="returnDateInput" placeholder="تاريخ الفاتور" onChange={(e) => setreturnDate(e.target.value)} />
+                                  <input type="date" className="form-control border-primary m-0 h-100 " required id="returnDateInput" placeholder="تاريخ الفاتور" onChange={(e) => setreturnDate(e.target.value)} />
                                 </div>
                               </div>
                             </div>
@@ -1324,7 +1324,7 @@ const PurchaseReturn = () => {
                                   <tr id="TRow" key={i}>
                                     <th scope="d-flex flex-wrap align-items-center justify-content-between">{i + 1}</th>
                                     <td>
-                                      <select className="form-control border-primary"  required onChange={(e) => handleItemId(e.target.value, i)}>
+                                      <select className="form-control border-primary m-0 h-100 "  required onChange={(e) => handleItemId(e.target.value, i)}>
                                         <option value="">
                                           {StockItems && StockItems.filter(stock => stock._id === item.item)[0]?.name}
                                         </option>
@@ -1333,14 +1333,14 @@ const PurchaseReturn = () => {
                                         ))}
                                       </select>
                                     </td>
-                                    <td><input type="number" required className="form-control border-primary" name="qty" onChange={(e) => handleQuantity(e.target.value, i)} /></td>
-                                    <td><input type="text" readOnly value={item.largeUnit} className="form-control border-primary" name="largeUnit" /></td>
+                                    <td><input type="number" required className="form-control border-primary m-0 h-100 " name="qty" onChange={(e) => handleQuantity(e.target.value, i)} /></td>
+                                    <td><input type="text" readOnly value={item.largeUnit} className="form-control border-primary m-0 h-100 " name="largeUnit" /></td>
 
-                                    <td><input type="number" className="form-control border-primary" name="price" required onChange={(e) => handlePrice(e.target.value, i)} /></td>
+                                    <td><input type="number" className="form-control border-primary m-0 h-100 " name="price" required onChange={(e) => handlePrice(e.target.value, i)} /></td>
 
-                                    <td><input type="text" className="form-control border-primary" value={item.cost} name="amt" readOnly /></td>
+                                    <td><input type="text" className="form-control border-primary m-0 h-100 " value={item.cost} name="amt" readOnly /></td>
 
-                                    <td><input type="date" className="form-control border-primary" name="Exp" onChange={(e) => handleExpirationDate(e.target.value, i)} /></td>
+                                    <td><input type="date" className="form-control border-primary m-0 h-100 " name="Exp" onChange={(e) => handleExpirationDate(e.target.value, i)} /></td>
                                     <td className="NoPrint"><button type="button" className="h-100 btn btn-sm btn-danger" onClick={() => handleDeleteItem(i)}>X</button></td>
                                   </tr>
                                 ))}
@@ -1367,7 +1367,7 @@ const PurchaseReturn = () => {
                                 </div>
                                 <div className="input-group mb-3 d-flex align-items-center justify-content-between flex-nowrap">
                                   <span className="input-group-text col-4" htmlFor="notesInput">الملاحظات</span>
-                                  <textarea className="form-control border-primary" id="notesInput" placeholder="الملاحظات" onChange={(e) => setNotes(e.target.value)} style={{ height: 'auto' }} />
+                                  <textarea className="form-control border-primary m-0 h-100 " id="notesInput" placeholder="الملاحظات" onChange={(e) => setNotes(e.target.value)} style={{ height: 'auto' }} />
                                 </div>
                                 <div className="input-group mb-3 d-flex align-items-center justify-content-between flex-nowrap">
                                   <span className="input-group-text col-4" htmlFor="gstInput">تكلفه اضافية</span>
@@ -1417,8 +1417,9 @@ const PurchaseReturn = () => {
 
                       </div>
                       <div className="modal-footer d-flex flex-nowrap align-items-center justify-content-between m-0 p-1">
-                        <input type="button" className=" btn btn-danger col-6 h-100 p-0 m-0" data-dismiss="modal" value="إغلاق" />
                         <input type="submit" className=" btn btn-success col-6 h-100 p-0 m-0" value="اضافه" />
+                        <input type="button" className=" btn btn-danger col-6 h-100 p-0 m-0" data-dismiss="modal" value="إغلاق" />
+                      </div>
                       </div>
                     </form>
                   </div>

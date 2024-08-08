@@ -679,11 +679,11 @@ const Purchase = () => {
               </div>
               <div className="filter-group d-flex align-items-center justify-content-evenly col-3 mb-1 p-0">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">رقم الفاتوره</label>
-                <input type="text" className="form-control border-primary" onChange={(e) => searchByIvoiceNumber(e.target.value)} />
+                <input type="text" className="form-control border-primary m-0 h-100 " onChange={(e) => searchByIvoiceNumber(e.target.value)} />
               </div>
               <div className="filter-group d-flex align-items-center justify-content-evenly col-3 mb-1 p-0">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">طريقه السداد</label>
-                <select className="form-control border-primary"  onChange={(e) => searchByPaymentType(e.target.value)} >
+                <select className="form-control border-primary m-0 h-100 "  onChange={(e) => searchByPaymentType(e.target.value)} >
                   <option value={""}>الكل</option>
                   <option value="cash">كاش</option>;
                   <option value="credit">تقسيط</option>;
@@ -691,7 +691,7 @@ const Purchase = () => {
               </div>
               <div className="filter-group d-flex align-items-center justify-content-evenly col-3 mb-1 p-0">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">حاله السداد</label>
-                <select className="form-control border-primary"  onChange={(e) => searchBypaymentStatus(e.target.value)} >
+                <select className="form-control border-primary m-0 h-100 "  onChange={(e) => searchBypaymentStatus(e.target.value)} >
                   <option value={""}>الكل</option>
                   <option value="unpaid">لم يتم السداد</option>;
                   <option value="partially_paid">سداد جزء</option>;
@@ -700,7 +700,7 @@ const Purchase = () => {
               </div>
               <div className="filter-group d-flex align-items-center justify-content-evenly col-3 mb-1 p-0">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">المورد</label>
-                <select className="form-control border-primary"  onChange={(e) => searchBySupplier(e.target.value)} >
+                <select className="form-control border-primary m-0 h-100 "  onChange={(e) => searchBySupplier(e.target.value)} >
                   <option value={""}>الكل</option>
                   {AllSuppliers.map(supplier => {
                     return <option value={supplier._id}>{supplier.name}</option>;
@@ -709,7 +709,7 @@ const Purchase = () => {
               </div>
               <div className="filter-group d-flex align-items-center justify-content-evenly col-3 mb-1 p-0">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">خزينه الدفع</label>
-                <select className="form-control border-primary"  onChange={(e) => searchByCashRegister(e.target.value)} >
+                <select className="form-control border-primary m-0 h-100 "  onChange={(e) => searchByCashRegister(e.target.value)} >
                   <option value={""}>الكل</option>
                   {AllCashRegisters.map(cashRegister => {
                     return <option value={cashRegister._id}>{cashRegister.name}</option>;
@@ -719,7 +719,7 @@ const Purchase = () => {
               <div className='col-12 d-flex align-items-center justify-content-between'>
                 <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">فلتر حسب الوقت</label>
-                  <select className="form-control border-primary"  onChange={(e) => setallPurchaseInvoice(filterByTime(e.target.value, allPurchaseInvoice))}>
+                  <select className="form-control border-primary m-0 h-100 "  onChange={(e) => setallPurchaseInvoice(filterByTime(e.target.value, allPurchaseInvoice))}>
                     <option value="">اختر</option>
                     <option value="today">اليوم</option>
                     <option value="week">هذا الأسبوع</option>
@@ -733,12 +733,12 @@ const Purchase = () => {
 
                   <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">من</label>
-                    <input type="date" className="form-control border-primary" onChange={(e) => setStartDate(e.target.value)} placeholder="اختر التاريخ" />
+                    <input type="date" className="form-control border-primary m-0 h-100 " onChange={(e) => setStartDate(e.target.value)} placeholder="اختر التاريخ" />
                   </div>
 
                   <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">إلى</label>
-                    <input type="date" className="form-control border-primary" onChange={(e) => setEndDate(e.target.value)} placeholder="اختر التاريخ" />
+                    <input type="date" className="form-control border-primary m-0 h-100 " onChange={(e) => setEndDate(e.target.value)} placeholder="اختر التاريخ" />
                   </div>
 
                   <div className="d-flex flex-nowrap justify-content-between col-3 p-0 m-0">
@@ -852,7 +852,7 @@ const Purchase = () => {
                       <div className="col-6">
                         <div className="input-group mb-3 d-flex align-items-center justify-content-between flex-nowrap">
                           <span className="input-group-text" htmlFor="supplierSelect">المورد</span>
-                          <select required className="form-control border-primary"  id="supplierSelect" onChange={(e) => handleSupplier(e.target.value)}>
+                          <select required className="form-control border-primary m-0 h-100 "  id="supplierSelect" onChange={(e) => handleSupplier(e.target.value)}>
                             <option>اختر المورد</option>
                             {AllSuppliers.map((supplier, i) => (
                               <option value={supplier._id} key={i}>{supplier.name}</option>
@@ -861,18 +861,18 @@ const Purchase = () => {
                         </div>
                         <div className="input-group mb-3 d-flex align-items-center justify-content-between flex-nowrap">
                           <span className="input-group-text" htmlFor="notesInput">الرصيد</span>
-                          <input type="text" className="form-control border-primary" id="notesInput" readOnly value={supplierInfo.currentBalance} />
+                          <input type="text" className="form-control border-primary m-0 h-100 " id="notesInput" readOnly value={supplierInfo.currentBalance} />
                         </div>
 
                       </div>
                       <div className="col-6">
                         <div className="input-group mb-3 d-flex align-items-center justify-content-between flex-nowrap">
                           <span className="input-group-text" htmlFor="invoiceNumberInput">رقم الفاتورة</span>
-                          <input type="text" className="form-control border-primary" required id="invoiceNumberInput" placeholder="رقم الفاتورة" onChange={(e) => setInvoiceNumber(e.target.value)} />
+                          <input type="text" className="form-control border-primary m-0 h-100 " required id="invoiceNumberInput" placeholder="رقم الفاتورة" onChange={(e) => setInvoiceNumber(e.target.value)} />
                         </div>
                         <div className="input-group mb-3 d-flex align-items-center justify-content-between flex-nowrap">
                           <span className="input-group-text" htmlFor="invoiceDateInput">تاريخ الفاتورة</span>
-                          <input type="date" className="form-control border-primary" required id="invoiceDateInput" placeholder="تاريخ الفاتور" onChange={(e) => setinvoiceDate(e.target.value)} />
+                          <input type="date" className="form-control border-primary m-0 h-100 " required id="invoiceDateInput" placeholder="تاريخ الفاتور" onChange={(e) => setinvoiceDate(e.target.value)} />
                         </div>
                       </div>
                     </div>
@@ -940,7 +940,7 @@ const Purchase = () => {
                         </div>
                         <div className="input-group mb-3 d-flex align-items-center justify-content-between flex-nowrap">
                           <span className="input-group-text" htmlFor="notesInput">الملاحظات</span>
-                          <textarea className="form-control border-primary" id="notesInput" placeholder="الملاحظات" onChange={(e) => setNotes(e.target.value)} style={{ height: 'auto' }} />
+                          <textarea className="form-control border-primary m-0 h-100 " id="notesInput" placeholder="الملاحظات" onChange={(e) => setNotes(e.target.value)} style={{ height: 'auto' }} />
                         </div>
                         <div className="input-group mb-3 d-flex align-items-center justify-content-between flex-nowrap">
                           <span className="input-group-text" htmlFor="gstInput">تكلفه اضافية</span>
