@@ -318,23 +318,9 @@
   }
 }
 
-@media (max-width: 400px) {
+/* @media (max-width: 400px) {
   .sidebar.close .nav-links li .sub-menu {
     display: none;
   }
 
-  .sidebar.close {
-    width: 55px;
-  }
-
-  .home-section {
-    left: 50px;
-    width: 200px;
-    z-index: 99;
-  }
-
-  .sidebar.close~.home-section {
-    width: 55px;
-    left: 50px;
-  }
-}
+} */
