@@ -239,7 +239,7 @@ const SupplierTransaction = () => {
               <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                 <label htmlFor="supplierSelect">المورد</label>
                 <select
-                  className="form-control border-primary m-0 h-100 " 
+                  className="form-control border-primary m-0 p-1 h-100" 
                   id="supplierSelect"
                   onChange={(e) => handleSupplier(e.target.value)}
                 >
@@ -252,7 +252,7 @@ const SupplierTransaction = () => {
               <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                 <label htmlFor="transactionTypeSelect">نوع العملية</label>
                 <select
-                  className="form-control border-primary m-0 h-100 " 
+                  className="form-control border-primary m-0 p-1 h-100" 
                   id="transactionTypeSelect"
                   onChange={(e) => filterSupplierTransactionByTransactionType(e.target.value)}
                 >
@@ -265,7 +265,7 @@ const SupplierTransaction = () => {
               <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                 <label htmlFor="invoiceNumberSelect">رقم الفاتورة</label>
                 <select
-                  className="form-control border-primary m-0 h-100 " 
+                  className="form-control border-primary m-0 p-1 h-100" 
                   id="invoiceNumberSelect"
                   onChange={(e) => filterSupplierTransactionByInvoiceNumber(e.target.value)}
                 >
@@ -284,7 +284,7 @@ const SupplierTransaction = () => {
               <div className='col-12 d-flex align-items-center justify-content-between'>
                 <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">فلتر حسب الوقت</label>
-                  <select className="form-control border-primary m-0 h-100 "  onChange={(e) => setAllSupplierTransaction(filterByTime(e.target.value, AllSupplierTransaction))}>
+                  <select className="form-control border-primary m-0 p-1 h-100"  onChange={(e) => setAllSupplierTransaction(filterByTime(e.target.value, AllSupplierTransaction))}>
                     <option value="">اختر</option>
                     <option value="today">اليوم</option>
                     <option value="week">هذا الأسبوع</option>
@@ -298,12 +298,12 @@ const SupplierTransaction = () => {
 
                   <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">من</label>
-                    <input type="date" className="form-control border-primary m-0 h-100 " onChange={(e) => setStartDate(e.target.value)} placeholder="اختر التاريخ" />
+                    <input type="date" className="form-control border-primary m-0 p-1 h-100" onChange={(e) => setStartDate(e.target.value)} placeholder="اختر التاريخ" />
                   </div>
 
                   <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">إلى</label>
-                    <input type="date" className="form-control border-primary m-0 h-100 " onChange={(e) => setEndDate(e.target.value)} placeholder="اختر التاريخ" />
+                    <input type="date" className="form-control border-primary m-0 p-1 h-100" onChange={(e) => setEndDate(e.target.value)} placeholder="اختر التاريخ" />
                   </div>
 
                   <div className="d-flex flex-nowrap justify-content-between col-3 p-0 m-0">
@@ -435,11 +435,11 @@ const SupplierTransaction = () => {
               <div className="modal-body p-4 text-right">
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">تاريخ العملية</label>
-                  <input type="date" className="form-control border-primary m-0 h-100 " value={transactionDate} onChange={(e) => setTransactionDate(e.target.value)} />
+                  <input type="date" className="form-control border-primary m-0 p-1 h-100" value={transactionDate} onChange={(e) => setTransactionDate(e.target.value)} />
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">المورد</label>
-                  <select required className="form-control border-primary m-0 h-100 "  id="supplierSelect" onChange={(e) => handleSupplier(e.target.value)}>
+                  <select required className="form-control border-primary m-0 p-1 h-100"  id="supplierSelect" onChange={(e) => handleSupplier(e.target.value)}>
                     <option>اختر المورد</option>
                     {AllSuppliers.map((supplier, i) => (
                       <option value={supplier._id} key={i}>{supplier.name}</option>
@@ -448,7 +448,7 @@ const SupplierTransaction = () => {
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">نوع العملية</label>
-                  <select required className="form-control border-primary m-0 h-100 "  id="supplierSelect" onChange={(e) => setTransactionType(e.target.value)}>
+                  <select required className="form-control border-primary m-0 p-1 h-100"  id="supplierSelect" onChange={(e) => setTransactionType(e.target.value)}>
                     <option>اختر نوع العملية</option>
                     {listtransactionType.map((type, i) => (
                       <option value={type} key={i}>{type}</option>
@@ -457,7 +457,7 @@ const SupplierTransaction = () => {
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">رقم الفاتورة</label>
-                  <select required className="form-control border-primary m-0 h-100 "  id="supplierSelect" onChange={(e) => setInvoiceNumber(e.target.value)} >
+                  <select required className="form-control border-primary m-0 p-1 h-100"  id="supplierSelect" onChange={(e) => setInvoiceNumber(e.target.value)} >
                     <option>اختر رقم الفاتورة</option>
                     {allPurchaseInvoiceFilterd.map((Invoice, i) => (
                       <option value={Invoice._id} key={i}>{Invoice.invoiceNumber}</option>
@@ -466,23 +466,23 @@ const SupplierTransaction = () => {
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">المبلغ</label>
-                  <input type="number" className="form-control border-primary m-0 h-100 " defaultValue={amount} onChange={(e) => handlecurrentBalance(e.target.value)} />
+                  <input type="number" className="form-control border-primary m-0 p-1 h-100" defaultValue={amount} onChange={(e) => handlecurrentBalance(e.target.value)} />
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الرصيد السابق</label>
-                  <input type="text" className="form-control border-primary m-0 h-100 " value={previousBalance} readOnly />
+                  <input type="text" className="form-control border-primary m-0 p-1 h-100" value={previousBalance} readOnly />
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الرصيد الحالي</label>
-                  <input type="text" className="form-control border-primary m-0 h-100 " value={currentBalance} readOnly />
+                  <input type="text" className="form-control border-primary m-0 p-1 h-100" value={currentBalance} readOnly />
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">طريقة الدفع</label>
-                  <input type="text" className="form-control border-primary m-0 h-100 " defaultValue={paymentMethod} onChange={(e) => setPaymentMethod(e.target.value)} />
+                  <input type="text" className="form-control border-primary m-0 p-1 h-100" defaultValue={paymentMethod} onChange={(e) => setPaymentMethod(e.target.value)} />
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">ملاحظات</label>
-                  <input type="text" className="form-control border-primary m-0 h-100 " value={notes} onChange={(e) => setNotes(e.target.value)} />
+                  <input type="text" className="form-control border-primary m-0 p-1 h-100" value={notes} onChange={(e) => setNotes(e.target.value)} />
                 </div>
               </div>
               <div className="modal-footer d-flex flex-nowrap align-items-center justify-content-between m-0 p-1">
@@ -505,11 +505,11 @@ const SupplierTransaction = () => {
                       <div className="modal-body p-4 text-right">
                         <div className="form-group col-12 col-md-6">
                           <label className="form-label text-wrap text-right fw-bolder p-0 m-0">اسم الصنف</label>
-                          <input type="text" className="form-control border-primary m-0 h-100 " defaultValue={itemName} required onChange={(e) => setitemName(e.target.value)} />
+                          <input type="text" className="form-control border-primary m-0 p-1 h-100" defaultValue={itemName} required onChange={(e) => setitemName(e.target.value)} />
                         </div>
                         <div className="form-group col-12 col-md-6">
                           <label className="form-label text-wrap text-right fw-bolder p-0 m-0">نوع المخزن</label>
-                          <select className="form-control border-primary m-0 h-100 "  name="category" id="category" defaultValue={categoryId} form="carform" onChange={(e) => setcategoryId(e.target.value)}>
+                          <select className="form-control border-primary m-0 p-1 h-100"  name="category" id="category" defaultValue={categoryId} form="carform" onChange={(e) => setcategoryId(e.target.value)}>
                             <option>{AllCategoryStock.length>0?AllCategoryStock.filter(c=>c._id === categoryId)[0].name:''}</option>
                             <option value={categoryId}>{categoryId !== "" ? AllCategoryStock.filter(c => c._id === categoryId)[0].name : ''}</option>
                             {AllCategoryStock.map((category, i) => {
@@ -521,40 +521,40 @@ const SupplierTransaction = () => {
 
                         <div className="form-group col-12 col-md-6">
                           <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الوحدة الكبيرة</label>
-                          <input type='text' className="form-control border-primary m-0 h-100 " defaultValue={largeUnit} required onChange={(e) => setlargeUnit(e.target.value)}></input>
+                          <input type='text' className="form-control border-primary m-0 p-1 h-100" defaultValue={largeUnit} required onChange={(e) => setlargeUnit(e.target.value)}></input>
                         </div>
                         <div className="form-group col-12 col-md-6">
                           <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الوحدة الصغيره</label>
-                          <input type='text' className="form-control border-primary m-0 h-100 " defaultValue={smallUnit} required onChange={(e) => setsmallUnit(e.target.value)}></input>
+                          <input type='text' className="form-control border-primary m-0 p-1 h-100" defaultValue={smallUnit} required onChange={(e) => setsmallUnit(e.target.value)}></input>
                         </div>
                         <div className="form-group col-12 col-md-6">
                           <label className="form-label text-wrap text-right fw-bolder p-0 m-0">رصيد افتتاحي</label>
-                          <input type='Number' className="form-control border-primary m-0 h-100 " defaultValue={Balance} required onChange={(e) => setBalance(e.target.value)} />
+                          <input type='Number' className="form-control border-primary m-0 p-1 h-100" defaultValue={Balance} required onChange={(e) => setBalance(e.target.value)} />
                         </div>
                         <div className="form-group col-12 col-md-6">
                           <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الحد الادني</label>
-                          <input type='number' className="form-control border-primary m-0 h-100 " required defaultValue={minThreshold} onChange={(e) => { setminThreshold(e.target.value); }} />
+                          <input type='number' className="form-control border-primary m-0 p-1 h-100" required defaultValue={minThreshold} onChange={(e) => { setminThreshold(e.target.value); }} />
                         </div>
 
                         <div className="form-group col-12 col-md-6">
                           <label className="form-label text-wrap text-right fw-bolder p-0 m-0">السعر</label>
-                          <input type='Number' className="form-control border-primary m-0 h-100 " defaultValue={price} required onChange={(e) => { setprice(e.target.value); settotalCost(e.target.value * Balance) }} />
+                          <input type='Number' className="form-control border-primary m-0 p-1 h-100" defaultValue={price} required onChange={(e) => { setprice(e.target.value); settotalCost(e.target.value * Balance) }} />
                         </div>
                         <div className="form-group col-12 col-md-6">
                           <label className="form-label text-wrap text-right fw-bolder p-0 m-0">التكلفة</label>
-                          <input type='text' className="form-control border-primary m-0 h-100 " required defaultValue={totalCost} readOnly />
+                          <input type='text' className="form-control border-primary m-0 p-1 h-100" required defaultValue={totalCost} readOnly />
                         </div>
                         <div className="form-group col-12 col-md-6">
                           <label className="form-label text-wrap text-right fw-bolder p-0 m-0">عدد الوحدات</label>
-                          <input type='Number' className="form-control border-primary m-0 h-100 " defaultValue={parts} required onChange={(e) => { setparts(e.target.value); setcostOfPart(price / e.target.value) }} />
+                          <input type='Number' className="form-control border-primary m-0 p-1 h-100" defaultValue={parts} required onChange={(e) => { setparts(e.target.value); setcostOfPart(price / e.target.value) }} />
                         </div>
                         <div className="form-group col-12 col-md-6">
                           <label className="form-label text-wrap text-right fw-bolder p-0 m-0">تكلفة الوحده</label>
-                          <input type='Number' className="form-control border-primary m-0 h-100 " required defaultValue={costOfPart} readOnly />
+                          <input type='Number' className="form-control border-primary m-0 p-1 h-100" required defaultValue={costOfPart} readOnly />
                         </div>
                         <div className="form-group col-12 col-md-6">
                           <label className="form-label text-wrap text-right fw-bolder p-0 m-0">التاريخ</label>
-                          <input type='text' className="form-control border-primary m-0 h-100 " defaultValue={new Date().toLocaleDateString()} required readOnly />
+                          <input type='text' className="form-control border-primary m-0 p-1 h-100" defaultValue={new Date().toLocaleDateString()} required readOnly />
                         </div>
                       </div>
                       <div className="modal-footer d-flex flex-nowrap align-items-center justify-content-between m-0 p-1">

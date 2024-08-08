@@ -378,12 +378,12 @@ const DailyExpense = () => {
 
               <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">اسم المصروف</label>
-                <input type="text" className="form-control border-primary m-0 h-100 " onChange={(e) => searchByDailyExpense(e.target.value)} />
+                <input type="text" className="form-control border-primary m-0 p-1 h-100" onChange={(e) => searchByDailyExpense(e.target.value)} />
               </div>
 
               <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">المصروف</label>
-                <select className="form-control border-primary m-0 h-100 " onChange={(e) => filterByExpense(e.target.value)}>
+                <select className="form-control border-primary m-0 p-1 h-100" onChange={(e) => filterByExpense(e.target.value)}>
                   <option value="">اختر</option>
                   {allExpenses && allExpenses.map((expense, i) => {
                     return <option value={expense._id} key={i} >{expense.description}</option>
@@ -394,7 +394,7 @@ const DailyExpense = () => {
 
               <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">نوع المصروف</label>
-                <select className="form-control border-primary m-0 h-100 " onChange={(e) => filterByExpenseType(e.target.value)}>
+                <select className="form-control border-primary m-0 p-1 h-100" onChange={(e) => filterByExpenseType(e.target.value)}>
                   <option value="">اختر</option>
                   {expenseTypeEn && expenseTypeEn.map((TypeEn, i) => {
                     return <option value={TypeEn} key={i} >{expenseTypeAr[i]}</option>
@@ -406,7 +406,7 @@ const DailyExpense = () => {
               <div className='col-12 d-flex align-items-center justify-content-between'>
                 <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">فلتر حسب الوقت</label>
-                  <select className="form-control border-primary m-0 h-100 "  onChange={(e) => setallDailyExpenses(filterByTime(e.target.value, allDailyExpenses))}>
+                  <select className="form-control border-primary m-0 p-1 h-100"  onChange={(e) => setallDailyExpenses(filterByTime(e.target.value, allDailyExpenses))}>
                     <option value="">اختر</option>
                     <option value="today">اليوم</option>
                     <option value="week">هذا الأسبوع</option>
@@ -420,12 +420,12 @@ const DailyExpense = () => {
 
                   <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">من</label>
-                    <input type="date" className="form-control border-primary m-0 h-100 " onChange={(e) => setStartDate(e.target.value)} placeholder="اختر التاريخ" />
+                    <input type="date" className="form-control border-primary m-0 p-1 h-100" onChange={(e) => setStartDate(e.target.value)} placeholder="اختر التاريخ" />
                   </div>
 
                   <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">إلى</label>
-                    <input type="date" className="form-control border-primary m-0 h-100 " onChange={(e) => setEndDate(e.target.value)} placeholder="اختر التاريخ" />
+                    <input type="date" className="form-control border-primary m-0 p-1 h-100" onChange={(e) => setEndDate(e.target.value)} placeholder="اختر التاريخ" />
                   </div>
 
                   <div className="d-flex flex-nowrap justify-content-between col-3 p-0 m-0">
@@ -520,7 +520,7 @@ const DailyExpense = () => {
               <div className="modal-body p-4 text-right">
                 <div className="form-group col-12 col-md-6" >
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">المصروف</label>
-                  <select className="form-control border-primary m-0 h-100 "  name="category" id="category" form="carform" onChange={(e) => {
+                  <select className="form-control border-primary m-0 p-1 h-100"  name="category" id="category" form="carform" onChange={(e) => {
                     setexpenseId(e.target.value);
                     setexpenseDescription(allExpenses.length > 0 ? allExpenses.find(ex => ex._id === e.target.value).description : "");
                   }}>
@@ -532,19 +532,19 @@ const DailyExpense = () => {
                 </div>
                 <div className="form-group col-12 col-md-6" >
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">التاريخ</label>
-                  <input type="date" className="form-control border-primary m-0 h-100 " required onChange={(e) => {
+                  <input type="date" className="form-control border-primary m-0 p-1 h-100" required onChange={(e) => {
                     setdate(e.target.value)
                   }} />
                 </div>
                 <div className="form-group col-12 col-md-6" >
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">المبلغ</label>
-                  <input type="Number" className="form-control border-primary m-0 h-100 " required onChange={(e) => {
+                  <input type="Number" className="form-control border-primary m-0 p-1 h-100" required onChange={(e) => {
                     setamount(e.target.value)
                   }} />
                 </div>
                 <div className="form-group col-12 col-md-6" >
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الخزينه </label>
-                  <select className="form-control border-primary m-0 h-100 "  onChange={(e) => selectCashRegister(e.target.value)} >
+                  <select className="form-control border-primary m-0 p-1 h-100"  onChange={(e) => selectCashRegister(e.target.value)} >
                     <option value={""}>الكل</option>
                     {listCashRegister.map(cashRegister => {
                       return <option value={cashRegister._id}>{cashRegister.name}</option>;
@@ -553,7 +553,7 @@ const DailyExpense = () => {
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">ملاحظات</label>
-                  <textarea className="form-control border-primary m-0 h-100 " rows={2} cols={50} onChange={(e) => { setnotes(e.target.value) }} />
+                  <textarea className="form-control border-primary m-0 p-1 h-100" rows={2} cols={50} onChange={(e) => { setnotes(e.target.value) }} />
                 </div>
               </div>
               <div className="modal-footer d-flex flex-nowrap align-items-center justify-content-between m-0 p-1">
@@ -575,7 +575,7 @@ const DailyExpense = () => {
               <div className="modal-body p-4 text-right">
                 <div className="form-group col-12 col-md-6" >
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">المصروف</label>
-                  <select className="form-control border-primary m-0 h-100 "  name="category" id="category" form="carform" onChange={(e) => {
+                  <select className="form-control border-primary m-0 p-1 h-100"  name="category" id="category" form="carform" onChange={(e) => {
                     setexpenseId(e.target.value);
                     setexpenseDescription(allExpenses ? allExpenses.find(ex => ex._id === e.target.value).description : "");
                   }}>
@@ -588,19 +588,19 @@ const DailyExpense = () => {
                 </div>
                 <div className="form-group col-12 col-md-6" >
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">التاريخ</label>
-                  <input type="date" className="form-control border-primary m-0 h-100 " required onChange={(e) => {
+                  <input type="date" className="form-control border-primary m-0 p-1 h-100" required onChange={(e) => {
                     setdate(e.target.value)
                   }} />
                 </div>
                 <div className="form-group col-12 col-md-6" >
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">المبلغ</label>
-                  <input type="Number" className="form-control border-primary m-0 h-100 " value={amount} required onChange={(e) => {
+                  <input type="Number" className="form-control border-primary m-0 p-1 h-100" value={amount} required onChange={(e) => {
                     setamount(e.target.value)
                   }} />
                 </div>
                 <div className="form-group col-12 col-md-6" >
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الخزينه </label>
-                  <select className="form-control border-primary m-0 h-100 "  onChange={(e) => selectCashRegister(e.target.value)} >
+                  <select className="form-control border-primary m-0 p-1 h-100"  onChange={(e) => selectCashRegister(e.target.value)} >
                     <option value={cashRegister}>{cashRegisterName}</option>
                     {listCashRegister.map(cashRegister => {
                       return <option value={cashRegister._id}>{cashRegister.name}</option>;
@@ -609,7 +609,7 @@ const DailyExpense = () => {
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">ملاحظات</label>
-                  <textarea className="form-control border-primary m-0 h-100 " rows={2} cols={100} value={notes} onChange={(e) => { setnotes(e.target.value) }} />
+                  <textarea className="form-control border-primary m-0 p-1 h-100" rows={2} cols={100} value={notes} onChange={(e) => { setnotes(e.target.value) }} />
                 </div>
               </div>
               <div className="modal-footer d-flex flex-nowrap align-items-center justify-content-between m-0 p-1">

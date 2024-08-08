@@ -608,7 +608,7 @@ const POS = () => {
                   <div className="modal-body d-flex justify-content-center align-items-center ">
                     <div className="form-group d-flex flex-nowrap align-items-center justify-content-between col-12 ">
                       <label htmlFor='table' className='col-4 col-form-label text-dark'>رقم الطاولة:</label>
-                      <select id='table' className="form-control border-primary m-0 h-100 " required onChange={(e) => { settableID(e.target.value) }}>
+                      <select id='table' className="form-control border-primary m-0 p-1 h-100" required onChange={(e) => { settableID(e.target.value) }}>
                         <option>اختر رقم الطاولة</option>
                         {allTable.map((table, i) => (
                           <option value={table._id} key={i}>{table.tableNumber}</option>
@@ -650,7 +650,7 @@ const POS = () => {
                       <>
                         <div className="form-group w-100 h-auto px-3 d-flex align-items-center justify-content-start col-12 col-md-6">
                           <label className="form-label text-wrap text-right fw-bolder p-0 m-0">التوثيق</label>
-                          <select name='isVarified' required className="form-control border-primary m-0 h-100 "   value={isVarified} onChange={(e) => setisVarified(e.target.value)}>
+                          <select name='isVarified' required className="form-control border-primary m-0 p-1 h-100"   value={isVarified} onChange={(e) => setisVarified(e.target.value)}>
                             <option value="">{isVarified ? 'موثق' : "غير موثق"}</option>
                             <option value={true}>موثق</option>
                             <option value={false}>غير موثق</option>
@@ -659,7 +659,7 @@ const POS = () => {
 
                         <div className="form-group w-100 h-auto px-3 d-flex align-items-center justify-content-start col-12 col-md-6">
                           <label className="form-label text-wrap text-right fw-bolder p-0 m-0">رفض الاوردرات</label>
-                          <select name='refusesOrders' required className="form-control border-primary m-0 h-100 "   value={refusesOrders} onChange={(e) => setrefusesOrders(e.target.value)}>
+                          <select name='refusesOrders' required className="form-control border-primary m-0 p-1 h-100"   value={refusesOrders} onChange={(e) => setrefusesOrders(e.target.value)}>
                             <option value="">{refusesOrders ? 'رفض اوردر' : "لم يرفض الاوردر"}</option>
                             <option value={true}>رفض اوردر</option>
                             <option value={false}>لم يرفض الاوردر</option>
@@ -669,7 +669,7 @@ const POS = () => {
                       : ''}
                     <div className="form-group w-100 h-auto px-3 d-flex align-items-center justify-content-start col-12 col-md-6">
                       <label className="form-label text-wrap text-right fw-bolder p-0 m-0">ملاحظات</label>
-                      <textarea className="form-control border-primary m-0 h-100 " name='notes' value={clientNotes} onChange={(e) => setclientNotes(e.target.value)} />
+                      <textarea className="form-control border-primary m-0 p-1 h-100" name='notes' value={clientNotes} onChange={(e) => setclientNotes(e.target.value)} />
                       <div className="invalid-feedback">الرجاء إدخال ملاحظات صالحة.</div>
                     </div>
 

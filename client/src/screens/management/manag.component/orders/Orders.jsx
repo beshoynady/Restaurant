@@ -198,12 +198,12 @@ const Orders = () => {
 
               <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">رقم الفاتورة</label>
-                <input type="text" className="form-control border-primary m-0 h-100 " onChange={(e) => searchBySerial(e.target.value)} />
+                <input type="text" className="form-control border-primary m-0 p-1 h-100" onChange={(e) => searchBySerial(e.target.value)} />
               </div>
 
               <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">نوع الاوردر</label>
-                <select className="form-control border-primary m-0 h-100 " onChange={(e) => getOrdersByType(e.target.value)} >
+                <select className="form-control border-primary m-0 p-1 h-100" onChange={(e) => getOrdersByType(e.target.value)} >
                   <option value={""}>الكل</option>
                   <option value="Internal" >Internal</option>
                   <option value="Delivery" >Delivery</option>
@@ -211,7 +211,7 @@ const Orders = () => {
                 </select>
                 {/* <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">Status</label>
-                  <select className="form-control border-primary m-0 h-100 ">
+                  <select className="form-control border-primary m-0 p-1 h-100">
                     <option>Any</option>
                     <option>Delivered</option>
                     <option>Shipped</option>
@@ -225,7 +225,7 @@ const Orders = () => {
               <div className='col-12 d-flex align-items-center justify-content-between'>
                 <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">فلتر حسب الوقت</label>
-                  <select className="form-control border-primary m-0 h-100 "  onChange={(e) => setlistOfOrders(filterByTime(e.target.value, listOfOrders))}>
+                  <select className="form-control border-primary m-0 p-1 h-100"  onChange={(e) => setlistOfOrders(filterByTime(e.target.value, listOfOrders))}>
                     <option value="">اختر</option>
                     <option value="today">اليوم</option>
                     <option value="week">هذا الأسبوع</option>
@@ -239,12 +239,12 @@ const Orders = () => {
 
                   <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">من</label>
-                    <input type="date" className="form-control border-primary m-0 h-100 " onChange={(e) => setStartDate(e.target.value)} placeholder="اختر التاريخ" />
+                    <input type="date" className="form-control border-primary m-0 p-1 h-100" onChange={(e) => setStartDate(e.target.value)} placeholder="اختر التاريخ" />
                   </div>
 
                   <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">إلى</label>
-                    <input type="date" className="form-control border-primary m-0 h-100 " onChange={(e) => setEndDate(e.target.value)} placeholder="اختر التاريخ" />
+                    <input type="date" className="form-control border-primary m-0 p-1 h-100" onChange={(e) => setEndDate(e.target.value)} placeholder="اختر التاريخ" />
                   </div>
 
                   <div className="d-flex flex-nowrap justify-content-between col-3 p-0 m-0">
