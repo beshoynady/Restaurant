@@ -49,10 +49,10 @@ const KitchenConsumption = React.lazy(() => import('./screens/management/manag.c
 
 
 
-// import io from 'socket.io-client';
-// const socket = io(process.env.REACT_APP_API_URL, {
-//   reconnection: true,
-// });
+import io from 'socket.io-client';
+const socket = io(process.env.REACT_APP_API_URL, {
+  reconnection: true,
+});
 
 
 export const detacontext = createContext({});
@@ -949,7 +949,7 @@ function App() {
           setitemsInCart([]);
           setitemId([]);
           getAllProducts();
-          // socket.emit("sendorder", `اضافه طلبات الي اوردر ديليفري`);
+          socket.emit("sendorder", `اضافه طلبات الي اوردر ديليفري`);
 
           toast.success("تم اضافه الاصناف الي الاوردر!");
         } else {
@@ -970,7 +970,7 @@ function App() {
           setitemsInCart([]);
           getAllProducts();
         }
-        // socket.emit("sendorder", `تم تعديل ارودر ديفرري`);
+        socket.emit("sendorder", `تم تعديل ارودر ديفرري`);
 
         toast.success("تم تعديل الاوردر بنجاح!");
       } else {
@@ -1007,7 +1007,7 @@ function App() {
         toast.success("تم عمل اوردر جديد بنجاح!");
       }
 
-      // socket.emit("sendorder", `اوردر ديليفري جديد`);
+      socket.emit("sendorder", `اوردر ديليفري جديد`);
       setitemsInCart([]);
       setitemId([]);
 
@@ -1060,7 +1060,7 @@ function App() {
           await axios.put(`${apiUrl}/api/order/${orderId}`, newOrderData);
           // Toast for updating order
           toast.success('تم تحديث الطلب بنجاح!');
-          // socket.emit("sendorder", ` اضافت طاولة${lastTableOrderActive.tableNumber} طلبات جديدة`);
+          socket.emit("sendorder", ` اضافت طاولة${lastTableOrderActive.tableNumber} طلبات جديدة`);
 
 
         } else {
@@ -1078,7 +1078,7 @@ function App() {
 
           await axios.put(`${apiUrl}/api/order/${orderId}`, newOrderData);
           // Toast for updating order
-          // socket.emit("sendorder", ` اضافت طاولة${lastTableOrderActive.tableNumber} طلبات جديدة`);
+          socket.emit("sendorder", ` اضافت طاولة${lastTableOrderActive.tableNumber} طلبات جديدة`);
 
           toast.success('تم تحديث الطلب بنجاح!');
         }
@@ -1107,7 +1107,7 @@ function App() {
         await axios.post(`${apiUrl}/api/order`, newOrderData);
         // Toast for creating a new order
         toast.success('تم إنشاء طلب جديد بنجاح!');
-        // socket.emit("sendorder", `اوردر جديد علي طاوله ${table.tableNumber}`);
+        socket.emit("sendorder", `اوردر جديد علي طاوله ${table.tableNumber}`);
 
       }
 
@@ -1393,7 +1393,7 @@ function App() {
       if (updatedOrder) {
         // Show success toast after successfully marking order for checkout
         toast.success('تم طلب الحساب');
-        // socket.emit("sendorder", `  طاولة${tablenum} تطلب الحساب`);
+        socket.emit("sendorder", `  طاولة${tablenum} تطلب الحساب`);
 
         // Redirect after 10 minutes
         setTimeout(() => {
