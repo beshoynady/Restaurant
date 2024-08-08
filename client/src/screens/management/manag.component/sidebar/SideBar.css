@@ -83,7 +83,7 @@
 }
 
 .sidebar .nav-links li:not(:last-child) {
-  border-bottom: 1px solid #444; /* لون حدود أغمق */
+  border-bottom: 1px solid #444; 
 }
 
 .sidebar .nav-links li:hover {
@@ -182,7 +182,7 @@
   padding: 10px 20px;
   border-radius: 0 6px 6px 0;
   opacity: 0;
-  display: block;
+  /* display: block; */
   pointer-events: none;
   transition: 0s;
 }
