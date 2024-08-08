@@ -671,7 +671,8 @@ const Info = () => {
 
     <div className="container w-100 h-auto" dir='rtl'>
       <div className="content-wrapper w-100">
-        <div className="d-flex flex-wrap align-items-center justify-content-between" style={{ color: 'darkblue', fontWeight: '900', textAlign: 'center' }}>
+        <div className="d-flex flex-wrap align-items-center justify-content-between"
+          style={{ color: 'darkblue', fontWeight: '900', textAlign: 'center', overflowX: 'hidden' }}>
           <div className="col-12 grid-margin">
             <div className="card">
               <div className="card-body">
@@ -940,7 +941,7 @@ const Info = () => {
 
 
           {/* contact  */}
-          <div className="col-lg-6 d-flex grid-margin" style={{overflowX:'scroll'}}>
+          <div className="col-lg-6 d-flex grid-margin">
             <div className="row flex-grow">
               <div className="col-12 stretch-card mb-3">
                 <div className="card">
@@ -1025,7 +1026,7 @@ const Info = () => {
             </div>
           </div>
 
-          <div className="col-lg-6 d-flex grid-margin">
+          <div className="col-lg-6 d-flex grid-margin" style={{ overflowX: 'scroll' }}>
             <div className="row flex-grow">
               <div className="col-12 stretch-card mb-3">
                 <div className="card">
