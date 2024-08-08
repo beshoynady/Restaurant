@@ -174,7 +174,7 @@ const NavBar = () => {
             </div>
             {/* <form className="form-inline my-2 my-lg-0 me-auto">
       <div className="input-group">
-        <input className="form-control border-primary m-0 p-1 h-100" type="search" placeholder="Search" aria-label="Search" />
+        <input className="form-control border-primary m-0 p-2 h-100" type="search" placeholder="Search" aria-label="Search" />
         <div className="input-group-append">
           <button className="h-100 btn btn-primary" type="submit">Search</button>
         </div>

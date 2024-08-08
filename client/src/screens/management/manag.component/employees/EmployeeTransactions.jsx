@@ -229,12 +229,12 @@ const EmployeeTransactions = () => {
 
               <div className="filter-group d-flex align-items-center col-3">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الاسم</label>
-                <input type="text" className="form-control border-primary m-0 p-1 h-100" />
+                <input type="text" className="form-control border-primary m-0 p-2 h-100" />
               </div>
 
               <div className="filter-group d-flex align-items-center col-3">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الموظف</label>
-                <select className="form-control border-primary m-0 p-1 h-100" onChange={(e) => getEmployeeTransactionsByEmp(e.target.value)}>
+                <select className="form-control border-primary m-0 p-2 h-100" onChange={(e) => getEmployeeTransactionsByEmp(e.target.value)}>
                   <option>الكل</option>
                   {allEmployees.map((employee, i) => (
                     <option value={employee._id} key={i}>{employee.fullname}</option>
@@ -244,7 +244,7 @@ const EmployeeTransactions = () => {
 
               <div className="filter-group d-flex align-items-center col-3">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">العملية</label>
-                <select className="form-control border-primary m-0 p-1 h-100" onChange={(e) => filterEmployeeTransactions(e.target.value)}>
+                <select className="form-control border-primary m-0 p-2 h-100" onChange={(e) => filterEmployeeTransactions(e.target.value)}>
                   <option>الكل</option>
                   {listofTransactions.map((transaction, i) => (
                     <option value={transaction} key={i}>{transaction}</option>
@@ -255,7 +255,7 @@ const EmployeeTransactions = () => {
               <div className='col-12 d-flex align-items-center justify-content-between mt-3'>
                 <div className="filter-group d-flex align-items-center col-3">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">فلتر حسب الوقت</label>
-                  <select className="form-control border-primary m-0 p-1 h-100" onChange={(e) => setlistofEmployeeTransactions(filterByTime(e.target.value, listofEmployeeTransactions))}>
+                  <select className="form-control border-primary m-0 p-2 h-100" onChange={(e) => setlistofEmployeeTransactions(filterByTime(e.target.value, listofEmployeeTransactions))}>
                     <option value="">اختر</option>
                     <option value="today">اليوم</option>
                     <option value="week">هذا الأسبوع</option>
@@ -268,11 +268,11 @@ const EmployeeTransactions = () => {
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0"><strong>مدة محددة:</strong></label>
                   <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">من</label>
-                    <input type="date" className="form-control border-primary m-0 p-1 h-100" onChange={(e) => setStartDate(e.target.value)} placeholder="اختر التاريخ" />
+                    <input type="date" className="form-control border-primary m-0 p-2 h-100" onChange={(e) => setStartDate(e.target.value)} placeholder="اختر التاريخ" />
                   </div>
                   <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">إلى</label>
-                    <input type="date" className="form-control border-primary m-0 p-1 h-100" onChange={(e) => setEndDate(e.target.value)} placeholder="اختر التاريخ" />
+                    <input type="date" className="form-control border-primary m-0 p-2 h-100" onChange={(e) => setEndDate(e.target.value)} placeholder="اختر التاريخ" />
                   </div>
                   <div className="d-flex flex-nowrap justify-content-between col-3 p-0 m-0">
                     <button type="button" className="btn btn-primary w-50 h-100 p-2" onClick={() => setlistofEmployeeTransactions(filterByDateRange(listofEmployeeTransactions))}>
@@ -365,7 +365,7 @@ const EmployeeTransactions = () => {
               <div className="modal-body p-4 text-right">
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الاسم</label>
-                  <select className="form-control border-primary m-0 p-1 h-100" form="carform" required onChange={(e) => {
+                  <select className="form-control border-primary m-0 p-2 h-100" form="carform" required onChange={(e) => {
                     setemployeeName(allEmployees ? allEmployees.find(employee => employee._id === e.target.value).fullname : "");
                     setemployeeId(e.target.value);
                     getEmployeeTransactionsByEmp(e.target.value)
@@ -381,7 +381,7 @@ const EmployeeTransactions = () => {
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">التعامل</label>
-                  <select className="form-control border-primary m-0 p-1 h-100" form="carform" required onChange={(e) => { filterCurrentEmployeeTransactions(e.target.value); settransactionType(e.target.value) }}>
+                  <select className="form-control border-primary m-0 p-2 h-100" form="carform" required onChange={(e) => { filterCurrentEmployeeTransactions(e.target.value); settransactionType(e.target.value) }}>
                     <option>اختر</option>
                     {listofTransactions.length > 0 ? listofTransactions.map((transaction, i) => {
                       return (
@@ -393,23 +393,23 @@ const EmployeeTransactions = () => {
 
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">المبلغ</label>
-                  <input type="number" min={0} className="form-control border-primary m-0 p-1 h-100" required pattern="[0-9]+" onChange={(e) => { setAmount(e.target.value); setnewAmount(Number(oldAmount) + Number(e.target.value)) }} />
+                  <input type="number" min={0} className="form-control border-primary m-0 p-2 h-100" required pattern="[0-9]+" onChange={(e) => { setAmount(e.target.value); setnewAmount(Number(oldAmount) + Number(e.target.value)) }} />
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الرصيد</label>
-                  <input type="number" className="form-control border-primary m-0 p-1 h-100" value={oldAmount > 0 ? oldAmount : 0} readOnly />
+                  <input type="number" className="form-control border-primary m-0 p-2 h-100" value={oldAmount > 0 ? oldAmount : 0} readOnly />
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الاجمالي</label>
-                  <input type="number" className="form-control border-primary m-0 p-1 h-100" readOnly defaultValue={newAmount} />
+                  <input type="number" className="form-control border-primary m-0 p-2 h-100" readOnly defaultValue={newAmount} />
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">بواسطه</label>
-                  <input type="text" className="form-control border-primary m-0 p-1 h-100" readOnly defaultValue={employeeLoginInfo ? employeeLoginInfo.username : ''} />
+                  <input type="text" className="form-control border-primary m-0 p-2 h-100" readOnly defaultValue={employeeLoginInfo ? employeeLoginInfo.username : ''} />
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">التاريخ</label>
-                  <p className="form-control border-primary m-0 p-1 h-100" readOnly>{formatDateTime(new Date())}</p>
+                  <p className="form-control border-primary m-0 p-2 h-100" readOnly>{formatDateTime(new Date())}</p>
                 </div>
               </div>
               <div className="modal-footer w-100 d-flex flex-nowrap">
@@ -432,7 +432,7 @@ const EmployeeTransactions = () => {
               <div className="modal-body p-4 text-right">
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الاسم</label>
-                  <select className="form-control border-primary m-0 p-1 h-100" form="carform" defaultValue={employeeName} required onChange={(e) => { setemployeeName(allEmployees.find(employee => employee._id === e.target.value).fullname); setemployeeId(e.target.value); filterEmployeeTransactions(e.target.value) }}>
+                  <select className="form-control border-primary m-0 p-2 h-100" form="carform" defaultValue={employeeName} required onChange={(e) => { setemployeeName(allEmployees.find(employee => employee._id === e.target.value).fullname); setemployeeId(e.target.value); filterEmployeeTransactions(e.target.value) }}>
                     <option>اختر</option>
                     {allEmployees.length > 0 ? allEmployees.map(employee => {
                       return (
@@ -443,7 +443,7 @@ const EmployeeTransactions = () => {
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الحركه</label>
-                  <select className="form-control border-primary m-0 p-1 h-100" form="carform" defaultValue={transactionType} required onChange={(e) => { filterCurrentEmployeeTransactions(e.target.value); settransactionType(e.target.value) }}>
+                  <select className="form-control border-primary m-0 p-2 h-100" form="carform" defaultValue={transactionType} required onChange={(e) => { filterCurrentEmployeeTransactions(e.target.value); settransactionType(e.target.value) }}>
                     <option>اختر</option>
                     {listofTransactions.length > 0 ? listofTransactions.map((transaction, i) => {
                       return (
@@ -454,23 +454,23 @@ const EmployeeTransactions = () => {
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">المبلغ</label>
-                  <input type="Number" className="form-control border-primary m-0 p-1 h-100" defaultValue={Amount} required onChange={(e) => { setAmount(e.target.value); setnewAmount(Number(oldAmount) + Number(e.target.value)) }} />
+                  <input type="Number" className="form-control border-primary m-0 p-2 h-100" defaultValue={Amount} required onChange={(e) => { setAmount(e.target.value); setnewAmount(Number(oldAmount) + Number(e.target.value)) }} />
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">المبلغ السابق</label>
-                  <input type="Number" className="form-control border-primary m-0 p-1 h-100" Value={oldAmount > 0 ? oldAmount : 0} readOnly />
+                  <input type="Number" className="form-control border-primary m-0 p-2 h-100" Value={oldAmount > 0 ? oldAmount : 0} readOnly />
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الاجمالي</label>
-                  <input type="Number" className="form-control border-primary m-0 p-1 h-100" readOnly defaultValue={newAmount} />
+                  <input type="Number" className="form-control border-primary m-0 p-2 h-100" readOnly defaultValue={newAmount} />
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">بواسطة</label>
-                  <input type="text" className="form-control border-primary m-0 p-1 h-100" readOnly defaultValue={employeeLoginInfo ? employeeLoginInfo.username : ''} />
+                  <input type="text" className="form-control border-primary m-0 p-2 h-100" readOnly defaultValue={employeeLoginInfo ? employeeLoginInfo.username : ''} />
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">التاريخ</label>
-                  <p className="form-control border-primary m-0 p-1 h-100" readOnly>{formatDateTime(new Date())}</p>
+                  <p className="form-control border-primary m-0 p-2 h-100" readOnly>{formatDateTime(new Date())}</p>
                 </div>
               </div>
               <div className="modal-footer w-100 d-flex flex-nowrap">

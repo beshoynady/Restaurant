@@ -155,13 +155,13 @@ const CustomerMessage = () => {
               </div>
               <div class="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الموبايل</label>
-                <input type="text" class="form-control border-primary m-0 p-1 h-100" onChange={(e) => getCustomerMessageByPhone(e.target.value)} />
+                <input type="text" class="form-control border-primary m-0 p-2 h-100" onChange={(e) => getCustomerMessageByPhone(e.target.value)} />
 
               </div>
               <div className='col-12 d-flex align-items-center justify-content-between'>
                 <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">فلتر حسب الوقت</label>
-                  <select className="form-control border-primary m-0 p-1 h-100"  onChange={(e) => setallCustomerMessage(filterByTime(e.target.value, allCustomerMessage))}>
+                  <select className="form-control border-primary m-0 p-2 h-100"  onChange={(e) => setallCustomerMessage(filterByTime(e.target.value, allCustomerMessage))}>
                     <option value="">اختر</option>
                     <option value="today">اليوم</option>
                     <option value="week">هذا الأسبوع</option>
@@ -175,12 +175,12 @@ const CustomerMessage = () => {
 
                   <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">من</label>
-                    <input type="date" className="form-control border-primary m-0 p-1 h-100" onChange={(e) => setStartDate(e.target.value)} placeholder="اختر التاريخ" />
+                    <input type="date" className="form-control border-primary m-0 p-2 h-100" onChange={(e) => setStartDate(e.target.value)} placeholder="اختر التاريخ" />
                   </div>
 
                   <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">إلى</label>
-                    <input type="date" className="form-control border-primary m-0 p-1 h-100" onChange={(e) => setEndDate(e.target.value)} placeholder="اختر التاريخ" />
+                    <input type="date" className="form-control border-primary m-0 p-2 h-100" onChange={(e) => setEndDate(e.target.value)} placeholder="اختر التاريخ" />
                   </div>
 
                   <div className="d-flex flex-nowrap justify-content-between col-3 p-0 m-0">
@@ -272,20 +272,20 @@ const CustomerMessage = () => {
               <div className="modal-body p-4 text-right">
                 <div className="form-group col-12 col-md-6" >
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الاسم</label>
-                  <input type="text" className="form-control border-primary m-0 p-1 h-100" defaultValue={name} required readOnly />
+                  <input type="text" className="form-control border-primary m-0 p-2 h-100" defaultValue={name} required readOnly />
                 </div>
 
                 <div className="form-group col-12 col-md-6" >
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الموبايل</label>
-                  <input type="text" className="form-control border-primary m-0 p-1 h-100" defaultValue={phone} required readOnly />
+                  <input type="text" className="form-control border-primary m-0 p-2 h-100" defaultValue={phone} required readOnly />
                 </div>
                 <div className="form-group col-12 col-md-6" >
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الايميل</label>
-                  <input type="email" className="form-control border-primary m-0 p-1 h-100" defaultValue={email} required readOnly />
+                  <input type="email" className="form-control border-primary m-0 p-2 h-100" defaultValue={email} required readOnly />
                 </div>
                 <div className="form-group col-12 col-md-6" >
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الرسالة</label>
-                  <textarea className="form-control border-primary m-0 p-1 h-100" defaultValue={message} required readOnly></textarea>
+                  <textarea className="form-control border-primary m-0 p-2 h-100" defaultValue={message} required readOnly></textarea>
                 </div>
               </div>
               <div className="modal-footer d-flex flex-nowrap align-items-center justify-content-between m-0 p-1">

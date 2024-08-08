@@ -36,19 +36,19 @@
 }
 
 .table-title .btn .btn-group {
-    float: left;
+    float: right;
 }
 
-.table-title .btn {
+/* .table-title .btn {
     color: #fff;
-    float: right;
+    float: center;
     font-size: 13px;
     border: none;
     min-width: 50px;
     border-radius: 2px;
     border: none;
     outline: none !important;
-}
+} */
 
 .table-title .btn i {
     float: left;
@@ -69,6 +69,7 @@
 .show-entries span {
     color: initial;
     font-size: 16px;
+    color: #000;
     font-weight: 900;
     margin-left: 10px;
 }
@@ -90,8 +91,9 @@
     box-shadow: none;
     display: inline-block;
     margin-left: 5px;
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 900;
+    color: black;
     text-align: center;
     padding: 0;
     font-family: serif;

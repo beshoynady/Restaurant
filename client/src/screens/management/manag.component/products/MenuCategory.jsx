@@ -293,7 +293,7 @@ const MenuCategory = () => {
                         </div>
                         <div className="col-12 col-sm-5 d-flex align-items-center mx-1  p-0">
                           <label htmlFor="categorySelect" className="mr-2">التصنيف الرئيسي:</label>
-                          <select id="categorySelect" className="form-control border-primary m-0 p-1 h-100"
+                          <select id="categorySelect" className="form-control border-primary m-0 p-2 h-100"
                             onChange={handleCategoryChange}>
                             <option value="">{mainCategory ? mainCategory.name : ""}</option>
                             {allCategory.map((category, index) => (
@@ -327,7 +327,7 @@ const MenuCategory = () => {
 
                       <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                         <label className="form-label text-wrap text-right fw-bolder p-0 m-0">اسم التصنيف</label>
-                        <input type="text" className="form-control border-primary m-0 p-1 h-100" onChange={(e) => searchByCategory(e.target.value)} />
+                        <input type="text" className="form-control border-primary m-0 p-2 h-100" onChange={(e) => searchByCategory(e.target.value)} />
                       </div>
 
                     </div>
@@ -410,21 +410,19 @@ const MenuCategory = () => {
                           <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الاسم</label>
                           <input
                             type="text"
-                            className="form-control border-primary m-0 p-1 h-100"
+                            className="form-control border-primary m-0 p-2 h-100"
                             required
                             value={categoryName}
                             onChange={(e) => setcategoryName(e.target.value)}
-                            style={{ width: "100%" }}
-                          />
+                            />
                         </div>
                         <div className="form-group col-12 col-md-6">
                           <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الحالة</label>
                           <select
-                            className="form-control border-primary m-0 p-1 h-100"
+                            className="form-control border-primary m-0 p-2 h-100"
                             value={status.toString()} 
                             onChange={(e) => setstatus(e.target.value === "true")}
-                            style={{ width: "100%" }}
-                          >
+                            >
                             <option value="">اختر الحالة</option>
                             <option value="true">متاح</option>
                             <option value="false">غير متاح</option>
@@ -453,21 +451,19 @@ const MenuCategory = () => {
                           <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الاسم</label>
                           <input
                             type="text"
-                            className="form-control border-primary m-0 p-1 h-100"
+                            className="form-control border-primary m-0 p-2 h-100"
                             required
                             value={categoryName}
                             onChange={(e) => setcategoryName(e.target.value)}
-                            style={{ width: "100%" }}
-                          />
+                            />
                         </div>
                         <div className="form-group col-12 col-md-6">
                           <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الحالة</label>
                           <select
-                            className="form-control border-primary m-0 p-1 h-100"
+                            className="form-control border-primary m-0 p-2 h-100"
                             value={status.toString()} // تحويل قيمة status إلى سلسلة نصية
                             onChange={(e) => setstatus(e.target.value === "true")} // تحويل القيمة المحددة إلى قيمة بوليانية
-                            style={{ width: "100%" }}
-                          >
+                            >
                             <option value="true">متاح</option>
                             <option value="false">غير متاح</option>
                           </select>

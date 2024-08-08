@@ -738,7 +738,7 @@ const ManagerDash = () => {
                   </div>
                   <div className="col-4">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">رقم الفاتورة</label>
-                    <input type="text" className="form-control border-primary m-0 p-1 h-100" onChange={(e) => searchBySerial(e.target.value)} />
+                    <input type="text" className="form-control border-primary m-0 p-2 h-100" onChange={(e) => searchBySerial(e.target.value)} />
                   </div>
                   <div className="col-4">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">نوع الأوردر</label>
@@ -827,7 +827,7 @@ const ManagerDash = () => {
                               ) : "ملغاه"}
                             </td>
                             <td>
-                              <select className="form-control border-primary m-0 p-1 h-100"  name="status" 
+                              <select className="form-control border-primary m-0 p-2 h-100"  name="status" 
                                 onChange={(e) => { changeorderstauts(e, recent._id, employeeLoginInfo.id) }}>
                                 <option value={recent.status}>{statusAR[status.findIndex(state => state === recent.status)]}</option>
                                 {status.map((state, i) => (

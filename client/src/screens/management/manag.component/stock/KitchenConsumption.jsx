@@ -349,17 +349,17 @@ const KitchenConsumption = () => {
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">التاريخ</label>
                 <input id="dateInput"
                   type="date"
-                  value={date} class="form-control border-primary m-0 p-1 h-100" onChange={handleDateChange} />
+                  value={date} class="form-control border-primary m-0 p-2 h-100" onChange={handleDateChange} />
               </div>
 
               <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">اسم الصنف</label>
-                <input type="text" class="form-control border-primary m-0 p-1 h-100" onChange={(e) => searchByKitchenConsumption(e.target.value)} />
+                <input type="text" class="form-control border-primary m-0 p-2 h-100" onChange={(e) => searchByKitchenConsumption(e.target.value)} />
               </div>
 
               <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">اختر الصنف</label>
-                <select class="form-control border-primary m-0 p-1 h-100" onChange={(e) => searchByKitchenConsumption(e.target.value)} >
+                <select class="form-control border-primary m-0 p-2 h-100" onChange={(e) => searchByKitchenConsumption(e.target.value)} >
                   <option value={""}>الكل</option>
                   {KitchenConsumptionForView.map((consumption) => {
                     return (<option value={consumption.stockItemName}>{consumption.stockItemName}</option>)
@@ -369,7 +369,7 @@ const KitchenConsumption = () => {
               <div className='col-12 d-flex align-items-center justify-content-between'>
                 <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">فلتر حسب الوقت</label>
-                  <select className="form-control border-primary m-0 p-1 h-100"  onChange={(e) => setAllKitchenConsumption(filterByTime(e.target.value, allKitchenConsumption))}>
+                  <select className="form-control border-primary m-0 p-2 h-100"  onChange={(e) => setAllKitchenConsumption(filterByTime(e.target.value, allKitchenConsumption))}>
                     <option value="">اختر</option>
                     <option value="today">اليوم</option>
                     <option value="week">هذا الأسبوع</option>
@@ -383,12 +383,12 @@ const KitchenConsumption = () => {
 
                   <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">من</label>
-                    <input type="date" className="form-control border-primary m-0 p-1 h-100" onChange={(e) => setStartDate(e.target.value)} placeholder="اختر التاريخ" />
+                    <input type="date" className="form-control border-primary m-0 p-2 h-100" onChange={(e) => setStartDate(e.target.value)} placeholder="اختر التاريخ" />
                   </div>
 
                   <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">إلى</label>
-                    <input type="date" className="form-control border-primary m-0 p-1 h-100" onChange={(e) => setEndDate(e.target.value)} placeholder="اختر التاريخ" />
+                    <input type="date" className="form-control border-primary m-0 p-2 h-100" onChange={(e) => setEndDate(e.target.value)} placeholder="اختر التاريخ" />
                   </div>
 
                   <div className="d-flex flex-nowrap justify-content-between col-3 p-0 m-0">
@@ -484,7 +484,7 @@ const KitchenConsumption = () => {
 
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الصنف</label>
-                  <select className="form-control border-primary m-0 p-1 h-100"  name="category" id="category" form="carform" onChange={(e) => { setstockItemId(e.target.value); setunit(AllStockItems.filter(stock => stock._id === e.target.value)[0].smallUnit); setcreatedBy(employeeLoginInfo.id); setstockItemName(AllStockItems.filter(it => it._id === e.target.value)[0].itemName) }}>
+                  <select className="form-control border-primary m-0 p-2 h-100"  name="category" id="category" form="carform" onChange={(e) => { setstockItemId(e.target.value); setunit(AllStockItems.filter(stock => stock._id === e.target.value)[0].smallUnit); setcreatedBy(employeeLoginInfo.id); setstockItemName(AllStockItems.filter(it => it._id === e.target.value)[0].itemName) }}>
                     <option>اختر الصنف</option>
                     {AllStockItems.map((StockItems, i) => {
                       return <option value={StockItems._id} key={i} >{StockItems.itemName}</option>
@@ -494,15 +494,15 @@ const KitchenConsumption = () => {
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">رصيد محول</label>
-                  <input type='Number' className="form-control border-primary m-0 p-1 h-100" required onChange={(e) => setquantityTransferredToKitchen(Number(e.target.value))} />
+                  <input type='Number' className="form-control border-primary m-0 p-2 h-100" required onChange={(e) => setquantityTransferredToKitchen(Number(e.target.value))} />
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الوحدة </label>
-                  <input type='text' className="form-control border-primary m-0 p-1 h-100" required defaultValue={unit}></input>
+                  <input type='text' className="form-control border-primary m-0 p-2 h-100" required defaultValue={unit}></input>
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">التاريخ</label>
-                  <input type='text' className="form-control border-primary m-0 p-1 h-100" Value={formatDateTime(new Date())} required readOnly />
+                  <input type='text' className="form-control border-primary m-0 p-2 h-100" Value={formatDateTime(new Date())} required readOnly />
                 </div>
               </div>
               <div className="modal-footer d-flex flex-nowrap align-items-center justify-content-between m-0 p-1">
@@ -524,37 +524,37 @@ const KitchenConsumption = () => {
               <div className="modal-body p-4 text-right">
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">اسم الصنف</label>
-                  <input type="text" className="form-control border-primary m-0 p-1 h-100" defaultValue={stockItemName} required />
+                  <input type="text" className="form-control border-primary m-0 p-2 h-100" defaultValue={stockItemName} required />
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الكمية المستلمة</label>
-                  <input type="text" className="form-control border-primary m-0 p-1 h-100" defaultValue={quantityTransferredToKitchen} required readOnly />
+                  <input type="text" className="form-control border-primary m-0 p-2 h-100" defaultValue={quantityTransferredToKitchen} required readOnly />
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الكمية المستهلكه</label>
-                  <input type="text" className="form-control border-primary m-0 p-1 h-100" defaultValue={consumptionQuantity} required readOnly />
+                  <input type="text" className="form-control border-primary m-0 p-2 h-100" defaultValue={consumptionQuantity} required readOnly />
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الرصيد الدفتري</label>
-                  <input type="text" className="form-control border-primary m-0 p-1 h-100" defaultValue={bookBalance} required readOnly />
+                  <input type="text" className="form-control border-primary m-0 p-2 h-100" defaultValue={bookBalance} required readOnly />
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الرصيد الفعلي</label>
-                  <input type="Number" className="form-control border-primary m-0 p-1 h-100" required onChange={(e) => {
+                  <input type="Number" className="form-control border-primary m-0 p-2 h-100" required onChange={(e) => {
                     setadjustment(Number(e.target.value) - bookBalance); setactualBalance(e.target.value)
                   }} />
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">التسويه</label>
-                  <input type="text" className="form-control border-primary m-0 p-1 h-100" defaultValue={adjustment} required readOnly />
+                  <input type="text" className="form-control border-primary m-0 p-2 h-100" defaultValue={adjustment} required readOnly />
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الوحدة </label>
-                  <input type='text' className="form-control border-primary m-0 p-1 h-100" defaultValue={unit} required></input>
+                  <input type='text' className="form-control border-primary m-0 p-2 h-100" defaultValue={unit} required></input>
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">التاريخ</label>
-                  <input type='text' className="form-control border-primary m-0 p-1 h-100" defaultValue={formatDateTime(new Date())} required readOnly />
+                  <input type='text' className="form-control border-primary m-0 p-2 h-100" defaultValue={formatDateTime(new Date())} required readOnly />
                 </div>
               </div>
               <div className="modal-footer d-flex flex-nowrap align-items-center justify-content-between m-0 p-1">
