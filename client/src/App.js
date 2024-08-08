@@ -6,6 +6,8 @@ import jwt_decode from 'jwt-decode';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+import io from 'socket.io-client';
+
 
 import LoadingPage from './screens/management/manag.component/LoadingPage/LoadingPage';
 
@@ -49,7 +51,7 @@ const KitchenConsumption = React.lazy(() => import('./screens/management/manag.c
 
 
 
-import io from 'socket.io-client';
+
 const socket = io(process.env.REACT_APP_API_URL, {
   reconnection: true,
 });
