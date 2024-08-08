@@ -3,8 +3,6 @@ import { detacontext } from '../../../../App';
 
 
 
-
-
 const Reservation = () => {
 
   const { allTable, getAvailableTables, availableTableIds, createReservations, updateReservation, getAllReservations, allReservations, getReservationById, deleteReservation, userLoginInfo } = useContext(detacontext)
@@ -30,20 +28,20 @@ const Reservation = () => {
       <div className='section-title mb-2'>
         <h2>حجز طاولة</h2>
       </div>
-      <div className="d-flex align-items-center justify-content-center col-12 col-md-10 p-2 " style={{
+      <div className="col-12 col-md-10 p-2 " style={{
         backgroundColor: 'rgba(0, 0, 0, 0.7)',
         paddingBottom: '50px',
       }}>
-        <form className="w-100 d-flex flex-column align-items-center justify-content-center text-white text-right" style={{ fontSize: '20px', fontWeight: '800', borderRadius: "25px" }}
+        <form className="w-100 text-white text-right" style={{ fontSize: '20px', fontWeight: '800' }}
           onSubmit={(e) => createReservations(e, tableInfo.id, tableInfo.tableNumber, userId, numberOfGuests, customerName, customerPhone, reservationDate, startTime, endTime, reservationNote)}>
           <div className="d-flex flex-wrap align-items-center justify-content-between">
             <div className="col-md-8 mb-1">
               <label htmlFor="name" className="form-label text-wrap text-right fw-bolder p-0 m-0">الاسم</label>
-              <input type="text" className="form-control p-2" id="name" onChange={(e) => setCustomerName(e.target.value)} />
+              <input type="text" className="form-control" id="name" onChange={(e) => setCustomerName(e.target.value)} />
             </div>
             <div className="col-md-4 mb-1">
               <label htmlFor="mobile" className="form-label text-wrap text-right fw-bolder p-0 m-0">رقم الموبايل</label>
-              <input type="tel" className="form-control p-2" id="mobile" onChange={(e) => setCustomerPhone(e.target.value)} />
+              <input type="tel" className="form-control" id="mobile" onChange={(e) => setCustomerPhone(e.target.value)} />
             </div>
           </div>
 
@@ -52,7 +50,7 @@ const Reservation = () => {
               <label htmlFor="date" className="form-label text-wrap text-right fw-bolder p-0 m-0">التاريخ</label>
               <input
                 type="date"
-                className="form-control p-2"
+                className="form-control"
                 id="date"
                 onChange={(e) => {
                   const selectedDate = new Date(e.target.value);
@@ -64,7 +62,7 @@ const Reservation = () => {
               <label htmlFor="arrivalTime" className="form-label text-wrap text-right fw-bolder p-0 m-0">وقت الحضور</label>
               <input
                 type="time"
-                className="form-control p-2"
+                className="form-control"
                 id="arrivalTime"
                 required
                 onChange={(e) => {
@@ -92,7 +90,7 @@ const Reservation = () => {
               <label htmlFor="departureTime" className="form-label text-wrap text-right fw-bolder p-0 m-0">وقت الانصراف</label>
               <input
                 type="time"
-                className="form-control p-2"
+                className="form-control"
                 id="departureTime"
                 required
                 onChange={(e) => {
@@ -122,7 +120,7 @@ const Reservation = () => {
           <div className="row mb-1">
             <div className="col-md-7">
               <label htmlFor="tableNumber" className="form-label text-wrap text-right fw-bolder p-0 m-0">رقم الطاولة</label>
-              <select className="form-control p-2" id="tableNumber" onChange={(e) => setTableInfo({ id: e.target.value, tableNumber: e.target.options[e.target.selectedIndex].text })}>
+              <select className="form-control" id="tableNumber" onChange={(e) => setTableInfo({ id: e.target.value, tableNumber: e.target.options[e.target.selectedIndex].text })}>
                 <option>الطاولات المتاحة في هذا الوقت</option>
                 {allTable.map((table, i) => (
                   availableTableIds.includes(table._id) && (
@@ -134,12 +132,12 @@ const Reservation = () => {
 
             <div className="col-md-5">
               <label htmlFor="numberOfGuests" className="form-label text-wrap text-right fw-bolder p-0 m-0">عدد الضيوف</label>
-              <input type="number" className="form-control p-2" id="numberOfGuests" onChange={(e) => setNumberOfGuests(e.target.value)} />
+              <input type="number" className="form-control" id="numberOfGuests" onChange={(e) => setNumberOfGuests(e.target.value)} />
             </div>
           </div>
           <div className="mb-1">
             <label htmlFor="notes" className="form-label text-wrap text-right fw-bolder p-0 m-0">ملاحظات</label>
-            <textarea className="form-control p-2" id="notes" rows="2" onChange={(e) => setReservationNote(e.target.value)}></textarea>
+            <textarea className="form-control" id="notes" rows="2" onChange={(e) => setReservationNote(e.target.value)}></textarea>
           </div>
           <button type="submit" className="h-100 btn btn-47 btn-primary" style={{ width: '100%', height: '50px' }}>تأكيد الحجز</button>
         </form>
