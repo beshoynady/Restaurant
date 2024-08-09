@@ -128,32 +128,22 @@ const ReservationTables = () => {
             <div className="col-12 text-dark d-flex flex-wrap align-items-center justify-content-evenly p-0 m-0">
                 <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">عرض</label>
-                  <select className="form-select border-primary col-6 px-1 py-2 m-0" onChange={(e) => { setstartpagination(0); setendpagination(e.target.value) }}>
-                    <option value={5}>5</option>
-                    <option value={10}>10</option>
-                    <option value={15}>15</option>
-                    <option value={20}>20</option>
-                    <option value={25}>25</option>
-                    <option value={30}>30</option>
-                    <option value={35}>35</option>
-                    <option value={40}>40</option>
-                    <option value={45}>45</option>
-                    <option value={50}>50</option>
+                  <select className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => { setstartpagination(0); setendpagination(e.target.value) }}>
+                   {
+                    (() => {
+                      const options = [];
+                      for (let i = 5; i < 100; i += 5) {
+                        options.push(<option key={i} value={i}>{i}</option>);
+                      }
+                      return options;
+                    })()
+                  }
                   </select>
                 </div>
               <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">رقم الطاولة</label>
                 <input type="text" className="form-control border-primary col-12" onChange={(e) => searchByNum(e.target.value)} />
               </div>
-
-              {/* <div className="form-group w-100 h-auto px-3 d-flex align-itmes-center justify-content-start col-12  col-12 col-md-6 ">
-                        <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الحالة</label>
-                        <select className="form-control border-primary m-0 p-2 h-auto"  name="category" id="category" form="carform" onChange={(e) => filterByStatus(e.target.value)}>
-                          <option value="">اختر</option>
-                          <option value={true} >متاح</option>
-                          <option value={false} >غير متاح</option>
-                        </select>
-                      </div> */}
 
               <div className='col-12 d-flex align-items-center justify-content-between flex-wrap'>
                 <div className="filter-group d-flex align-items-center justify-content-between col-md-4 col-sm-12 p-0 mb-2">

@@ -407,13 +407,16 @@ const exportToExcel = () => {
             <div className="d-flex flex-wrap flex-row w-100 text-dark">
               <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">عرض</label>
-                <select className="form-select border-primary col-6 px-1 py-2 m-0" onChange={(e) => { setstartpagination(0); setendpagination(e.target.value) }}>
-                  <option value={5}>5</option>
-                  <option value={10}>10</option>
-                  <option value={15}>15</option>
-                  <option value={20}>20</option>
-                  <option value={25}>25</option>
-                  <option value={30}>30</option>
+                <select className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => { setstartpagination(0); setendpagination(e.target.value) }}>
+                  {
+                    (() => {
+                      const options = [];
+                      for (let i = 5; i < 100; i += 5) {
+                        options.push(<option key={i} value={i}>{i}</option>);
+                      }
+                      return options;
+                    })()
+                  }
                 </select>
                 
               </div>

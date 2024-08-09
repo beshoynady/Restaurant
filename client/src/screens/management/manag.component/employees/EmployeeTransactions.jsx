@@ -218,12 +218,15 @@ const EmployeeTransactions = () => {
               <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
                 <span className="me-2">عرض</span>
                 <select className="form-select" onChange={(e) => { setstartpagination(0); setendpagination(e.target.value) }}>
-                  <option value={5}>5</option>
-                  <option value={10}>10</option>
-                  <option value={15}>15</option>
-                  <option value={20}>20</option>
-                  <option value={25}>25</option>
-                  <option value={30}>30</option>
+                  {
+                    (() => {
+                      const options = [];
+                      for (let i = 5; i < 100; i += 5) {
+                        options.push(<option key={i} value={i}>{i}</option>);
+                      }
+                      return options;
+                    })()
+                  }
                 </select>
               </div>
 
