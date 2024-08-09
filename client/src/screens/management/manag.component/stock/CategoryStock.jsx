@@ -184,7 +184,7 @@ const CategoryStock = () => {
               <div className="text-right">
                 <h2>إدارة <b>اقسام المخزن</b></h2>
               </div>
-              <div className="col-12 col-md-6 p-0 m-0 d-flex flex-wrap aliegn-items-center justify-content-end">
+              <div className="col-12 col-md-6 p-0 m-0 d-flex flex-wrap aliegn-items-center justify-content-end print-hide">
                 <a href="#addCategoryStockModal" className="d-flex align-items-center justify-content-center col-4 h-100 p-2 m-0 btn btn-success" data-toggle="modal"> <span>اضافه تصنيف</span></a>
                 {/* <a href="#deleteCategoryStockModal" className="d-flex align-items-center justify-content-center col-4 h-100 p-2 m-0 btn btn-danger" data-toggle="modal"> <span>حذف</span></a> */}
               </div>

@@ -256,7 +256,7 @@ const Tables = () => {
               <div className="col-sm-6 text-right">
                 <h2>ادارة <b>الطاولات</b></h2>
               </div>
-              <div className="col-12 col-md-8 d-flex flex-wrap align-items-center justify-content-between">
+              <div className="col-12 col-md-6 p-0 m-0 d-flex flex-wrap aliegn-items-center justify-content-end print-hide">
                 <a href="#qrwebModal" className="d-flex align-items-center justify-content-center col-4 h-100 p-2 m-0 btn btn-info"
                   data-toggle="modal"><span className="material-symbols-outlined" data-toggle="tooltip" title="QR">qr_code_2_add</span>
                   <span>انشاء qr للسايت</span></a>

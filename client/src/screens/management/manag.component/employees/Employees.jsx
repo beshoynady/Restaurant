@@ -391,7 +391,7 @@ const exportToExcel = () => {
               <div className="col-6">
                 <h2>ادارة <b>الموظفين</b></h2>
               </div>
-              <div className="col-6 d-flex justify-content-end print-hide">
+              <div className="col-12 col-md-6 p-0 m-0 d-flex flex-wrap aliegn-items-center justify-content-end print-hide">
                 {
                   permissionsList?.filter(permission => permission.resource === 'Employees')[0]?.create === true ? (
                     <a href="#addEmployeeModal" className="d-flex align-items-center justify-content-center col-4 h-100 p-2 m-0 btn btn-success" data-toggle="modal"> <span>اضافة موظف جديد</span></a>
