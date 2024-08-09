@@ -183,7 +183,7 @@ table.table .avatar {
     border-radius: 4px;
     border-color: #ddd;
     font-size: 16px;
-    color: #333;
+    color: #000000;
 }
 
 .modal textarea.form-control {
@@ -193,6 +193,7 @@ table.table .avatar {
 .modal form label {
     font-weight: 600;
     font-size: 16px;
+    color: #000000;
 }
 
 @media (max-width: 768px) {

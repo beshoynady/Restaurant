@@ -281,7 +281,7 @@ const MenuCategory = () => {
               <div className="table-responsive">
                 <div className="table-wrapper">
                   <div className="table-title">
-                    <div className="d-flex flex-wrap align-items-center justify-content-between">
+                    <div className="w-100 d-flex flex-wrap align-items-center justify-content-between">
                       <div className="col-12 col-md-4 text-md-right text-center mb-3 mb-md-0">
                         <h2>ادارة <b>اقسام المنيو</b></h2>
                       </div>
@@ -293,7 +293,7 @@ const MenuCategory = () => {
                         </div>
                         <div className="col-12 col-sm-5 d-flex align-items-center mx-1  p-0">
                           <label htmlFor="categorySelect" className="mr-2">التصنيف الرئيسي:</label>
-                          <select id="categorySelect" className="form-control border-primary m-0 p-2 h-100"
+                          <select id="categorySelect" className="form-control border-primary m-0 p-2 h-auto"
                             onChange={handleCategoryChange}>
                             <option value="">{mainCategory ? mainCategory.name : ""}</option>
                             {allCategory.map((category, index) => (
@@ -327,7 +327,7 @@ const MenuCategory = () => {
 
                       <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                         <label className="form-label text-wrap text-right fw-bolder p-0 m-0">اسم التصنيف</label>
-                        <input type="text" className="form-control border-primary m-0 p-2 h-100" onChange={(e) => searchByCategory(e.target.value)} />
+                        <input type="text" className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => searchByCategory(e.target.value)} />
                       </div>
 
                     </div>
@@ -401,16 +401,16 @@ const MenuCategory = () => {
                 <div className="modal-dialog modal-lg">
                   <div className="modal-content shadow-lg border-0 rounded ">
                     <form onSubmit={(e) => createCategory(e, setisLoadiog)}>
-                      <div className="modal-header text-light bg-primary">
+                      <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                         <h4 className="modal-title">اضافه تصنيف</h4>
-                        <button type="button" className="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
                       </div>
-                      <div className="modal-body p-4 text-right">
+                      <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
                         <div className="form-group col-12 col-md-6">
                           <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الاسم</label>
                           <input
                             type="text"
-                            className="form-control border-primary m-0 p-2 h-100"
+                            className="form-control border-primary m-0 p-2 h-auto"
                             required
                             value={categoryName}
                             onChange={(e) => setcategoryName(e.target.value)}
@@ -419,7 +419,7 @@ const MenuCategory = () => {
                         <div className="form-group col-12 col-md-6">
                           <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الحالة</label>
                           <select
-                            className="form-control border-primary m-0 p-2 h-100"
+                            className="form-control border-primary m-0 p-2 h-auto"
                             value={status.toString()} 
                             onChange={(e) => setstatus(e.target.value === "true")}
                             >
@@ -442,16 +442,16 @@ const MenuCategory = () => {
                 <div className="modal-dialog modal-lg">
                   <div className="modal-content shadow-lg border-0 rounded ">
                     <form onSubmit={editCategory}>
-                      <div className="modal-header text-light bg-primary">
+                      <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                         <h4 className="modal-title">تعديل التصنيف</h4>
-                        <button type="button" className="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
                       </div>
-                      <div className="modal-body p-4 text-right">
+                      <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
                         <div className="form-group col-12 col-md-6">
                           <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الاسم</label>
                           <input
                             type="text"
-                            className="form-control border-primary m-0 p-2 h-100"
+                            className="form-control border-primary m-0 p-2 h-auto"
                             required
                             value={categoryName}
                             onChange={(e) => setcategoryName(e.target.value)}
@@ -460,7 +460,7 @@ const MenuCategory = () => {
                         <div className="form-group col-12 col-md-6">
                           <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الحالة</label>
                           <select
-                            className="form-control border-primary m-0 p-2 h-100"
+                            className="form-control border-primary m-0 p-2 h-auto"
                             value={status.toString()} // تحويل قيمة status إلى سلسلة نصية
                             onChange={(e) => setstatus(e.target.value === "true")} // تحويل القيمة المحددة إلى قيمة بوليانية
                             >
@@ -493,9 +493,9 @@ const MenuCategory = () => {
                 <div className="modal-dialog ">
                   <div className="modal-content p-1">
                     <form onSubmit={handleOrderCategory}>
-                      <div className="modal-header text-light bg-primary">
+                      <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                         <h4 className="modal-title">تعديل التصنيف</h4>
-                        <button type="button" className="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
                       </div>
                       <div className="modal-body d-flex flex-wrap flex-md-row flex-wrap">
                         {allCategory.map((category, index) => (
@@ -521,11 +521,11 @@ const MenuCategory = () => {
                 <div className="modal-dialog modal-lg">
                   <div className="modal-content shadow-lg border-0 rounded ">
                     <form onSubmit={deleteCategory}>
-                      <div className="modal-header text-light bg-primary">
+                      <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                         <h4 className="modal-title">حذف تصنيف</h4>
-                        <button type="button" className="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
                       </div>
-                      <div className="modal-body p-4 text-right">
+                      <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
                         <p>هل انت متاكد من حذف هذا التصنيف?</p>
                         <p className="text-warning"><small>لا يمكن الرجوع فيه.</small></p>
                       </div>

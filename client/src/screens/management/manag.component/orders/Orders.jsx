@@ -170,7 +170,7 @@ const Orders = () => {
       <div className="table-responsive">
         <div className="table-wrapper">
           <div className="table-title">
-            <div className="d-flex flex-wrap align-items-center justify-content-between">
+            <div className="w-100 d-flex flex-wrap align-items-center justify-content-between">
               <div className="col-sm-6">
                 <h2>ادارة <b>الاوردرات</b></h2>
               </div>
@@ -198,12 +198,12 @@ const Orders = () => {
 
               <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">رقم الفاتورة</label>
-                <input type="text" className="form-control border-primary m-0 p-2 h-100" onChange={(e) => searchBySerial(e.target.value)} />
+                <input type="text" className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => searchBySerial(e.target.value)} />
               </div>
 
               <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">نوع الاوردر</label>
-                <select className="form-control border-primary m-0 p-2 h-100" onChange={(e) => getOrdersByType(e.target.value)} >
+                <select className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => getOrdersByType(e.target.value)} >
                   <option value={""}>الكل</option>
                   <option value="Internal" >Internal</option>
                   <option value="Delivery" >Delivery</option>
@@ -211,7 +211,7 @@ const Orders = () => {
                 </select>
                 {/* <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">Status</label>
-                  <select className="form-control border-primary m-0 p-2 h-100">
+                  <select className="form-control border-primary m-0 p-2 h-auto">
                     <option>Any</option>
                     <option>Delivered</option>
                     <option>Shipped</option>
@@ -225,7 +225,7 @@ const Orders = () => {
               <div className='col-12 d-flex align-items-center justify-content-between'>
                 <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">فلتر حسب الوقت</label>
-                  <select className="form-control border-primary m-0 p-2 h-100"  onChange={(e) => setlistOfOrders(filterByTime(e.target.value, listOfOrders))}>
+                  <select className="form-control border-primary m-0 p-2 h-auto"  onChange={(e) => setlistOfOrders(filterByTime(e.target.value, listOfOrders))}>
                     <option value="">اختر</option>
                     <option value="today">اليوم</option>
                     <option value="week">هذا الأسبوع</option>
@@ -239,12 +239,12 @@ const Orders = () => {
 
                   <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">من</label>
-                    <input type="date" className="form-control border-primary m-0 p-2 h-100" onChange={(e) => setStartDate(e.target.value)} placeholder="اختر التاريخ" />
+                    <input type="date" className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => setStartDate(e.target.value)} placeholder="اختر التاريخ" />
                   </div>
 
                   <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">إلى</label>
-                    <input type="date" className="form-control border-primary m-0 p-2 h-100" onChange={(e) => setEndDate(e.target.value)} placeholder="اختر التاريخ" />
+                    <input type="date" className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => setEndDate(e.target.value)} placeholder="اختر التاريخ" />
                   </div>
 
                   <div className="d-flex flex-nowrap justify-content-between col-3 p-0 m-0">
@@ -340,11 +340,11 @@ const Orders = () => {
         <div className="modal-dialog modal-lg">
           <div className="modal-content shadow-lg border-0 rounded ">
             <form onSubmit={deleteOrder}>
-              <div className="modal-header text-light bg-primary">
+              <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                 <h4 className="modal-title">Delete Order</h4>
-                <button type="button" className="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
               </div>
-              <div className="modal-body p-4 text-right">
+              <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
                 <p>هل انت متاكد من حذف هذا السجل؟?</p>
                 <p className="text-warning"><small>لا يمكن الرجوع في هذا الاجراء.</small></p>
               </div>

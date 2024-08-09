@@ -695,7 +695,7 @@ const PurchaseReturn = () => {
       <div className="table-responsive">
         <div className="table-wrapper">
           <div className="table-title">
-            <div className="d-flex flex-wrap align-items-center justify-content-between">
+            <div className="w-100 d-flex flex-wrap align-items-center justify-content-between">
               <div className="col-sm-6">
                 <h2>ادارة <b>مرتجع المشتريات</b></h2>
               </div>
@@ -725,7 +725,7 @@ const PurchaseReturn = () => {
               </div>
               <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">رقم الفاتورة</label>
-                <select className="form-control border-primary m-0 p-2 h-100"  onChange={(e) => searchByInvoice(e.target.value)} >
+                <select className="form-control border-primary m-0 p-2 h-auto"  onChange={(e) => searchByInvoice(e.target.value)} >
                   <option value="all">الكل</option>
                   {allPurchaseInvoice.map(PurchaseInvoice => {
                     return <option value={PurchaseInvoice._id}>{PurchaseInvoice.invoiceNumber}</option>;
@@ -734,7 +734,7 @@ const PurchaseReturn = () => {
               </div>
               <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">المورد</label>
-                <select className="form-control border-primary m-0 p-2 h-100"  onChange={(e) => searchBySupplier(e.target.value)} >
+                <select className="form-control border-primary m-0 p-2 h-auto"  onChange={(e) => searchBySupplier(e.target.value)} >
                   <option value="all">الكل</option>
                   {AllSuppliers.map(Supplier => {
                     return <option value={Supplier._id}>{Supplier.name}</option>;
@@ -745,7 +745,7 @@ const PurchaseReturn = () => {
               <div className='col-12 d-flex align-items-center justify-content-between'>
                 <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">فلتر حسب الوقت</label>
-                  <select className="form-control border-primary m-0 p-2 h-100"  onChange={(e) => setallPurchasesReturn(filterByTime(e.target.value, allPurchasesReturn))}>
+                  <select className="form-control border-primary m-0 p-2 h-auto"  onChange={(e) => setallPurchasesReturn(filterByTime(e.target.value, allPurchasesReturn))}>
                     <option value="">اختر</option>
                     <option value="today">اليوم</option>
                     <option value="week">هذا الأسبوع</option>
@@ -759,12 +759,12 @@ const PurchaseReturn = () => {
 
                   <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">من</label>
-                    <input type="date" className="form-control border-primary m-0 p-2 h-100" onChange={(e) => setStartDate(e.target.value)} placeholder="اختر التاريخ" />
+                    <input type="date" className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => setStartDate(e.target.value)} placeholder="اختر التاريخ" />
                   </div>
 
                   <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">إلى</label>
-                    <input type="date" className="form-control border-primary m-0 p-2 h-100" onChange={(e) => setEndDate(e.target.value)} placeholder="اختر التاريخ" />
+                    <input type="date" className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => setEndDate(e.target.value)} placeholder="اختر التاريخ" />
                   </div>
 
                   <div className="d-flex flex-nowrap justify-content-between col-3 p-0 m-0">
@@ -873,9 +873,9 @@ const PurchaseReturn = () => {
         <div className="modal-dialog modal-lg">
           <div className="modal-content shadow-lg border-0 rounded ">
             <form onSubmit={(e) => createPurchaseReturn(e, employeeLoginInfo.id)}>
-              <div className="modal-header text-light bg-primary">
+              <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                 <h4 className="modal-title">تسجيل مرتجع مشتريات</h4>
-                <button type="button" className="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
               </div>
               <div className="modal-body container ">
 
@@ -885,7 +885,7 @@ const PurchaseReturn = () => {
                   </div>
 
                   <div className="card-body min-content">
-                    <div className="d-flex flex-wrap align-items-center justify-content-between">
+                    <div className="w-100 d-flex flex-wrap align-items-center justify-content-between">
                       <div className="col-6">
                         <div className="input-group mb-3 d-flex align-items-center justify-content-between flex-nowrap">
                           <span className="input-group-text" htmlFor="supplierSelect">الفاتورة الاصليه</span>
@@ -933,7 +933,7 @@ const PurchaseReturn = () => {
                       <tbody id="TBody">
                         {returnedItems && returnedItems.map((item, i) => (
                           <tr id="TRow" key={i}>
-                            <th scope="d-flex flex-wrap align-items-center justify-content-between">{i + 1}</th>
+                            <th scope="w-100 d-flex flex-wrap align-items-center justify-content-between">{i + 1}</th>
                             <td><input type="text" className="form-control p-0 m-0" name="qty" value={item.itemId?.itemName} readOnly /></td>
                             <td><input type="text" required className="form-control p-0 m-0" max={item.quantity} value={item.quantity} name="qty" onChange={(e) => handleQuantity(Number(e.target.value), i)} /></td>
 
@@ -950,7 +950,7 @@ const PurchaseReturn = () => {
                       </tbody>
                     </table>
 
-                    <div className="d-flex flex-wrap align-items-center justify-content-between">
+                    <div className="w-100 d-flex flex-wrap align-items-center justify-content-between">
                       <div className="col-6">
                         <div className="input-group mb-3 d-flex align-items-center justify-content-between flex-nowrap">
                           <span className="input-group-text" htmlFor="totalInput">الإجمالي</span>
@@ -1108,9 +1108,9 @@ const PurchaseReturn = () => {
         <div className="modal-dialog modal-lg">
           <div className="modal-content shadow-lg border-0 rounded ">
             <form >
-              <div className="modal-header text-light bg-primary">
+              <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                 <h4 className="modal-title">عرض مرتجع مشتريات</h4>
-                <button type="button" className="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
               </div>
               <div className="modal-body printpage" ref={printContainerPurchasesReturnInvoice} style={{direction:'rtl'}}>
 
@@ -1120,7 +1120,7 @@ const PurchaseReturn = () => {
                   </div>
 
                   <div className="card-body min-content">
-                    <div className="d-flex flex-wrap align-items-center justify-content-between">
+                    <div className="w-100 d-flex flex-wrap align-items-center justify-content-between">
                       <div className="col-6">
                         <div className="input-group mb-3 d-flex align-items-center justify-content-between flex-nowrap">
                           <span className="input-group-text" htmlFor="supplierSelect">الفاتورة الاصلية</span>
@@ -1161,7 +1161,7 @@ const PurchaseReturn = () => {
                       <tbody id="TBody">
                         {returnInvoice.returnedItems && returnInvoice.returnedItems.map((item, i) => (
                           <tr id="TRow" key={i}>
-                            <th scope="d-flex flex-wrap align-items-center justify-content-between">{i + 1}</th>
+                            <th scope="w-100 d-flex flex-wrap align-items-center justify-content-between">{i + 1}</th>
                             <td><input type="text" className="form-control p-0 m-0" name="qty" value={item.itemId?.itemName} readOnly /></td>
                             <td><input type="text"  className="form-control p-0 m-0"  value={item.quantity} name="qty" readOnly /></td>
 
@@ -1178,7 +1178,7 @@ const PurchaseReturn = () => {
                       </tbody>
                     </table>
 
-                    <div className="d-flex flex-wrap align-items-center justify-content-between">
+                    <div className="w-100 d-flex flex-wrap align-items-center justify-content-between">
                       <div className="col-6">
                         <div className="input-group mb-3 d-flex align-items-center justify-content-between flex-nowrap">
                           <span className="input-group-text" htmlFor="totalInput">الإجمالي</span>
@@ -1266,9 +1266,9 @@ const PurchaseReturn = () => {
                 <div className="modal-dialog modal-lg">
                   <div className="modal-content shadow-lg border-0 rounded ">
                     <form onSubmit={(e) => handlePurchaseReturn(e, employeeLoginInfo.id)}>
-                      <div className="modal-header text-light bg-primary">
+                      <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                         <h4 className="modal-title"></h4>
-                        <button type="button" className="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
                       </div>
                       <div className="modal-body container ">
 
@@ -1277,11 +1277,11 @@ const PurchaseReturn = () => {
                             <h4>ادخل بيانات فاتورة الشراء</h4>
                           </div>
                           <div className="card-body min-content">
-                            <div className="d-flex flex-wrap align-items-center justify-content-between">
+                            <div className="w-100 d-flex flex-wrap align-items-center justify-content-between">
                               <div className="col-6">
                                 <div className="input-group mb-3 d-flex align-items-center justify-content-between flex-nowrap">
                                   <span className="input-group-text" htmlFor="supplierSelect">المورد</span>
-                                  <select readOnly className="form-control border-primary m-0 p-2 h-100"  id="supplierSelect" onChange={(e) => handleSupplier(e.target.value)}>
+                                  <select readOnly className="form-control border-primary m-0 p-2 h-auto"  id="supplierSelect" onChange={(e) => handleSupplier(e.target.value)}>
                                     <option>اختر المورد</option>
                                     {AllSuppliers.map((supplier, i) => (
                                       <option value={supplier._id} key={i}>{supplier.name}</option>
@@ -1290,18 +1290,18 @@ const PurchaseReturn = () => {
                                 </div>
                                 <div className="input-group mb-3 d-flex align-items-center justify-content-between flex-nowrap">
                                   <span className="input-group-text col-4" htmlFor="notesInput">الرصيد</span>
-                                  <input type="text" className="form-control border-primary m-0 p-2 h-100" id="notesInput" readOnly value={supplierInfo.currentBalance} />
+                                  <input type="text" className="form-control border-primary m-0 p-2 h-auto" id="notesInput" readOnly value={supplierInfo.currentBalance} />
                                 </div>
 
                               </div>
                               <div className="col-6">
                                 <div className="input-group mb-3 d-flex align-items-center justify-content-between flex-nowrap">
                                   <span className="input-group-text col-4" htmlFor="originalInvoiceInput">رقم الفاتورة</span>
-                                  <input type="text" className="form-control border-primary m-0 p-2 h-100" required id="originalInvoiceInput" placeholder="رقم الفاتورة" onChange={(e) => setoriginalInvoice(e.target.value)} />
+                                  <input type="text" className="form-control border-primary m-0 p-2 h-auto" required id="originalInvoiceInput" placeholder="رقم الفاتورة" onChange={(e) => setoriginalInvoice(e.target.value)} />
                                 </div>
                                 <div className="input-group mb-3 d-flex align-items-center justify-content-between flex-nowrap">
                                   <span className="input-group-text col-4" htmlFor="returnDateInput">تاريخ الفاتورة</span>
-                                  <input type="date" className="form-control border-primary m-0 p-2 h-100" required id="returnDateInput" placeholder="تاريخ الفاتور" onChange={(e) => setreturnDate(e.target.value)} />
+                                  <input type="date" className="form-control border-primary m-0 p-2 h-auto" required id="returnDateInput" placeholder="تاريخ الفاتور" onChange={(e) => setreturnDate(e.target.value)} />
                                 </div>
                               </div>
                             </div>
@@ -1324,9 +1324,9 @@ const PurchaseReturn = () => {
                               <tbody id="TBody">
                                 {items.map((item, i) => (
                                   <tr id="TRow" key={i}>
-                                    <th scope="d-flex flex-wrap align-items-center justify-content-between">{i + 1}</th>
+                                    <th scope="w-100 d-flex flex-wrap align-items-center justify-content-between">{i + 1}</th>
                                     <td>
-                                      <select className="form-control border-primary m-0 p-2 h-100"  required onChange={(e) => handleItemId(e.target.value, i)}>
+                                      <select className="form-control border-primary m-0 p-2 h-auto"  required onChange={(e) => handleItemId(e.target.value, i)}>
                                         <option value="">
                                           {StockItems && StockItems.filter(stock => stock._id === item.item)[0]?.name}
                                         </option>
@@ -1335,21 +1335,21 @@ const PurchaseReturn = () => {
                                         ))}
                                       </select>
                                     </td>
-                                    <td><input type="number" required className="form-control border-primary m-0 p-2 h-100" name="qty" onChange={(e) => handleQuantity(e.target.value, i)} /></td>
-                                    <td><input type="text" readOnly value={item.largeUnit} className="form-control border-primary m-0 p-2 h-100" name="largeUnit" /></td>
+                                    <td><input type="number" required className="form-control border-primary m-0 p-2 h-auto" name="qty" onChange={(e) => handleQuantity(e.target.value, i)} /></td>
+                                    <td><input type="text" readOnly value={item.largeUnit} className="form-control border-primary m-0 p-2 h-auto" name="largeUnit" /></td>
 
-                                    <td><input type="number" className="form-control border-primary m-0 p-2 h-100" name="price" required onChange={(e) => handlePrice(e.target.value, i)} /></td>
+                                    <td><input type="number" className="form-control border-primary m-0 p-2 h-auto" name="price" required onChange={(e) => handlePrice(e.target.value, i)} /></td>
 
-                                    <td><input type="text" className="form-control border-primary m-0 p-2 h-100" value={item.cost} name="amt" readOnly /></td>
+                                    <td><input type="text" className="form-control border-primary m-0 p-2 h-auto" value={item.cost} name="amt" readOnly /></td>
 
-                                    <td><input type="date" className="form-control border-primary m-0 p-2 h-100" name="Exp" onChange={(e) => handleExpirationDate(e.target.value, i)} /></td>
+                                    <td><input type="date" className="form-control border-primary m-0 p-2 h-auto" name="Exp" onChange={(e) => handleExpirationDate(e.target.value, i)} /></td>
                                     <td className="NoPrint"><button type="button" className="h-100 btn btn-sm btn-danger" onClick={() => handleDeleteItem(i)}>X</button></td>
                                   </tr>
                                 ))}
                               </tbody>
                             </table>
 
-                            <div className="d-flex flex-wrap align-items-center justify-content-between">
+                            <div className="w-100 d-flex flex-wrap align-items-center justify-content-between">
                               <div className="col-6">
                                 <div className="input-group mb-3 d-flex align-items-center justify-content-between flex-nowrap">
                                   <span className="input-group-text col-4" htmlFor="totalInput">الإجمالي</span>
@@ -1369,7 +1369,7 @@ const PurchaseReturn = () => {
                                 </div>
                                 <div className="input-group mb-3 d-flex align-items-center justify-content-between flex-nowrap">
                                   <span className="input-group-text col-4" htmlFor="notesInput">الملاحظات</span>
-                                  <textarea className="form-control border-primary m-0 p-2 h-100" id="notesInput" placeholder="الملاحظات" onChange={(e) => setNotes(e.target.value)} style={{ height: 'auto' }} />
+                                  <textarea className="form-control border-primary m-0 p-2 h-auto" id="notesInput" placeholder="الملاحظات" onChange={(e) => setNotes(e.target.value)} style={{ height: 'auto' }} />
                                 </div>
                                 <div className="input-group mb-3 d-flex align-items-center justify-content-between flex-nowrap">
                                   <span className="input-group-text col-4" htmlFor="gstInput">تكلفه اضافية</span>
@@ -1432,11 +1432,11 @@ const PurchaseReturn = () => {
                 <div className="modal-dialog modal-lg">
                   <div className="modal-content shadow-lg border-0 rounded ">
                     <form onSubmit={deleteStockaction}>
-                      <div className="modal-header text-light bg-primary">
+                      <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                         <h4 className="modal-title">حذف منتج</h4>
-                        <button type="button" className="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
                       </div>
-                      <div className="modal-body p-4 text-right">
+                      <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
                         <p>هل انت متاكد من حذف هذا السجل؟</p>
                         <p className="text-warning"><small>لا يمكن الرجوع في هذا الاجراء.</small></p>
                       </div>

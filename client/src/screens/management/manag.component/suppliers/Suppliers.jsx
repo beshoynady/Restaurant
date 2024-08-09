@@ -338,7 +338,7 @@ const Suppliers = () => {
               <div className="table-responsive mt-1">
                 <div className="table-wrapper p-3 mw-100">
                   <div className="table-title">
-                    <div className="d-flex flex-wrap align-items-center justify-content-between">
+                    <div className="w-100 d-flex flex-wrap align-items-center justify-content-between">
                       <div className="col-sm-6 text-right">
                         <h2>ادارة <b>الموردين</b></h2>
                       </div>
@@ -483,11 +483,11 @@ const Suppliers = () => {
                 <div className="modal-dialog modal-lg">
                   <div className="modal-content shadow-lg border-0 rounded ">
                     <form onSubmit={createSupplier}>
-                      <div className="modal-header text-light bg-primary">
+                      <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                         <h4 className="modal-title">إضافة مورد</h4>
-                        <button type="button" className="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
                       </div>
-                      <div className="modal-body p-4 text-right">
+                      <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
                         <div className="form-group w-100 h-auto px-3 d-flex flex-wrap align-itmes-center justify-content-start col-12  col-md-6 ">
                           <label className="col-3 text-wrap text-right fw-bolder p-0 m-0">اسم المورد</label>
                           <input type="text" className="form-control border-primary col-9" required onChange={(e) => setName(e.target.value)} />
@@ -572,11 +572,11 @@ const Suppliers = () => {
                 <div className="modal-dialog modal-lg">
                   <div className="modal-content shadow-lg border-0 rounded ">
                     <form onSubmit={(e) => updateSupplier(e)}>
-                      <div className="modal-header text-light bg-primary">
+                      <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                         <h4 className="modal-title">تعديل مورد</h4>
-                        <button type="button" className="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
                       </div>
-                      <div className="modal-body p-4 text-right">
+                      <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
                         <div className="form-group w-100 h-auto px-3 d-flex flex-wrap align-itmes-center justify-content-start col-12  col-md-6 ">
                           <label className="col-3 text-wrap text-right fw-bolder p-0 m-0">اسم المورد</label>
                           <input type="text" className="form-control border-primary col-9" defaultValue={name} value={name} onChange={(e) => setName(e.target.value)} />
@@ -659,11 +659,11 @@ const Suppliers = () => {
                 <div className="modal-dialog modal-lg">
                   <div className="modal-content shadow-lg border-0 rounded ">
                     <form onSubmit={deleteSupplier}>
-                      <div className="modal-header text-light bg-primary">
+                      <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                         <h4 className="modal-title">حذف منتج</h4>
-                        <button type="button" className="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
                       </div>
-                      <div className="modal-body p-4 text-right">
+                      <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
                         <p>هل انت متاكد من حذف هذا السجل؟</p>
                         <p className="text-warning"><small>لا يمكن الرجوع في هذا الاجراء.</small></p>
                       </div>

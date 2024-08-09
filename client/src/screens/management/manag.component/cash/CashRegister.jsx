@@ -211,7 +211,7 @@ const CashRegister = () => {
             <div className="table-responsive">
               <div className="table-wrapper">
                 <div className="table-title">
-                  <div className="d-flex flex-wrap align-items-center justify-content-between">
+                  <div className="w-100 d-flex flex-wrap align-items-center justify-content-between">
                     <div className="col-sm-6 text-right">
                       <h2>ادارة <b>الخزينه</b></h2>
                     </div>
@@ -237,12 +237,12 @@ const CashRegister = () => {
 
                     <div className="filter-group d-flex align-items-center justify-content-evenly col-md-3 mb-1">
                       <label className="form-label text-wrap text-right fw-bolder p-0 m-0">اسم الخزينة</label>
-                      <input type="text" className="form-control border-primary m-0 p-2 h-100" onChange={(e) => filterCashRegistersByName(e.target.value)} />
+                      <input type="text" className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => filterCashRegistersByName(e.target.value)} />
                     </div>
 
                     <div className="filter-group d-flex align-items-center justify-content-evenly col-md-3 mb-1">
                       <label className="form-label text-wrap text-right fw-bolder p-0 m-0">المسؤول</label>
-                      <select className="form-control border-primary m-0 p-2 h-100"  onChange={(e) => filterCashRegistersByEmployee(e.target.value)}>
+                      <select className="form-control border-primary m-0 p-2 h-auto"  onChange={(e) => filterCashRegistersByEmployee(e.target.value)}>
                         <option value="">اختر</option>
                         {allEmployee && allEmployee.map((Employee, i) => (
                           <option value={Employee._id} key={i}>{Employee.username}</option>
@@ -326,18 +326,18 @@ const CashRegister = () => {
               <div className="modal-dialog modal-lg">
                 <div className="modal-content shadow-lg border-0 rounded ">
                   <form onSubmit={createCashRegister}>
-                    <div className="modal-header text-light bg-primary">
+                    <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                       <h4 className="modal-title">اضافه خزينه</h4>
-                      <button type="button" className="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                      <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
                     </div>
-                    <div className="modal-body p-4 text-right">
+                    <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
                       <div className="form-group w-100 h-auto px-3 d-flex align-itmes-center justify-content-start col-12 ">
                         <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الاسم</label>
-                        <input type="text" className="form-control border-primary m-0 p-2 h-100" required onChange={(e) => setname(e.target.value)} />
+                        <input type="text" className="form-control border-primary m-0 p-2 h-auto" required onChange={(e) => setname(e.target.value)} />
                       </div>
                       <div className="form-group w-100 h-auto px-3 d-flex align-itmes-center justify-content-start col-12 ">
                         <label className="form-label text-wrap text-right fw-bolder p-0 m-0">المسؤل</label>
-                        <select className="form-control border-primary m-0 p-2 h-100"  name="Employee" id="Employee" form="carform" onChange={(e) => setemployee(e.target.value)}>
+                        <select className="form-control border-primary m-0 p-2 h-auto"  name="Employee" id="Employee" form="carform" onChange={(e) => setemployee(e.target.value)}>
                           <option>احتر الموظف</option>
                           {allEmployee.map((Employee, i) => {
                             return <option value={Employee._id} key={i} >{Employee.username}</option>
@@ -359,18 +359,18 @@ const CashRegister = () => {
               <div className="modal-dialog modal-lg">
                 <div className="modal-content shadow-lg border-0 rounded ">
                   <form onSubmit={updateCashRegister}>
-                    <div className="modal-header text-light bg-primary">
+                    <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                       <h4 className="modal-title">تعديل التصنيف</h4>
-                      <button type="button" className="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                      <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
                     </div>
-                    <div className="modal-body p-4 text-right">
+                    <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
                       <div className="form-group w-100 h-auto px-3 d-flex align-itmes-center justify-content-start col-12">
                         <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الاسم</label>
-                        <input type="text" className="form-control border-primary m-0 p-2 h-100" required defaultValue={name} onChange={(e) => setname(e.target.value)} />
+                        <input type="text" className="form-control border-primary m-0 p-2 h-auto" required defaultValue={name} onChange={(e) => setname(e.target.value)} />
                       </div>
                       <div className="form-group w-100 h-auto px-3 d-flex align-itmes-center justify-content-start col-12">
                         <label className="form-label text-wrap text-right fw-bolder p-0 m-0">المسؤل</label>
-                        <select className="form-control border-primary m-0 p-2 h-100"  name="category" id="category" form="carform" defaultValue={employee} onChange={(e) => setemployee(e.target.value)}>
+                        <select className="form-control border-primary m-0 p-2 h-auto"  name="category" id="category" form="carform" defaultValue={employee} onChange={(e) => setemployee(e.target.value)}>
                           <option value={employee}>{employeeName}</option>
                           {allEmployee.length > 0 ? allEmployee.map((Employee, i) => {
                             return <option value={Employee._id} key={i} >{Employee.username}</option>
@@ -391,11 +391,11 @@ const CashRegister = () => {
               <div className="modal-dialog modal-lg">
                 <div className="modal-content shadow-lg border-0 rounded ">
                   <form onSubmit={deleteCashRegister}>
-                    <div className="modal-header text-light bg-primary">
+                    <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                       <h4 className="modal-title">حذف تصنيف</h4>
-                      <button type="button" className="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                      <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
                     </div>
-                    <div className="modal-body p-4 text-right">
+                    <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
                       <p>هل انت متاكد من حذف هذا التصنيف?</p>
                       <p className="text-warning"><small>لا يمكن الرجوع فيه.</small></p>
                     </div>
@@ -411,11 +411,11 @@ const CashRegister = () => {
               <div className="modal-dialog modal-lg">
                 <div className="modal-content shadow-lg border-0 rounded ">
                   <form onSubmit={deleteSelectedIds}>
-                    <div className="modal-header text-light bg-primary">
+                    <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                       <h4 className="modal-title">حذف الخزن المحدده</h4>
-                      <button type="button" className="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                      <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
                     </div>
-                    <div className="modal-body p-4 text-right">
+                    <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
                       <p>هل انت متاكد من حذف هذا التصنيف?</p>
                       <p className="text-warning"><small>لا يمكن الرجوع فيه.</small></p>
                     </div>

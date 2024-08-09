@@ -589,7 +589,7 @@ const PayRoll = () => {
               <div className="table-responsive">
                 <div className="table-wrapper">
                   <div className="table-title">
-                    <div className="d-flex flex-wrap align-items-center justify-content-between">
+                    <div className="w-100 d-flex flex-wrap align-items-center justify-content-between">
                       <div className="col-sm-6">
                         <h2>ادارة <b>الرواتب</b></h2>
                       </div>
@@ -614,12 +614,12 @@ const PayRoll = () => {
                       </div>
                         <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                           <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الاسم</label>
-                          <input type="text" className="form-control border-primary m-0 p-2 h-100" onChange={(e) => searchByName(e.target.value)} />
+                          <input type="text" className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => searchByName(e.target.value)} />
 
                         </div>
                         <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                           <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الوظيفه</label>
-                          <select className="form-control border-primary m-0 p-2 h-100" onChange={(e) => filterEmployeesByJob(e.target.value)} >
+                          <select className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => filterEmployeesByJob(e.target.value)} >
                             <option>الكل</option>
                             <option value="manager">مدير</option>
                             <option value="cashier">كاشير</option>
@@ -630,7 +630,7 @@ const PayRoll = () => {
                         </div>
                         <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                           <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الحالة</label>
-                          <select className="form-control border-primary m-0 p-2 h-100" onChange={(e) => filterEmpByStatus(e.target.value)}>
+                          <select className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => filterEmpByStatus(e.target.value)}>
                             <option >الكل</option>
                             <option value={true}>متاح</option>
                             <option value={false}>غير متاح</option>
@@ -638,7 +638,7 @@ const PayRoll = () => {
                         </div>
                         <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                           <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الشهر</label>
-                          <select className="form-control border-primary m-0 p-2 h-100"  onChange={(e) => { setthismonth(e.target.value); console.log(e.target.value) }}>
+                          <select className="form-control border-primary m-0 p-2 h-auto"  onChange={(e) => { setthismonth(e.target.value); console.log(e.target.value) }}>
                             <option>الكل</option>
                             {months.length > 0 ? months.map((month, i) => (
                               <option value={i} key={i}>{month}</option>
@@ -755,11 +755,11 @@ const PayRoll = () => {
                 <div className="modal-dialog modal-lg">
                   <div className="modal-content shadow-lg border-0 rounded ">
                     <form onSubmit={(e) => paidSalary(e, rollId)}>
-                      <div className="modal-header text-light bg-primary">
+                      <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                         <h4 className="modal-title">دفع راتب</h4>
-                        <button type="button" className="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
                       </div>
-                      <div className="modal-body p-4 text-right">
+                      <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
                         <p className="text-center" style={{ fontSize: '20px', marginBottom: '1' }}>هل أنت متأكد من دفع {amount} مرتب {employeeName} ؟</p>
                         <p className="text-center text-warning" style={{ fontSize: '16px', marginBottom: '0' }}>لا يمكن الرجوع في هذا الإجراء.</p>
                       </div>

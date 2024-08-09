@@ -36,9 +36,9 @@ const InvoiceComponent=({  ModalId, orderData, showModal, setShowModal })=>{
       <div className="modal-dialog modal-lg">
         <div className="modal-content shadow-lg border-0 rounded ">
           <form>
-            <div className="modal-header text-light bg-primary">
+            <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
               <h4 className="modal-title"></h4>
-              <button type="button" className="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+              <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
             </div>
             <div ref={printContainerInvoice} className="p-1 mb-7 overflow-auto printpage" style={{ width: '100%', textAlign: 'center' }}>
               {/* Invoice Header */}

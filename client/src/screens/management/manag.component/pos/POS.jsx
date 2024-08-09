@@ -381,9 +381,9 @@ const POS = () => {
           <div className="modal-content shadow-lg border-0 rounded ">
             {/* <form onSubmit={handleGetOrderDetailsBySerial}> */}
             <form onSubmit={(e) => { e.preventDefault(); getOrderDetailsBySerial(e, serial) }}>
-              <div className="modal-header text-light bg-primary">
+              <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                 <h4 className="modal-title">رقم الفاتوره</h4>
-                <button type="button" className="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
               </div>
               <div className="modal-body d-flex justify-content-center align-items-center ">
                 <div className="w-100">
@@ -407,9 +407,9 @@ const POS = () => {
       <div id="paymentModal" className="modal fade">
         <div className="modal-dialog modal-lg">
           <div className="modal-content shadow-lg border-0 rounded ">
-            <div className="modal-header text-light bg-primary">
+            <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
               <h4 className="modal-title">دفع ثمن اخر اوردر</h4>
-              <button type="button" className="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+              <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
             </div>
             <form className='p-1' onSubmit={(e) => { changePaymentorderstauts(e) }}>
               <div className="form-group w-100 d-flex align-items-center justify-content-between">
@@ -467,9 +467,9 @@ const POS = () => {
         <div className="modal-dialog modal-lg">
           <div className="modal-content shadow-lg border-0 rounded ">
             <form onSubmit={(e) => { splitInvoice(e) }}>
-              <div className="modal-header text-light bg-primary">
+              <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                 <h4 className="modal-title">اختر الطاوله</h4>
-                <button type="button" className="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
               </div>
               <div className="modal-body d-flex justify-content-center align-items-center ">
                 <div className="w-100">
@@ -608,7 +608,7 @@ const POS = () => {
                   <div className="modal-body d-flex justify-content-center align-items-center ">
                     <div className="form-group d-flex flex-nowrap align-items-center justify-content-between col-12 ">
                       <label htmlFor='table' className='col-4 col-form-label text-dark'>رقم الطاولة:</label>
-                      <select id='table' className="form-control border-primary m-0 p-2 h-100" required onChange={(e) => { settableID(e.target.value) }}>
+                      <select id='table' className="form-control border-primary m-0 p-2 h-auto" required onChange={(e) => { settableID(e.target.value) }}>
                         <option>اختر رقم الطاولة</option>
                         {allTable.map((table, i) => (
                           <option value={table._id} key={i}>{table.tableNumber}</option>
@@ -650,7 +650,7 @@ const POS = () => {
                       <>
                         <div className="form-group w-100 h-auto px-3 d-flex align-items-center justify-content-start col-12 col-md-6">
                           <label className="form-label text-wrap text-right fw-bolder p-0 m-0">التوثيق</label>
-                          <select name='isVarified' required className="form-control border-primary m-0 p-2 h-100"   value={isVarified} onChange={(e) => setisVarified(e.target.value)}>
+                          <select name='isVarified' required className="form-control border-primary m-0 p-2 h-auto"   value={isVarified} onChange={(e) => setisVarified(e.target.value)}>
                             <option value="">{isVarified ? 'موثق' : "غير موثق"}</option>
                             <option value={true}>موثق</option>
                             <option value={false}>غير موثق</option>
@@ -659,7 +659,7 @@ const POS = () => {
 
                         <div className="form-group w-100 h-auto px-3 d-flex align-items-center justify-content-start col-12 col-md-6">
                           <label className="form-label text-wrap text-right fw-bolder p-0 m-0">رفض الاوردرات</label>
-                          <select name='refusesOrders' required className="form-control border-primary m-0 p-2 h-100"   value={refusesOrders} onChange={(e) => setrefusesOrders(e.target.value)}>
+                          <select name='refusesOrders' required className="form-control border-primary m-0 p-2 h-auto"   value={refusesOrders} onChange={(e) => setrefusesOrders(e.target.value)}>
                             <option value="">{refusesOrders ? 'رفض اوردر' : "لم يرفض الاوردر"}</option>
                             <option value={true}>رفض اوردر</option>
                             <option value={false}>لم يرفض الاوردر</option>
@@ -669,7 +669,7 @@ const POS = () => {
                       : ''}
                     <div className="form-group w-100 h-auto px-3 d-flex align-items-center justify-content-start col-12 col-md-6">
                       <label className="form-label text-wrap text-right fw-bolder p-0 m-0">ملاحظات</label>
-                      <textarea className="form-control border-primary m-0 p-2 h-100" name='notes' value={clientNotes} onChange={(e) => setclientNotes(e.target.value)} />
+                      <textarea className="form-control border-primary m-0 p-2 h-auto" name='notes' value={clientNotes} onChange={(e) => setclientNotes(e.target.value)} />
                       <div className="invalid-feedback">الرجاء إدخال ملاحظات صالحة.</div>
                     </div>
 

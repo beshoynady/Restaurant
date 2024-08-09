@@ -73,7 +73,7 @@ const TablesPage = () => {
   return (
     <div className="container-xl" style={{height: "calc(100% - 60px)"}}>
       <h1>صفحة الطاولات</h1>
-      <div className="d-flex flex-wrap align-items-center justify-content-between">
+      <div className="w-100 d-flex flex-wrap align-items-center justify-content-between">
         {listoftable.map(table => (
           <div key={table.id} className="col-lg-2 col-md-4 col-sm-6 mb-4" style={{ border: '2px solid var(--light)' }}>
             <div className="text-center">

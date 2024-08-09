@@ -629,7 +629,7 @@ const ManagerDash = () => {
   return (
     <section className='w-100 mw-100 p-1 m-0' style={{ scrollbarWidth: 'none' }}>
       <div className="w-100 p-0 m-0">
-        <div className="d-flex flex-wrap align-items-center justify-content-between">
+        <div className="w-100 d-flex flex-wrap align-items-center justify-content-between">
           <div className="w-100">
             <div className="d-flex justify-content-between align-items-center py-1 px-2 bg-primary text-light rounded" style={{ minHeight: '50px' }}>
               <h1 className="h5 mb-0">الصفحة الرئيسية</h1>
@@ -738,7 +738,7 @@ const ManagerDash = () => {
                   </div>
                   <div className="col-4">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">رقم الفاتورة</label>
-                    <input type="text" className="form-control border-primary m-0 p-2 h-100" onChange={(e) => searchBySerial(e.target.value)} />
+                    <input type="text" className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => searchBySerial(e.target.value)} />
                   </div>
                   <div className="col-4">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">نوع الأوردر</label>
@@ -827,7 +827,7 @@ const ManagerDash = () => {
                               ) : "ملغاه"}
                             </td>
                             <td>
-                              <select className="form-control border-primary m-0 p-2 h-100"  name="status" 
+                              <select className="form-control border-primary m-0 p-2 h-auto"  name="status" 
                                 onChange={(e) => { changeorderstauts(e, recent._id, employeeLoginInfo.id) }}>
                                 <option value={recent.status}>{statusAR[status.findIndex(state => state === recent.status)]}</option>
                                 {status.map((state, i) => (
@@ -960,9 +960,9 @@ const ManagerDash = () => {
       <div id="paymentModal" className="modal fade">
         <div className="modal-dialog modal-lg">
           <div className="modal-content shadow-lg border-0 rounded ">
-            <div className="modal-header text-light bg-primary">
+            <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
               <h4 className="modal-title">تاكيد دفع الفاتورة</h4>
-              <button type="button" className="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+              <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
             </div>
             <form className='p-1' onSubmit={(e) => { changePaymentorderstauts(e) }}>
               <div className="form-group w-100 d-flex align-items-center justify-content-between">
@@ -1020,9 +1020,9 @@ const ManagerDash = () => {
         <div className="modal-dialog modal-lg">
           <div className="modal-content shadow-lg border-0 rounded ">
             <form>
-              <div className="modal-header text-light bg-primary">
+              <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                 <h4 className="modal-title"></h4>
-                <button type="button" className="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
               </div>
               <div ref={printContainerInvoiceSplit} className="w-100 p-1 mb-7 overflow-auto printpage" style={{ textAlign: 'center' }}>
                 {/* Invoice Header */}
@@ -1163,9 +1163,9 @@ const ManagerDash = () => {
         <div className="modal-dialog modal-lg">
           <div className="modal-content shadow-lg border-0 rounded ">
             <form>
-              <div className="modal-header text-light bg-primary">
+              <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                 {/* <h4 className="modal-title"></h4> */}
-                <button type="button" className="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <button type="button" className="h-100 btn btn-primary" value="طباعه للشيف" onClick={(e) => handlePrintKitchen(e)}>طباعه للشيف</button>
               </div>
               <div ref={printContainerKitchen} className="w-100 p-1 mb-7 overflow-auto printpage" style={{ textAlign: 'center' }}>

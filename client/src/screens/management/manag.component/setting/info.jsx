@@ -671,7 +671,7 @@ const Info = () => {
 
     <div className="container w-100 h-auto" dir='rtl'>
       <div className="content-wrapper w-100">
-        <div className="d-flex flex-wrap align-items-center justify-content-between"
+        <div className="w-100 d-flex flex-wrap align-items-center justify-content-between"
           style={{ color: 'darkblue', fontWeight: '900', textAlign: 'center', overflowX: 'hidden' }}>
           <div className="col-12 grid-margin">
             <div className="card">
@@ -813,7 +813,7 @@ const Info = () => {
                   <div className="form-group h-auto px-3 d-flex flex-nowrap align-items-center justify-content-start col-12 col-md-6 ">
                     <label className="form-label col-3 p-0 m-0">اللوجو</label>
                     <div className="d-flex flex-wrap align-items-center col-9">
-                      <input type="file" className="form-control border-primary m-0 p-2 h-100" onChange={(e) => handleFileUpload(e)} />
+                      <input type="file" className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => handleFileUpload(e)} />
                       <div className="d-flex align-items-center justify-content-center w-100 mt-2" style={{ height: '120px', backgroundColor: 'gray' }}>
                         <img src={`${apiUrl}/images/${image}`} alt="image" className="img-fluid" style={{ width: '100%', height: '100%' }} />
                       </div>
@@ -870,14 +870,14 @@ const Info = () => {
 
 
           <div className="container mt-5">
-            <div className="d-flex flex-wrap align-items-center justify-content-between">
+            <div className="w-100 d-flex flex-wrap align-items-center justify-content-between">
               <div className="col-md-6 mb-4">
                 <div className="card">
                   <div className="card-body">
                     <h4 className="card-title">وسائل الدفع المقبوله</h4>
                     <p className="card-description">اختر وسائل الدفع المقبوله لدفع فواتير المطعم</p>
                     <form className="forms-sample p-2" onSubmit={handleAcceptedPayments}>
-                      <div className="d-flex flex-wrap align-items-center justify-content-between">
+                      <div className="w-100 d-flex flex-wrap align-items-center justify-content-between">
                         <div className="col-lg-12">
                           <div className="form-group d-flex flex-wrap">
                             {listAcceptedPayments.map((AcceptedPayment, i) => (
@@ -910,7 +910,7 @@ const Info = () => {
                     <h4 className="card-title">خدمات اضافيه</h4>
                     <p className="card-description">اختر الخدمات المتاحة التي يقدمها المطعم</p>
                     <form className="forms-sample p-2" onSubmit={handleFeatures}>
-                      <div className="d-flex flex-wrap align-items-center justify-content-between">
+                      <div className="w-100 d-flex flex-wrap align-items-center justify-content-between">
                         <div className="col-lg-12">
                           <div className="form-group d-flex flex-wrap">
                             {listFeatures.map((feature, i) => (
@@ -951,35 +951,35 @@ const Info = () => {
                     <form className="forms-sample p-2" onSubmit={(e) => handleContactSocialmedia(e)}>
                       <div className="form-group  h-auto px-3 d-flex align-items-center justify-content-start col-12 " style={{ width: '100%' }}>
                         <label className='col-4 text-dark fs-5' htmlFor="phone">رقم الهاتف:</label>
-                        <input type="text" className="form-control border-primary m-0 p-2 h-100" id="phone" placeholder="ادخل رقم الهاتف" required defaultValue={phone} onChange={(e) => setPhone([e.target.value])} />
+                        <input type="text" className="form-control border-primary m-0 p-2 h-auto" id="phone" placeholder="ادخل رقم الهاتف" required defaultValue={phone} onChange={(e) => setPhone([e.target.value])} />
                       </div>
                       <div className="form-group  h-auto px-3 d-flex align-items-center justify-content-start col-12 " style={{ width: '100%' }}>
                         <label className='col-4 text-dark fs-5' htmlFor="whatsapp">واتساب:</label>
-                        <input type="text" className="form-control border-primary m-0 p-2 h-100" id="whatsapp" placeholder="ادخل رقم واتساب" required defaultValue={whatsapp} onChange={(e) => setWhatsapp(e.target.value)} />
+                        <input type="text" className="form-control border-primary m-0 p-2 h-auto" id="whatsapp" placeholder="ادخل رقم واتساب" required defaultValue={whatsapp} onChange={(e) => setWhatsapp(e.target.value)} />
                       </div>
                       <div className="form-group  h-auto px-3 d-flex align-items-center justify-content-start col-12 " style={{ width: '100%' }}>
                         <label className='col-4 text-dark fs-5' htmlFor="email">البريد الإلكتروني:</label>
-                        <input type="email" className="form-control border-primary m-0 p-2 h-100" id="email" placeholder="ادخل البريد الإلكتروني" defaultValue={email} onChange={(e) => setEmail(e.target.value)} />
+                        <input type="email" className="form-control border-primary m-0 p-2 h-auto" id="email" placeholder="ادخل البريد الإلكتروني" defaultValue={email} onChange={(e) => setEmail(e.target.value)} />
                       </div>
                       <div className="form-group  h-auto px-3 d-flex align-items-center justify-content-start col-12 " style={{ width: '100%' }}>
                         <label className='col-4 text-dark fs-5' htmlFor="facebook">فيسبوك:</label>
-                        <input type="text" className="form-control border-primary m-0 p-2 h-100" id="facebook" placeholder="ادخل رابط فيسبوك" defaultValue={facebook} required onChange={(e) => setFacebook(e.target.value)} />
+                        <input type="text" className="form-control border-primary m-0 p-2 h-auto" id="facebook" placeholder="ادخل رابط فيسبوك" defaultValue={facebook} required onChange={(e) => setFacebook(e.target.value)} />
                       </div>
                       <div className="form-group  h-auto px-3 d-flex align-items-center justify-content-start col-12 " >
                         <label className='col-4 text-dark fs-5' htmlFor="twitter">تويتر:</label>
-                        <input type="text" className="form-control border-primary m-0 p-2 h-100" id="twitter" placeholder="ادخل رابط تويتر" defaultValue={twitter} onChange={(e) => setTwitter(e.target.value)} />
+                        <input type="text" className="form-control border-primary m-0 p-2 h-auto" id="twitter" placeholder="ادخل رابط تويتر" defaultValue={twitter} onChange={(e) => setTwitter(e.target.value)} />
                       </div>
                       <div className="form-group  h-auto px-3 d-flex align-items-center justify-content-start col-12 " >
                         <label className='col-4 text-dark fs-5' htmlFor="instagram">انستجرام:</label>
-                        <input type="text" className="form-control border-primary m-0 p-2 h-100" id="instagram" placeholder="ادخل رابط انستجرام" defaultValue={instagram} onChange={(e) => setInstagram(e.target.value)} />
+                        <input type="text" className="form-control border-primary m-0 p-2 h-auto" id="instagram" placeholder="ادخل رابط انستجرام" defaultValue={instagram} onChange={(e) => setInstagram(e.target.value)} />
                       </div>
                       <div className="form-group  h-auto px-3 d-flex align-items-center justify-content-start col-12 " >
                         <label className='col-4 text-dark fs-5' htmlFor="linkedin">لينكدإن:</label>
-                        <input type="text" className="form-control border-primary m-0 p-2 h-100" id="linkedin" placeholder="ادخل رابط لينكدإن" defaultValue={linkedin} onChange={(e) => setLinkedin(e.target.value)} />
+                        <input type="text" className="form-control border-primary m-0 p-2 h-auto" id="linkedin" placeholder="ادخل رابط لينكدإن" defaultValue={linkedin} onChange={(e) => setLinkedin(e.target.value)} />
                       </div>
                       <div className="form-group  h-auto px-3 d-flex align-items-center justify-content-start col-12 " >
                         <label className='col-4 text-dark fs-5' htmlFor="youtube">يوتيوب:</label>
-                        <input type="text" className="form-control border-primary m-0 p-2 h-100" id="youtube" placeholder="ادخل رابط يوتيوب" defaultValue={youtube} onChange={(e) => setYoutube(e.target.value)} />
+                        <input type="text" className="form-control border-primary m-0 p-2 h-auto" id="youtube" placeholder="ادخل رابط يوتيوب" defaultValue={youtube} onChange={(e) => setYoutube(e.target.value)} />
                       </div>
                       <div className="col-12 d-flex flex-nowrap align-items-center justify-consten-between " style={{ height: '50px' }}>
                         <button type="submit" className="btn btn-success col-6 h-100 p-0">تأكيد</button>
@@ -1047,11 +1047,11 @@ const Info = () => {
                           {daysOfWeek.map((day, index) => (
                             <tr key={index}>
                               <td className="col- text-center">{day}</td>
-                              <td><input type="time" className="form-control border-primary m-0 p-2 h-100" name={`openingTime${day}`} disabled={opening_hours && opening_hours[index]?.closed}
+                              <td><input type="time" className="form-control border-primary m-0 p-2 h-auto" name={`openingTime${day}`} disabled={opening_hours && opening_hours[index]?.closed}
                                 value={opening_hours && opening_hours[index]?.from}
                                 onChange={(e) => handleSetFrom(index, e.target.value)} /></td>
 
-                              <td><input type="time" className="form-control border-primary m-0 p-2 h-100" name={`closingTime${day}`} disabled={opening_hours && opening_hours[index]?.closed}
+                              <td><input type="time" className="form-control border-primary m-0 p-2 h-auto" name={`closingTime${day}`} disabled={opening_hours && opening_hours[index]?.closed}
                                 value={opening_hours && opening_hours[index]?.to}
                                 onChange={(e) => handleSetTo(index, e.target.value)} /></td>
 

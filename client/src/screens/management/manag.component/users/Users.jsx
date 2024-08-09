@@ -196,7 +196,7 @@ const Users = () => {
       <div className="table-responsive">
         <div className="table-wrapper">
           <div className="table-title">
-            <div className="d-flex flex-wrap align-items-center justify-content-between">
+            <div className="w-100 d-flex flex-wrap align-items-center justify-content-between">
               <div className="col-sm-6">
                 <h2>ادارة <b>المستخدمين</b></h2>
               </div>
@@ -222,13 +222,13 @@ const Users = () => {
               </div>
               <div class="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الموبايل</label>
-                <input type="text" class="form-control border-primary m-0 p-2 h-100" onChange={(e) => getUserByPhone(e.target.value)} />
+                <input type="text" class="form-control border-primary m-0 p-2 h-auto" onChange={(e) => getUserByPhone(e.target.value)} />
 
               </div>
               <div className='col-12 d-flex align-items-center justify-content-between'>
                 <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">فلتر حسب الوقت</label>
-                  <select className="form-control border-primary m-0 p-2 h-100"  onChange={(e) => setAllUsers(filterByTime(e.target.value, AllUsers))}>
+                  <select className="form-control border-primary m-0 p-2 h-auto"  onChange={(e) => setAllUsers(filterByTime(e.target.value, AllUsers))}>
                     <option value="">اختر</option>
                     <option value="today">اليوم</option>
                     <option value="week">هذا الأسبوع</option>
@@ -242,12 +242,12 @@ const Users = () => {
 
                   <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">من</label>
-                    <input type="date" className="form-control border-primary m-0 p-2 h-100" onChange={(e) => setStartDate(e.target.value)} placeholder="اختر التاريخ" />
+                    <input type="date" className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => setStartDate(e.target.value)} placeholder="اختر التاريخ" />
                   </div>
 
                   <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">إلى</label>
-                    <input type="date" className="form-control border-primary m-0 p-2 h-100" onChange={(e) => setEndDate(e.target.value)} placeholder="اختر التاريخ" />
+                    <input type="date" className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => setEndDate(e.target.value)} placeholder="اختر التاريخ" />
                   </div>
 
                   <div className="d-flex flex-nowrap justify-content-between col-3 p-0 m-0">
@@ -292,14 +292,14 @@ const Users = () => {
                         <td>{user.address}</td>
                         <td>{user.email}</td>
                         <td>
-                          <select className="form-control border-primary m-0 p-2 h-100"  name="status" id="status" form="carform" onChange={(e) => { changeorderActive(e, user._id) }}>
+                          <select className="form-control border-primary m-0 p-2 h-auto"  name="status" id="status" form="carform" onChange={(e) => { changeorderActive(e, user._id) }}>
                             <option>{user.isActive ? 'نشط' : "غير نشط"}</option>
                             <option value={true} key={i}>نشط</option>
                             <option value={false} key={i}>غير نشط</option>
                           </select>
                         </td>
                         <td>
-                          <select className="form-control border-primary m-0 p-2 h-100"  name="status" id="status" form="carform" onChange={(e) => { changeorderVarified(e, user._id) }}>
+                          <select className="form-control border-primary m-0 p-2 h-auto"  name="status" id="status" form="carform" onChange={(e) => { changeorderVarified(e, user._id) }}>
                             <option>{user.isVarified ? 'موثق' : "غير موثق"}</option>
                             <option value={true} key={i}>موثق</option>
                             <option value={false} key={i}>غير موثق</option>
@@ -341,45 +341,45 @@ const Users = () => {
                 <div className="modal-dialog modal-lg">
                   <div className="modal-content shadow-lg border-0 rounded ">
                     <form onSubmit={createuserloyee}>
-                      <div className="modal-header text-light bg-primary">
+                      <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                         <h4 className="modal-title">اضافه موظف</h4>
-                        <button type="button" className="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
                       </div>
-                      <div className="modal-body p-4 text-right">
+                      <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
                         <div className="form-group col-12 col-md-6">
                           <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الاسم</label>
-                          <input type="text" className="form-control border-primary m-0 p-2 h-100" required pattern="[A-Za-z\u0600-\u06FF\s]+" onChange={(e) => setusername(e.target.value)} />
+                          <input type="text" className="form-control border-primary m-0 p-2 h-auto" required pattern="[A-Za-z\u0600-\u06FF\s]+" onChange={(e) => setusername(e.target.value)} />
                           <div className="invalid-feedback">Please enter a valid name.</div>
                         </div>
                         <div className="form-group col-12 col-md-6">
                           <label className="form-label text-wrap text-right fw-bolder p-0 m-0">اسم المستخدم</label>
-                          <input type="text" className="form-control border-primary m-0 p-2 h-100" required onChange={(e) => setusername(e.target.value)} />
+                          <input type="text" className="form-control border-primary m-0 p-2 h-auto" required onChange={(e) => setusername(e.target.value)} />
                         </div>
                         <div className="form-group col-12 col-md-6">
                           <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الموبايل</label>
-                          <input type="text" className="form-control border-primary m-0 p-2 h-100" required pattern="[0-9]{11}" onChange={(e) => setphone(e.target.value)} />
+                          <input type="text" className="form-control border-primary m-0 p-2 h-auto" required pattern="[0-9]{11}" onChange={(e) => setphone(e.target.value)} />
                           <div className="invalid-feedback">Please enter a valid phone number (11 digits).</div>
                         </div>
                         <div className="form-group col-12 col-md-6">
                           <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الباسورد</label>
-                          <input type="text" className="form-control border-primary m-0 p-2 h-100" required onChange={(e) => setpassword(e.target.value)} />
+                          <input type="text" className="form-control border-primary m-0 p-2 h-auto" required onChange={(e) => setpassword(e.target.value)} />
                         </div>
                         <div className="form-group col-12 col-md-6">
                           <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الرقم القومي</label>
-                          <input type="text" className="form-control border-primary m-0 p-2 h-100" required onChange={(e) => setnumberID(e.target.value)} />
+                          <input type="text" className="form-control border-primary m-0 p-2 h-auto" required onChange={(e) => setnumberID(e.target.value)} />
                         </div>
                         <div className="form-group col-12 col-md-6">
                           <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الايميل</label>
-                          <input type="email" className="form-control border-primary m-0 p-2 h-100" required onChange={(e) => setemail(e.target.value)} />
+                          <input type="email" className="form-control border-primary m-0 p-2 h-auto" required onChange={(e) => setemail(e.target.value)} />
                           <div className="invalid-feedback">Please enter a valid email address.</div>
                         </div>
                         <div className="form-group col-12 col-md-6">
                           <label className="form-label text-wrap text-right fw-bolder p-0 m-0">العنوان</label>
-                          <textarea className="form-control border-primary m-0 p-2 h-100" required onChange={(e) => setaddress(e.target.value)}></textarea>
+                          <textarea className="form-control border-primary m-0 p-2 h-auto" required onChange={(e) => setaddress(e.target.value)}></textarea>
                         </div>
                         <div className="form-group col-12 col-md-6">
                           <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الحالة</label>
-                          <select className="form-control border-primary m-0 p-2 h-100" form="carform" required onChange={(e) => setisActive(e.target.value)}>
+                          <select className="form-control border-primary m-0 p-2 h-auto" form="carform" required onChange={(e) => setisActive(e.target.value)}>
                             <option value="">اختر</option>
                             <option value={true}>متاح</option>
                             <option value={false}>ليس متاح</option>
@@ -387,7 +387,7 @@ const Users = () => {
                         </div>
                         <div className="form-group col-12 col-md-6">
                           <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الوظيفه</label>
-                          <select className="form-control border-primary m-0 p-2 h-100"  name={role} form="carform" required onChange={(e) => setrole(e.target.value)}>
+                          <select className="form-control border-primary m-0 p-2 h-auto"  name={role} form="carform" required onChange={(e) => setrole(e.target.value)}>
                             <option>اختار وظيفة</option>
                             <option value="manager">مدير</option>
                             <option value="cashier">كاشير</option>
@@ -398,7 +398,7 @@ const Users = () => {
                         </div>
                         <div className="form-group col-12 col-md-6">
                           <label className="form-label text-wrap text-right fw-bolder p-0 m-0">المرتب الاساسي</label>
-                          <input type="Number" min={0} className="form-control border-primary m-0 p-2 h-100" required onChange={(e) => setbasicSalary(e.target.value)} />
+                          <input type="Number" min={0} className="form-control border-primary m-0 p-2 h-auto" required onChange={(e) => setbasicSalary(e.target.value)} />
                           <div className="invalid-feedback">Please enter a valid salary.</div>
                         </div>
                       </div>
@@ -414,16 +414,16 @@ const Users = () => {
         <div className="modal-dialog modal-lg">
           <div className="modal-content shadow-lg border-0 rounded ">
             <form onSubmit={handleUpdateUser}>
-              <div className="modal-header text-light bg-primary">
+              <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                 <h4 className="modal-title">تعديل بيانات العملاء</h4>
-                <button type="button" className="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
               </div>
-              <div className="modal-body p-4 text-right">
+              <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الاسم</label>
                   <input
                     type="text"
-                    className="form-control border-primary m-0 p-2 h-100"
+                    className="form-control border-primary m-0 p-2 h-auto"
                     value={username}
                     required
                     pattern="[A-Za-z\u0600-\u06FF\s]+"
@@ -435,7 +435,7 @@ const Users = () => {
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الموبايل</label>
                   <input
                     type="text"
-                    className="form-control border-primary m-0 p-2 h-100"
+                    className="form-control border-primary m-0 p-2 h-auto"
                     value={phone}
                     required
                     pattern="[0-9]{11}"
@@ -447,7 +447,7 @@ const Users = () => {
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الباسورد</label>
                   <input
                     type="password"
-                    className="form-control border-primary m-0 p-2 h-100"
+                    className="form-control border-primary m-0 p-2 h-auto"
                     onChange={(e) => setPassword(e.target.value)}
                   />
                 </div>
@@ -455,7 +455,7 @@ const Users = () => {
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الايميل</label>
                   <input
                     type="email"
-                    className="form-control border-primary m-0 p-2 h-100"
+                    className="form-control border-primary m-0 p-2 h-auto"
                     value={email}
                     required
                     onChange={(e) => setEmail(e.target.value)}
@@ -465,7 +465,7 @@ const Users = () => {
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">العنوان</label>
                   <textarea
-                    className="form-control border-primary m-0 p-2 h-100"
+                    className="form-control border-primary m-0 p-2 h-auto"
                     value={address}
                     required
                     onChange={(e) => setAddress(e.target.value)}
@@ -474,7 +474,7 @@ const Users = () => {
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الحالة</label>
                   <select
-                    className="form-control border-primary m-0 p-2 h-100"
+                    className="form-control border-primary m-0 p-2 h-auto"
                     value={isActive}
                     required
                     onChange={(e) => setIsActive(e.target.value === 'true')}
@@ -488,7 +488,7 @@ const Users = () => {
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">المنطقة</label>
                   <select
                     name="area"
-                    className="form-control border-primary m-0 p-2 h-100"
+                    className="form-control border-primary m-0 p-2 h-auto"
                     value={deliveryArea}
                     required
                     onChange={(e) => setDeliveryArea(e.target.value)}
@@ -513,11 +513,11 @@ const Users = () => {
                 <div className="modal-dialog modal-lg">
                   <div className="modal-content shadow-lg border-0 rounded ">
                     <form onSubmit={deleteuserloyee}>
-                      <div className="modal-header text-light bg-primary">
+                      <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                         <h4 className="modal-title">حذف موظف</h4>
-                        <button type="button" className="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
                       </div>
-                      <div className="modal-body p-4 text-right">
+                      <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
                         <p>هل انت متاكد من حذف هذا السجل؟?</p>
                         <p className="text-warning"><small>لا يمكن الرجوع في هذا الاجراء.</small></p>
                       </div>

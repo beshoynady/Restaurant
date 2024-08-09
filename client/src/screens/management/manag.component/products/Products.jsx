@@ -408,8 +408,8 @@ const Products = () => {
       <div className="table-responsive mt-1">
         <div className="table-wrapper p-3 mw-100">
           <div className="table-title">
-            <div className="d-flex flex-wrap align-items-center justify-content-between">
-              <div className="col-sm-6">
+            <div className="w-100 d-flex flex-wrap align-items-center justify-content-between">
+              <div className="col-sm-6 text-right">
                 <h2>ادارة <b>المنتجات</b></h2>
               </div>
               <div className="col-6 d-flex flex-wrap justify-content-end p-0 m-0">
@@ -437,11 +437,11 @@ const Products = () => {
               </div>
               <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الاسم</label>
-                <input type="text" className="form-control border-primary m-0 p-2 h-100" onChange={(e) => searchByName(e.target.value)} />
+                <input type="text" className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => searchByName(e.target.value)} />
               </div>
               <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">التصنيف</label>
-                <select className="form-control border-primary m-0 p-2 h-100" onChange={(e) => filterProductsByCategory(e.target.value)} >
+                <select className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => filterProductsByCategory(e.target.value)} >
                   <option value={""}>الكل</option>
                   {listofcategories.map((category, i) => {
                     return <option value={category._id} key={i} >{category.name}</option>
@@ -452,7 +452,7 @@ const Products = () => {
               <div className='col-12 d-flex align-items-center justify-content-between'>
                 <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">فلتر حسب الوقت</label>
-                  <select className="form-control border-primary m-0 p-2 h-100" onChange={(e) => setallOrders(filterByTime(e.target.value, allOrders))}>
+                  <select className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => setallOrders(filterByTime(e.target.value, allOrders))}>
                     <option value="">اختر</option>
                     <option value="today">اليوم</option>
                     <option value="week">هذا الأسبوع</option>
@@ -466,12 +466,12 @@ const Products = () => {
 
                   <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">من</label>
-                    <input type="date" className="form-control border-primary m-0 p-2 h-100" onChange={(e) => setStartDate(e.target.value)} placeholder="اختر التاريخ" />
+                    <input type="date" className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => setStartDate(e.target.value)} placeholder="اختر التاريخ" />
                   </div>
 
                   <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">إلى</label>
-                    <input type="date" className="form-control border-primary m-0 p-2 h-100" onChange={(e) => setEndDate(e.target.value)} placeholder="اختر التاريخ" />
+                    <input type="date" className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => setEndDate(e.target.value)} placeholder="اختر التاريخ" />
                   </div>
 
                   <div className="d-flex flex-nowrap justify-content-between col-3 p-0 m-0">
@@ -603,19 +603,19 @@ const Products = () => {
         <div className="modal-dialog modal-lg">
           <div className="modal-content shadow-lg border-0 rounded ">
             <form onSubmit={createProduct}>
-              <div className="modal-header text-light bg-primary">
+              <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                 <h4 className="modal-title">اضافه منتج</h4>
-                <button type="button" className="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
               </div>
-              <div className="modal-body p-4 text-right">
+              <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الاسم</label>
-                  <input type="text" className="form-control border-primary m-0 p-2 h-100" required onChange={(e) => setproductname(e.target.value)} />
+                  <input type="text" className="form-control border-primary m-0 p-2 h-auto" required onChange={(e) => setproductname(e.target.value)} />
                 </div>
 
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">التصنيف</label>
-                  <select className="form-control border-primary m-0 p-2 h-100" name="category" id="category" form="carform" onChange={(e) => setproductcategoryid(e.target.value)}>
+                  <select className="form-control border-primary m-0 p-2 h-auto" name="category" id="category" form="carform" onChange={(e) => setproductcategoryid(e.target.value)}>
                     <option defaultValue={productcategoryid}>اختر تصنيف</option>
                     {listofcategories.map((category, i) => {
                       return <option value={category._id} key={i} >{category.name}</option>
@@ -726,7 +726,7 @@ const Products = () => {
                   <div className="form-group " style={{ fontSize: '16px', fontWeight: '900' }}>
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">اختر الاضافات</label>
                     {listofProductsAddon.length > 0 ?
-                      <div className="d-flex flex-wrap align-items-center justify-content-between">
+                      <div className="w-100 d-flex flex-wrap align-items-center justify-content-between">
                         <div className="col-lg-12">
                           <div className="form-group d-flex flex-wrap">
                             {listofProductsAddon && listofProductsAddon.map((ProductsAddon, i) => (
@@ -741,13 +741,13 @@ const Products = () => {
                           </div>
                         </div>
                       </div>
-                      : <input type="text" className="form-control border-primary m-0 p-2 h-100" value='لا يوجد اي اضافات' />
+                      : <input type="text" className="form-control border-primary m-0 p-2 h-auto" value='لا يوجد اي اضافات' />
                     }
                   </div>
                 }
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">متاح</label>
-                  <select className="form-control border-primary m-0 p-2 h-100" name="category" id="category" form="carform" onChange={(e) => setavailable(e.target.value)}>
+                  <select className="form-control border-primary m-0 p-2 h-auto" name="category" id="category" form="carform" onChange={(e) => setavailable(e.target.value)}>
 
                     <option defaultValue={available} >اختر الحاله</option>
                     <option value={true} >متاح</option>
@@ -756,13 +756,13 @@ const Products = () => {
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الصورة</label>
-                  <input type="file" className="form-control border-primary m-0 p-2 h-100" onChange={(e) => handleFileUpload(e)} />
+                  <input type="file" className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => handleFileUpload(e)} />
                 </div>
               </div>
 
               <div className="form-group col-12">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الوصف</label>
-                <textarea className="form-control border-primary m-0 p-2 h-100" onChange={(e) => setproductdescription(e.target.value)}></textarea>
+                <textarea className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => setproductdescription(e.target.value)}></textarea>
               </div>
 
               <div className="modal-footer d-flex flex-nowrap align-items-center justify-content-between m-0 p-1">
@@ -780,11 +780,11 @@ const Products = () => {
         <div className="modal-dialog modal-lg">
           <div className="modal-content shadow-lg border-0 rounded ">
             <form onSubmit={editProduct}>
-              <div className="modal-header text-light bg-primary">
+              <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                 <h4 className="modal-title">تعديل منتج</h4>
-                <button type="button" className="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
               </div>
-              <div className="modal-body p-4 text-right">
+              <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
                 {hasSizes ? (
                   <div className="container p-0">
                     {sizes.map((size, index) => (
@@ -904,11 +904,11 @@ const Products = () => {
         <div className="modal-dialog modal-lg">
           <div className="modal-content shadow-lg border-0 rounded ">
             <form onSubmit={deleteProduct}>
-              <div className="modal-header text-light bg-primary">
+              <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                 <h4 className="modal-title">حذف منتج</h4>
-                <button type="button" className="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
               </div>
-              <div className="modal-body p-4 text-right">
+              <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
                 <p>هل انت متاكد من حذف هذا السجل؟</p>
                 <p className="text-warning"><small>لا يمكن الرجوع في هذا الاجراء.</small></p>
               </div>

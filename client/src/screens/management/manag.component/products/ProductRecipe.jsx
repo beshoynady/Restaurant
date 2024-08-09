@@ -438,7 +438,7 @@ const ProductRecipe = () => {
       <div className="table-responsive mt-1">
         <div className="table-wrapper p-3 mw-100">
           <div className="table-title">
-            <div className="d-flex flex-wrap align-items-center justify-content-between">
+            <div className="w-100 d-flex flex-wrap align-items-center justify-content-between">
               <div className="col-sm-6">
                 <h2>ادارة <b>تكاليف الانتاج</b></h2>
               </div>
@@ -463,7 +463,7 @@ const ProductRecipe = () => {
               </div>
                 <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">التصنيف</label>
-                  <select className="form-control border-primary m-0 p-2 h-100" onChange={(e) => getproductByCategory(e.target.value)} >
+                  <select className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => getproductByCategory(e.target.value)} >
                     <option value={""}>الكل</option>
                     {listofcategories.map((category, i) => {
                       return <option value={category._id} key={i} >{category.name}</option>
@@ -473,7 +473,7 @@ const ProductRecipe = () => {
                 </div>
                 <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">المنتج</label>
-                  <select className="form-control border-primary m-0 p-2 h-100" onChange={(e) => handleSelectedProduct(e.target.value)} >
+                  <select className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => handleSelectedProduct(e.target.value)} >
                     <option value={""}>الكل</option>
                     {productFilterd.map((product, i) => {
                       return <option value={product._id} key={i} >{product.name}</option>
@@ -484,7 +484,7 @@ const ProductRecipe = () => {
                 {sizes.length > 0 ?
                   <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الحجم</label>
-                    <select className="form-control border-primary m-0 p-2 h-100"  onChange={(e) => handleSelectedProductSize(e.target.value)} >
+                    <select className="form-control border-primary m-0 p-2 h-auto"  onChange={(e) => handleSelectedProductSize(e.target.value)} >
                       <option value="">اختر حجم</option>
                       {sizes.map((size, i) => {
                         return <option value={size._id} key={i} >{size.sizeName}</option>
@@ -494,11 +494,11 @@ const ProductRecipe = () => {
                   : ""}
                 <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">اجمالي التكاليف</label>
-                  <input type="Number" className="form-control border-primary m-0 p-2 h-100" readOnly defaultValue={producttotalcost} />
+                  <input type="Number" className="form-control border-primary m-0 p-2 h-auto" readOnly defaultValue={producttotalcost} />
                 </div>
                 {/* <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">Status</label>
-                  <select className="form-control border-primary m-0 p-2 h-100">
+                  <select className="form-control border-primary m-0 p-2 h-auto">
                     <option>Any</option>
                     <option>Delivered</option>
                     <option>Shipped</option>
@@ -583,14 +583,14 @@ const ProductRecipe = () => {
         <div className="modal-dialog modal-lg">
           <div className="modal-content shadow-lg border-0 rounded ">
             <form onSubmit={createRecipe}>
-              <div className="modal-header text-light bg-primary">
+              <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                 <h4 className="modal-title">اضافه مكون</h4>
-                <button type="button" className="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
               </div>
-              <div className="modal-body p-4 text-right">
+              <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الاسم</label>
-                  <select className="form-control border-primary m-0 p-2 h-100" form="carform" onChange={(e) => { setitemId(e.target.value);
+                  <select className="form-control border-primary m-0 p-2 h-auto" form="carform" onChange={(e) => { setitemId(e.target.value);
                      setname(AllStockItems.find(s => s._id === e.target.value).itemName); 
                      setunit(AllStockItems.find(s => s._id === e.target.value).smallUnit); 
                      setcostofitem(AllStockItems.find(s => s._id === e.target.value).costOfPart) }}>
@@ -605,7 +605,7 @@ const ProductRecipe = () => {
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">التكلفة</label>
-                  <input type='Number' className="form-control border-primary m-0 p-2 h-100" required defaultValue={costofitem} readOnly />
+                  <input type='Number' className="form-control border-primary m-0 p-2 h-auto" required defaultValue={costofitem} readOnly />
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الكمية</label>
@@ -614,7 +614,7 @@ const ProductRecipe = () => {
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">التكلفة الاجمالية</label>
-                  <input type='Number' className="form-control border-primary m-0 p-2 h-100" defaultValue={totalcostofitem} required readOnly />
+                  <input type='Number' className="form-control border-primary m-0 p-2 h-auto" defaultValue={totalcostofitem} required readOnly />
                 </div>
                 {/* <div className="form-group col-12 col-md-6">
                           <button onClick={add}>اضافه جديدة</button>
@@ -634,14 +634,14 @@ const ProductRecipe = () => {
         <div className="modal-dialog modal-lg">
           <div className="modal-content shadow-lg border-0 rounded ">
             <form onSubmit={editRecipe}>
-              <div className="modal-header text-light bg-primary">
+              <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                 <h4 className="modal-title">تعديل مكون</h4>
-                <button type="button" className="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
               </div>
-              <div className="modal-body p-4 text-right">
+              <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الاسم</label>
-                  <input type='text' className="form-control border-primary m-0 p-2 h-100" defaultValue={name} readOnly />
+                  <input type='text' className="form-control border-primary m-0 p-2 h-auto" defaultValue={name} readOnly />
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">التكلفة</label>
@@ -650,11 +650,11 @@ const ProductRecipe = () => {
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الكمية</label>
-                  <input type="Number" className="form-control border-primary m-0 p-2 h-100" defaultValue={amount} required onChange={(e) => { setamount(e.target.value); settotalcostofitem(e.target.value * costofitem) }} />
+                  <input type="Number" className="form-control border-primary m-0 p-2 h-auto" defaultValue={amount} required onChange={(e) => { setamount(e.target.value); settotalcostofitem(e.target.value * costofitem) }} />
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">التكلفة الاجمالية</label>
-                  <input type='Number' className="form-control border-primary m-0 p-2 h-100" defaultValue={totalcostofitem} required readOnly />
+                  <input type='Number' className="form-control border-primary m-0 p-2 h-auto" defaultValue={totalcostofitem} required readOnly />
                 </div>
               </div>
               <div className="modal-footer d-flex flex-nowrap align-items-center justify-content-between m-0 p-1">
@@ -669,11 +669,11 @@ const ProductRecipe = () => {
         <div className="modal-dialog modal-lg">
           <div className="modal-content shadow-lg border-0 rounded ">
             <form onSubmit={deleteRecipe}>
-              <div className="modal-header text-light bg-primary">
+              <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                 <h4 className="modal-title">حذف منتج</h4>
-                <button type="button" className="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
               </div>
-              <div className="modal-body p-4 text-right">
+              <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
                 <p>هل انت متاكد من حذف هذا السجل؟</p>
                 <p className="text-warning"><small>لا يمكن الرجوع في هذا الاجراء.</small></p>
               </div>
@@ -689,11 +689,11 @@ const ProductRecipe = () => {
         <div className="modal-dialog modal-lg">
           <div className="modal-content shadow-lg border-0 rounded ">
             <form onSubmit={deleteAllRecipe}>
-              <div className="modal-header text-light bg-primary">
+              <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                 <h4 className="modal-title">حذف منتج</h4>
-                <button type="button" className="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
               </div>
-              <div className="modal-body p-4 text-right">
+              <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
                 <p>هل انت متاكد من حذف هذا السجل؟</p>
                 <p className="text-warning"><small>لا يمكن الرجوع في هذا الاجراء.</small></p>
               </div>

@@ -201,7 +201,7 @@ const ExpenseItem = () => {
       <div className="table-responsive mt-1">
         <div className="table-wrapper p-3 mw-100">
           <div className="table-title">
-            <div className="d-flex flex-wrap align-items-center justify-content-between">
+            <div className="w-100 d-flex flex-wrap align-items-center justify-content-between">
               <div className="col-sm-6 text-right">
                 <h2>ادارة <b>المصروفات</b></h2>
               </div>
@@ -229,12 +229,12 @@ const ExpenseItem = () => {
 
               <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">اسم المصروف</label>
-                <input type="text" className="form-control border-primary m-0 p-2 h-100" onChange={(e) => searchByExpense(e.target.value)} />
+                <input type="text" className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => searchByExpense(e.target.value)} />
               </div>
               
               <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">نوع المصروف</label>
-                <select className="form-control border-primary m-0 p-2 h-100" onChange={(e) => filterByExpenseType(e.target.value)}>
+                <select className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => filterByExpenseType(e.target.value)}>
                   <option value="">اختر</option>
                   {expenseTypeEn && expenseTypeEn.map((TypeEn, i) => {
                     return <option value={TypeEn} key={i} >{expenseTypeAr[i]}</option>
@@ -246,7 +246,7 @@ const ExpenseItem = () => {
               <div className='col-12 d-flex align-items-center justify-content-between'>
                 <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">فلتر حسب الوقت</label>
-                  <select className="form-control border-primary m-0 p-2 h-100"  onChange={(e) => setallDailyExpenses(filterByTime(e.target.value, allDailyExpenses))}>
+                  <select className="form-control border-primary m-0 p-2 h-auto"  onChange={(e) => setallDailyExpenses(filterByTime(e.target.value, allDailyExpenses))}>
                     <option value="">اختر</option>
                     <option value="today">اليوم</option>
                     <option value="week">هذا الأسبوع</option>
@@ -260,12 +260,12 @@ const ExpenseItem = () => {
 
                   <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">من</label>
-                    <input type="date" className="form-control border-primary m-0 p-2 h-100" onChange={(e) => setStartDate(e.target.value)} placeholder="اختر التاريخ" />
+                    <input type="date" className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => setStartDate(e.target.value)} placeholder="اختر التاريخ" />
                   </div>
 
                   <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">إلى</label>
-                    <input type="date" className="form-control border-primary m-0 p-2 h-100" onChange={(e) => setEndDate(e.target.value)} placeholder="اختر التاريخ" />
+                    <input type="date" className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => setEndDate(e.target.value)} placeholder="اختر التاريخ" />
                   </div>
 
                   <div className="d-flex flex-nowrap justify-content-between col-3 p-0 m-0">
@@ -338,19 +338,19 @@ const ExpenseItem = () => {
         <div className="modal-dialog modal-lg">
           <div className="modal-content shadow-lg border-0 rounded ">
             <form onSubmit={createExpense}>
-              <div className="modal-header text-light bg-primary">
+              <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                 <h4 className="modal-title">اضافه مصروف</h4>
-                <button type="button" className="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
               </div>
-              <div className="modal-body p-4 text-right">
+              <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">اسم المصروف</label>
-                  <input type="text" className="form-control border-primary m-0 p-2 h-100" required onChange={(e) => setDescription(e.target.value)} />
+                  <input type="text" className="form-control border-primary m-0 p-2 h-auto" required onChange={(e) => setDescription(e.target.value)} />
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">نوع المصروف</label>
                   <select
-                    className="form-control border-primary m-0 p-2 h-100"
+                    className="form-control border-primary m-0 p-2 h-auto"
                     required
                     name="ExpenseType"
                     onChange={(e)=>setExpenseType(e.target.value)}
@@ -374,19 +374,19 @@ const ExpenseItem = () => {
         <div className="modal-dialog modal-lg">
           <div className="modal-content shadow-lg border-0 rounded ">
             <form onSubmit={editExpense}>
-              <div className="modal-header text-light bg-primary">
+              <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                 <h4 className="modal-title">تعديل صنف بالمخزن</h4>
-                <button type="button" className="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
               </div>
-              <div className="modal-body p-4 text-right">
+              <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">اسم المصروف</label>
-                  <input type="text" className="form-control border-primary m-0 p-2 h-100" defaultValue={description} required onChange={(e) => setDescription(e.target.value)} />
+                  <input type="text" className="form-control border-primary m-0 p-2 h-auto" defaultValue={description} required onChange={(e) => setDescription(e.target.value)} />
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">نوع المصروف</label>
                   <select
-                    className="form-control border-primary m-0 p-2 h-100"
+                    className="form-control border-primary m-0 p-2 h-auto"
                     required
                     name="ExpenseType"
                     onChange={(e)=>setExpenseType(e.target.value)}
@@ -411,11 +411,11 @@ const ExpenseItem = () => {
         <div className="modal-dialog modal-lg">
           <div className="modal-content shadow-lg border-0 rounded ">
             <form onSubmit={deleteExpense}>
-              <div className="modal-header text-light bg-primary">
+              <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                 <h4 className="modal-title">حذف منتج</h4>
-                <button type="button" className="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
               </div>
-              <div className="modal-body p-4 text-right">
+              <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
                 <p>هل انت متاكد من حذف هذا السجل؟</p>
                 <p className="text-warning"><small>لا يمكن الرجوع في هذا الاجراء.</small></p>
               </div>

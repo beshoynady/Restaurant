@@ -252,7 +252,7 @@ const Tables = () => {
       <div className="table-responsive">
         <div className="table-wrapper">
           <div className="table-title">
-            <div className="d-flex flex-wrap align-items-center justify-content-between">
+            <div className="w-100 d-flex flex-wrap align-items-center justify-content-between">
               <div className="col-12 col-md-4">
                 <h2>ادارة <b>الطاولات</b></h2>
               </div>
@@ -287,12 +287,12 @@ const Tables = () => {
               </div>
               <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">رقم الطاولة</label>
-                <input type="text" className="form-control border-primary m-0 p-2 h-100" onChange={(e) => searchByNum(e.target.value)} />
+                <input type="text" className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => searchByNum(e.target.value)} />
               </div>
 
               <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الحالة</label>
-                <select className="form-control border-primary m-0 p-2 h-100" name="Status" id="Status" form="carform"
+                <select className="form-control border-primary m-0 p-2 h-auto" name="Status" id="Status" form="carform"
                   onChange={(e) => filterByStatus(e.target.value)}>
                   <option value="">اختر</option>
                   <option value={true} >متاح</option>
@@ -382,26 +382,26 @@ const Tables = () => {
         <div className="modal-dialog modal-lg">
           <div className="modal-content shadow-lg border-0 rounded ">
             <form onSubmit={createTable}>
-              <div className="modal-header text-light bg-primary">
+              <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                 <h4 className="modal-title">اضافه طاولة</h4>
-                <button type="button" className="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
               </div>
-              <div className="modal-body p-4 text-right">
+              <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">رقم السكشن</label>
-                  <input type="Number" className="form-control border-primary m-0 p-2 h-100" required onChange={(e) => setsectionNumber(e.target.value)} />
+                  <input type="Number" className="form-control border-primary m-0 p-2 h-auto" required onChange={(e) => setsectionNumber(e.target.value)} />
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">رقم الطاولة</label>
-                  <input type="Number" defaultValue={listoftable.length > 0 ? listoftable[listoftable.length - 1].tableNumber : ""} className="form-control border-primary m-0 p-2 h-100" required onChange={(e) => settableNumber(e.target.value)} />
+                  <input type="Number" defaultValue={listoftable.length > 0 ? listoftable[listoftable.length - 1].tableNumber : ""} className="form-control border-primary m-0 p-2 h-auto" required onChange={(e) => settableNumber(e.target.value)} />
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">عدد المقاعد</label>
-                  <input type="Number" className="form-control border-primary m-0 p-2 h-100" required onChange={(e) => setchairs(e.target.value)} />
+                  <input type="Number" className="form-control border-primary m-0 p-2 h-auto" required onChange={(e) => setchairs(e.target.value)} />
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الوصف</label>
-                  <textarea className="form-control border-primary m-0 p-2 h-100" required onChange={(e) => settabledesc(e.target.value)}></textarea>
+                  <textarea className="form-control border-primary m-0 p-2 h-auto" required onChange={(e) => settabledesc(e.target.value)}></textarea>
                 </div>
               </div>
               <div className="modal-footer p-0 m-0 d-flex flex-nowrap align-items-center justify-content-between">
@@ -417,30 +417,30 @@ const Tables = () => {
         <div className="modal-dialog modal-lg">
           <div className="modal-content shadow-lg border-0 rounded ">
             <form onSubmit={editTable}>
-              <div className="modal-header text-light bg-primary">
+              <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                 <h4 className="modal-title">تعديل طاولة</h4>
-                <button type="button" className="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
               </div>
-              <div className="modal-body p-4 text-right">
+              <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
                 <div className="form-group px-3 d-flex align-itmes-center justify-content-start col-12  col-md-6  ">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">رقم السكشن</label>
-                  <input type="Number" className="form-control border-primary m-0 p-2 h-100" required onChange={(e) => setsectionNumber(e.target.value)} />
+                  <input type="Number" className="form-control border-primary m-0 p-2 h-auto" required onChange={(e) => setsectionNumber(e.target.value)} />
                 </div>
                 <div className="form-group px-3 d-flex align-itmes-center justify-content-start col-12  col-md-6  ">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">رقم الطاولة</label>
-                  <input type="Number" defaultValue={listoftable.length > 0 ? listoftable[listoftable.length - 1].tableNumber : ""} className="form-control border-primary m-0 p-2 h-100" required onChange={(e) => settableNumber(e.target.value)} />
+                  <input type="Number" defaultValue={listoftable.length > 0 ? listoftable[listoftable.length - 1].tableNumber : ""} className="form-control border-primary m-0 p-2 h-auto" required onChange={(e) => settableNumber(e.target.value)} />
                 </div>
                 <div className="form-group px-3 d-flex align-itmes-center justify-content-start col-12  col-md-6  ">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">عدد المقاعد</label>
-                  <input type="Number" defaultValue={listoftable.length > 0 ? listoftable.find((table, i) => table._id === tableid).chairs : ''} className="form-control border-primary m-0 p-2 h-100" required onChange={(e) => setchairs(e.target.value)} />
+                  <input type="Number" defaultValue={listoftable.length > 0 ? listoftable.find((table, i) => table._id === tableid).chairs : ''} className="form-control border-primary m-0 p-2 h-auto" required onChange={(e) => setchairs(e.target.value)} />
                 </div>
                 <div className="form-group px-3 d-flex align-itmes-center justify-content-start col-12  col-md-6  ">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الوصف</label>
-                  <textarea defaultValue={listoftable.length > 0 ? listoftable.find((table, i) => table._id === tableid).description : ""} className="form-control border-primary m-0 p-2 h-100" required onChange={(e) => settabledesc(e.target.value)}></textarea>
+                  <textarea defaultValue={listoftable.length > 0 ? listoftable.find((table, i) => table._id === tableid).description : ""} className="form-control border-primary m-0 p-2 h-auto" required onChange={(e) => settabledesc(e.target.value)}></textarea>
                 </div>
                 <div className="form-group px-3 d-flex align-itmes-center justify-content-start col-12  col-md-6  ">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">متاح</label>
-                  <select className="form-control border-primary m-0 p-2 h-100" name="category" id="category" form="carform" onChange={(e) => setisValid(e.target.value)}>
+                  <select className="form-control border-primary m-0 p-2 h-auto" name="category" id="category" form="carform" onChange={(e) => setisValid(e.target.value)}>
                     <option value="">اختر</option>
                     <option value={true} >متاح</option>
                     <option value={false} >غير متاح</option>
@@ -461,10 +461,10 @@ const Tables = () => {
         <div className="modal-dialog col-10 col-md-5 h-75">
           <div className="modal-content shadow-lg border-0 rounded ">
             <form onSubmit={createQR}>
-              <div className="modal-header text-light bg-primary">
+              <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                 <h4 className="modal-title">استخراج QR</h4>
               </div>
-              <div className="modal-body p-4 text-right">
+              <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
                 <div ref={printtableqr} className="form-group qrprint w-100 h-auto p-3 d-flex align-items-center justify-content-center">
                   <div className="w-100 text-center">
                     <p className="mb-3 text-nowrap text-center" style={{ fontSize: '26px', fontFamily: 'Noto Nastaliq Urdu , serif' }}>طاولة رقم {tableNumber}</p>
@@ -493,10 +493,10 @@ const Tables = () => {
         <div className="modal-dialog col-10 col-md-5 h-75">
           <div className="modal-content shadow-lg border-0 rounded ">
             <form onSubmit={createwebQR}>
-              <div className="modal-header text-light bg-primary">
+              <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                 <h4 className="modal-title">استخراج QR</h4>
               </div>
-              <div className="modal-body p-4 text-right">
+              <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
                 <div ref={printwepqr} className="form-group qrprint w-100 h-auto p-3 d-flex align-items-center justify-content-center">
                   <div className="w-100 text-center">
                     <p className="mb-3" style={{ fontSize: '26px', fontFamily: 'Noto Nastaliq Urdu , serif' }}>{restaurantData && restaurantData.name}</p>
@@ -527,11 +527,11 @@ const Tables = () => {
         <div className="modal-dialog modal-lg">
           <div className="modal-content shadow-lg border-0 rounded ">
             <form onSubmit={deleteTable}>
-              <div className="modal-header text-light bg-primary">
+              <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                 <h4 className="modal-title">حذف طاولة</h4>
-                <button type="button" className="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
               </div>
-              <div className="modal-body p-4 text-right">
+              <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
                 <p>هل انت متاكد من حذف هذا السجل؟?</p>
                 <p className="text-warning"><small>لا يمكن الرجوع في هذا الاجراء.</small></p>
               </div>
@@ -547,11 +547,11 @@ const Tables = () => {
         <div className="modal-dialog modal-lg">
           <div className="modal-content shadow-lg border-0 rounded ">
             <form onSubmit={deleteSelectedIds}>
-              <div className="modal-header text-light bg-primary">
+              <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                 <h4 className="modal-title">حذف طاولة</h4>
-                <button type="button" className="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
               </div>
-              <div className="modal-body p-4 text-right">
+              <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
                 <p>هل انت متاكد من حذف هذا السجل؟?</p>
                 <p className="text-warning"><small>لا يمكن الرجوع في هذا الاجراء.</small></p>
               </div>

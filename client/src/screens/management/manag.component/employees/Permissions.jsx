@@ -298,7 +298,7 @@ const PermissionsComponent = () => {
               <div className="table-responsive">
                 <div className="table-wrapper">
                   <div className="table-title">
-                    <div className="d-flex flex-wrap align-items-center justify-content-between">
+                    <div className="w-100 d-flex flex-wrap align-items-center justify-content-between">
                       <div className="col-sm-6">
                         <h2>ادارة <b>صلاحيات الموظفين</b></h2>
                       </div>
@@ -313,12 +313,12 @@ const PermissionsComponent = () => {
                       <div className='d-flex'>
                         <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1" style={{ minWidth: '35%' }}>
                           <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الاسم</label>
-                          <input type="text" className="form-control border-primary m-0 p-2 h-100" style={{ minWidth: '200px' }} onChange={(e) => getEmployeesByName(e.target.value)} />
+                          <input type="text" className="form-control border-primary m-0 p-2 h-auto" style={{ minWidth: '200px' }} onChange={(e) => getEmployeesByName(e.target.value)} />
                           {/* <button type="button" className="btn btn-primary col-6 h-100 p-0 m-0"><i className="fa fa-search"></i></button> */}
                         </div>
                         <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1" style={{ minWidth: '40%' }}>
                           <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الموظف</label>
-                          <select className="form-control border-primary m-0 p-2 h-100"  style={{ minWidth: '200px' }} onChange={(e) => getEmployeesById(e.target.value)} >
+                          <select className="form-control border-primary m-0 p-2 h-auto"  style={{ minWidth: '200px' }} onChange={(e) => getEmployeesById(e.target.value)} >
                             <option value="">الكل</option>
                             {listOfEmployees && listOfEmployees.map((employee, i) => (
                               <option key={i} value={employee._id}>{employee.fullname}</option>
@@ -329,12 +329,12 @@ const PermissionsComponent = () => {
                       <div className='d-flex'>
                         <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1" style={{ minWidth: '35%' }}>
                           <label className="form-label text-wrap text-right fw-bolder p-0 m-0">اسم الموظف</label>
-                          <input type="text" className="form-control border-primary m-0 p-2 h-100" style={{ minWidth: '200px' }} value={selectedEmployee ? selectedEmployee.fullname : ''} readOnly />
+                          <input type="text" className="form-control border-primary m-0 p-2 h-auto" style={{ minWidth: '200px' }} value={selectedEmployee ? selectedEmployee.fullname : ''} readOnly />
                         </div>
 
                         <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1" style={{ minWidth: '35%' }}>
                           <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الوظية</label>
-                          <input type="text" className="form-control border-primary m-0 p-2 h-100" style={{ minWidth: '200px' }} value={selectedEmployee ? selectedEmployee.role : ''} readOnly />
+                          <input type="text" className="form-control border-primary m-0 p-2 h-auto" style={{ minWidth: '200px' }} value={selectedEmployee ? selectedEmployee.role : ''} readOnly />
                         </div>
                       </div>
                     </div>

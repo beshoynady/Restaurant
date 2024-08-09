@@ -387,7 +387,7 @@ const exportToExcel = () => {
       <div className="table-responsive" ref={printEmployeeContainer}>
         <div className="table-wrapper">
           <div className="table-title">
-            <div className="d-flex flex-wrap align-items-center justify-content-between">
+            <div className="w-100 d-flex flex-wrap align-items-center justify-content-between">
               <div className="col-6">
                 <h2>ادارة <b>الموظفين</b></h2>
               </div>
@@ -419,11 +419,11 @@ const exportToExcel = () => {
               </div>
               <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الاسم</label>
-                <input type="text" className="form-control border-primary m-0 p-2 h-100" onChange={(e) => getEmployeesByName(e.target.value)} />
+                <input type="text" className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => getEmployeesByName(e.target.value)} />
               </div>
               <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الوظيفة</label>
-                <select className="form-control border-primary m-0 p-2 h-100"  onChange={(e) => getEmployeesByJob(e.target.value)} >
+                <select className="form-control border-primary m-0 p-2 h-auto"  onChange={(e) => getEmployeesByJob(e.target.value)} >
                   <option value="all">الكل</option>
                   <option value="owner">مالك</option>
                   <option value="manager">مدير</option>
@@ -434,7 +434,7 @@ const exportToExcel = () => {
               </div>
               <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الشيفت</label>
-                <select className="form-control border-primary m-0 p-2 h-100"  onChange={(e) => getEmployeesByShift(e.target.value)} >
+                <select className="form-control border-primary m-0 p-2 h-auto"  onChange={(e) => getEmployeesByShift(e.target.value)} >
                   <option value="all">الكل</option>
                   {shifts ? shifts.map((shift, i) =>
                     <option value={shift._id} key={i}>{shift.shiftType}</option>
@@ -444,7 +444,7 @@ const exportToExcel = () => {
               </div>
               <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الحالة</label>
-                <select className="form-control border-primary m-0 p-2 h-100"  onChange={(e) => filterEmpByStatus(e.target.value)} >
+                <select className="form-control border-primary m-0 p-2 h-auto"  onChange={(e) => filterEmpByStatus(e.target.value)} >
                   <option value="all">الكل</option>
                   <option value={true}>متاح</option>
                   <option value={false}>غير متاح</option>
@@ -543,45 +543,45 @@ const exportToExcel = () => {
           <div className="modal-dialog modal-lg">
             <div className="modal-content shadow-lg border-0 rounded ">
               <form className='text-right' onSubmit={(e) => createEmployee(e)}>
-                <div className="modal-header text-light bg-primary">
+                <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                   <h4 className="modal-title">إضافة موظف</h4>
-                  <button type="button" className="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                  <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
                 </div>
-                <div className="modal-body p-4 text-right">
+                <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
                   <div className="form-group col-12 col-md-6">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0" htmlFor="fullname">الاسم</label>
-                    <input type="text" id="fullname" className="form-control border-primary m-0 p-2 h-100" required pattern="[A-Za-z\u0600-\u06FF\s]+" onChange={(e) => setfullname(e.target.value)} />
+                    <input type="text" id="fullname" className="form-control border-primary m-0 p-2 h-auto" required pattern="[A-Za-z\u0600-\u06FF\s]+" onChange={(e) => setfullname(e.target.value)} />
                     <div className="invalid-feedback">الرجاء إدخال اسم صحيح.</div>
                   </div>
                   <div className="form-group col-12 col-md-6">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0" htmlFor="username">اسم المستخدم</label>
-                    <input type="text" id="username" className="form-control border-primary m-0 p-2 h-100" onChange={(e) => setusername(e.target.value)} />
+                    <input type="text" id="username" className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => setusername(e.target.value)} />
                   </div>
                   <div className="form-group col-12 col-md-6">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0" htmlFor="phone">الموبايل</label>
-                    <input type="text" id="phone" className="form-control border-primary m-0 p-2 h-100" required pattern="[0-9]{11}" onChange={(e) => setphone(e.target.value)} />
+                    <input type="text" id="phone" className="form-control border-primary m-0 p-2 h-auto" required pattern="[0-9]{11}" onChange={(e) => setphone(e.target.value)} />
                     <div className="invalid-feedback">الرجاء إدخال رقم هاتف صحيح (11 رقم).</div>
                   </div>
                   <div className="form-group col-12 col-md-6">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0" htmlFor="password">الباسورد</label>
-                    <input type="text" id="password" className="form-control border-primary m-0 p-2 h-100" required onChange={(e) => setpassword(e.target.value)} />
+                    <input type="text" id="password" className="form-control border-primary m-0 p-2 h-auto" required onChange={(e) => setpassword(e.target.value)} />
                   </div>
                   <div className="form-group col-12 col-md-6">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0" htmlFor="numberID">الرقم القومي</label>
-                    <input type="text" id="numberID" className="form-control border-primary m-0 p-2 h-100" required onChange={(e) => setnumberID(e.target.value)} />
+                    <input type="text" id="numberID" className="form-control border-primary m-0 p-2 h-auto" required onChange={(e) => setnumberID(e.target.value)} />
                   </div>
                   <div className="form-group col-12 col-md-6">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0" htmlFor="email">الايميل</label>
-                    <input type="email" id="email" className="form-control border-primary m-0 p-2 h-100" required onChange={(e) => setemail(e.target.value)} />
+                    <input type="email" id="email" className="form-control border-primary m-0 p-2 h-auto" required onChange={(e) => setemail(e.target.value)} />
                     <div className="invalid-feedback">الرجاء إدخال عنوان بريد إلكتروني صحيح.</div>
                   </div>
                   <div className="form-group col-12 col-md-6">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0" htmlFor="address">العنوان</label>
-                    <textarea id="address" className="form-control border-primary m-0 p-2 h-100" required onChange={(e) => setaddress(e.target.value)}></textarea>
+                    <textarea id="address" className="form-control border-primary m-0 p-2 h-auto" required onChange={(e) => setaddress(e.target.value)}></textarea>
                   </div>
                   <div className="form-group col-12 col-md-6">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0" htmlFor="isActive">الحالة</label>
-                    <select id="isActive" className="form-control border-primary m-0 p-2 h-100" required onChange={(e) => setisActive(e.target.value)}>
+                    <select id="isActive" className="form-control border-primary m-0 p-2 h-auto" required onChange={(e) => setisActive(e.target.value)}>
                       <option value="">اختر</option>
                       <option value={true}>متاح</option>
                       <option value={false}>ليس متاح</option>
@@ -589,7 +589,7 @@ const exportToExcel = () => {
                   </div>
                   <div className="form-group col-12 col-md-6">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0" htmlFor="shift">الشيفت</label>
-                    <select id="shift" className="form-control border-primary m-0 p-2 h-100" required onChange={(e) => setshift(e.target.value)}>
+                    <select id="shift" className="form-control border-primary m-0 p-2 h-auto" required onChange={(e) => setshift(e.target.value)}>
                       <option value="">اختر</option>
                       {shifts ? shifts.map((shift, i) =>
                         <option value={shift._id} key={i}>{shift.shiftType}</option>
@@ -598,7 +598,7 @@ const exportToExcel = () => {
                   </div>
                   <div className="form-group col-12 col-md-6">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0" htmlFor="role">الوظيفة</label>
-                    <select id="role" className="form-control border-primary m-0 p-2 h-100" required onChange={(e) => setrole(e.target.value)}>
+                    <select id="role" className="form-control border-primary m-0 p-2 h-auto" required onChange={(e) => setrole(e.target.value)}>
                       <option value="">اختر وظيفة</option>
                       <option value="owner">مالك</option>
                       <option value="manager">مدير</option>
@@ -610,28 +610,28 @@ const exportToExcel = () => {
                   </div>
                   <div className="form-group col-12 col-md-6">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0" htmlFor="workingDays">ايام العمل الشهرية</label>
-                    <input type="number" id="workingDays" className="form-control border-primary m-0 p-2 h-100" min={0} max={31} required onChange={(e) => setworkingDays(Number(e.target.value))} />
+                    <input type="number" id="workingDays" className="form-control border-primary m-0 p-2 h-auto" min={0} max={31} required onChange={(e) => setworkingDays(Number(e.target.value))} />
                     <div className="invalid-feedback">الرجاء إدخال أيام عمل صحيحة.</div>
                   </div>
                   <div className="form-group col-12 col-md-6">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0" htmlFor="basicSalary">المرتب الأساسي</label>
-                    <input type="number" id="basicSalary" className="form-control border-primary m-0 p-2 h-100" min={0} required onChange={(e) => setbasicSalary(Number(e.target.value))} />
+                    <input type="number" id="basicSalary" className="form-control border-primary m-0 p-2 h-auto" min={0} required onChange={(e) => setbasicSalary(Number(e.target.value))} />
                     <div className="invalid-feedback">الرجاء إدخال راتب صحيح.</div>
                   </div>
                   <div className="form-group col-12 col-md-6">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0" htmlFor="taxRate">نسبة الضريبة</label>
-                    <input type="number" id="taxRate" className="form-control border-primary m-0 p-2 h-100" min={0} max={100} required onChange={(e) => settaxRate(Number(e.target.value))} />
+                    <input type="number" id="taxRate" className="form-control border-primary m-0 p-2 h-auto" min={0} max={100} required onChange={(e) => settaxRate(Number(e.target.value))} />
                     <div className="invalid-feedback">الرجاء إدخال نسبة ضريبة صحيحة.</div>
                   </div>
                   <div className="form-group col-12 col-md-6">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0" htmlFor="insuranceRate">نسبة التأمين</label>
-                    <input type="number" id="insuranceRate" className="form-control border-primary m-0 p-2 h-100" min={0} max={100} required onChange={(e) => setinsuranceRate(Number(e.target.value))} />
+                    <input type="number" id="insuranceRate" className="form-control border-primary m-0 p-2 h-auto" min={0} max={100} required onChange={(e) => setinsuranceRate(Number(e.target.value))} />
                     <div className="invalid-feedback">الرجاء إدخال نسبة تأمين صحيحة.</div>
                   </div>
                   {role === 'waiter' && (
                     <div className="form-group col-12 col-md-6">
                       <label className="form-label text-wrap text-right fw-bolder p-0 m-0" htmlFor="sectionNumber">رقم السكشن</label>
-                      <input type="number" id="sectionNumber" className="form-control border-primary m-0 p-2 h-100" required onChange={(e) => setsectionNumber(Number(e.target.value))} />
+                      <input type="number" id="sectionNumber" className="form-control border-primary m-0 p-2 h-auto" required onChange={(e) => setsectionNumber(Number(e.target.value))} />
                     </div>
                   )}
                 </div>
@@ -652,59 +652,59 @@ const exportToExcel = () => {
           <div className="modal-dialog modal-lg">
             <div className="modal-content shadow-lg border-0 rounded ">
               <form className='text-right' onSubmit={(e) => editEmployee(e)}>
-                <div className="modal-header text-light bg-primary">
+                <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                   <h4 className="modal-title">تعديل بيانات الموظف</h4>
-                  <button type="button" className="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                  <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
                 </div>
-                <div className="modal-body p-4 text-right">
+                <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
                   <div className="form-group col-12 col-md-6">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0" htmlFor="fullname">الاسم</label>
-                    <input type="text" id="fullname" className="form-control border-primary m-0 p-2 h-100" defaultValue={fullname} required pattern="[A-Za-z\u0600-\u06FF\s]+" onChange={(e) => setfullname(e.target.value)} />
+                    <input type="text" id="fullname" className="form-control border-primary m-0 p-2 h-auto" defaultValue={fullname} required pattern="[A-Za-z\u0600-\u06FF\s]+" onChange={(e) => setfullname(e.target.value)} />
                     <div className="invalid-feedback">الرجاء إدخال اسم صحيح.</div>
                   </div>
                   <div className="form-group col-12 col-md-6">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0" htmlFor="username">اسم المستخدم</label>
-                    <input type="text" id="username" className="form-control border-primary m-0 p-2 h-100" defaultValue={username} required onChange={(e) => setusername(e.target.value)} />
+                    <input type="text" id="username" className="form-control border-primary m-0 p-2 h-auto" defaultValue={username} required onChange={(e) => setusername(e.target.value)} />
                   </div>
                   <div className="form-group col-12 col-md-6">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0" htmlFor="phone">الموبايل</label>
-                    <input type="text" id="phone" className="form-control border-primary m-0 p-2 h-100" defaultValue={phone} required pattern="[0-9]{11}" onChange={(e) => setphone(e.target.value)} />
+                    <input type="text" id="phone" className="form-control border-primary m-0 p-2 h-auto" defaultValue={phone} required pattern="[0-9]{11}" onChange={(e) => setphone(e.target.value)} />
                     <div className="invalid-feedback">الرجاء إدخال رقم هاتف صحيح (11 رقم).</div>
                   </div>
                   <div className="form-group col-12 col-md-6">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0" htmlFor="password">الباسورد</label>
-                    <input type="password" id="password" className="form-control border-primary m-0 p-2 h-100" onChange={(e) => setpassword(e.target.value)} />
+                    <input type="password" id="password" className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => setpassword(e.target.value)} />
                   </div>
                   <div className="form-group col-12 col-md-6">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0" htmlFor="numberID">الرقم القومي</label>
-                    <input type="text" id="numberID" className="form-control border-primary m-0 p-2 h-100" defaultValue={numberID} required onChange={(e) => setnumberID(e.target.value)} />
+                    <input type="text" id="numberID" className="form-control border-primary m-0 p-2 h-auto" defaultValue={numberID} required onChange={(e) => setnumberID(e.target.value)} />
                   </div>
                   <div className="form-group col-12 col-md-6">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0" htmlFor="email">الايميل</label>
-                    <input type="email" id="email" className="form-control border-primary m-0 p-2 h-100" defaultValue={email} required onChange={(e) => setemail(e.target.value)} />
+                    <input type="email" id="email" className="form-control border-primary m-0 p-2 h-auto" defaultValue={email} required onChange={(e) => setemail(e.target.value)} />
                     <div className="invalid-feedback">الرجاء إدخال عنوان بريد إلكتروني صحيح.</div>
                   </div>
                   <div className="form-group col-12 col-md-6">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0" htmlFor="address">العنوان</label>
-                    <textarea id="address" className="form-control border-primary m-0 p-2 h-100" defaultValue={address} required onChange={(e) => setaddress(e.target.value)}></textarea>
+                    <textarea id="address" className="form-control border-primary m-0 p-2 h-auto" defaultValue={address} required onChange={(e) => setaddress(e.target.value)}></textarea>
                   </div>
                   <div className="form-group col-12 col-md-6">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0" htmlFor="isActive">في الفريق</label>
-                    <select id="isActive" className="form-control border-primary m-0 p-2 h-100" defaultValue={isAdmin} required onChange={(e) => setisAdmin(e.target.value)}>
+                    <select id="isActive" className="form-control border-primary m-0 p-2 h-auto" defaultValue={isAdmin} required onChange={(e) => setisAdmin(e.target.value)}>
                       <option value={true}>في الفريق</option>
                       <option value={false}>ترك لعمل</option>
                     </select>
                   </div>
                   <div className="form-group col-12 col-md-6">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0" htmlFor="isActive">الحالة</label>
-                    <select id="isActive" className="form-control border-primary m-0 p-2 h-100" defaultValue={isActive} required onChange={(e) => setisActive(e.target.value)}>
+                    <select id="isActive" className="form-control border-primary m-0 p-2 h-auto" defaultValue={isActive} required onChange={(e) => setisActive(e.target.value)}>
                       <option value={true}>متاح</option>
                       <option value={false}>ليس متاح</option>
                     </select>
                   </div>
                   <div className="form-group col-12 col-md-6">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0" htmlFor="shift">الشيفت</label>
-                    <select id="shift" className="form-control border-primary m-0 p-2 h-100" defaultValue={shift} required onChange={(e) => setshift(e.target.value)}>
+                    <select id="shift" className="form-control border-primary m-0 p-2 h-auto" defaultValue={shift} required onChange={(e) => setshift(e.target.value)}>
                       {shifts ? shifts.map((shift, i) =>
                         <option value={shift._id} key={i}>{shift.shiftType}</option>
                       ) : <option>لم يتم إنشاء شفتات</option>}
@@ -712,7 +712,7 @@ const exportToExcel = () => {
                   </div>
                   <div className="form-group col-12 col-md-6">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0" htmlFor="role">الوظيفة</label>
-                    <select id="role" className="form-control border-primary m-0 p-2 h-100" defaultValue={role} required onChange={(e) => setrole(e.target.value)}>
+                    <select id="role" className="form-control border-primary m-0 p-2 h-auto" defaultValue={role} required onChange={(e) => setrole(e.target.value)}>
                       <option value="owner">مالك</option>
                       <option value="manager">مدير</option>
                       <option value="cashier">كاشير</option>
@@ -723,28 +723,28 @@ const exportToExcel = () => {
                   </div>
                   <div className="form-group col-12 col-md-6">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0" htmlFor="workingDays">ايام العمل الشهرية</label>
-                    <input type="number" id="workingDays" className="form-control border-primary m-0 p-2 h-100" defaultValue={workingDays} min={0} max={31} required onChange={(e) => setworkingDays(Number(e.target.value))} />
+                    <input type="number" id="workingDays" className="form-control border-primary m-0 p-2 h-auto" defaultValue={workingDays} min={0} max={31} required onChange={(e) => setworkingDays(Number(e.target.value))} />
                     <div className="invalid-feedback">الرجاء إدخال أيام عمل صحيحة.</div>
                   </div>
                   <div className="form-group col-12 col-md-6">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0" htmlFor="basicSalary">المرتب الأساسي</label>
-                    <input type="number" id="basicSalary" className="form-control border-primary m-0 p-2 h-100" defaultValue={basicSalary} min={0} required onChange={(e) => setbasicSalary(e.target.value)} />
+                    <input type="number" id="basicSalary" className="form-control border-primary m-0 p-2 h-auto" defaultValue={basicSalary} min={0} required onChange={(e) => setbasicSalary(e.target.value)} />
                     <div className="invalid-feedback">الرجاء إدخال راتب صحيح.</div>
                   </div>
                   <div className="form-group col-12 col-md-6">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0" htmlFor="taxRate">نسبة الضريبة</label>
-                    <input type="number" id="taxRate" className="form-control border-primary m-0 p-2 h-100" min={0} max={100} required onChange={(e) => settaxRate(Number(e.target.value))} />
+                    <input type="number" id="taxRate" className="form-control border-primary m-0 p-2 h-auto" min={0} max={100} required onChange={(e) => settaxRate(Number(e.target.value))} />
                     <div className="invalid-feedback">الرجاء إدخال نسبة ضريبة صحيحة.</div>
                   </div>
                   <div className="form-group col-12 col-md-6">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0" htmlFor="insuranceRate">نسبة التأمين</label>
-                    <input type="number" id="insuranceRate" className="form-control border-primary m-0 p-2 h-100" min={0} max={100} required onChange={(e) => setinsuranceRate(Number(e.target.value))} />
+                    <input type="number" id="insuranceRate" className="form-control border-primary m-0 p-2 h-auto" min={0} max={100} required onChange={(e) => setinsuranceRate(Number(e.target.value))} />
                     <div className="invalid-feedback">الرجاء إدخال نسبة تأمين صحيحة.</div>
                   </div>
                   {role === 'waiter' && (
                     <div className="form-group col-12 col-md-6">
                       <label className="form-label text-wrap text-right fw-bolder p-0 m-0" htmlFor="sectionNumber">رقم السكشن</label>
-                      <input type="number" id="sectionNumber" className="form-control border-primary m-0 p-2 h-100" defaultValue={sectionNumber} required onChange={(e) => setsectionNumber(Number(e.target.value))} />
+                      <input type="number" id="sectionNumber" className="form-control border-primary m-0 p-2 h-auto" defaultValue={sectionNumber} required onChange={(e) => setsectionNumber(Number(e.target.value))} />
                     </div>
                   )}
                 </div>
@@ -764,11 +764,11 @@ const exportToExcel = () => {
           <div className="modal-dialog modal-lg">
             <div className="modal-content shadow-lg border-0 rounded ">
               <form className='text-right' onSubmit={(e) => deleteEmployee(e)}>
-                <div className="modal-header text-light bg-primary">
+                <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                   <h4 className="modal-title">حذف موظف</h4>
-                  <button type="button" className="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                  <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
                 </div>
-                <div className="modal-body p-4 text-right">
+                <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
                   <p>هل أنت متأكد من حذف الموظف <strong>{fullname}</strong>؟</p>
                 </div>
                 <div className="modal-footer flex-nowrap d-flex flex-row align-items-center justify-content-between">
@@ -785,11 +785,11 @@ const exportToExcel = () => {
                 <div className="modal-dialog modal-lg">
                   <div className="modal-content shadow-lg border-0 rounded ">
                     <form className='text-right' onSubmit={deleteSelectedIds}>
-                      <div className="modal-header text-light bg-primary">
+                      <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                         <h4 className="modal-title">حذف الموظفين المحددين</h4>
-                        <button type="button" className="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
                       </div>
-                      <div className="modal-body p-4 text-right">
+                      <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
                         <p>هل انت متاكد من حذف هذا السجل؟?</p>
                         <p className="text-warning"><small>لا يمكن الرجوع في هذا الاجراء.</small></p>
                       </div>

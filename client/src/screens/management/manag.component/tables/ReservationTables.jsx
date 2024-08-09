@@ -114,7 +114,7 @@ const ReservationTables = () => {
       <div className="table-responsive">
         <div className="table-wrapper">
           <div className="table-title">
-            <div className="d-flex flex-wrap align-items-center justify-content-between">
+            <div className="w-100 d-flex flex-wrap align-items-center justify-content-between">
               <div className="col-sm-6">
                 <h2>ادارة <b>حجز الطاولات</b></h2>
               </div>
@@ -148,7 +148,7 @@ const ReservationTables = () => {
 
               {/* <div className="form-group w-100 h-auto px-3 d-flex align-itmes-center justify-content-start col-12  col-12 col-md-6 ">
                         <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الحالة</label>
-                        <select className="form-control border-primary m-0 p-2 h-100"  name="category" id="category" form="carform" onChange={(e) => filterByStatus(e.target.value)}>
+                        <select className="form-control border-primary m-0 p-2 h-auto"  name="category" id="category" form="carform" onChange={(e) => filterByStatus(e.target.value)}>
                           <option value="">اختر</option>
                           <option value={true} >متاح</option>
                           <option value={false} >غير متاح</option>
@@ -158,7 +158,7 @@ const ReservationTables = () => {
               <div className='col-12 d-flex align-items-center justify-content-between flex-wrap'>
                 <div className="filter-group d-flex align-items-center justify-content-between col-md-4 col-sm-12 p-0 mb-2">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">فلتر حسب الوقت</label>
-                  <select className="form-control border-primary m-0 p-2 h-100"  onChange={(e) => setallReservations(filterByTime(e.target.value, allReservations))}>
+                  <select className="form-control border-primary m-0 p-2 h-auto"  onChange={(e) => setallReservations(filterByTime(e.target.value, allReservations))}>
                     <option value="">اختر</option>
                     <option value="today">اليوم</option>
                     <option value="week">هذا الأسبوع</option>
@@ -172,12 +172,12 @@ const ReservationTables = () => {
 
                   <div className="d-flex align-items-center me-2">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">من</label>
-                    <input type="date" className="form-control border-primary m-0 p-2 h-100" onChange={(e) => setStartDate(e.target.value)} placeholder="اختر التاريخ" />
+                    <input type="date" className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => setStartDate(e.target.value)} placeholder="اختر التاريخ" />
                   </div>
 
                   <div className="d-flex align-items-center me-2">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">إلى</label>
-                    <input type="date" className="form-control border-primary m-0 p-2 h-100" onChange={(e) => setEndDate(e.target.value)} placeholder="اختر التاريخ" />
+                    <input type="date" className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => setEndDate(e.target.value)} placeholder="اختر التاريخ" />
                   </div>
 
                   <div className="d-flex align-items-center">
@@ -222,7 +222,7 @@ const ReservationTables = () => {
                         <td>{formatTime(reservation.startTime)}</td>
                         <td>{formatTime(reservation.endTime)}</td>
                         <td>
-                          <select className="form-control border-primary m-0 p-2 h-100"  name="status" id="status" onChange={(e) => confirmReservation(reservation._id, e.target.value)}>
+                          <select className="form-control border-primary m-0 p-2 h-auto"  name="status" id="status" onChange={(e) => confirmReservation(reservation._id, e.target.value)}>
                             <option >{translateStatus(reservation.status)}</option>
                             <option value='confirmed'>تاكيد</option>
                             <option value='awaiting confirmation'>انتظار التاكيد</option>
@@ -259,13 +259,13 @@ const ReservationTables = () => {
         <div className="modal-dialog ">
           <div className="modal-content shadow-lg border-0 rounded ">
             <form onSubmit={(e) => createReservations(e, tableInfo.id, tableInfo.tableNumber, userId, numberOfGuests, customerName, customerPhone, reservationDate, startTime, endTime, reservationNote, createdBy)}>
-              <div className="modal-header text-light bg-primary">
+              <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                 <h4 className="modal-title">اضافه حجز طاولة</h4>
-                <button type="button" className="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
               </div>
-              <div className="modal-body p-4 text-right">
+              <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
                 <div className="container">
-                  <div className="d-flex flex-wrap align-items-center justify-content-between">
+                  <div className="w-100 d-flex flex-wrap align-items-center justify-content-between">
                     <div className="col-12 col-md-8 mb-1">
                       <label htmlFor="name" className="form-label text-wrap text-right fw-bolder p-0 m-0">الاسم</label>
                       <input type="text" className="form-control border-primary col-12" id="name" onChange={(e) => clientByName(allusers, e.target.value)} />
@@ -281,7 +281,7 @@ const ReservationTables = () => {
                     </div>
                   </div>
 
-                  <div className="d-flex flex-wrap align-items-center justify-content-between">
+                  <div className="w-100 d-flex flex-wrap align-items-center justify-content-between">
                     <div className="col-12 col-md-4 mb-1">
                       <label htmlFor="date" className="form-label text-wrap text-right fw-bolder p-0 m-0">التاريخ</label>
                       <input
@@ -391,11 +391,11 @@ const ReservationTables = () => {
         <div className="modal-dialog ">
           <div className="modal-content shadow-lg border-0 rounded ">
             <form onSubmit={(e) => updateReservation(e, reservationId, tableInfo.id, tableInfo.tableNumber, userId, numberOfGuests, customerName, customerPhone, reservationDate, startTime, endTime, reservationNote, createdBy)}>
-              <div className="modal-header text-light bg-primary">
+              <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                 <h4 className="modal-title">اضافه حجز طاولة</h4>
-                <button type="button" className="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
               </div>
-              <div className="modal-body p-4 text-right">
+              <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
                 <div className="container">
                   <div className='row'>
                     <div className="col-12 col-md-7 mb-1">
