@@ -142,7 +142,7 @@ const ReservationTables = () => {
                 </div>
               <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">رقم الطاولة</label>
-                <input type="text" className="form-control border-primary col-12" onChange={(e) => searchByNum(e.target.value)} />
+                <input type="text" className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => searchByNum(e.target.value)} />
               </div>
 
               <div className='col-12 d-flex align-items-center justify-content-between flex-wrap'>
@@ -258,7 +258,7 @@ const ReservationTables = () => {
                   <div className="w-100 d-flex flex-wrap align-items-center justify-content-between">
                     <div className="col-12 col-md-8 mb-1">
                       <label htmlFor="name" className="form-label text-wrap text-right fw-bolder p-0 m-0">الاسم</label>
-                      <input type="text" className="form-control border-primary col-12" id="name" onChange={(e) => clientByName(allusers, e.target.value)} />
+                      <input type="text" className="form-control border-primary m-0 p-2 h-auto" id="name" onChange={(e) => clientByName(allusers, e.target.value)} />
                       <ul>
                         {filteredClients && filteredClients.map((client, index) => (
                           <li key={index}>{client.username}</li>
@@ -267,7 +267,7 @@ const ReservationTables = () => {
                     </div>
                     <div className="col-12 col-md-4 mb-1">
                       <label htmlFor="mobile" className="form-label text-wrap text-right fw-bolder p-0 m-0">رقم الموبايل</label>
-                      <input type="tel" className="form-control border-primary col-12" id="mobile" onChange={(e) => setCustomerPhone(e.target.value)} />
+                      <input type="tel" className="form-control border-primary m-0 p-2 h-auto" id="mobile" onChange={(e) => setCustomerPhone(e.target.value)} />
                     </div>
                   </div>
 
@@ -276,7 +276,7 @@ const ReservationTables = () => {
                       <label htmlFor="date" className="form-label text-wrap text-right fw-bolder p-0 m-0">التاريخ</label>
                       <input
                         type="date"
-                        className="form-control border-primary col-12"
+                        className="form-control border-primary m-0 p-2 h-auto"
                         id="date"
                         onChange={(e) => {
                           const selectedDate = new Date(e.target.value);
@@ -288,7 +288,7 @@ const ReservationTables = () => {
                       <label htmlFor="arrivalTime" className="form-label text-wrap text-right fw-bolder p-0 m-0">وقت الحضور</label>
                       <input
                         type="time"
-                        className="form-control border-primary col-12"
+                        className="form-control border-primary m-0 p-2 h-auto"
                         id="arrivalTime"
                         required
                         onChange={(e) => {
@@ -316,7 +316,7 @@ const ReservationTables = () => {
                       <label htmlFor="departureTime" className="form-label text-wrap text-right fw-bolder p-0 m-0">وقت الانصراف</label>
                       <input
                         type="time"
-                        className="form-control border-primary col-12"
+                        className="form-control border-primary m-0 p-2 h-auto"
                         id="departureTime"
                         required
                         onChange={(e) => {
@@ -358,12 +358,12 @@ const ReservationTables = () => {
 
                     <div className="col-12 col-md-5">
                       <label htmlFor="numberOfGuests" className="form-label text-wrap text-right fw-bolder p-0 m-0">عدد الضيوف</label>
-                      <input type="number" className="form-control border-primary col-12" id="numberOfGuests" onChange={(e) => setNumberOfGuests(e.target.value)} />
+                      <input type="number" className="form-control border-primary m-0 p-2 h-auto" id="numberOfGuests" onChange={(e) => setNumberOfGuests(e.target.value)} />
                     </div>
                   </div>
                   <div className="col-12 mb-1">
                     <label htmlFor="notes" className="form-label text-wrap text-right fw-bolder p-0 m-0">ملاحظات</label>
-                    <textarea className="form-control border-primary col-12" id="notes" rows="2" onChange={(e) => setReservationNote(e.target.value)}></textarea>
+                    <textarea className="form-control border-primary m-0 p-2 h-auto" id="notes" rows="2" onChange={(e) => setReservationNote(e.target.value)}></textarea>
                   </div>
                 </div>
               </div>
@@ -390,7 +390,7 @@ const ReservationTables = () => {
                   <div className='row'>
                     <div className="col-12 col-md-7 mb-1">
                       <label htmlFor="name" className="form-label text-wrap text-right fw-bolder p-0 m-0">الاسم</label>
-                      <input type="text" className="form-control border-primary col-12" id="name" onChange={(e) => clientByName(allusers, e.target.value)} />
+                      <input type="text" className="form-control border-primary m-0 p-2 h-auto" id="name" onChange={(e) => clientByName(allusers, e.target.value)} />
                       <ul>
                         {filteredClients && filteredClients.map((client, index) => (
                           <li key={index}>{client.username}</li>
@@ -399,7 +399,7 @@ const ReservationTables = () => {
                     </div>
                     <div className="col-12 col-md-5 mb-1">
                       <label htmlFor="mobile" className="form-label text-wrap text-right fw-bolder p-0 m-0">رقم الموبايل</label>
-                      <input type="tel" className="form-control border-primary col-12" id="mobile" defaultValue={customerPhone} onChange={(e) => setCustomerPhone(e.target.value)} />
+                      <input type="tel" className="form-control border-primary m-0 p-2 h-auto" id="mobile" defaultValue={customerPhone} onChange={(e) => setCustomerPhone(e.target.value)} />
                     </div>
                   </div>
 
@@ -408,7 +408,7 @@ const ReservationTables = () => {
                       <label htmlFor="date" className="form-label text-wrap text-right fw-bolder p-0 m-0">التاريخ</label>
                       <input
                         type="date"
-                        className="form-control border-primary col-12"
+                        className="form-control border-primary m-0 p-2 h-auto"
                         id="date"
                         defaultValue={reservationDate ? new Date(reservationDate).toISOString().split('T')[0] : ''}
                         onChange={(e) => {
@@ -421,7 +421,7 @@ const ReservationTables = () => {
                       <label className="form-label text-wrap text-right fw-bolder p-0 m-0">وقت الحضور</label>
                       <input
                         type="time"
-                        className="form-control border-primary col-12"
+                        className="form-control border-primary m-0 p-2 h-auto"
                         required
                         defaultValue={startTime ? new Date(startTime).toISOString().split('T')[1].slice(0, 5) : ''}
                         onChange={(e) => {
@@ -449,7 +449,7 @@ const ReservationTables = () => {
                       <label htmlFor="departureTime" className="form-label text-wrap text-right fw-bolder p-0 m-0">وقت الانصراف</label>
                       <input
                         type="time"
-                        className="form-control border-primary col-12"
+                        className="form-control border-primary m-0 p-2 h-auto"
                         id="departureTime"
                         required
                         defaultValue={endTime ? new Date(endTime).toISOString().split('T')[1].slice(0, 5) : ''}
@@ -493,12 +493,12 @@ const ReservationTables = () => {
                     </div>
                     <div className="col-12 col-md-5">
                       <label htmlFor="numberOfGuests" className="form-label text-wrap text-right fw-bolder p-0 m-0">عدد الضيوف</label>
-                      <input type="number" className="form-control border-primary col-12" id="numberOfGuests" defaultValue={numberOfGuests} onChange={(e) => setNumberOfGuests(e.target.value)} />
+                      <input type="number" className="form-control border-primary m-0 p-2 h-auto" id="numberOfGuests" defaultValue={numberOfGuests} onChange={(e) => setNumberOfGuests(e.target.value)} />
                     </div>
                   </div>
                   <div className="col-12 mb-1">
                     <label htmlFor="notes" className="form-label text-wrap text-right fw-bolder p-0 m-0">ملاحظات</label>
-                    <textarea className="form-control border-primary col-12" id="notes" rows="2" defaultValue={reservationNote} onChange={(e) => setReservationNote(e.target.value)}></textarea>
+                    <textarea className="form-control border-primary m-0 p-2 h-auto" id="notes" rows="2" defaultValue={reservationNote} onChange={(e) => setReservationNote(e.target.value)}></textarea>
                   </div>
                 </div>
               </div>
