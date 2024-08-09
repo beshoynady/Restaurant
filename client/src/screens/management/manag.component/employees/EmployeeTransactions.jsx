@@ -215,7 +215,7 @@ const EmployeeTransactions = () => {
           </div>
           <div className="table-filter print-hide">
             <div className="col-12 text-dark d-flex flex-wrap align-items-center justify-content-evenly p-3 m-0 bg-light rounded">
-              <div className="show-entries d-flex align-items-center col-2 p-0 m-0">
+              <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
                 <span className="me-2">عرض</span>
                 <select className="form-select" onChange={(e) => { setstartpagination(0); setendpagination(e.target.value) }}>
                   <option value={5}>5</option>

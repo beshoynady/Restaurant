@@ -333,7 +333,7 @@ const KitchenConsumption = () => {
 
           <div class="table-filter w-100 p-0 print-hide">
             <div className="w-100 d-flex flex-row flex-wrap align-items-center justify-content-evenly text-dark">
-              <div class="show-entries d-flex flex-wrap align-items-center justify-content-evenly col-2">
+              <div class="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">عرض</label>
                 <select className="form-select border-primary col-6 px-1 py-2 m-0" onChange={(e) => { setstartpagination(0); setendpagination(e.target.value) }}>
                   <option value={5}>5</option>

@@ -352,7 +352,7 @@ const Suppliers = () => {
                   </div>
                   <div className="table-filter print-hide">
                     <div className="col-12 text-dark d-flex flex-wrap align-items-center justify-content-evenly p-0 m-0">
-                      <div className="show-entries col-sm-3">
+                      <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
                         <label className="form-label text-wrap text-right fw-bolder p-0 m-0">عرض</label>
                         <select className="form-select border-primary col-6 px-1 py-2 m-0" onChange={(e) => { setstartpagination(0); setendpagination(e.target.value) }}>
                           <option value={5}>5</option>
@@ -366,12 +366,12 @@ const Suppliers = () => {
                       </div>
 
                       <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
-                        <label className="col-3 text-wrap text-right fw-bolder p-0 m-0">اسم المورد</label>
-                        <input type="text" className="form-control border-primary col-9" onChange={(e) => searchSupplierByName(e.target.value)} />
+                        <label className="form-label text-wrap text-right fw-bolder p-0 m-0">اسم المورد</label>
+                        <input type="text" className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => searchSupplierByName(e.target.value)} />
                       </div>
                       {/* <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
-                          <label className="col-3 text-wrap text-right fw-bolder p-0 m-0">نوع الاوردر</label>
-                          <select className="form-control border-primary col-9" onChange={(e) => searchByaction(e.target.value)} >
+                          <label className="form-label text-wrap text-right fw-bolder p-0 m-0">نوع الاوردر</label>
+                          <select className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => searchByaction(e.target.value)} >
                             <option value={""}>الكل</option>
                             <option value="Purchase" >Purchase</option>
                             <option value="Return" >Return</option>
@@ -380,8 +380,8 @@ const Suppliers = () => {
                           </select>
                         </div> */}
                       {/* <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
-                          <label className="col-3 text-wrap text-right fw-bolder p-0 m-0">Location</label>
-                          <select className="form-control border-primary col-9">
+                          <label className="form-label text-wrap text-right fw-bolder p-0 m-0">Location</label>
+                          <select className="form-control border-primary m-0 p-2 h-auto">
                             <option>All</option>
                             <option>Berlin</option>
                             <option>London</option>
@@ -391,8 +391,8 @@ const Suppliers = () => {
                           </select>
                         </div>
                         <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
-                          <label className="col-3 text-wrap text-right fw-bolder p-0 m-0">Status</label>
-                          <select className="form-control border-primary col-9">
+                          <label className="form-label text-wrap text-right fw-bolder p-0 m-0">Status</label>
+                          <select className="form-control border-primary m-0 p-2 h-auto">
                             <option>Any</option>
                             <option>Delivered</option>
                             <option>Shipped</option>
@@ -489,26 +489,26 @@ const Suppliers = () => {
                       </div>
                       <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
                         <div className="form-group w-100 h-auto px-3 d-flex flex-wrap align-itmes-center justify-content-start col-12  col-md-6 ">
-                          <label className="col-3 text-wrap text-right fw-bolder p-0 m-0">اسم المورد</label>
-                          <input type="text" className="form-control border-primary col-9" required onChange={(e) => setName(e.target.value)} />
+                          <label className="form-label text-wrap text-right fw-bolder p-0 m-0">اسم المورد</label>
+                          <input type="text" className="form-control border-primary m-0 p-2 h-auto" required onChange={(e) => setName(e.target.value)} />
                         </div>
 
                         <div className="form-group w-100 h-auto px-3 d-flex flex-wrap align-itmes-center justify-content-start col-12  col-md-6 ">
-                          <label className="col-3 text-wrap text-right fw-bolder p-0 m-0">الواتس اب</label>
-                          <input type="text" className="form-control border-primary col-9" onChange={(e) => setwhatsapp(e.target.value)} />
+                          <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الواتس اب</label>
+                          <input type="text" className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => setwhatsapp(e.target.value)} />
                         </div>
                         <div className="form-group w-100 h-auto px-3 d-flex flex-wrap align-itmes-center justify-content-start col-12  col-md-6 ">
-                          <label className="col-3 text-wrap text-right fw-bolder p-0 m-0">الايميل</label>
-                          <input type="text" className="form-control border-primary col-9" onChange={(e) => setemail(e.target.value)} />
+                          <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الايميل</label>
+                          <input type="text" className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => setemail(e.target.value)} />
                         </div>
                         <div className="form-group w-100 h-auto px-3 d-flex flex-wrap align-itmes-center justify-content-start col-12  col-md-6 ">
-                          <label className="col-3 text-wrap text-right fw-bolder p-0 m-0">العنوان</label>
-                          <input type="text" className="form-control border-primary col-9" required onChange={(e) => setAddress(e.target.value)} />
+                          <label className="form-label text-wrap text-right fw-bolder p-0 m-0">العنوان</label>
+                          <input type="text" className="form-control border-primary m-0 p-2 h-auto" required onChange={(e) => setAddress(e.target.value)} />
                         </div>
                         <div className="form-group w-100 h-auto px-3 d-flex flex-wrap align-itmes-center justify-content-start col-12  col-md-6 " >
                           {phone && phone.map((phoneNumber, index) => (
                             <React.Fragment key={index}>
-                              <label className="col-3 text-wrap text-right fw-bolder p-0 m-0">الموبايل {index + 1}</label>
+                              <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الموبايل {index + 1}</label>
                               <input type="text" className="form-control border-primary col-7" placeholder={phoneNumber} required onChange={(e) => handleNewPhone(index, e)} />
                               <button type="button" className="btn col-2 btn-danger h-100 btn btn-sm" onClick={() => handleDeletePhone(index)}>حذف</button>
                             </React.Fragment>
@@ -518,7 +518,7 @@ const Suppliers = () => {
                         <div className="form-group w-100 h-auto px-3 d-flex flex-wrap align-itmes-center justify-content-start col-12  col-md-6 " >
                           {itemsSupplied.map((item, index) => (
                             <React.Fragment key={index}>
-                              <label className="col-3 text-wrap text-right fw-bolder p-0 m-0">الاصناف الموردة {index + 1}</label>
+                              <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الاصناف الموردة {index + 1}</label>
                               <select className="form-select border-primary col-7" onChange={(e) => handleNewItemsSupplied(index, e)}>
                                 <option value="">اخترالصنف</option>
                                 {AllStockItems.map(stockItem => {
@@ -532,21 +532,21 @@ const Suppliers = () => {
 
                         </div>
                         <div className="form-group w-100 h-auto px-3 d-flex flex-wrap align-itmes-center justify-content-start col-12  col-md-6 ">
-                          <label className="col-3 text-wrap text-right fw-bolder p-0 m-0">نوع الدفع</label>
-                          <select className="form-select border-primary col-9" required onChange={(e) => setPaymentType(e.target.value)}>
+                          <label className="form-label text-wrap text-right fw-bolder p-0 m-0">نوع الدفع</label>
+                          <select className="form-control border-primary m-0 p-2 h-auto" required onChange={(e) => setPaymentType(e.target.value)}>
                             <option value="">اختر...</option>
                             <option value="Cash">كاش</option>
                             <option value="Installments">تقسيط</option>
                           </select>
                         </div>
                         <div className="form-group w-100 h-auto px-3 d-flex flex-wrap align-itmes-center justify-content-start col-12  col-md-6 ">
-                          <label className="col-3 text-wrap text-right fw-bolder p-0 m-0">الرصيد الافتتاحي</label>
-                          <input type="number" className="form-control border-primary col-9" onChange={(e) => setCurrentBalance(e.target.value)} />
+                          <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الرصيد الافتتاحي</label>
+                          <input type="number" className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => setCurrentBalance(e.target.value)} />
                         </div>
                         <div className="form-group w-100 h-auto px-3 d-flex flex-wrap align-itmes-center justify-content-start col-12  col-md-6 " >
                           {financialInfo.map((info, index) => (
                             <React.Fragment key={index}>
-                              <label className="col-3 text-wrap text-right fw-bolder p-0 m-0">المعلومات المالية {index + 1}</label>
+                              <label className="form-label text-wrap text-right fw-bolder p-0 m-0">المعلومات المالية {index + 1}</label>
                               <input type="text" className="form-control border-primary col-3" value={info.paymentMethodName} placeholder="اسم وسيلة الدفع" required onChange={(e) => handleNewFinancialInfo(index, 'paymentMethodName', e.target.value)} />
                               <input type="text" className="form-control border-primary col-4" value={info.accountNumber} placeholder="رقم الحساب" required onChange={(e) => handleNewFinancialInfo(index, 'accountNumber', e.target.value)} />
                               <button type="button" className="btn col-2 btn-danger h-100 btn btn-sm" onClick={() => handleDeleteFinancialInfo(index)}>حذف</button>
@@ -555,8 +555,8 @@ const Suppliers = () => {
                           <button type="button" className="btn w-100 btn-success" onClick={handleAddfinancialInfo}>إضافة معلومات مالية</button>
                         </div>
                         <div className="form-group w-100 h-auto px-3 d-flex flex-wrap align-itmes-center justify-content-start col-12  col-md-6 ">
-                          <label className="col-3 text-wrap text-right fw-bolder p-0 m-0">ملاحظات</label>
-                          <textarea className="form-control border-primary col-9" onChange={(e) => setnotes(e.target.value)} />
+                          <label className="form-label text-wrap text-right fw-bolder p-0 m-0">ملاحظات</label>
+                          <textarea className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => setnotes(e.target.value)} />
                         </div>
                       </div>
                       <div className="modal-footer d-flex flex-nowrap align-items-center justify-content-between m-0 p-1">
@@ -578,25 +578,25 @@ const Suppliers = () => {
                       </div>
                       <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
                         <div className="form-group w-100 h-auto px-3 d-flex flex-wrap align-itmes-center justify-content-start col-12  col-md-6 ">
-                          <label className="col-3 text-wrap text-right fw-bolder p-0 m-0">اسم المورد</label>
-                          <input type="text" className="form-control border-primary col-9" defaultValue={name} value={name} onChange={(e) => setName(e.target.value)} />
+                          <label className="form-label text-wrap text-right fw-bolder p-0 m-0">اسم المورد</label>
+                          <input type="text" className="form-control border-primary m-0 p-2 h-auto" defaultValue={name} value={name} onChange={(e) => setName(e.target.value)} />
                         </div>
 
                         <div className="form-group w-100 h-auto px-3 d-flex flex-wrap align-itmes-center justify-content-start col-12  col-md-6 ">
-                          <label className="col-3 text-wrap text-right fw-bolder p-0 m-0">الواتس اب</label>
-                          <input type="text" className="form-control border-primary col-9" defaultValue={whatsapp} onChange={(e) => setwhatsapp(e.target.value)} />
+                          <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الواتس اب</label>
+                          <input type="text" className="form-control border-primary m-0 p-2 h-auto" defaultValue={whatsapp} onChange={(e) => setwhatsapp(e.target.value)} />
                         </div>
                         <div className="form-group w-100 h-auto px-3 d-flex flex-wrap align-itmes-center justify-content-start col-12  col-md-6 ">
-                          <label className="col-3 text-wrap text-right fw-bolder p-0 m-0">الايميل</label>
-                          <input type="text" className="form-control border-primary col-9" defaultValue={email} onChange={(e) => setemail(e.target.value)} />
+                          <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الايميل</label>
+                          <input type="text" className="form-control border-primary m-0 p-2 h-auto" defaultValue={email} onChange={(e) => setemail(e.target.value)} />
                         </div>
                         <div className="form-group w-100 h-auto px-3 d-flex flex-wrap align-itmes-center justify-content-start col-12  col-md-6 ">
-                          <label className="col-3 text-wrap text-right fw-bolder p-0 m-0">العنوان</label>
-                          <input type="text" className="form-control border-primary col-9" defaultValue={address} onChange={(e) => setAddress(e.target.value)} />
+                          <label className="form-label text-wrap text-right fw-bolder p-0 m-0">العنوان</label>
+                          <input type="text" className="form-control border-primary m-0 p-2 h-auto" defaultValue={address} onChange={(e) => setAddress(e.target.value)} />
                         </div>
                         <div className="form-group w-100 h-auto px-3 d-flex flex-wrap align-itmes-center justify-content-start col-12  col-md-6 ">
-                          <label className="col-3 text-wrap text-right fw-bolder p-0 m-0">نوع الدفع</label>
-                          <select className="form-select border-primary col-9" defaultValue={paymentType} onChange={(e) => setPaymentType(e.target.value)}>
+                          <label className="form-label text-wrap text-right fw-bolder p-0 m-0">نوع الدفع</label>
+                          <select className="form-control border-primary m-0 p-2 h-auto" defaultValue={paymentType} onChange={(e) => setPaymentType(e.target.value)}>
                             <option value="">{paymentType === 'Cash' ? 'كاش' : "تقسيط"}</option>
                             <option value="Cash">كاش</option>
                             <option value="Installments">تقسيط</option>
@@ -605,7 +605,7 @@ const Suppliers = () => {
                         <div className="form-group w-100 h-auto px-3 d-flex flex-wrap align-itmes-center justify-content-start col-12  col-md-6 " >
                           {phone && phone.map((phoneNumber, index) => (
                             <React.Fragment key={index}>
-                              <label className="col-3 text-wrap text-right fw-bolder p-0 m-0">الموبايل {index + 1}</label>
+                              <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الموبايل {index + 1}</label>
                               <input type="text" className="form-control border-primary col-7" defaultValue={phoneNumber} onChange={(e) => handleNewPhone(index, e)} />
                               <button type="button" className="btn col-2 btn-danger h-100 btn btn-sm" onClick={() => handleDeletePhone(index)}>حذف</button>
                             </React.Fragment>
@@ -615,7 +615,7 @@ const Suppliers = () => {
                         <div className="form-group w-100 h-auto px-3 d-flex flex-wrap align-itmes-center justify-content-start col-12  col-md-6 " >
                           {itemsSupplied.map((item, index) => (
                             <React.Fragment key={index}>
-                              <label className="col-3 text-wrap text-right fw-bolder p-0 m-0">الاصناف الموردة {index + 1}</label>
+                              <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الاصناف الموردة {index + 1}</label>
                               <select className="form-select border-primary col-7" onChange={(e) => handleNewItemsSupplied(index, e)}>
                                 <option value="">{item ? item.itemName : ""}</option>
                                 {AllStockItems.map(stockItem => {
@@ -631,7 +631,7 @@ const Suppliers = () => {
                           {financialInfo.map((info, index) => (
                             <React.Fragment key={index}>
 
-                              <label className="col-3 text-wrap text-right fw-bolder p-0 m-0">المعلومات المالية {index + 1}</label>
+                              <label className="form-label text-wrap text-right fw-bolder p-0 m-0">المعلومات المالية {index + 1}</label>
                               <input type="text" className="form-control border-primary col-3" defaultValue={info.paymentMethodName} placeholder="اسم وسيلة الدفع" onChange={(e) => handleNewFinancialInfo(index, 'paymentMethodName', e.target.value)} />
                               <input type="text" className="form-control border-primary col-4" defaultValue={info.accountNumber} placeholder="رقم الحساب" onChange={(e) => handleNewFinancialInfo(index, 'accountNumber', e.target.value)} />
                               <button type="button" className="btn col-2 btn-danger h-100 btn btn-sm" onClick={() => handleDeleteFinancialInfo(index)}>حذف</button>
@@ -641,8 +641,8 @@ const Suppliers = () => {
                           <button type="button" className="btn w-100 btn-success" onClick={handleAddfinancialInfo}>إضافة معلومات مالية</button>
                         </div>
                         <div className="form-group w-100 h-auto px-3 d-flex flex-wrap align-itmes-center justify-content-start col-12  col-md-6 ">
-                          <label className="col-3 text-wrap text-right fw-bolder p-0 m-0">ملاحظات</label>
-                          <textarea className="form-control border-primary col-9" defaultValue={notes} onChange={(e) => setnotes(e.target.value)} />
+                          <label className="form-label text-wrap text-right fw-bolder p-0 m-0">ملاحظات</label>
+                          <textarea className="form-control border-primary m-0 p-2 h-auto" defaultValue={notes} onChange={(e) => setnotes(e.target.value)} />
                         </div>
                       </div>
                       <div className="modal-footer d-flex flex-nowrap align-items-center justify-content-between m-0 p-1">

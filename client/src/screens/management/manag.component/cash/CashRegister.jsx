@@ -223,7 +223,7 @@ const CashRegister = () => {
                 </div>
                 <div class="table-filter print-hide">
                   <div className="row text-dark d-flex flex-wrap align-items-center justify-content-between p-0 m-0">
-                    <div className="show-entries d-flex flex-wrap align-items-center justify-content-evenly col-md-2">
+                    <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
                       <label className="form-label text-wrap text-right fw-bolder p-0 m-0">عرض</label>
                       <select className="form-select border-primary col-6 px-1 py-2 m-0" onChange={(e) => { setstartpagination(0); setendpagination(e.target.value) }}>
                         <option value={5}>5</option>
