@@ -396,7 +396,7 @@ const POS = () => {
               </div>
               <div className="modal-footer w-100 d-flex flex-row flex-nowrap align-item-center justify-content-between">
                 <input type="submit" className="btn btn-success col-6 h-100 p-0 m-0" value="تم" />
-                <input type="button" className="btn btn-danger col-6 h-100 p-2 m-0" data-dismiss="modal" value="إغلاق" />
+                <input type="button" className="btn btn-danger col-6 h-100 px-2  py-3 m-0" data-dismiss="modal" value="إغلاق" />
               </div>
             </form>
           </div>
@@ -454,7 +454,7 @@ const POS = () => {
               </div>
               <div className="modal-footer w-100 d-flex flex-row flex-nowrap align-items-center justify-content-between">
                 <input type="submit" className="btn btn-success col-6 h-100 p-0 m-0" value="تم" />
-                <input type="button" className="btn btn-danger col-6 h-100 p-2 m-0" data-dismiss="modal" value="إغلاق" />
+                <input type="button" className="btn btn-danger col-6 h-100 px-2  py-3 m-0" data-dismiss="modal" value="إغلاق" />
               </div>
             </form>
           </div>
@@ -586,7 +586,7 @@ const POS = () => {
               </div>
               <div className="modal-footer w-100 d-flex flex-row flex-nowrap align-item-center justify-content-between">
                 <input type="submit" className="btn btn-success col-6 h-100 p-0 m-0" value="تم" />
-                <input type="button" className="btn btn-danger col-6 h-100 p-2 m-0" data-dismiss="modal" value="اغلاق" />
+                <input type="button" className="btn btn-danger col-6 h-100 px-2  py-3 m-0" data-dismiss="modal" value="اغلاق" />
               </div>
             </form>
           </div>
@@ -698,7 +698,7 @@ const POS = () => {
                 ) : null : ''}
               <div className="modal-footer d-flex flex-nowrap align-items-center justify-content-between m-0 p-1">
                 <input type="button" className="btn btn-success col-6 h-100 p-0 m-0" data-dismiss="modal" value="تم" />
-                <input type="button" className="btn btn-danger col-6 h-100 p-2 m-0" data-dismiss="modal" value="اغلاق" onClick={() => { deleteOrderdetalis() }} />
+                <input type="button" className="btn btn-danger col-6 h-100 px-2  py-3 m-0" data-dismiss="modal" value="اغلاق" onClick={() => { deleteOrderdetalis() }} />
               </div>
             </form>
           </div>

@@ -766,8 +766,8 @@ const Products = () => {
               </div>
 
               <div className="modal-footer d-flex flex-nowrap align-items-center justify-content-between m-0 p-1">
-                <input type="submit" className="btn btn-success col-6 h-100 p-2 m-0" value="اضافه" />
-                <input type="button" className="btn btn-danger col-6 h-100 p-2 m-0" data-dismiss="modal" value="إغلاق" />
+                <input type="submit" className="btn btn-success col-6 h-100 px-2  py-3 m-0" value="اضافه" />
+                <input type="button" className="btn btn-danger col-6 h-100 px-2  py-3 m-0" data-dismiss="modal" value="إغلاق" />
               </div>
             </form>
           </div>
@@ -890,8 +890,8 @@ const Products = () => {
               </div>
 
               <div className="modal-footer d-flex flex-nowrap align-items-center justify-content-between m-0 p-1">
-                <input type="submit" className="btn btn-success col-6 h-100 p-2 m-0" value="حفظ" />
-                <input type="button" className="btn btn-danger col-6 h-100 p-2 m-0" data-dismiss="modal" value="إغلاق" />
+                <input type="submit" className="btn btn-success col-6 h-100 px-2  py-3 m-0" value="حفظ" />
+                <input type="button" className="btn btn-danger col-6 h-100 px-2  py-3 m-0" data-dismiss="modal" value="إغلاق" />
               </div>
             </form>
           </div>
@@ -908,13 +908,13 @@ const Products = () => {
                 <h4 className="modal-title">حذف منتج</h4>
                 <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
               </div>
-              <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
-                <p>هل انت متاكد من حذف هذا السجل؟</p>
-                <p className="text-warning"><small>لا يمكن الرجوع في هذا الاجراء.</small></p>
-              </div>
+               <div className="modal-body text-center">
+          <p className="mb-2">هل أنت متأكد من حذف هذا السجل؟</p>
+          <p className="text-warning"><small>لا يمكن الرجوع في هذا الإجراء.</small></p>
+        </div>
               <div className="modal-footer d-flex flex-nowrap align-items-center justify-content-between m-0 p-1">
                 <input type="submit" className="btn btn-warning col-6 h-100 p-0 m-0" value="حذف" />
-                <input type="button" className="btn btn-danger col-6 h-100 p-2 m-0" data-dismiss="modal" value="إغلاق" />
+                <input type="button" className="btn btn-danger col-6 h-100 px-2  py-3 m-0" data-dismiss="modal" value="إغلاق" />
               </div>
             </form>
           </div>

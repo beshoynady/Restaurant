@@ -242,7 +242,7 @@ const CashRegister = () => {
 
                     <div className="filter-group d-flex align-items-center justify-content-evenly col-md-3 mb-1">
                       <label className="form-label text-wrap text-right fw-bolder p-0 m-0">المسؤول</label>
-                      <select className="form-control border-primary m-0 p-2 h-auto"  onChange={(e) => filterCashRegistersByEmployee(e.target.value)}>
+                      <select className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => filterCashRegistersByEmployee(e.target.value)}>
                         <option value="">اختر</option>
                         {allEmployee && allEmployee.map((Employee, i) => (
                           <option value={Employee._id} key={i}>{Employee.username}</option>
@@ -337,7 +337,7 @@ const CashRegister = () => {
                       </div>
                       <div className="form-group w-100 h-auto px-3 d-flex align-itmes-center justify-content-start col-12 ">
                         <label className="form-label text-wrap text-right fw-bolder p-0 m-0">المسؤل</label>
-                        <select className="form-control border-primary m-0 p-2 h-auto"  name="Employee" id="Employee" form="carform" onChange={(e) => setemployee(e.target.value)}>
+                        <select className="form-control border-primary m-0 p-2 h-auto" name="Employee" id="Employee" form="carform" onChange={(e) => setemployee(e.target.value)}>
                           <option>احتر الموظف</option>
                           {allEmployee.map((Employee, i) => {
                             return <option value={Employee._id} key={i} >{Employee.username}</option>
@@ -348,8 +348,8 @@ const CashRegister = () => {
                     </div>
 
                     <div className="modal-footer d-flex flex-nowrap align-items-center justify-content-between m-0 p-1">
-                      <input type="submit" className="btn btn-success col-6 h-100 p-2 m-0" value="اضافه" />
-                      <input type="button" className="btn btn-danger col-6 h-100 p-2 m-0" data-dismiss="modal" value="إغلاق" />
+                      <input type="submit" className="btn btn-success col-6 h-100 px-2  py-3 m-0" value="اضافه" />
+                      <input type="button" className="btn btn-danger col-6 h-100 px-2  py-3 m-0" data-dismiss="modal" value="إغلاق" />
                     </div>
                   </form>
                 </div>
@@ -370,7 +370,7 @@ const CashRegister = () => {
                       </div>
                       <div className="form-group w-100 h-auto px-3 d-flex align-itmes-center justify-content-start col-12">
                         <label className="form-label text-wrap text-right fw-bolder p-0 m-0">المسؤل</label>
-                        <select className="form-control border-primary m-0 p-2 h-auto"  name="category" id="category" form="carform" defaultValue={employee} onChange={(e) => setemployee(e.target.value)}>
+                        <select className="form-control border-primary m-0 p-2 h-auto" name="category" id="category" form="carform" defaultValue={employee} onChange={(e) => setemployee(e.target.value)}>
                           <option value={employee}>{employeeName}</option>
                           {allEmployee.length > 0 ? allEmployee.map((Employee, i) => {
                             return <option value={Employee._id} key={i} >{Employee.username}</option>
@@ -380,8 +380,8 @@ const CashRegister = () => {
                       </div>
                     </div>
                     <div className="modal-footer d-flex flex-nowrap align-items-center justify-content-between m-0 p-1">
-                      <input type="submit" className="btn btn-success col-6 h-100 p-2 m-0" value="حفظ" />
-                      <input type="button" className="btn btn-danger col-6 h-100 p-2 m-0" data-dismiss="modal" value="إغلاق" />
+                      <input type="submit" className="btn btn-success col-6 h-100 px-2  py-3 m-0" value="حفظ" />
+                      <input type="button" className="btn btn-danger col-6 h-100 px-2  py-3 m-0" data-dismiss="modal" value="إغلاق" />
                     </div>
                   </form>
                 </div>
@@ -395,13 +395,13 @@ const CashRegister = () => {
                       <h4 className="modal-title">حذف تصنيف</h4>
                       <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
                     </div>
-                    <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
-                      <p>هل انت متاكد من حذف هذا التصنيف?</p>
-                      <p className="text-warning"><small>لا يمكن الرجوع فيه.</small></p>
+                    <div className="modal-body text-center">
+                      <p className="mb-2">هل أنت متأكد من حذف هذا السجل؟</p>
+                      <p className="text-warning"><small>لا يمكن الرجوع في هذا الإجراء.</small></p>
                     </div>
                     <div className="modal-footer d-flex flex-nowrap align-items-center justify-content-between m-0 p-1">
                       <input type="submit" className="btn btn-warning col-6 h-100 p-0 m-0" value="حذف" />
-                      <input type="button" className="btn btn-danger col-6 h-100 p-2 m-0" data-dismiss="modal" value="إغلاق" />
+                      <input type="button" className="btn btn-danger col-6 h-100 px-2  py-3 m-0" data-dismiss="modal" value="إغلاق" />
                     </div>
                   </form>
                 </div>
@@ -415,13 +415,13 @@ const CashRegister = () => {
                       <h4 className="modal-title">حذف الخزن المحدده</h4>
                       <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
                     </div>
-                    <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
-                      <p>هل انت متاكد من حذف هذا التصنيف?</p>
-                      <p className="text-warning"><small>لا يمكن الرجوع فيه.</small></p>
+                    <div className="modal-body text-center">
+                      <p className="mb-2">هل أنت متأكد من حذف هذا السجل؟</p>
+                      <p className="text-warning"><small>لا يمكن الرجوع في هذا الإجراء.</small></p>
                     </div>
                     <div className="modal-footer d-flex flex-nowrap align-items-center justify-content-between m-0 p-1">
                       <input type="submit" className="btn btn-warning col-6 h-100 p-0 m-0" value="حذف" />
-                      <input type="button" className="btn btn-danger col-6 h-100 p-2 m-0" data-dismiss="modal" value="إغلاق" />
+                      <input type="button" className="btn btn-danger col-6 h-100 px-2  py-3 m-0" data-dismiss="modal" value="إغلاق" />
                     </div>
                   </form>
                 </div>
