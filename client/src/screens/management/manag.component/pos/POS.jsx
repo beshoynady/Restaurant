@@ -38,7 +38,7 @@ const POS = () => {
 
   const [showModal, setShowModal] = useState(false);
 
-  
+
   const [ExtrasIsPaid, setExtrasIsPaid] = useState([])
   const [serial, setserial] = useState('')
   const [sizeId, setsizeId] = useState('');
@@ -229,18 +229,18 @@ const POS = () => {
   const [cashOutAmount, setCashOutAmount] = useState(0);
   const [revenueAmount, setRevenueAmount] = useState(0);
 
-  
-  
+
+
   useEffect(() => {
     const remaining = paidAmount - myOrder.total;
     const revenue = paidAmount - cashOutAmount;
-  
-    setRemainingAmount(remaining>0?remaining:0);
-    setRevenueAmount(revenue>0?revenue:0);
-  }, [paidAmount, cashOutAmount])
-  
 
-  const RevenueRecording = async (total , revenue) => {
+    setRemainingAmount(remaining > 0 ? remaining : 0);
+    setRevenueAmount(revenue > 0 ? revenue : 0);
+  }, [paidAmount, cashOutAmount])
+
+
+  const RevenueRecording = async (total, revenue) => {
     try {
       if (!token) {
         // Handle case where token is not available
@@ -248,7 +248,7 @@ const POS = () => {
       }
       if (registerSelected) {
         // احسب الرصيد المحدث
-        const oldBalance= registers.find(register => register._id === registerSelected).balance
+        const oldBalance = registers.find(register => register._id === registerSelected).balance
         const updatedBalance = oldBalance + revenue;
 
         // إنشاء سجل حركة نقدية
@@ -330,12 +330,12 @@ const POS = () => {
 
 
   useEffect(() => {
-    const roundedSalesTax = ((costOrder * restaurantData.salesTaxRate) / 100).toFixed(2);    
+    const roundedSalesTax = ((costOrder * restaurantData.salesTaxRate) / 100).toFixed(2);
     setsalesTax(parseFloat(roundedSalesTax));
-    if(ordertype==='Internal'){
+    if (ordertype === 'Internal') {
       const roundedServiceTax = ((costOrder * restaurantData.serviceTaxRate) / 100).toFixed(2);
       setserviceTax(parseFloat(roundedServiceTax));
-    }else{
+    } else {
       setserviceTax(0);
     }
   }, [costOrder]);
@@ -395,8 +395,8 @@ const POS = () => {
                 </div>
               </div>
               <div className="modal-footer w-100 d-flex flex-row flex-nowrap align-item-center justify-content-between">
-                <input type="submit" className="btn btn-success col-6 h-100 p-0 m-0" value="تم" />
-                <input type="button" className="btn btn-danger col-6 h-100 px-2  py-3 m-0" data-dismiss="modal" value="إغلاق" />
+                <input type="submit" className="btn btn-success col-6 h-100 px-2 py-3 m-0" value="تم" />
+                <input type="button" className="btn btn-danger col-6 h-100 px-2 py-3 m-0" data-dismiss="modal" value="إغلاق" />
               </div>
             </form>
           </div>
@@ -418,7 +418,7 @@ const POS = () => {
               </div>
               <div className="form-group w-100 d-flex align-items-center justify-content-between">
                 <label htmlFor="paidAmount" className="col-6 text-dark">المدفوع:</label>
-                <input type="number" id="paidAmount" className="form-control border-primary col-6" min={parseFloat(myOrder.total)} required onChange={(e)=>setPaidAmount(e.target.value)} />
+                <input type="number" id="paidAmount" className="form-control border-primary col-6" min={parseFloat(myOrder.total)} required onChange={(e) => setPaidAmount(e.target.value)} />
               </div>
               <div className="form-group w-100 d-flex align-items-center justify-content-between">
                 <label htmlFor="remainingAmount" className="col-6 text-dark">الباقي:</label>
@@ -426,7 +426,7 @@ const POS = () => {
               </div>
               <div className="form-group w-100 d-flex align-items-center justify-content-between">
                 <label htmlFor="cashOutAmount" className="col-6 text-dark">المبلغ الخارج من الخزينة:</label>
-                <input type="number" id="cashOutAmount" className="form-control border-primary col-6" max={parseFloat(remainingAmount)}  onChange={(e)=>setCashOutAmount(e.target.value)} />
+                <input type="number" id="cashOutAmount" className="form-control border-primary col-6" max={parseFloat(remainingAmount)} onChange={(e) => setCashOutAmount(e.target.value)} />
               </div>
               <div className="form-group d-flex flex-nowrap w-100">
                 <label htmlFor='paymentMethod' className='col-6 text-dark'>طريقه الدفع:</label>
@@ -453,8 +453,8 @@ const POS = () => {
                 )}
               </div>
               <div className="modal-footer w-100 d-flex flex-row flex-nowrap align-items-center justify-content-between">
-                <input type="submit" className="btn btn-success col-6 h-100 p-0 m-0" value="تم" />
-                <input type="button" className="btn btn-danger col-6 h-100 px-2  py-3 m-0" data-dismiss="modal" value="إغلاق" />
+                <input type="submit" className="btn btn-success col-6 h-100 px-2 py-3 m-0" value="تم" />
+                <input type="button" className="btn btn-danger col-6 h-100 px-2 py-3 m-0" data-dismiss="modal" value="إغلاق" />
               </div>
             </form>
           </div>
@@ -585,8 +585,8 @@ const POS = () => {
                 </div>
               </div>
               <div className="modal-footer w-100 d-flex flex-row flex-nowrap align-item-center justify-content-between">
-                <input type="submit" className="btn btn-success col-6 h-100 p-0 m-0" value="تم" />
-                <input type="button" className="btn btn-danger col-6 h-100 px-2  py-3 m-0" data-dismiss="modal" value="اغلاق" />
+                <input type="submit" className="btn btn-success col-6 h-100 px-2 py-3 m-0" value="تم" />
+                <input type="button" className="btn btn-danger col-6 h-100 px-2 py-3 m-0" data-dismiss="modal" value="اغلاق" />
               </div>
             </form>
           </div>
@@ -599,9 +599,9 @@ const POS = () => {
         <div className="modal-dialog modal-lg">
           <div className="modal-content shadow-lg border-0 rounded ">
             <form>
-              <div className="modal-header bg-primary text-white">
+              <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                 <h4 className="modal-title">ادخل بيانات العميل</h4>
-                <button type="button" className="close text-white" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
               </div>
               {ordertype ?
                 ordertype === 'Internal' ? (
@@ -621,7 +621,7 @@ const POS = () => {
 
                     <div className="form-group d-flex flex-nowrap align-items-center justify-content-between col-12 col-md-6 ">
                       <label htmlFor="phone" className='col-4 col-form-label text-dark'>رقم الموبايل:</label>
-                      <input type='text' className="col-8 form-control" required onChange={(e) =>{setclientphone(e.target.value); getCustomerByPhone(e.target.value)}} />
+                      <input type='text' className="col-8 form-control" required onChange={(e) => { setclientphone(e.target.value); getCustomerByPhone(e.target.value) }} />
                     </div>
 
                     <div className="form-group d-flex flex-nowrap align-items-center justify-content-between col-12 col-md-6 ">
@@ -631,7 +631,7 @@ const POS = () => {
 
                     <div className="form-group d-flex flex-nowrap align-items-center justify-content-between col-12 col-md-6 ">
                       <label htmlFor="area" className='col-4 col-form-label text-dark'>المنطقة:</label>
-                      <select id="area" className="col-8 form-control" required onChange={(e) =>{handelcustomerDeliveryArea(e.target.value)}}>
+                      <select id="area" className="col-8 form-control" required onChange={(e) => { handelcustomerDeliveryArea(e.target.value) }}>
                         <option>{deliveryAreaName}</option>
                         {areas ? (
                           areas.map((area, i) => (
@@ -650,7 +650,7 @@ const POS = () => {
                       <>
                         <div className="form-group w-100 h-auto px-3 d-flex align-items-center justify-content-start col-12 col-md-6">
                           <label className="form-label text-wrap text-right fw-bolder p-0 m-0">التوثيق</label>
-                          <select name='isVarified' required className="form-control border-primary m-0 p-2 h-auto"   value={isVarified} onChange={(e) => setisVarified(e.target.value)}>
+                          <select name='isVarified' required className="form-control border-primary m-0 p-2 h-auto" value={isVarified} onChange={(e) => setisVarified(e.target.value)}>
                             <option value="">{isVarified ? 'موثق' : "غير موثق"}</option>
                             <option value={true}>موثق</option>
                             <option value={false}>غير موثق</option>
@@ -659,7 +659,7 @@ const POS = () => {
 
                         <div className="form-group w-100 h-auto px-3 d-flex align-items-center justify-content-start col-12 col-md-6">
                           <label className="form-label text-wrap text-right fw-bolder p-0 m-0">رفض الاوردرات</label>
-                          <select name='refusesOrders' required className="form-control border-primary m-0 p-2 h-auto"   value={refusesOrders} onChange={(e) => setrefusesOrders(e.target.value)}>
+                          <select name='refusesOrders' required className="form-control border-primary m-0 p-2 h-auto" value={refusesOrders} onChange={(e) => setrefusesOrders(e.target.value)}>
                             <option value="">{refusesOrders ? 'رفض اوردر' : "لم يرفض الاوردر"}</option>
                             <option value={true}>رفض اوردر</option>
                             <option value={false}>لم يرفض الاوردر</option>
@@ -697,8 +697,8 @@ const POS = () => {
                   </div>
                 ) : null : ''}
               <div className="modal-footer d-flex flex-nowrap align-items-center justify-content-between m-0 p-1">
-                <input type="button" className="btn btn-success col-6 h-100 p-0 m-0" data-dismiss="modal" value="تم" />
-                <input type="button" className="btn btn-danger col-6 h-100 px-2  py-3 m-0" data-dismiss="modal" value="اغلاق" onClick={() => { deleteOrderdetalis() }} />
+                <input type="button" className="btn btn-success col-6 h-100 px-2 py-3 m-0" data-dismiss="modal" value="تم" />
+                <input type="button" className="btn btn-danger col-6 h-100 px-2 py-3 m-0" data-dismiss="modal" value="اغلاق" onClick={() => { deleteOrderdetalis() }} />
               </div>
             </form>
           </div>
@@ -848,8 +848,8 @@ const POS = () => {
                             onChange={(e) => { setproductNote(e.target.value); }}></textarea>
 
                           <div className="d-flex flex-nowrap align-aitems-center  justify-content-between w-100 h-25 p-0 m-0">
-                            <button type="submit" className="btn btn-primary col-6 h-100 p-0 m-0" >تاكيد</button>
-                            <button type="button" className="btn btn-secondary col-6 h-100 p-0 m-0" onClick={() => setnoteArea(!noteArea)} >اغلاق</button>
+                            <button type="submit" className="btn btn-primarycol-6 h-100 px-2 py-3 m-0" >تاكيد</button>
+                            <button type="button" className="btn btn-secondarycol-6 h-100 px-2 py-3 m-0" onClick={() => setnoteArea(!noteArea)} >اغلاق</button>
                           </div>
                         </form>
                       </div>
@@ -862,8 +862,8 @@ const POS = () => {
                               onChange={(e) => { setproductNote(e.target.value); }}></textarea>
 
                             <div className="d-flex flex-nowrap align-aitems-center  justify-content-between p-0 m-0">
-                              <button type="submit" className="btn btn-primary col-6 h-100 p-0 m-0 btn-primary">تاكيد</button>
-                              <button type="button" className="btn btn-secondary col-6 h-100 p-0 m-0 " onClick={() => { setnoteArea(!noteArea); setproductNote('') }} >اغلاق</button>
+                              <button type="submit" className="btn btn-primarycol-6 h-100 px-2 py-3 m-0 btn-primary">تاكيد</button>
+                              <button type="button" className="btn btn-secondarycol-6 h-100 px-2 py-3 m-0 " onClick={() => { setnoteArea(!noteArea); setproductNote('') }} >اغلاق</button>
                             </div>
                           </form>
                         </div>
@@ -874,11 +874,13 @@ const POS = () => {
                   <div className="card-body col-12 p-0 m-0 text-dark bg-light">
                     <div className="d-flex justify-content-between align-items-center py-2">
                       <div className="fw-bold w-50">{item.name}{item.size ? ` - ${item.size}` : ''}</div>
-                      <span onClick={() => { setnoteArea(!noteArea); setproductid(item.productid); 
-                        getProductDitalis(allProducts, item.productid); item.sizeId ? setsizeId(item.sizeId) 
-                        : setproductid(item.productid) }} 
+                      <span onClick={() => {
+                        setnoteArea(!noteArea); setproductid(item.productid);
+                        getProductDitalis(allProducts, item.productid); item.sizeId ? setsizeId(item.sizeId)
+                          : setproductid(item.productid)
+                      }}
                         className='material-symbols-outlined' style={{ width: '30%', fontSize: '40px', cursor: 'pointer', color: 'rgb(0, 238, 255)' }}
-                        >note_alt</span>
+                      >note_alt</span>
 
                       {item.hasExtras &&
                         <span className="material-icons" style={{ color: "green", fontSize: "45px", cursor: 'pointer' }}
@@ -934,8 +936,8 @@ const POS = () => {
                         <textarea className="form-control h-75 p-1 m-0" placeholder='اضف تعليماتك الخاصة بهذا الطبق' name='note'
                           onChange={(e) => { setproductNote(e.target.value); }}></textarea>
                         <div className="d-flex flex-nowrap align-aitems-center  justify-content-between w-100 h-25 p-0 m-0">
-                          <button type="submit" className="btn btn-primary col-6 h-100 p-0 m-0" >تاكيد</button>
-                          <button type="button" className="btn btn-secondary col-6 h-100 p-0 m-0" onClick={() => setnoteArea(!noteArea)} >اغلاق</button>
+                          <button type="submit" className="btn btn-primarycol-6 h-100 px-2 py-3 m-0" >تاكيد</button>
+                          <button type="button" className="btn btn-secondarycol-6 h-100 px-2 py-3 m-0" onClick={() => setnoteArea(!noteArea)} >اغلاق</button>
                         </div>
                       </form>
                     ) : (

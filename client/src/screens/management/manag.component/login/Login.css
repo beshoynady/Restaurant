@@ -52,41 +52,6 @@
     padding: 20px;
 }
 
-.header-title {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: #333;
-    margin-bottom: 20px;
-}
-
-.form-group {
-    margin-bottom: 15px;
-}
-
-.form-control {
-    border-radius: 5px;
-    border: 1px solid #007bff;
-    padding: 10px;
-    font-size: 1rem;
-}
-
-.btn {
-    border-radius: 5px;
-    padding: 10px;
-    font-size: 1rem;
-}
-
-.btn-primary {
-    background-color: #007bff;
-    border: none;
-    color: white;
-}
-
-.btn-success {
-    background-color: #28a745;
-    border: none;
-    color: white;
-}
 
 .carousel-inner {
     border-radius: 10px;

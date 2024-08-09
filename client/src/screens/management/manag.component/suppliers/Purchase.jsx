@@ -1023,8 +1023,8 @@ const Purchase = () => {
 
               </div>
               <div className="modal-footer d-flex flex-nowrap align-items-center justify-content-between m-0 p-1">
-                <input type="submit" className="btn btn-success col-6 h-100 px-2  py-3 m-0" value="اضافه" />
-                <input type="button" className="btn btn-danger col-6 h-100 px-2  py-3 m-0" data-dismiss="modal" value="إغلاق" />
+                <input type="submit" className="btn btn-success col-6 h-100 px-2 py-3 m-0" value="اضافه" />
+                <input type="button" className="btn btn-danger col-6 h-100 px-2 py-3 m-0" data-dismiss="modal" value="إغلاق" />
               </div>
             </form>
           </div>
@@ -1162,8 +1162,8 @@ const Purchase = () => {
               </div>
             </div>
             <div className="modal-footer d-flex flex-nowrap align-items-center justify-content-between m-0 p-1">
-              <input type="button" className="btn btn-danger col-6 h-100 px-2  py-3 m-0" data-dismiss="modal" value="إغلاق" />
-              <input type="button" className="btn btn-primary col-6 h-100 p-0 m-0" data-dismiss="modal" value="طباعه" onClick={handlePrint} />
+              <input type="button" className="btn btn-danger col-6 h-100 px-2 py-3 m-0" data-dismiss="modal" value="إغلاق" />
+              <input type="button" className="btn btn-primarycol-6 h-100 px-2 py-3 m-0" data-dismiss="modal" value="طباعه" onClick={handlePrint} />
             </div>
           </div>
         </div>
@@ -1185,8 +1185,8 @@ const Purchase = () => {
                         <p className="text-warning"><small>لا يمكن الرجوع في هذا الاجراء.</small></p>
                       </div>
                       <div className="modal-footer d-flex flex-nowrap align-items-center justify-content-between m-0 p-1">
-                        <input type="submit" className="btn btn-warning col-6 h-100 p-0 m-0" value="حذف" />
-                        <input type="button" className="btn btn-danger col-6 h-100 px-2  py-3 m-0" data-dismiss="modal" value="إغلاق" />
+                        <input type="submit" className="btn btn-warningcol-6 h-100 px-2 py-3 m-0" value="حذف" />
+                        <input type="button" className="btn btn-danger col-6 h-100 px-2 py-3 m-0" data-dismiss="modal" value="إغلاق" />
                       </div>
                     </form>
                   </div>

@@ -405,8 +405,8 @@ const Tables = () => {
                 </div>
               </div>
               <div className="modal-footer p-0 m-0 d-flex flex-nowrap align-items-center justify-content-between">
-                <input type="submit" className="btn btn-success col-6 h-100 px-2  py-3 m-0" value="ضافه" />
-                <input type="button" className="btn btn-danger col-6 h-100 px-2  py-3 m-0" data-dismiss="modal" value="إغلاق" />
+                <input type="submit" className="btn btn-success col-6 h-100 px-2 py-3 m-0" value="ضافه" />
+                <input type="button" className="btn btn-danger col-6 h-100 px-2 py-3 m-0" data-dismiss="modal" value="إغلاق" />
               </div>
             </form>
           </div>
@@ -422,23 +422,23 @@ const Tables = () => {
                 <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
               </div>
               <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
-                <div className="form-group px-3 d-flex align-itmes-center justify-content-start col-12  col-md-6  ">
+                <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">رقم السكشن</label>
                   <input type="Number" className="form-control border-primary m-0 p-2 h-auto" required onChange={(e) => setsectionNumber(e.target.value)} />
                 </div>
-                <div className="form-group px-3 d-flex align-itmes-center justify-content-start col-12  col-md-6  ">
+                <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">رقم الطاولة</label>
                   <input type="Number" defaultValue={listoftable.length > 0 ? listoftable[listoftable.length - 1].tableNumber : ""} className="form-control border-primary m-0 p-2 h-auto" required onChange={(e) => settableNumber(e.target.value)} />
                 </div>
-                <div className="form-group px-3 d-flex align-itmes-center justify-content-start col-12  col-md-6  ">
+                <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">عدد المقاعد</label>
                   <input type="Number" defaultValue={listoftable.length > 0 ? listoftable.find((table, i) => table._id === tableid).chairs : ''} className="form-control border-primary m-0 p-2 h-auto" required onChange={(e) => setchairs(e.target.value)} />
                 </div>
-                <div className="form-group px-3 d-flex align-itmes-center justify-content-start col-12  col-md-6  ">
+                <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الوصف</label>
                   <textarea defaultValue={listoftable.length > 0 ? listoftable.find((table, i) => table._id === tableid).description : ""} className="form-control border-primary m-0 p-2 h-auto" required onChange={(e) => settabledesc(e.target.value)}></textarea>
                 </div>
-                <div className="form-group px-3 d-flex align-itmes-center justify-content-start col-12  col-md-6  ">
+                <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">متاح</label>
                   <select className="form-control border-primary m-0 p-2 h-auto" name="category" id="category" form="carform" onChange={(e) => setisValid(e.target.value)}>
                     <option value="">اختر</option>
@@ -448,8 +448,8 @@ const Tables = () => {
                 </div>
               </div>
               <div className="modal-footer p-0 m-0 d-flex flex-nowrap align-items-center justify-content-between">
-                <input type="submit" className="btn btn-success col-6 h-100 px-2  py-3 m-0" value="حفظ" />
-                <input type="button" className="btn btn-danger col-6 h-100 px-2  py-3 m-0" data-dismiss="modal" value="إغلاق" />
+                <input type="submit" className="btn btn-success col-6 h-100 px-2 py-3 m-0" value="حفظ" />
+                <input type="button" className="btn btn-danger col-6 h-100 px-2 py-3 m-0" data-dismiss="modal" value="إغلاق" />
               </div>
             </form>
           </div>
@@ -480,9 +480,9 @@ const Tables = () => {
                 {qrimage ? (
                   <button type="button" className="col-6 btn p-3 m-0 btn-info" onClick={handlePrinttableqr}>طباعة</button>
                 ) : (
-                  <input type="submit" className="btn btn-success col-6 h-100 px-2  py-3 m-0"  value="استخراج" />
+                  <input type="submit" className="btn btn-success col-6 h-100 px-2 py-3 m-0"  value="استخراج" />
                 )}
-                <button type="button" className="btn btn-danger col-6 h-100 px-2  py-3 m-0" data-dismiss="modal" >اغلاق</button>
+                <button type="button" className="btn btn-danger col-6 h-100 px-2 py-3 m-0" data-dismiss="modal" >اغلاق</button>
               </div>
             </form>
           </div>
@@ -512,9 +512,9 @@ const Tables = () => {
                 {qrimage ? (
                   <button type="button" className="col-6 btn p-3 m-0 btn-info" onClick={handlePrintwepqr}>طباعة</button>
                 ) : (
-                  <input type="submit" className="btn btn-success col-6 h-100 px-2  py-3 m-0"  value="استخراج" />
+                  <input type="submit" className="btn btn-success col-6 h-100 px-2 py-3 m-0"  value="استخراج" />
                 )}
-                <button type="button" className="btn btn-danger col-6 h-100 px-2  py-3 m-0" data-dismiss="modal">اغلاق</button>
+                <button type="button" className="btn btn-danger col-6 h-100 px-2 py-3 m-0" data-dismiss="modal">اغلاق</button>
               </div>
             </form>
           </div>
@@ -536,8 +536,8 @@ const Tables = () => {
           <p className="text-warning"><small>لا يمكن الرجوع في هذا الإجراء.</small></p>
         </div>
               <div className="modal-footer p-0 m-0 d-flex flex-nowrap align-items-center justify-content-between">
-                <input type="submit" className="btn btn-warning col-6 h-100 p-0 m-0" value="حذف" />
-                <input type="button" className="btn btn-danger col-6 h-100 px-2  py-3 m-0" data-dismiss="modal" value="إغلاق" />
+                <input type="submit" className="btn btn-warningcol-6 h-100 px-2 py-3 m-0" value="حذف" />
+                <input type="button" className="btn btn-danger col-6 h-100 px-2 py-3 m-0" data-dismiss="modal" value="إغلاق" />
               </div>
             </form>
           </div>
@@ -559,8 +559,8 @@ const Tables = () => {
           <p className="text-warning"><small>لا يمكن الرجوع في هذا الإجراء.</small></p>
         </div>
               <div className="modal-footer p-0 m-0 d-flex flex-nowrap align-items-center justify-content-between">
-                <input type="submit" className="btn btn-warning col-6 h-100 p-0 m-0" value="حذف" />
-                <input type="button" className="btn btn-danger col-6 h-100 px-2  py-3 m-0" data-dismiss="modal" value="إغلاق" />
+                <input type="submit" className="btn btn-warningcol-6 h-100 px-2 py-3 m-0" value="حذف" />
+                <input type="button" className="btn btn-danger col-6 h-100 px-2 py-3 m-0" data-dismiss="modal" value="إغلاق" />
               </div>
             </form>
           </div>

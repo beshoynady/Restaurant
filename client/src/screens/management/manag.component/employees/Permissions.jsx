@@ -314,7 +314,7 @@ const PermissionsComponent = () => {
                         <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1" style={{ minWidth: '35%' }}>
                           <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الاسم</label>
                           <input type="text" className="form-control border-primary m-0 p-2 h-auto" style={{ minWidth: '200px' }} onChange={(e) => getEmployeesByName(e.target.value)} />
-                          {/* <button type="button" className="btn btn-primary col-6 h-100 p-0 m-0"><i className="fa fa-search"></i></button> */}
+                          {/* <button type="button" className="btn btn-primarycol-6 h-100 px-2 py-3 m-0"><i className="fa fa-search"></i></button> */}
                         </div>
                         <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1" style={{ minWidth: '40%' }}>
                           <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الموظف</label>

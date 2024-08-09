@@ -631,9 +631,9 @@ const AttendanceManagement = () => {
         <div className="modal-dialog modal-lg">
           <div className="modal-content shadow-lg border-0 rounded ">
             <form onSubmit={recordArrival}>
-              <div className="modal-header bg-primary text-white">
+              <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                 <h4 className="modal-title">تسجيل سجل حضور الموظف</h4>
-                <button type="button" className="close text-white" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
               </div>
               <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
                 <div className="w-100 d-flex flex-wrap align-items-center justify-content-between">
@@ -718,8 +718,8 @@ const AttendanceManagement = () => {
                 </div>
               </div>
               <div className="modal-footer w-100 d-flex flex-nowrap">
-                <input type="submit" className="btn btn-success col-6 h-100 px-2  py-3 m-0" value="اضافه" />
-                <input type="button" className="btn btn-danger col-6 h-100 px-2  py-3 m-0" data-dismiss="modal" value="إغلاق" />
+                <input type="submit" className="btn btn-success col-6 h-100 px-2 py-3 m-0" value="اضافه" />
+                <input type="button" className="btn btn-danger col-6 h-100 px-2 py-3 m-0" data-dismiss="modal" value="إغلاق" />
               </div>
             </form>
           </div>
@@ -730,9 +730,9 @@ const AttendanceManagement = () => {
         <div className="modal-dialog modal-lg">
           <div className="modal-content shadow-lg border-0 rounded">
             <form onSubmit={recordDeparture}>
-              <div className="modal-header bg-primary text-white">
+              <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                 <h4 className="modal-title">تسجيل انصراف الموظف</h4>
-                <button type="button" className="close text-white" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
               </div>
               <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
                 <div className="w-100 d-flex flex-wrap align-items-center justify-content-between">
@@ -788,8 +788,8 @@ const AttendanceManagement = () => {
                 </div>
               </div>
               <div className="modal-footer w-100 d-flex flex-nowrap">
-                <input type="submit" className="btn btn-success col-6 h-100 px-2  py-3 m-0" value="اضافه" />
-                <input type="button" className="btn btn-danger col-6 h-100 px-2  py-3 m-0" data-dismiss="modal" value="إغلاق" />
+                <input type="submit" className="btn btn-success col-6 h-100 px-2 py-3 m-0" value="اضافه" />
+                <input type="button" className="btn btn-danger col-6 h-100 px-2 py-3 m-0" data-dismiss="modal" value="إغلاق" />
               </div>
             </form>
           </div>
@@ -800,9 +800,9 @@ const AttendanceManagement = () => {
         <div className="modal-dialog modal-lg">
           <div className="modal-content shadow-lg border-0 rounded">
             <form onSubmit={editAttendanceRecord}>
-              <div className="modal-header bg-primary text-white">
+              <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                 <h4 className="modal-title">تعديل سجل</h4>
-                <button type="button" className="close text-white" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
               </div>
               <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
                 <div className="w-100 d-flex flex-wrap align-items-center justify-content-between">
@@ -897,8 +897,8 @@ const AttendanceManagement = () => {
                 </div>
               </div>
               <div className="modal-footer w-100 d-flex flex-nowrap">
-                <input type="submit" className="btn btn-success col-6 h-100 px-2  py-3 m-0" value="حفظ" />
-                <input type="button" className="btn btn-danger col-6 h-100 px-2  py-3 m-0" data-dismiss="modal" value="إغلاق" />
+                <input type="submit" className="btn btn-success col-6 h-100 px-2 py-3 m-0" value="حفظ" />
+                <input type="button" className="btn btn-danger col-6 h-100 px-2 py-3 m-0" data-dismiss="modal" value="إغلاق" />
               </div>
             </form>
           </div>
@@ -911,7 +911,7 @@ const AttendanceManagement = () => {
             <form onSubmit={deleteRecord}>
               <div className="modal-header bg-danger text-white">
                 <h4 className="modal-title">حذف تصنيف</h4>
-                <button type="button" className="close text-white" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
               </div>
               <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
                 <p>هل انت متاكد من حذف هذا التصنيف?</p>

@@ -403,8 +403,8 @@ const Users = () => {
                         </div>
                       </div>
                       <div className="modal-footer d-flex flex-nowrap align-items-center justify-content-between m-0 p-1">
-                        <input type="button" className="btn btn-danger col-6 h-100 px-2  py-3 m-0" data-dismiss="modal" value="اغلاق" />
-                        <input type="submit" className="btn btn-success col-6 h-100 px-2  py-3 m-0"  value="اضافه" />
+                        <input type="button" className="btn btn-danger col-6 h-100 px-2 py-3 m-0" data-dismiss="modal" value="اغلاق" />
+                        <input type="submit" className="btn btn-success col-6 h-100 px-2 py-3 m-0"  value="اضافه" />
                       </div>
                     </form>
                   </div>
@@ -522,8 +522,8 @@ const Users = () => {
                         <p className="text-warning"><small>لا يمكن الرجوع في هذا الاجراء.</small></p>
                       </div>
                       <div className="modal-footer d-flex flex-nowrap align-items-center justify-content-between m-0 p-1">
-                        <input type="submit" className="btn btn-warning col-6 h-100 p-0 m-0" value="حذف" />
-                        <input type="button" className="btn btn-danger col-6 h-100 px-2  py-3 m-0" data-dismiss="modal" value="اغلاق" />
+                        <input type="submit" className="btn btn-warningcol-6 h-100 px-2 py-3 m-0" value="حذف" />
+                        <input type="button" className="btn btn-danger col-6 h-100 px-2 py-3 m-0" data-dismiss="modal" value="اغلاق" />
                       </div>
                     </form>
                   </div>

@@ -172,7 +172,7 @@ table.table .avatar {
 }
 
 .modal-header, .modal-body, .modal-footer {
-    padding: 20px;
+    padding: 5px 10px;
 }
 
 .modal .modal-title {
