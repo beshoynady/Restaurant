@@ -206,9 +206,9 @@ const ExpenseItem = () => {
                 <h2>ادارة <b>المصروفات</b></h2>
               </div>
               <div className="col-12 col-md-6 p-0 m-0 d-flex flex-wrap aliegn-items-center justify-content-end print-hide">
-                <a href="#addExpensesModal" className="d-flex align-items-center justify-content-center col-4 h-100 p-2 m-0 btn btn-success" data-toggle="modal"> <span>اضافه مصروف جديد</span></a>
+                <a href="#addExpensesModal" className="d-flex align-items-center justify-content-center  h-100  m-0 btn btn-success" data-toggle="modal"> <span>اضافه مصروف جديد</span></a>
 
-                {/* <a href="#deleteExpensesModal" className="d-flex align-items-center justify-content-center col-4 h-100 p-2 m-0 btn btn-danger" data-toggle="modal"> <span>حذف</span></a> */}
+                {/* <a href="#deleteExpensesModal" className="d-flex align-items-center justify-content-center  h-100  m-0 btn btn-danger" data-toggle="modal"> <span>حذف</span></a> */}
               </div>
             </div>
           </div>

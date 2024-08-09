@@ -36,18 +36,18 @@
 }
 
 .table-title .btn {
-    color: #fff;
-    font-size: 14px;
+    margin-inline: auto;
     border: none;
     border-radius: 4px;
-    padding: 8px 16px;
-    background-color: #007bff;
-    transition: background-color 0.3s;
+    color: #fff;
+    font-size: 14px;
+    padding: 15px 30px;
+    transition: background-color .3s;
 }
 
-.table-title .btn:hover {
+/* .table-title .btn:hover {
     background-color: #0056b3;
-}
+} */
 
 .table-title .btn i {
     font-size: 24px;

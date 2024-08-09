@@ -303,8 +303,8 @@ const PermissionsComponent = () => {
                         <h2>ادارة <b>صلاحيات الموظفين</b></h2>
                       </div>
                       <div className="col-12 col-md-6 p-0 m-0 d-flex flex-wrap aliegn-items-center justify-content-end print-hide">
-                        <a className="d-flex align-items-center justify-content-center col-4 h-100 p-2 m-0 btn btn-success" onClick={addPermissions}> <span>حفظ</span></a>
-                        <a className="d-flex align-items-center justify-content-center col-4 h-100 p-2 m-0 btn btn-danger" onClick={getPermissions}> <span>الغاء</span></a>
+                        <a className="d-flex align-items-center justify-content-center  h-100  m-0 btn btn-success" onClick={addPermissions}> <span>حفظ</span></a>
+                        <a className="d-flex align-items-center justify-content-center  h-100  m-0 btn btn-danger" onClick={getPermissions}> <span>الغاء</span></a>
                       </div>
                     </div>
                   </div>

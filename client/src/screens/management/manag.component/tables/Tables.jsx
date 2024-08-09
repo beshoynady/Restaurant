@@ -257,12 +257,12 @@ const Tables = () => {
                 <h2>ادارة <b>الطاولات</b></h2>
               </div>
               <div className="col-12 col-md-6 p-0 m-0 d-flex flex-wrap aliegn-items-center justify-content-end print-hide">
-                <a href="#qrwebModal" className="d-flex align-items-center justify-content-center col-4 h-100 p-2 m-0 btn btn-info"
+                <a href="#qrwebModal" className="d-flex align-items-center justify-content-center  h-100  m-0 btn btn-info"
                   data-toggle="modal"><span className="material-symbols-outlined" data-toggle="tooltip" title="QR">qr_code_2_add</span>
                   <span>انشاء qr للسايت</span></a>
-                <a href="#addTableModal" className="d-flex align-items-center justify-content-center col-4 h-100 p-2 m-0 btn btn-success"
+                <a href="#addTableModal" className="d-flex align-items-center justify-content-center  h-100  m-0 btn btn-success"
                   data-toggle="modal"> <span>اضافه طاولة جديدة</span></a>
-                <a href="#deleteListTableModal" className="d-flex align-items-center justify-content-center col-4 h-100 p-2 m-0 btn btn-danger"
+                <a href="#deleteListTableModal" className="d-flex align-items-center justify-content-center  h-100  m-0 btn btn-danger"
                   data-toggle="modal"> <span>حذف</span></a>
               </div>
             </div>

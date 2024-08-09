@@ -207,7 +207,7 @@ const EmployeeTransactions = () => {
                 <a href="#" className=" d-flex align-items-center justify-content-evenly col-3  h-100 p-2 m-0 btn btn-info " data-toggle="modal" onClick={exportToExcel}>
                   <span>تصدير</span>
                 </a>
-                <a href="#" className="d-flex align-items-center justify-content-center col-4 h-100 p-2 m-0 btn btn-primary" data-toggle="modal" onClick={handlePrint}>
+                <a href="#" className="d-flex align-items-center justify-content-center  h-100  m-0 btn btn-primary" data-toggle="modal" onClick={handlePrint}>
                   <span>طباعه</span>
                 </a>
               </div>

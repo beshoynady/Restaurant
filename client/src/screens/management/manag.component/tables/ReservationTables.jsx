@@ -119,8 +119,8 @@ const ReservationTables = () => {
                 <h2>ادارة <b>حجز الطاولات</b></h2>
               </div>
               <div className="col-12 col-12 col-md-6 p-0 m-0 d-flex flex-wrap aliegn-items-center  justify-content-evenly">
-                <a href="#createreservationModal" className="d-flex align-items-center justify-content-center col-4 h-100 p-2 m-0 btn btn-success" data-toggle="modal"> <span>انشاء حجز جديد</span></a>
-                <a href="#deleteListTableModal" className="d-flex align-items-center justify-content-center col-4 h-100 p-2 m-0 btn btn-danger" data-toggle="modal"> <span>حذف</span></a>
+                <a href="#createreservationModal" className="d-flex align-items-center justify-content-center  h-100  m-0 btn btn-success" data-toggle="modal"> <span>انشاء حجز جديد</span></a>
+                <a href="#deleteListTableModal" className="d-flex align-items-center justify-content-center  h-100  m-0 btn btn-danger" data-toggle="modal"> <span>حذف</span></a>
               </div>
             </div>
           </div>
