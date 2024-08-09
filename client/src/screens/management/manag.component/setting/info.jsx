@@ -1009,7 +1009,7 @@ const Info = () => {
                             <input type="number" className="form-control border-primary col-12 p-1" placeholder="تكلفة التوصيل" defaultValue={Number(area.delivery_fee)} onChange={(e) => handleDeliveryCostChange(index, e)} />
                           </div>
                           <div className="col-2 mb-2 mb-md-0">
-                            <button type="button" className=" btn btn-danger col-12 h-100 p-0 m-0" onClick={() => removeArea(index, area._id)} style={{ height: '50px' }}>
+                            <button type="button" className="btn btn-danger col-12 h-100 p-0 m-0" onClick={() => removeArea(index, area._id)} style={{ height: '50px' }}>
                               <i className="mdi mdi-delete fs-3" />
                             </button>
                           </div>

@@ -405,8 +405,8 @@ const Tables = () => {
                 </div>
               </div>
               <div className="modal-footer p-0 m-0 d-flex flex-nowrap align-items-center justify-content-between">
-                <input type="button" className=" btn btn-danger col-6 h-100 p-0 m-0" data-dismiss="modal" value="إغلاق" />
-                <input type="submit" className=" btn btn-success col-6 h-100 p-0 m-0" value="ضافه" />
+                <input type="button" className="btn btn-danger col-6 h-100 p-2 m-0" data-dismiss="modal" value="إغلاق" />
+                <input type="submit" className="btn btn-success col-6 h-100 p-2 m-0" value="ضافه" />
               </div>
             </form>
           </div>
@@ -448,8 +448,8 @@ const Tables = () => {
                 </div>
               </div>
               <div className="modal-footer p-0 m-0 d-flex flex-nowrap align-items-center justify-content-between">
-                <input type="submit" className=" btn btn-info col-6 h-100 p-0 m-0" value="حفظ" />
-                <input type="button" className=" btn btn-danger col-6 h-100 p-0 m-0" data-dismiss="modal" value="إغلاق" />
+                <input type="submit" className="btn btn-success col-6 h-100 p-2 m-0" value="حفظ" />
+                <input type="button" className="btn btn-danger col-6 h-100 p-2 m-0" data-dismiss="modal" value="إغلاق" />
               </div>
             </form>
           </div>
@@ -480,9 +480,9 @@ const Tables = () => {
                 {qrimage ? (
                   <button type="button" className="col-6 btn p-3 m-0 btn-info" onClick={handlePrinttableqr}>طباعة</button>
                 ) : (
-                  <input type="submit" className="col-6 btn p-3 m-0 btn-success" value="استخراج" />
+                  <input type="submit" className="btn btn-success col-6 h-100 p-2 m-0"  value="استخراج" />
                 )}
-                <button type="button" className="col-6 btn p-3 m-0 btn-danger" data-dismiss="modal" >اغلاق</button>
+                <button type="button" className="btn btn-danger col-6 h-100 p-2 m-0" data-dismiss="modal" >اغلاق</button>
               </div>
             </form>
           </div>
@@ -512,9 +512,9 @@ const Tables = () => {
                 {qrimage ? (
                   <button type="button" className="col-6 btn p-3 m-0 btn-info" onClick={handlePrintwepqr}>طباعة</button>
                 ) : (
-                  <input type="submit" className="col-6 btn p-3 m-0 btn-success" value="استخراج" />
+                  <input type="submit" className="btn btn-success col-6 h-100 p-2 m-0"  value="استخراج" />
                 )}
-                <button type="button" className="col-6 btn p-3 m-0 btn-danger" data-dismiss="modal">اغلاق</button>
+                <button type="button" className="btn btn-danger col-6 h-100 p-2 m-0" data-dismiss="modal">اغلاق</button>
               </div>
             </form>
           </div>
@@ -536,8 +536,8 @@ const Tables = () => {
                 <p className="text-warning"><small>لا يمكن الرجوع في هذا الاجراء.</small></p>
               </div>
               <div className="modal-footer p-0 m-0 d-flex flex-nowrap align-items-center justify-content-between">
-                <input type="submit" className=" btn btn-warning col-6 h-100 p-0 m-0" value="حذف" />
-                <input type="button" className=" btn btn-danger col-6 h-100 p-0 m-0" data-dismiss="modal" value="إغلاق" />
+                <input type="submit" className="btn btn-warning col-6 h-100 p-0 m-0" value="حذف" />
+                <input type="button" className="btn btn-danger col-6 h-100 p-2 m-0" data-dismiss="modal" value="إغلاق" />
               </div>
             </form>
           </div>
@@ -556,8 +556,8 @@ const Tables = () => {
                 <p className="text-warning"><small>لا يمكن الرجوع في هذا الاجراء.</small></p>
               </div>
               <div className="modal-footer p-0 m-0 d-flex flex-nowrap align-items-center justify-content-between">
-                <input type="submit" className=" btn btn-warning col-6 h-100 p-0 m-0" value="حذف" />
-                <input type="button" className=" btn btn-danger col-6 h-100 p-0 m-0" data-dismiss="modal" value="إغلاق" />
+                <input type="submit" className="btn btn-warning col-6 h-100 p-0 m-0" value="حذف" />
+                <input type="button" className="btn btn-danger col-6 h-100 p-2 m-0" data-dismiss="modal" value="إغلاق" />
               </div>
             </form>
           </div>

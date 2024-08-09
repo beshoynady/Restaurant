@@ -594,7 +594,7 @@ const PayRoll = () => {
                         <h2>ادارة <b>الرواتب</b></h2>
                       </div>
                       <div className="col-6 p-0 m-0 d-flex flex-wrap aliegn-items-center  justify-content-evenly">
-                        <a className=" btn btn-success col-4 h-100 p-2 m-0" onClick={addPayRoll}> <span>تحديث كشف المرتبات</span></a>
+                        <a className="btn btn-success col-4 h-100 p-2 m-0" onClick={addPayRoll}> <span>تحديث كشف المرتبات</span></a>
                       </div>
                     </div>
                   </div>
@@ -715,7 +715,7 @@ const PayRoll = () => {
                                           href="#paidModal"
                                           type='button'
                                           data-toggle="modal"
-                                          className=" btn btn-success col-6 h-100 p-0 m-0"
+                                          className="btn btn-success col-6 h-100 p-2 m-0"
                                           onClick={() => handelPaid(Roll._id, Roll.NetSalary, employeeLoginInfo.id, employee._id, employee.fullname, Roll.Month)}
                                         >
                                           دفع
@@ -764,8 +764,8 @@ const PayRoll = () => {
                         <p className="text-center text-warning" style={{ fontSize: '16px', marginBottom: '0' }}>لا يمكن الرجوع في هذا الإجراء.</p>
                       </div>
                       <div className="modal-footer d-flex flex-nowrap align-items-center justify-content-between m-0 p-1">
-                        <input type="button" className=" btn btn-danger col-6 h-100 p-0 m-0" data-dismiss="modal" value="الغاء" />
-                        <input type="submit" className=" btn btn-danger col-6 h-100 p-0 m-0" value="تاكيد الدفع" />
+                        <input type="button" className="btn btn-danger col-6 h-100 p-2 m-0" data-dismiss="modal" value="الغاء" />
+                        <input type="submit" className="btn btn-danger col-6 h-100 p-2 m-0" value="تاكيد الدفع" />
                       </div>
                     </form>
                   </div>

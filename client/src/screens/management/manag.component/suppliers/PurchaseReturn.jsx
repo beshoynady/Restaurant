@@ -769,10 +769,10 @@ const PurchaseReturn = () => {
                   </div>
 
                   <div className="d-flex flex-nowrap justify-content-between col-3 p-0 m-0">
-                    <button type="button" className=" btn btn-primary w-50 h-100 p-2 " onClick={() => setallPurchasesReturn(filterByDateRange(allPurchasesReturn))}>
+                    <button type="button" className="btn btn-primary w-50 h-100 p-2 " onClick={() => setallPurchasesReturn(filterByDateRange(allPurchasesReturn))}>
                       <i className="fa fa-search"></i>
                     </button>
-                    <button type="button" className=" btn btn-warning w-50 h-100 p-2" onClick={getAllPurchasesReturn}>استعادة
+                    <button type="button" className="btn btn-warning w-50 h-100 p-2" onClick={getAllPurchasesReturn}>استعادة
                     </button>
                   </div>
                 </div>
@@ -1097,8 +1097,8 @@ const PurchaseReturn = () => {
 
               </div>
               <div className="modal-footer d-flex flex-nowrap align-items-center justify-content-between m-0 p-1">
-                <input type="submit" className=" btn btn-success col-6 h-100 p-0 m-0" value="اضافه" />
-                <input type="button" className=" btn btn-danger col-6 h-100 p-0 m-0" data-dismiss="modal" value="إغلاق" />
+                <input type="submit" className="btn btn-success col-6 h-100 p-2 m-0" value="اضافه" />
+                <input type="button" className="btn btn-danger col-6 h-100 p-2 m-0" data-dismiss="modal" value="إغلاق" />
               </div>
             </form>
           </div>
@@ -1254,7 +1254,7 @@ const PurchaseReturn = () => {
 
               </div>
               <div className="modal-footer d-flex flex-nowrap align-items-center justify-content-between m-0 p-1">
-              <input type="button" className=" btn btn-danger col-6 h-100 p-0 m-0" data-dismiss="modal" value="إغلاق" />
+              <input type="button" className="btn btn-danger col-6 h-100 p-2 m-0" data-dismiss="modal" value="إغلاق" />
               <input type="button" className="btn btn-primary col-6 h-100 p-0 m-0" data-dismiss="modal" value="طباعه" onClick={handlePrint} />
               </div>
             </form>
@@ -1420,8 +1420,8 @@ const PurchaseReturn = () => {
 
                       </div>
                       <div className="modal-footer d-flex flex-nowrap align-items-center justify-content-between m-0 p-1">
-                        <input type="submit" className=" btn btn-success col-6 h-100 p-0 m-0" value="اضافه" />
-                        <input type="button" className=" btn btn-danger col-6 h-100 p-0 m-0" data-dismiss="modal" value="إغلاق" />
+                        <input type="submit" className="btn btn-success col-6 h-100 p-2 m-0" value="اضافه" />
+                        <input type="button" className="btn btn-danger col-6 h-100 p-2 m-0" data-dismiss="modal" value="إغلاق" />
                       </div>
                       </div>
                     </form>
@@ -1442,8 +1442,8 @@ const PurchaseReturn = () => {
                         <p className="text-warning"><small>لا يمكن الرجوع في هذا الاجراء.</small></p>
                       </div>
                       <div className="modal-footer d-flex flex-nowrap align-items-center justify-content-between m-0 p-1">
-                        <input type="submit" className=" btn btn-warning col-6 h-100 p-0 m-0" value="حذف" />
-                        <input type="button" className=" btn btn-danger col-6 h-100 p-0 m-0" data-dismiss="modal" value="إغلاق" />
+                        <input type="submit" className="btn btn-warning col-6 h-100 p-0 m-0" value="حذف" />
+                        <input type="button" className="btn btn-danger col-6 h-100 p-2 m-0" data-dismiss="modal" value="إغلاق" />
                       </div>
                     </form>
                   </div>

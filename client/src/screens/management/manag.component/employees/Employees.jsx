@@ -636,8 +636,8 @@ const exportToExcel = () => {
                   )}
                 </div>
                 <div className="modal-footer flex-nowrap d-flex flex-row align-items-center justify-content-between">
-                  <input type="submit" className=" btn btn-success col-6 h-100 p-0 m-0" value="إضافة" />
-                  <input type="button" className=" btn btn-danger col-6 h-100 p-0 m-0" data-dismiss="modal" value="إغلاق" />
+                  <input type="submit" className="btn btn-success col-6 h-100 p-2 m-0" value="إضافة" />
+                  <input type="button" className="btn btn-danger col-6 h-100 p-2 m-0" data-dismiss="modal" value="إغلاق" />
                 </div>
               </form>
             </div>
@@ -749,8 +749,8 @@ const exportToExcel = () => {
                   )}
                 </div>
                 <div className="modal-footer flex-nowrap d-flex flex-row align-items-center justify-content-between">
-                  <input type="submit" className=" btn btn-success col-6 h-100 p-0 m-0" value="تعديل" />
-                  <input type="button" className=" btn btn-danger col-6 h-100 p-0 m-0" data-dismiss="modal" value="إغلاق" />
+                  <input type="submit" className="btn btn-success col-6 h-100 p-2 m-0" value="تعديل" />
+                  <input type="button" className="btn btn-danger col-6 h-100 p-2 m-0" data-dismiss="modal" value="إغلاق" />
                 </div>
               </form>
             </div>
@@ -772,7 +772,7 @@ const exportToExcel = () => {
                   <p>هل أنت متأكد من حذف الموظف <strong>{fullname}</strong>؟</p>
                 </div>
                 <div className="modal-footer flex-nowrap d-flex flex-row align-items-center justify-content-between">
-                  <input type="submit" className=" btn btn-warning col-6 h-100 p-0 m-0" value="حذف" />
+                  <input type="submit" className="btn btn-warning col-6 h-100 p-0 m-0" value="حذف" />
                   <input type="button" className="col-md-6 col-12 h-100 p-0 m-0 btn btn-default" data-dismiss="modal" value="إلغاء" />
                 </div>
               </form>
@@ -794,8 +794,8 @@ const exportToExcel = () => {
                         <p className="text-warning"><small>لا يمكن الرجوع في هذا الاجراء.</small></p>
                       </div>
                       <div className="modal-footer flex-nowrap d-flex flex-row align-items-center justify-content-between">
-                        <input type="submit" className=" btn btn-warning col-6 h-100 p-0 m-0" value="حذف" />
-                        <input type="button" className=" btn btn-danger col-6 h-100 p-0 m-0" data-dismiss="modal" value="اغلاق" />
+                        <input type="submit" className="btn btn-warning col-6 h-100 p-0 m-0" value="حذف" />
+                        <input type="button" className="btn btn-danger col-6 h-100 p-2 m-0" data-dismiss="modal" value="اغلاق" />
                       </div>
                     </form>
                   </div>

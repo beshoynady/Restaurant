@@ -528,10 +528,10 @@ const AttendanceManagement = () => {
                   </div>
 
                   <div className="d-flex flex-nowrap justify-content-between col-3 p-0 m-0">
-                    <button type="button" className=" btn btn-primary w-50 h-100 p-2 " onClick={()=>setallAttendanceRecords(filterByDateRange(allAttendanceRecords))}>
+                    <button type="button" className="btn btn-primary w-50 h-100 p-2 " onClick={()=>setallAttendanceRecords(filterByDateRange(allAttendanceRecords))}>
                       <i className="fa fa-search"></i>
                     </button>
-                    <button type="button" className=" btn btn-warning w-50 h-100 p-2" onClick={getallAttendanceRecords}>
+                    <button type="button" className="btn btn-warning w-50 h-100 p-2" onClick={getallAttendanceRecords}>
                       استعادة
                     </button>
                   </div>
@@ -718,8 +718,8 @@ const AttendanceManagement = () => {
                 </div>
               </div>
               <div className="modal-footer w-100 d-flex flex-nowrap">
-                <input type="submit" className=" btn btn-success col-6 h-100 p-0 m-0" value="اضافه" />
-                <input type="button" className=" btn btn-danger col-6 h-100 p-0 m-0" data-dismiss="modal" value="إغلاق" />
+                <input type="submit" className="btn btn-success col-6 h-100 p-2 m-0" value="اضافه" />
+                <input type="button" className="btn btn-danger col-6 h-100 p-2 m-0" data-dismiss="modal" value="إغلاق" />
               </div>
             </form>
           </div>
@@ -788,8 +788,8 @@ const AttendanceManagement = () => {
                 </div>
               </div>
               <div className="modal-footer w-100 d-flex flex-nowrap">
-                <input type="submit" className=" btn btn-success col-6 h-100 p-0 m-0" value="اضافه" />
-                <input type="button" className=" btn btn-danger col-6 h-100 p-0 m-0" data-dismiss="modal" value="إغلاق" />
+                <input type="submit" className="btn btn-success col-6 h-100 p-2 m-0" value="اضافه" />
+                <input type="button" className="btn btn-danger col-6 h-100 p-2 m-0" data-dismiss="modal" value="إغلاق" />
               </div>
             </form>
           </div>
@@ -897,8 +897,8 @@ const AttendanceManagement = () => {
                 </div>
               </div>
               <div className="modal-footer w-100 d-flex flex-nowrap">
-                <input type="submit" className=" btn btn-success col-6 h-100 p-0 m-0" value="حفظ" />
-                <input type="button" className=" btn btn-danger col-6 h-100 p-0 m-0" data-dismiss="modal" value="إغلاق" />
+                <input type="submit" className="btn btn-success col-6 h-100 p-2 m-0" value="حفظ" />
+                <input type="button" className="btn btn-danger col-6 h-100 p-2 m-0" data-dismiss="modal" value="إغلاق" />
               </div>
             </form>
           </div>

@@ -392,10 +392,10 @@ const KitchenConsumption = () => {
                   </div>
 
                   <div className="d-flex flex-nowrap justify-content-between col-3 p-0 m-0">
-                    <button type="button" className=" btn btn-primary w-50 h-100 p-2 " onClick={() => setAllKitchenConsumption(filterByDateRange(allKitchenConsumption))}>
+                    <button type="button" className="btn btn-primary w-50 h-100 p-2 " onClick={() => setAllKitchenConsumption(filterByDateRange(allKitchenConsumption))}>
                       <i className="fa fa-search"></i>
                     </button>
-                    <button type="button" className=" btn btn-warning w-50 h-100 p-2" onClick={getKitchenConsumption}>استعادة
+                    <button type="button" className="btn btn-warning w-50 h-100 p-2" onClick={getKitchenConsumption}>استعادة
                     </button>
                   </div>
                 </div>
@@ -506,8 +506,8 @@ const KitchenConsumption = () => {
                 </div>
               </div>
               <div className="modal-footer d-flex flex-nowrap align-items-center justify-content-between m-0 p-1">
-                <input type="submit" className=" btn btn-success col-6 h-100 p-0 m-0" value="اضافه" />
-                <input type="button" className=" btn btn-danger col-6 h-100 p-0 m-0" data-dismiss="modal" value="إغلاق" />
+                <input type="submit" className="btn btn-success col-6 h-100 p-2 m-0" value="اضافه" />
+                <input type="button" className="btn btn-danger col-6 h-100 p-2 m-0" data-dismiss="modal" value="إغلاق" />
               </div>
             </form>
           </div>
@@ -558,8 +558,8 @@ const KitchenConsumption = () => {
                 </div>
               </div>
               <div className="modal-footer d-flex flex-nowrap align-items-center justify-content-between m-0 p-1">
-                <input type="submit" className=" btn btn-info col-6 h-100 p-0 m-0" value="حفظ" />
-                <input type="button" className=" btn btn-danger col-6 h-100 p-0 m-0" data-dismiss="modal" value="إغلاق" />
+                <input type="submit" className="btn btn-success col-6 h-100 p-2 m-0" value="حفظ" />
+                <input type="button" className="btn btn-danger col-6 h-100 p-2 m-0" data-dismiss="modal" value="إغلاق" />
               </div>
             </form>
           </div>
@@ -580,8 +580,8 @@ const KitchenConsumption = () => {
                 <p className="text-warning"><small>لا يمكن الرجوع في هذا الاجراء.</small></p>
               </div>
               <div className="modal-footer d-flex flex-nowrap align-items-center justify-content-between m-0 p-1">
-                <input type="button" className=" btn btn-danger col-6 h-100 p-0 m-0" data-dismiss="modal" value="إغلاق" />
-                <input type="submit" className=" btn btn-danger col-6 h-100 p-0 m-0" value="تحديث" />
+                <input type="button" className="btn btn-danger col-6 h-100 p-2 m-0" data-dismiss="modal" value="إغلاق" />
+                <input type="submit" className="btn btn-danger col-6 h-100 p-2 m-0" value="تحديث" />
               </div>
             </form>
           </div>

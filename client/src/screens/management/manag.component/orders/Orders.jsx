@@ -248,10 +248,10 @@ const Orders = () => {
                   </div>
 
                   <div className="d-flex flex-nowrap justify-content-between col-3 p-0 m-0">
-                    <button type="button" className=" btn btn-primary w-50 h-100 p-2 " onClick={() => setlistOfOrders(filterByDateRange(listOfOrders))}>
+                    <button type="button" className="btn btn-primary w-50 h-100 p-2 " onClick={() => setlistOfOrders(filterByDateRange(listOfOrders))}>
                       <i className="fa fa-search"></i>
                     </button>
-                    <button type="button" className=" btn btn-warning w-50 h-100 p-2" onClick={getOrders}>استعادة
+                    <button type="button" className="btn btn-warning w-50 h-100 p-2" onClick={getOrders}>استعادة
                     </button>
                   </div>
                 </div>
@@ -350,7 +350,7 @@ const Orders = () => {
               </div>
               <div className="modal-footer d-flex flex-nowrap align-items-center justify-content-between m-0 p-1">
                 <input type="submit" className="col-md-6 col-12 h-100 p-0 m-0 btn btn-warning" value="حذف" />
-                <input type="button" className=" btn btn-danger col-6 h-100 p-0 m-0" data-toggle="modal" data-dismiss="modal" value="الغاء" />
+                <input type="button" className="btn btn-danger col-6 h-100 p-2 m-0" data-toggle="modal" data-dismiss="modal" value="الغاء" />
 
               </div>
             </form>

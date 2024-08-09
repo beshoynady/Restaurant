@@ -429,10 +429,10 @@ const DailyExpense = () => {
                   </div>
 
                   <div className="d-flex flex-nowrap justify-content-between col-3 p-0 m-0">
-                    <button type="button" className=" btn btn-primary w-50 h-100 p-2 " onClick={() => setallDailyExpenses(filterByDateRange(allDailyExpenses))}>
+                    <button type="button" className="btn btn-primary w-50 h-100 p-2 " onClick={() => setallDailyExpenses(filterByDateRange(allDailyExpenses))}>
                       <i className="fa fa-search"></i>
                     </button>
-                    <button type="button" className=" btn btn-warning w-50 h-100 p-2" onClick={getallDailyExpenses}>استعادة
+                    <button type="button" className="btn btn-warning w-50 h-100 p-2" onClick={getallDailyExpenses}>استعادة
                     </button>
                   </div>
                 </div>
@@ -557,8 +557,8 @@ const DailyExpense = () => {
                 </div>
               </div>
               <div className="modal-footer d-flex flex-nowrap align-items-center justify-content-between m-0 p-1">
-                <input type="submit" className=" btn btn-success col-6 h-100 p-0 m-0" value="اضافه" />
-                <input type="button" className=" btn btn-danger col-6 h-100 p-0 m-0" data-dismiss="modal" value="إغلاق" />
+                <input type="submit" className="btn btn-success col-6 h-100 p-2 m-0" value="اضافه" />
+                <input type="button" className="btn btn-danger col-6 h-100 p-2 m-0" data-dismiss="modal" value="إغلاق" />
               </div>
             </form>
           </div>
@@ -613,8 +613,8 @@ const DailyExpense = () => {
                 </div>
               </div>
               <div className="modal-footer d-flex flex-nowrap align-items-center justify-content-between m-0 p-1">
-                <input type="submit" className=" btn btn-info col-6 h-100 p-0 m-0" value="حفظ" />
-                <input type="button" className=" btn btn-danger col-6 h-100 p-0 m-0" data-dismiss="modal" value="إغلاق" />
+                <input type="submit" className="btn btn-success col-6 h-100 p-2 m-0" value="حفظ" />
+                <input type="button" className="btn btn-danger col-6 h-100 p-2 m-0" data-dismiss="modal" value="إغلاق" />
               </div>
             </form>
           </div>
@@ -634,8 +634,8 @@ const DailyExpense = () => {
                 <p className="text-warning"><small>لا يمكن الرجوع في هذا الاجراء.</small></p>
               </div>
               <div className="modal-footer d-flex flex-nowrap align-items-center justify-content-between m-0 p-1">
-                <input type="submit" className=" btn btn-warning col-6 h-100 p-0 m-0" value="حذف" />
-                <input type="button" className=" btn btn-danger col-6 h-100 p-0 m-0" data-dismiss="modal" value="إغلاق" />
+                <input type="submit" className="btn btn-warning col-6 h-100 p-0 m-0" value="حذف" />
+                <input type="button" className="btn btn-danger col-6 h-100 p-2 m-0" data-dismiss="modal" value="إغلاق" />
               </div>
             </form>
           </div>
