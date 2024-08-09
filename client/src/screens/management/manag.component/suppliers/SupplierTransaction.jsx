@@ -210,7 +210,7 @@ const SupplierTransaction = () => {
               <div className="col-sm-6 text-right">
                 <h2>ادارة <b>تعاملات الموردين</b></h2>
               </div>
-              <div className="col-12 col-md-6 p-0 m-0 d-flex flex-wrap aliegn-items-center  justify-content-evenly">
+              <div className="col-12 col-md-6 p-0 m-0 d-flex flex-wrap aliegn-items-center justify-content-end">
                 <a href="#addSupplierTransactionModal" className="d-flex align-items-center justify-content-center col-4 h-100 p-2 m-0 btn btn-success" data-toggle="modal"> <span>اضافه منتج جديد</span></a>
 
                 {/* <a href="#deleteSupplierTransactionModal" className="d-flex align-items-center justify-content-center col-4 h-100 p-2 m-0 btn btn-danger" data-toggle="modal"> <span>حذف</span></a> */}
@@ -220,7 +220,7 @@ const SupplierTransaction = () => {
 
           <div className="table-filter print-hide">
             <div className="col-12 text-dark d-flex flex-wrap align-items-center justify-content-evenly p-0 m-0">
-              <div className="show-entries d-flex flex-wrap align-items-center justify-content-evenly col-2 p-0 m-0">
+              <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
                 <label htmlFor="showEntries">عرض</label>
                 <select
                   className="form-select border-primary col-6 px-1 py-2 m-0" onChange={(e) => { setstartpagination(0);
@@ -236,7 +236,7 @@ const SupplierTransaction = () => {
                 </select>
                 
               </div>
-              <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
+              <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
                 <label htmlFor="supplierSelect">المورد</label>
                 <select
                   className="form-control border-primary m-0 p-2 h-auto" 
@@ -249,7 +249,7 @@ const SupplierTransaction = () => {
                   ))}
                 </select>
               </div>
-              <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
+              <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
                 <label htmlFor="transactionTypeSelect">نوع العملية</label>
                 <select
                   className="form-control border-primary m-0 p-2 h-auto" 
@@ -262,7 +262,7 @@ const SupplierTransaction = () => {
                   ))}
                 </select>
               </div>
-              <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
+              <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
                 <label htmlFor="invoiceNumberSelect">رقم الفاتورة</label>
                 <select
                   className="form-control border-primary m-0 p-2 h-auto" 
@@ -282,7 +282,7 @@ const SupplierTransaction = () => {
               </div>
 
               <div className='col-12 d-flex align-items-center justify-content-between'>
-                <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
+                <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">فلتر حسب الوقت</label>
                   <select className="form-control border-primary m-0 p-2 h-auto"  onChange={(e) => setAllSupplierTransaction(filterByTime(e.target.value, AllSupplierTransaction))}>
                     <option value="">اختر</option>
@@ -296,12 +296,12 @@ const SupplierTransaction = () => {
                 <div className="d-flex align-items-center justify-content-between flex-nowrap col-9 p-0 m-0 px-1">
                   <label className="form-label text-nowrap"><strong>مدة محددة:</strong></label>
 
-                  <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
+                  <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">من</label>
                     <input type="date" className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => setStartDate(e.target.value)} placeholder="اختر التاريخ" />
                   </div>
 
-                  <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
+                  <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">إلى</label>
                     <input type="date" className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => setEndDate(e.target.value)} placeholder="اختر التاريخ" />
                   </div>

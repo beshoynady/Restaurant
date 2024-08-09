@@ -14,7 +14,7 @@ const ProductRecipe = () => {
       'Authorization': `Bearer ${token}`,
     },
   };
-  const{restaurantData, permissionsList,setStartDate, setEndDate, filterByDateRange, filterByTime, employeeLoginInfo, usertitle, formatDate, formatDateTime, setisLoadiog, EditPagination, startpagination, endpagination, setstartpagination, setendpagination } = useContext(detacontext)
+  const { restaurantData, permissionsList, setStartDate, setEndDate, filterByDateRange, filterByTime, employeeLoginInfo, usertitle, formatDate, formatDateTime, setisLoadiog, EditPagination, startpagination, endpagination, setstartpagination, setendpagination } = useContext(detacontext)
 
   const productRecipePermission = permissionsList && permissionsList.filter(perission => perission.resource === 'Recipes')[0]
 
@@ -110,7 +110,7 @@ const ProductRecipe = () => {
       return
     }
     try {
-      if (productRecipePermission&&!productRecipePermission.read) {
+      if (productRecipePermission && !productRecipePermission.read) {
         toast.warn('ليس لك صلاحية لعرض الوصفات')
         return
       }
@@ -214,7 +214,7 @@ const ProductRecipe = () => {
       return
     }
     try {
-      if (productRecipePermission&&!productRecipePermission.create) {
+      if (productRecipePermission && !productRecipePermission.create) {
         toast.warn('ليس لك صلاحية لانشاء الوصفات')
         return
       }
@@ -325,7 +325,7 @@ const ProductRecipe = () => {
         toast.error('رجاء تسجيل الدخول مره اخري');
         return
       }
-      if (productRecipePermission&&!productRecipePermission.update) {
+      if (productRecipePermission && !productRecipePermission.update) {
         toast.warn('ليس لك صلاحية لتعديل الوصفات')
         return
       }
@@ -371,7 +371,7 @@ const ProductRecipe = () => {
 
   const deleteRecipe = async (e) => {
     e.preventDefault()
-    if (productRecipePermission&&!productRecipePermission.delete) {
+    if (productRecipePermission && !productRecipePermission.delete) {
       toast.warn('ليس لك صلاحية لحذف الوصفات')
       return
     }
@@ -401,7 +401,7 @@ const ProductRecipe = () => {
       return
     }
     try {
-      if (productRecipePermission&&!productRecipePermission.delete) {
+      if (productRecipePermission && !productRecipePermission.delete) {
         toast.warn('ليس لك صلاحية لحذف الوصفات')
         return
       }
@@ -439,10 +439,10 @@ const ProductRecipe = () => {
         <div className="table-wrapper p-3 mw-100">
           <div className="table-title">
             <div className="w-100 d-flex flex-wrap align-items-center justify-content-between">
-              <div className="col-sm-6">
+              <div className="col-sm-6 text-right">
                 <h2>ادارة <b>تكاليف الانتاج</b></h2>
               </div>
-              <div className="col-12 col-md-6 p-0 m-0 d-flex flex-wrap aliegn-items-center  justify-content-evenly">
+              <div className="col-12 col-md-6 p-0 m-0 d-flex flex-wrap aliegn-items-center justify-content-end">
                 <a href="#addRecipeModal" className="d-flex align-items-center justify-content-center col-4 h-100 p-2 m-0 btn btn-success" data-toggle="modal"> <span>اضافه منتج جديد</span></a>
 
                 <a href="#deleteAllProductModal" className="d-flex align-items-center justify-content-center col-4 h-100 p-2 m-0 btn btn-danger" data-toggle="modal"> <span>حذف الكل</span></a>
@@ -451,52 +451,54 @@ const ProductRecipe = () => {
           </div>
           <div className="table-filter print-hide">
             <div className="col-12 text-dark d-flex flex-wrap align-items-center justify-content-evenly p-0 m-0">
-              
-                <div className="show-entries d-flex flex-wrap align-items-center justify-content-evenly col-2 p-0 m-0">
-                  <span>عرض</span>
-                  <select className="form-select border-primary col-6 px-1 py-2 m-0" onChange={(e) => { setstartpagination(0); setendpagination(e.target.value) }}>
-                    <option value={5}>5</option>
-                    <option value={10}>10</option>
-                    <option value={15}>15</option>
-                    <option value={20}>20</option>
-                  </select>
+
+              <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
+                <label className="form-label text-wrap text-right fw-bolder p-0 m-0">عرض</label>
+                <select className="form-select border-primary col-6 px-1 py-2 m-0" onChange={(e) => { setstartpagination(0); setendpagination(e.target.value) }}>
+                  <option value={5}>5</option>
+                  <option value={10}>10</option>
+                  <option value={15}>15</option>
+                  <option value={20}>20</option>
+                  <option value={25}>25</option>
+                  <option value={30}>30</option>
+                </select>
               </div>
-                <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
-                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0">التصنيف</label>
-                  <select className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => getproductByCategory(e.target.value)} >
-                    <option value={""}>الكل</option>
-                    {listofcategories.map((category, i) => {
-                      return <option value={category._id} key={i} >{category.name}</option>
-                    })
-                    }
+              <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
+                <label className="form-label text-wrap text-right fw-bolder p-0 m-0">التصنيف</label>
+                <select className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => getproductByCategory(e.target.value)} >
+                  <option value={""}>الكل</option>
+                  {listofcategories.map((category, i) => {
+                    return <option value={category._id} key={i} >{category.name}</option>
+                  })
+                  }
+                </select>
+              </div>
+              <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
+                <label className="form-label text-wrap text-right fw-bolder p-0 m-0">المنتج</label>
+                <select className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => handleSelectedProduct(e.target.value)} >
+                  <option value={""}>الكل</option>
+                  {productFilterd.map((product, i) => {
+                    return <option value={product._id} key={i} >{product.name}</option>
+                  })
+                  }
+                </select>
+              </div>
+              {sizes.length > 0 ?
+                <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
+                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الحجم</label>
+                  <select className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => handleSelectedProductSize(e.target.value)} >
+                    <option value="">اختر حجم</option>
+                    {sizes.map((size, i) => {
+                      return <option value={size._id} key={i} >{size.sizeName}</option>
+                    })}
                   </select>
                 </div>
-                <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
-                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0">المنتج</label>
-                  <select className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => handleSelectedProduct(e.target.value)} >
-                    <option value={""}>الكل</option>
-                    {productFilterd.map((product, i) => {
-                      return <option value={product._id} key={i} >{product.name}</option>
-                    })
-                    }
-                  </select>
-                </div>
-                {sizes.length > 0 ?
-                  <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
-                    <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الحجم</label>
-                    <select className="form-control border-primary m-0 p-2 h-auto"  onChange={(e) => handleSelectedProductSize(e.target.value)} >
-                      <option value="">اختر حجم</option>
-                      {sizes.map((size, i) => {
-                        return <option value={size._id} key={i} >{size.sizeName}</option>
-                      })}
-                    </select>
-                  </div>
-                  : ""}
-                <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
-                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0">اجمالي التكاليف</label>
-                  <input type="Number" className="form-control border-primary m-0 p-2 h-auto" readOnly defaultValue={producttotalcost} />
-                </div>
-                {/* <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
+                : ""}
+              <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
+                <label className="form-label text-wrap text-right fw-bolder p-0 m-0">اجمالي التكاليف</label>
+                <input type="Number" className="form-control border-primary m-0 p-2 h-auto" readOnly defaultValue={producttotalcost} />
+              </div>
+              {/* <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">Status</label>
                   <select className="form-control border-primary m-0 p-2 h-auto">
                     <option>Any</option>
@@ -507,8 +509,8 @@ const ProductRecipe = () => {
                   </select>
                 </div>
                 <span className="filter-icon"><i className="fa fa-filter"></i></span> */}
-              </div>
             </div>
+          </div>
           <table className="table table-striped table-hover">
             <thead>
               <tr>
@@ -590,10 +592,12 @@ const ProductRecipe = () => {
               <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الاسم</label>
-                  <select className="form-control border-primary m-0 p-2 h-auto" form="carform" onChange={(e) => { setitemId(e.target.value);
-                     setname(AllStockItems.find(s => s._id === e.target.value).itemName); 
-                     setunit(AllStockItems.find(s => s._id === e.target.value).smallUnit); 
-                     setcostofitem(AllStockItems.find(s => s._id === e.target.value).costOfPart) }}>
+                  <select className="form-control border-primary m-0 p-2 h-auto" form="carform" onChange={(e) => {
+                    setitemId(e.target.value);
+                    setname(AllStockItems.find(s => s._id === e.target.value).itemName);
+                    setunit(AllStockItems.find(s => s._id === e.target.value).smallUnit);
+                    setcostofitem(AllStockItems.find(s => s._id === e.target.value).costOfPart)
+                  }}>
                     <option value="">اختر</option>
                     {AllStockItems && AllStockItems.map((item, i) => {
                       return (

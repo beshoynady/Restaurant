@@ -215,7 +215,7 @@ const CashRegister = () => {
                     <div className="col-sm-6 text-right">
                       <h2>ادارة <b>الخزينه</b></h2>
                     </div>
-                    <div className="col-12 col-md-6 p-0 m-0 d-flex flex-wrap aliegn-items-center  justify-content-evenly">
+                    <div className="col-12 col-md-6 p-0 m-0 d-flex flex-wrap aliegn-items-center justify-content-end">
                       <a href="#addCashRegisterModal" className="d-flex align-items-center justify-content-center col-4 h-100 p-2 m-0 btn btn-success" data-toggle="modal"> <span>اضافه خزنه</span></a>
                       <a href="#deleteListCashRegisterModal" className="d-flex align-items-center justify-content-center col-4 h-100 p-2 m-0 btn btn-danger" data-toggle="modal"> <span>حذف</span></a>
                     </div>
@@ -224,7 +224,7 @@ const CashRegister = () => {
                 <div class="table-filter print-hide">
                   <div className="row text-dark d-flex flex-wrap align-items-center justify-content-between p-0 m-0">
                     <div className="show-entries d-flex flex-wrap align-items-center justify-content-evenly col-md-2">
-                      <span>عرض</span>
+                      <label className="form-label text-wrap text-right fw-bolder p-0 m-0">عرض</label>
                       <select className="form-select border-primary col-6 px-1 py-2 m-0" onChange={(e) => { setstartpagination(0); setendpagination(e.target.value) }}>
                         <option value={5}>5</option>
                         <option value={10}>10</option>

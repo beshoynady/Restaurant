@@ -299,10 +299,10 @@ const PermissionsComponent = () => {
                 <div className="table-wrapper">
                   <div className="table-title">
                     <div className="w-100 d-flex flex-wrap align-items-center justify-content-between">
-                      <div className="col-sm-6">
+                      <div className="col-sm-6 text-right">
                         <h2>ادارة <b>صلاحيات الموظفين</b></h2>
                       </div>
-                      <div className="col-12 col-md-6 p-0 m-0 d-flex flex-wrap aliegn-items-center  justify-content-evenly">
+                      <div className="col-12 col-md-6 p-0 m-0 d-flex flex-wrap aliegn-items-center justify-content-end">
                         <a className="d-flex align-items-center justify-content-center col-4 h-100 p-2 m-0 btn btn-success" onClick={addPermissions}> <span>حفظ</span></a>
                         <a className="d-flex align-items-center justify-content-center col-4 h-100 p-2 m-0 btn btn-danger" onClick={getPermissions}> <span>الغاء</span></a>
                       </div>
@@ -311,12 +311,12 @@ const PermissionsComponent = () => {
                   <div className="table-filter print-hide">
                     <div className="d-flex flex-column text-dark">
                       <div className='d-flex'>
-                        <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1" style={{ minWidth: '35%' }}>
+                        <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1" style={{ minWidth: '35%' }}>
                           <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الاسم</label>
                           <input type="text" className="form-control border-primary m-0 p-2 h-auto" style={{ minWidth: '200px' }} onChange={(e) => getEmployeesByName(e.target.value)} />
                           {/* <button type="button" className="btn btn-primary col-6 h-100 p-0 m-0"><i className="fa fa-search"></i></button> */}
                         </div>
-                        <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1" style={{ minWidth: '40%' }}>
+                        <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1" style={{ minWidth: '40%' }}>
                           <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الموظف</label>
                           <select className="form-control border-primary m-0 p-2 h-auto"  style={{ minWidth: '200px' }} onChange={(e) => getEmployeesById(e.target.value)} >
                             <option value="">الكل</option>
@@ -327,12 +327,12 @@ const PermissionsComponent = () => {
                         </div>
                       </div>
                       <div className='d-flex'>
-                        <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1" style={{ minWidth: '35%' }}>
+                        <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1" style={{ minWidth: '35%' }}>
                           <label className="form-label text-wrap text-right fw-bolder p-0 m-0">اسم الموظف</label>
                           <input type="text" className="form-control border-primary m-0 p-2 h-auto" style={{ minWidth: '200px' }} value={selectedEmployee ? selectedEmployee.fullname : ''} readOnly />
                         </div>
 
-                        <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1" style={{ minWidth: '35%' }}>
+                        <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1" style={{ minWidth: '35%' }}>
                           <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الوظية</label>
                           <input type="text" className="form-control border-primary m-0 p-2 h-auto" style={{ minWidth: '200px' }} value={selectedEmployee ? selectedEmployee.role : ''} readOnly />
                         </div>

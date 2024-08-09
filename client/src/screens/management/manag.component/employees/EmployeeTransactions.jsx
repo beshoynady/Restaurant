@@ -196,7 +196,7 @@ const EmployeeTransactions = () => {
         <div className="table-wrapper">
           <div className="table-title">
             <div className="w-100 d-flex flex-wrap align-items-center justify-content-between">
-              <div className="col-sm-6">
+              <div className="col-sm-6 text-right">
                 <h2>ادارة <b>تعاملات الموظفين</b></h2>
               </div>
               <div className="col-6 d-flex justify-content-end print-hide">
@@ -266,11 +266,11 @@ const EmployeeTransactions = () => {
 
                 <div className="d-flex align-items-center justify-content-between flex-nowrap col-9 p-0 m-0 px-1">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0"><strong>مدة محددة:</strong></label>
-                  <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
+                  <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">من</label>
                     <input type="date" className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => setStartDate(e.target.value)} placeholder="اختر التاريخ" />
                   </div>
-                  <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
+                  <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">إلى</label>
                     <input type="date" className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => setEndDate(e.target.value)} placeholder="اختر التاريخ" />
                   </div>

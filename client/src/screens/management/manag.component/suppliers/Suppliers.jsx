@@ -342,7 +342,7 @@ const Suppliers = () => {
                       <div className="col-sm-6 text-right">
                         <h2>ادارة <b>الموردين</b></h2>
                       </div>
-                      <div className="col-12 col-md-6 p-0 m-0 d-flex flex-wrap aliegn-items-center  justify-content-evenly">
+                      <div className="col-12 col-md-6 p-0 m-0 d-flex flex-wrap aliegn-items-center justify-content-end">
                         <a href="#addSupplierModal" className="d-flex align-items-center justify-content-center col-4 h-100 p-2 m-0 btn btn-success" data-toggle="modal">
                            <span>اضافه مورد جديد</span></a>
 
@@ -353,7 +353,7 @@ const Suppliers = () => {
                   <div className="table-filter print-hide">
                     <div className="col-12 text-dark d-flex flex-wrap align-items-center justify-content-evenly p-0 m-0">
                       <div className="show-entries col-sm-3">
-                        <span>عرض</span>
+                        <label className="form-label text-wrap text-right fw-bolder p-0 m-0">عرض</label>
                         <select className="form-select border-primary col-6 px-1 py-2 m-0" onChange={(e) => { setstartpagination(0); setendpagination(e.target.value) }}>
                           <option value={5}>5</option>
                           <option value={10}>10</option>
@@ -365,11 +365,11 @@ const Suppliers = () => {
                         
                       </div>
 
-                      <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
+                      <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
                         <label className="col-3 text-wrap text-right fw-bolder p-0 m-0">اسم المورد</label>
                         <input type="text" className="form-control border-primary col-9" onChange={(e) => searchSupplierByName(e.target.value)} />
                       </div>
-                      {/* <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
+                      {/* <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
                           <label className="col-3 text-wrap text-right fw-bolder p-0 m-0">نوع الاوردر</label>
                           <select className="form-control border-primary col-9" onChange={(e) => searchByaction(e.target.value)} >
                             <option value={""}>الكل</option>
@@ -379,7 +379,7 @@ const Suppliers = () => {
                             <option value="Wastage" >Wastage</option>
                           </select>
                         </div> */}
-                      {/* <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
+                      {/* <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
                           <label className="col-3 text-wrap text-right fw-bolder p-0 m-0">Location</label>
                           <select className="form-control border-primary col-9">
                             <option>All</option>
@@ -390,7 +390,7 @@ const Suppliers = () => {
                             <option>Paris</option>
                           </select>
                         </div>
-                        <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
+                        <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
                           <label className="col-3 text-wrap text-right fw-bolder p-0 m-0">Status</label>
                           <select className="form-control border-primary col-9">
                             <option>Any</option>

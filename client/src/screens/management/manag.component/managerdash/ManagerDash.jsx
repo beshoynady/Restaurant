@@ -727,6 +727,7 @@ const ManagerDash = () => {
                 <div className="row mb-3">
                   <div className="col-4">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">عرض</label>
+
                     <select className="form-select w-auto" onChange={(e) => { setstartpagination(0); setendpagination(parseInt(e.target.value)) }}>
                       <option value={5}>5</option>
                       <option value={10}>10</option>

@@ -650,10 +650,10 @@ const Purchase = () => {
         <div className="table-wrapper">
           <div className="table-title">
             <div className="w-100 d-flex flex-wrap align-items-center justify-content-between">
-              <div className="col-sm-6">
+              <div className="col-sm-6 text-right">
                 <h2>ادارة <b>المشتريات</b></h2>
               </div>
-              <div className="col-12 col-md-6 p-0 m-0 d-flex flex-wrap aliegn-items-center  justify-content-evenly">
+              <div className="col-12 col-md-6 p-0 m-0 d-flex flex-wrap aliegn-items-center justify-content-end">
                 <a href="#addPurchaseInvoiceModal" className="d-flex align-items-center justify-content-center col-4 h-100 p-2 m-0 btn btn-success" data-toggle="modal"> <label className=" text-wrap text-right fw-bolder p-0 m-0">اضافه فاتورة جديدة</label></a>
 
                 {/* <a href="#deleteStockactionModal" className="d-flex align-items-center justify-content-center col-4 h-100 p-2 m-0 btn btn-danger" data-toggle="modal"> <label className=" text-wrap text-right fw-bolder p-0 m-0">حذف</label></a> */}
@@ -717,7 +717,7 @@ const Purchase = () => {
                 </select>
               </div>
               <div className='col-12 d-flex align-items-center justify-content-between'>
-                <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
+                <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">فلتر حسب الوقت</label>
                   <select className="form-control border-primary m-0 p-2 h-auto"  onChange={(e) => setallPurchaseInvoice(filterByTime(e.target.value, allPurchaseInvoice))}>
                     <option value="">اختر</option>
@@ -731,12 +731,12 @@ const Purchase = () => {
                 <div className="d-flex align-items-center justify-content-between flex-nowrap col-9 p-0 m-0 px-1">
                   <label className="form-label text-nowrap"><strong>مدة محددة:</strong></label>
 
-                  <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
+                  <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">من</label>
                     <input type="date" className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => setStartDate(e.target.value)} placeholder="اختر التاريخ" />
                   </div>
 
-                  <div className="filter-group d-flex align-items-center justify-content-between col-3 p-0 mb-1">
+                  <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">إلى</label>
                     <input type="date" className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => setEndDate(e.target.value)} placeholder="اختر التاريخ" />
                   </div>
