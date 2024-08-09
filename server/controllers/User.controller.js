@@ -11,8 +11,8 @@ const createuser = async (req, res) => {
         // Schema validation using Joi for incoming data
         const schema = Joi.object({
             username: Joi.string().trim().min(3).max(100).required(),
-            email: Joi.string().email().trim().min(10).max(100).required(),
-            address: Joi.string().trim().min(3).max(150),
+            email: Joi.string().email().trim().min(10).max(100).option(),
+            address: Joi.string().trim().min(3).max(150).required(),
             phone: Joi.string().trim().length(11).required(),
             password: Joi.string().trim().min(3).max(200).required(),
         });

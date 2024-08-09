@@ -126,6 +126,10 @@ const MenuCard = () => {
                             </div>
                           : ''}
 
+
+
+                          {/* start card body */}
+
                         <div className="row g-0 h-100 m-0 p-0">
                           <div className="col-5 m-0 p-0 d-flex flex-nowrap flex-column justify-content-between">
                             <img src={`${apiUrl}/images/${product.image}`} className="h-75 w-100" alt="Delicious soup" />
@@ -155,7 +159,7 @@ const MenuCard = () => {
                                 onClick={() => { setnoteArea(!noteArea); setproductid(product._id) }}>note_alt</span>
                             </div>
                             <div className="d-flex justify-content-between align-items-center mb-2">
-                              <p className="card-text mb-2" style={{ fontSize: "12px", fontWeight: "700" }}>{product.description}</p>
+                              <p className="card-text text-center p-0 m-0" style={{ fontSize: "12px", fontWeight: "700" }}>{product.description}</p>
                               {product.hasExtras &&
                                 <span className="material-icons" style={{ color: "green", fontSize: "45px", cursor: 'pointer' }}
                                   onClick={() => { setproductExtras(product.sizes.filter(size => size._id === sizeId)[0].extrasSelected ? product.sizes.filter(size => size._id === sizeId)[0].extrasSelected : []); setextraArea(!extraArea); setproductid(product._id) }}>add_circle</span>

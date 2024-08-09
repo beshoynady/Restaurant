@@ -722,7 +722,8 @@ function App() {
           notes: '',
           price: 0,
           priceAfterDiscount: 0,
-          hasExtras: cartItem.hasExtras
+          hasExtras: cartItem.hasExtras,
+          image: cartItem.image
         };
 
         if (sizeId && cartItem.sizes && cartItem.sizes.length > 0) {
