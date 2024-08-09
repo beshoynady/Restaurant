@@ -341,7 +341,7 @@ const CashMovement = () => {
         <div className="table-wrapper">
           <div className="table-title">
             <div className="w-100 d-flex flex-wrap align-items-center justify-content-between">
-              <div className="col-sm-6 text-right">
+              <div className="text-right">
                 <h2>ادارة <b>حركه النقدية</b></h2>
               </div>
               <div className="col-sm-6 h-100 d-flex justify-content-end">

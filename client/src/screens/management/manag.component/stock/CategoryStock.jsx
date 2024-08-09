@@ -181,7 +181,7 @@ const CategoryStock = () => {
         <div className="table-wrapper">
           <div className="table-title">
             <div className="row ">
-              <div className="col-sm-6 text-right">
+              <div className="text-right">
                 <h2>إدارة <b>اقسام المخزن</b></h2>
               </div>
               <div className="col-12 col-md-6 p-0 m-0 d-flex flex-wrap aliegn-items-center justify-content-end">

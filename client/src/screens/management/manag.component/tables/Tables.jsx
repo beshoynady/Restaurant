@@ -253,7 +253,7 @@ const Tables = () => {
         <div className="table-wrapper">
           <div className="table-title">
             <div className="w-100 d-flex flex-wrap align-items-center justify-content-between">
-              <div className="col-12 col-md-4">
+              <div className="col-sm-6 text-right">
                 <h2>ادارة <b>الطاولات</b></h2>
               </div>
               <div className="col-12 col-md-8 d-flex flex-wrap align-items-center justify-content-between">
