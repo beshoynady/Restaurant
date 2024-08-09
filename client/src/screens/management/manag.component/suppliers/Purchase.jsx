@@ -675,7 +675,7 @@ const Purchase = () => {
                     })()
                   }
                 </select>
-                <label className="form-label text-wrap text-right fw-bolder p-0 m-0">صفوف</label>
+                
               </div>
               <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">رقم الفاتوره</label>
