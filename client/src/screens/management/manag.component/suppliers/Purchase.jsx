@@ -677,11 +677,11 @@ const Purchase = () => {
                 </select>
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">صفوف</label>
               </div>
-              <div className="filter-group d-flex align-items-center justify-content-evenly col-3 mb-1 p-0">
+              <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">رقم الفاتوره</label>
                 <input type="text" className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => searchByIvoiceNumber(e.target.value)} />
               </div>
-              <div className="filter-group d-flex align-items-center justify-content-evenly col-3 mb-1 p-0">
+              <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">طريقه السداد</label>
                 <select className="form-control border-primary m-0 p-2 h-auto"  onChange={(e) => searchByPaymentType(e.target.value)} >
                   <option value={""}>الكل</option>
@@ -689,7 +689,7 @@ const Purchase = () => {
                   <option value="credit">تقسيط</option>;
                 </select>
               </div>
-              <div className="filter-group d-flex align-items-center justify-content-evenly col-3 mb-1 p-0">
+              <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">حاله السداد</label>
                 <select className="form-control border-primary m-0 p-2 h-auto"  onChange={(e) => searchBypaymentStatus(e.target.value)} >
                   <option value={""}>الكل</option>
@@ -698,7 +698,7 @@ const Purchase = () => {
                   <option value="paid">سداد كامل</option>;
                 </select>
               </div>
-              <div className="filter-group d-flex align-items-center justify-content-evenly col-3 mb-1 p-0">
+              <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">المورد</label>
                 <select className="form-control border-primary m-0 p-2 h-auto"  onChange={(e) => searchBySupplier(e.target.value)} >
                   <option value={""}>الكل</option>
@@ -707,7 +707,7 @@ const Purchase = () => {
                   })}
                 </select>
               </div>
-              <div className="filter-group d-flex align-items-center justify-content-evenly col-3 mb-1 p-0">
+              <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">خزينه الدفع</label>
                 <select className="form-control border-primary m-0 p-2 h-auto"  onChange={(e) => searchByCashRegister(e.target.value)} >
                   <option value={""}>الكل</option>
