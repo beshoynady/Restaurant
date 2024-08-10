@@ -1,11 +1,10 @@
 const mongoose = require('mongoose');
-const { ObjectId } = mongoose.Schema
-
+const { ObjectId } = mongoose.Schema;
 
 const userschema = new mongoose.Schema({
     username: {
         type: String,
-        require: [true, 'required username'],
+        required: [true, 'username is required'],
         trim: true,
         minlength: 3,
         maxlength: 100,
@@ -13,22 +12,21 @@ const userschema = new mongoose.Schema({
     email: {
         type: String,
         maxlength: 100,
-        minlength: 10,
         lowercase: true,
         trim: true,
-        match: [/\S+@\S+\.\S+/, 'Please enter a valid email address'],
+        match: [/\S+@\S+\.\S+/, 'يرجى إدخال عنوان بريد إلكتروني صحيح'],
     },
     password: {
         type: String,
         trim: true,
-        require: [true, 'password required'],
+        required: [true, 'password is required'],
         maxlength: 200,
         minlength: 3,
     },
     deliveryArea: {
         type: ObjectId,
         ref: 'DeliveryArea',
-        required: true
+        required: [true, 'deliveryArea is required']
     },
     address: {
         type: String,
@@ -39,9 +37,10 @@ const userschema = new mongoose.Schema({
     phone: {
         type: String,
         unique: true,
-        require: [true, 'phone required'],
+        required: [true, 'phone is required'],
         trim: true,
-        length: 11,
+        minlength: 11,
+        maxlength: 11,
     },
     isVarified: {
         type: Boolean,
@@ -49,8 +48,7 @@ const userschema = new mongoose.Schema({
     },
     isActive: {
         type: Boolean,
-        default: true,
-        require: [true, 'isActive required'],
+        default: true
     }
 },
     { timestamps: true }
@@ -59,4 +57,3 @@ const userschema = new mongoose.Schema({
 const Usermodel = mongoose.model('User', userschema);
 
 module.exports = Usermodel;
-
