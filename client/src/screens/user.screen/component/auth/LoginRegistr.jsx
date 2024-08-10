@@ -63,7 +63,7 @@ const LoginRegistr = (props) => {
         phone,
         password,
       });
-
+      console.log({response})
       // Handle response data
       if (response && response.data) {
         const { accessToken, findUser } = response.data;

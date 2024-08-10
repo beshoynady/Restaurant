@@ -4,7 +4,6 @@ const bcrypt = require('bcrypt');
 const { validationResult } = require('express-validator');
 require('dotenv').config();
 
-
 const signup = async (req, res) => {
     try {
         const { username, email, address, deliveryArea, phone, password } = req.body;
@@ -60,7 +59,7 @@ const login = async (req, res) => {
         }
 
         // Validate password
-        const match = bcrypt.compare(password, findUser.password);
+        const match = await bcrypt.compare(password, findUser.password);
         if (!match) {
             return res.status(401).json({ success: false, error: 'Incorrect password' });
         }
@@ -76,7 +75,6 @@ const login = async (req, res) => {
         res.status(500).json({ success: false, error: 'Internal server error' });
     }
 };
-
 
 const generateAccessToken = (user) => {
     return jwt.sign(
