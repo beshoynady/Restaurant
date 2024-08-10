@@ -386,7 +386,7 @@ const Tables = () => {
                 <h4 className="modal-title">اضافه طاولة</h4>
                 <button type="button" className="close m-0 p-1" data-dismiss="modal" aria-hidden="true">&times;</button>
               </div>
-              <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
+              <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">رقم السكشن</label>
                   <input type="Number" className="form-control border-primary m-0 p-2 h-auto" required onChange={(e) => setsectionNumber(e.target.value)} />
@@ -421,7 +421,7 @@ const Tables = () => {
                 <h4 className="modal-title">تعديل طاولة</h4>
                 <button type="button" className="close m-0 p-1" data-dismiss="modal" aria-hidden="true">&times;</button>
               </div>
-              <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
+              <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">رقم السكشن</label>
                   <input type="Number" className="form-control border-primary m-0 p-2 h-auto" required onChange={(e) => setsectionNumber(e.target.value)} />
@@ -464,7 +464,7 @@ const Tables = () => {
               <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                 <h4 className="modal-title">استخراج QR</h4>
               </div>
-              <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
+              <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
                 <div ref={printtableqr} className="form-group qrprint w-100 h-auto p-3 d-flex align-items-center justify-content-center">
                   <div className="w-100 text-center">
                     <p className="mb-3 text-nowrap text-center" style={{ fontSize: '26px', fontFamily: 'Noto Nastaliq Urdu , serif' }}>طاولة رقم {tableNumber}</p>
@@ -496,7 +496,7 @@ const Tables = () => {
               <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                 <h4 className="modal-title">استخراج QR</h4>
               </div>
-              <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
+              <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
                 <div ref={printwepqr} className="form-group qrprint w-100 h-auto p-3 d-flex align-items-center justify-content-center">
                   <div className="w-100 text-center">
                     <p className="mb-3" style={{ fontSize: '26px', fontFamily: 'Noto Nastaliq Urdu , serif' }}>{restaurantData && restaurantData.name}</p>

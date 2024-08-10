@@ -550,7 +550,7 @@ const exportToExcel = () => {
                   <h4 className="modal-title">إضافة موظف</h4>
                   <button type="button" className="close m-0 p-1" data-dismiss="modal" aria-hidden="true">&times;</button>
                 </div>
-                <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
+                <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
                   <div className="form-group col-12 col-md-6">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0" htmlFor="fullname">الاسم</label>
                     <input type="text" id="fullname" className="form-control border-primary m-0 p-2 h-auto" required pattern="[A-Za-z\u0600-\u06FF\s]+" onChange={(e) => setfullname(e.target.value)} />
@@ -659,7 +659,7 @@ const exportToExcel = () => {
                   <h4 className="modal-title">تعديل بيانات الموظف</h4>
                   <button type="button" className="close m-0 p-1" data-dismiss="modal" aria-hidden="true">&times;</button>
                 </div>
-                <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
+                <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
                   <div className="form-group col-12 col-md-6">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0" htmlFor="fullname">الاسم</label>
                     <input type="text" id="fullname" className="form-control border-primary m-0 p-2 h-auto" defaultValue={fullname} required pattern="[A-Za-z\u0600-\u06FF\s]+" onChange={(e) => setfullname(e.target.value)} />
@@ -771,7 +771,7 @@ const exportToExcel = () => {
                   <h4 className="modal-title">حذف موظف</h4>
                   <button type="button" className="close m-0 p-1" data-dismiss="modal" aria-hidden="true">&times;</button>
                 </div>
-                <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
+                <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
                   <p>هل أنت متأكد من حذف الموظف <strong>{fullname}</strong>؟</p>
                 </div>
                 <div className="modal-footer flex-nowrap d-flex flex-row align-items-center justify-content-between">
@@ -792,7 +792,7 @@ const exportToExcel = () => {
                         <h4 className="modal-title">حذف الموظفين المحددين</h4>
                         <button type="button" className="close m-0 p-1" data-dismiss="modal" aria-hidden="true">&times;</button>
                       </div>
-                      <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
+                      <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
                         <p>هل انت متاكد من حذف هذا السجل؟?</p>
                         <p className="text-warning"><small>لا يمكن الرجوع في هذا الاجراء.</small></p>
                       </div>

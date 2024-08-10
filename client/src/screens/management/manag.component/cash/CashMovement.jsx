@@ -500,7 +500,7 @@ const CashMovement = () => {
                 <h4 className="modal-title">ايداع بالخزينه</h4>
                 <button type="button" className="close m-0 p-1" data-dismiss="modal" aria-hidden="true">&times;</button>
               </div>
-              <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
+              <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
                 <div className="form-group col-12 col-md-6" >
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الخزينه </label>
                   <select className="form-control border-primary m-0 p-2 h-auto"  onChange={(e) => selectCashRegister(e.target.value)} >
@@ -544,7 +544,7 @@ const CashMovement = () => {
                 <h4 className="modal-title">سحب بالخزينه</h4>
                 <button type="button" className="close m-0 p-1" data-dismiss="modal" aria-hidden="true">&times;</button>
               </div>
-              <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
+              <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
                 <div className="form-group col-12 col-md-6" >
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الخزينه </label>
                   <select className="form-control border-primary m-0 p-2 h-auto"  onChange={(e) => selectCashRegister(e.target.value)} >
@@ -586,7 +586,7 @@ const CashMovement = () => {
                 <h4 className="modal-title">تحويل بالخزينه</h4>
                 <button type="button" className="close m-0 p-1" data-dismiss="modal" aria-hidden="true">&times;</button>
               </div>
-              <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
+              <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
                 <div className="form-group col-12 col-md-6" >
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الخزينه </label>
                   <select className="form-control border-primary m-0 p-2 h-auto"  onChange={(e) => { selectCashRegister(e.target.value); setsendRegister(e.target.value) }} >
@@ -637,7 +637,7 @@ const CashMovement = () => {
                         <h4 className="modal-title">حذف منتج</h4>
                         <button type="button" className="close m-0 p-1" data-dismiss="modal" aria-hidden="true">&times;</button>
                       </div>
-                      <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
+                      <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
                         <p className="text-dark f-3">هل انت متاكد من حذف هذا السجل؟</p>
                         <p className="text-warning"><small>لا يمكن الرجوع في هذا الاجراء.</small></p>
                       </div>

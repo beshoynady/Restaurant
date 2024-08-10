@@ -385,7 +385,7 @@ const POS = () => {
                 <h4 className="modal-title">رقم الفاتوره</h4>
                 <button type="button" className="close m-0 p-1" data-dismiss="modal" aria-hidden="true">&times;</button>
               </div>
-              <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
+              <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
                 <div className="w-100">
                   <div className="form-group w-100 d-flex align-item-center justify-content-between">
                     <label htmlFor="serial" className="col-6 text-dark">رقم الفاتورة:</label>
@@ -471,7 +471,7 @@ const POS = () => {
                 <h4 className="modal-title">اختر الطاوله</h4>
                 <button type="button" className="close m-0 p-1" data-dismiss="modal" aria-hidden="true">&times;</button>
               </div>
-              <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
+              <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
                 <div className="w-100">
                   <div className="form-group d-flex flex-nowrap  w-100">
                     <label htmlFor='table' className='col-6 text-dark'>رقم الطاولة:</label>
@@ -605,7 +605,7 @@ const POS = () => {
               </div>
               {ordertype ?
                 ordertype === 'Internal' ? (
-                  <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
+                  <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
                     <div className="form-group d-flex flex-nowrap align-items-center justify-content-between col-12 ">
                       <label htmlFor='table' className='col-4 col-form-label text-dark'>رقم الطاولة:</label>
                       <select id='table' className="form-control border-primary m-0 p-2 h-auto" required onChange={(e) => { settableID(e.target.value) }}>
@@ -617,7 +617,7 @@ const POS = () => {
                     </div>
                   </div>
                 ) : ordertype === 'Delivery' ? (
-                  <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
+                  <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
 
                     <div className="form-group d-flex flex-nowrap align-items-center justify-content-between col-12 col-md-6 ">
                       <label htmlFor="phone" className='col-4 col-form-label text-dark'>رقم الموبايل:</label>
@@ -684,7 +684,7 @@ const POS = () => {
                   </div>
 
                 ) : ordertype === 'Takeaway' ? (
-                  <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
+                  <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
 
                     <div className="form-group d-flex flex-nowrap align-items-center justify-content-between col-12 col-md-6 ">
                       <label htmlFor="name" className='col-4 col-form-label text-dark'>اسم العميل:</label>

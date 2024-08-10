@@ -759,7 +759,7 @@ const PayRoll = () => {
                         <h4 className="modal-title">دفع راتب</h4>
                         <button type="button" className="close m-0 p-1" data-dismiss="modal" aria-hidden="true">&times;</button>
                       </div>
-                      <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
+                      <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
                         <p className="text-center" style={{ fontSize: '20px', marginBottom: '1' }}>هل أنت متأكد من دفع {amount} مرتب {employeeName} ؟</p>
                         <p className="text-center text-warning" style={{ fontSize: '16px', marginBottom: '0' }}>لا يمكن الرجوع في هذا الإجراء.</p>
                       </div>

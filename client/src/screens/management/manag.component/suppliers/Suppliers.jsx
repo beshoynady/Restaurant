@@ -490,7 +490,7 @@ const Suppliers = () => {
                         <h4 className="modal-title">إضافة مورد</h4>
                         <button type="button" className="close m-0 p-1" data-dismiss="modal" aria-hidden="true">&times;</button>
                       </div>
-                      <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
+                      <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
                         <div className="form-group w-100 h-auto px-3 d-flex flex-wrap align-itmes-center justify-content-start col-12  col-md-6 ">
                           <label className="form-label text-wrap text-right fw-bolder p-0 m-0">اسم المورد</label>
                           <input type="text" className="form-control border-primary m-0 p-2 h-auto" required onChange={(e) => setName(e.target.value)} />
@@ -579,7 +579,7 @@ const Suppliers = () => {
                         <h4 className="modal-title">تعديل مورد</h4>
                         <button type="button" className="close m-0 p-1" data-dismiss="modal" aria-hidden="true">&times;</button>
                       </div>
-                      <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
+                      <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
                         <div className="form-group w-100 h-auto px-3 d-flex flex-wrap align-itmes-center justify-content-start col-12  col-md-6 ">
                           <label className="form-label text-wrap text-right fw-bolder p-0 m-0">اسم المورد</label>
                           <input type="text" className="form-control border-primary m-0 p-2 h-auto" defaultValue={name} value={name} onChange={(e) => setName(e.target.value)} />
@@ -666,7 +666,7 @@ const Suppliers = () => {
                         <h4 className="modal-title">حذف منتج</h4>
                         <button type="button" className="close m-0 p-1" data-dismiss="modal" aria-hidden="true">&times;</button>
                       </div>
-                      <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
+                      <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
                         <p className="text-dark f-3">هل انت متاكد من حذف هذا السجل؟</p>
                         <p className="text-warning"><small>لا يمكن الرجوع في هذا الاجراء.</small></p>
                       </div>

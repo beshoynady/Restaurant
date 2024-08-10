@@ -635,7 +635,7 @@ const AttendanceManagement = () => {
                 <h4 className="modal-title">تسجيل سجل حضور الموظف</h4>
                 <button type="button" className="close m-0 p-1" data-dismiss="modal" aria-hidden="true">&times;</button>
               </div>
-              <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
+              <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
                 <div className="w-100 d-flex flex-wrap align-items-center justify-content-between">
                   <div className="form-group col-12 col-md-6">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">تاريخ الحالي</label>
@@ -734,7 +734,7 @@ const AttendanceManagement = () => {
                 <h4 className="modal-title">تسجيل انصراف الموظف</h4>
                 <button type="button" className="close m-0 p-1" data-dismiss="modal" aria-hidden="true">&times;</button>
               </div>
-              <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
+              <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
                 <div className="w-100 d-flex flex-wrap align-items-center justify-content-between">
                   <div className="form-group col-12 col-md-6">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الاسم</label>
@@ -804,7 +804,7 @@ const AttendanceManagement = () => {
                 <h4 className="modal-title">تعديل سجل</h4>
                 <button type="button" className="close m-0 p-1" data-dismiss="modal" aria-hidden="true">&times;</button>
               </div>
-              <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
+              <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
                 <div className="w-100 d-flex flex-wrap align-items-center justify-content-between">
                   <div className="form-group col-12 col-md-6">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">تاريخ الحالي</label>
@@ -913,7 +913,7 @@ const AttendanceManagement = () => {
                 <h4 className="modal-title">حذف تصنيف</h4>
                 <button type="button" className="close m-0 p-1" data-dismiss="modal" aria-hidden="true">&times;</button>
               </div>
-              <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
+              <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
                 <p>هل انت متاكد من حذف هذا التصنيف?</p>
                 <p className="text-warning"><small>لا يمكن الرجوع فيه.</small></p>
               </div>

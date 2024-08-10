@@ -592,7 +592,7 @@ const ProductRecipe = () => {
                 <h4 className="modal-title">اضافه مكون</h4>
                 <button type="button" className="close m-0 p-1" data-dismiss="modal" aria-hidden="true">&times;</button>
               </div>
-              <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
+              <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الاسم</label>
                   <select className="form-control border-primary m-0 p-2 h-auto" form="carform" onChange={(e) => {
@@ -645,7 +645,7 @@ const ProductRecipe = () => {
                 <h4 className="modal-title">تعديل مكون</h4>
                 <button type="button" className="close m-0 p-1" data-dismiss="modal" aria-hidden="true">&times;</button>
               </div>
-              <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
+              <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الاسم</label>
                   <input type='text' className="form-control border-primary m-0 p-2 h-auto" defaultValue={name} readOnly />

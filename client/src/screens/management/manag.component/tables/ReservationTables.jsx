@@ -253,7 +253,7 @@ const ReservationTables = () => {
                 <h4 className="modal-title">اضافه حجز طاولة</h4>
                 <button type="button" className="close m-0 p-1" data-dismiss="modal" aria-hidden="true">&times;</button>
               </div>
-              <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
+              <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
                 <div className="container">
                   <div className="w-100 d-flex flex-wrap align-items-center justify-content-between">
                     <div className="col-12 col-md-8 mb-1">
@@ -385,7 +385,7 @@ const ReservationTables = () => {
                 <h4 className="modal-title">اضافه حجز طاولة</h4>
                 <button type="button" className="close m-0 p-1" data-dismiss="modal" aria-hidden="true">&times;</button>
               </div>
-              <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
+              <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
                 <div className="container">
                   <div className='row'>
                     <div className="col-12 col-md-7 mb-1">
