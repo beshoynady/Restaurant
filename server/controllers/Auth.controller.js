@@ -88,7 +88,7 @@ const generateAccessToken = (user) => {
             },
         },
         process.env.JWT_SECRET_KEY,
-        { expiresIn: process.env.jwt_expire }
+        { expiresIn: '1y' }
     );
 };
 
