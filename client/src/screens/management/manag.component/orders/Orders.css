@@ -182,7 +182,7 @@ table.table .avatar {
   
   .modal .modal-content {
     border-radius: 8px;
-    overflow: auto; /* Add scroll if content overflows */
+    overflow: auto;
   }
   
   .modal-header {
@@ -217,8 +217,8 @@ table.table .avatar {
   
   @media (max-width: 768px) {
     .modal .modal-dialog {
-      width: 90%;
-      max-width: 100%;
+      /* width: 90%; */
+      /* max-width: 100%; */
     }
   }
   
@@ -236,6 +236,13 @@ table.table .avatar {
       font-size: 18px;
     }
   }
+
+  @media (min-width: 576px) {
+    .modal-dialog {
+        max-width: fit-content !important;
+        margin: 1.75rem auto;
+    }
+}
   
   @media print {
     .print-hide {
