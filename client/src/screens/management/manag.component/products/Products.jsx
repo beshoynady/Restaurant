@@ -531,7 +531,7 @@ const Products = () => {
                           <td>{i + 1}</td>
                           <td><img src={`${apiUrl}/images/${product.image}`} style={{ width: "60px", height: "50px" }} /></td>
                           <td>{product.name}</td>
-                          <td className="text-wrap" style={{ maxWidth: '200px' }}>{product.description}</td>
+                          <td className="text-wrap" style={{ maxWidth: '250px', minWidth:'200px' }}>{product.description}</td>
                           <td>{product.category.name}</td>
                           <td>{product.sizes.length}</td>
                           <td>{product.extras.length}</td>
@@ -759,13 +759,15 @@ const Products = () => {
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الصورة</label>
-                  <input type="file" className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => handleFileUpload(e)} />
+                  <input type="file" className="form-control border-primary m-0 p-2 h-auto" 
+                  onChange={(e) => handleFileUpload(e)} />
                 </div>
               </div>
 
               <div className="form-group col-12">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الوصف</label>
-                <textarea className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => setproductdescription(e.target.value)}></textarea>
+                <textarea maxLength='105' placeholder="هذا الوصف سوف يظهر للزبون" className="form-control border-primary m-0 p-2 h-auto" 
+                onChange={(e) => setproductdescription(e.target.value)}></textarea>
               </div>
 
               <div className="modal-footer d-flex flex-nowrap align-items-center justify-content-between m-0 p-1">
