@@ -346,7 +346,7 @@ const Users = () => {
                     <form onSubmit={createuserloyee}>
                       <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                         <h4 className="modal-title">اضافه موظف</h4>
-                        <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <button type="button" className="close m-0 p-1" data-dismiss="modal" aria-hidden="true">&times;</button>
                       </div>
                       <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
                         <div className="form-group col-12 col-md-6">
@@ -419,7 +419,7 @@ const Users = () => {
             <form onSubmit={handleUpdateUser}>
               <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                 <h4 className="modal-title">تعديل بيانات العملاء</h4>
-                <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <button type="button" className="close m-0 p-1" data-dismiss="modal" aria-hidden="true">&times;</button>
               </div>
               <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
                 <div className="form-group col-12 col-md-6">
@@ -518,7 +518,7 @@ const Users = () => {
                     <form onSubmit={deleteuserloyee}>
                       <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                         <h4 className="modal-title">حذف موظف</h4>
-                        <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <button type="button" className="close m-0 p-1" data-dismiss="modal" aria-hidden="true">&times;</button>
                       </div>
                       <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
                         <p>هل انت متاكد من حذف هذا السجل؟?</p>

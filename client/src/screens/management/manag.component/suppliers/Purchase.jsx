@@ -838,7 +838,7 @@ const Purchase = () => {
             <form onSubmit={(e) => createPurchaseInvoice(e, employeeLoginInfo.id)}>
               <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                 <h4 className="modal-title">اضافه فاتورة مشتريات</h4>
-                <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <button type="button" className="close m-0 p-1" data-dismiss="modal" aria-hidden="true">&times;</button>
               </div>
               <div className="modal-body container ">
 
@@ -1037,7 +1037,7 @@ const Purchase = () => {
           <div className="modal-content shadow-lg border-0 rounded ">
             <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
               <h4 className="modal-title">عرض فاتورة المشتريات</h4>
-              <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
+              <button type="button" className="close m-0 p-1" data-dismiss="modal" aria-hidden="true">&times;</button>
             </div>
             <div className="modal-body container printpage" ref={printContainerPurchasesInvoice} style={{ direction: 'rtl' }}>
               <div className="card">
@@ -1178,7 +1178,7 @@ const Purchase = () => {
                     <form onSubmit={deleteStockaction}>
                       <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                         <h4 className="modal-title">حذف منتج</h4>
-                        <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <button type="button" className="close m-0 p-1" data-dismiss="modal" aria-hidden="true">&times;</button>
                       </div>
                       <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
                         <p className="text-dark f-3">هل انت متاكد من حذف هذا السجل؟</p>

@@ -548,7 +548,7 @@ const exportToExcel = () => {
               <form className='text-right' onSubmit={(e) => createEmployee(e)}>
                 <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                   <h4 className="modal-title">إضافة موظف</h4>
-                  <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
+                  <button type="button" className="close m-0 p-1" data-dismiss="modal" aria-hidden="true">&times;</button>
                 </div>
                 <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
                   <div className="form-group col-12 col-md-6">
@@ -657,7 +657,7 @@ const exportToExcel = () => {
               <form className='text-right' onSubmit={(e) => editEmployee(e)}>
                 <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                   <h4 className="modal-title">تعديل بيانات الموظف</h4>
-                  <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
+                  <button type="button" className="close m-0 p-1" data-dismiss="modal" aria-hidden="true">&times;</button>
                 </div>
                 <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
                   <div className="form-group col-12 col-md-6">
@@ -769,7 +769,7 @@ const exportToExcel = () => {
               <form className='text-right' onSubmit={(e) => deleteEmployee(e)}>
                 <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                   <h4 className="modal-title">حذف موظف</h4>
-                  <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
+                  <button type="button" className="close m-0 p-1" data-dismiss="modal" aria-hidden="true">&times;</button>
                 </div>
                 <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
                   <p>هل أنت متأكد من حذف الموظف <strong>{fullname}</strong>؟</p>
@@ -790,7 +790,7 @@ const exportToExcel = () => {
                     <form className='text-right' onSubmit={deleteSelectedIds}>
                       <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                         <h4 className="modal-title">حذف الموظفين المحددين</h4>
-                        <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <button type="button" className="close m-0 p-1" data-dismiss="modal" aria-hidden="true">&times;</button>
                       </div>
                       <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
                         <p>هل انت متاكد من حذف هذا السجل؟?</p>

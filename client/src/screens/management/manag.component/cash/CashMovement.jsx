@@ -498,7 +498,7 @@ const CashMovement = () => {
             <form onSubmit={handleSubmit}>
               <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                 <h4 className="modal-title">ايداع بالخزينه</h4>
-                <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <button type="button" className="close m-0 p-1" data-dismiss="modal" aria-hidden="true">&times;</button>
               </div>
               <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
                 <div className="form-group col-12 col-md-6" >
@@ -542,7 +542,7 @@ const CashMovement = () => {
             <form onSubmit={handleSubmit}>
               <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                 <h4 className="modal-title">سحب بالخزينه</h4>
-                <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <button type="button" className="close m-0 p-1" data-dismiss="modal" aria-hidden="true">&times;</button>
               </div>
               <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
                 <div className="form-group col-12 col-md-6" >
@@ -584,7 +584,7 @@ const CashMovement = () => {
             <form onSubmit={transferCash}>
               <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                 <h4 className="modal-title">تحويل بالخزينه</h4>
-                <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <button type="button" className="close m-0 p-1" data-dismiss="modal" aria-hidden="true">&times;</button>
               </div>
               <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
                 <div className="form-group col-12 col-md-6" >
@@ -635,7 +635,7 @@ const CashMovement = () => {
                     <form onSubmit={deleteStockaction}>
                       <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                         <h4 className="modal-title">حذف منتج</h4>
-                        <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <button type="button" className="close m-0 p-1" data-dismiss="modal" aria-hidden="true">&times;</button>
                       </div>
                       <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
                         <p className="text-dark f-3">هل انت متاكد من حذف هذا السجل؟</p>

@@ -251,7 +251,7 @@ const ReservationTables = () => {
             <form onSubmit={(e) => createReservations(e, tableInfo.id, tableInfo.tableNumber, userId, numberOfGuests, customerName, customerPhone, reservationDate, startTime, endTime, reservationNote, createdBy)}>
               <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                 <h4 className="modal-title">اضافه حجز طاولة</h4>
-                <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <button type="button" className="close m-0 p-1" data-dismiss="modal" aria-hidden="true">&times;</button>
               </div>
               <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
                 <div className="container">
@@ -383,7 +383,7 @@ const ReservationTables = () => {
             <form onSubmit={(e) => updateReservation(e, reservationId, tableInfo.id, tableInfo.tableNumber, userId, numberOfGuests, customerName, customerPhone, reservationDate, startTime, endTime, reservationNote, createdBy)}>
               <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                 <h4 className="modal-title">اضافه حجز طاولة</h4>
-                <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <button type="button" className="close m-0 p-1" data-dismiss="modal" aria-hidden="true">&times;</button>
               </div>
               <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
                 <div className="container">

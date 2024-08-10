@@ -876,7 +876,7 @@ const PurchaseReturn = () => {
             <form onSubmit={(e) => createPurchaseReturn(e, employeeLoginInfo.id)}>
               <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                 <h4 className="modal-title">تسجيل مرتجع مشتريات</h4>
-                <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <button type="button" className="close m-0 p-1" data-dismiss="modal" aria-hidden="true">&times;</button>
               </div>
               <div className="modal-body container ">
 
@@ -1111,7 +1111,7 @@ const PurchaseReturn = () => {
             <form >
               <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                 <h4 className="modal-title">عرض مرتجع مشتريات</h4>
-                <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <button type="button" className="close m-0 p-1" data-dismiss="modal" aria-hidden="true">&times;</button>
               </div>
               <div className="modal-body printpage" ref={printContainerPurchasesReturnInvoice} style={{ direction: 'rtl' }}>
 
@@ -1269,7 +1269,7 @@ const PurchaseReturn = () => {
                     <form onSubmit={(e) => handlePurchaseReturn(e, employeeLoginInfo.id)}>
                       <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                         <h4 className="modal-title"></h4>
-                        <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <button type="button" className="close m-0 p-1" data-dismiss="modal" aria-hidden="true">&times;</button>
                       </div>
                       <div className="modal-body container ">
 
@@ -1435,7 +1435,7 @@ const PurchaseReturn = () => {
                     <form onSubmit={deleteStockaction}>
                       <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                         <h4 className="modal-title">حذف منتج</h4>
-                        <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <button type="button" className="close m-0 p-1" data-dismiss="modal" aria-hidden="true">&times;</button>
                       </div>
                       <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
                         <p className="text-dark f-3">هل انت متاكد من حذف هذا السجل؟</p>

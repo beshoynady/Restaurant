@@ -963,7 +963,7 @@ const ManagerDash = () => {
           <div className="modal-content shadow-lg border-0 rounded ">
             <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
               <h4 className="modal-title">تاكيد دفع الفاتورة</h4>
-              <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
+              <button type="button" className="close m-0 p-1" data-dismiss="modal" aria-hidden="true">&times;</button>
             </div>
             <form className='p-1' onSubmit={(e) => { changePaymentorderstauts(e) }}>
               <div className="form-group w-100 d-flex align-items-center justify-content-between">
@@ -1023,7 +1023,7 @@ const ManagerDash = () => {
             <form>
               <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                 <h4 className="modal-title"></h4>
-                <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <button type="button" className="close m-0 p-1" data-dismiss="modal" aria-hidden="true">&times;</button>
               </div>
               <div ref={printContainerInvoiceSplit} className="w-100 p-1 mb-7 overflow-auto printpage" style={{ textAlign: 'center' }}>
                 {/* Invoice Header */}
@@ -1166,7 +1166,7 @@ const ManagerDash = () => {
             <form>
               <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                 {/* <h4 className="modal-title"></h4> */}
-                <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <button type="button" className="close m-0 p-1" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <button type="button" className="h-100 btn btn-primary" value="طباعه للشيف" onClick={(e) => handlePrintKitchen(e)}>طباعه للشيف</button>
               </div>
               <div ref={printContainerKitchen} className="w-100 p-1 mb-7 overflow-auto printpage" style={{ textAlign: 'center' }}>

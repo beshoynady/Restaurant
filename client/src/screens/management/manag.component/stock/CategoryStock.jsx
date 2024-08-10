@@ -273,7 +273,7 @@ const CategoryStock = () => {
             <form onSubmit={createCategoryStock}>
               <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                 <h4 className="modal-title">اضافه تصنيف</h4>
-                <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <button type="button" className="close m-0 p-1" data-dismiss="modal" aria-hidden="true">&times;</button>
               </div>
               <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
                 <div className="form-group w-100 h-auto px-3 d-flex align-itmes-center justify-content-start col-12 ">
@@ -296,7 +296,7 @@ const CategoryStock = () => {
             <form onSubmit={editCategoryStock}>
               <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                 <h4 className="modal-title">تعديل التصنيف</h4>
-                <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <button type="button" className="close m-0 p-1" data-dismiss="modal" aria-hidden="true">&times;</button>
               </div>
               <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
                 <div className="form-group w-100 h-auto px-3 d-flex align-itmes-center justify-content-start col-12 ">
@@ -318,7 +318,7 @@ const CategoryStock = () => {
             <form onSubmit={deleteCategoryStock}>
               <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                 <h4 className="modal-title">حذف تصنيف</h4>
-                <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <button type="button" className="close m-0 p-1" data-dismiss="modal" aria-hidden="true">&times;</button>
               </div>
               <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
                 <p>هل انت متاكد من حذف هذا التصنيف?</p>

@@ -383,7 +383,7 @@ const POS = () => {
             <form onSubmit={(e) => { e.preventDefault(); getOrderDetailsBySerial(e, serial) }}>
               <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                 <h4 className="modal-title">رقم الفاتوره</h4>
-                <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <button type="button" className="close m-0 p-1" data-dismiss="modal" aria-hidden="true">&times;</button>
               </div>
               <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
                 <div className="w-100">
@@ -409,7 +409,7 @@ const POS = () => {
           <div className="modal-content shadow-lg border-0 rounded ">
             <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
               <h4 className="modal-title">دفع ثمن اخر اوردر</h4>
-              <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
+              <button type="button" className="close m-0 p-1" data-dismiss="modal" aria-hidden="true">&times;</button>
             </div>
             <form className='p-1' onSubmit={(e) => { changePaymentorderstauts(e) }}>
               <div className="form-group w-100 d-flex align-items-center justify-content-between">
@@ -469,7 +469,7 @@ const POS = () => {
             <form onSubmit={(e) => { splitInvoice(e) }}>
               <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                 <h4 className="modal-title">اختر الطاوله</h4>
-                <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <button type="button" className="close m-0 p-1" data-dismiss="modal" aria-hidden="true">&times;</button>
               </div>
               <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
                 <div className="w-100">
@@ -601,7 +601,7 @@ const POS = () => {
             <form>
               <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                 <h4 className="modal-title">ادخل بيانات العميل</h4>
-                <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <button type="button" className="close m-0 p-1" data-dismiss="modal" aria-hidden="true">&times;</button>
               </div>
               {ordertype ?
                 ordertype === 'Internal' ? (

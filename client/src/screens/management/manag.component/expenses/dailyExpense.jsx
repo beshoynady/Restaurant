@@ -518,7 +518,7 @@ const DailyExpense = () => {
             <form onSubmit={createDailyExpense}>
               <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                 <h4 className="modal-title">تسجيل مصروف</h4>
-                <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <button type="button" className="close m-0 p-1" data-dismiss="modal" aria-hidden="true">&times;</button>
               </div>
               <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
                 <div className="form-group col-12 col-md-6" >
@@ -573,7 +573,7 @@ const DailyExpense = () => {
             <form onSubmit={editDailyExpense}>
               <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                 <h4 className="modal-title">تعديل مصروف</h4>
-                <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <button type="button" className="close m-0 p-1" data-dismiss="modal" aria-hidden="true">&times;</button>
               </div>
               <div className="modal-body d-flex flex-wrap align-items-center p-4 text-right">
                 <div className="form-group col-12 col-md-6" >
@@ -630,7 +630,7 @@ const DailyExpense = () => {
             <form onSubmit={deleteDailyExpense}>
               <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                 <h4 className="modal-title">حذف منتج</h4>
-                <button type="button" className="close m-0" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <button type="button" className="close m-0 p-1" data-dismiss="modal" aria-hidden="true">&times;</button>
               </div>
                <div className="modal-body text-center">
           <p className="mb-2">هل أنت متأكد من حذف هذا السجل؟</p>
