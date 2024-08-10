@@ -165,6 +165,10 @@ table.table .avatar {
 
 
 /* Modal styles */
+.modal-open .modal {
+    overflow: auto !important;
+}
+
 .modal {
     right: 0;
     z-index: 1055 !important;
@@ -172,7 +176,7 @@ table.table .avatar {
   
   .modal .modal-dialog {
     width: 740px;
-    max-width: 90%;
+    /* max-width: 90%; */
     margin: 55px auto;
   }
   
@@ -225,8 +229,8 @@ table.table .avatar {
       padding: 10px;
     }
     .modal .modal-dialog {
-      width: 90%;
-      max-width: 90%;
+      /* width: 90%;
+      max-width: 90%; */
     }
     .modal .modal-title {
       font-size: 18px;
