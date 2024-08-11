@@ -10,7 +10,7 @@
     justify-content: center;
     position: relative;
 
-    .container {
+    .main-container {
         display: flex;
         align-items: center;
         justify-content: flex-end;
@@ -30,8 +30,8 @@
             .main-title {
                 font-size: 24px;
                 font-weight: 700;
-                color: var(--u-gold);
-                text-align: right;
+                color: var(--primary-color);
+                text-align: center;
                 margin-bottom: 15px;
                 line-height: 1.4;
                 text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
@@ -41,8 +41,8 @@
             .main-text {
                 font-size: 28px;
                 font-weight: 600;
-                color: var(--u-gold);
-                text-align: right;
+                color: var(--text-color);
+                text-align: center;
                 margin-bottom: 20px;
                 line-height: 1.4;
                 text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
@@ -58,10 +58,10 @@
                 padding: 0;
 
                 .main-li {
-                    background-color: var(--u-dark);
+                    background-color: var(--dark-color);
                     border: 2px solid transparent;
                     border-radius: 25px;
-                    color: var(--u-gold);
+                    color: var(--secondary-color);
                     cursor: pointer;
                     display: flex;
                     align-items: center;
@@ -75,7 +75,7 @@
                     a {
                         display: inline-block;
                         text-decoration: none;
-                        color: var(--u-gold);
+                        color: var(--secondary-color);
                         font-size: 22px;
                         font-weight: 800;
                     }

@@ -10,14 +10,14 @@
   justify-content: center;
   position: relative;
 }
-.main-home .container {
+.main-home .main-container {
   display: flex;
   align-items: center;
   justify-content: flex-end;
   width: 100%;
   height: 100%;
 }
-.main-home .container .content {
+.main-home .main-container .content {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
@@ -27,27 +27,27 @@
   position: absolute;
   right: 50px;
 }
-.main-home .container .content .main-title {
+.main-home .main-container .content .main-title {
   font-size: 24px;
   font-weight: 700;
-  color: var(--u-gold);
-  text-align: right;
+  color: var(--primary-color);
+  text-align: center;
   margin-bottom: 15px;
   line-height: 1.4;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
   max-width: 90%;
 }
-.main-home .container .content .main-text {
+.main-home .main-container .content .main-text {
   font-size: 28px;
   font-weight: 600;
-  color: var(--u-gold);
-  text-align: right;
+  color: var(--text-color);
+  text-align: center;
   margin-bottom: 20px;
   line-height: 1.4;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
   max-width: 90%;
 }
-.main-home .container .content .main-btn {
+.main-home .main-container .content .main-btn {
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -55,11 +55,11 @@
   list-style: none;
   padding: 0;
 }
-.main-home .container .content .main-btn .main-li {
-  background-color: var(--u-dark);
+.main-home .main-container .content .main-btn .main-li {
+  background-color: var(--dark-color);
   border: 2px solid transparent;
   border-radius: 25px;
-  color: var(--u-gold);
+  color: var(--secondary-color);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -70,10 +70,10 @@
   margin-bottom: 10px;
   padding: 10px;
 }
-.main-home .container .content .main-btn .main-li a {
+.main-home .main-container .content .main-btn .main-li a {
   display: inline-block;
   text-decoration: none;
-  color: var(--u-gold);
+  color: var(--secondary-color);
   font-size: 22px;
   font-weight: 800;
 }

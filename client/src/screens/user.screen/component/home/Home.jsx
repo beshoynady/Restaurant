@@ -73,7 +73,7 @@ const Home = () => {
         ({ restaurantData, userLoginInfo, usertitle }) => {
           return (
             <main className='main-home' id='main'>
-              <div className="container">
+              <div className="main-container">
                 <div className="content">
                   {userLoginInfo && userLoginInfo.userinfo && id ? <p className='main-title'>مرحبا {usertitle(userLoginInfo.userinfo.id)} <br />علي طاولة {usertitle(id)} <br /> في</p>
                     : userLoginInfo && userLoginInfo.userinfo ? <p className='main-title'>مرحبا {usertitle(userLoginInfo.userinfo.id)} <br /> في</p>
