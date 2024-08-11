@@ -77,6 +77,8 @@
   
   #menu .container-lg {
     height: 100%;
+    margin: 2px;
+    padding: 0;
   }
   
   #menu .container-lg .section-content {
