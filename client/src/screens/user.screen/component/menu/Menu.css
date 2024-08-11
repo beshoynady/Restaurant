@@ -1,3 +1,4 @@
+/* النمط العام لقسم القائمة */
 #menu {
   width: 100%;
   height: calc(100vh - 80px);
@@ -7,7 +8,7 @@
   align-items: center;
   justify-content: center;
   padding-bottom: 15px;
-  background-color:transparent;
+  background-color: transparent;
 }
 
 #menu .container-lg {
@@ -22,6 +23,7 @@
   margin-top: 15px;
 }
 
+/* النمط الخاص بقائمة التصنيفات */
 #menu .container-lg .section-content .menu-nav {
   width: 100%;
   display: flex;
@@ -30,6 +32,7 @@
   margin: 10px auto;
 }
 
+/* تنسيق قائمة العناصر داخل القائمة */
 #menu .container-lg .section-content .menu-nav > .menu-ul {
   width: 100%;
   display: flex;
@@ -67,6 +70,7 @@
   border: 2px solid var(--primary-color); /* تغيير لون الحدود للأزرار النشطة */
 }
 
+/* الأنماط الخاصة بالشاشات الصغيرة والمتوسطة */
 @media (max-width: 768px) {
   #menu {
     align-items: flex-start;
@@ -92,31 +96,34 @@
   
   #menu .container-lg .section-content .menu-nav {
     height: 100%;
-    margin: 10px auto;
-    rotate: 0;
-    width: 19%;
-    position: relative;
-    top: 100vh;
-    transform: translateY(100%);
+    width: 80px; /* عرض ناف بار مناسب */
+    position: fixed; /* ثبّت الناف بار على اليسار */
+    left: 0;
+    top: 0;
+    transform: rotate(270deg); /* تدوير الناف بار */
+    transform-origin: left top; /* ضبط نقطة الأصل للتدوير */
+    overflow-y: auto; /* التمرير العمودي داخل الناف بار */
+    z-index: 1000; /* وضع الناف بار فوق العناصر الأخرى */
+    background-color: var(--background-color); /* يمكن تخصيص اللون الخلفي */
   }
   
   #menu .container-lg .section-content .menu-nav .menu-ul {
-    align-items: center;
+    align-items: flex-start;
     display: flex;
-    flex-wrap: nowrap;
+    flex-direction: column;
     height: 100%;
-    justify-content: center;
+    justify-content: flex-start;
     margin: 0;
     padding: 0;
+    overflow-y: auto; /* التمرير العمودي داخل الناف بار */
     width: 100%;
-    rotate: 270deg;
   }
   
   #menu .container-lg .section-content .menu-nav .menu-ul .menu-nav-li {
     list-style: none;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
   }
   
   #menu .container-lg .section-content .menu-nav .menu-ul .menu-nav-li .category-btn {
