@@ -104,12 +104,12 @@
   }
 
   #menu .container-lg .section-content {
-    align-content: flex-start;
-    align-items: center;
     display: flex;
     flex-direction: row-reverse;
-    flex-wrap: nowrap;
+    align-content: center;
+    align-items: flex-start;
     justify-content: space-between;
+    flex-wrap: nowrap;
     margin: 0;
     padding: 0;
     width: 100%;
