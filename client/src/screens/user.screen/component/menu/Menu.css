@@ -67,76 +67,96 @@
   border: 2px solid var(--primary-color); /* تغيير لون الحدود للأزرار النشطة */
 }
 
+
+
+
+
 @media (max-width: 768px) {
   #menu {
+    width: 100%;
+    height: auto;
+    margin-top: 80px;
+    scroll-margin-top: 80px;
+    display: flex;
     align-items: flex-start;
-    height: fit-content;
+    justify-content: space-between;
     padding-bottom: 15px;
-    min-height: 250vh;
+    background-color: transparent;
   }
   
   #menu .container-lg {
-    height: 100%;
-    margin: 2px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
     padding: 0;
+    margin: 0;
   }
   
   #menu .container-lg .section-content {
-    align-items: flex-start;
-    display: flex;
-    flex-direction: row-reverse;
-    height: 100%;
-    justify-content: space-between;
-    margin-top: 15px;
     width: 100%;
+    margin-top: 15px;
+    display: flex;
     flex-wrap: nowrap;
+    justify-content: space-between;
+    align-content: flex-start;
+    align-items: center;
+    flex-direction: row-reverse;
+    width: 100%;
+    padding: 0;
+    margin: 0;
   }
   
   #menu .container-lg .section-content .menu-nav {
-    height: 100%;
-    margin: 100px 0;
     width: 60px;
-    position: relative;
-    top: 100vh;
-    transform: translateY(100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 10px 0;
   }
   
-  #menu .container-lg .section-content .menu-nav .menu-ul {
-    align-items: center;
-    display: flex;
-    flex-wrap: nowrap;
-    height: 100%;
-    justify-content: center;
-    margin: 0;
-    padding: 0;
+  #menu .container-lg .section-content .menu-nav > .menu-ul {
     width: 100%;
-    rotate: 270deg;
-  }
-  
-  #menu .container-lg .section-content .menu-nav .menu-ul .menu-nav-li {
-    list-style: none;
     display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
     align-items: center;
     justify-content: center;
+    padding: 0;
+    margin: 0;
+
   }
   
-  #menu .container-lg .section-content .menu-nav .menu-ul .menu-nav-li .category-btn {
+  #menu .container-lg .section-content .menu-nav > .menu-ul .menu-nav-li {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    rotate: 270deg;
+    width: 100px;
+    margin: 26px;
+    align-content: center;
+    align-items: center;
+    flex-wrap: nowrap;
+  }
+  
+  #menu .container-lg .section-content .menu-nav > .menu-ul .menu-nav-li .category-btn {
     cursor: pointer;
-    height: 55px;
+    background-color: var(--primary-color); 
+    color: var(--white-color); 
+    border: 2px solid var(--dark-color);
+    height: 60px;
     min-width: -moz-max-content;
     min-width: max-content;
     border-radius: 5px;
-    font-size: 18px;
-    font-weight: 800;
-    padding: 5px 10px;
-    background-color: var(--primary-color); /* تغيير لون الخلفية للأزرار في العرض الصغير */
-    color: var(--white-color); /* تغيير لون النص في العرض الصغير */
-    border: 2px solid var(--dark-color); /* تغيير لون الحدود في العرض الصغير */
+    font-size: 22px;
+    font-weight: 600;
+    padding: 10px 20px;
   }
   
-  #menu .container-lg .section-content .menu-nav .menu-ul .menu-nav-li .category-btn.active {
-    background-color: var(--secondary-color); /* تغيير لون الخلفية للأزرار النشطة في العرض الصغير */
-    color: var(--text-color); /* تغيير لون النص للأزرار النشطة في العرض الصغير */
-    border: 2px solid var(--primary-color); /* تغيير لون الحدود للأزرار النشطة في العرض الصغير */
+  #menu .container-lg .section-content .menu-nav > .menu-ul .menu-nav-li .category-btn.active {
+    background-color: var(--secondary-color); /* تغيير لون الخلفية للأزرار النشطة */
+    color: var(--text-color); /* تغيير لون النص للأزرار النشطة */
+    border: 2px solid var(--primary-color); /* تغيير لون الحدود للأزرار النشطة */
   }
+  
 }
