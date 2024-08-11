@@ -3,156 +3,124 @@
     height: calc(100vh - 80px);
     background-image: url(../../../../image/main-cover.jpg);
     background-repeat: no-repeat;
-    background-size: 100% 100%;
-    background-position: 100% right;
+    background-size: cover;
+    background-position: center;
     display: flex;
     align-items: center;
     justify-content: center;
+    position: relative;
 
     .container {
         display: flex;
         align-items: center;
-        justify-content: space-between;
+        justify-content: flex-end;
+        width: 100%;
+        height: 100%;
 
         .content {
-            align-items: center;
             display: flex;
             flex-direction: column;
-            height: 60%;
-            justify-content: space-between;
-            // position: absolute;
-            text-wrap: wrap;
+            align-items: flex-end;
+            justify-content: center;
+            width: 50%;
+            padding: 20px;
+            position: absolute;
             right: 50px;
-            width: 45%;
-            bottom: 70px;
 
             .main-title {
-                color: var(--u-gold);
                 font-size: 24px;
                 font-weight: 700;
-                height: fit-content;
-                text-align: center;
-                width: 98%;
+                color: var(--u-gold);
+                text-align: right;
+                margin-bottom: 15px;
+                line-height: 1.4;
+                text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+                max-width: 90%;
             }
 
             .main-text {
-                color: var(--u-gold);
-                font-family: cursive;
-                font-size: 36px;
+                font-size: 28px;
                 font-weight: 600;
-                margin-top: 30px;
-                text-align: center
+                color: var(--u-gold);
+                text-align: right;
+                margin-bottom: 20px;
+                line-height: 1.4;
+                text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+                max-width: 90%;
             }
 
             .main-btn {
-                width: 90%;
-                height: 20%;
+                width: 100%;
                 display: flex;
-                align-items: center;
-                justify-content: space-between;
+                flex-direction: column;
+                align-items: flex-end;
                 list-style: none;
+                padding: 0;
 
                 .main-li {
-                    align-items: center;
                     background-color: var(--u-dark);
                     border: 2px solid transparent;
                     border-radius: 25px;
                     color: var(--u-gold);
                     cursor: pointer;
                     display: flex;
-                    height: 90%;
+                    align-items: center;
                     justify-content: center;
-                    width: 40%;
-                    font-size: 26px;
+                    width: 100%;
+                    font-size: 22px;
                     font-weight: 800;
-
-                    &.mrl-auto {
-                        margin-left: auto !important;
-                        margin-right: auto !important;
-                    }
+                    margin-bottom: 10px;
+                    padding: 10px;
 
                     a {
                         display: inline-block;
                         text-decoration: none;
-                        font-size: 26px;
-                        font-weight: 800;
                         color: var(--u-gold);
-                        margin: 10px 0px;
-
+                        font-size: 22px;
+                        font-weight: 800;
                     }
-
                 }
             }
         }
     }
 }
 
-
-
 @media (max-width: 768px) {
     .main-home {
         background-image: url('../../../../image/main-cover-mob.jpg');
-        background-repeat: no-repeat;
-        background-size: 100vw 100vh;
+        background-size: cover;
         background-position: center;
 
         .container {
-            align-items: center;
-            display: flex;
-            justify-content: flex-start;
-            flex-direction: column;
-            flex-wrap: nowrap;
-
             .content {
-                align-items: center;
-                display: flex;
-                flex-direction: column;
-                height: 40%;
-                justify-content: space-evenly;
-                position: static;
-                width: 93%;
+                width: 90%;
+                padding: 20px;
                 margin-top: 100px;
+                align-items: center;
+                text-align: center;
 
                 .main-title {
-                    align-items: center;
-                    display: flex;
-                    font-size: 22px;
-                    font-weight: 800;
-                    height: fit-content;
-                    justify-content: center;
-                    width: 100%;
+                    font-size: 20px;
+                    line-height: 1.3;
+                    margin-bottom: 10px;
+                    max-width: 100%;
                 }
 
                 .main-text {
-                    font-size: 26px;
-                    font-weight: 600;
-                    text-align: center;
+                    font-size: 24px;
+                    line-height: 1.3;
+                    margin-bottom: 15px;
+                    max-width: 100%;
                 }
 
                 .main-btn {
-                    width: 90%;
-                    height: 20%;
-                    display: flex;
-                    align-items: center;
-                    justify-content: space-between;
-                    list-style: none;
+                    flex-direction: column;
+                    width: 100%;
 
                     .main-li {
-                        align-items: center;
-                        border: 2px solid transparent;
-                        border-radius: 25px;
-                        cursor: pointer;
-                        display: flex;
-                        font-size: 22px;
-                        font-weight: 800;
-                        height: 90%;
-                        justify-content: center;
-                        width: 45%;
-
-                        a {
-                            display: inline-block;
-                            text-decoration: none;
-                        }
+                        width: 100%;
+                        font-size: 20px;
+                        margin-bottom: 10px;
                     }
                 }
             }
@@ -163,8 +131,7 @@
 @media (max-width: 400px) {
     .main-home {
         background-image: url('../../../../image/main-cover-mob.jpg');
-        background-position: top center;
-        background-repeat: no-repeat;
-        background-size: 100% 100vh;
+        background-size: cover;
+        background-position: center;
     }
 }
