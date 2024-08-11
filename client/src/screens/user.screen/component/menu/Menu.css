@@ -7,7 +7,7 @@
   align-items: center;
   justify-content: center;
   padding-bottom: 15px;
-  background-color:transparent;
+  background-color: transparent;
 }
 
 #menu .container-lg {
@@ -47,7 +47,13 @@
   justify-content: center;
 }
 
-#menu .container-lg .section-content .menu-nav > .menu-ul .menu-nav-li .category-btn {
+#menu
+  .container-lg
+  .section-content
+  .menu-nav
+  > .menu-ul
+  .menu-nav-li
+  .category-btn {
   cursor: pointer;
   background-color: var(--primary-color); /* تغيير لون الخلفية للأزرار */
   color: var(--white-color); /* تغيير لون النص */
@@ -61,15 +67,19 @@
   padding: 10px 20px;
 }
 
-#menu .container-lg .section-content .menu-nav > .menu-ul .menu-nav-li .category-btn.active {
-  background-color: var(--secondary-color); /* تغيير لون الخلفية للأزرار النشطة */
+#menu
+  .container-lg
+  .section-content
+  .menu-nav
+  > .menu-ul
+  .menu-nav-li
+  .category-btn.active {
+  background-color: var(
+    --secondary-color
+  ); /* تغيير لون الخلفية للأزرار النشطة */
   color: var(--text-color); /* تغيير لون النص للأزرار النشطة */
   border: 2px solid var(--primary-color); /* تغيير لون الحدود للأزرار النشطة */
 }
-
-
-
-
 
 @media (max-width: 768px) {
   #menu {
@@ -83,7 +93,7 @@
     padding-bottom: 15px;
     background-color: transparent;
   }
-  
+
   #menu .container-lg {
     display: flex;
     flex-direction: column;
@@ -92,71 +102,88 @@
     padding: 0;
     margin: 0;
   }
-  
+
   #menu .container-lg .section-content {
-    width: 100%;
-    margin-top: 15px;
-    display: flex;
-    flex-wrap: nowrap;
-    justify-content: space-between;
     align-content: flex-start;
     align-items: center;
-    flex-direction: row-reverse;
-    width: 100%;
-    padding: 0;
-    margin: 0;
-  }
-  
-  #menu .container-lg .section-content .menu-nav {
-    width: 60px;
     display: flex;
+    flex-direction: row-reverse;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+  }
+
+  #menu .container-lg .section-content .menu-nav {
     align-items: center;
+    display: flex;
     justify-content: center;
     margin: 10px 0;
+    width: 50px;
   }
-  
+
   #menu .container-lg .section-content .menu-nav > .menu-ul {
-    width: 100%;
+    align-items: center;
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
-    align-items: center;
     justify-content: center;
-    padding: 0;
     margin: 0;
+    padding: 0;
+    width: 100%;
+  }
 
-  }
-  
   #menu .container-lg .section-content .menu-nav > .menu-ul .menu-nav-li {
+    /* align-items: center; */
     display: flex;
-    justify-content: center;
-    list-style: none;
-    rotate: 270deg;
-    width: 100px;
-    margin: 26px;
-    align-content: center;
-    align-items: center;
-    flex-wrap: nowrap;
+    /* flex-wrap: nowrap; */
+    /* justify-content: center; */
+    /* list-style: none; */
+    margin: 0;
+    rotate: 0;
+    width: 60px;
+    height: 130px;
   }
-  
-  #menu .container-lg .section-content .menu-nav > .menu-ul .menu-nav-li .category-btn {
-    cursor: pointer;
-    background-color: var(--primary-color); 
-    color: var(--white-color); 
+
+  #menu
+    .container-lg
+    .section-content
+    .menu-nav
+    > .menu-ul
+    .menu-nav-li
+    .category-btn {
+    background-color: var(--primary-color);
     border: 2px solid var(--dark-color);
-    height: 60px;
-    min-width: -moz-max-content;
-    min-width: max-content;
     border-radius: 5px;
-    font-size: 22px;
-    font-weight: 600;
+    color: var(--white-color);
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 400;
+    height: 130px;
     padding: 10px 20px;
+    width: 45px;
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    text-align: center;
+    display: flex;
+    flex-wrap: nowrap;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
   }
-  
-  #menu .container-lg .section-content .menu-nav > .menu-ul .menu-nav-li .category-btn.active {
-    background-color: var(--secondary-color); /* تغيير لون الخلفية للأزرار النشطة */
+
+  #menu
+    .container-lg
+    .section-content
+    .menu-nav
+    > .menu-ul
+    .menu-nav-li
+    .category-btn.active {
+    background-color: var(
+      --secondary-color
+    ); /* تغيير لون الخلفية للأزرار النشطة */
     color: var(--text-color); /* تغيير لون النص للأزرار النشطة */
     border: 2px solid var(--primary-color); /* تغيير لون الحدود للأزرار النشطة */
   }
-  
 }
