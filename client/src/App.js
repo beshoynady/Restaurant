@@ -978,6 +978,7 @@ function App() {
         socket.emit("sendorder", 'تم تعديل ارودر ديفرري');
 
         toast.success("تم تعديل الاوردر بنجاح!");
+        setisLoading(false)
       } else {
         // Create a new order
         const serial = allOrders && allOrders.length > 0 ? String(Number(allOrders[allOrders && allOrders.length - 1].serial) + 1).padStart(6, '0') : '000001';
@@ -1010,17 +1011,22 @@ function App() {
         setitemId([]);
         getAllProducts();
         toast.success("تم عمل اوردر جديد بنجاح!");
+        setisLoading(false)
+
       }
 
       socket.emit("sendorder", 'اوردر ديليفري جديد');
       setitemsInCart([]);
       setitemId([]);
+      setisLoading(false)
+
 
     } catch (error) {
       console.error("An error occurred while processing the order:", error);
       toast.error("حدث خطأ اثناء عمل الاوردر رجاء المحاوله مره اخري");
+      setisLoading(false)
     } finally {
-      setisLoading(!isLoading);
+      setisLoading(false);
     }
   };
 
