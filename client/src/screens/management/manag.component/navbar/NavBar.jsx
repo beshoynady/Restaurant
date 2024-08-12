@@ -1,16 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { detacontext } from '../../../../App';
-
-import notificationSound from '../../../../audio/sound.mp3'
 import io from 'socket.io-client';
+import notificationSound from '../../../../audio/sound.mp3';
 
 const socket = io(process.env.REACT_APP_API_URL, {
   reconnection: true,
 });
 
 const NavBar = () => {
-  const apiUrl = process.env.REACT_APP_API_URL;
-
   const [showDropdown, setShowDropdown] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [showMessages, setShowMessages] = useState(false);
@@ -18,53 +14,50 @@ const NavBar = () => {
   const [messages, setMessages] = useState([]);
 
   const toggleDropdown = () => {
-    setShowDropdown(!showDropdown);
+    setShowDropdown(prev => !prev);
   };
 
   const toggleNotifications = () => {
-    setShowNotifications(!showNotifications);
+    setShowNotifications(prev => !prev);
     setShowMessages(false);
-
   };
 
   const toggleMessages = () => {
-    setShowMessages(!showMessages);
+    setShowMessages(prev => !prev);
     setShowNotifications(false);
-
   };
 
   const toggleDir = () => {
     const html = document.documentElement;
-    if (html.getAttribute('dir') === 'ltr') {
-      html.setAttribute('dir', 'rtl');
-      html.setAttribute('lang', 'ar');
-    } else {
-      html.setAttribute('dir', 'ltr');
-      html.setAttribute('lang', 'en');
-    }
+    const newDir = html.getAttribute('dir') === 'ltr' ? 'rtl' : 'ltr';
+    const newLang = newDir === 'rtl' ? 'ar' : 'en';
+
+    html.setAttribute('dir', newDir);
+    html.setAttribute('lang', newLang);
   };
 
   const handleNotificationClick = (index) => {
-    const updatedNotifications = [...notifications];
-    updatedNotifications.splice(index, 1);
-    setNotifications(updatedNotifications);
+    setNotifications(prevNotifications => prevNotifications.filter((_, i) => i !== index));
   };
 
   const handleMessageClick = (index) => {
-    const updatedMessages = [...messages];
-    updatedMessages.splice(index, 1);
-    setMessages(updatedMessages);
+    setMessages(prevMessages => prevMessages.filter((_, i) => i !== index));
   };
 
   useEffect(() => {
     // Listen for new order notifications
     socket.on('reciveorder', (notification) => {
-      console.log("socket Notification received:", notification);
+      console.log("Socket notification received:", notification);
       setNotifications(prevNotifications => [...prevNotifications, notification]);
 
       const audio = new Audio(notificationSound);
       audio.play();
     });
+
+    // Clean up the socket connection on component unmount
+    return () => {
+      socket.off('reciveorder');
+    };
   }, []);
 
 
@@ -107,6 +100,9 @@ const NavBar = () => {
       setFullscreen(false);
     }
   };
+
+
+  
   return (
     <detacontext.Consumer>
       {({ employeeLoginInfo, employeelogout }) => (

@@ -119,7 +119,7 @@ const server = http.createServer(app);
 // Setup Socket.io
 const io = socketIo(server, {
   cors: {
-    origin: `${frontEnd}`,
+    origin: 'https://www.elbaronpark.sm-menu.tech',
     methods: ["GET", "POST"],
     allowedHeaders: ["content-type"]
   },
