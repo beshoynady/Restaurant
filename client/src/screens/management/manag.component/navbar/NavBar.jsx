@@ -95,9 +95,13 @@ const NavBar = () => {
   };
 
   const handleNotificationClick = (index) => {
-    setNotifications((prevNotifications) =>
-      prevNotifications.filter((_, i) => i !== index)
+    const newNotifications = notifications.filter((_, i) => i !== index)
+    setNotifications(newNotifications);
+    localStorage.setItem(
+      "notifications",
+      JSON.stringify(newNotifications)
     );
+
   };
 
   const handleMessageClick = (index) => {
