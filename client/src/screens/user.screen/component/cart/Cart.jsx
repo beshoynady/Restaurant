@@ -63,7 +63,7 @@ const Cart = (props) => {
     }
   }
   useEffect(() => {
-    tableInfo
+    tableInfo()
   }, [id])
 
 
