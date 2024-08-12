@@ -914,90 +914,119 @@ function App() {
 
 
 
+
   const createDeliveryOrderByClient = async (userId, currentAddress, delivery_fee) => {
     try {
-      setisLoading(true); 
-  
-      const userOrders = allOrders?.filter(order => order.user?._id === userId) || [];
+      setisLoading(!isLoading)
+
+      // console.log({ itemsInCart })
+      // Find the user's orders
+      const userOrders = allOrders && allOrders.filter((order) => order.user && order.user?._id === userId);
       const lastUserOrder = userOrders.length > 0 ? userOrders[userOrders.length - 1] : null;
-  
+
+      // Check if the last user order is active
       if (lastUserOrder && lastUserOrder.isActive) {
         const orderId = lastUserOrder._id;
         const oldProducts = lastUserOrder.products;
         const oldSubTotal = lastUserOrder.subTotal;
-        const newsalesTaxt = lastUserOrder.salesTax + salesTax;
+        const newsalesTaxt = lastUserOrder.salesTax + salesTax
         const subTotal = costOrder + oldSubTotal;
-        const total = subTotal + delivery_fee + salesTax;
-  
-        // تحديث الطلب إذا كان في حالة "تحضير"
+        const deliveryCost = delivery_fee;
+        const total = subTotal + salesTax;
+
+        // Update order if it's in 'Preparing' status
         if (lastUserOrder.status === 'Preparing') {
-          const updatedProducts = itemsInCart.map(item => ({ ...item, isAdd: true }));
+          const updatedProducts = itemsInCart.map((item) => ({ ...item, isAdd: true }));
           const products = [...updatedProducts, ...oldProducts];
           const status = 'Pending';
           const orderType = 'Delivery';
-  
+
           await axios.put(`${apiUrl}/api/order/${orderId}`, {
             products,
             subTotal,
-            deliveryCost: delivery_fee,
+            deliveryCost,
             salesTaxt: newsalesTaxt,
             total,
             status,
             orderType
           }, config);
-  
-          toast.success("تم إضافة الأصناف إلى الطلب!");
-          socket.emit("sendorder", `تم تعديل طلب ديليفري`);
-  
+
+          setitemsInCart([]);
+          setitemId([]);
+          getAllProducts();
+          socket.emit("sendorder", 'اضافه طلبات الي اوردر ديليفري');
+
+          toast.success("تم اضافه الاصناف الي الاوردر!");
         } else {
-          const serial = allOrders.length > 0 ? String(Number(allOrders[allOrders.length - 1].serial) + 1).padStart(6, '0') : '000001';
-          const findUser = allUsers.find(u => u._id === userId);
-          const user = findUser ? userId : null;
-          const products = [...itemsInCart];
-          const name = findUser ? findUser.username : '';
-          const phone = findUser ? findUser.phone : '';
+          const products = [...itemsInCart, ...oldProducts];
+          const status = 'Pending';
           const orderType = 'Delivery';
-          const total = subTotal + delivery_fee + salesTax;
-  
-          await axios.post(`${apiUrl}/api/order`, {
-            serial,
+
+          await axios.put(`${apiUrl}/api/order/${orderId}`, {
             products,
             subTotal,
-            salesTax,
-            deliveryCost: delivery_fee,
+            deliveryCost,
+            salesTaxt: newsalesTaxt,
             total,
-            user,
-            name,
-            address: currentAddress,
-            phone,
+            status,
             orderType
           }, config);
-  
-          toast.success("تم عمل طلب جديد بنجاح!");
-          socket.emit("sendorder", `تم إضافة طلب ديليفري`);
+
+          setitemsInCart([]);
+          getAllProducts();
         }
-  
-  
+        socket.emit("sendorder", 'تم تعديل ارودر ديفرري');
+
+        toast.success("تم تعديل الاوردر بنجاح!");
       } else {
-        toast.error("لم يتم العثور على طلب نشط لتحديثه.");
+        // Create a new order
+        const serial = allOrders && allOrders.length > 0 ? String(Number(allOrders[allOrders && allOrders.length - 1].serial) + 1).padStart(6, '0') : '000001';
+        const findUser = allUsers.find((u, i) => u._id === userId);
+        const user = findUser ? userId : null;
+        const products = [...itemsInCart];
+        const subTotal = costOrder;
+        const deliveryCost = delivery_fee;
+        const name = findUser ? findUser.username : '';
+        const phone = findUser ? findUser.phone : '';
+        const address = currentAddress;
+        const orderType = 'Delivery';
+        const total = subTotal + deliveryCost + salesTax;
+
+        await axios.post(`${apiUrl}/api/order`, {
+          serial,
+          products,
+          subTotal,
+          salesTax,
+          deliveryCost,
+          total,
+          user,
+          name,
+          address,
+          phone,
+          orderType,
+        }, config);
+
+        setitemsInCart([]);
+        setitemId([]);
+        getAllProducts();
+        toast.success("تم عمل اوردر جديد بنجاح!");
       }
-  
+
+      socket.emit("sendorder", 'اوردر ديليفري جديد');
       setitemsInCart([]);
       setitemId([]);
-      getAllProducts();
-  
+
     } catch (error) {
-      console.error("حدث خطأ أثناء معالجة الطلب:", error);
-      toast.error("حدث خطأ أثناء معالجة الطلب، يرجى المحاولة مرة أخرى.");
+      console.error("An error occurred while processing the order:", error);
+      toast.error("حدث خطأ اثناء عمل الاوردر رجاء المحاوله مره اخري");
     } finally {
-      setisLoading(false);
+      setisLoading(!isLoading);
     }
   };
-  
 
 
   const createOrderForTableByClient = async (tableId) => {
-    // setisLoading(true)
+    setisLoading(true)
     try {
       // Find orders for the specified table
       const tableOrders = allOrders && allOrders.filter((order) => order.table._id === tableId);

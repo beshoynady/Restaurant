@@ -918,7 +918,7 @@ const AttendanceManagement = () => {
                 <p className="text-warning text-center mt-3"><small>لا يمكن الرجوع فيه.</small></p>
               </div>
               <div className="modal-footer w-100 d-flex flex-nowrap">
-                <input type="submit" className="col-md-6 col-12 h-100 p-0 m-0 btn btn-warning" value="حذف" />
+                <input type="submit" className="btn btn-warning  col-6 h-100 px-2 py-3 m-0" value="حذف" />
                 <input type="button" className="col-md-6 col-12 h-100 p-0 m-0 btn btn-secondary" data-dismiss="modal" value="إغلاق" />
               </div>
             </form>
