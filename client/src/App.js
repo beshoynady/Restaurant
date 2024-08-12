@@ -3,6 +3,9 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import axios from 'axios';
 import io from 'socket.io-client';
 
+import { toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+
 
 
 import LoadingPage from './screens/management/manag.component/LoadingPage/LoadingPage';
