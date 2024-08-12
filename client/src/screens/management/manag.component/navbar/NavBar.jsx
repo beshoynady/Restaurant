@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import io from 'socket.io-client';
+import { Link } from 'react-router-dom';
+
 import { detacontext } from '../../../../App';
 
 import notificationSound from '../../../../audio/sound.mp3';
@@ -46,6 +48,8 @@ const NavBar = () => {
   const handleMessageClick = (index) => {
     setMessages(prevMessages => prevMessages.filter((_, i) => i !== index));
   };
+
+
 
   useEffect(() => {
     // Load notifications from localStorage on component mount
@@ -152,10 +156,10 @@ const NavBar = () => {
               {showMessages && (
                 <div className="dropdown-menu dropdown-menu-right flex-column show" aria-labelledby="messagesDropdown" style={{ position: 'absolute' }}>
                   {messages.length > 0 ? messages.map((message, index) => (
-                    <a key={index} className="dropdown-item" href="#" onClick={() => handleMessageClick(index)}>
-                      {message}
-                    </a>
-                  )) : <a className="dropdown-item" href="#">لا يوجد رسائل</a>}
+                    <Link to="/message" key={index} className="dropdown-item"  onClick={() => handleMessageClick(index)}>
+                      <strong>{message.name}</strong>: {message.message}
+                    </Link>
+                  )) : <p className="dropdown-item" href="#">لا يوجد رسائل</p>}
                 </div>
               )}
             </div>

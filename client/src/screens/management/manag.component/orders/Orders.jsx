@@ -348,8 +348,8 @@ const Orders = () => {
                 <button type="button" className="close m-0 p-1" data-dismiss="modal" aria-hidden="true">&times;</button>
               </div>
               <div className="modal-body text-center">
-          <p className="mb-2">هل أنت متأكد من حذف هذا السجل؟</p>
-          <p className="text-warning"><small>لا يمكن الرجوع في هذا الإجراء.</small></p>
+          <p className="text-right text-dark fs-3 fw-800 mb-2">هل أنت متأكد من حذف هذا السجل؟</p>
+          <p className="text-warning text-center mt-3"><small>لا يمكن الرجوع في هذا الإجراء.</small></p>
         </div>
               <div className="modal-footer d-flex flex-nowrap align-items-center justify-content-between m-0 p-1">
                 <input type="submit" className="col-md-6 col-12 h-100 p-0 m-0 btn btn-warning" value="حذف" />

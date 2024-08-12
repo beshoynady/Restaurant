@@ -579,7 +579,7 @@ const SupplierTransaction = () => {
                       </div>
                       <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
                         <p className="text-dark f-3">هل انت متاكد من حذف هذا السجل؟</p>
-                        <p className="text-warning"><small>لا يمكن الرجوع في هذا الاجراء.</small></p>
+                        <p className="text-warning text-center mt-3"><small>لا يمكن الرجوع في هذا الاجراء.</small></p>
                       </div>
                       <div className="modal-footer d-flex flex-nowrap align-items-center justify-content-between m-0 p-1">
                         <input type="submit" className="btn btn-warning col-6 h-100 px-2 py-3 m-0" value="حذف" />

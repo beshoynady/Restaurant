@@ -532,8 +532,8 @@ const Tables = () => {
                 <button type="button" className="close m-0 p-1" data-dismiss="modal" aria-hidden="true">&times;</button>
               </div>
               <div className="modal-body text-center">
-          <p className="mb-2">هل أنت متأكد من حذف هذا السجل؟</p>
-          <p className="text-warning"><small>لا يمكن الرجوع في هذا الإجراء.</small></p>
+          <p className="text-right text-dark fs-3 fw-800 mb-2">هل أنت متأكد من حذف هذا السجل؟</p>
+          <p className="text-warning text-center mt-3"><small>لا يمكن الرجوع في هذا الإجراء.</small></p>
         </div>
               <div className="modal-footer p-0 m-0 d-flex flex-nowrap align-items-center justify-content-between">
                 <input type="submit" className="btn btn-warning col-6 h-100 px-2 py-3 m-0" value="حذف" />
@@ -555,8 +555,8 @@ const Tables = () => {
                 <button type="button" className="close m-0 p-1" data-dismiss="modal" aria-hidden="true">&times;</button>
               </div>
               <div className="modal-body text-center">
-          <p className="mb-2">هل أنت متأكد من حذف هذا السجل؟</p>
-          <p className="text-warning"><small>لا يمكن الرجوع في هذا الإجراء.</small></p>
+          <p className="text-right text-dark fs-3 fw-800 mb-2">هل أنت متأكد من حذف هذا السجل؟</p>
+          <p className="text-warning text-center mt-3"><small>لا يمكن الرجوع في هذا الإجراء.</small></p>
         </div>
               <div className="modal-footer p-0 m-0 d-flex flex-nowrap align-items-center justify-content-between">
                 <input type="submit" className="btn btn-warning col-6 h-100 px-2 py-3 m-0" value="حذف" />
