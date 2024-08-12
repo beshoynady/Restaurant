@@ -48,10 +48,18 @@ const NavBar = () => {
   };
 
   useEffect(() => {
+    // Load notifications from localStorage on component mount
+    const savedNotifications = JSON.parse(localStorage.getItem('notifications')) || [];
+    setNotifications(savedNotifications);
+
     // Listen for new order notifications
     socket.on('reciveorder', (notification) => {
       console.log("Socket notification received:", notification);
-      setNotifications(prevNotifications => [...prevNotifications, notification]);
+      const updatedNotifications = [...notifications, notification];
+      setNotifications(updatedNotifications);
+
+      // Save notifications to localStorage
+      localStorage.setItem('notifications', JSON.stringify(updatedNotifications));
 
       const audio = new Audio(notificationSound);
       audio.play();
@@ -61,7 +69,8 @@ const NavBar = () => {
     return () => {
       socket.off('reciveorder');
     };
-  }, []);
+  }, [notifications]);
+
 
 
   const employeeLogout = () => {
@@ -146,7 +155,7 @@ const NavBar = () => {
                     <a key={index} className="dropdown-item" href="#" onClick={() => handleMessageClick(index)}>
                       {message}
                     </a>
-                  )) : <a className="dropdown-item" href="#">No new messages</a>}
+                  )) : <a className="dropdown-item" href="#">لا يوجد رسائل</a>}
                 </div>
               )}
             </div>
@@ -161,7 +170,7 @@ const NavBar = () => {
                     <a key={index} className="dropdown-item" href="#" onClick={() => handleNotificationClick(index)}>
                       {notification}
                     </a>
-                  )) : <a className="dropdown-item" href="#">No new notifications</a>}
+                  )) : <a className="dropdown-item" href="#">لا يوجد اشعارات</a>}
                 </div>
               )}
             </div>
