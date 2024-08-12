@@ -159,7 +159,7 @@ const NavBar = () => {
                     <Link to="/message" key={index} className="dropdown-item"  onClick={() => handleMessageClick(index)}>
                       <strong>{message.name}</strong>: {message.message}
                     </Link>
-                  )) : <p className="dropdown-item" href="#">لا يوجد رسائل</p>}
+                  )) : <p className="dropdown-item">لا يوجد رسائل</p>}
                 </div>
               )}
             </div>
