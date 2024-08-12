@@ -358,23 +358,13 @@ const SideBar = () => {
                       </li>
                     )}
 
-
-                  {/* <li className="profile-details">
-                    <div className="profile-content">
-                      <i className='bx bx-log-out' style={{ fontSize: '40px' }} onClick={employeelogout}></i>
-                    </div>
-                    <div className="name-job">
-                      <div className="profile_name">{employeeLoginInfo ? employeeLoginInfo.username : ''}</div>
-                      <div className="job">{employeeLoginInfo ? employeeLoginInfo.role : ''}</div>
-                    </div>
-                  </li> */}
                 </ul>
               </div>
-              <section className="home-section" onClick={openSidebar}>
-                <div className="home-content">
+              <div className="sidebar-icon" onClick={openSidebar}>
+                <div className="sidebar-icon-content">
                   <i className='bx bx-menu text-light' ></i>
                 </div>
-              </section>
+              </div>
             </>
           )
         }

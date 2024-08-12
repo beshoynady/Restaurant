@@ -268,7 +268,7 @@
   font-size: 12px;
 }
 
-.home-section {
+.sidebar-icon {
   position: absolute;
   background-color: #343a40;
   height: 50px;
@@ -278,29 +278,29 @@
   z-index: 1024;
 }
 
-.sidebar.close~.home-section {
+.sidebar.close~.sidebar-icon {
   left: 0;
   width: 105px;
 }
 
-.home-section .home-content {
+.sidebar-icon .sidebar-icon-content {
   height: 50px;
   display: flex;
   align-items: center;
 }
 
-.home-section .home-content .bx-menu,
-.home-section .home-content .text {
+.sidebar-icon .sidebar-icon-content .bx-menu,
+.sidebar-icon .sidebar-icon-content .text {
   color: #11101d;
   font-size: 35px;
 }
 
-.home-section .home-content .bx-menu {
+.sidebar-icon .sidebar-icon-content .bx-menu {
   margin: 0 15px;
   cursor: pointer;
 }
 
-.home-section .home-content .text {
+.sidebar-icon .sidebar-icon-content .text {
   font-size: 26px;
   font-weight: 600;
 }
