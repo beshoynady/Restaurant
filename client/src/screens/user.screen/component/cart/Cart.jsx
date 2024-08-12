@@ -57,9 +57,9 @@ const Cart = (props) => {
     if(response){
       return <Navigate to='/' />
     }
-    const tableInfo = response.data
-    if (tableInfo){
-      settable(tableInfo)
+    const tableData = response.data
+    if (tableData){
+      settable(tableData)
     }
   }
   useEffect(() => {

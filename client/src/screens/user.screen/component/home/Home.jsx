@@ -1,10 +1,8 @@
-import React, { useRef, useState, useEffect, useContext } from 'react';
-import './Home.css'
-import { detacontext } from '../../../../App'
-import { useParams } from 'react-router-dom';
+import React, { useContext, useState, useEffect } from 'react';
+import './Home.css';
+import { detacontext } from '../../../../App';
+import { useParams, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { Navigate } from 'react-router-dom';
-
 import axios from 'axios';
 
 const Home = () => {
@@ -16,24 +14,33 @@ const Home = () => {
     },
   };
 
-  const { restaurantData, userLoginInfo } = useContext(detacontext)
+  const { restaurantData, userLoginInfo } = useContext(detacontext);
+  const { id } = useParams();
+  const navigate = useNavigate(); // Use useNavigate hook
+  const [table, setTable] = useState({});
 
-  const { id } = useParams()
-  const [table, settable] = useState({})
-  const tableInfo = async()=>{
-    const response =await axios.get(`${apiUrl}/api/table/${id}`,config)
-    if(response){
-      return <Navigate to='/' />
+  const tableInfo = async () => {
+    try {
+      const response = await axios.get(`${apiUrl}/api/table/${id}`, config);
+      if (response.data) {
+        setTable(response.data);
+      } else {
+        // If table data is not found, navigate to home
+        navigate('/');
+      }
+    } catch (error) {
+      // Handle error and navigate to home
+      navigate('/');
     }
-    const tableInfo = response.data
-    if (tableInfo){
-      settable(tableInfo)
-    }
-  }
+  };
+
   useEffect(() => {
-    tableInfo()
-  }, [id])
-  
+    if (id) {
+      tableInfo();
+    } else {
+      navigate('/');
+    }
+  }, [id, navigate]);
   
   const askingForHelp = async (tableId) => {
     try {
