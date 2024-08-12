@@ -104,36 +104,36 @@ const NavBar = () => {
     setMessages((prevMessages) => prevMessages.filter((_, i) => i !== index));
   };
 
-  useEffect(() => {
-    // Load notifications from localStorage on component mount
-    const savedNotifications =
-      JSON.parse(localStorage.getItem("notifications")) || [];
-    setNotifications(savedNotifications);
+  // useEffect(() => {
+  //   // Load notifications from localStorage on component mount
+  //   const savedNotifications =
+  //     JSON.parse(localStorage.getItem("notifications")) || [];
+  //   setNotifications(savedNotifications);
 
-    // Listen for new order notifications
-    socket.on("reciveorder", (notification) => {
-      console.log("Socket notification received:", notification);
-      const updatedNotifications = [...notifications, notification];
-      setNotifications(updatedNotifications);
+  //   // Listen for new order notifications
+  //   socket.on("reciveorder", (notification) => {
+  //     console.log("Socket notification received:", notification);
+  //     const updatedNotifications = [...notifications, notification];
+  //     setNotifications(updatedNotifications);
 
-      // Save notifications to localStorage
-      localStorage.setItem(
-        "notifications",
-        JSON.stringify(updatedNotifications)
-      );
+  //     // Save notifications to localStorage
+  //     localStorage.setItem(
+  //       "notifications",
+  //       JSON.stringify(updatedNotifications)
+  //     );
 
-      const audio = new Audio(notificationSound);
-      audio.play();
-    });
+  //     const audio = new Audio(notificationSound);
+  //     audio.play();
+  //   });
 
-    // Clean up the socket connection on component unmount
-    return () => {
-      socket.off("reciveorder");
-    };
-  }, [notifications]);
+  //   // Clean up the socket connection on component unmount
+  //   return () => {
+  //     socket.off("reciveorder");
+  //   };
+  // }, [notifications]);
 
 
-  
+
   const employeeLogout = () => {
     try {
       // Remove admin token from local storage
