@@ -917,7 +917,7 @@ function App() {
 
   const createDeliveryOrderByClient = async (userId, currentAddress, delivery_fee) => {
     try {
-      setisLoading(!isLoading)
+      setisLoading(true)
 
       // console.log({ itemsInCart })
       // Find the user's orders
