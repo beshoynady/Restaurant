@@ -24,19 +24,7 @@ const ManagerDash = () => {
     endpagination, setstartpagination, setendpagination } = useContext(detacontext)
 
 
-  // useEffect(() => {
-  //   const socket = io(apiUrl+'', { withCredentials: true });
 
-  //   socket.on('newOrderNotification', (data) => {
-  //     console.log('New order received:', data);
-  //     toast.success('New order received');
-  //     // Do something with the received order data
-  //   });
-
-  //   return () => {
-  //     socket.disconnect();
-  //   };
-  // }, []);
 
   const [showModal, setShowModal] = useState(false);
 
