@@ -357,7 +357,7 @@ function App() {
       }
 
       // Set fetched orders in the state
-      setallOrders(response.data);
+      setallOrders(response.data.reverse());
     } catch (error) {
       // Handle errors
       console.error('Error fetching orders:', error.message);

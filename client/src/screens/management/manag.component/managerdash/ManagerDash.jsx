@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef, useContext } from 'react'
 import { detacontext } from '../../../../App'
-import jwt_decode from 'jwt-decode';
 import axios from 'axios'
 // import io from 'socket.io-client';
 import { toast } from 'react-toastify';
@@ -728,7 +727,7 @@ const ManagerDash = () => {
                   <div className="col-4">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">عرض</label>
 
-                    <select className="form-select w-auto" onChange={(e) => { setstartpagination(0); setendpagination(parseInt(e.target.value)) }}>
+                    <select className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => { setstartpagination(0); setendpagination(parseInt(e.target.value)) }}>
                       <option value={5}>5</option>
                       <option value={10}>10</option>
                       <option value={15}>15</option>
@@ -743,7 +742,7 @@ const ManagerDash = () => {
                   </div>
                   <div className="col-4">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">نوع الأوردر</label>
-                    <select className="form-select w-auto" onChange={(e) => getOrdersByType(e.target.value)}>
+                    <select className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => getOrdersByType(e.target.value)}>
                       <option value="">الكل</option>
                       <option value="Internal">صالة</option>
                       <option value="Delivery">ديليفري</option>
@@ -846,7 +845,7 @@ const ManagerDash = () => {
                               {recent.orderType === 'Delivery' && (
                                 <select
                                   name="status"
-                                  className="form-select w-auto"
+                                  className="form-control border-primary m-0 p-2 h-auto"
                                   onChange={(e) => putdeliveryman(e.target.value, recent._id)}
                                 >
                                   <option value={recent.deliveryMan?._id}>
@@ -986,7 +985,7 @@ const ManagerDash = () => {
               </div>
               <div className="form-group d-flex flex-nowrap w-100">
                 <label htmlFor='paymentMethod' className='col-6 text-dark'>طريقه الدفع:</label>
-                <select id='paymentMethod' className="form-control border-primary col-6 text-dark" required onChange={(e) => setpaymentMethod(e.target.value)}>
+                <select id='paymentMethod' className="form-control border-primary m-0 p-2 h-auto" required onChange={(e) => setpaymentMethod(e.target.value)}>
                   <option>اختر طريقه الدفع</option>
                   {restaurantData.acceptedPayments && restaurantData.acceptedPayments.map((method, i) => (
                     <option value={method} key={i}>{method}</option>
@@ -996,7 +995,7 @@ const ManagerDash = () => {
               <div className="form-group d-flex flex-nowrap w-100">
                 <label htmlFor='registerSelected' className='col-6 text-dark'>الخزينة:</label>
                 {registers.length > 1 ? (
-                  <select id='registerSelected' className="form-control border-primary col-6 text-dark" required onChange={(e) => setregisterSelected(e.target.value)}>
+                  <select id='registerSelected' className="form-control border-primary m-0 p-2 h-auto" required onChange={(e) => setregisterSelected(e.target.value)}>
                     <option>اختر الخزينه</option>
                     {registers.map((register, i) => (
                       <option value={register._id} key={i}>{register.name}</option>

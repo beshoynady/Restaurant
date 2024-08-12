@@ -127,7 +127,7 @@ const NavBar = () => {
 
         const audio = new Audio(notificationSound);
         audio.play();
-
+        get
         return updatedNotifications;
       });
     };
