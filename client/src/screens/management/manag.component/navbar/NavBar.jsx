@@ -132,6 +132,8 @@ const NavBar = () => {
     };
   }, [notifications]);
 
+
+  
   const employeeLogout = () => {
     try {
       // Remove admin token from local storage
@@ -179,6 +181,10 @@ const NavBar = () => {
   useEffect(() => {
     getAllCustomerMessage();
   }, []);
+
+
+
+
 
   return (
     <nav
