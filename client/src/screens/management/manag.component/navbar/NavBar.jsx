@@ -18,6 +18,26 @@ const NavBar = () => {
   const [notifications, setNotifications] = useState([]);
   const [messages, setMessages] = useState([]);
 
+
+
+  const getAllCustomerMessage = async () => {
+    if (permissionUserMassage && !permissionUserMassage.read) {
+      toast.warn("ليس لك صلاحية لعرض رسائل المستخدمين");
+      return;
+    }
+    try {
+      if (!token) {
+        // Handle case where token is not available
+        toast.error("رجاء تسجيل الدخول مره اخري");
+        return;
+      }
+      const response = await axios.get(`${apiUrl}/api/message`, config);
+      setMessages(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const toggleDropdown = () => {
     setShowDropdown(prev => !prev);
   };
@@ -117,6 +137,9 @@ const NavBar = () => {
     }
   };
 
+useEffect(() => {
+  getAllCustomerMessage()
+}, [])
 
 
   return (
