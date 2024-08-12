@@ -172,6 +172,7 @@
   .contact .container .contact-content .left {
     width: 100%;
     height: 48%;
+    margin-bottom: 10px;
   }
   .contact .container .contact-content .left form {
     width: 100%;
@@ -221,6 +222,7 @@
   .contact .container .contact-content .right {
     width: 100%;
     height: 48%;
+    margin-bottom: 10px;
   }
   .contact .container .contact-content .right p {
     font-size: 22px;
