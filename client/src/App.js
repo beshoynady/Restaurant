@@ -1,6 +1,8 @@
 import React, { createContext, useState, useEffect, Suspense } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import axios from 'axios';
+import jwt_decode from 'jwt-decode';
+
 import io from 'socket.io-client';
 
 import { toast } from "react-toastify";
