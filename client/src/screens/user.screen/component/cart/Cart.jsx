@@ -1,6 +1,10 @@
-import React, { useContext, useRef, useEffect } from 'react'
+import React, {useState, useContext, useRef, useEffect } from 'react'
 import { detacontext } from '../../../../App'
 import { useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { Navigate } from 'react-router-dom';
+
+import axios from 'axios';
 
 import { useReactToPrint } from 'react-to-print';
 import './Cart.css'
@@ -10,6 +14,12 @@ import html2pdf from 'html2pdf.js';
 
 const Cart = (props) => {
   const apiUrl = process.env.REACT_APP_API_URL;
+  const token = localStorage.getItem('token_e');
+  const config = {
+    headers: {
+      'Authorization': `Bearer ${token}`,
+    },
+  };
 
   const { restaurantData, setsalesTax, salesTax, setserviceTax, serviceTax, formatDateTime, clientInfo, userLoginInfo, usertitle, itemsInCart, costOrder, deleteItemFromCart, invoice, myOrder, listProductsOrder, orderTotal, orderSubtotal, ordertax, orderdeliveryCost
     , createDeliveryOrderByClient, createOrderForTableByClient, checkout } = useContext(detacontext)
