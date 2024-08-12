@@ -79,7 +79,7 @@ const Cart = (props) => {
               orderside.current.style.marginRight = "-50%";
             }}>الفاتورة</label>
               : userLoginInfo ? <label htmlFor="invoice-radio" className="slide invoice" onClick={() => {
-                invoice(userLoginInfo.userinfo.id);
+                invoice(userLoginInfo.userinfo?.id);
                 orderside.current.style.marginRight = "-50%";
               }}>الفاتورة</label>
                 : <label htmlFor="invoice-radio" className="slide invoice" onClick={() => {
