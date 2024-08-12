@@ -13,7 +13,7 @@ const socket = io(process.env.REACT_APP_API_URL, {
 });
 
 const NavBar = () => {
-  const { permissionUserMassage } = useContext(detacontext);
+  const { permissionUserMassage ,employeeLoginInfo } = useContext(detacontext);
   const apiUrl = process.env.REACT_APP_API_URL;
   const token = localStorage.getItem("token_e");
 
