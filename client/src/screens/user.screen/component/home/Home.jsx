@@ -1,13 +1,13 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, useContext } from 'react';
 import './Home.css'
 import { detacontext } from '../../../../App'
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { Navigate } from 'react-router-dom';
 
 import axios from 'axios';
 
 const Home = () => {
-  const { id } = useParams()
   const apiUrl = process.env.REACT_APP_API_URL;
   const token = localStorage.getItem('token_e');
   const config = {
@@ -16,13 +16,31 @@ const Home = () => {
     },
   };
 
+  const { restaurantData, userLoginInfo } = useContext(detacontext)
 
+  const { id } = useParams()
+  const [table, settable] = useState({})
+  const tableInfo = async()=>{
+    const response =await axios.get(`${apiUrl}/api/table/${id}`,config)
+    if(response){
+      return <Navigate to='/' />
+    }
+    const tableInfo = response.data
+    if (tableInfo){
+      settable(tableInfo)
+    }
+  }
+  useEffect(() => {
+    tableInfo
+  }, [id])
+  
+  
   const askingForHelp = async (tableId) => {
     try {
       // Fetch the last 30 orders
       const response = await axios.get(`${apiUrl}/api/order/limit/30`, config);
       const allOrders = response.data;
-
+      
       // Filter orders for the specified table
       const tableOrders = allOrders.filter(order => order.table && order.table._id === tableId);
 
@@ -67,24 +85,21 @@ const Home = () => {
 
 
 
-  return (
-    <detacontext.Consumer>
-      {
-        ({ restaurantData, userLoginInfo, usertitle }) => {
+
           return (
             <main className='main-home' id='main'>
               <div className="main-container">
                 <div className="content">
-                  {userLoginInfo && userLoginInfo.userinfo && id ? <p className='main-title'>مرحبا {usertitle(userLoginInfo.userinfo.id)} <br />علي طاولة {usertitle(id)} <br /> في</p>
-                    : userLoginInfo && userLoginInfo.userinfo ? <p className='main-title'>مرحبا {usertitle(userLoginInfo.userinfo.id)} <br /> في</p>
-                      : id ? <p className='main-title'>مرحبا ضيوف طاولة {usertitle(id)} <br /> في</p>
+                  {userLoginInfo && userLoginInfo.userinfo && table? <p className='main-title'>مرحبا {userLoginInfo.userinfo?.username} <br />علي طاولة {table.tableNum} <br /> في</p>
+                    : userLoginInfo && userLoginInfo.userinfo ? <p className='main-title'>مرحبا {userLoginInfo.userinfo.username} <br /> في</p>
+                      : table? <p className='main-title'>مرحبا ضيوف طاولة {table.tableNum} <br /> في</p>
                         : <p className='main-title'>مرحبا بكم  <br /> في</p>
                   }
                   <p className='main-text'> {restaurantData.name} <br /> {restaurantData.description}</p>
                   <ul className="main-btn">
 
-                    {id ? <>
-                      <li className='main-li' onClick={() => askingForHelp(id)}>طلب الويتر</li>
+                    {table ? <>
+                      <li className='main-li' onClick={() => askingForHelp(table._id)}>طلب الويتر</li>
                       <li className='main-li'><a href="#menu">المنيو</a></li>
                     </>
                       : <li className='main-li mrl-auto'><a href="#menu">المنيو</a></li>}
@@ -93,10 +108,6 @@ const Home = () => {
               </div>
             </main>
           )
-        }
-      }
-    </detacontext.Consumer>
-  )
 
 }
 

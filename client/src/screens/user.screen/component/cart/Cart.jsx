@@ -41,6 +41,20 @@ const Cart = (props) => {
 
 
   const { id } = useParams()
+  const [table, settable] = useState({})
+  const tableInfo = async()=>{
+    const response =await axios.get(`${apiUrl}/api/table/${id}`,config)
+    if(response){
+      return <Navigate to='/' />
+    }
+    const tableInfo = response.data
+    if (tableInfo){
+      settable(tableInfo)
+    }
+  }
+  useEffect(() => {
+    tableInfo
+  }, [id])
 
 
   useEffect(() => {
@@ -60,8 +74,8 @@ const Cart = (props) => {
             <label htmlFor="order-radio" className="slide order" onClick={() => {
               orderside.current.style.marginRight = "0%";
             }}>طلباتك الحالية</label>
-            {id ? <label htmlFor="invoice-radio" className="slide invoice" onClick={() => {
-              invoice(id);
+            {table ? <label htmlFor="invoice-radio" className="slide invoice" onClick={() => {
+              invoice(table._id);
               orderside.current.style.marginRight = "-50%";
             }}>الفاتورة</label>
               : userLoginInfo ? <label htmlFor="invoice-radio" className="slide invoice" onClick={() => {
@@ -130,8 +144,8 @@ const Cart = (props) => {
 
                 {itemsInCart.length > 0 && (
                   <div className="total-order">
-                    {id ? (
-                      <button className='total-order-h-100 btn btn btn-success' onClick={() => createOrderForTableByClient(id)}>تأكيد الطلب</button>
+                    {table ? (
+                      <button className='total-order-h-100 btn btn btn-success' onClick={() => createOrderForTableByClient(table._id)}>تأكيد الطلب</button>
                     ) : (userLoginInfo && userLoginInfo.userinfo) && (
                       <button className='total-order-h-100 btn btn btn-success' onClick={() => createDeliveryOrderByClient(clientInfo._id, clientInfo.address, clientInfo.deliveryArea.delivery_fee)}>تأكيد الطلب</button>
                     )}
