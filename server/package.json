@@ -1,16 +1,17 @@
 {
   "name": "elbaron-bns-server",
   "version": "1.0.0",
-  "description": "Backend server for Elbaron BNS, providing APIs for managing products and user authentication.",
+  "description": "Backend server for Elbaron BNS, providing APIs for managing products, user authentication, and other essential functionalities.",
   "main": "index.js",
   "scripts": {
     "start": "pm2 start index.js --name \"elbaron-bns-server\"",
     "stop": "pm2 stop elbaron-bns-server",
     "restart": "pm2 restart elbaron-bns-server",
     "logs": "pm2 logs elbaron-bns-server",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon index.js",
+    "test": "echo \"No test specified\" && exit 0"
   },
-  "author": "Your Name <your.email@example.com>",
+  "author": "Beshoy Nady",
   "license": "ISC",
   "engines": {
     "node": ">=18.17.0"
@@ -28,7 +29,6 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^7.4.0",
     "multer": "^1.4.5-lts.1",
-    "nodemon": "^3.0.1",
     "path": "^0.12.7",
     "qrcode": "^1.5.3",
     "socket.io": "^4.7.2"

@@ -1,21 +1,20 @@
-import React, { createContext, useContext, useState, useEffect, Suspense } from 'react';
+import React, { createContext, useState, useEffect, Suspense } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import axios from 'axios';
-import jwt_decode from 'jwt-decode';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import io from 'socket.io-client';
+
 
 
 import LoadingPage from './screens/management/manag.component/LoadingPage/LoadingPage';
 import Userscreen from './screens/user.screen/Userscreen';
 import Login from './screens/management/manag.component/login/Login';
-// Lazy-loaded components
+
 const ManagLayout = React.lazy(() => import('./screens/management/ManagLayout'));
 const ManagerDash = React.lazy(() => import('./screens/management/manag.component/managerdash/ManagerDash'));
 const Info = React.lazy(() => import('./screens/management/manag.component/setting/info'));
 const Orders = React.lazy(() => import('./screens/management/manag.component/orders/Orders'));
 const Products = React.lazy(() => import('./screens/management/manag.component/products/Products'));
+const ProductRecipe = React.lazy(() => import('./screens/management/manag.component/products/ProductRecipe'));
 const Tables = React.lazy(() => import('./screens/management/manag.component/tables/Tables'));
 const TablesPage = React.lazy(() => import('./screens/management/manag.component/tables/TablesPage'));
 const ReservationTables = React.lazy(() => import('./screens/management/manag.component/tables/ReservationTables'));
@@ -36,7 +35,7 @@ const PurchaseReturn = React.lazy(() => import('./screens/management/manag.compo
 const SupplierTransaction = React.lazy(() => import('./screens/management/manag.component/suppliers/SupplierTransaction'));
 const StockItem = React.lazy(() => import('./screens/management/manag.component/stock/StockItem'));
 const StockManag = React.lazy(() => import('./screens/management/manag.component/stock/StockManag'));
-const ProductRecipe = React.lazy(() => import('./screens/management/manag.component/products/ProductRecipe'));
+const KitchenConsumption = React.lazy(() => import('./screens/management/manag.component/stock/KitchenConsumption'));
 const ExpenseItem = React.lazy(() => import('./screens/management/manag.component/expenses/Expense'));
 const DailyExpense = React.lazy(() => import('./screens/management/manag.component/expenses/dailyExpense'));
 const CashRegister = React.lazy(() => import('./screens/management/manag.component/cash/CashRegister'));
@@ -44,30 +43,29 @@ const CashMovement = React.lazy(() => import('./screens/management/manag.compone
 const Users = React.lazy(() => import('./screens/management/manag.component/users/Users'));
 const Customers = React.lazy(() => import('./screens/management/manag.component/users/Customers'));
 const CustomerMessage = React.lazy(() => import('./screens/management/manag.component/users/CustomerMessage'));
-const KitchenConsumption = React.lazy(() => import('./screens/management/manag.component/stock/KitchenConsumption'));
 
-// Initialize socket connection
+
+
 const socket = io(process.env.REACT_APP_API_URL, {
   reconnection: true,
   reconnectionAttempts: Infinity,
   reconnectionDelay: 1000,
 });
 
-// Create context
 export const detacontext = createContext({});
 
 function App() {
-
   axios.defaults.withCredentials = true;
 
   const apiUrl = process.env.REACT_APP_API_URL;
-  const token = localStorage.getItem('token_e'); // Retrieve the token from localStorage
+  const token = localStorage.getItem('token_e');
   const config = {
     headers: {
       'Authorization': `Bearer ${token}`,
     },
   };
-  const [isLoading, setisLoading] = useState(false)
+
+  const [isLoading, setisLoading] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
 
   useEffect(() => {
@@ -771,7 +769,7 @@ function App() {
     } catch (error) {
       console.error('Error adding item to cart:', error.message);
     } finally {
-      // setisLoading(false);
+      setisLoading(false);
     }
   };
 
@@ -913,7 +911,7 @@ function App() {
 
   const createDeliveryOrderByClient = async (userId, currentAddress, delivery_fee) => {
     try {
-      // setisLoading(true); 
+      setisLoading(true); 
   
       const userOrders = allOrders?.filter(order => order.user?._id === userId) || [];
       const lastUserOrder = userOrders.length > 0 ? userOrders[userOrders.length - 1] : null;
@@ -987,7 +985,7 @@ function App() {
       console.error("حدث خطأ أثناء معالجة الطلب:", error);
       toast.error("حدث خطأ أثناء معالجة الطلب، يرجى المحاولة مرة أخرى.");
     } finally {
-      // setisLoading(false);
+      setisLoading(false);
     }
   };
   
@@ -1093,7 +1091,7 @@ function App() {
       // Toast for error
       toast.error('حدث خطأ أثناء إنشاء/تحديث الطلب');
     } finally {
-      // setisLoading(false);
+      setisLoading(false);
     }
   };
 
@@ -1217,7 +1215,7 @@ function App() {
       console.error(error);
       toast.error('حدث خطأ. يرجى المحاولة مرة أخرى.');
     } finally {
-      // setisLoading(false);
+      setisLoading(false);
     }
   };
 
@@ -1287,7 +1285,7 @@ function App() {
       console.error(error);
       toast.error('حدث خطأ. يرجى المحاولة مرة أخرى');
     } finally {
-      // setisLoading(false);
+      setisLoading(false);
     }
   };
 
@@ -1421,7 +1419,7 @@ function App() {
       console.error(error);
       toast.error('حدث خطأ أثناء جلب بيانات الطلب. يرجى المحاولة مرة أخرى.');
     } finally {
-      // setisLoading(false);
+      setisLoading(false);
     }
   };
 
@@ -1697,7 +1695,7 @@ function App() {
     } catch (error) {
       console.error('Error fetching user info from token:', error);
     } finally {
-      // setisLoading(false);
+      setisLoading(false);
     }
   };
 
@@ -1746,7 +1744,7 @@ function App() {
   const updateOrder = async (e) => {
     e.preventDefault();
     const id = orderDetalisBySerial._id;
-    // setisLoading(true);
+    setisLoading(true);
 
     try {
       const subTotal = costOrder;
@@ -1777,7 +1775,7 @@ function App() {
       console.error('Error updating order:', error);
       toast.error('حدث خطأ أثناء تعديل الأوردر.');
     } finally {
-      // setisLoading(false);
+      setisLoading(false);
     }
   };
 
@@ -1931,7 +1929,7 @@ function App() {
       console.error(error);
       toast.error("فشل عملية الحجز! الرجاء المحاولة مرة أخرى");
     } finally {
-      // setisLoading(false);
+      setisLoading(false);
     }
   };
 
@@ -1995,7 +1993,7 @@ function App() {
 
       toast.error('حدث خطأاثناء تعديل الحجز ! حاول مرة اخري')
     } finally {
-      // setisLoading(false);
+      setisLoading(false);
     }
   }
 
@@ -2023,7 +2021,7 @@ function App() {
     } catch (error) {
       toast.error('حدث خطأاثناء تاكيد الحجز ! حاول مرة اخري')
     } finally {
-      // setisLoading(false);
+      setisLoading(false);
     }
   }
 
@@ -2046,14 +2044,14 @@ function App() {
     } catch (error) {
       toast.error('حدث خطاء عملية الحذف !حاول مره اخري')
     } finally {
-      // setisLoading(false);
+      setisLoading(false);
     }
   }
 
 
 
   const fetchData = async () => {
-    // setisLoading(true);
+    setisLoading(true);
     try {
       await getUserInfoFromToken();
       await getRestaurant();
@@ -2072,7 +2070,7 @@ function App() {
       console.error('Error fetching data:', error);
       toast.error('Error fetching data');
     } finally {
-      // setisLoading(false);
+      setisLoading(false);
     }
   };
 
@@ -2104,54 +2102,53 @@ function App() {
 
   }, [count, itemsInCart, productOrderToUpdate, isLogin])
 
-
   return (
     <detacontext.Provider
       value={{
-        // Basic information
+        // المعلومات الأساسية
         restaurantData, clientInfo, apiUrl,
 
-        // Functions related to authentication
+        // الدوال المتعلقة بالمصادقة
         userLoginInfo, employeeLoginInfo, permissionsList, getUserInfoFromToken,
 
-        // Functions related to products and categories
+        // الدوال المتعلقة بالمنتجات والفئات
         allProducts, productsOffer, sizesOffer, allMenuCategories, filterByMenuCategoryId,
         setMenuCategoryId, deleteItemFromCart,
 
-        // Functions related to users, tables, and orders
+        // الدوال المتعلقة بالمستخدمين، الطاولات، والطلبات
         allUsers, allTable, usertitle, allOrders, allEmployees,
 
-        // Functions related to manipulating product details
+        // الدوال المتعلقة بتفاصيل المنتجات
         setproductNote, addNoteToProduct, addExtrasToProduct, handleAddProductExtras,
         setproductExtras, productExtras,
 
-        // Functions related to order processing and calculations
+        // الدوال المتعلقة بمعالجة الطلبات والحسابات
         invoice, listProductsOrder, orderUpdateDate, myOrder, MenuCategoryId, itemsInCart,
         costOrder, addItemToCart, setitemsInCart, incrementProductQuantity, decrementProductQuantity,
         getOrderProductForTable, setdiscount, setaddition, discount, addition, orderaddition, orderdiscount,
 
-        // Functions related to creating different types of orders
+        // الدوال المتعلقة بإنشاء أنواع مختلفة من الطلبات
         checkout, createWaiterOrderForTable, createcashierOrder, createOrderForTableByClient, createDeliveryOrderByClient,
         lastInvoiceByCashier,
         clientname, setclientname, clientNotes, setclientNotes, clientphone, setclientphone, clientaddress,
         setclientaddress, deliveryAreaId, setdeliveryAreaId, deliverycost, setdeliverycost,
 
-        // Functions related to pagination
+        // الدوال المتعلقة بالتقسيم
         setisLoading, EditPagination, startpagination, endpagination, setstartpagination, setendpagination,
 
-        // Other utility functions or state variables
+        // دوال أخرى أو متغيرات حالة
         itemId, setitemId, formatDateTime, formatDate, formatTime, orderTotal, orderSubtotal,
         setsalesTax, salesTax, setserviceTax, serviceTax, orderDeliveryCost, setorderDeliveryCost,
 
-        // Functions related to order details
+        // الدوال المتعلقة بتفاصيل الطلبات
         orderDetalisBySerial, setorderDetalisBySerial, productOrderToUpdate, setproductOrderToUpdate,
         getOrderDetailsBySerial, updateOrder, putNumOfPaid, handlePayExtras, splitInvoice, subtotalSplitOrder,
 
-        // Functions related to reservations
+        // الدوال المتعلقة بالحجوزات
         createReservations, getAvailableTables, availableTableIds, confirmReservation, updateReservation,
         getAllReservations, allReservations, setallReservations, getReservationById, deleteReservation,
 
-        // Load state and other utilities
+        // حالة التحميل وأدوات أخرى
         isLoading, setisLoading, setStartDate, setEndDate, filterByDateRange, filterByTime
       }}>
 
@@ -2167,8 +2164,7 @@ function App() {
             <Suspense fallback={<LoadingPage />}>
               <ManagLayout />
             </Suspense>
-          }
-          >
+          }>
             <Route index element={<Suspense fallback={<LoadingPage />}><ManagerDash /></Suspense>} />
             <Route path='info' element={<Suspense fallback={<LoadingPage />}><Info /></Suspense>} />
             <Route path='orders' element={<Suspense fallback={<LoadingPage />}><Orders /></Suspense>} />
@@ -2185,23 +2181,22 @@ function App() {
             <Route path='menucategory' element={<Suspense fallback={<LoadingPage />}><MenuCategory /></Suspense>} />
             <Route path='kitchen' element={<Suspense fallback={<LoadingPage />}><Kitchen /></Suspense>} />
             <Route path='waiter' element={<Suspense fallback={<LoadingPage />}><Waiter /></Suspense>} />
-            <Route path='users' element={<Suspense fallback={<LoadingPage />}><Users /></Suspense>} />
-            <Route path='customers' element={<Suspense fallback={<LoadingPage />}><Customers /></Suspense>} />
-            <Route path='message' element={<Suspense fallback={<LoadingPage />}><CustomerMessage /></Suspense>} />
             <Route path='deliveryman' element={<Suspense fallback={<LoadingPage />}><DeliveryMan /></Suspense>} />
             <Route path='pos' element={<Suspense fallback={<LoadingPage />}><POS /></Suspense>} />
-            <Route path='supplier' element={<Suspense fallback={<LoadingPage />}><Suppliers /></Suspense>} />
+            <Route path='suppliers' element={<Suspense fallback={<LoadingPage />}><Suppliers /></Suspense>} />
             <Route path='purchase' element={<Suspense fallback={<LoadingPage />}><Purchase /></Suspense>} />
             <Route path='purchasereturn' element={<Suspense fallback={<LoadingPage />}><PurchaseReturn /></Suspense>} />
             <Route path='suppliertransaction' element={<Suspense fallback={<LoadingPage />}><SupplierTransaction /></Suspense>} />
-            <Route path='categorystock' element={<Suspense fallback={<LoadingPage />}><CategoryStock /></Suspense>} />
             <Route path='stockitem' element={<Suspense fallback={<LoadingPage />}><StockItem /></Suspense>} />
-            <Route path='stockmang' element={<Suspense fallback={<LoadingPage />}><StockManag /></Suspense>} />
+            <Route path='stockmanag' element={<Suspense fallback={<LoadingPage />}><StockManag /></Suspense>} />
             <Route path='kitchenconsumption' element={<Suspense fallback={<LoadingPage />}><KitchenConsumption /></Suspense>} />
-            <Route path='expense' element={<Suspense fallback={<LoadingPage />}><ExpenseItem /></Suspense>} />
+            <Route path='expenseitem' element={<Suspense fallback={<LoadingPage />}><ExpenseItem /></Suspense>} />
             <Route path='dailyexpense' element={<Suspense fallback={<LoadingPage />}><DailyExpense /></Suspense>} />
             <Route path='cashregister' element={<Suspense fallback={<LoadingPage />}><CashRegister /></Suspense>} />
             <Route path='cashmovement' element={<Suspense fallback={<LoadingPage />}><CashMovement /></Suspense>} />
+            <Route path='users' element={<Suspense fallback={<LoadingPage />}><Users /></Suspense>} />
+            <Route path='customers' element={<Suspense fallback={<LoadingPage />}><Customers /></Suspense>} />
+            <Route path='customermessage' element={<Suspense fallback={<LoadingPage />}><CustomerMessage /></Suspense>} />
           </Route>
 
           <Route path='*' element={<Navigate to='/' />} />
@@ -2209,7 +2204,6 @@ function App() {
       </BrowserRouter>
     </detacontext.Provider>
   );
-
 }
 
 export default App;
