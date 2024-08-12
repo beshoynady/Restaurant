@@ -17,9 +17,9 @@ const customerMessageSchema = new mongoose.Schema({
     required: true,
     maxlenght: 255
   },
-  createdAt: {
-    type: Date,
-    default: Date.now
+  isSeen: {
+    type: Boolean,
+    default: false
   }
 },
 {timestamps : true});

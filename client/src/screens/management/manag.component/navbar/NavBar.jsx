@@ -2,9 +2,9 @@ import React, { useState, useEffect, useContext } from "react";
 import io from "socket.io-client";
 import { Link } from "react-router-dom";
 
-import axios from 'axios'
-import { detacontext } from '../../../../App';
-import { toast } from 'react-toastify';
+import axios from "axios";
+import { detacontext } from "../../../../App";
+import { toast } from "react-toastify";
 
 import notificationSound from "../../../../audio/sound.mp3";
 
@@ -13,7 +13,7 @@ const socket = io(process.env.REACT_APP_API_URL, {
 });
 
 const NavBar = () => {
-  const { permissionUserMassage ,employeeLoginInfo } = useContext(detacontext);
+  const { permissionUserMassage, employeeLoginInfo } = useContext(detacontext);
   const apiUrl = process.env.REACT_APP_API_URL;
   const token = localStorage.getItem("token_e");
 
@@ -41,7 +41,31 @@ const NavBar = () => {
         return;
       }
       const response = await axios.get(`${apiUrl}/api/message`, config);
-      setMessages(response.data);
+      const data = await response.data.reverse();
+      const messageNotSeen = data.filter((mas) => mas.isSeen === false);
+      setMessages(messageNotSeen);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const updateisSeenMessage = async (id) => {
+    if (permissionUserMassage && !permissionUserMassage.update) {
+      toast.warn("ليس لك صلاحية لتعديل رسائل المستخدمين");
+      return;
+    }
+    try {
+      if (!token) {
+        // Handle case where token is not available
+        toast.error("رجاء تسجيل الدخول مره اخري");
+        return;
+      }
+      const response = await axios.put(
+        `${apiUrl}/api/message/${id}`,
+        { isSeen: true },
+        config
+      );
+      getAllCustomerMessage();
     } catch (error) {
       console.log(error);
     }
@@ -226,12 +250,21 @@ const NavBar = () => {
               {messages.length > 0 ? (
                 messages.map((message, index) => (
                   <Link
-                    to="/message"
+                    to="message"
                     key={index}
-                    className="dropdown-item"
-                    onClick={() => handleMessageClick(index)}
+                    className="dropdown-item text-right"
                   >
-                    <strong>{message.name}</strong>: {message.message}
+                    <i
+                      className="material-icons"
+                      data-toggle="tooltip"
+                      title="Delete"
+                      onClick={() => updateisSeenMessage(message._id)}
+                      style={{ marginRight: "8px", fontSize: "18px" }}
+                    >
+                      close
+                    </i>
+                    <strong className="text-right">{message.name}</strong>:
+                    {message.message}
                   </Link>
                 ))
               ) : (

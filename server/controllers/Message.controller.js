@@ -45,7 +45,8 @@ const getCustomerMessageById = async (req, res) => {
 const updateCustomerMessageById = async (req, res) => {
     try {
         const messageId = req.params.id;
-        const updatedMessage = await CustomerMessageModel.findByIdAndUpdate(messageId, req.body, { new: true });
+        const isSeen = req.body.isSeen
+        const updatedMessage = await CustomerMessageModel.findByIdAndUpdate(messageId, {isSeen}, { new: true });
         if (!updatedMessage) {
             return res.status(404).json({ message: 'Message not found' });
         }

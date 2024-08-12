@@ -60,18 +60,48 @@ const CustomerMessage = () => {
       console.log(error);
     }
   };
+
+  const updateisSeenMessage = async (e, mes) => {
+    e.preventDefault()
+    if (!token) {
+      // Handle case where token is not available
+      toast.error("رجاء تسجيل الدخول مره اخري");
+      return;
+    }
+    if (permissionUserMassage && !permissionUserMassage.show) {
+      toast.warn("ليس لك صلاحية لتعديل رسائل المستخدمين");
+      return;
+    }
+    const message = JSON.parse(mes)
+    setName(message.name);
+    setPhone(message.phone);
+    setMessage(message.message);
+    setEmail(message.email);
+    setmessageId(message._id);
+    try {
+      const response = await axios.put(
+        `${apiUrl}/api/message/${message._id}`,
+        { isSeen: true },
+        config
+      );
+      getAllCustomerMessage();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const deleteCustomerMessage = async (e) => {
     e.preventDefault();
+    if (!token) {
+      // Handle case where token is not available
+      toast.error("رجاء تسجيل الدخول مره اخري");
+      return;
+    }
     if (permissionUserMassage && !permissionUserMassage.delete) {
       toast.warn("ليس لك صلاحية لحذف رسائل المستخدمين");
       return;
     }
     try {
-      if (!token) {
-        // Handle case where token is not available
-        toast.error("رجاء تسجيل الدخول مره اخري");
-        return;
-      }
       const response = await axios.delete(
         `${apiUrl}/api/message/${messageId}`,
         config
@@ -291,6 +321,7 @@ const CustomerMessage = () => {
                 <th>الموبايل</th>
                 <th>الايميل</th>
                 <th>الرساله</th>
+                <th>المشاهده</th>
                 <th>التاريخ</th>
                 <th>اجراءات</th>
               </tr>
@@ -318,18 +349,15 @@ const CustomerMessage = () => {
                       <td>{message.phone}</td>
                       <td>{message.email}</td>
                       <td>{message.message}</td>
+                      <td>{message.isSeen ? "تم المشاهده" : "لم تشاهد"}</td>
                       <td>{formatDateTime(message.createdAt)}</td>
                       <td>
                         <a
                           href="#showMessageModal"
                           className="edit"
                           data-toggle="modal"
-                          onClick={() => {
-                            setName(message.name);
-                            setPhone(message.phone);
-                            setMessage(message.message);
-                            setEmail(message.email);
-                            setmessageId(message._id);
+                          onClick={(e) => {
+                            updateisSeenMessage(e, JSON.stringify(message));
                           }}
                         >
                           <i
@@ -495,15 +523,15 @@ const CustomerMessage = () => {
               </div>
               <div className="modal-footer d-flex flex-nowrap align-items-center justify-content-between m-0 p-1">
                 <input
+                  type="submit"
+                  className="btn btn-success col-6 h-100 px-2 py-3 m-0"
+                  value="تم"
+                />
+                <input
                   type="button"
                   className="btn btn-danger col-6 h-100 px-2 py-3 m-0"
                   data-dismiss="modal"
                   value="اغلاق"
-                />
-                <input
-                  type="submit"
-                  className="btn btn-success col-6 h-100 px-2 py-3 m-0"
-                  value="تم"
                 />
               </div>
             </form>
