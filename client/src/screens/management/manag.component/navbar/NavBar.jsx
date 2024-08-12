@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import io from 'socket.io-client';
+import { detacontext } from '../../../../App';
+
 import notificationSound from '../../../../audio/sound.mp3';
+
 
 const socket = io(process.env.REACT_APP_API_URL, {
   reconnection: true,
@@ -102,7 +105,7 @@ const NavBar = () => {
   };
 
 
-  
+
   return (
     <detacontext.Consumer>
       {({ employeeLoginInfo, employeelogout }) => (

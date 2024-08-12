@@ -1,26 +1,12 @@
 import React, { createContext, useContext, useState, useEffect, Suspense } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-
 import axios from 'axios';
 import jwt_decode from 'jwt-decode';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
 import io from 'socket.io-client';
 
-const socket = io(process.env.REACT_APP_API_URL, {
-  reconnection: true,
-  reconnectionAttempts: Infinity, // Allow unlimited reconnection attempts
-  reconnectionDelay: 1000, // Delay between reconnection attempts
-});
-
-
-
-import LoadingPage from './screens/management/manag.component/LoadingPage/LoadingPage';
-
-import Userscreen from './screens/user.screen/Userscreen';
-import Login from './screens/management/manag.component/login/Login';
-
+// Lazy-loaded components
 const ManagLayout = React.lazy(() => import('./screens/management/ManagLayout'));
 const ManagerDash = React.lazy(() => import('./screens/management/manag.component/managerdash/ManagerDash'));
 const Info = React.lazy(() => import('./screens/management/manag.component/setting/info'));
@@ -56,14 +42,18 @@ const Customers = React.lazy(() => import('./screens/management/manag.component/
 const CustomerMessage = React.lazy(() => import('./screens/management/manag.component/users/CustomerMessage'));
 const KitchenConsumption = React.lazy(() => import('./screens/management/manag.component/stock/KitchenConsumption'));
 
+// Initialize socket connection
+const socket = io(process.env.REACT_APP_API_URL, {
+  reconnection: true,
+  reconnectionAttempts: Infinity,
+  reconnectionDelay: 1000,
+});
 
-
-
-
-
+// Create context
 export const detacontext = createContext({});
 
 function App() {
+
   axios.defaults.withCredentials = true;
 
   const apiUrl = process.env.REACT_APP_API_URL;
