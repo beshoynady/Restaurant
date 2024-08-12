@@ -2081,18 +2081,18 @@ function App() {
 
 
 
-  // useEffect(() => {
-  //   fetchData();
+  useEffect(() => {
+    fetchData();
 
-  //   socket.on('connect_error', (error) => {
-  //     console.error('Socket connection error:', error);
-  //     toast.error('هناك مشكله في نظام الاشعارات');
-  //   });
+    // socket.on('connect_error', (error) => {
+    //   console.error('Socket connection error:', error);
+    //   toast.error('هناك مشكله في نظام الاشعارات');
+    // });
 
-  //   return () => {
-  //     socket.off('connect_error');
-  //   };
-  // }, []);
+    // return () => {
+    //   socket.off('connect_error');
+    // };
+  }, []);
 
 
 
