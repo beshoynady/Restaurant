@@ -59,6 +59,7 @@ const MenuCard = () => {
                             width: "100%",
                             height: "215px",
                             margin: "0 0 10px 10px",
+                            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)"
                           }}
                         >
                           {/* nots */}
@@ -102,7 +103,7 @@ const MenuCard = () => {
                           ) : (
                             ""
                           )}
-                               {/* extraArea */}
+                          {/* extraArea */}
 
                           {product._id === productid && extraArea === true ? (
                             sizeId &&
@@ -422,7 +423,7 @@ const MenuCard = () => {
                                       return (
                                         <label
                                           key={i}
-                                          className={`d-flex justify-content-center align-items-center col-4 h-100 btn btn-outline-secondary btn-sm${
+                                          className={`d-flex justify-content-center align-items-center col-4 h-100 btn btn-outline-danger btn-sm${
                                             size._id === sizeId
                                               ? "btn-info"
                                               : "btn-primary"
@@ -465,12 +466,12 @@ const MenuCard = () => {
                                                     <s>{size.sizePrice}ج</s>
                                                   </small>
                                                 </sup>
-                                                <span className="text-danger fw-bold">
+                                                <span className="text-danger fw-bold" style={{fontWeight:"700"}}>
                                                   {size.sizePriceAfterDescount}ج
                                                 </span>
                                               </>
                                             ) : (
-                                              <span className="text-danger fw-bold">
+                                              <span className="text-danger fw-bold" style={{fontWeight:"700"}}>
                                                 {size.sizePrice}ج
                                               </span>
                                             )}
@@ -484,7 +485,7 @@ const MenuCard = () => {
                               <div className="form-row align-items-center">
                                 <div className="col-4">
                                   <button
-                                    className="h-100 btn btn-outline-secondary w-100"
+                                    className="btn btn-outline-danger w-100 h-100"
                                     type="button"
                                     onClick={() => {
                                       incrementProductQuantity(
@@ -513,7 +514,7 @@ const MenuCard = () => {
                                 </div>
                                 <div className="col-4">
                                   <button
-                                    className="h-100 btn btn-outline-secondary w-100"
+                                    className="btn btn-outline-danger w-100 h-100"
                                     type="button"
                                     onClick={() => {
                                       decrementProductQuantity(
@@ -542,6 +543,7 @@ const MenuCard = () => {
                             width: "100%",
                             height: "210px",
                             margin: "0 0 10px 10px",
+                            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)"
                           }}
                         >
                           {product._id === productid && noteArea === true ? (
@@ -815,8 +817,6 @@ const MenuCard = () => {
                               )}
                             </div>
 
-
-
                             <div className="col-7 d-flex flex-column justify-content-between align-items-stretch p-1">
                               <div className="d-flex justify-content-between align-items-center m-0 pb-2">
                                 <h5 className="card-title m-0">
@@ -839,7 +839,7 @@ const MenuCard = () => {
                               </div>
                               <div className="d-flex justify-content-between align-items-center m-0 pb-2">
                                 <p
-                                  className="card-text mb-2"
+                                  className="card-text text-center mb-1 p-0"
                                   style={{
                                     fontSize: "12px",
                                     fontWeight: "700",
@@ -873,18 +873,18 @@ const MenuCard = () => {
                                 <div className="col-7"></div>
                                 <div className="col-5 d-flex flex-column align-items-end">
                                   {product.discount > 0 ? (
-                                    <>
+                                    <div>
                                       <sup>
-                                        <small className="text-muted">
+                                        <small className="text-muted" style={{fontWeight:"700"}}>
                                           <s>{product.price}ج</s>
                                         </small>
                                       </sup>
-                                      <span className="text-danger fw-bold">
+                                      <span className="text-danger fw-700" style={{fontWeight:"700"}}>
                                         {product.priceAfterDiscount}ج
                                       </span>
-                                    </>
+                                    </div>
                                   ) : (
-                                    <span className="text-danger fw-bold">
+                                    <span className="text-danger fw-700" style={{fontWeight:"700"}}>
                                       {product.price}ج
                                     </span>
                                   )}
@@ -893,7 +893,7 @@ const MenuCard = () => {
                               <div className="form-row align-items-center">
                                 <div className="col-4">
                                   <button
-                                    className="h-100 btn btn-outline-secondary w-100"
+                                    className="btn btn-outline-danger w-100 h-100"
                                     type="button"
                                     onClick={() =>
                                       incrementProductQuantity(product._id)
@@ -912,7 +912,7 @@ const MenuCard = () => {
                                 </div>
                                 <div className="col-4">
                                   <button
-                                    className="h-100 btn btn-outline-secondary w-100"
+                                    className="btn btn-outline-danger w-100 h-100"
                                     type="button"
                                     onClick={() =>
                                       decrementProductQuantity(product._id)
