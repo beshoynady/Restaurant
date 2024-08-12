@@ -708,7 +708,7 @@ function App() {
 
   const addItemToCart = (productId, sizeId) => {
     try {
-      setisLoading(!isLoading)
+      // setisLoading(true)
       // Find the product to add to the cart
       const cartItem = allProducts.find(item => item._id === productId);
 
@@ -771,7 +771,7 @@ function App() {
     } catch (error) {
       console.error('Error adding item to cart:', error.message);
     } finally {
-      setisLoading(false);
+      // setisLoading(false);
     }
   };
 
@@ -913,7 +913,7 @@ function App() {
 
   const createDeliveryOrderByClient = async (userId, currentAddress, delivery_fee) => {
     try {
-      setisLoading(true); 
+      // setisLoading(true); 
   
       const userOrders = allOrders?.filter(order => order.user?._id === userId) || [];
       const lastUserOrder = userOrders.length > 0 ? userOrders[userOrders.length - 1] : null;
@@ -987,14 +987,14 @@ function App() {
       console.error("حدث خطأ أثناء معالجة الطلب:", error);
       toast.error("حدث خطأ أثناء معالجة الطلب، يرجى المحاولة مرة أخرى.");
     } finally {
-      setisLoading(false);
+      // setisLoading(false);
     }
   };
   
 
 
   const createOrderForTableByClient = async (tableId) => {
-    setisLoading(!isLoading)
+    // setisLoading(true)
     try {
       // Find orders for the specified table
       const tableOrders = allOrders && allOrders.filter((order) => order.table._id === tableId);
@@ -1093,7 +1093,7 @@ function App() {
       // Toast for error
       toast.error('حدث خطأ أثناء إنشاء/تحديث الطلب');
     } finally {
-      setisLoading(!isLoading);
+      // setisLoading(false);
     }
   };
 
@@ -1127,7 +1127,7 @@ function App() {
   const [serviceTax, setserviceTax] = useState(0)
 
   const createWaiterOrderForTable = async (tableId, waiterId) => {
-    setisLoading(!isLoading)
+    // setisLoading(true)
     try {
       // Check for active orders for the table
       const tableOrder = allOrders && allOrders.filter((order) => order.table && order.table._id === tableId);
@@ -1217,13 +1217,13 @@ function App() {
       console.error(error);
       toast.error('حدث خطأ. يرجى المحاولة مرة أخرى.');
     } finally {
-      setisLoading(false);
+      // setisLoading(false);
     }
   };
 
 
   const createcashierOrder = async (cashierId, clientName, clientPhone, clientAddress, orderType, deliveryCost, discount, addition) => {
-    setisLoading(!isLoading)
+    // setisLoading(true)
     try {
 
       const dayOrders = allOrders && allOrders.filter(order => new Date(order.createdAt).toDateString() === new Date().toDateString());
@@ -1287,7 +1287,7 @@ function App() {
       console.error(error);
       toast.error('حدث خطأ. يرجى المحاولة مرة أخرى');
     } finally {
-      setisLoading(false);
+      // setisLoading(false);
     }
   };
 
@@ -1391,7 +1391,7 @@ function App() {
       return;
     }
 
-    setisLoading(!isLoading)
+    // setisLoading(true)
     try {
 
       const tableorder = allOrders && allOrders.filter((order, i) => order.table && order.table._id === tableId);
@@ -1421,7 +1421,7 @@ function App() {
       console.error(error);
       toast.error('حدث خطأ أثناء جلب بيانات الطلب. يرجى المحاولة مرة أخرى.');
     } finally {
-      setisLoading(false);
+      // setisLoading(false);
     }
   };
 
@@ -1665,7 +1665,7 @@ function App() {
       toast.error('رجاء تسجيل الدخول مره اخري');
       return
     }
-    setisLoading(true)
+    // setisLoading(true)
     try {
       const userToken = localStorage.getItem('token_u');
       const employeeToken = localStorage.getItem('token_e');
@@ -1697,7 +1697,7 @@ function App() {
     } catch (error) {
       console.error('Error fetching user info from token:', error);
     } finally {
-      setisLoading(false);
+      // setisLoading(false);
     }
   };
 
@@ -1746,7 +1746,7 @@ function App() {
   const updateOrder = async (e) => {
     e.preventDefault();
     const id = orderDetalisBySerial._id;
-    setisLoading(true);
+    // setisLoading(true);
 
     try {
       const subTotal = costOrder;
@@ -1777,7 +1777,7 @@ function App() {
       console.error('Error updating order:', error);
       toast.error('حدث خطأ أثناء تعديل الأوردر.');
     } finally {
-      setisLoading(false);
+      // setisLoading(false);
     }
   };
 
@@ -1853,7 +1853,7 @@ function App() {
   const createReservations = async (e, tableId, tableNumber, userId, numberOfGuests, customerName, customerPhone, reservationDate, startTime, endTime, reservationNote, createdBy) => {
     try {
       e.preventDefault();
-      setisLoading(!isLoading)
+      // setisLoading(true)
 
       // Logging input data for debugging purposes
       // console.log({ tableId, tableNumber, userId, numberOfGuests, customerName, customerPhone, reservationDate, startTime, endTime, reservationNote, createdBy });
@@ -1931,7 +1931,7 @@ function App() {
       console.error(error);
       toast.error("فشل عملية الحجز! الرجاء المحاولة مرة أخرى");
     } finally {
-      setisLoading(false);
+      // setisLoading(false);
     }
   };
 
@@ -1961,7 +1961,7 @@ function App() {
         toast.error("رجاء اختيار الحجز بشكل صحيح")
         return
       }
-      setisLoading(!isLoading)
+      // setisLoading(true)
 
       const filterReservationsByTable = allReservations.filter(reservation => reservation.tableId === tableId && reservation.reservationDate === reservationDate)
 
@@ -1995,13 +1995,13 @@ function App() {
 
       toast.error('حدث خطأاثناء تعديل الحجز ! حاول مرة اخري')
     } finally {
-      setisLoading(false);
+      // setisLoading(false);
     }
   }
 
 
   const confirmReservation = async (id, status) => {
-    setisLoading(true)
+    // setisLoading(true)
     try {
       if (!id) {
         toast.error("رجاء اختيار الحجز بشكل صحيح")
@@ -2023,12 +2023,12 @@ function App() {
     } catch (error) {
       toast.error('حدث خطأاثناء تاكيد الحجز ! حاول مرة اخري')
     } finally {
-      setisLoading(false);
+      // setisLoading(false);
     }
   }
 
   const deleteReservation = async (id) => {
-    setisLoading(true)
+    // setisLoading(true)
     try {
       if (!id) {
         toast.error("رجاء اختيار الحجز بشكل صحيح")
@@ -2046,14 +2046,14 @@ function App() {
     } catch (error) {
       toast.error('حدث خطاء عملية الحذف !حاول مره اخري')
     } finally {
-      setisLoading(false);
+      // setisLoading(false);
     }
   }
 
 
 
   const fetchData = async () => {
-    setisLoading(true);
+    // setisLoading(true);
     try {
       await getUserInfoFromToken();
       await getRestaurant();
@@ -2072,7 +2072,7 @@ function App() {
       console.error('Error fetching data:', error);
       toast.error('Error fetching data');
     } finally {
-      setisLoading(false);
+      // setisLoading(false);
     }
   };
 
@@ -2154,7 +2154,9 @@ function App() {
         // Load state and other utilities
         isLoading, setisLoading, setStartDate, setEndDate, filterByDateRange, filterByTime
       }}>
+
       {isLoading && <LoadingPage />}
+
       <BrowserRouter>
         <Routes>
           <Route path='/' element={<Userscreen />} />
