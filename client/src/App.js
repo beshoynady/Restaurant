@@ -6,6 +6,10 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import io from 'socket.io-client';
 
+
+import LoadingPage from './screens/management/manag.component/LoadingPage/LoadingPage';
+import Userscreen from './screens/user.screen/Userscreen';
+import Login from './screens/management/manag.component/login/Login';
 // Lazy-loaded components
 const ManagLayout = React.lazy(() => import('./screens/management/ManagLayout'));
 const ManagerDash = React.lazy(() => import('./screens/management/manag.component/managerdash/ManagerDash'));
