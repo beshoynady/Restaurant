@@ -1,7 +1,14 @@
 const express = require("express");
 const router = express.Router();
-const { createFirstEmployee, createEmployee, getoneEmployee, loginEmployee,
-    getAllemployees, getCountEmployees, updateEmployee, deleteEmployee } = require('../controllers/Employee.controller.js');
+const {createFirstEmployee,
+    createEmployee,
+    updateEmployee,
+    getoneEmployee,
+    loginEmployee,
+    getAllEmployee,
+    getCountEmployees,
+    deleteEmployee
+   } = require('../controllers/Employee.controller.js');
 
 const authenticateToken = require('../utlits/authenticate')
 const checkSubscription = require('../utlits/checkSubscription')
@@ -11,7 +18,7 @@ router.route('/count').get(getCountEmployees);
 
 
 router.route('/').post(authenticateToken, checkSubscription, createEmployee)
-    .get(authenticateToken, checkSubscription, getAllemployees);
+    .get(authenticateToken, checkSubscription, getAllEmployee);
 
 router.route('/:employeeId').get(authenticateToken, checkSubscription, getoneEmployee)
     .put(authenticateToken, checkSubscription, updateEmployee)

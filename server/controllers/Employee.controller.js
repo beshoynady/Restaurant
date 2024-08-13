@@ -207,6 +207,22 @@ const getAllEmployee = async (req, res) => {
   }
 };
 
+const getCountEmployees = async (req, res) => {
+  try {
+    // Count the number of employees
+    const employeeCount = await EmployeeModel.countDocuments();
+
+    // Return the count in the response
+    res.status(200).json({ count: employeeCount });
+  } catch (err) {
+    // Handle errors occurred during the process
+    console.error("Error counting employees:", err);
+    res
+      .status(500)
+      .json({ message: "An error occurred while counting employees", err });
+  }
+};
+
 const deleteEmployee = async (req, res) => {
   try {
     const employeeId = req.params.employeeId;
@@ -228,5 +244,6 @@ module.exports = {
   getoneEmployee,
   loginEmployee,
   getAllEmployee,
+  getCountEmployees,
   deleteEmployee
 };
