@@ -39,7 +39,6 @@ const employeeSchema = new mongoose.Schema({
     trim: true,
     minlength: 14, 
     maxlength: 14,
-    default: null,
   },
   address: {
     type: String,
