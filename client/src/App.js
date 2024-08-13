@@ -1219,7 +1219,7 @@ function App() {
           createdBy
         }, config);
         toast.success('تم تحديث الطلب بنجاح!');
-        cashierSocket.emit("neworder", `اوردر جديد علي طاوله ${table.tableNumber}`);
+        cashierSocket.emit("neworder", 'اوردر جديد من الويتر');
         setitemsInCart([]);
         setitemId([]);
         setaddition(0);
@@ -1256,7 +1256,7 @@ function App() {
         }, config);
 
         toast.success('تم إنشاء طلب جديد بنجاح!');
-        cashierSocket.emit("neworder", `اوردر جديد علي طاوله ${table.tableNumber}`);
+        cashierSocket.emit("neworder", 'اوردر جديد من الويتر');
         setitemsInCart([]);
         setitemId([]);
         setaddition(0);
@@ -1424,7 +1424,7 @@ function App() {
       if (updatedOrder) {
         // Show success toast after successfully marking order for checkout
         toast.success('تم طلب الحساب');
-        socket.emit("neworder", `  طاولة${tablenum} تطلب الحساب`);
+        cashierSocket.emit("helprequest", `  طاولة${tablenum} تطلب الحساب`);
 
         // Redirect after 10 minutes
         setTimeout(() => {
@@ -2139,15 +2139,26 @@ function App() {
   useEffect(() => {
     fetchData();
 
-    socket.on('connect_error', (error) => {
+    const handleConnectError = (error) => {
       console.error('Socket connection error:', error);
-      toast.error('هناك مشكله في نظام الاشعارات');
-    });
+      toast.error('هناك مشكلة في نظام الإشعارات');
+    };
+
+    cashierSocket.on('connect_error', handleConnectError);
+    kitchenSocket.on('connect_error', handleConnectError);
+    waiterSocket.on('connect_error', handleConnectError);
 
     return () => {
-      socket.off('connect_error');
+      cashierSocket.off('connect_error', handleConnectError);
+      kitchenSocket.off('connect_error', handleConnectError);
+      waiterSocket.off('connect_error', handleConnectError);
+      
+      cashierSocket.disconnect();
+      kitchenSocket.disconnect();
+      waiterSocket.disconnect();
     };
   }, []);
+
 
 
 

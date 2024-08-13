@@ -170,6 +170,11 @@ cashierNamespace.on('connection', (socket) => {
   });
 
   // استقبال إشعار من الكاشير إلى الويتر
+  socket.on('helprequest', (notification) => {
+    console.log("Order ready notification:", notification);
+    waiterNamespace.emit('helprequest', notification);
+  });
+
   socket.on('orderwaiter', (notification) => {
     console.log("Order ready notification:", notification);
     waiterNamespace.emit('orderwaiter', notification);
