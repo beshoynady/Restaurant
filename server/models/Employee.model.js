@@ -12,7 +12,6 @@ const employeeSchema = new mongoose.Schema({
   },
   username: {
     type: String,
-    unique: true,
     trim: true,
     minlength: 3,
     maxlength: 100,
