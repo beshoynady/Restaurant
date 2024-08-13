@@ -8,8 +8,26 @@ import { toast } from "react-toastify";
 
 import notificationSound from "../../../../audio/sound.mp3";
 
-const socket = io(process.env.REACT_APP_API_URL, {
+// const socket = io(process.env.REACT_APP_API_URL, {
+//   reconnection: true,
+// });
+
+const cashierSocket = io(`${process.env.REACT_APP_API_URL}/cashier`, {
   reconnection: true,
+  reconnectionAttempts: Infinity,
+  reconnectionDelay: 1000,
+});
+
+const kitchenSocket = io(`${process.env.REACT_APP_API_URL}/kitchen`, {
+  reconnection: true,
+  reconnectionAttempts: Infinity,
+  reconnectionDelay: 1000,
+});
+
+const waiterSocket = io(`${process.env.REACT_APP_API_URL}/waiter`, {
+  reconnection: true,
+  reconnectionAttempts: Infinity,
+  reconnectionDelay: 1000,
 });
 
 const NavBar = () => {
@@ -116,7 +134,7 @@ const NavBar = () => {
 
     // Define the event handler
     const handleNewOrderNotification = (notification) => {
-      console.log("Socket notification received:", notification);
+      // console.log("Socket notification received:", notification);
       setNotifications((prevNotifications) => {
         const updatedNotifications = [...prevNotifications, notification];
         // Save notifications to localStorage
@@ -132,7 +150,17 @@ const NavBar = () => {
     };
 
     // Listen for new order notifications
-    socket.on("reciveorder", handleNewOrderNotification);
+    if(employeeLoginInfo.role==='cashier'||employeeLoginInfo.role==='programer'){
+      cashierSocket.on("neworder", handleNewOrderNotification);
+      
+    }else if(employeeLoginInfo.role==='chef'){
+      
+      kitchenSocket.on("neworder", handleNewOrderNotification);
+    }else if(employeeLoginInfo.role==='waiter'){
+      
+      waiterSocket.on("neworder", handleNewOrderNotification);
+    }
+
 
     // Clean up the socket connection on component unmount
     return () => {

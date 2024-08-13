@@ -126,19 +126,92 @@ const io = socketIo(server, {
 });
 
 // Handle socket.io connections
-io.on('connect', (socket) => {
-  console.log('New client connected');
+// io.on('connect', (socket) => {
+//   console.log('New client connected');
 
-  // Listen for new order notifications
-  socket.on('sendorder', (notification) => {
-    console.log("Notification received:", notification); // Confirm receipt
-    // Emit the notification back to the client for testing purposes
-    socket.broadcast.emit('reciveorder', notification);
+//   // Listen for new order notifications
+//   socket.on('neworder', (notification) => {
+//     console.log("Notification received:", notification); // Confirm receipt
+//     // Emit the notification back to the client for testing purposes
+//     socket.broadcast.emit('neworder', notification);
+//   });
+//   socket.on('orderkit', (notification) => {
+//     console.log("Notification received:", notification); // Confirm receipt
+//     // Emit the notification back to the client for testing purposes
+//     socket.broadcast.emit('orderkit', notification);
+//   });
+
+//   socket.on('orderwaiter', (notification) => {
+//     console.log("Notification received:", notification); // Confirm receipt
+//     // Emit the notification back to the client for testing purposes
+//     socket.broadcast.emit('orderwaiter', notification);
+//   });
+
+//   // Handle disconnect event
+//   socket.on('disconnect', () => {
+//     console.log('Client disconnected');
+//   });
+// });
+
+
+const cashierNamespace = io.of('/cashier');
+const kitchenNamespace = io.of('/kitchen');
+const waiterNamespace = io.of('/waiter');
+
+// التعامل مع اتصالات الكاشير
+cashierNamespace.on('connection', (socket) => {
+  console.log('Cashier connected');
+
+  // استقبال إشعار من العميل إلى الكاشير
+  socket.on('neworder', (notification) => {
+    console.log("New order received:", notification);
+    // إرسال الإشعار إلى المطبخ
+    kitchenNamespace.emit('orderkit', notification);
   });
 
-  // Handle disconnect event
+  // استقبال إشعار من الكاشير إلى الويتر
+  socket.on('orderwaiter', (notification) => {
+    console.log("Order ready notification:", notification);
+    waiterNamespace.emit('orderwaiter', notification);
+  });
+
   socket.on('disconnect', () => {
-    console.log('Client disconnected');
+    console.log('Cashier disconnected');
+  });
+});
+
+
+
+
+
+// التعامل مع اتصالات المطبخ
+kitchenNamespace.on('connection', (socket) => {
+  console.log('Kitchen connected');
+
+  socket.on('orderready', (notification) => {
+    console.log("Order ready notification:", notification);
+    cashierNamespace.emit('orderready', notification);
+  });
+
+  socket.on('disconnect', () => {
+    console.log('Kitchen disconnected');
+  });
+});
+
+
+
+
+// التعامل مع اتصالات الويتر
+waiterNamespace.on('connection', (socket) => {
+  console.log('Waiter connected');
+
+  socket.on('helprequest', (notification) => {
+    console.log("Help request received:", notification);
+    cashierNamespace.emit('helprequest', notification);
+  });
+
+  socket.on('disconnect', () => {
+    console.log('Waiter disconnected');
   });
 });
 
