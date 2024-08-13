@@ -164,7 +164,7 @@ const NavBar = () => {
 
     // Clean up the socket connection on component unmount
     return () => {
-      socket.off("reciveorder", handleNewOrderNotification);
+      cashierSocket.off("neworder", handleNewOrderNotification);
     };
   }, []);
 
