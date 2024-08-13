@@ -896,7 +896,7 @@ const ManagerDash = () => {
           </div>
 
                         {/* متابعه الطاوله */}
-                        
+
           <div className="col-12 col-lg-4 h-auto">
             <div className="card">
               <div className="card-header">
@@ -1182,8 +1182,8 @@ const ManagerDash = () => {
 
                       <div style={{ maxWidth: "50%" }}>
                         <p className="card-text">الفاتورة: {kitchenOrder.serial}</p>
-                        <p className="card-text">الكاشير: {employeeLoginInfo && employeeLoginInfo ? usertitle(employeeLoginInfo.id) : ''}</p>
-                        {kitchenOrder.waiter ? <p className="card-text">الويتر: {kitchenOrder.waiter.username}</p> : ""}
+                        <p className="card-text">الكاشير: {kitchenOrder.cashier?.username}</p>
+                        {kitchenOrder.waiter ? <p className="card-text">الويتر: {kitchenOrder.waiter?.username}</p> : ""}
                         <p className="card-text">الاستلام: {new Date(kitchenOrder.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
                         <p className="card-text">الانتظار: {55} دقيقه</p>
                       </div>
