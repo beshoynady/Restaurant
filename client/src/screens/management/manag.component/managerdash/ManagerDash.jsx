@@ -1,15 +1,21 @@
-import React, { useState, useEffect, useRef, useContext } from 'react'
-import { detacontext } from '../../../../App'
-import axios from 'axios'
+import React, { useState, useEffect, useRef, useContext } from "react";
+import { detacontext } from "../../../../App";
+import axios from "axios";
 import io from "socket.io-client";
-import { toast } from 'react-toastify';
-import { useReactToPrint } from 'react-to-print';
-import InvoiceComponent from '../invoice/invoice';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCalendarCheck, faClock, faMoneyBill, faDollarSign, faCashRegister, faBan } from '@fortawesome/free-solid-svg-icons';
+import { toast } from "react-toastify";
+import { useReactToPrint } from "react-to-print";
+import InvoiceComponent from "../invoice/invoice";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faCalendarCheck,
+  faClock,
+  faMoneyBill,
+  faDollarSign,
+  faCashRegister,
+  faBan,
+} from "@fortawesome/free-solid-svg-icons";
 
-import 'bootstrap/dist/css/bootstrap.min.css';
-
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const cashierSocket = io(`${process.env.REACT_APP_API_URL}/cashier`, {
   reconnection: true,
@@ -17,24 +23,28 @@ const cashierSocket = io(`${process.env.REACT_APP_API_URL}/cashier`, {
   reconnectionDelay: 1000,
 });
 
-
 const ManagerDash = () => {
   const apiUrl = process.env.REACT_APP_API_URL;
-  const token = localStorage.getItem('token_e');
+  const token = localStorage.getItem("token_e");
   const config = {
     headers: {
-      'Authorization': `Bearer ${token}`,
+      Authorization: `Bearer ${token}`,
     },
   };
 
-  const { restaurantData, employeeLoginInfo, formatDate,  setisLoadiog, EditPagination, startpagination,
-    endpagination, setstartpagination, setendpagination } = useContext(detacontext)
-
-
-
+  const {
+    restaurantData,
+    employeeLoginInfo,
+    formatDate,
+    setisLoadiog,
+    EditPagination,
+    startpagination,
+    endpagination,
+    setstartpagination,
+    setendpagination,
+  } = useContext(detacontext);
 
   const [showModal, setShowModal] = useState(false);
-
 
   // State initialization
   const [listOrderShow, setlistOrderShow] = useState([]);
@@ -52,93 +62,109 @@ const ManagerDash = () => {
     try {
       if (!token) {
         // Handle case where token is not available
-        toast.error('رجاء تسجيل الدخول مره اخري');
+        toast.error("رجاء تسجيل الدخول مره اخري");
         return; // Exit the function if token is not available
       }
 
       // Fetch orders from API
-      const res = await axios.get(apiUrl + '/api/order', config);
+      const res = await axios.get(apiUrl + "/api/order", config);
       const orders = res.data;
 
       // Update all orders state
       setAllOrders(orders);
 
-
       // Filter pending orders
-      const pendingOrders = orders.filter(order => order.status === 'Pending');
+      const pendingOrders = orders.filter(
+        (order) => order.status === "Pending"
+      );
       setPendingOrder(pendingOrders);
 
       // Filter pending payments (excluding cancelled orders)
-      const pendingPayments = orders.filter(order => order.payment_status === 'Pending' && order.status !== 'Cancelled');
+      const pendingPayments = orders.filter(
+        (order) =>
+          order.payment_status === "Pending" && order.status !== "Cancelled"
+      );
       setPendingPayment(pendingPayments.reverse());
-      setlistOrderShow(pendingPayments.reverse())
+      setlistOrderShow(pendingPayments.reverse());
       // Filter today's orders
       const today = new Date().toDateString();
-      const dayOrders = orders.filter(order => new Date(order.createdAt).toDateString() === today);
+      const dayOrders = orders.filter(
+        (order) => new Date(order.createdAt).toDateString() === today
+      );
       setListDayOrder(dayOrders);
 
       // Calculate total sales for paid orders of today
-      const paidDayOrders = dayOrders.filter(order => order.payment_status === 'Paid');
-      const calctotalDaySales = paidDayOrders.reduce((total, order) => total + order.total, 0);
+      const paidDayOrders = dayOrders.filter(
+        (order) => order.payment_status === "Paid"
+      );
+      const calctotalDaySales = paidDayOrders.reduce(
+        (total, order) => total + order.total,
+        0
+      );
       setTotalDaySales(calctotalDaySales);
 
       // Filter cancelled orders and update state
-      const cancelledOrders = dayOrders.filter(order => order.status === 'Cancelled');
+      const cancelledOrders = dayOrders.filter(
+        (order) => order.status === "Cancelled"
+      );
       setCancelledOrders(cancelledOrders);
 
-
-      const shiftId = employeeLoginInfo.shift
-      const shiftData = await axios.get(`${apiUrl}/api/shift/${shiftId}`)
+      const shiftId = employeeLoginInfo.shift;
+      const shiftData = await axios.get(
+        `${apiUrl}/api/shift/${shiftId}`,
+        config
+      );
       const startTime = new Date(shiftData.data.startTime).getTime();
-      const endTime = new Date(shiftData.data.endTime).getTime(); 
-  
-      const shiftOrders = dayOrders.filter(order => {
-          const orderTime = new Date(order.createdAt).getTime();
-          return orderTime >= startTime && orderTime <= endTime;
+      const endTime = new Date(shiftData.data.endTime).getTime();
+
+      const shiftOrders = dayOrders.filter((order) => {
+        const orderTime = new Date(order.createdAt).getTime();
+        return orderTime >= startTime && orderTime <= endTime;
       });
-      setorderShift(shiftOrders)
-      console.log({shiftData, startTime, endTime, shiftOrders})
+      setorderShift(shiftOrders);
+      console.log({ shiftData, startTime, endTime, shiftOrders });
     } catch (error) {
       // Handle and log error
-      console.error('Error fetching orders data:', error.message);
+      console.error("Error fetching orders data:", error.message);
     }
   };
 
-
-  const status = ['Pending', 'Approved', 'Cancelled']
-  const statusAR = ['انتظار', 'موافق', 'ملغي']
-  const [update, setupdate] = useState(false)
+  const status = ["Pending", "Approved", "Cancelled"];
+  const statusAR = ["انتظار", "موافق", "ملغي"];
+  const [update, setupdate] = useState(false);
 
   const changeorderstauts = async (e, orderId, cashier) => {
     try {
       if (!token) {
         // Handle case where token is not available
-        toast.error('رجاء تسجيل الدخول مره اخري');
+        toast.error("رجاء تسجيل الدخول مره اخري");
       }
       const status = e.target.value;
-      const isActive = status === 'Cancelled' ? false : true;
+      const isActive = status === "Cancelled" ? false : true;
 
-      const response = await axios.put(`${apiUrl}/api/order/${orderId}`, { status, isActive, cashier },config);
-      if(response ){
+      const response = await axios.put(
+        `${apiUrl}/api/order/${orderId}`,
+        { status, isActive, cashier },
+        config
+      );
+      if (response) {
         fetchOrdersData();
-  
-        toast.success('تم تغيير حالة الطلب بنجاح');
-  
-        setupdate(!update);
-          
-        if(status==='Approved'){
-          cashierSocket.emit('orderkitchen','استلام اوردر جديد')
+
+        toast.success("تم تغيير حالة الطلب بنجاح");
+
+        
+        if (status === "Approved") {
+          setupdate(!update);
+          cashierSocket.emit("orderkitchen", "استلام اوردر جديد");
         }
       }
-
     } catch (error) {
-      console.error('خطأ في تغيير حالة الطلب:', error);
-      toast.error('حدث خطأ أثناء تغيير حالة الطلب');
+      console.error("خطأ في تغيير حالة الطلب:", error);
+      toast.error("حدث خطأ أثناء تغيير حالة الطلب");
     }
   };
 
-  const paymentstatus = ['Pending', 'Paid']
-
+  const paymentstatus = ["Pending", "Paid"];
 
   const [AllWaiters, setAllWaiters] = useState([]);
   const [deliverymen, setDeliverymen] = useState([]);
@@ -147,77 +173,96 @@ const ManagerDash = () => {
     try {
       if (!token) {
         // Handle case where token is not available
-        toast.error('رجاء تسجيل الدخول مره اخري');
+        toast.error("رجاء تسجيل الدخول مره اخري");
       }
-      const allEmployees = await axios.get(apiUrl + '/api/employee', config);
-      const activeEmployees = allEmployees.data.filter((employee) => employee.isActive === true)
-      const allWaiters = activeEmployees.length > 0 ? activeEmployees.filter((employee) => employee.role === 'waiter') : [];
+      const allEmployees = await axios.get(apiUrl + "/api/employee", config);
+      const activeEmployees = allEmployees.data.filter(
+        (employee) => employee.isActive === true
+      );
+      const allWaiters =
+        activeEmployees.length > 0
+          ? activeEmployees.filter((employee) => employee.role === "waiter")
+          : [];
       if (allWaiters) {
         setAllWaiters(allWaiters);
       } else {
         // إذا لم يتم العثور على نوادل، قد يكون من الجيد إخطار المستخدم
-        toast.warning('لم يتم العثور على ويتر نشط الان.');
+        toast.warning("لم يتم العثور على ويتر نشط الان.");
       }
 
-      const alldeliverymens = activeEmployees.length > 0 ? activeEmployees.filter((employee) => employee.role === 'deliveryman') : [];
+      const alldeliverymens =
+        activeEmployees.length > 0
+          ? activeEmployees.filter(
+              (employee) => employee.role === "deliveryman"
+            )
+          : [];
       if (alldeliverymens) {
         setDeliverymen(alldeliverymens);
       } else {
         // إذا لم يتم العثور على نوادل، قد يكون من الجيد إخطار المستخدم
-        toast.warning('لم يتم العثور على مندوبي توصيل نشططين الان.');
+        toast.warning("لم يتم العثور على مندوبي توصيل نشططين الان.");
       }
-
     } catch (error) {
       // معالجة الخطأ وعرض رسالة خطأ
-      console.error('خطأ في جلب بيانات الموظفين:', error);
-      toast.error('حدث خطأ أثناء جلب بيانات الموظفين.');
+      console.error("خطأ في جلب بيانات الموظفين:", error);
+      toast.error("حدث خطأ أثناء جلب بيانات الموظفين.");
     }
   };
-
 
   const specifiedWaiter = async (id) => {
     try {
       if (!token) {
         // Handle case where token is not available
-        toast.error('رجاء تسجيل الدخول مره اخري');
-        return
+        toast.error("رجاء تسجيل الدخول مره اخري");
+        return;
       }
       if (!AllWaiters.length > 0) {
-        toast.warn('لا يوجد ويتر نشط الان ')
-        return ''
+        toast.warn("لا يوجد ويتر نشط الان ");
+        return "";
       }
       // البحث عن الطلب بالمعرف المحدد
       const getorder = allOrders.find((order) => order._id === id);
       if (!getorder) {
-        throw new Error('Order not found');
+        throw new Error("Order not found");
       }
 
       // استخراج رقم القسم من بيانات الطاولة المرتبطة بالطلب
-      const tablesectionNumber = getorder.table && getorder.table?.sectionNumber;
+      const tablesectionNumber =
+        getorder.table && getorder.table?.sectionNumber;
       if (!tablesectionNumber) {
-        throw new Error('Table section number not found');
+        throw new Error("Table section number not found");
       }
 
       // البحث عن النوادل في القسم المحدد
-      const sectionWaiters = AllWaiters.filter((waiter) => waiter.sectionNumber === tablesectionNumber);
+      const sectionWaiters = AllWaiters.filter(
+        (waiter) => waiter.sectionNumber === tablesectionNumber
+      );
       if (sectionWaiters.length === 0) {
-        throw new Error('No waiters found in the specified section');
+        throw new Error("No waiters found in the specified section");
       }
 
-      const OrderSection = allOrders.filter(order => order.waiter && order.waiter.sectionNumber === tablesectionNumber).sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+      const OrderSection = allOrders
+        .filter(
+          (order) =>
+            order.waiter && order.waiter.sectionNumber === tablesectionNumber
+        )
+        .sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
 
-      let waiterId = '';
+      let waiterId = "";
 
       if (OrderSection.length > 0) {
         const lastWaiterId = OrderSection[0]?.waiter?._id;
-        const lastWaiterIndex = sectionWaiters.findIndex(waiter => waiter._id === lastWaiterId);
+        const lastWaiterIndex = sectionWaiters.findIndex(
+          (waiter) => waiter._id === lastWaiterId
+        );
         console.log({ lastWaiterId, lastWaiterIndex });
 
-        waiterId = (lastWaiterIndex !== -1 && lastWaiterIndex < sectionWaiters.length - 1)
-          ? sectionWaiters[lastWaiterIndex + 1]._id
-          : sectionWaiters[0]._id;
+        waiterId =
+          lastWaiterIndex !== -1 && lastWaiterIndex < sectionWaiters.length - 1
+            ? sectionWaiters[lastWaiterIndex + 1]._id
+            : sectionWaiters[0]._id;
       } else {
-        console.log('لا توجد طلبات سابقة لهذه الطاولة');
+        console.log("لا توجد طلبات سابقة لهذه الطاولة");
         waiterId = sectionWaiters[0]._id;
       }
 
@@ -225,48 +270,52 @@ const ManagerDash = () => {
 
       return waiterId;
     } catch (error) {
-      console.error('Error fetching table or waiter data:', error);
-      return '';
+      console.error("Error fetching table or waiter data:", error);
+      return "";
     }
   };
-
-
-
 
   const sendWaiter = async (id) => {
     try {
       if (!token) {
         // Handle case where token is not available
-        toast.error('رجاء تسجيل الدخول مره اخري');
+        toast.error("رجاء تسجيل الدخول مره اخري");
       }
       const waiter = await specifiedWaiter(id);
       if (!waiter) {
-        return
+        return;
       }
-      const helpStatus = 'Send waiter';
-      const order = await axios.put(apiUrl + '/api/order/' + id, {
+      const helpStatus = "Send waiter";
+      const order = await axios.put(apiUrl + "/api/order/" + id, {
         waiter,
         helpStatus,
-      });
-      setupdate(!update);
-      console.log(order.data);
+      },config);
+      const orderData = order.data;
+      console.log(orderData);
+      if (orderData) {
+        setupdate(!update);
+        if (orderData.help === "Requests assistance") {
+          cashierSocket.emit("helprequest", `عميل يطلب مساعده-${waiter}`);
+        } else if (orderData.help === "Requests bill") {
+          cashierSocket.emit("helprequest", `عميل يطلب الحساب-${waiter}`);
+        }
+      }
     } catch (error) {
       console.log(error);
+      toast.error("حدث خطأ أثناء إرسال الويتر");
     }
   };
-
-
 
   const putdeliveryman = async (id, orderid) => {
     try {
       if (!token) {
         // Handle case where token is not available
-        toast.error('رجاء تسجيل الدخول مره اخري');
+        toast.error("رجاء تسجيل الدخول مره اخري");
       }
-      const deliveryMan = id
-      const order = await axios.put(apiUrl + '/api/order/' + orderid, {
-        deliveryMan
-      });
+      const deliveryMan = id;
+      const order = await axios.put(apiUrl + "/api/order/" + orderid, {
+        deliveryMan,
+      },config);
       setupdate(!update);
       console.log(order.data);
     } catch (error) {
@@ -274,54 +323,57 @@ const ManagerDash = () => {
     }
   };
 
-
-  const [paymentMethod, setpaymentMethod] = useState('')
-  const [registers, setregisters] = useState([])
-  const [totalRegistersBalance, settotalRegistersBalance] = useState(0)
-  const [registerSelected, setregisterSelected] = useState('')
+  const [paymentMethod, setpaymentMethod] = useState("");
+  const [registers, setregisters] = useState([]);
+  const [totalRegistersBalance, settotalRegistersBalance] = useState(0);
+  const [registerSelected, setregisterSelected] = useState("");
 
   const getCashRegistersByEmployee = async (id) => {
     if (!id) {
-      return
+      return;
     }
 
     try {
-      const response = await axios.get(`${apiUrl}/api/cashregister/employee/${id}`, config);
+      const response = await axios.get(
+        `${apiUrl}/api/cashregister/employee/${id}`,
+        config
+      );
       const registers = response.data;
       // console.log({response})
       if (registers.length === 0) {
-        toast.info('لم يتم العثور على حسابات النقدية لهذا الموظف');
+        toast.info("لم يتم العثور على حسابات النقدية لهذا الموظف");
         return;
       }
       if (registers.length > 1) {
-        setregisters(registers)
+        setregisters(registers);
       } else if (registers.length === 1) {
-        setregisterSelected(registers[0])
+        setregisterSelected(registers[0]);
       }
-
     } catch (error) {
       console.error({ error });
-      toast.error('حدث خطأ أثناء جلب حسابات النقدية');
+      toast.error("حدث خطأ أثناء جلب حسابات النقدية");
     }
   };
 
   useEffect(() => {
-    const total = registers.reduce((total, register) => total + register.balance, 0);
+    const total = registers.reduce(
+      (total, register) => total + register.balance,
+      0
+    );
     settotalRegistersBalance(total);
   }, [registers]);
-
-
-
 
   const RevenueRecording = async (total, revenue) => {
     try {
       if (!token) {
         // Handle case where token is not available
-        toast.error('رجاء تسجيل الدخول مره اخري');
+        toast.error("رجاء تسجيل الدخول مره اخري");
       }
       if (registerSelected) {
         // احسب الرصيد المحدث
-        const oldBalance = registers.find(register => register._id === registerSelected).balance
+        const oldBalance = registers.find(
+          (register) => register._id === registerSelected
+        ).balance;
         const updatedBalance = oldBalance + revenue;
 
         // إنشاء سجل حركة نقدية
@@ -331,14 +383,14 @@ const ManagerDash = () => {
             registerId: registerSelected,
             createdBy: employeeLoginInfo.id,
             amount: revenue,
-            type: 'Revenue',
+            type: "Revenue",
             description: ` فاتورة بيع رقم ${orderdata.serial} باجمالي  ${total}`,
           },
           config
         );
-        const cashMovementData = cashMovement.data
+        const cashMovementData = cashMovement.data;
         if (cashMovement) {
-          toast.success('تم تسجيل حركه الخزينه');
+          toast.success("تم تسجيل حركه الخزينه");
           const updateCashRegister = await axios.put(
             `${apiUrl}/api/cashregister/${registerSelected}`,
             {
@@ -346,31 +398,31 @@ const ManagerDash = () => {
             },
             config
           );
-          const updateCashRegisterData = updateCashRegister.data
+          const updateCashRegisterData = updateCashRegister.data;
           if (updateCashRegisterData) {
-            toast.success('تم اضافه اليراد لرصيد الخزينه بنجاح');
+            toast.success("تم اضافه اليراد لرصيد الخزينه بنجاح");
           } else {
             const deletecashMovement = await axios.delete(
-              `${apiUrl}/api/cashMovement/${cashMovementData._id}`, config
+              `${apiUrl}/api/cashMovement/${cashMovementData._id}`,
+              config
             );
-            toast.warn('حدث خطا اثناء تسجيل ايراد الفاتوره بالخزينه يرجي تسجيلها ');
+            toast.warn(
+              "حدث خطا اثناء تسجيل ايراد الفاتوره بالخزينه يرجي تسجيلها "
+            );
           }
         }
       }
     } catch (error) {
       console.log(error);
       // إخطار المستخدم بالفشل
-      toast.error('فشل في تسجيل الإيراد');
+      toast.error("فشل في تسجيل الإيراد");
     }
   };
-
 
   const [paidAmount, setPaidAmount] = useState(0);
   const [remainingAmount, setRemainingAmount] = useState(0);
   const [cashOutAmount, setCashOutAmount] = useState(0);
   const [revenueAmount, setRevenueAmount] = useState(0);
-
-
 
   useEffect(() => {
     const remaining = paidAmount - orderdata.total;
@@ -378,24 +430,23 @@ const ManagerDash = () => {
 
     setRemainingAmount(remaining > 0 ? remaining : 0);
     setRevenueAmount(revenue > 0 ? revenue : 0);
-  }, [paidAmount, cashOutAmount])
-
+  }, [paidAmount, cashOutAmount]);
 
   const changePaymentorderstauts = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     try {
       if (!token) {
         // Handle case where token is not available
-        toast.error('رجاء تسجيل الدخول مره اخري');
+        toast.error("رجاء تسجيل الدخول مره اخري");
       }
       if (!registerSelected) {
-        toast.warn('لم يتم التعرف علي خزينه لتسجيل فيها اليرادات')
-        return
+        toast.warn("لم يتم التعرف علي خزينه لتسجيل فيها اليرادات");
+        return;
       }
-      const id = orderdata._id
-      const payment_status = 'Paid';
+      const id = orderdata._id;
+      const payment_status = "Paid";
       const isActive = false;
-      const cashier = employeeLoginInfo.id
+      const cashier = employeeLoginInfo.id;
 
       const changePaymentstauts = await axios.put(`${apiUrl}/api/order/${id}`, {
         payment_status,
@@ -403,45 +454,38 @@ const ManagerDash = () => {
         isActive,
         cashier,
       });
-      const changePaymentstautsData = changePaymentstauts.data
+      const changePaymentstautsData = changePaymentstauts.data;
       if (changePaymentstautsData) {
-        await RevenueRecording(changePaymentstautsData.total, revenueAmount)
+        await RevenueRecording(changePaymentstautsData.total, revenueAmount);
         // عرض رسالة نجاح
-        toast.success('تم تغيير حالة الدفع بنجاح');
+        toast.success("تم تغيير حالة الدفع بنجاح");
       }
       fetchOrdersData();
     } catch (error) {
       // معالجة الخطأ وعرض رسالة خطأ
-      console.error('خطأ في تغيير حالة الدفع:', error);
-      toast.error('حدث خطأ أثناء تغيير حالة الدفع');
+      console.error("خطأ في تغيير حالة الدفع:", error);
+      toast.error("حدث خطأ أثناء تغيير حالة الدفع");
     }
   };
 
+  const [serial, setserial] = useState("");
+  const [orderType, setorderType] = useState("");
 
-
-  const [serial, setserial] = useState('')
-  const [orderType, setorderType] = useState('')
-
-
-
-  const [orderdata, setorderdata] = useState({})
-
+  const [orderdata, setorderdata] = useState({});
 
   // Fetch orders from API
   const getOrderDetalis = async (serial) => {
     try {
       if (!token) {
         // Handle case where token is not available
-        toast.error('رجاء تسجيل الدخول مره اخري');
+        toast.error("رجاء تسجيل الدخول مره اخري");
       }
-      const res = await axios.get(apiUrl + '/api/order', config);
-      const order = res.data.find(o => o.serial === serial)
+      const res = await axios.get(apiUrl + "/api/order", config);
+      const order = res.data.find((o) => o.serial === serial);
       if (order) {
-
-        setorderdata(order)
-        setserial(order.serial)
-        setorderType(order.orderType)
-
+        setorderdata(order);
+        setserial(order.serial);
+        setorderType(order.orderType);
       }
     } catch (error) {
       console.log(error);
@@ -449,30 +493,24 @@ const ManagerDash = () => {
     }
   };
 
-
   const printContainerInvoiceSplit = useRef();
   const printContainerKitchen = useRef();
-
-
 
   const PrintInvoiceSplit = useReactToPrint({
     content: () => printContainerInvoiceSplit.current,
     copyStyles: true,
     removeAfterPrint: true,
-    bodyClass: 'printpage',
-    printerName: 'cashier'
+    bodyClass: "printpage",
+    printerName: "cashier",
   });
 
   const PrintKitchen = useReactToPrint({
     content: () => printContainerKitchen.current,
     copyStyles: true,
     removeAfterPrint: true,
-    bodyClass: 'printpage',
-    printerName: 'Kitchen'
-
+    bodyClass: "printpage",
+    printerName: "Kitchen",
   });
-
-
 
   const handlePrintInvoiceSplit = (e) => {
     e.preventDefault();
@@ -486,48 +524,53 @@ const ManagerDash = () => {
     setisPrint(true);
   };
 
-
-
   // Filter orders by serial number
   const searchBySerial = (serial) => {
-    const orders = pendingPayment.filter((order) => order.serial.toString().startsWith(serial));
+    const orders = pendingPayment.filter((order) =>
+      order.serial.toString().startsWith(serial)
+    );
     setPendingPayment(orders);
   };
 
   // Filter orders by order type
   const getOrdersByType = (type) => {
-    const orders = pendingPayment.filter((order) => order.orderdata.orderType === type);
+    const orders = pendingPayment.filter(
+      (order) => order.orderdata.orderType === type
+    );
     setPendingPayment(orders);
   };
 
-
-  const [kitchenOrder, setkitchenOrder] = useState({})
-  const [kitchenProducts, setkitchenProducts] = useState([])
+  const [kitchenOrder, setkitchenOrder] = useState({});
+  const [kitchenProducts, setkitchenProducts] = useState([]);
 
   const getKitchenCard = (id) => {
     const neworder = pendingPayment.find((order) => order._id === id);
     setkitchenOrder(neworder);
-    const orderproducts = neworder.products
-    const newproducts = orderproducts.filter((product) => product.isDone === false)
-    const newExreas = orderproducts.filter((extra) => extra.isDone === false)
-    setkitchenProducts(newproducts)
+    const orderproducts = neworder.products;
+    const newproducts = orderproducts.filter(
+      (product) => product.isDone === false
+    );
+    const newExreas = orderproducts.filter((extra) => extra.isDone === false);
+    setkitchenProducts(newproducts);
+  };
 
-  }
-
-  const [isPrint, setisPrint] = useState(false)
+  const [isPrint, setisPrint] = useState(false);
 
   const aproveOrder = async (e, cashier) => {
-    e.preventDefault()
+    e.preventDefault();
     try {
       if (!token) {
         // Handle case where token is not available
-        toast.error('رجاء تسجيل الدخول مره اخري');
+        toast.error("رجاء تسجيل الدخول مره اخري");
       }
 
       // Fetch order data by ID
-      const order = await axios.get(`${apiUrl}/api/order/${kitchenOrder._id}`, config);
+      const order = await axios.get(
+        `${apiUrl}/api/order/${kitchenOrder._id}`,
+        config
+      );
       const products = await order.data.products;
-      const aproveorder = "Approved"
+      const aproveorder = "Approved";
 
       // Loop through each product in the order
       // for (const product of products) {
@@ -597,52 +640,63 @@ const ManagerDash = () => {
       // }
 
       // Update order status or perform other tasks
-      const status = 'Prepared';
-      const updateproducts = products.map((prod) => ({ ...prod, isDone: true }));
-      const updateorder = await axios.put(`${apiUrl}/api/order/${kitchenOrder._id}`, { products: updateproducts, status: aproveorder, cashier }, config);
+      
+      const status = "Prepared";
+      const updateproducts = products.map((prod) => ({
+        ...prod,
+        isDone: true,
+      }));
+      const updateorder = await axios.put(
+        `${apiUrl}/api/order/${kitchenOrder._id}`,
+        { products: updateproducts, status: aproveorder, cashier },
+        config
+      );
       if (updateorder.status === 200) {
-        toast.success('تم ارسال الاوردر'); // Notifies success in completing order
-        setkitchenOrder("")
-        setisPrint(false)
-        setkitchenProducts([])
+        toast.success("تم ارسال الاوردر"); // Notifies success in completing order
+        setkitchenOrder("");
+        setisPrint(false);
+        setkitchenProducts([]);
       }
     } catch (error) {
       console.log(error);
-      toast.error('حدث خطأ اثناء ارسال الاوردر!');
+      toast.error("حدث خطأ اثناء ارسال الاوردر!");
     }
   };
 
-
   useEffect(() => {
-    fetchOrdersData()
+    fetchOrdersData();
     fetchActiveEmployees();
-
   }, [update]);
 
   useEffect(() => {
-    employeeLoginInfo&&getCashRegistersByEmployee(employeeLoginInfo?.id)
+    employeeLoginInfo && getCashRegistersByEmployee(employeeLoginInfo?.id);
   }, []);
 
-
-
-
   return (
-    <section className='w-100 mw-100 p-1 m-0' style={{ scrollbarWidth: 'none' }}>
+    <section
+      className="w-100 mw-100 p-1 m-0"
+      style={{ scrollbarWidth: "none" }}
+    >
       <div className="w-100 p-0 m-0">
         <div className="w-100 d-flex flex-wrap align-items-center justify-content-between">
           <div className="w-100">
-            <div className="d-flex justify-content-between align-items-center py-1 px-2 bg-primary text-light rounded" style={{ minHeight: '50px' }}>
+            <div
+              className="d-flex justify-content-between align-items-center py-1 px-2 bg-primary text-light rounded"
+              style={{ minHeight: "50px" }}
+            >
               <h1 className="h5 mb-0">الصفحة الرئيسية</h1>
-              <a href={`http://${window.location.hostname}`} target="_blank" className="btn btn-outline-light">
-                <i className='bx bx-world'></i>
+              <a
+                href={`http://${window.location.hostname}`}
+                target="_blank"
+                className="btn btn-outline-light"
+              >
+                <i className="bx bx-world"></i>
                 <span className="ms-2">زيارة الموقع</span>
               </a>
             </div>
           </div>
         </div>
       </div>
-
-
 
       <div className="container h-auto mt-4">
         <div className="d-flex flex-wrap align-items-center justify-content-start">
@@ -695,7 +749,9 @@ const ManagerDash = () => {
               <div className="card-body d-flex justify-content-between align-items-center">
                 <div className="info">
                   <p>ايراد اليوم</p>
-                  <h3>{totalDaySales ? Math.round(totalDaySales / 10) * 10 : 0}</h3>
+                  <h3>
+                    {totalDaySales ? Math.round(totalDaySales / 10) * 10 : 0}
+                  </h3>
                 </div>
                 <FontAwesomeIcon icon={faDollarSign} size="3x" />
               </div>
@@ -712,23 +768,30 @@ const ManagerDash = () => {
               </div>
             </div>
           </div>
-
         </div>
       </div>
 
       <div className="w-100 p-0 m-0">
         <div className="w-100 d-flex flex-wrap align-content-start justify-content-between align-items-start">
           <div className="col-12 col-lg-8 h-auto mb-3">
-            <div className="card h-100 w-100" style={{overflow:'auto'}}>
+            <div className="card h-100 w-100" style={{ overflow: "auto" }}>
               <div className="card-header w-100">
                 <h3 className="card-title">الأوردرات الحالية</h3>
               </div>
               <div className="card-body w-auto">
                 <div className="row mb-3">
                   <div className="col-4">
-                    <label className="form-label text-wrap text-right fw-bolder p-0 m-0">عرض</label>
+                    <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                      عرض
+                    </label>
 
-                    <select className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => { setstartpagination(0); setendpagination(parseInt(e.target.value)) }}>
+                    <select
+                      className="form-control border-primary m-0 p-2 h-auto"
+                      onChange={(e) => {
+                        setstartpagination(0);
+                        setendpagination(parseInt(e.target.value));
+                      }}
+                    >
                       <option value={5}>5</option>
                       <option value={10}>10</option>
                       <option value={15}>15</option>
@@ -738,12 +801,23 @@ const ManagerDash = () => {
                     </select>
                   </div>
                   <div className="col-4">
-                    <label className="form-label text-wrap text-right fw-bolder p-0 m-0">رقم الفاتورة</label>
-                    <input type="text" className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => searchBySerial(e.target.value)} />
+                    <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                      رقم الفاتورة
+                    </label>
+                    <input
+                      type="text"
+                      className="form-control border-primary m-0 p-2 h-auto"
+                      onChange={(e) => searchBySerial(e.target.value)}
+                    />
                   </div>
                   <div className="col-4">
-                    <label className="form-label text-wrap text-right fw-bolder p-0 m-0">نوع الأوردر</label>
-                    <select className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => getOrdersByType(e.target.value)}>
+                    <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                      نوع الأوردر
+                    </label>
+                    <select
+                      className="form-control border-primary m-0 p-2 h-auto"
+                      onChange={(e) => getOrdersByType(e.target.value)}
+                    >
                       <option value="">الكل</option>
                       <option value="Internal">صالة</option>
                       <option value="Delivery">ديليفري</option>
@@ -753,33 +827,63 @@ const ManagerDash = () => {
                 </div>
                 <div className="row align-items-center justify-content-between mb-3">
                   <div className="col p-0">
-                    <button className="btn btn-primary w-100 p-1 text-center" style={{fontSize:"14px"}}
-                    onClick={()=>setlistOrderShow(listDayOrder)}>
-                      أوردرات اليوم <span className="badge bg-secondary">{listDayOrder.length}</span>
+                    <button
+                      className="btn btn-primary w-100 p-1 text-center"
+                      style={{ fontSize: "14px" }}
+                      onClick={() => setlistOrderShow(listDayOrder)}
+                    >
+                      أوردرات اليوم{" "}
+                      <span className="badge bg-secondary">
+                        {listDayOrder.length}
+                      </span>
                     </button>
-                   </div>
+                  </div>
                   <div className="col p-0">
-                    <button className="btn btn-primary w-100 p-1 text-center" style={{fontSize:"14px"}}
-                    onClick={()=>setlistOrderShow(orderShift)}>
-                      أوردرات الشيفت <span className="badge bg-secondary">{orderShift.length}</span>
+                    <button
+                      className="btn btn-primary w-100 p-1 text-center"
+                      style={{ fontSize: "14px" }}
+                      onClick={() => setlistOrderShow(orderShift)}
+                    >
+                      أوردرات الشيفت{" "}
+                      <span className="badge bg-secondary">
+                        {orderShift.length}
+                      </span>
                     </button>
-                   </div>
+                  </div>
                   <div className="col p-0">
-                    <button className="btn btn-warning w-100 p-1 text-center" style={{fontSize:"14px"}}
-                    onClick={()=>setlistOrderShow(pendingOrder)}>
-                      انتظار الموافقة <span className="badge bg-secondary">{pendingOrder.length}</span>
+                    <button
+                      className="btn btn-warning w-100 p-1 text-center"
+                      style={{ fontSize: "14px" }}
+                      onClick={() => setlistOrderShow(pendingOrder)}
+                    >
+                      انتظار الموافقة{" "}
+                      <span className="badge bg-secondary">
+                        {pendingOrder.length}
+                      </span>
                     </button>
-                   </div>
+                  </div>
                   <div className="col p-0">
-                    <button className="btn btn-warning w-100 p-1 text-center" style={{fontSize:"14px"}}
-                    onClick={()=>setlistOrderShow(pendingPayment)}>
-                      انتظار الدفع <span className="badge bg-secondary">{pendingPayment.length}</span>
+                    <button
+                      className="btn btn-warning w-100 p-1 text-center"
+                      style={{ fontSize: "14px" }}
+                      onClick={() => setlistOrderShow(pendingPayment)}
+                    >
+                      انتظار الدفع{" "}
+                      <span className="badge bg-secondary">
+                        {pendingPayment.length}
+                      </span>
                     </button>
-                   </div>
+                  </div>
                   <div className="col p-0">
-                    <button className="btn btn-danger w-100 p-1 text-center" style={{fontSize:"14px"}}
-                    onClick={()=>setlistOrderShow(cancelledOrders)}>
-                      الملغاه <span className="badge bg-secondary">{cancelledOrders.length}</span>
+                    <button
+                      className="btn btn-danger w-100 p-1 text-center"
+                      style={{ fontSize: "14px" }}
+                      onClick={() => setlistOrderShow(cancelledOrders)}
+                    >
+                      الملغاه{" "}
+                      <span className="badge bg-secondary">
+                        {cancelledOrders.length}
+                      </span>
                     </button>
                   </div>
                 </div>
@@ -801,101 +905,237 @@ const ManagerDash = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {listOrderShow.length > 0 ?
-                        listOrderShow.slice(startpagination, endpagination + 15).map((recent, i) => (
-                          <tr key={i} className={
-                            recent.status === "Pending" ? "bg-warning" :
-                              recent.status === "Approved" ? "bg-success" :
-                                recent.status === "Cancelled" ? "bg-danger" : ""
-                          }>
-                            <td>{i + 1}</td>
-                            <td>
-                              <a href="#invoiceOrderModal" data-toggle="modal" onClick={() => { getOrderDetalis(recent.serial); setShowModal(!showModal) }}>
-                                {recent.serial}
-                              </a>
-                            </td>
-                            <td>{recent.orderType === 'Internal' ? recent.table?.tableNumber
-                              : recent.orderType === 'Delivery' ? recent.user?.username
-                                : recent.orderType === 'Takeaway' ? `num ${recent.orderNum}` : ''}</td>
-                            <td>{recent.total}</td>
-                            <td>
-                              {recent.status !== "Cancelled" ? (
-                                recent.isSplit && recent.subtotalSplitOrder < recent.total ? (
-                                  <a href="#invoiceSplitModal" type="button" className="btn btn-primary" data-toggle="modal" onClick={() => getOrderDetalis(recent.serial)}>
-                                    باقي
-                                  </a>
-                                ) : "كاملة"
-                              ) : "ملغاه"}
-                            </td>
-                            <td>
-                              <select className="form-control border-primary m-0 p-2 h-auto"  name="status" 
-                                onChange={(e) => { changeorderstauts(e, recent._id, employeeLoginInfo.id) }}>
-                                <option value={recent.status}>{statusAR[status.findIndex(state => state === recent.status)]}</option>
-                                {status.map((state, i) => (
-                                  <option value={state} key={i}>{statusAR[i]}</option>
-                                ))}
-                              </select>
-                            </td>
-                            <td onClick={() => getKitchenCard(recent._id)}>
-                              <a href='#kitchenorderModal' data-toggle="modal" className="btn btn-info">
-                                جديد
-                              </a>
-                            </td>
-                            <td>{recent.waiter ? recent.waiter?.username : ''}</td>
-                            <td>
-                              {recent.orderType === 'Delivery' && (
-                                <select
-                                  name="status"
-                                  className="form-control border-primary m-0 p-2 h-auto"
-                                  onChange={(e) => putdeliveryman(e.target.value, recent._id)}
+                      {listOrderShow.length > 0 ? (
+                        listOrderShow
+                          .slice(startpagination, endpagination + 15)
+                          .map((recent, i) => (
+                            <tr
+                              key={i}
+                              className={
+                                recent.status === "Pending"
+                                  ? "bg-warning"
+                                  : recent.status === "Approved"
+                                  ? "bg-success"
+                                  : recent.status === "Cancelled"
+                                  ? "bg-danger"
+                                  : ""
+                              }
+                            >
+                              <td>{i + 1}</td>
+                              <td>
+                                <a
+                                  href="#invoiceOrderModal"
+                                  data-toggle="modal"
+                                  onClick={() => {
+                                    getOrderDetalis(recent.serial);
+                                    setShowModal(!showModal);
+                                  }}
                                 >
-                                  <option value={recent.deliveryMan?._id}>
-                                    {recent.deliveryMan ? recent.deliveryMan?.username : "لم يحدد"}
+                                  {recent.serial}
+                                </a>
+                              </td>
+                              <td>
+                                {recent.orderType === "Internal"
+                                  ? recent.table?.tableNumber
+                                  : recent.orderType === "Delivery"
+                                  ? recent.user?.username
+                                  : recent.orderType === "Takeaway"
+                                  ? `num ${recent.orderNum}`
+                                  : ""}
+                              </td>
+                              <td>{recent.total}</td>
+                              <td>
+                                {recent.status !== "Cancelled" ? (
+                                  recent.isSplit &&
+                                  recent.subtotalSplitOrder < recent.total ? (
+                                    <a
+                                      href="#invoiceSplitModal"
+                                      type="button"
+                                      className="btn btn-primary"
+                                      data-toggle="modal"
+                                      onClick={() =>
+                                        getOrderDetalis(recent.serial)
+                                      }
+                                    >
+                                      باقي
+                                    </a>
+                                  ) : (
+                                    "كاملة"
+                                  )
+                                ) : (
+                                  "ملغاه"
+                                )}
+                              </td>
+                              <td>
+                                <select
+                                  className="form-control border-primary m-0 p-2 h-auto"
+                                  name="status"
+                                  onChange={(e) => {
+                                    changeorderstauts(
+                                      e,
+                                      recent._id,
+                                      employeeLoginInfo.id
+                                    );
+                                  }}
+                                >
+                                  <option value={recent.status}>
+                                    {
+                                      statusAR[
+                                        status.findIndex(
+                                          (state) => state === recent.status
+                                        )
+                                      ]
+                                    }
                                   </option>
-                                  {deliverymen.map((man, i) => (
-                                    <option value={man._id} key={i}>
-                                      {man.username}
+                                  {status.map((state, i) => (
+                                    <option value={state} key={i}>
+                                      {statusAR[i]}
                                     </option>
                                   ))}
                                 </select>
-                              )}
-                            </td>
-                            <td>{recent.orderType}</td>
-                            <td>
-                              {recent.payment_status === 'Pending'?
-                              (
-                              <a href="#paymentModal" className="btn btn-primary text-light" data-toggle="modal" onClick={() => { getOrderDetalis(recent.serial) }}>
-                                دفع
-                              </a>
-                              ):'تم الدفع'
-                              }
-                            </td>
-                          </tr>
-                        )) : (
-                          <tr>
-                            <td colSpan="11">لا توجد اوردرات</td>
-                          </tr>
-                        )}
+                              </td>
+                              <td onClick={() => getKitchenCard(recent._id)}>
+                                <a
+                                  href="#kitchenorderModal"
+                                  data-toggle="modal"
+                                  className="btn btn-info"
+                                >
+                                  جديد
+                                </a>
+                              </td>
+                              <td>
+                                {recent.waiter ? recent.waiter?.username : ""}
+                              </td>
+                              <td>
+                                {recent.orderType === "Delivery" && (
+                                  <select
+                                    name="status"
+                                    className="form-control border-primary m-0 p-2 h-auto"
+                                    onChange={(e) =>
+                                      putdeliveryman(e.target.value, recent._id)
+                                    }
+                                  >
+                                    <option value={recent.deliveryMan?._id}>
+                                      {recent.deliveryMan
+                                        ? recent.deliveryMan?.username
+                                        : "لم يحدد"}
+                                    </option>
+                                    {deliverymen.map((man, i) => (
+                                      <option value={man._id} key={i}>
+                                        {man.username}
+                                      </option>
+                                    ))}
+                                  </select>
+                                )}
+                              </td>
+                              <td>{recent.orderType}</td>
+                              <td>
+                                {recent.payment_status === "Pending" ? (
+                                  <a
+                                    href="#paymentModal"
+                                    className="btn btn-primary text-light"
+                                    data-toggle="modal"
+                                    onClick={() => {
+                                      getOrderDetalis(recent.serial);
+                                    }}
+                                  >
+                                    دفع
+                                  </a>
+                                ) : (
+                                  "تم الدفع"
+                                )}
+                              </td>
+                            </tr>
+                          ))
+                      ) : (
+                        <tr>
+                          <td colSpan="11">لا توجد اوردرات</td>
+                        </tr>
+                      )}
                     </tbody>
                   </table>
                 </div>
                 <div className="clearfix">
-                  <div className="hint-text text-dark">عرض <b>{listOrderShow.length > startpagination ? startpagination : listOrderShow.length}</b> من <b>{listOrderShow.length}</b> عنصر</div>
+                  <div className="hint-text text-dark">
+                    عرض{" "}
+                    <b>
+                      {listOrderShow.length > startpagination
+                        ? startpagination
+                        : listOrderShow.length}
+                    </b>{" "}
+                    من <b>{listOrderShow.length}</b> عنصر
+                  </div>
                   <ul className="pagination">
-                    <li onClick={EditPagination} className="page-item disabled"><a href="#">السابق</a></li>
-                    <li onClick={EditPagination} className={`page-item ${endpagination === 5 ? 'active' : ''}`}><a href="#" className="page-link">1</a></li>
-                    <li onClick={EditPagination} className={`page-item ${endpagination === 10 ? 'active' : ''}`}><a href="#" className="page-link">2</a></li>
-                    <li onClick={EditPagination} className={`page-item ${endpagination === 15 ? 'active' : ''}`}><a href="#" className="page-link">3</a></li>
-                    <li onClick={EditPagination} className={`page-item ${endpagination === 20 ? 'active' : ''}`}><a href="#" className="page-link">4</a></li>
-                    <li onClick={EditPagination} className={`page-item ${endpagination === 25 ? 'active' : ''}`}><a href="#" className="page-link">5</a></li>
-                    <li onClick={EditPagination} className={`page-item ${endpagination === 30 ? 'active' : ''}`}><a href="#" className="page-link">التالي</a></li>
+                    <li onClick={EditPagination} className="page-item disabled">
+                      <a href="#">السابق</a>
+                    </li>
+                    <li
+                      onClick={EditPagination}
+                      className={`page-item ${
+                        endpagination === 5 ? "active" : ""
+                      }`}
+                    >
+                      <a href="#" className="page-link">
+                        1
+                      </a>
+                    </li>
+                    <li
+                      onClick={EditPagination}
+                      className={`page-item ${
+                        endpagination === 10 ? "active" : ""
+                      }`}
+                    >
+                      <a href="#" className="page-link">
+                        2
+                      </a>
+                    </li>
+                    <li
+                      onClick={EditPagination}
+                      className={`page-item ${
+                        endpagination === 15 ? "active" : ""
+                      }`}
+                    >
+                      <a href="#" className="page-link">
+                        3
+                      </a>
+                    </li>
+                    <li
+                      onClick={EditPagination}
+                      className={`page-item ${
+                        endpagination === 20 ? "active" : ""
+                      }`}
+                    >
+                      <a href="#" className="page-link">
+                        4
+                      </a>
+                    </li>
+                    <li
+                      onClick={EditPagination}
+                      className={`page-item ${
+                        endpagination === 25 ? "active" : ""
+                      }`}
+                    >
+                      <a href="#" className="page-link">
+                        5
+                      </a>
+                    </li>
+                    <li
+                      onClick={EditPagination}
+                      className={`page-item ${
+                        endpagination === 30 ? "active" : ""
+                      }`}
+                    >
+                      <a href="#" className="page-link">
+                        التالي
+                      </a>
+                    </li>
                   </ul>
                 </div>
               </div>
             </div>
           </div>
 
-                        {/* متابعه الطاوله */}
+          {/* متابعه الطاوله */}
 
           <div className="col-12 col-lg-4 h-auto">
             <div className="card">
@@ -904,50 +1144,79 @@ const ManagerDash = () => {
               </div>
               <div className="card-body">
                 <ul className="list-group">
-                  {pendingPayment.filter(order =>
-                    order.orderType === 'Internal' &&
-                    order.payment_status === 'Pending' &&
-                    order.status !== 'Cancelled' &&
-                    order.help !== 'Not requested'
-                  ).map((order, i) => (
-                    <li className={`list-group-item ${order.helpStatus === 'Not send' ? 'bg-warning text-dark' : order.helpStatus === 'Assistance done' ? 'bg-success' : 'bg-info'} mb-2`}
-                      key={i}
-                    >
-                      <div className="d-flex justify-content-between align-items-center">
-                        <div className='d-flex w-50 justify-content-between align-items-center'>
-                          <p className='w-50 text-dark' style={{ fontSize: '18px', fontWeight: "900" }}>طاوله : {order.table && order.table?.tableNumber}</p>
-                          <p className='w-50 text-dark' style={{ fontSize: '18px', fontWeight: "900" }}>
-                            {order.help === 'Requests assistance'
-                              ? 'يحتاج المساعدة'
-                              : order.help === 'Requests bill'
-                                ? 'يحتاج الفاتورة'
-                                : ''}
-                          </p>
-                        </div>
-
-                        {order.helpStatus === 'Not send' ? (
-                          <button
-                            type="button"
-                            className="btn btn-primary"
-                            onClick={() => sendWaiter(order._id)}
-                          >
-                            ارسال ويتر
-                          </button>
-                        ) : (
-                          <div className='d-flex flex-nowrap w-50 text-dark justify-content-between align-items-center'>
-                            <p className='w-50 text-dark text-center' style={{ fontSize: '18px', fontWeight: "900" }}> {order.waiter?.username}</p>
-                            <p className='w-50 text-dark text-center' style={{ fontSize: '18px', fontWeight: "900" }}>
-                              {order.helpStatus === 'Send waiter' ? 'تم ارسال'
-                                : order.helpStatus === 'On the way' ? 'في الطريق'
-                                  : order.helpStatus === 'Assistance done' ? 'تمت'
-                                    : ''
-                              }
+                  {pendingPayment
+                    .filter(
+                      (order) =>
+                        order.orderType === "Internal" &&
+                        order.payment_status === "Pending" &&
+                        order.status !== "Cancelled" &&
+                        order.help !== "Not requested"
+                    )
+                    .map((order, i) => (
+                      <li
+                        className={`list-group-item ${
+                          order.helpStatus === "Not send"
+                            ? "bg-warning text-dark"
+                            : order.helpStatus === "Assistance done"
+                            ? "bg-success"
+                            : "bg-info"
+                        } mb-2`}
+                        key={i}
+                      >
+                        <div className="d-flex justify-content-between align-items-center">
+                          <div className="d-flex w-50 justify-content-between align-items-center">
+                            <p
+                              className="w-50 text-dark"
+                              style={{ fontSize: "18px", fontWeight: "900" }}
+                            >
+                              طاوله : {order.table && order.table?.tableNumber}
+                            </p>
+                            <p
+                              className="w-50 text-dark"
+                              style={{ fontSize: "18px", fontWeight: "900" }}
+                            >
+                              {order.help === "Requests assistance"
+                                ? "يحتاج المساعدة"
+                                : order.help === "Requests bill"
+                                ? "يحتاج الفاتورة"
+                                : ""}
                             </p>
                           </div>
-                        )}
-                      </div>
-                    </li>
-                  ))}
+
+                          {order.helpStatus === "Not send" ? (
+                            <button
+                              type="button"
+                              className="btn btn-primary"
+                              onClick={() => sendWaiter(order._id)}
+                            >
+                              ارسال ويتر
+                            </button>
+                          ) : (
+                            <div className="d-flex flex-nowrap w-50 text-dark justify-content-between align-items-center">
+                              <p
+                                className="w-50 text-dark text-center"
+                                style={{ fontSize: "18px", fontWeight: "900" }}
+                              >
+                                {" "}
+                                {order.waiter?.username}
+                              </p>
+                              <p
+                                className="w-50 text-dark text-center"
+                                style={{ fontSize: "18px", fontWeight: "900" }}
+                              >
+                                {order.helpStatus === "Send waiter"
+                                  ? "تم ارسال"
+                                  : order.helpStatus === "On the way"
+                                  ? "في الطريق"
+                                  : order.helpStatus === "Assistance done"
+                                  ? "تمت"
+                                  : ""}
+                              </p>
+                            </div>
+                          )}
+                        </div>
+                      </li>
+                    ))}
                 </ul>
               </div>
             </div>
@@ -955,8 +1224,12 @@ const ManagerDash = () => {
         </div>
       </div>
 
-      <InvoiceComponent ModalId="invoiceOrderModal" orderData={orderdata} showModal={showModal} setShowModal={setShowModal} />
-
+      <InvoiceComponent
+        ModalId="invoiceOrderModal"
+        orderData={orderdata}
+        showModal={showModal}
+        setShowModal={setShowModal}
+      />
 
       {/* تاكيد الدفع */}
       <div id="paymentModal" className="modal fade">
@@ -964,54 +1237,131 @@ const ManagerDash = () => {
           <div className="modal-content shadow-lg border-0 rounded ">
             <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
               <h4 className="modal-title">تاكيد دفع الفاتورة</h4>
-              <button type="button" className="close m-0 p-1" data-dismiss="modal" aria-hidden="true">&times;</button>
+              <button
+                type="button"
+                className="close m-0 p-1"
+                data-dismiss="modal"
+                aria-hidden="true"
+              >
+                &times;
+              </button>
             </div>
-            <form className='p-1' onSubmit={(e) => { changePaymentorderstauts(e) }}>
+            <form
+              className="p-1"
+              onSubmit={(e) => {
+                changePaymentorderstauts(e);
+              }}
+            >
               <div className="form-group w-100 d-flex align-items-center justify-content-between">
-                <label htmlFor="totalOrder" className="col-6 text-dark">اجمالي المطلوب:</label>
-                <input type="text" id="totalOrder" className="form-control border-primary col-6" value={orderdata.total} readOnly />
+                <label htmlFor="totalOrder" className="col-6 text-dark">
+                  اجمالي المطلوب:
+                </label>
+                <input
+                  type="text"
+                  id="totalOrder"
+                  className="form-control border-primary col-6"
+                  value={orderdata.total}
+                  readOnly
+                />
               </div>
               <div className="form-group w-100 d-flex align-items-center justify-content-between">
-                <label htmlFor="paidAmount" className="col-6 text-dark">المدفوع:</label>
-                <input type="number" id="paidAmount" className="form-control border-primary col-6" min={parseFloat(orderdata.total)} required
-                  onChange={(e) => setPaidAmount(e.target.value)} />
+                <label htmlFor="paidAmount" className="col-6 text-dark">
+                  المدفوع:
+                </label>
+                <input
+                  type="number"
+                  id="paidAmount"
+                  className="form-control border-primary col-6"
+                  min={parseFloat(orderdata.total)}
+                  required
+                  onChange={(e) => setPaidAmount(e.target.value)}
+                />
               </div>
               <div className="form-group w-100 d-flex align-items-center justify-content-between">
-                <label htmlFor="remainingAmount" className="col-6 text-dark">الباقي:</label>
-                <input type="text" id="remainingAmount" className="form-control border-primary col-6" value={remainingAmount} readOnly />
+                <label htmlFor="remainingAmount" className="col-6 text-dark">
+                  الباقي:
+                </label>
+                <input
+                  type="text"
+                  id="remainingAmount"
+                  className="form-control border-primary col-6"
+                  value={remainingAmount}
+                  readOnly
+                />
               </div>
               <div className="form-group w-100 d-flex align-items-center justify-content-between">
-                <label htmlFor="cashOutAmount" className="col-6 text-dark">المبلغ الخارج من الخزينة:</label>
-                <input type="number" id="cashOutAmount" className="form-control border-primary col-6" max={parseFloat(remainingAmount)}
-                  onChange={(e) => setCashOutAmount(e.target.value)} />
+                <label htmlFor="cashOutAmount" className="col-6 text-dark">
+                  المبلغ الخارج من الخزينة:
+                </label>
+                <input
+                  type="number"
+                  id="cashOutAmount"
+                  className="form-control border-primary col-6"
+                  max={parseFloat(remainingAmount)}
+                  onChange={(e) => setCashOutAmount(e.target.value)}
+                />
               </div>
               <div className="form-group d-flex flex-nowrap w-100">
-                <label htmlFor='paymentMethod' className='col-6 text-dark'>طريقه الدفع:</label>
-                <select id='paymentMethod' className="form-control border-primary m-0 p-2 h-auto" required onChange={(e) => setpaymentMethod(e.target.value)}>
+                <label htmlFor="paymentMethod" className="col-6 text-dark">
+                  طريقه الدفع:
+                </label>
+                <select
+                  id="paymentMethod"
+                  className="form-control border-primary m-0 p-2 h-auto"
+                  required
+                  onChange={(e) => setpaymentMethod(e.target.value)}
+                >
                   <option>اختر طريقه الدفع</option>
-                  {restaurantData.acceptedPayments && restaurantData.acceptedPayments.map((method, i) => (
-                    <option value={method} key={i}>{method}</option>
-                  ))}
+                  {restaurantData.acceptedPayments &&
+                    restaurantData.acceptedPayments.map((method, i) => (
+                      <option value={method} key={i}>
+                        {method}
+                      </option>
+                    ))}
                 </select>
               </div>
               <div className="form-group d-flex flex-nowrap w-100">
-                <label htmlFor='registerSelected' className='col-6 text-dark'>الخزينة:</label>
+                <label htmlFor="registerSelected" className="col-6 text-dark">
+                  الخزينة:
+                </label>
                 {registers.length > 1 ? (
-                  <select id='registerSelected' className="form-control border-primary m-0 p-2 h-auto" required onChange={(e) => setregisterSelected(e.target.value)}>
+                  <select
+                    id="registerSelected"
+                    className="form-control border-primary m-0 p-2 h-auto"
+                    required
+                    onChange={(e) => setregisterSelected(e.target.value)}
+                  >
                     <option>اختر الخزينه</option>
                     {registers.map((register, i) => (
-                      <option value={register._id} key={i}>{register.name}</option>
+                      <option value={register._id} key={i}>
+                        {register.name}
+                      </option>
                     ))}
                   </select>
                 ) : registers.length === 1 ? (
-                  <input type="text" id="registerSelected" className="form-control border-primary col-6" value={registers[0].name} readOnly />
+                  <input
+                    type="text"
+                    id="registerSelected"
+                    className="form-control border-primary col-6"
+                    value={registers[0].name}
+                    readOnly
+                  />
                 ) : (
-                  'لم يوجد خزينه'
+                  "لم يوجد خزينه"
                 )}
               </div>
               <div className="modal-footer w-100 d-flex flex-row flex-nowrap align-items-center justify-content-between">
-                <input type="submit" className="btn btn-success col-6 h-100 px-2 py-3 m-0" value="تم" />
-                <input type="button" className="btn btn-danger col-6 h-100 px-2 py-3 m-0" data-dismiss="modal" value="إغلاق" />
+                <input
+                  type="submit"
+                  className="btn btn-success col-6 h-100 px-2 py-3 m-0"
+                  value="تم"
+                />
+                <input
+                  type="button"
+                  className="btn btn-danger col-6 h-100 px-2 py-3 m-0"
+                  data-dismiss="modal"
+                  value="إغلاق"
+                />
               </div>
             </form>
           </div>
@@ -1024,204 +1374,149 @@ const ManagerDash = () => {
             <form>
               <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                 <h4 className="modal-title"></h4>
-                <button type="button" className="close m-0 p-1" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <button
+                  type="button"
+                  className="close m-0 p-1"
+                  data-dismiss="modal"
+                  aria-hidden="true"
+                >
+                  &times;
+                </button>
               </div>
-              <div ref={printContainerInvoiceSplit} className="w-100 p-1 mb-7 overflow-auto printpage" style={{ textAlign: 'center' }}>
+              <div
+                ref={printContainerInvoiceSplit}
+                className="w-100 p-1 mb-7 overflow-auto printpage"
+                style={{ textAlign: "center" }}
+              >
                 {/* Invoice Header */}
-                <div className="invoice-header" style={{ backgroundColor: '#343a40', color: '#ffffff', padding: '20px', textAlign: 'center' }}>
+                <div
+                  className="invoice-header"
+                  style={{
+                    backgroundColor: "#343a40",
+                    color: "#ffffff",
+                    padding: "20px",
+                    textAlign: "center",
+                  }}
+                >
                   <h2>{restaurantData.name}</h2>
-                  <p>كاشير {orderdata.cashier && orderdata.cashier.username} | فاتورة باقي #{serial} | {orderdata.orderType === 'Internal' ? `Table ${orderdata.table && orderdata.table.tableNumber}` : ''} | التاريخ: {formatDate(new Date())}</p>
+                  <p>
+                    كاشير {orderdata.cashier && orderdata.cashier.username} |
+                    فاتورة باقي #{serial} |{" "}
+                    {orderdata.orderType === "Internal"
+                      ? `Table ${
+                          orderdata.table && orderdata.table.tableNumber
+                        }`
+                      : ""}{" "}
+                    | التاريخ: {formatDate(new Date())}
+                  </p>
                 </div>
 
                 {/* Customer Information */}
-                {orderType === 'Delivery' ? <div className="customer-info text-dark" style={{ margin: '20px' }}>
-                  <h4>بيانات العميل</h4>
-                  <p>الاسم: {orderdata.name}</p>
-                  <p>الموبايل: {orderdata.phone}</p>
-                  <p>العنوان: {orderdata.address}</p>
-                  <p>Delivery Man: {orderdata.deliveryMan?.username}</p>
-                </div> : orderType === 'Takeaway' ?
-                  <div className="customer-info text-dark" style={{ marginBottom: '20px' }}>
+                {orderType === "Delivery" ? (
+                  <div
+                    className="customer-info text-dark"
+                    style={{ margin: "20px" }}
+                  >
+                    <h4>بيانات العميل</h4>
+                    <p>الاسم: {orderdata.name}</p>
+                    <p>الموبايل: {orderdata.phone}</p>
+                    <p>العنوان: {orderdata.address}</p>
+                    <p>Delivery Man: {orderdata.deliveryMan?.username}</p>
+                  </div>
+                ) : orderType === "Takeaway" ? (
+                  <div
+                    className="customer-info text-dark"
+                    style={{ marginBottom: "20px" }}
+                  >
                     <h4>بيانات العميل</h4>
                     <p>الاسم: {orderdata.name}</p>
                     <p>الموبايل: {orderdata.phone}</p>
                     <p>رقم الاوردر: {orderdata.orderNum}</p>
                   </div>
-                  : ''}
+                ) : (
+                  ""
+                )}
                 {/* Order Details Table */}
-                <table className="table table-bordered table-responsive-md" style={{ direction: 'rtl' }}>
+                <table
+                  className="table table-bordered table-responsive-md"
+                  style={{ direction: "rtl" }}
+                >
                   <thead className="thead-dark">
                     <tr>
-                      <th scope="col" className="col-md-3">الصنف</th>
-                      <th scope="col" className="col-md-2">السعر</th>
-                      <th scope="col" className="col-md-2">الكمية</th>
-                      <th scope="col" className="col-md-2">الاجمالي</th>
+                      <th scope="col" className="col-md-3">
+                        الصنف
+                      </th>
+                      <th scope="col" className="col-md-2">
+                        السعر
+                      </th>
+                      <th scope="col" className="col-md-2">
+                        الكمية
+                      </th>
+                      <th scope="col" className="col-md-2">
+                        الاجمالي
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
                     {/* Replace this with your dynamic data */}
-                    {orderdata.products&&orderdata.products.map((item, i) => (
-                      item.quantity - item.numOfPaid > 0 ?
-                        <>
-                          <tr key={i}>
-                            <td className="col-md-3 text-truncate">{item.name}</td>
-                            <td className="col-md-2 text-nowrap">{item.priceAfterDiscount ? item.priceAfterDiscount : item.price}</td>
-                            <td className="col-md-2 text-nowrap">{item.quantity - item.numOfPaid}</td>
-                            <td className="col-md-2 text-nowrap">{item.priceAfterDiscount ? item.priceAfterDiscount * (item.quantity - item.numOfPaid) : item.price * (item.quantity - item.numOfPaid)}</td>
-                          </tr>
-                          {item.extras && item.extras.length > 0 && (
-                            item.extras.map((extra, j) => {
-                              if (extra && extra.isPaid === false) {
-                                return (
-                                  <tr key={`${i}-${j}`}>
-                                    <td className="col-md-3 text-truncate">
-                                      <div className="d-flex flex-column flex-wrap w-100 align-items-center justify-content-between">
-                                        {extra.extraDetails.map((detail) => (
-                                          <p className="badge badge-secondary m-1" key={detail.extraid}>{`${detail.name}`}</p>
-                                        ))}
-                                      </div>
-                                    </td>
-                                    <td className="col-md-2 text-nowrap">
-                                      <div className="d-flex  flex-column flex-wrap w-100 align-items-center justify-content-between">
-                                        {extra.extraDetails.map((detail) => (
-                                          <p className="badge badge-secondary m-1" key={detail.extraid}>{`${detail.price} ج`}</p>
-                                        ))}
-                                      </div>
-                                    </td>
-                                    <td className="col-md-2 text-nowrap">1</td>
-                                    <td className="col-md-2 text-nowrap">
-                                      {extra && (
-                                        <p className="badge badge-info m-1">{extra.totalExtrasPrice} ج</p>
-                                      )}
-                                    </td>
-                                  </tr>
-                                );
-                              } else {
-                                return null; // Return null if extra.isPaid !== false
-                              }
-                            })
-                          )}
-
-
-                        </>
-                        : ''
-                    ))}
-                  </tbody>
-                  <tfoot>
-                    <tr>
-                      <td colSpan="3">المجموع</td>
-                      <td>{orderdata.subTotal - orderdata.subtotalSplitOrder}</td>
-                    </tr>
-                    {orderdata.deliveryCost > 0 && (
-                      <tr>
-                        <td colSpan="3">خدمة التوصيل</td>
-                        <td>{orderdata.deliveryCost}</td>
-                      </tr>
-                    )}
-                    {orderdata.addition > 0 ?
-                      <tr>
-                        <td colSpan="3">رسوم اضافيه</td>
-                        <td>{orderdata.addition}</td>
-                      </tr>
-                      : ''
-                    }
-                    {orderdata.discount > 0 ?
-                      <tr>
-                        <td colSpan="3">خصم</td>
-                        <td>{orderdata.discount}</td>
-                      </tr> : ''
-                    }
-                    <tr>
-                      <td colSpan="3">الاجمالي</td>
-                      <td>{orderdata.total - orderdata.subtotalSplitOrder}</td>
-                    </tr>
-                  </tfoot>
-                </table>
-
-
-                {/* Restaurant Information */}
-                <div className="restaurant-info text-dark" style={{ marginTop: '20px', textAlign: 'center' }}>
-                  <p>{restaurantData.name}</p>
-                  <p>موبايل: 01144001433</p>
-                  <p>العنوان: بني سويف - الفشن -أخر شارع البحر الأعظم بجوار ماركت طيبة </p>
-                </div>
-                {/* Footer */}
-                <div className="footer" style={{ marginTop: '30px', textAlign: 'center', color: '#828282' }}>
-                  <p>webapp: <span style={{ color: '#5a6268' }}>Smart Menu</span></p>
-                  <p>Developed by: <span style={{ color: '#5a6268' }}>Beshoy Nady</span></p>
-                </div>
-              </div>
-              <div className="modal-footer d-flex flex-nowrap align-items-center justify-content-between m-0 p-1">
-                <input type="button" className="btn btn-danger col-6 h-100 px-2 py-3 m-0" data-dismiss="modal" value="الغاء" />
-                <input type="submit" className="btn btn-success col-6 h-100 px-2 py-3 m-0" value="Print" onClick={handlePrintInvoiceSplit} />
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-
-
-      <div id="kitchenorderModal" className="modal fade">
-        <div className="modal-dialog modal-lg">
-          <div className="modal-content shadow-lg border-0 rounded ">
-            <form>
-              <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
-                {/* <h4 className="modal-title"></h4> */}
-                <button type="button" className="close m-0 p-1" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <button type="button" className="h-100 btn btn-primary" value="طباعه للشيف" onClick={(e) => handlePrintKitchen(e)}>طباعه للشيف</button>
-              </div>
-              <div ref={printContainerKitchen} className="w-100 p-1 mb-7 overflow-auto printpage" style={{ textAlign: 'center' }}>
-                <div className="mb-4" style={{ direction: 'rtl' }}>
-                  <div className="card text-white bg-success" style={{ width: "265px" }}>
-                    <div className="card-body text-right d-flex justify-content-between p-0 m-1">
-                      <div style={{ maxWidth: "50%" }}>
-                        <p className="card-text"> {kitchenOrder.table ? (`طاولة: ${kitchenOrder.table?.tableNumber}`) : (kitchenOrder.user ? `العميل: ${kitchenOrder.user.username}` : '')}</p>
-                        <p className="card-text">نوع الطلب: {kitchenOrder.orderType}</p>
-                        {kitchenOrder.orderNum ? `<p className="card-text"> رقم الطلب:  ${kitchenOrder.orderNum} </p>` : ''}
-                      </div>
-
-                      <div style={{ maxWidth: "50%" }}>
-                        <p className="card-text">الفاتورة: {kitchenOrder.serial}</p>
-                        <p className="card-text">الكاشير: {kitchenOrder.cashier?.username}</p>
-                        {kitchenOrder.waiter ? <p className="card-text">الويتر: {kitchenOrder.waiter?.username}</p> : ""}
-                        <p className="card-text">الاستلام: {new Date(kitchenOrder.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
-                        <p className="card-text">الانتظار: {55} دقيقه</p>
-                      </div>
-                    </div>
-                    <ul className='list-group list-group-flush'>
-                      {kitchenProducts.map((product, i) => {
-                        return (
+                    {orderdata.products &&
+                      orderdata.products.map((item, i) =>
+                        item.quantity - item.numOfPaid > 0 ? (
                           <>
-                            <li className='list-group-item d-flex flex-column justify-content-between align-items-center' key={i} style={product.isAdd ? { backgroundColor: 'red', color: 'white' } : { color: 'black' }}>
-                              <div className="d-flex justify-content-between align-items-center w-100">
-                                <p style={{ fontSize: '1.2em', fontWeight: 'bold' }}>{i + 1}- {product.name}</p>
-                                <span style={{ fontSize: '1.2em', fontWeight: 'bold' }}> × {product.quantity}</span>
-                              </div>
-                              <div style={{ fontSize: '1.2em', fontWeight: 'bold' }}>{product.notes}</div>
-                            </li>
-                            {product.extras && product.extras.length > 0 && (
-                              product.extras.map((extra, j) => {
-                                if (extra && extra.isDone === false) {
+                            <tr key={i}>
+                              <td className="col-md-3 text-truncate">
+                                {item.name}
+                              </td>
+                              <td className="col-md-2 text-nowrap">
+                                {item.priceAfterDiscount
+                                  ? item.priceAfterDiscount
+                                  : item.price}
+                              </td>
+                              <td className="col-md-2 text-nowrap">
+                                {item.quantity - item.numOfPaid}
+                              </td>
+                              <td className="col-md-2 text-nowrap">
+                                {item.priceAfterDiscount
+                                  ? item.priceAfterDiscount *
+                                    (item.quantity - item.numOfPaid)
+                                  : item.price *
+                                    (item.quantity - item.numOfPaid)}
+                              </td>
+                            </tr>
+                            {item.extras &&
+                              item.extras.length > 0 &&
+                              item.extras.map((extra, j) => {
+                                if (extra && extra.isPaid === false) {
                                   return (
                                     <tr key={`${i}-${j}`}>
                                       <td className="col-md-3 text-truncate">
                                         <div className="d-flex flex-column flex-wrap w-100 align-items-center justify-content-between">
                                           {extra.extraDetails.map((detail) => (
-                                            <p className="badge badge-secondary m-1" key={detail.extraid}>{`${detail.name}`}</p>
+                                            <p
+                                              className="badge badge-secondary m-1"
+                                              key={detail.extraid}
+                                            >{`${detail.name}`}</p>
                                           ))}
                                         </div>
                                       </td>
                                       <td className="col-md-2 text-nowrap">
                                         <div className="d-flex  flex-column flex-wrap w-100 align-items-center justify-content-between">
                                           {extra.extraDetails.map((detail) => (
-                                            <p className="badge badge-secondary m-1" key={detail.extraid}>{`${detail.price} ج`}</p>
+                                            <p
+                                              className="badge badge-secondary m-1"
+                                              key={detail.extraid}
+                                            >{`${detail.price} ج`}</p>
                                           ))}
                                         </div>
                                       </td>
-                                      <td className="col-md-2 text-nowrap">1</td>
+                                      <td className="col-md-2 text-nowrap">
+                                        1
+                                      </td>
                                       <td className="col-md-2 text-nowrap">
                                         {extra && (
-                                          <p className="badge badge-info m-1">{extra.totalExtrasPrice} ج</p>
+                                          <p className="badge badge-info m-1">
+                                            {extra.totalExtrasPrice} ج
+                                          </p>
                                         )}
                                       </td>
                                     </tr>
@@ -1229,25 +1524,287 @@ const ManagerDash = () => {
                                 } else {
                                   return null; // Return null if extra.isPaid !== false
                                 }
-                              })
-                            )}
+                              })}
                           </>
+                        ) : (
+                          ""
                         )
+                      )}
+                  </tbody>
+                  <tfoot>
+                    <tr>
+                      <td colSpan="3">المجموع</td>
+                      <td>
+                        {orderdata.subTotal - orderdata.subtotalSplitOrder}
+                      </td>
+                    </tr>
+                    {orderdata.deliveryCost > 0 && (
+                      <tr>
+                        <td colSpan="3">خدمة التوصيل</td>
+                        <td>{orderdata.deliveryCost}</td>
+                      </tr>
+                    )}
+                    {orderdata.addition > 0 ? (
+                      <tr>
+                        <td colSpan="3">رسوم اضافيه</td>
+                        <td>{orderdata.addition}</td>
+                      </tr>
+                    ) : (
+                      ""
+                    )}
+                    {orderdata.discount > 0 ? (
+                      <tr>
+                        <td colSpan="3">خصم</td>
+                        <td>{orderdata.discount}</td>
+                      </tr>
+                    ) : (
+                      ""
+                    )}
+                    <tr>
+                      <td colSpan="3">الاجمالي</td>
+                      <td>{orderdata.total - orderdata.subtotalSplitOrder}</td>
+                    </tr>
+                  </tfoot>
+                </table>
+
+                {/* Restaurant Information */}
+                <div
+                  className="restaurant-info text-dark"
+                  style={{ marginTop: "20px", textAlign: "center" }}
+                >
+                  <p>{restaurantData.name}</p>
+                  <p>موبايل: 01144001433</p>
+                  <p>
+                    العنوان: بني سويف - الفشن -أخر شارع البحر الأعظم بجوار ماركت
+                    طيبة{" "}
+                  </p>
+                </div>
+                {/* Footer */}
+                <div
+                  className="footer"
+                  style={{
+                    marginTop: "30px",
+                    textAlign: "center",
+                    color: "#828282",
+                  }}
+                >
+                  <p>
+                    webapp: <span style={{ color: "#5a6268" }}>Smart Menu</span>
+                  </p>
+                  <p>
+                    Developed by:{" "}
+                    <span style={{ color: "#5a6268" }}>Beshoy Nady</span>
+                  </p>
+                </div>
+              </div>
+              <div className="modal-footer d-flex flex-nowrap align-items-center justify-content-between m-0 p-1">
+                <input
+                  type="button"
+                  className="btn btn-danger col-6 h-100 px-2 py-3 m-0"
+                  data-dismiss="modal"
+                  value="الغاء"
+                />
+                <input
+                  type="submit"
+                  className="btn btn-success col-6 h-100 px-2 py-3 m-0"
+                  value="Print"
+                  onClick={handlePrintInvoiceSplit}
+                />
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <div id="kitchenorderModal" className="modal fade">
+        <div className="modal-dialog modal-lg">
+          <div className="modal-content shadow-lg border-0 rounded ">
+            <form>
+              <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
+                {/* <h4 className="modal-title"></h4> */}
+                <button
+                  type="button"
+                  className="close m-0 p-1"
+                  data-dismiss="modal"
+                  aria-hidden="true"
+                >
+                  &times;
+                </button>
+                <button
+                  type="button"
+                  className="h-100 btn btn-primary"
+                  value="طباعه للشيف"
+                  onClick={(e) => handlePrintKitchen(e)}
+                >
+                  طباعه للشيف
+                </button>
+              </div>
+              <div
+                ref={printContainerKitchen}
+                className="w-100 p-1 mb-7 overflow-auto printpage"
+                style={{ textAlign: "center" }}
+              >
+                <div className="mb-4" style={{ direction: "rtl" }}>
+                  <div
+                    className="card text-white bg-success"
+                    style={{ width: "265px" }}
+                  >
+                    <div className="card-body text-right d-flex justify-content-between p-0 m-1">
+                      <div style={{ maxWidth: "50%" }}>
+                        <p className="card-text">
+                          {" "}
+                          {kitchenOrder.table
+                            ? `طاولة: ${kitchenOrder.table?.tableNumber}`
+                            : kitchenOrder.user
+                            ? `العميل: ${kitchenOrder.user.username}`
+                            : ""}
+                        </p>
+                        <p className="card-text">
+                          نوع الطلب: {kitchenOrder.orderType}
+                        </p>
+                        {kitchenOrder.orderNum
+                          ? `<p className="card-text"> رقم الطلب:  ${kitchenOrder.orderNum} </p>`
+                          : ""}
+                      </div>
+
+                      <div style={{ maxWidth: "50%" }}>
+                        <p className="card-text">
+                          الفاتورة: {kitchenOrder.serial}
+                        </p>
+                        <p className="card-text">
+                          الكاشير: {kitchenOrder.cashier?.username}
+                        </p>
+                        {kitchenOrder.waiter ? (
+                          <p className="card-text">
+                            الويتر: {kitchenOrder.waiter?.username}
+                          </p>
+                        ) : (
+                          ""
+                        )}
+                        <p className="card-text">
+                          الاستلام:{" "}
+                          {new Date(kitchenOrder.createdAt).toLocaleTimeString(
+                            [],
+                            { hour: "2-digit", minute: "2-digit" }
+                          )}
+                        </p>
+                        <p className="card-text">الانتظار: {55} دقيقه</p>
+                      </div>
+                    </div>
+                    <ul className="list-group list-group-flush">
+                      {kitchenProducts.map((product, i) => {
+                        return (
+                          <>
+                            <li
+                              className="list-group-item d-flex flex-column justify-content-between align-items-center"
+                              key={i}
+                              style={
+                                product.isAdd
+                                  ? { backgroundColor: "red", color: "white" }
+                                  : { color: "black" }
+                              }
+                            >
+                              <div className="d-flex justify-content-between align-items-center w-100">
+                                <p
+                                  style={{
+                                    fontSize: "1.2em",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  {i + 1}- {product.name}
+                                </p>
+                                <span
+                                  style={{
+                                    fontSize: "1.2em",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  {" "}
+                                  × {product.quantity}
+                                </span>
+                              </div>
+                              <div
+                                style={{
+                                  fontSize: "1.2em",
+                                  fontWeight: "bold",
+                                }}
+                              >
+                                {product.notes}
+                              </div>
+                            </li>
+                            {product.extras &&
+                              product.extras.length > 0 &&
+                              product.extras.map((extra, j) => {
+                                if (extra && extra.isDone === false) {
+                                  return (
+                                    <tr key={`${i}-${j}`}>
+                                      <td className="col-md-3 text-truncate">
+                                        <div className="d-flex flex-column flex-wrap w-100 align-items-center justify-content-between">
+                                          {extra.extraDetails.map((detail) => (
+                                            <p
+                                              className="badge badge-secondary m-1"
+                                              key={detail.extraid}
+                                            >{`${detail.name}`}</p>
+                                          ))}
+                                        </div>
+                                      </td>
+                                      <td className="col-md-2 text-nowrap">
+                                        <div className="d-flex  flex-column flex-wrap w-100 align-items-center justify-content-between">
+                                          {extra.extraDetails.map((detail) => (
+                                            <p
+                                              className="badge badge-secondary m-1"
+                                              key={detail.extraid}
+                                            >{`${detail.price} ج`}</p>
+                                          ))}
+                                        </div>
+                                      </td>
+                                      <td className="col-md-2 text-nowrap">
+                                        1
+                                      </td>
+                                      <td className="col-md-2 text-nowrap">
+                                        {extra && (
+                                          <p className="badge badge-info m-1">
+                                            {extra.totalExtrasPrice} ج
+                                          </p>
+                                        )}
+                                      </td>
+                                    </tr>
+                                  );
+                                } else {
+                                  return null; // Return null if extra.isPaid !== false
+                                }
+                              })}
+                          </>
+                        );
                       })}
                     </ul>
                   </div>
                 </div>
               </div>
               <div className="modal-footer d-flex flex-nowrap align-items-center justify-content-between m-0 p-1">
-                <input type="button" className="btn btn-danger col-6 h-100 px-2 py-3 m-0" data-dismiss="modal" value="اغلاق" />
-                <input type="button" className="btn btn-success col-6 h-100 px-2 py-3 m-0" value="تم الموافقه" onClick={(e) => isPrint ? aproveOrder(e, employeeLoginInfo.id) : alert("لم تتم الطباعه ! يجب طباعه اولا")} />
+                <input
+                  type="button"
+                  className="btn btn-danger col-6 h-100 px-2 py-3 m-0"
+                  data-dismiss="modal"
+                  value="اغلاق"
+                />
+                <input
+                  type="button"
+                  className="btn btn-success col-6 h-100 px-2 py-3 m-0"
+                  value="تم الموافقه"
+                  onClick={(e) =>
+                    isPrint
+                      ? aproveOrder(e, employeeLoginInfo.id)
+                      : alert("لم تتم الطباعه ! يجب طباعه اولا")
+                  }
+                />
               </div>
             </form>
           </div>
         </div>
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default ManagerDash
+export default ManagerDash;

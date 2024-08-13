@@ -130,21 +130,47 @@ const NavBar = () => {
 
     // Define the event handler
     const handleNewOrderNotification = (notification) => {
-      // console.log("Socket notification received:", notification);
-      setNotifications((prevNotifications) => {
-        const updatedNotifications = [...prevNotifications, notification];
-        // Save notifications to localStorage
-        localStorage.setItem(
-          "notifications",
-          JSON.stringify(updatedNotifications)
-        );
+      const message = notification;
+      const parts = message.split('-');
 
-        const audio = new Audio(notificationSound);
-        audio.play().catch((error) => {
-          console.error("Error playing sound:", error);
+      if (parts.length===2) {
+        const messageText = match[1]; 
+        const waiterId = match[2];
+        const currentWaiterId = employeeLoginInfo.id;
+        // Check if the waiter id matches the current user's waiter id
+        if (waiterId === currentWaiterId) {
+          // Assuming currentWaiterId is the ID of the current waiter
+          setNotifications((prevNotifications) => {
+            const updatedNotifications = [...prevNotifications, messageText];
+            // Save notifications to localStorage
+            localStorage.setItem(
+              "notifications",
+              JSON.stringify(updatedNotifications)
+            );
+
+            const audio = new Audio(notificationSound);
+            audio.play().catch((error) => {
+              console.error("Error playing sound:", error);
+            });
+            return updatedNotifications;
+          });
+        }
+      } else {
+        setNotifications((prevNotifications) => {
+          const updatedNotifications = [...prevNotifications, notification];
+          // Save notifications to localStorage
+          localStorage.setItem(
+            "notifications",
+            JSON.stringify(updatedNotifications)
+          );
+
+          const audio = new Audio(notificationSound);
+          audio.play().catch((error) => {
+            console.error("Error playing sound:", error);
+          });
+          return updatedNotifications;
         });
-        return updatedNotifications;
-      });
+      }
     };
 
     // Listen for new order notifications
