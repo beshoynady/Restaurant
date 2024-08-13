@@ -164,7 +164,15 @@ const NavBar = () => {
 
     // Clean up the socket connection on component unmount
     return () => {
-      cashierSocket.off("neworder", handleNewOrderNotification);
+      if(employeeLoginInfo.role==='cashier'||employeeLoginInfo.role==='programer'){
+        cashierSocket.off("neworder", handleNewOrderNotification);
+
+      }else if(employeeLoginInfo.role==='chef'){
+        kitchenSocket.off("orderkitchen", handleNewOrderNotification);
+
+      }else if(employeeLoginInfo.role==='waiter'){
+        waiterSocket.off("neworder", handleNewOrderNotification);
+      }
     };
   }, []);
 
