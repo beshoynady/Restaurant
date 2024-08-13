@@ -166,31 +166,52 @@ const loginEmployee = async (req, res) => {
     const { phone, password } = req.body;
 
     if (!phone || !password) {
-      return res.status(400).json({ message: "Phone number and password are required" });
+      return res
+        .status(400)
+        .json({ message: "Phone number and password are required" });
     }
 
     const findEmployee = await EmployeeModel.findOne({ phone });
+
     if (!findEmployee) {
       return res.status(404).json({ message: "Employee not found" });
     }
     if (!findEmployee.isActive) {
-      return res.status(403).json({ message: "Employee is not active" });
+      return res.status(404).json({ message: "Employee not active" });
     }
 
     const match = await bcrypt.compare(password, findEmployee.password);
+
     if (!match) {
-      return res.status(401).json({ message: "Invalid password" });
+      return res.status(401).json({ message: "Invalid credentials" });
     }
 
-    const token = jwt.sign(
-      { id: findEmployee._id, role: findEmployee.role },
-      process.env.TOKEN_SECRET,
-      { expiresIn: "1h" }
+    const accessToken = jwt.sign(
+      {
+        id: findEmployee._id,
+        username: findEmployee.username,
+        isAdmin: findEmployee.isAdmin,
+        isActive: findEmployee.isActive,
+        isVerified: findEmployee.isVerified,
+        role: findEmployee.role,
+        shift: findEmployee.shift,
+      },
+      process.env.JWT_SECRET_KEY,
+      { expiresIn: "1y" } 
     );
 
-    res.status(200).json({ token });
-  } catch (err) {
-    res.status(500).json({ message: "Error logging in", err });
+    if (!accessToken) {
+      return res
+        .status(500)
+        .json({ message: "Failed to generate access token" });
+    }
+
+    res
+      .status(200)
+      .json({ findEmployee, accessToken, message: "Login successful" });
+  } catch (error) {
+    console.error("Error logging in:", error); // إضافة تسجيل الأخطاء
+    res.status(500).json({ message: "Internal server error", error });
   }
 };
 

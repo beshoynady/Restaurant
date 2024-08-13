@@ -126,7 +126,7 @@ const ManagerDash = () => {
   
         setupdate(!update);
           
-        if(isActive){
+        if(status==='Approved'){
           cashierSocket.emit('orderkitchen','استلام اوردر جديد')
         }
       }

@@ -155,7 +155,7 @@ const NavBar = () => {
       
     }else if(employeeLoginInfo.role==='chef'){
       
-      kitchenSocket.on("neworder", handleNewOrderNotification);
+      kitchenSocket.on("orderkitchen", handleNewOrderNotification);
     }else if(employeeLoginInfo.role==='waiter'){
       
       waiterSocket.on("neworder", handleNewOrderNotification);

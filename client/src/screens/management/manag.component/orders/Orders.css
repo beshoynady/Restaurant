@@ -204,6 +204,7 @@ table.table .avatar {
     border-color: #ddd;
     font-size: 16px;
     color: #000000;
+    min-width: max-content
   }
   
   .modal textarea.form-control {
