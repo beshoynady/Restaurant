@@ -16,7 +16,7 @@ const CashMovement = () => {
   };
 
 
-  const { setStartDate, formatDateTime, setEndDate, filterByDateRange, filterByTime, employeeLoginInfo, usertitle, formatDate, setisLoadiog, EditPagination, startpagination, endpagination, setstartpagination, setendpagination } = useContext(detacontext)
+  const { setStartDate, formatDateTime, setEndDate, filterByDateRange, filterByTime, employeeLoginInfo,  formatDate, setisLoadiog, EditPagination, startpagination, endpagination, setstartpagination, setendpagination } = useContext(detacontext)
 
   const [EmployeeLoginInfo, setEmployeeLoginInfo] = useState({})
   // Function to retrieve user info from tokens

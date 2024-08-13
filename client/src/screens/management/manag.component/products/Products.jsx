@@ -15,7 +15,7 @@ const Products = () => {
     },
   };
 
-  const { restaurantData, permissionsList, setStartDate, setEndDate, filterByDateRange, filterByTime, employeeLoginInfo, usertitle, formatDate, formatDateTime, setisLoadiog, EditPagination, startpagination, endpagination, setstartpagination, setendpagination } = useContext(detacontext)
+  const { restaurantData, permissionsList, setStartDate, setEndDate, filterByDateRange, filterByTime, employeeLoginInfo, formatDate, formatDateTime, setisLoadiog, EditPagination, startpagination, endpagination, setstartpagination, setendpagination } = useContext(detacontext)
 
   const productPermission = permissionsList && permissionsList.filter(perission => perission.resource === 'Products')[0]
 

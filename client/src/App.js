@@ -972,7 +972,7 @@ function App() {
           setitemsInCart([]);
           setitemId([]);
           getAllProducts();
-          cashierSocket.emit("neworder", 'اضافه طلبات الي اوردر ديليفري');
+          cashierSocket.emit("neworder",`اضافه طلبات الي اوردر ديليفري ${lastUserOrder.serial}`);
 
           toast.success("تم اضافه الاصناف الي الاوردر!");
         } else {
@@ -992,10 +992,10 @@ function App() {
 
           setitemsInCart([]);
           getAllProducts();
+          cashierSocket.emit("neworder", 'تم تعديل ارودر ديفرري');
+          toast.success("تم تعديل الاوردر بنجاح!");
         }
-        cashierSocket.emit("neworder", 'تم تعديل ارودر ديفرري');
 
-        toast.success("تم تعديل الاوردر بنجاح!");
         setisLoading(false)
       } else {
         // Create a new order
@@ -1029,11 +1029,11 @@ function App() {
         setitemId([]);
         getAllProducts();
         toast.success("تم عمل اوردر جديد بنجاح!");
+        cashierSocket.emit("neworder", 'اوردر ديليفري جديد');
         setisLoading(false)
 
       }
 
-      cashierSocket.emit("neworder", 'اوردر ديليفري جديد');
       setitemsInCart([]);
       setitemId([]);
       setisLoading(false)
@@ -1679,29 +1679,6 @@ function App() {
   };
 
 
-
-
-
-
-  const usertitle = (id) => {
-    if (!id) return null; // Handle edge case where id is falsy
-
-    // Check if id corresponds to a table
-    const table = allTable ? allTable.find((table) => table._id === id) : null;
-    if (table) return table.tableNumber;
-
-    // Check if id corresponds to a user
-    const user = allUsers ? allUsers.find((user) => user._id === id) : null;
-    if (user) return user.username;
-
-    // Check if id corresponds to an employee
-    const employee = allEmployees ? allEmployees.find((employee) => employee._id === id) : null;
-    if (employee) return employee.username;
-
-    return null; // Handle case where id doesn't match any entity
-  };
-
-
   //++++++++++++++++++++++++++ AUTH ++++++++++++++++++++++++++++
   //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -2187,7 +2164,7 @@ function App() {
         setMenuCategoryId, deleteItemFromCart,
 
         // الدوال المتعلقة بالمستخدمين، الطاولات، والطلبات
-        allUsers, allTable, usertitle, allOrders, allEmployees,
+        allUsers, allTable,  allOrders, allEmployees,
 
         // الدوال المتعلقة بتفاصيل المنتجات
         setproductNote, addNoteToProduct, addExtrasToProduct, handleAddProductExtras,

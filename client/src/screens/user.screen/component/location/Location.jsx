@@ -8,7 +8,7 @@ const Location = () => {
   return (
     <detacontext.Consumer>
       {
-        ({ restaurantData, askingForHelp, userLoginInfo, usertitle }) => {
+        ({ restaurantData, askingForHelp, userLoginInfo }) => {
           return (
             <section id='location'>
               <div className="container">

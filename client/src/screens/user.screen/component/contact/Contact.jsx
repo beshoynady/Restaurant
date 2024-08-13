@@ -53,7 +53,7 @@ const Contact = () => {
   return (
     <detacontext.Consumer>
       {
-        ({ restaurantData, askingForHelp, userLoginInfo, usertitle }) => {
+        ({ restaurantData, askingForHelp, userLoginInfo }) => {
           return (
             <section className='contact' id='contact'>
               <div className="container">

@@ -20,7 +20,7 @@ const PurchaseReturn = () => {
 
 
   const { restaurantData, permissionsList, setStartDate, setEndDate, filterByDateRange, filterByTime, employeeLoginInfo,
-    usertitle, formatDate, formatDateTime, setisLoadiog, EditPagination, startpagination, endpagination,
+     formatDate, formatDateTime, setisLoadiog, EditPagination, startpagination, endpagination,
     setstartpagination, setendpagination } = useContext(detacontext)
 
   const [AllStockactions, setAllStockactions] = useState([]);

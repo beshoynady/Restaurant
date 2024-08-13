@@ -27,7 +27,7 @@ const ManagerDash = () => {
     },
   };
 
-  const { restaurantData, employeeLoginInfo, formatDate, usertitle, setisLoadiog, EditPagination, startpagination,
+  const { restaurantData, employeeLoginInfo, formatDate,  setisLoadiog, EditPagination, startpagination,
     endpagination, setstartpagination, setendpagination } = useContext(detacontext)
 
 
@@ -895,7 +895,8 @@ const ManagerDash = () => {
             </div>
           </div>
 
-
+                        {/* متابعه الطاوله */}
+                        
           <div className="col-12 col-lg-4 h-auto">
             <div className="card">
               <div className="card-header">
@@ -1038,7 +1039,7 @@ const ManagerDash = () => {
                   <p>الاسم: {orderdata.name}</p>
                   <p>الموبايل: {orderdata.phone}</p>
                   <p>العنوان: {orderdata.address}</p>
-                  {/* <p>Delivery Man: {usertitle(deliveryMan)}</p> */}
+                  <p>Delivery Man: {orderdata.deliveryMan?.username}</p>
                 </div> : orderType === 'Takeaway' ?
                   <div className="customer-info text-dark" style={{ marginBottom: '20px' }}>
                     <h4>بيانات العميل</h4>

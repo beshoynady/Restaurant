@@ -583,7 +583,7 @@ const PayRoll = () => {
   return (
     <detacontext.Consumer>
       {
-        ({ usertitle, setisLoadiog, EditPagination, employeeLoginInfo, endpagination, setstartpagination, setendpagination }) => {
+        ({setisLoadiog, EditPagination, employeeLoginInfo, endpagination, setstartpagination, setendpagination }) => {
           return (
             <div className="w-100 px-3 d-flex align-itmes-center justify-content-start">
               <div className="table-responsive">

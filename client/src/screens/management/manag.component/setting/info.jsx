@@ -13,7 +13,7 @@ const Info = () => {
   };
 
   const { restaurantData, permissionsList, setStartDate, setEndDate, filterByDateRange, filterByTime,
-    employeeLoginInfo, usertitle, formatDate, formatDateTime, setisLoadiog,
+    employeeLoginInfo, formatDate, formatDateTime, setisLoadiog,
     EditPagination, startpagination, endpagination, setstartpagination, setendpagination } = useContext(detacontext)
 
 

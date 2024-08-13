@@ -204,6 +204,11 @@ kitchenNamespace.on('connection', (socket) => {
     waiterNamespace.emit('orderready', notification);
   });
 
+  socket.on('orderkitchen', (notification) => {
+    console.log("Order ready notification:", notification);
+    kitchenNamespace.emit('orderkitchen', notification);
+  });
+
   socket.on('disconnect', () => {
     console.log('Kitchen disconnected');
   });

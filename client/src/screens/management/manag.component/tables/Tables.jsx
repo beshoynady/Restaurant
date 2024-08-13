@@ -14,7 +14,7 @@ const Tables = () => {
       'Authorization': `Bearer ${token}`,
     },
   };
-  const { permissionsList, restaurantData, setStartDate, setEndDate, filterByDateRange, filterByTime, employeeLoginInfo, usertitle, formatDate, formatDateTime, setisLoadiog, EditPagination,
+  const { permissionsList, restaurantData, setStartDate, setEndDate, filterByDateRange, filterByTime, employeeLoginInfo,  formatDate, formatDateTime, setisLoadiog, EditPagination,
     startpagination, endpagination, setstartpagination, setendpagination } = useContext(detacontext)
 
   const [tableid, settableid] = useState("")

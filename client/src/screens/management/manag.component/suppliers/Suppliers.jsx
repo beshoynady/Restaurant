@@ -332,7 +332,7 @@ const Suppliers = () => {
   return (
     <detacontext.Consumer>
       {
-        ({ employeeLoginInfo, usertitle, formatDateTime, setisLoadiog, EditPagination, startpagination, endpagination, setstartpagination, setendpagination }) => {
+        ({ employeeLoginInfo,  formatDateTime, setisLoadiog, EditPagination, startpagination, endpagination, setstartpagination, setendpagination }) => {
           return (
             <div className="w-100 px-3 d-flex flex-wrap align-itmes-center justify-content-start">
               <div className="table-responsive mt-1">

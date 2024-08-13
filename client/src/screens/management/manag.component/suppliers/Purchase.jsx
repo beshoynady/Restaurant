@@ -18,7 +18,7 @@ const Purchase = () => {
     },
   };
 
-  const{restaurantData, permissionsList,setStartDate, setEndDate, filterByDateRange, filterByTime, employeeLoginInfo, usertitle, formatDate, formatDateTime, setisLoadiog, EditPagination, startpagination, endpagination, setstartpagination, setendpagination } = useContext(detacontext)
+  const{restaurantData, permissionsList,setStartDate, setEndDate, filterByDateRange, filterByTime, employeeLoginInfo,  formatDate, formatDateTime, setisLoadiog, EditPagination, startpagination, endpagination, setstartpagination, setendpagination } = useContext(detacontext)
 
   const permissionPurchase = permissionsList?.filter(permission => permission.resource === 'Purchases')[0]
   const permissionPurchaseReturn = permissionsList?.filter(permission => permission.resource === 'Purchases Returns')[0]

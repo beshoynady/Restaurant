@@ -29,7 +29,7 @@ const Cart = (props) => {
     formatDateTime,
     clientInfo,
     userLoginInfo,
-    usertitle,
+    
     itemsInCart,
     costOrder,
     deleteItemFromCart,
