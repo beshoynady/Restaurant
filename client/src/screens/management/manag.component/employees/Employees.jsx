@@ -19,7 +19,8 @@ const Employees = () => {
   };
   const [isExecuting, setIsExecuting] = useState(false);
 
-  const { restaurantData, formatDateTime, permissionsList,setisLoadiog, EditPagination, startpagination, endpagination, setstartpagination, setendpagination } = useContext(detacontext);
+  const { restaurantData, formatDateTime, permissionsList,setisLoadiog, EditPagination, startpagination,
+     endpagination, setstartpagination, setendpagination } = useContext(detacontext);
 
 
   const notify = (message, type) => {

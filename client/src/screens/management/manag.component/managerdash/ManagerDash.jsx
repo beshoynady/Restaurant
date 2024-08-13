@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useContext } from 'react'
 import { detacontext } from '../../../../App'
 import axios from 'axios'
-// import io from 'socket.io-client';
+import io from "socket.io-client";
 import { toast } from 'react-toastify';
 import { useReactToPrint } from 'react-to-print';
 import InvoiceComponent from '../invoice/invoice';
@@ -9,6 +9,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCalendarCheck, faClock, faMoneyBill, faDollarSign, faCashRegister, faBan } from '@fortawesome/free-solid-svg-icons';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
+
+
+const cashierSocket = io(`${process.env.REACT_APP_API_URL}/cashier`, {
+  reconnection: true,
+  reconnectionAttempts: Infinity,
+  reconnectionDelay: 1000,
+});
 
 
 const ManagerDash = () => {
@@ -111,13 +118,19 @@ const ManagerDash = () => {
       const status = e.target.value;
       const isActive = status === 'Cancelled' ? false : true;
 
-      await axios.put(`${apiUrl}/api/order/${orderId}`, { status, isActive, cashier });
+      const response = await axios.put(`${apiUrl}/api/order/${orderId}`, { status, isActive, cashier });
+      if(response ){
+        fetchOrdersData();
+  
+        toast.success('تم تغيير حالة الطلب بنجاح');
+  
+        setupdate(!update);
+          
+        if(isActive){
+          cashierSocket.emit('orderkitchen','استلام اوردر جديد')
+        }
+      }
 
-      fetchOrdersData();
-
-      toast.success('تم تغيير حالة الطلب بنجاح');
-
-      setupdate(!update);
     } catch (error) {
       console.error('خطأ في تغيير حالة الطلب:', error);
       toast.error('حدث خطأ أثناء تغيير حالة الطلب');

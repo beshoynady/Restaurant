@@ -90,11 +90,7 @@ const createEmployeeSchema = Joi.object({
     isAdmin: Joi.boolean().default(true),
     isVerified: Joi.boolean().default(false),
     sectionNumber: Joi.number().optional(),
-    createdBy: Joi.string().when('role', {
-        is: 'programer',
-        then: Joi.optional(),
-        otherwise: Joi.required()
-    }),
+   
 });
 
 
@@ -164,7 +160,6 @@ const updateEmployeeSchema = Joi.object({
     isAdmin: Joi.boolean().default(true),
     isVerified: Joi.boolean().default(false),
     sectionNumber: Joi.number().optional(),
-    updatedBy: Joi.string().optional()
 });
 
 

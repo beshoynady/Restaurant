@@ -309,16 +309,17 @@ const PermissionsComponent = () => {
                     </div>
                   </div>
                   <div className="table-filter print-hide">
-                    <div className="d-flex flex-column text-dark">
-                      <div className='d-flex'>
-                        <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1" style={{ minWidth: '35%' }}>
+                    <div className="w-100 d-flex flex-column text-dark">
+                      <div className='w-100 d-flex flex-nowrap align-items-center justify-content-between mb-2 m-0 p-0'>
+                        <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-4 p-0 mb-1">
                           <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الاسم</label>
-                          <input type="text" className="form-control border-primary m-0 p-2 h-auto" style={{ minWidth: '200px' }} onChange={(e) => getEmployeesByName(e.target.value)} />
-                          {/* <button type="button" className="btn btn-primarycol-6 h-100 px-2 py-3 m-0"><i className="fa fa-search"></i></button> */}
+                          <input type="text" className="form-control border-primary m-0 p-2 h-auto" 
+                          onChange={(e) => getEmployeesByName(e.target.value)} />
                         </div>
-                        <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1" style={{ minWidth: '40%' }}>
+                        <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-4 p-0 mb-1">
                           <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الموظف</label>
-                          <select className="form-control border-primary m-0 p-2 h-auto"  style={{ minWidth: '200px' }} onChange={(e) => getEmployeesById(e.target.value)} >
+                          <select className="form-control border-primary m-0 p-2 h-auto"  
+                          onChange={(e) => getEmployeesById(e.target.value)} >
                             <option value="">الكل</option>
                             {listOfEmployees && listOfEmployees.map((employee, i) => (
                               <option key={i} value={employee._id}>{employee.fullname}</option>
@@ -326,15 +327,15 @@ const PermissionsComponent = () => {
                           </select>
                         </div>
                       </div>
-                      <div className='d-flex'>
-                        <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1" style={{ minWidth: '35%' }}>
+                      <div className='w-100 d-flex flex-nowrap align-items-center justify-content-between m-0 p-0'>
+                        <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-4 p-0 mb-1" >
                           <label className="form-label text-wrap text-right fw-bolder p-0 m-0">اسم الموظف</label>
-                          <input type="text" className="form-control border-primary m-0 p-2 h-auto" style={{ minWidth: '200px' }} value={selectedEmployee ? selectedEmployee.fullname : ''} readOnly />
+                          <input type="text" className="form-control border-primary m-0 p-2 h-auto" value={selectedEmployee ? selectedEmployee.fullname : ''} readOnly />
                         </div>
 
-                        <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1" style={{ minWidth: '35%' }}>
+                        <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-4 p-0 mb-1">
                           <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الوظية</label>
-                          <input type="text" className="form-control border-primary m-0 p-2 h-auto" style={{ minWidth: '200px' }} value={selectedEmployee ? selectedEmployee.role : ''} readOnly />
+                          <input type="text" className="form-control border-primary m-0 p-2 h-auto" value={selectedEmployee ? selectedEmployee.role : ''} readOnly />
                         </div>
                       </div>
                     </div>
