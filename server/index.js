@@ -60,7 +60,8 @@ app.use(cookieParser()); // Parse cookies
 app.use(cors({
   origin: 'https://www.elbaronpark.sm-menu.tech',
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  credentials: true
+  credentials: true,
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 // Serve static files
