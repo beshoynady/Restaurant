@@ -113,13 +113,9 @@ const NavBar = () => {
   };
 
   const handleNotificationClick = (index) => {
-    const newNotifications = notifications.filter((_, i) => i !== index)
+    const newNotifications = notifications.filter((_, i) => i !== index);
     setNotifications(newNotifications);
-    localStorage.setItem(
-      "notifications",
-      JSON.stringify(newNotifications)
-    );
-
+    localStorage.setItem("notifications", JSON.stringify(newNotifications));
   };
 
   const handleMessageClick = (index) => {
@@ -144,33 +140,35 @@ const NavBar = () => {
         );
 
         const audio = new Audio(notificationSound);
-        audio.play();
+        audio.play().catch((error) => {
+          console.error("Error playing sound:", error);
+        });
         return updatedNotifications;
       });
     };
 
     // Listen for new order notifications
-    if(employeeLoginInfo.role==='cashier'||employeeLoginInfo.role==='programer'){
+    if (
+      employeeLoginInfo.role === "cashier" ||
+      employeeLoginInfo.role === "programer"
+    ) {
       cashierSocket.on("neworder", handleNewOrderNotification);
-      
-    }else if(employeeLoginInfo.role==='chef'){
-      
+    } else if (employeeLoginInfo.role === "chef") {
       kitchenSocket.on("orderkitchen", handleNewOrderNotification);
-    }else if(employeeLoginInfo.role==='waiter'){
-      
+    } else if (employeeLoginInfo.role === "waiter") {
       waiterSocket.on("neworder", handleNewOrderNotification);
     }
 
-
     // Clean up the socket connection on component unmount
     return () => {
-      if(employeeLoginInfo.role==='cashier'||employeeLoginInfo.role==='programer'){
+      if (
+        employeeLoginInfo.role === "cashier" ||
+        employeeLoginInfo.role === "programer"
+      ) {
         cashierSocket.off("neworder", handleNewOrderNotification);
-
-      }else if(employeeLoginInfo.role==='chef'){
+      } else if (employeeLoginInfo.role === "chef") {
         kitchenSocket.off("orderkitchen", handleNewOrderNotification);
-
-      }else if(employeeLoginInfo.role==='waiter'){
+      } else if (employeeLoginInfo.role === "waiter") {
         waiterSocket.off("neworder", handleNewOrderNotification);
       }
     };
