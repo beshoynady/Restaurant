@@ -154,9 +154,9 @@ const io = socketIo(server, {
 // });
 
 
-const cashierNamespace = io.of('/cashier').broadcast;
-const kitchenNamespace = io.of('/kitchen').broadcast;
-const waiterNamespace = io.of('/waiter').broadcast;
+const cashierNamespace = io.of('/cashier');
+const kitchenNamespace = io.of('/kitchen');
+const waiterNamespace = io.of('/waiter');
 
 // التعامل مع اتصالات الكاشير
 cashierNamespace.on('connection', (socket) => {
