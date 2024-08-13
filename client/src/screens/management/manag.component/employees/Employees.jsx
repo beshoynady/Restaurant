@@ -1351,22 +1351,25 @@ const Employees = () => {
                       الرجاء إدخال نسبة تأمين صحيحة.
                     </div>
                   </div>
-                  <div className="form-group col-12 col-md-6">
-                    <label
-                      className="form-label text-wrap text-right fw-bolder p-0 m-0"
-                      htmlFor="totalSalaryEdit"
-                    >
-                      المرتب الإجمالي
-                    </label>
-                    <input
-                      type="number"
-                      id="totalSalaryEdit"
-                      className="form-control border-primary m-0 p-2 h-auto"
-                      defaultValue={totalSalary}
-                      required
-                      disabled
-                    />
-                  </div>
+                  {role === "waiter" && (
+                    <div className="form-group col-12 col-md-6">
+                      <label
+                        className="form-label text-wrap text-right fw-bolder p-0 m-0"
+                        htmlFor="sectionNumber"
+                      >
+                        رقم السكشن
+                      </label>
+                      <input
+                        type="number"
+                        id="sectionNumber"
+                        className="form-control border-primary m-0 p-2 h-auto"
+                        defaultValue={sectionNumber}
+                        onChange={(e) =>
+                          setsectionNumber(Number(e.target.value))
+                        }
+                      />
+                    </div>
+                  )}
                 </div>
                 <div className="modal-footer d-flex flex-wrap align-items-center p-3">
                   <button
