@@ -154,9 +154,9 @@ const io = socketIo(server, {
 // });
 
 
-const cashierNamespace = io.of('/cashier');
-const kitchenNamespace = io.of('/kitchen');
-const waiterNamespace = io.of('/waiter');
+const cashierNamespace = io.of('/cashier').broadcast;
+const kitchenNamespace = io.of('/kitchen').broadcast;
+const waiterNamespace = io.of('/waiter').broadcast;
 
 // التعامل مع اتصالات الكاشير
 cashierNamespace.on('connection', (socket) => {
@@ -166,7 +166,7 @@ cashierNamespace.on('connection', (socket) => {
   socket.on('neworder', (notification) => {
     console.log("New order received:", notification);
     // إرسال الإشعار إلى المطبخ
-    kitchenNamespace.emit('orderkit', notification);
+    cashierNamespace.emit('neworder', notification);
   });
 
   // استقبال إشعار من الكاشير إلى الويتر
