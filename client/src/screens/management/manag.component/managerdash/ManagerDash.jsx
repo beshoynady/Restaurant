@@ -118,7 +118,7 @@ const ManagerDash = () => {
       const status = e.target.value;
       const isActive = status === 'Cancelled' ? false : true;
 
-      const response = await axios.put(`${apiUrl}/api/order/${orderId}`, { status, isActive, cashier });
+      const response = await axios.put(`${apiUrl}/api/order/${orderId}`, { status, isActive, cashier },config);
       if(response ){
         fetchOrdersData();
   
