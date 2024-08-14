@@ -2537,11 +2537,11 @@ function App() {
               index
               element={
                 <Suspense fallback={<LoadingPage />}>
-                  {employeeLoginInfo.role === "chef" ? (
+                  {employeeLoginInfo?.role === "chef" ? (
                     <Kitchen />
-                  ) : employeeLoginInfo.role === "waiter" ? (
+                  ) : employeeLoginInfo?.role === "waiter" ? (
                     <Waiter />
-                  ) : employeeLoginInfo.role === "deliveryMan" ? (
+                  ) : employeeLoginInfo?.role === "deliveryMan" ? (
                     <DeliveryMan />
                   ) : (
                     <ManagerDash />
