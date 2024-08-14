@@ -417,7 +417,7 @@ const Kitchen = () => {
       }
 
       // استخراج رقم القسم من بيانات الطاولة المرتبطة بالطلب
-      const tablesectionNumber = getorder.table && getorder.table.sectionNumber;
+      const tablesectionNumber = getorder.table && getorder.table?.sectionNumber;
       if (!tablesectionNumber) {
         throw new Error('Table section number not found');
       }
@@ -450,7 +450,7 @@ const Kitchen = () => {
       return waiterId;
     } catch (error) {
       console.error('Error fetching table or waiter data:', error);
-      return ''; // التعامل مع حالة الخطأ هنا، وإرجاع سلسلة فارغة كقيمة افتراضية لمعرف النادل
+      return '';
     }
   };
 
@@ -523,7 +523,7 @@ const Kitchen = () => {
                     </div>
 
                     <div style={{ maxWidth: "50%" }}>
-                      {order.waiter ? <p className="card-text">الويتر: {order.waiter && order.waiter.username}</p> : ""}
+                      {order.waiter ? <p className="card-text">الويتر: {order.waiter && order.waiter?.username}</p> : ""}
                       <p className="card-text">الاستلام: {formatTime(order.createdAt)}</p>
                       <p className="card-text">الانتظار: {setTimeout(() => waitingTime(order.updateAt), 60000)} دقيقه</p>
                     </div>
