@@ -68,13 +68,18 @@ const createEmployee = async (req, res) => {
       workingDays, basicSalary, role, sectionNumber, taxRate, insuranceRate, isActive,
     } = req.body;
 
-    if (!fullname || !phone || !req.body.password) {
-      return res.status(400).json({ message: "Invalid input: Fullname, Phone, or Password missing" });
+    if (!fullname || !phone || numberID||!req.body.password) {
+      return res.status(400).json({ message: "Invalid input: Fullname, Phone, numberID or Password missing" });
     }
 
     const isEmployeeFound = await EmployeeModel.findOne({ phone });
     if (isEmployeeFound) {
       return res.status(409).json({ message: "This phone is already in use" });
+    }
+
+    const isEmployeenumberIDFound = await EmployeeModel.findOne({ numberID });
+    if (isEmployeenumberIDFound) {
+      return res.status(409).json({ message: "This numberID is already in use" });
     }
 
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
@@ -90,15 +95,15 @@ const createEmployee = async (req, res) => {
 };
 
 const updateEmployeeSchema = Joi.object({
-  fullname: Joi.string().min(3).max(100).optional(),
-  numberID: Joi.string().length(14).optional(),
-  username: Joi.string().min(3).max(100).optional(),
-  address: Joi.string().min(3).max(200).optional(),
+  fullname: Joi.string().min(3).max(100).required(),
+  numberID: Joi.string().length(14).required(),
+  username: Joi.string().min(3).max(100).required(),
+  address: Joi.string().min(3).max(200).required(),
   email: Joi.string().email().min(10).max(100).optional(),
-  phone: Joi.string().length(11).optional(),
+  phone: Joi.string().length(11).required(),
   password: Joi.string().min(3).max(200).optional(),
-  basicSalary: Joi.number().min(0).optional(),
-  role: Joi.string().valid("owner", "manager", "cashier", "waiter", "deliveryman", "chef").optional(),
+  basicSalary: Joi.number().min(0).required(),
+  role: Joi.string().valid('programer',"owner", "manager", "cashier", "waiter", "deliveryman", "chef").required(),
   isActive: Joi.boolean().optional(),
   shift: Joi.string().optional(),
   workingDays: Joi.number().min(0).max(31).optional(),
@@ -140,6 +145,7 @@ const updateEmployee = async (req, res) => {
     res.status(200).json(updatedEmployee);
   } catch (err) {
     res.status(500).json({ message: "Error updating employee", err });
+   console.log({message: "Error updating employee", err});
   }
 };
 
@@ -210,7 +216,7 @@ const loginEmployee = async (req, res) => {
       .status(200)
       .json({ findEmployee, accessToken, message: "Login successful" });
   } catch (error) {
-    console.error("Error logging in:", error); // إضافة تسجيل الأخطاء
+    console.error("Error logging in:", error); 
     res.status(500).json({ message: "Internal server error", error });
   }
 };

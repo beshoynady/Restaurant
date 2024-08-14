@@ -6,8 +6,6 @@ import * as XLSX from "xlsx";
 import { useReactToPrint } from "react-to-print";
 import "../orders/Orders.css";
 
-const Joi = require("joi");
-
 const Employees = () => {
   const apiUrl = process.env.REACT_APP_API_URL;
   const token = localStorage.getItem("token_e");
@@ -42,24 +40,27 @@ const Employees = () => {
   const [listOfEmployees, setListOfEmployees] = useState([]);
 
   const getEmployees = async () => {
+    if (!token) {
+      // Handle case where token is not available
+      toast.error("رجاء تسجيل الدخول مره اخري");
+      return;
+    }
     if (permissionsForEmployee && permissionsForEmployee.read === false) {
       notify("ليس لك صلاحية لعرض بيانات الموظفين", "info");
       return;
     }
     if (permissionsForEmployee && permissionsForEmployee.read === true) {
       try {
-        if (!token) {
-          // Handle case where token is not available
-          toast.error("رجاء تسجيل الدخول مره اخري");
-          return;
-        }
         const response = await axios.get(`${apiUrl}/api/employee`, config);
         const data = response.data;
-        setListOfEmployees(data);
+        if (data) {
+          setListOfEmployees(data);
+        } else {
+          toast.info("لا توجد بيانات لعرضها");
+        }
         // console.log({ data });
       } catch (error) {
         // console.log(error);
-        toast.error("حدث خطأاثناء جلب بيانات الموظفين اعد تحميل الصفحة");
       }
     } else {
       toast.error("ليس لك صلاحية لعرض بيانات الموظفين");
@@ -625,12 +626,12 @@ const Employees = () => {
                             {employee.isAdmin ? "في الفريق" : "ترك العمل"}
                           </td>
                           <td>{employee.sectionNumber}</td>
-                          <td>{employee.shift && employee.shift.shiftType}</td>
+                          <td>{employee.shift && employee.shift?.shiftType}</td>
                           <td>
-                            {employee.createdBy && employee.createdBy.username}
+                            {employee.createdBy && employee.createdBy?.username}
                           </td>
                           <td>
-                            {employee.updatedBy && employee.updatedBy.username}
+                            {employee.updatedBy && employee.updatedBy?.username}
                           </td>
                           <td>
                             {employee.createdAt &&
@@ -652,7 +653,10 @@ const Employees = () => {
                                   &#xE254;
                                 </i>
                               </a>
-                            ) : permissionsForEmployee?.delete ? (
+                            ) : (
+                              ""
+                            )}
+                            {permissionsForEmployee?.delete ? (
                               <a
                                 href="#deleteEmployeeModal"
                                 className="delete"
@@ -668,7 +672,7 @@ const Employees = () => {
                                 </i>
                               </a>
                             ) : (
-                              "--"
+                              ""
                             )}
                           </td>
                         </tr>
@@ -794,6 +798,7 @@ const Employees = () => {
                       type="text"
                       id="username"
                       className="form-control border-primary m-0 p-2 h-auto"
+                      required
                       onChange={(e) => setusername(e.target.value)}
                     />
                   </div>
@@ -827,9 +832,14 @@ const Employees = () => {
                       type="text"
                       id="password"
                       className="form-control border-primary m-0 p-2 h-auto"
+                      minLength={3}
+                      maxLength={30}
                       required
                       onChange={(e) => setpassword(e.target.value)}
                     />
+                    <div className="invalid-feedback">
+                      الرجاء إدخال باسورد مكون من 3 - 30 رقم و حرف .
+                    </div>
                   </div>
                   <div className="form-group col-12 col-md-6">
                     <label
@@ -841,10 +851,14 @@ const Employees = () => {
                     <input
                       type="text"
                       id="numberID"
+                      pattern="[0-9]{14}"
                       className="form-control border-primary m-0 p-2 h-auto"
                       required
                       onChange={(e) => setnumberID(e.target.value)}
                     />
+                    <div className="invalid-feedback">
+                      الرجاء إدخال رقم قومي صحيح صحيح.
+                    </div>
                   </div>
                   <div className="form-group col-12 col-md-6">
                     <label
@@ -857,7 +871,6 @@ const Employees = () => {
                       type="email"
                       id="email"
                       className="form-control border-primary m-0 p-2 h-auto"
-                      required
                       onChange={(e) => setemail(e.target.value)}
                     />
                     <div className="invalid-feedback">
@@ -1111,6 +1124,7 @@ const Employees = () => {
                       type="text"
                       id="usernameEdit"
                       className="form-control border-primary m-0 p-2 h-auto"
+                      required
                       defaultValue={username}
                       onChange={(e) => setusername(e.target.value)}
                     />
@@ -1145,6 +1159,8 @@ const Employees = () => {
                     <input
                       type="text"
                       id="passwordEdit"
+                      minLength={3}
+                      maxLength={30}
                       className="form-control border-primary m-0 p-2 h-auto"
                       defaultValue={password}
                       onChange={(e) => setpassword(e.target.value)}
@@ -1162,9 +1178,13 @@ const Employees = () => {
                       id="numberIDEdit"
                       className="form-control border-primary m-0 p-2 h-auto"
                       defaultValue={numberID}
+                      pattern="[0-9]{14}"
                       required
                       onChange={(e) => setnumberID(e.target.value)}
                     />
+                    <div className="invalid-feedback">
+                      الرجاء إدخال رقم قومي صحيح صحيح.
+                    </div>
                   </div>
                   <div className="form-group col-12 col-md-6">
                     <label
@@ -1178,7 +1198,6 @@ const Employees = () => {
                       id="emailEdit"
                       className="form-control border-primary m-0 p-2 h-auto"
                       defaultValue={email}
-                      required
                       onChange={(e) => setemail(e.target.value)}
                     />
                     <div className="invalid-feedback">
