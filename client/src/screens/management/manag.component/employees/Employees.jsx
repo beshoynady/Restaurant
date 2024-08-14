@@ -96,8 +96,8 @@ const Employees = () => {
   const [workingDays, setworkingDays] = useState(0);
   const [basicSalary, setbasicSalary] = useState(0);
   const [shift, setshift] = useState("");
-  const [taxRate, settaxRate] = useState("");
-  const [insuranceRate, setinsuranceRate] = useState("");
+  const [taxRate, settaxRate] = useState(0);
+  const [insuranceRate, setinsuranceRate] = useState(0);
   const [password, setpassword] = useState("");
   const [address, setaddress] = useState("");
   const [phone, setphone] = useState("");
@@ -257,7 +257,8 @@ const Employees = () => {
   };
 
   const [employeeShift, setemployeeShift] = useState({});
-  const handleEditEmployee = (employee) => {
+  const handleEditEmployee = (employeeData) => {
+    const employee= JSON.parse(employeeData)
     setemployeeid(employee._id);
     setfullname(employee.fullname);
     setnumberID(employee.numberID);
@@ -269,7 +270,7 @@ const Employees = () => {
     setrole(employee.role);
     setbasicSalary(employee.basicSalary);
     setworkingDays(employee.workingDays);
-    setshift(employee.shift._id);
+    setshift(employee.shift?._id);
     setemployeeShift(employee.shift);
     settaxRate(employee.taxRate);
     setinsuranceRate(employee.insuranceRate);
@@ -648,7 +649,7 @@ const Employees = () => {
                                   className="material-icons"
                                   data-toggle="tooltip"
                                   title="Edit"
-                                  onClick={() => handleEditEmployee(employee)}
+                                  onClick={() => handleEditEmployee(JSON.stringify(employee))}
                                 >
                                   &#xE254;
                                 </i>
@@ -1162,7 +1163,6 @@ const Employees = () => {
                       minLength={3}
                       maxLength={30}
                       className="form-control border-primary m-0 p-2 h-auto"
-                      defaultValue={password}
                       onChange={(e) => setpassword(e.target.value)}
                     />
                   </div>
@@ -1248,11 +1248,11 @@ const Employees = () => {
                     <select
                       id="shiftEdit"
                       className="form-control border-primary m-0 p-2 h-auto"
-                      defaultValue={shift}
+                      defaultValue={employeeShift}
                       required
                       onChange={(e) => setshift(e.target.value)}
                     >
-                      <option value="">اختر</option>
+                      <option value={shift}>{employeeShift.name}</option>
                       {shifts ? (
                         shifts.map((shift, i) => (
                           <option value={shift._id} key={i}>
