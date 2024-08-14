@@ -1,24 +1,38 @@
-import React, { useState, useEffect, useRef, useContext } from 'react'
-import axios from 'axios'
-import { useReactToPrint } from 'react-to-print';
-import { detacontext } from '../../../../App';
-import { toast } from 'react-toastify';
-import '../orders/Orders.css'
-
+import React, { useState, useEffect, useRef, useContext } from "react";
+import axios from "axios";
+import { useReactToPrint } from "react-to-print";
+import { detacontext } from "../../../../App";
+import { toast } from "react-toastify";
+import "../orders/Orders.css";
 
 const Tables = () => {
   const apiUrl = process.env.REACT_APP_API_URL;
-  const token = localStorage.getItem('token_e'); 
+  const token = localStorage.getItem("token_e");
   const config = {
     headers: {
-      'Authorization': `Bearer ${token}`,
+      Authorization: `Bearer ${token}`,
     },
   };
-  const { permissionsList, restaurantData, setStartDate, setEndDate, filterByDateRange, filterByTime, employeeLoginInfo,  formatDate, formatDateTime, setisLoadiog, EditPagination,
-    startpagination, endpagination, setstartpagination, setendpagination } = useContext(detacontext)
+  const {
+    permissionsList,
+    restaurantData,
+    setStartDate,
+    setEndDate,
+    filterByDateRange,
+    filterByTime,
+    employeeLoginInfo,
+    formatDate,
+    formatDateTime,
+    setisLoadiog,
+    EditPagination,
+    startpagination,
+    endpagination,
+    setstartpagination,
+    setendpagination,
+  } = useContext(detacontext);
 
-  const [tableid, settableid] = useState("")
-  const [qrimage, setqrimage] = useState("")
+  const [tableid, settableid] = useState("");
+  const [qrimage, setqrimage] = useState("");
   const [listoftable, setlistoftable] = useState([]);
   const [listoftabledescription, setlistoftabledescription] = useState([]);
   const [tableNumber, settableNumber] = useState(0);
@@ -27,14 +41,13 @@ const Tables = () => {
   const [tabledesc, settabledesc] = useState("");
   const [isValid, setisValid] = useState();
 
-
   // Function to create a new table
   const createTable = async (e) => {
     e.preventDefault();
     try {
       if (!token) {
         // Handle case where token is not available
-        toast.error('رجاء تسجيل الدخول مره اخري');
+        toast.error("رجاء تسجيل الدخول مره اخري");
         throw new Error("must login");
       }
       // Prepare table data
@@ -43,11 +56,15 @@ const Tables = () => {
         tableNumber,
         chairs,
         sectionNumber,
-        isValid
+        isValid,
       };
 
       // Send request to create table
-      const response = await axios.post(`${apiUrl}/api/table/`, tableData, config);
+      const response = await axios.post(
+        `${apiUrl}/api/table/`,
+        tableData,
+        config
+      );
 
       // Check response status
       if (response.status === 200) {
@@ -68,8 +85,7 @@ const Tables = () => {
       console.error("Error creating table:", error);
       toast.error("حدث خطأ أثناء إنشاء الطاولة. الرجاء المحاولة مرة أخرى.");
     }
-  }
-
+  };
 
   // Function to edit an existing table
   const editTable = async (e) => {
@@ -77,129 +93,144 @@ const Tables = () => {
     try {
       if (!token) {
         // Handle case where token is not available
-        toast.error('رجاء تسجيل الدخول مره اخري');
+        toast.error("رجاء تسجيل الدخول مره اخري");
       }
-      const response = await axios.put(`${apiUrl}/api/table/${tableid}`,
-         { "description": tabledesc, tableNumber, chairs, sectionNumber, isValid },
-          config);
+      const response = await axios.put(
+        `${apiUrl}/api/table/${tableid}`,
+        { description: tabledesc, tableNumber, chairs, sectionNumber, isValid },
+        config
+      );
       console.log(response.data);
       getAllTable();
     } catch (error) {
       console.error("Error editing table:", error);
     }
-  }
+  };
   // Function to create QR code for the table URL
   const createQR = async (e) => {
     e.preventDefault();
     if (!token) {
       // Handle case where token is not available
-      toast.error('رجاء تسجيل الدخول مره اخري');
-      return
+      toast.error("رجاء تسجيل الدخول مره اخري");
+      return;
     }
     try {
-
       const URL = `https://${window.location.hostname}/${tableid}`;
-      const response = await axios.post(apiUrl + '/api/table/qr', { URL }, config);
-      const qrData =  response.data.QRCode
-      console.log({qrData, URL})
+      const response = await axios.post(
+        apiUrl + "/api/table/qr",
+        { URL },
+        config
+      );
+      const qrData = response.data.QRCode;
+      console.log({ qrData, URL });
       setqrimage(qrData);
-      toast.success('تم إنشاء رمز QR بنجاح!');
+      toast.success("تم إنشاء رمز QR بنجاح!");
     } catch (error) {
       console.error("حدث خطأ أثناء إنشاء رمز QR:", error);
-      toast.error('حدث خطأ أثناء إنشاء رمز QR!');
+      toast.error("حدث خطأ أثناء إنشاء رمز QR!");
     }
-  }
+  };
 
   // Function to create web QR code
   const createwebQR = async (e) => {
     e.preventDefault();
     if (!token) {
       // Handle case where token is not available
-      toast.error('رجاء تسجيل الدخول مره اخري');
-      return
+      toast.error("رجاء تسجيل الدخول مره اخري");
+      return;
     }
     try {
-
       const URL = `https://${window.location.hostname}/`;
-      const qr = await axios.post(apiUrl + '/api/table/qr', { URL }, config);
-      setqrimage(qr.data);
-      toast.success('تم إنشاء رمز QR بنجاح!', {
+      const response = await axios.post(
+        apiUrl + "/api/table/qr",
+        { URL },
+        config
+      );
+      const qrData = response.data.QRCode;
+
+      setqrimage(qrData);
+      toast.success("تم إنشاء رمز QR بنجاح!", {
         position: toast.POSITION.TOP_CENTER,
-        autoClose: 3000
+        autoClose: 3000,
       });
     } catch (error) {
       console.error("حدث خطأ أثناء إنشاء رمز QR للويب:", error);
       // عرض رسالة خطأ باستخدام toast
-      toast.error('حدث خطأ أثناء إنشاء رمز QR للويب!', {
+      toast.error("حدث خطأ أثناء إنشاء رمز QR للويب!", {
         position: toast.POSITION.TOP_CENTER,
-        autoClose: 5000
+        autoClose: 5000,
       });
     }
-  }
+  };
 
   // Function to get all tables
   const getAllTable = async () => {
     if (!token) {
       // Handle case where token is not available
-      toast.error('رجاء تسجيل الدخول مره اخري');
-      return
+      toast.error("رجاء تسجيل الدخول مره اخري");
+      return;
     }
     try {
-      const response = await axios.get(apiUrl + '/api/table');
+      const response = await axios.get(apiUrl + "/api/table");
       const tables = response.data;
       setlistoftable(tables);
-      const descriptions = tables.map(table => table.description);
-      setlistoftabledescription(prevDescription => [...prevDescription, ...descriptions]);
+      const descriptions = tables.map((table) => table.description);
+      setlistoftabledescription((prevDescription) => [
+        ...prevDescription,
+        ...descriptions,
+      ]);
     } catch (error) {
       console.error("Error getting all tables:", error);
     }
   };
-
-
 
   // Function to delete a table
   const deleteTable = async (e) => {
     e.preventDefault();
     if (!token) {
       // Handle case where token is not available
-      toast.error('رجاء تسجيل الدخول مره اخري');
-      return
+      toast.error("رجاء تسجيل الدخول مره اخري");
+      return;
     }
     try {
-      const response = await axios.delete(`${apiUrl}/api/table/${tableid}`, config);
+      const response = await axios.delete(
+        `${apiUrl}/api/table/${tableid}`,
+        config
+      );
       console.log(response.data);
       settableid(null);
       getAllTable();
     } catch (error) {
       console.error("Error deleting table:", error);
     }
-  }
-
+  };
 
   const searchByNum = (num) => {
     if (!num) {
-      getAllTable()
-      return
+      getAllTable();
+      return;
     }
-    const tables = listoftable.filter((table) => table.tableNumber.toString().startsWith(num) === true)
-    setlistoftable(tables)
-  }
+    const tables = listoftable.filter(
+      (table) => table.tableNumber.toString().startsWith(num) === true
+    );
+    setlistoftable(tables);
+  };
   const filterByStatus = (Status) => {
     if (!Status) {
-      getAllTable()
-      return
+      getAllTable();
+      return;
     }
-    const filter = listoftable.filter(table => table.isValid === Status)
-    setlistoftable(filter)
-  }
+    const filter = listoftable.filter((table) => table.isValid === Status);
+    setlistoftable(filter);
+  };
 
-  const printtableqr = useRef()
+  const printtableqr = useRef();
   const handlePrinttableqr = useReactToPrint({
     content: () => printtableqr.current,
     copyStyles: true,
     removeAfterPrint: true,
   });
-  const printwepqr = useRef()
+  const printwepqr = useRef();
   const handlePrintwepqr = useReactToPrint({
     content: () => printwepqr.current,
     copyStyles: true,
@@ -221,31 +252,28 @@ const Tables = () => {
 
   const deleteSelectedIds = async (e) => {
     e.preventDefault();
-    console.log(selectedIds)
+    console.log(selectedIds);
     if (!token) {
       // Handle case where token is not available
-      toast.error('رجاء تسجيل الدخول مره اخري');
-      return
+      toast.error("رجاء تسجيل الدخول مره اخري");
+      return;
     }
     try {
       for (const Id of selectedIds) {
         await axios.delete(`${apiUrl}/api/table/${Id}`, config);
       }
-      getAllTable()
-      toast.success('Selected orders deleted successfully');
+      getAllTable();
+      toast.success("Selected orders deleted successfully");
       setSelectedIds([]);
     } catch (error) {
       console.log(error);
-      toast.error('Failed to delete selected orders');
+      toast.error("Failed to delete selected orders");
     }
   };
 
-
-
-
   useEffect(() => {
-    getAllTable()
-  }, [])
+    getAllTable();
+  }, []);
 
   return (
     <div className="w-100 px-3 d-flex align-itmes-center justify-content-start">
@@ -254,49 +282,95 @@ const Tables = () => {
           <div className="table-title">
             <div className="w-100 d-flex flex-wrap align-items-center justify-content-between">
               <div className="col-sm-6 text-right">
-                <h2>ادارة <b>الطاولات</b></h2>
+                <h2>
+                  ادارة <b>الطاولات</b>
+                </h2>
               </div>
               <div className="col-12 col-md-6 p-0 m-0 d-flex flex-wrap aliegn-items-center justify-content-end print-hide">
-                <a href="#qrwebModal" className="d-flex align-items-center justify-content-center  h-100  m-0 btn btn-info"
-                  data-toggle="modal"><span className="material-symbols-outlined" data-toggle="tooltip" title="QR">qr_code_2_add</span>
-                  <span>انشاء qr للسايت</span></a>
-                <a href="#addTableModal" className="d-flex align-items-center justify-content-center  h-100  m-0 btn btn-success"
-                  data-toggle="modal"> <span>اضافه طاولة جديدة</span></a>
-                <a href="#deleteListTableModal" className="d-flex align-items-center justify-content-center  h-100  m-0 btn btn-danger"
-                  data-toggle="modal"> <span>حذف</span></a>
+                <a
+                  href="#qrwebModal"
+                  className="d-flex align-items-center justify-content-center  h-100  m-0 btn btn-info"
+                  data-toggle="modal"
+                >
+                  <span
+                    className="material-symbols-outlined"
+                    data-toggle="tooltip"
+                    title="QR"
+                  >
+                    qr_code_2_add
+                  </span>
+                  <span>انشاء qr للسايت</span>
+                </a>
+                <a
+                  href="#addTableModal"
+                  className="d-flex align-items-center justify-content-center  h-100  m-0 btn btn-success"
+                  data-toggle="modal"
+                >
+                  {" "}
+                  <span>اضافه طاولة جديدة</span>
+                </a>
+                <a
+                  href="#deleteListTableModal"
+                  className="d-flex align-items-center justify-content-center  h-100  m-0 btn btn-danger"
+                  data-toggle="modal"
+                >
+                  {" "}
+                  <span>حذف</span>
+                </a>
               </div>
             </div>
           </div>
           <div className="table-filter print-hide">
             <div className="col-12 text-dark d-flex flex-wrap align-items-center justify-content-between p-0 m-0">
               <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
-                <label className="form-label text-wrap text-right fw-bolder p-0 m-0">عرض</label>
-                <select className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => { setstartpagination(0); setendpagination(e.target.value) }}>
-                  {
-                    (() => {
-                      const options = [];
-                      for (let i = 5; i < 100; i += 5) {
-                        options.push(<option key={i} value={i}>{i}</option>);
-                      }
-                      return options;
-                    })()
-                  }
-                  
+                <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                  عرض
+                </label>
+                <select
+                  className="form-control border-primary m-0 p-2 h-auto"
+                  onChange={(e) => {
+                    setstartpagination(0);
+                    setendpagination(e.target.value);
+                  }}
+                >
+                  {(() => {
+                    const options = [];
+                    for (let i = 5; i < 100; i += 5) {
+                      options.push(
+                        <option key={i} value={i}>
+                          {i}
+                        </option>
+                      );
+                    }
+                    return options;
+                  })()}
                 </select>
-
               </div>
               <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
-                <label className="form-label text-wrap text-right fw-bolder p-0 m-0">رقم الطاولة</label>
-                <input type="text" className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => searchByNum(e.target.value)} />
+                <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                  رقم الطاولة
+                </label>
+                <input
+                  type="text"
+                  className="form-control border-primary m-0 p-2 h-auto"
+                  onChange={(e) => searchByNum(e.target.value)}
+                />
               </div>
 
               <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
-                <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الحالة</label>
-                <select className="form-control border-primary m-0 p-2 h-auto" name="Status" id="Status" form="carform"
-                  onChange={(e) => filterByStatus(e.target.value)}>
+                <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                  الحالة
+                </label>
+                <select
+                  className="form-control border-primary m-0 p-2 h-auto"
+                  name="Status"
+                  id="Status"
+                  form="carform"
+                  onChange={(e) => filterByStatus(e.target.value)}
+                >
                   <option value="">اختر</option>
-                  <option value={true} >متاح</option>
-                  <option value={false} >غير متاح</option>
+                  <option value={true}>متاح</option>
+                  <option value={false}>غير متاح</option>
                 </select>
               </div>
             </div>
@@ -307,7 +381,11 @@ const Tables = () => {
               <tr>
                 <th>
                   <span className="custom-checkbox">
-                    <input type="checkbox" className="form-check-input form-check-input-lg" id="selectAll" />
+                    <input
+                      type="checkbox"
+                      className="form-check-input form-check-input-lg"
+                      id="selectAll"
+                    />
                     <label htmlFor="selectAll"></label>
                   </span>
                 </th>
@@ -324,7 +402,7 @@ const Tables = () => {
             </thead>
             <tbody>
               {listoftable.map((table, i) => {
-                if (i >= startpagination & i < endpagination) {
+                if ((i >= startpagination) & (i < endpagination)) {
                   return (
                     <tr key={i}>
                       <td>
@@ -344,41 +422,137 @@ const Tables = () => {
                       <td>{table.description}</td>
                       <td>{table.chairs}</td>
                       <td>{table.sectionNumber}</td>
-                      <td>{table.isValid ? 'متاح' : 'غير متاح'}</td>
+                      <td>{table.isValid ? "متاح" : "غير متاح"}</td>
 
                       {/* <td>{table.reservation ? "Reserved" : "Unreserved"}</td> */}
-                      <td><a href="#qrTableModal" className="edit" data-toggle="modal" onClick={() => { settableid(table._id); settableNumber(table.tableNumber); setqrimage('') }}>
-                        <span className="material-symbols-outlined" data-toggle="tooltip" title="QR">qr_code_2_add</span>
-                      </a></td>
                       <td>
-                        <a href="#editTableModal" className="edit" data-toggle="modal" onClick={() => { settableid(table._id); settableNumber(table.tableNumber); setchairs(table.chairs); settabledesc(table.description) }}>
-                          <i className="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+                        <a
+                          href="#qrTableModal"
+                          className="edit"
+                          data-toggle="modal"
+                          onClick={() => {
+                            settableid(table._id);
+                            settableNumber(table.tableNumber);
+                            setqrimage("");
+                          }}
+                        >
+                          <span
+                            className="material-symbols-outlined"
+                            data-toggle="tooltip"
+                            title="QR"
+                          >
+                            qr_code_2_add
+                          </span>
+                        </a>
+                      </td>
+                      <td>
+                        <a
+                          href="#editTableModal"
+                          className="edit"
+                          data-toggle="modal"
+                          onClick={() => {
+                            settableid(table._id);
+                            settableNumber(table.tableNumber);
+                            setchairs(table.chairs);
+                            settabledesc(table.description);
+                          }}
+                        >
+                          <i
+                            className="material-icons"
+                            data-toggle="tooltip"
+                            title="Edit"
+                          >
+                            &#xE254;
+                          </i>
+                        </a>
 
-                        <a href="#deleteTableModal" className="delete" data-toggle="modal" onClick={() => settableid(table._id)}>
-                          <i className="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+                        <a
+                          href="#deleteTableModal"
+                          className="delete"
+                          data-toggle="modal"
+                          onClick={() => settableid(table._id)}
+                        >
+                          <i
+                            className="material-icons"
+                            data-toggle="tooltip"
+                            title="Delete"
+                          >
+                            &#xE872;
+                          </i>
+                        </a>
                       </td>
                     </tr>
-                  )
+                  );
                 }
-              })
-              }
+              })}
             </tbody>
           </table>
           <div className="clearfix">
-            <div className="hint-text text-dark">عرض <b>{listoftable.length > endpagination ? endpagination : listoftable.length}</b> من <b>{listoftable.length}</b> عنصر</div>
+            <div className="hint-text text-dark">
+              عرض{" "}
+              <b>
+                {listoftable.length > endpagination
+                  ? endpagination
+                  : listoftable.length}
+              </b>{" "}
+              من <b>{listoftable.length}</b> عنصر
+            </div>
             <ul className="pagination">
-              <li onClick={EditPagination} className="page-item disabled"><a href="#">السابق</a></li>
-              <li onClick={EditPagination} className={`page-item ${endpagination === 5 ? 'active' : ''}`}><a href="#" className="page-link">1</a></li>
-              <li onClick={EditPagination} className={`page-item ${endpagination === 10 ? 'active' : ''}`}><a href="#" className="page-link">2</a></li>
-              <li onClick={EditPagination} className={`page-item ${endpagination === 15 ? 'active' : ''}`}><a href="#" className="page-link">3</a></li>
-              <li onClick={EditPagination} className={`page-item ${endpagination === 20 ? 'active' : ''}`}><a href="#" className="page-link">4</a></li>
-              <li onClick={EditPagination} className={`page-item ${endpagination === 25 ? 'active' : ''}`}><a href="#" className="page-link">5</a></li>
-              <li onClick={EditPagination} className={`page-item ${endpagination === 30 ? 'active' : ''}`}><a href="#" className="page-link">التالي</a></li>
+              <li onClick={EditPagination} className="page-item disabled">
+                <a href="#">السابق</a>
+              </li>
+              <li
+                onClick={EditPagination}
+                className={`page-item ${endpagination === 5 ? "active" : ""}`}
+              >
+                <a href="#" className="page-link">
+                  1
+                </a>
+              </li>
+              <li
+                onClick={EditPagination}
+                className={`page-item ${endpagination === 10 ? "active" : ""}`}
+              >
+                <a href="#" className="page-link">
+                  2
+                </a>
+              </li>
+              <li
+                onClick={EditPagination}
+                className={`page-item ${endpagination === 15 ? "active" : ""}`}
+              >
+                <a href="#" className="page-link">
+                  3
+                </a>
+              </li>
+              <li
+                onClick={EditPagination}
+                className={`page-item ${endpagination === 20 ? "active" : ""}`}
+              >
+                <a href="#" className="page-link">
+                  4
+                </a>
+              </li>
+              <li
+                onClick={EditPagination}
+                className={`page-item ${endpagination === 25 ? "active" : ""}`}
+              >
+                <a href="#" className="page-link">
+                  5
+                </a>
+              </li>
+              <li
+                onClick={EditPagination}
+                className={`page-item ${endpagination === 30 ? "active" : ""}`}
+              >
+                <a href="#" className="page-link">
+                  التالي
+                </a>
+              </li>
             </ul>
           </div>
         </div>
       </div>
-
 
       <div id="addTableModal" className="modal fade">
         <div className="modal-dialog modal-lg">
@@ -386,78 +560,197 @@ const Tables = () => {
             <form onSubmit={createTable}>
               <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                 <h4 className="modal-title">اضافه طاولة</h4>
-                <button type="button" className="close m-0 p-1" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <button
+                  type="button"
+                  className="close m-0 p-1"
+                  data-dismiss="modal"
+                  aria-hidden="true"
+                >
+                  &times;
+                </button>
               </div>
               <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
                 <div className="form-group col-12 col-md-6">
-                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0">رقم السكشن</label>
-                  <input type="Number" className="form-control border-primary m-0 p-2 h-auto" required onChange={(e) => setsectionNumber(e.target.value)} />
+                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                    رقم السكشن
+                  </label>
+                  <input
+                    type="Number"
+                    className="form-control border-primary m-0 p-2 h-auto"
+                    required
+                    onChange={(e) => setsectionNumber(e.target.value)}
+                  />
                 </div>
                 <div className="form-group col-12 col-md-6">
-                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0">رقم الطاولة</label>
-                  <input type="Number" defaultValue={listoftable.length > 0 ? listoftable[listoftable.length - 1].tableNumber : ""} className="form-control border-primary m-0 p-2 h-auto" required onChange={(e) => settableNumber(e.target.value)} />
+                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                    رقم الطاولة
+                  </label>
+                  <input
+                    type="Number"
+                    defaultValue={
+                      listoftable.length > 0
+                        ? listoftable[listoftable.length - 1].tableNumber
+                        : ""
+                    }
+                    className="form-control border-primary m-0 p-2 h-auto"
+                    required
+                    onChange={(e) => settableNumber(e.target.value)}
+                  />
                 </div>
                 <div className="form-group col-12 col-md-6">
-                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0">عدد المقاعد</label>
-                  <input type="Number" className="form-control border-primary m-0 p-2 h-auto" required onChange={(e) => setchairs(e.target.value)} />
+                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                    عدد المقاعد
+                  </label>
+                  <input
+                    type="Number"
+                    className="form-control border-primary m-0 p-2 h-auto"
+                    required
+                    onChange={(e) => setchairs(e.target.value)}
+                  />
                 </div>
                 <div className="form-group col-12 col-md-6">
-                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الوصف</label>
-                  <textarea className="form-control border-primary m-0 p-2 h-auto" required onChange={(e) => settabledesc(e.target.value)}></textarea>
+                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                    الوصف
+                  </label>
+                  <textarea
+                    className="form-control border-primary m-0 p-2 h-auto"
+                    required
+                    onChange={(e) => settabledesc(e.target.value)}
+                  ></textarea>
                 </div>
               </div>
               <div className="modal-footer p-0 m-0 d-flex flex-nowrap align-items-center justify-content-between">
-                <input type="submit" className="btn btn-success col-6 h-100 px-2 py-3 m-0" value="ضافه" />
-                <input type="button" className="btn btn-danger col-6 h-100 px-2 py-3 m-0" data-dismiss="modal" value="إغلاق" />
+                <input
+                  type="submit"
+                  className="btn btn-success col-6 h-100 px-2 py-3 m-0"
+                  value="ضافه"
+                />
+                <input
+                  type="button"
+                  className="btn btn-danger col-6 h-100 px-2 py-3 m-0"
+                  data-dismiss="modal"
+                  value="إغلاق"
+                />
               </div>
             </form>
           </div>
         </div>
       </div>
 
-      {tableid && <div id="editTableModal" className="modal fade">
-        <div className="modal-dialog modal-lg">
-          <div className="modal-content shadow-lg border-0 rounded ">
-            <form onSubmit={editTable}>
-              <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
-                <h4 className="modal-title">تعديل طاولة</h4>
-                <button type="button" className="close m-0 p-1" data-dismiss="modal" aria-hidden="true">&times;</button>
-              </div>
-              <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
-                <div className="form-group col-12 col-md-6">
-                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0">رقم السكشن</label>
-                  <input type="Number" className="form-control border-primary m-0 p-2 h-auto" required onChange={(e) => setsectionNumber(e.target.value)} />
+      {tableid && (
+        <div id="editTableModal" className="modal fade">
+          <div className="modal-dialog modal-lg">
+            <div className="modal-content shadow-lg border-0 rounded ">
+              <form onSubmit={editTable}>
+                <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
+                  <h4 className="modal-title">تعديل طاولة</h4>
+                  <button
+                    type="button"
+                    className="close m-0 p-1"
+                    data-dismiss="modal"
+                    aria-hidden="true"
+                  >
+                    &times;
+                  </button>
                 </div>
-                <div className="form-group col-12 col-md-6">
-                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0">رقم الطاولة</label>
-                  <input type="Number" defaultValue={listoftable.length > 0 ? listoftable[listoftable.length - 1].tableNumber : ""} className="form-control border-primary m-0 p-2 h-auto" required onChange={(e) => settableNumber(e.target.value)} />
+                <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
+                  <div className="form-group col-12 col-md-6">
+                    <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                      رقم السكشن
+                    </label>
+                    <input
+                      type="Number"
+                      className="form-control border-primary m-0 p-2 h-auto"
+                      required
+                      onChange={(e) => setsectionNumber(e.target.value)}
+                    />
+                  </div>
+                  <div className="form-group col-12 col-md-6">
+                    <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                      رقم الطاولة
+                    </label>
+                    <input
+                      type="Number"
+                      defaultValue={
+                        listoftable.length > 0
+                          ? listoftable[listoftable.length - 1].tableNumber
+                          : ""
+                      }
+                      className="form-control border-primary m-0 p-2 h-auto"
+                      required
+                      onChange={(e) => settableNumber(e.target.value)}
+                    />
+                  </div>
+                  <div className="form-group col-12 col-md-6">
+                    <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                      عدد المقاعد
+                    </label>
+                    <input
+                      type="Number"
+                      defaultValue={
+                        listoftable.length > 0
+                          ? listoftable.find(
+                              (table, i) => table._id === tableid
+                            ).chairs
+                          : ""
+                      }
+                      className="form-control border-primary m-0 p-2 h-auto"
+                      required
+                      onChange={(e) => setchairs(e.target.value)}
+                    />
+                  </div>
+                  <div className="form-group col-12 col-md-6">
+                    <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                      الوصف
+                    </label>
+                    <textarea
+                      defaultValue={
+                        listoftable.length > 0
+                          ? listoftable.find(
+                              (table, i) => table._id === tableid
+                            ).description
+                          : ""
+                      }
+                      className="form-control border-primary m-0 p-2 h-auto"
+                      required
+                      onChange={(e) => settabledesc(e.target.value)}
+                    ></textarea>
+                  </div>
+                  <div className="form-group col-12 col-md-6">
+                    <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                      متاح
+                    </label>
+                    <select
+                      className="form-control border-primary m-0 p-2 h-auto"
+                      name="category"
+                      id="category"
+                      form="carform"
+                      onChange={(e) => setisValid(e.target.value)}
+                    >
+                      <option value="">اختر</option>
+                      <option value={true}>متاح</option>
+                      <option value={false}>غير متاح</option>
+                    </select>
+                  </div>
                 </div>
-                <div className="form-group col-12 col-md-6">
-                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0">عدد المقاعد</label>
-                  <input type="Number" defaultValue={listoftable.length > 0 ? listoftable.find((table, i) => table._id === tableid).chairs : ''} className="form-control border-primary m-0 p-2 h-auto" required onChange={(e) => setchairs(e.target.value)} />
+                <div className="modal-footer p-0 m-0 d-flex flex-nowrap align-items-center justify-content-between">
+                  <input
+                    type="submit"
+                    className="btn btn-success col-6 h-100 px-2 py-3 m-0"
+                    value="حفظ"
+                  />
+                  <input
+                    type="button"
+                    className="btn btn-danger col-6 h-100 px-2 py-3 m-0"
+                    data-dismiss="modal"
+                    value="إغلاق"
+                  />
                 </div>
-                <div className="form-group col-12 col-md-6">
-                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الوصف</label>
-                  <textarea defaultValue={listoftable.length > 0 ? listoftable.find((table, i) => table._id === tableid).description : ""} className="form-control border-primary m-0 p-2 h-auto" required onChange={(e) => settabledesc(e.target.value)}></textarea>
-                </div>
-                <div className="form-group col-12 col-md-6">
-                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0">متاح</label>
-                  <select className="form-control border-primary m-0 p-2 h-auto" name="category" id="category" form="carform" onChange={(e) => setisValid(e.target.value)}>
-                    <option value="">اختر</option>
-                    <option value={true} >متاح</option>
-                    <option value={false} >غير متاح</option>
-                  </select>
-                </div>
-              </div>
-              <div className="modal-footer p-0 m-0 d-flex flex-nowrap align-items-center justify-content-between">
-                <input type="submit" className="btn btn-success col-6 h-100 px-2 py-3 m-0" value="حفظ" />
-                <input type="button" className="btn btn-danger col-6 h-100 px-2 py-3 m-0" data-dismiss="modal" value="إغلاق" />
-              </div>
-            </form>
+              </form>
+            </div>
           </div>
         </div>
-      </div>}
-
+      )}
 
       <div id="qrTableModal" className="modal fade">
         <div className="modal-dialog col-10 col-md-5 h-75">
@@ -467,12 +760,27 @@ const Tables = () => {
                 <h4 className="modal-title">استخراج QR</h4>
               </div>
               <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
-                <div ref={printtableqr} className="form-group qrprint w-100 h-auto p-3 d-flex align-items-center justify-content-center">
+                <div
+                  ref={printtableqr}
+                  className="form-group qrprint w-100 h-auto p-3 d-flex align-items-center justify-content-center"
+                >
                   <div className="w-100 text-center">
-                    <p className="mb-3 text-nowrap text-center" style={{ fontSize: '26px', fontFamily: 'Noto Nastaliq Urdu , serif' }}>طاولة رقم {tableNumber}</p>
+                    <p
+                      className="mb-3 text-nowrap text-center text-dark"
+                      style={{
+                        fontSize: "26px",
+                        fontFamily: "Noto Nastaliq Urdu , serif",
+                      }}
+                    >
+                      طاولة رقم {tableNumber}
+                    </p>
                     {qrimage && (
                       <a href={qrimage} download>
-                        <img src={qrimage} className="img-fluid  w-100 h-75" alt="QR Code" />
+                        <img
+                          src={qrimage}
+                          className="img-fluid  w-100 h-75"
+                          alt="QR Code"
+                        />
                       </a>
                     )}
                   </div>
@@ -480,11 +788,27 @@ const Tables = () => {
               </div>
               <div className="modal-footer p-0 m-0 d-flex flex-nowrap align-items-center justify-content-between">
                 {qrimage ? (
-                  <button type="button" className="col-6 btn p-3 m-0 btn-info" onClick={handlePrinttableqr}>طباعة</button>
+                  <button
+                    type="button"
+                    className="col-6 btn p-3 m-0 btn-info"
+                    onClick={handlePrinttableqr}
+                  >
+                    طباعة
+                  </button>
                 ) : (
-                  <input type="submit" className="btn btn-success col-6 h-100 px-2 py-3 m-0"  value="استخراج" />
+                  <input
+                    type="submit"
+                    className="btn btn-success col-6 h-100 px-2 py-3 m-0"
+                    value="استخراج"
+                  />
                 )}
-                <button type="button" className="btn btn-danger col-6 h-100 px-2 py-3 m-0" data-dismiss="modal" >اغلاق</button>
+                <button
+                  type="button"
+                  className="btn btn-danger col-6 h-100 px-2 py-3 m-0"
+                  data-dismiss="modal"
+                >
+                  اغلاق
+                </button>
               </div>
             </form>
           </div>
@@ -499,12 +823,27 @@ const Tables = () => {
                 <h4 className="modal-title">استخراج QR</h4>
               </div>
               <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
-                <div ref={printwepqr} className="form-group qrprint w-100 h-auto p-3 d-flex align-items-center justify-content-center">
+                <div
+                  ref={printwepqr}
+                  className="form-group qrprint w-100 h-auto p-3 d-flex align-items-center justify-content-center"
+                >
                   <div className="w-100 text-center">
-                    <p className="mb-3" style={{ fontSize: '26px', fontFamily: 'Noto Nastaliq Urdu , serif' }}>{restaurantData && restaurantData.name}</p>
+                    <p
+                      className="mb-3"
+                      style={{
+                        fontSize: "26px",
+                        fontFamily: "Noto Nastaliq Urdu , serif",
+                      }}
+                    >
+                      {restaurantData && restaurantData.name}
+                    </p>
                     {qrimage && (
                       <a href={qrimage} download>
-                        <img src={qrimage} className="img-fluid  w-100 h-75" alt="QR Code" />
+                        <img
+                          src={qrimage}
+                          className="img-fluid  w-100 h-75"
+                          alt="QR Code"
+                        />
                       </a>
                     )}
                   </div>
@@ -512,18 +851,32 @@ const Tables = () => {
               </div>
               <div className="modal-footer p-0 m-0 d-flex flex-nowrap align-items-center justify-content-between">
                 {qrimage ? (
-                  <button type="button" className="col-6 btn p-3 m-0 btn-info" onClick={handlePrintwepqr}>طباعة</button>
+                  <button
+                    type="button"
+                    className="col-6 btn p-3 m-0 btn-info"
+                    onClick={handlePrintwepqr}
+                  >
+                    طباعة
+                  </button>
                 ) : (
-                  <input type="submit" className="btn btn-success col-6 h-100 px-2 py-3 m-0"  value="استخراج" />
+                  <input
+                    type="submit"
+                    className="btn btn-success col-6 h-100 px-2 py-3 m-0"
+                    value="استخراج"
+                  />
                 )}
-                <button type="button" className="btn btn-danger col-6 h-100 px-2 py-3 m-0" data-dismiss="modal">اغلاق</button>
+                <button
+                  type="button"
+                  className="btn btn-danger col-6 h-100 px-2 py-3 m-0"
+                  data-dismiss="modal"
+                >
+                  اغلاق
+                </button>
               </div>
             </form>
           </div>
         </div>
       </div>
-
-
 
       <div id="deleteTableModal" className="modal fade">
         <div className="modal-dialog modal-lg">
@@ -531,22 +884,40 @@ const Tables = () => {
             <form onSubmit={deleteTable}>
               <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                 <h4 className="modal-title">حذف طاولة</h4>
-                <button type="button" className="close m-0 p-1" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <button
+                  type="button"
+                  className="close m-0 p-1"
+                  data-dismiss="modal"
+                  aria-hidden="true"
+                >
+                  &times;
+                </button>
               </div>
               <div className="modal-body text-center">
-          <p className="text-right text-dark fs-3 fw-800 mb-2">هل أنت متأكد من حذف هذا السجل؟</p>
-          <p className="text-warning text-center mt-3"><small>لا يمكن الرجوع في هذا الإجراء.</small></p>
-        </div>
+                <p className="text-right text-dark fs-3 fw-800 mb-2">
+                  هل أنت متأكد من حذف هذا السجل؟
+                </p>
+                <p className="text-warning text-center mt-3">
+                  <small>لا يمكن الرجوع في هذا الإجراء.</small>
+                </p>
+              </div>
               <div className="modal-footer p-0 m-0 d-flex flex-nowrap align-items-center justify-content-between">
-                <input type="submit" className="btn btn-warning col-6 h-100 px-2 py-3 m-0" value="حذف" />
-                <input type="button" className="btn btn-danger col-6 h-100 px-2 py-3 m-0" data-dismiss="modal" value="إغلاق" />
+                <input
+                  type="submit"
+                  className="btn btn-warning col-6 h-100 px-2 py-3 m-0"
+                  value="حذف"
+                />
+                <input
+                  type="button"
+                  className="btn btn-danger col-6 h-100 px-2 py-3 m-0"
+                  data-dismiss="modal"
+                  value="إغلاق"
+                />
               </div>
             </form>
           </div>
         </div>
       </div>
-
-
 
       <div id="deleteListTableModal" className="modal fade">
         <div className="modal-dialog modal-lg">
@@ -554,22 +925,42 @@ const Tables = () => {
             <form onSubmit={deleteSelectedIds}>
               <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                 <h4 className="modal-title">حذف طاولة</h4>
-                <button type="button" className="close m-0 p-1" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <button
+                  type="button"
+                  className="close m-0 p-1"
+                  data-dismiss="modal"
+                  aria-hidden="true"
+                >
+                  &times;
+                </button>
               </div>
               <div className="modal-body text-center">
-          <p className="text-right text-dark fs-3 fw-800 mb-2">هل أنت متأكد من حذف هذا السجل؟</p>
-          <p className="text-warning text-center mt-3"><small>لا يمكن الرجوع في هذا الإجراء.</small></p>
-        </div>
+                <p className="text-right text-dark fs-3 fw-800 mb-2">
+                  هل أنت متأكد من حذف هذا السجل؟
+                </p>
+                <p className="text-warning text-center mt-3">
+                  <small>لا يمكن الرجوع في هذا الإجراء.</small>
+                </p>
+              </div>
               <div className="modal-footer p-0 m-0 d-flex flex-nowrap align-items-center justify-content-between">
-                <input type="submit" className="btn btn-warning col-6 h-100 px-2 py-3 m-0" value="حذف" />
-                <input type="button" className="btn btn-danger col-6 h-100 px-2 py-3 m-0" data-dismiss="modal" value="إغلاق" />
+                <input
+                  type="submit"
+                  className="btn btn-warning col-6 h-100 px-2 py-3 m-0"
+                  value="حذف"
+                />
+                <input
+                  type="button"
+                  className="btn btn-danger col-6 h-100 px-2 py-3 m-0"
+                  data-dismiss="modal"
+                  value="إغلاق"
+                />
               </div>
             </form>
           </div>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Tables
+export default Tables;
