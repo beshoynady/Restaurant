@@ -359,11 +359,11 @@ const Kitchen = () => {
       const updateproducts = products.map((prod) => ({ ...prod, isDone: true }));
       if (type === 'Internal') {
         const waiter = await specifiedWaiter(id);
-        await axios.put(`${apiUrl}/api/order/${id}`, { products: updateproducts, status, waiter });
+        await axios.put(`${apiUrl}/api/order/${id}`, { products: updateproducts, status, waiter },config);
         kitchenSocket.emit('orderready',`اورد جاهز -${waiter}`)
         
       }else{
-        await axios.put(`${apiUrl}/api/order/${id}`, { products: updateproducts, status });
+        await axios.put(`${apiUrl}/api/order/${id}`, { products: updateproducts, status },config);
         kitchenSocket.emit('orderready',`اورد جاهز`)
       }
       // Set all orders state
