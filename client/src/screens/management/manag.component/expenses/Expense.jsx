@@ -258,7 +258,7 @@ const ExpenseItem = () => {
                   </select>
                 </div>
 
-                <div className="d-flex align-items-center justify-content-between flex-nowrap p-0 m-0 px-1">
+                <div className="d-flex align-items-stretch justify-content-between flex-nowrap p-0 m-0 px-1">
                   <label className="form-label text-nowrap"><strong>مدة محددة:</strong></label>
 
                   <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
@@ -272,10 +272,10 @@ const ExpenseItem = () => {
                   </div>
 
                   <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
-                    <button type="button" className="btn btn-primary w-50 h-100 p-2 " onClick={() => setallDailyExpenses(filterByDateRange(allDailyExpenses))}>
+                    <button type="button" className="btn btn-primary  h-100 p-2 " onClick={() => setallDailyExpenses(filterByDateRange(allDailyExpenses))}>
                       <i className="fa fa-search"></i>
                     </button>
-                    <button type="button" className="btn btn-warning w-50 h-100 p-2" onClick={getAllExpenses}>استعادة
+                    <button type="button" className="btn btn-warning  h-100 p-2" onClick={getAllExpenses}>استعادة
                     </button>
                   </div>
                 </div>
