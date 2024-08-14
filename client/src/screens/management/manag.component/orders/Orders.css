@@ -79,7 +79,7 @@
   padding: 8px;
   min-width: 75px;
 }
-.form-control{
+.table-filter .form-control{
   max-width: max-content;
   min-width: 100%;
 }
@@ -108,6 +108,10 @@ table.table td {
   vertical-align: middle;
   text-align: center;
   font-size: 16px;
+}
+
+table.table td .form-control{
+  width: max-content;
 }
 
 table.table tr:nth-of-type(odd) {
