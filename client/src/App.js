@@ -2216,6 +2216,7 @@ function App() {
              <Route index element={
                   employeeLoginInfo.role === 'chef' ? <Kitchen /> :
                   employeeLoginInfo.role === 'waiter' ? <Waiter /> :
+                  employeeLoginInfo.role === 'deliveryMan' ? <DeliveryMan /> :
                   <ManagerDash />
                 } />
             {/* <Route index element={<Suspense fallback={<LoadingPage />}><ManagerDash /></Suspense>} /> */}
