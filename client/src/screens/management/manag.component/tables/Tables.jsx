@@ -269,7 +269,7 @@ const Tables = () => {
           </div>
           <div className="table-filter print-hide">
             <div className="col-12 text-dark d-flex flex-wrap align-items-center justify-content-between p-0 m-0">
-              <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
+              <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">عرض</label>
                 <select className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => { setstartpagination(0); setendpagination(e.target.value) }}>
                   {
@@ -285,12 +285,12 @@ const Tables = () => {
                 </select>
 
               </div>
-              <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
+              <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">رقم الطاولة</label>
                 <input type="text" className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => searchByNum(e.target.value)} />
               </div>
 
-              <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
+              <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الحالة</label>
                 <select className="form-control border-primary m-0 p-2 h-auto" name="Status" id="Status" form="carform"
                   onChange={(e) => filterByStatus(e.target.value)}>

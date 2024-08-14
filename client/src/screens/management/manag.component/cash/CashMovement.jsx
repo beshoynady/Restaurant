@@ -356,7 +356,7 @@ const CashMovement = () => {
           </div>
           <div class="table-filter print-hide">
             <div class="col-12 text-dark d-flex flex-wrap align-items-center justify-content-evenly p-0 m-0">
-              <div class="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
+              <div class="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">عرض</label>
                 <select className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => { setstartpagination(0); setendpagination(e.target.value) }}>
                   {
@@ -371,7 +371,7 @@ const CashMovement = () => {
                 </select>
                 
               </div>
-              <div class="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
+              <div class="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">نوع العملية</label>
                 <select class="form-control border-primary m-0 p-2 h-auto" onChange={(e) => filterByType(e.target.value)} >
                   <option value={""}>الكل</option>
@@ -380,7 +380,7 @@ const CashMovement = () => {
                   })}
                 </select>
               </div>
-              <div class="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
+              <div class="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الخزينه</label>
                 <select class="form-control border-primary m-0 p-2 h-auto" onChange={(e) => filterByCashRegisters(e.target.value)} >
                   <option value={""}>الكل</option>
@@ -390,7 +390,7 @@ const CashMovement = () => {
                 </select>
               </div>
               <div className='col-12 d-flex align-items-center justify-content-between'>
-                <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
+                <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">فلتر حسب الوقت</label>
                   <select className="form-control border-primary m-0 p-2 h-auto"  onChange={(e) => setAllCashMovement(filterByTime(e.target.value, AllCashMovement))}>
                     <option value="">اختر</option>
@@ -401,20 +401,20 @@ const CashMovement = () => {
                   </select>
                 </div>
 
-                <div className="d-flex align-items-center justify-content-between flex-nowrap col-9 p-0 m-0 px-1">
+                <div className="d-flex align-items-center justify-content-between flex-nowrap p-0 m-0 px-1">
                   <label className="form-label text-nowrap"><strong>مدة محددة:</strong></label>
 
-                  <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
+                  <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">من</label>
                     <input type="date" className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => setStartDate(e.target.value)} placeholder="اختر التاريخ" />
                   </div>
 
-                  <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
+                  <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">إلى</label>
                     <input type="date" className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => setEndDate(e.target.value)} placeholder="اختر التاريخ" />
                   </div>
 
-                  <div className="d-flex flex-nowrap justify-content-between col-3 p-0 m-0">
+                  <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
                     <button type="button" className="btn btn-primary w-50 h-100 p-2 " onClick={() => setAllCashMovement(filterByDateRange(AllCashMovement))}>
                       <i className="fa fa-search"></i>
                     </button>

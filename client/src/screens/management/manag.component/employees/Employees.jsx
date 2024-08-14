@@ -492,7 +492,7 @@ const Employees = () => {
           </div>
           <div className="table-filter print-hide">
             <div className="d-flex flex-wrap flex-row w-100 text-dark">
-              <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
+              <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                   عرض
                 </label>
@@ -516,7 +516,7 @@ const Employees = () => {
                   })()}
                 </select>
               </div>
-              <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
+              <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                   الاسم
                 </label>
@@ -526,7 +526,7 @@ const Employees = () => {
                   onChange={(e) => getEmployeesByName(e.target.value)}
                 />
               </div>
-              <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
+              <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                   الوظيفة
                 </label>
@@ -542,7 +542,7 @@ const Employees = () => {
                   <option value="Chef">شيف</option>
                 </select>
               </div>
-              <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
+              <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                   الشيفت
                 </label>
@@ -562,7 +562,7 @@ const Employees = () => {
                   )}
                 </select>
               </div>
-              <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
+              <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                   الحالة
                 </label>

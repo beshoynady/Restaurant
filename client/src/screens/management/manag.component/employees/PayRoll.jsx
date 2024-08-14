@@ -601,7 +601,7 @@ const PayRoll = () => {
                   <div className="table-filter print-hide">
                     <div className="col-12 text-dark d-flex flex-wrap align-items-center justify-content-evenly p-0 m-0">
                       
-                        <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
+                        <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
                           <label className="form-label text-wrap text-right fw-bolder p-0 m-0">عرض</label>
                           <select className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => { setstartpagination(0); setendpagination(e.target.value) }}>
                             <option value={5}>5</option>
@@ -612,12 +612,12 @@ const PayRoll = () => {
                             <option value={30}>30</option>
                           </select>
                       </div>
-                        <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
+                        <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
                           <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الاسم</label>
                           <input type="text" className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => searchByName(e.target.value)} />
 
                         </div>
-                        <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
+                        <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
                           <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الوظيفه</label>
                           <select className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => filterEmployeesByJob(e.target.value)} >
                             <option>الكل</option>
@@ -628,7 +628,7 @@ const PayRoll = () => {
                             <option value="deliveryman">ديليفري</option>
                           </select>
                         </div>
-                        <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
+                        <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
                           <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الحالة</label>
                           <select className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => filterEmpByStatus(e.target.value)}>
                             <option >الكل</option>
@@ -636,7 +636,7 @@ const PayRoll = () => {
                             <option value={false}>غير متاح</option>
                           </select>
                         </div>
-                        <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
+                        <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
                           <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الشهر</label>
                           <select className="form-control border-primary m-0 p-2 h-auto"  onChange={(e) => { setthismonth(e.target.value); console.log(e.target.value) }}>
                             <option>الكل</option>

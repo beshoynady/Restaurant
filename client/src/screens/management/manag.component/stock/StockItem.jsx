@@ -314,12 +314,12 @@ const StockItem = () => {
                 
               </div>
 
-              <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
+              <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">اسم الصنف</label>
                 <input type="text" className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => searchByitem(e.target.value)} />
               </div>
 
-              <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
+              <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">نوع المخزن</label>
                 <select className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => searchByCategory(e.target.value)} >
                   <option value={""}>الكل</option>

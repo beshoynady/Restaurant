@@ -208,7 +208,7 @@ const Users = () => {
           </div>
           <div class="table-filter print-hide">
             <div className="w-100 d-flex flex-row flex-wrap align-items-center justify-content-start text-dark">
-              <div class="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
+              <div class="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">عرض</label>
                 <select className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => { setstartpagination(0); setendpagination(e.target.value) }}>
                   {
@@ -223,13 +223,13 @@ const Users = () => {
                 </select>
                 
               </div>
-              <div class="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
+              <div class="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الموبايل</label>
                 <input type="text" class="form-control border-primary m-0 p-2 h-auto" onChange={(e) => getUserByPhone(e.target.value)} />
 
               </div>
               <div className='col-12 d-flex align-items-center justify-content-between'>
-                <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
+                <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">فلتر حسب الوقت</label>
                   <select className="form-control border-primary m-0 p-2 h-auto"  onChange={(e) => setAllUsers(filterByTime(e.target.value, AllUsers))}>
                     <option value="">اختر</option>
@@ -240,20 +240,20 @@ const Users = () => {
                   </select>
                 </div>
 
-                <div className="d-flex align-items-center justify-content-between flex-nowrap col-9 p-0 m-0 px-1">
+                <div className="d-flex align-items-center justify-content-between flex-nowrap p-0 m-0 px-1">
                   <label className="form-label text-nowrap"><strong>مدة محددة:</strong></label>
 
-                  <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
+                  <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">من</label>
                     <input type="date" className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => setStartDate(e.target.value)} placeholder="اختر التاريخ" />
                   </div>
 
-                  <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
+                  <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">إلى</label>
                     <input type="date" className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => setEndDate(e.target.value)} placeholder="اختر التاريخ" />
                   </div>
 
-                  <div className="d-flex flex-nowrap justify-content-between col-3 p-0 m-0">
+                  <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
                     <button type="button" className="btn btn-primary w-50 h-100 p-2 " onClick={() => setAllUsers(filterByDateRange(AllUsers))}>
                       <i className="fa fa-search"></i>
                     </button>

@@ -60,10 +60,11 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
+  max-width: max-content;
 }
 
 .table-filter .filter-group {
-  max-width: 200px;
+  max-width: 150px;
   display: flex;
   align-items: center;
   margin-left: 15px;
@@ -74,11 +75,14 @@
   border-radius: 4px;
   border-color: #ddd;
   font-size: 16px;
-  color: #333;
+  color: #000000;
   padding: 8px;
   min-width: 75px;
 }
-
+.form-control{
+  max-width: max-content;
+  min-width: 100%;
+}
 .table-filter .btn {
   height: 36px;
 }

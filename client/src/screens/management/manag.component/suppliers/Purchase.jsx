@@ -662,7 +662,7 @@ const Purchase = () => {
           </div>
           <div className="table-filter print-hide">
             <div className="col-12 text-dark d-flex flex-wrap align-items-center justify-content-evenly p-0 m-0">
-              <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
+              <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">عرض</label>
                 <select className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => { setstartpagination(0); setendpagination(e.target.value) }}>
                   {
@@ -677,11 +677,11 @@ const Purchase = () => {
                 </select>
                 
               </div>
-              <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
+              <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">رقم الفاتوره</label>
                 <input type="text" className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => searchByIvoiceNumber(e.target.value)} />
               </div>
-              <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
+              <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">طريقه السداد</label>
                 <select className="form-control border-primary m-0 p-2 h-auto"  onChange={(e) => searchByPaymentType(e.target.value)} >
                   <option value={""}>الكل</option>
@@ -689,7 +689,7 @@ const Purchase = () => {
                   <option value="credit">تقسيط</option>;
                 </select>
               </div>
-              <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
+              <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">حاله السداد</label>
                 <select className="form-control border-primary m-0 p-2 h-auto"  onChange={(e) => searchBypaymentStatus(e.target.value)} >
                   <option value={""}>الكل</option>
@@ -698,7 +698,7 @@ const Purchase = () => {
                   <option value="paid">سداد كامل</option>;
                 </select>
               </div>
-              <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
+              <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">المورد</label>
                 <select className="form-control border-primary m-0 p-2 h-auto"  onChange={(e) => searchBySupplier(e.target.value)} >
                   <option value={""}>الكل</option>
@@ -707,7 +707,7 @@ const Purchase = () => {
                   })}
                 </select>
               </div>
-              <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
+              <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">خزينه الدفع</label>
                 <select className="form-control border-primary m-0 p-2 h-auto"  onChange={(e) => searchByCashRegister(e.target.value)} >
                   <option value={""}>الكل</option>
@@ -717,7 +717,7 @@ const Purchase = () => {
                 </select>
               </div>
               <div className='col-12 d-flex align-items-center justify-content-between'>
-                <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
+                <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">فلتر حسب الوقت</label>
                   <select className="form-control border-primary m-0 p-2 h-auto"  onChange={(e) => setallPurchaseInvoice(filterByTime(e.target.value, allPurchaseInvoice))}>
                     <option value="">اختر</option>
@@ -728,20 +728,20 @@ const Purchase = () => {
                   </select>
                 </div>
 
-                <div className="d-flex align-items-center justify-content-between flex-nowrap col-9 p-0 m-0 px-1">
+                <div className="d-flex align-items-center justify-content-between flex-nowrap p-0 m-0 px-1">
                   <label className="form-label text-nowrap"><strong>مدة محددة:</strong></label>
 
-                  <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
+                  <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">من</label>
                     <input type="date" className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => setStartDate(e.target.value)} placeholder="اختر التاريخ" />
                   </div>
 
-                  <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
+                  <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">إلى</label>
                     <input type="date" className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => setEndDate(e.target.value)} placeholder="اختر التاريخ" />
                   </div>
 
-                  <div className="d-flex flex-nowrap justify-content-between col-3 p-0 m-0">
+                  <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
                     <button type="button" className="btn btn-primary w-50 h-100 p-2 " onClick={() => setallPurchaseInvoice(filterByDateRange(allPurchaseInvoice))}>
                       <i className="fa fa-search"></i>
                     </button>

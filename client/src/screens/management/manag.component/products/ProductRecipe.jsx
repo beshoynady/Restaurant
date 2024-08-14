@@ -452,7 +452,7 @@ const ProductRecipe = () => {
           <div className="table-filter print-hide">
             <div className="col-12 text-dark d-flex flex-wrap align-items-center justify-content-evenly p-0 m-0">
 
-              <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
+              <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">عرض</label>
                 <select className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => { setstartpagination(0); setendpagination(e.target.value) }}>
                   {
@@ -466,7 +466,7 @@ const ProductRecipe = () => {
                   }
                 </select>
               </div>
-              <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
+              <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">التصنيف</label>
                 <select className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => getproductByCategory(e.target.value)} >
                   <option value={""}>الكل</option>
@@ -476,7 +476,7 @@ const ProductRecipe = () => {
                   }
                 </select>
               </div>
-              <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
+              <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">المنتج</label>
                 <select className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => handleSelectedProduct(e.target.value)} >
                   <option value={""}>الكل</option>
@@ -487,7 +487,7 @@ const ProductRecipe = () => {
                 </select>
               </div>
               {sizes.length > 0 ?
-                <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
+                <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الحجم</label>
                   <select className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => handleSelectedProductSize(e.target.value)} >
                     <option value="">اختر حجم</option>
@@ -497,11 +497,11 @@ const ProductRecipe = () => {
                   </select>
                 </div>
                 : ""}
-              <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
+              <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">اجمالي التكاليف</label>
                 <input type="Number" className="form-control border-primary m-0 p-2 h-auto" readOnly defaultValue={producttotalcost} />
               </div>
-              {/* <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
+              {/* <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">Status</label>
                   <select className="form-control border-primary m-0 p-2 h-auto">
                     <option>Any</option>

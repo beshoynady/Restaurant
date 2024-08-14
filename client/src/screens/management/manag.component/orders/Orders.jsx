@@ -192,7 +192,7 @@ const Orders = () => {
           </div>
           <div className="table-filter print-hide">
             <div className="col-12 text-dark d-flex flex-wrap align-items-center justify-content-evenly p-0 m-0">
-              <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
+              <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                   عرض
                 </label>
@@ -217,7 +217,7 @@ const Orders = () => {
                 </select>
               </div>
 
-              <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
+              <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                   رقم الفاتورة
                 </label>
@@ -228,7 +228,7 @@ const Orders = () => {
                 />
               </div>
 
-              <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
+              <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                   نوع الاوردر
                 </label>
@@ -241,7 +241,7 @@ const Orders = () => {
                   <option value="Delivery">Delivery</option>
                   <option value="Takeaway">Takeaway</option>
                 </select>
-                {/* <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
+                {/* <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">Status</label>
                   <select className="form-control border-primary m-0 p-2 h-auto">
                     <option>Any</option>
@@ -255,7 +255,7 @@ const Orders = () => {
               </div>
 
               <div className="col-12 d-flex align-items-center justify-content-between">
-                <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
+                <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                     فلتر حسب الوقت
                   </label>
@@ -275,12 +275,12 @@ const Orders = () => {
                   </select>
                 </div>
 
-                <div className="d-flex align-items-center justify-content-between flex-nowrap col-9 p-0 m-0 px-1">
+                <div className="d-flex align-items-center justify-content-between flex-nowrap p-0 m-0 px-1">
                   <label className="form-label text-nowrap">
                     <strong>مدة محددة:</strong>
                   </label>
 
-                  <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
+                  <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                       من
                     </label>
@@ -292,7 +292,7 @@ const Orders = () => {
                     />
                   </div>
 
-                  <div className="filter-group d-flex flex-wrap align-items-center justify-content-between col-3 p-0 mb-1">
+                  <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                       إلى
                     </label>
@@ -304,7 +304,7 @@ const Orders = () => {
                     />
                   </div>
 
-                  <div className="d-flex flex-nowrap justify-content-between col-3 p-0 m-0">
+                  <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
                     <button
                       type="button"
                       className="btn btn-primary w-50 h-100 p-2 "
