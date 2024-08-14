@@ -753,7 +753,7 @@ const Tables = () => {
       )}
 
       <div id="qrTableModal" className="modal fade">
-        <div className="modal-dialog col-10 col-md-5 h-75">
+        <div className="modal-dialog modal-lg">
           <div className="modal-content shadow-lg border-0 rounded ">
             <form onSubmit={createQR}>
               <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
@@ -816,7 +816,7 @@ const Tables = () => {
       </div>
 
       <div id="qrwebModal" className="modal fade">
-        <div className="modal-dialog col-10 col-md-5 h-75">
+        <div className="modal-dialog modal-lg">
           <div className="modal-content shadow-lg border-0 rounded ">
             <form onSubmit={createwebQR}>
               <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
