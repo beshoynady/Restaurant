@@ -607,7 +607,7 @@ const POS = () => {
                 ordertype === 'Internal' ? (
                   <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
                     <div className="form-group d-flex flex-nowrap align-items-center justify-content-between col-12 ">
-                      <label htmlFor='table' className='col-4 col-form-label text-dark'>رقم الطاولة:</label>
+                      <label htmlFor='table' className='form-label text-dark'>رقم الطاولة:</label>
                       <select id='table' className="form-control border-primary m-0 p-2 h-auto" required onChange={(e) => { settableID(e.target.value) }}>
                         <option>اختر رقم الطاولة</option>
                         {allTable.map((table, i) => (
@@ -619,19 +619,19 @@ const POS = () => {
                 ) : ordertype === 'Delivery' ? (
                   <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
 
-                    <div className="form-group d-flex flex-nowrap align-items-center justify-content-between col-12 col-md-6 ">
-                      <label htmlFor="phone" className='col-4 col-form-label text-dark'>رقم الموبايل:</label>
-                      <input type='text' className="col-8 form-control" required onChange={(e) => { setclientphone(e.target.value); getCustomerByPhone(e.target.value) }} />
+                    <div className="form-group d-flex flex-wrap align-items-center justify-content-between col-12 col-md-6 ">
+                      <label htmlFor="phone" className='form-label text-dark'>رقم الموبايل:</label>
+                      <input type='text' className="form-control border-primary m-0 p-2 h-auto" required onChange={(e) => { setclientphone(e.target.value); getCustomerByPhone(e.target.value) }} />
                     </div>
 
-                    <div className="form-group d-flex flex-nowrap align-items-center justify-content-between col-12 col-md-6 ">
-                      <label htmlFor="name" className='col-4 col-form-label text-dark'>اسم العميل:</label>
-                      <input type='text' className="col-8 form-control" value={clientname} required onChange={(e) => { setclientname(e.target.value) }} />
+                    <div className="form-group d-flex flex-wrap align-items-center justify-content-between col-12 col-md-6 ">
+                      <label htmlFor="name" className='form-label text-dark'>اسم العميل:</label>
+                      <input type='text' className="form-control border-primary m-0 p-2 h-auto" value={clientname} required onChange={(e) => { setclientname(e.target.value) }} />
                     </div>
 
-                    <div className="form-group d-flex flex-nowrap align-items-center justify-content-between col-12 col-md-6 ">
-                      <label htmlFor="area" className='col-4 col-form-label text-dark'>المنطقة:</label>
-                      <select id="area" className="col-8 form-control" required onChange={(e) => { handelcustomerDeliveryArea(e.target.value) }}>
+                    <div className="form-group d-flex flex-wrap align-items-center justify-content-between col-12 col-md-6 ">
+                      <label htmlFor="area" className='form-label text-dark'>المنطقة:</label>
+                      <select id="area" className="form-control border-primary m-0 p-2 h-auto" required onChange={(e) => { handelcustomerDeliveryArea(e.target.value) }}>
                         <option>{deliveryAreaName}</option>
                         {areas ? (
                           areas.map((area, i) => (
@@ -642,9 +642,9 @@ const POS = () => {
                         )}
                       </select>
                     </div>
-                    <div className="form-group d-flex flex-nowrap align-items-center justify-content-between col-12 col-md-6 ">
-                      <label htmlFor="address" className='col-4 col-form-label text-dark'>العنوان:</label>
-                      <textarea className="col-8 form-control" value={clientaddress} required onChange={(e) => setclientaddress(e.target.value)} />
+                    <div className="form-group d-flex flex-wrap align-items-center justify-content-between col-12 col-md-6 ">
+                      <label htmlFor="address" className='form-label text-dark'>العنوان:</label>
+                      <textarea className="form-control border-primary m-0 p-2 h-auto" value={clientaddress} required onChange={(e) => setclientaddress(e.target.value)} />
                     </div>
                     {isClientFounded ?
                       <>
@@ -686,13 +686,13 @@ const POS = () => {
                 ) : ordertype === 'Takeaway' ? (
                   <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
 
-                    <div className="form-group d-flex flex-nowrap align-items-center justify-content-between col-12 col-md-6 ">
-                      <label htmlFor="name" className='col-4 col-form-label text-dark'>اسم العميل:</label>
-                      <input type='text' className="col-8 form-control" required onChange={(e) => { setclientname(e.target.value) }} />
+                    <div className="form-group d-flex flex-wrap align-items-center justify-content-between col-12 col-md-6 ">
+                      <label htmlFor="name" className='form-label text-dark'>اسم العميل:</label>
+                      <input type='text' className="form-control border-primary m-0 p-2 h-auto" required onChange={(e) => { setclientname(e.target.value) }} />
                     </div>
-                    <div className="form-group d-flex flex-nowrap align-items-center justify-content-between col-12 col-md-6 ">
-                      <label htmlFor="phone" className='col-4 col-form-label text-dark'>رقم الموبايل:</label>
-                      <input type='text' className="col-8 form-control" required onChange={(e) => setclientphone(e.target.value)} />
+                    <div className="form-group d-flex flex-wrap align-items-center justify-content-between col-12 col-md-6 ">
+                      <label htmlFor="phone" className='form-label text-dark'>رقم الموبايل:</label>
+                      <input type='text' className="form-control border-primary m-0 p-2 h-auto" required onChange={(e) => setclientphone(e.target.value)} />
                     </div>
                   </div>
                 ) : null : ''}
