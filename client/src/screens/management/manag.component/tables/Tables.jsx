@@ -569,7 +569,7 @@ const Tables = () => {
                   &times;
                 </button>
               </div>
-              <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
+              <div className="modal-body d-flex flex-wrap align-items-center p-0 m-0 text-center">
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                     رقم السكشن
@@ -653,7 +653,7 @@ const Tables = () => {
                     &times;
                   </button>
                 </div>
-                <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
+                <div className="modal-body d-flex flex-wrap align-items-center p-0 m-0 text-center">
                   <div className="form-group col-12 col-md-6">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                       رقم السكشن
@@ -759,10 +759,10 @@ const Tables = () => {
               <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                 <h4 className="modal-title">استخراج QR</h4>
               </div>
-              <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
+              <div className="modal-body d-flex flex-wrap align-items-center p-0 m-0 text-center">
                 <div
                   ref={printtableqr}
-                  className="form-group qrprint w-100 h-auto p-3 d-flex align-items-center justify-content-center"
+                  className="form-group qrprint w-100 h-auto p-0 m-2 d-flex align-items-center justify-content-center"
                 >
                   <div className="w-100 text-center">
                     <p
@@ -822,10 +822,10 @@ const Tables = () => {
               <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                 <h4 className="modal-title">استخراج QR</h4>
               </div>
-              <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
+              <div className="modal-body d-flex flex-wrap align-items-center p-0 m-0 text-center">
                 <div
                   ref={printwepqr}
-                  className="form-group qrprint w-100 h-auto p-3 d-flex align-items-center justify-content-center"
+                  className="form-group qrprint w-100 h-auto p-0 m-0 d-flex align-items-center justify-content-center"
                 >
                   <div className="w-100 text-center text-dark">
                     <p
