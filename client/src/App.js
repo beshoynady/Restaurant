@@ -1,55 +1,119 @@
-import React, { createContext, useState, useEffect, Suspense } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import axios from 'axios';
-import jwt_decode from 'jwt-decode';
+import React, { createContext, useState, useEffect, Suspense } from "react";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import axios from "axios";
+import jwt_decode from "jwt-decode";
 
-import io from 'socket.io-client';
+import io from "socket.io-client";
 
 import { toast } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
+import "react-toastify/dist/ReactToastify.css";
 
+import LoadingPage from "./screens/management/manag.component/LoadingPage/LoadingPage";
+import Userscreen from "./screens/user.screen/Userscreen";
+import Login from "./screens/management/manag.component/login/Login";
 
-
-import LoadingPage from './screens/management/manag.component/LoadingPage/LoadingPage';
-import Userscreen from './screens/user.screen/Userscreen';
-import Login from './screens/management/manag.component/login/Login';
-
-const ManagLayout = React.lazy(() => import('./screens/management/ManagLayout'));
-const ManagerDash = React.lazy(() => import('./screens/management/manag.component/managerdash/ManagerDash'));
-const Info = React.lazy(() => import('./screens/management/manag.component/setting/info'));
-const Orders = React.lazy(() => import('./screens/management/manag.component/orders/Orders'));
-const Products = React.lazy(() => import('./screens/management/manag.component/products/Products'));
-const ProductRecipe = React.lazy(() => import('./screens/management/manag.component/products/ProductRecipe'));
-const Tables = React.lazy(() => import('./screens/management/manag.component/tables/Tables'));
-const TablesPage = React.lazy(() => import('./screens/management/manag.component/tables/TablesPage'));
-const ReservationTables = React.lazy(() => import('./screens/management/manag.component/tables/ReservationTables'));
-const Employees = React.lazy(() => import('./screens/management/manag.component/employees/Employees'));
-const PermissionsComponent = React.lazy(() => import('./screens/management/manag.component/employees/Permissions'));
-const EmployeeTransactions = React.lazy(() => import('./screens/management/manag.component/employees/EmployeeTransactions'));
-const PayRoll = React.lazy(() => import('./screens/management/manag.component/employees/PayRoll'));
-const AttendanceManagement = React.lazy(() => import('./screens/management/manag.component/employees/attendance'));
-const MenuCategory = React.lazy(() => import('./screens/management/manag.component/products/MenuCategory'));
-const Kitchen = React.lazy(() => import('./screens/management/manag.component/kitchen/Kitchen'));
-const Waiter = React.lazy(() => import('./screens/management/manag.component/waiter/Waiter'));
-const DeliveryMan = React.lazy(() => import('./screens/management/manag.component/deliveryman/DeliveryMan'));
-const POS = React.lazy(() => import('./screens/management/manag.component/pos/POS'));
-const Suppliers = React.lazy(() => import('./screens/management/manag.component/suppliers/Suppliers'));
-const Purchase = React.lazy(() => import('./screens/management/manag.component/suppliers/Purchase'));
-const PurchaseReturn = React.lazy(() => import('./screens/management/manag.component/suppliers/PurchaseReturn'));
-const SupplierTransaction = React.lazy(() => import('./screens/management/manag.component/suppliers/SupplierTransaction'));
-const CategoryStock = React.lazy(() => import('./screens/management/manag.component/stock/CategoryStock'));
-const StockItem = React.lazy(() => import('./screens/management/manag.component/stock/StockItem'));
-const StockManag = React.lazy(() => import('./screens/management/manag.component/stock/StockManag'));
-const KitchenConsumption = React.lazy(() => import('./screens/management/manag.component/stock/KitchenConsumption'));
-const ExpenseItem = React.lazy(() => import('./screens/management/manag.component/expenses/Expense'));
-const DailyExpense = React.lazy(() => import('./screens/management/manag.component/expenses/dailyExpense'));
-const CashRegister = React.lazy(() => import('./screens/management/manag.component/cash/CashRegister'));
-const CashMovement = React.lazy(() => import('./screens/management/manag.component/cash/CashMovement'));
-const Users = React.lazy(() => import('./screens/management/manag.component/users/Users'));
-const Customers = React.lazy(() => import('./screens/management/manag.component/users/Customers'));
-const CustomerMessage = React.lazy(() => import('./screens/management/manag.component/users/CustomerMessage'));
-
-
+const ManagLayout = React.lazy(() =>
+  import("./screens/management/ManagLayout")
+);
+const ManagerDash = React.lazy(() =>
+  import("./screens/management/manag.component/managerdash/ManagerDash")
+);
+const Info = React.lazy(() =>
+  import("./screens/management/manag.component/setting/info")
+);
+const Orders = React.lazy(() =>
+  import("./screens/management/manag.component/orders/Orders")
+);
+const Products = React.lazy(() =>
+  import("./screens/management/manag.component/products/Products")
+);
+const ProductRecipe = React.lazy(() =>
+  import("./screens/management/manag.component/products/ProductRecipe")
+);
+const Tables = React.lazy(() =>
+  import("./screens/management/manag.component/tables/Tables")
+);
+const TablesPage = React.lazy(() =>
+  import("./screens/management/manag.component/tables/TablesPage")
+);
+const ReservationTables = React.lazy(() =>
+  import("./screens/management/manag.component/tables/ReservationTables")
+);
+const Employees = React.lazy(() =>
+  import("./screens/management/manag.component/employees/Employees")
+);
+const PermissionsComponent = React.lazy(() =>
+  import("./screens/management/manag.component/employees/Permissions")
+);
+const EmployeeTransactions = React.lazy(() =>
+  import("./screens/management/manag.component/employees/EmployeeTransactions")
+);
+const PayRoll = React.lazy(() =>
+  import("./screens/management/manag.component/employees/PayRoll")
+);
+const AttendanceManagement = React.lazy(() =>
+  import("./screens/management/manag.component/employees/attendance")
+);
+const MenuCategory = React.lazy(() =>
+  import("./screens/management/manag.component/products/MenuCategory")
+);
+const Kitchen = React.lazy(() =>
+  import("./screens/management/manag.component/kitchen/Kitchen")
+);
+const Waiter = React.lazy(() =>
+  import("./screens/management/manag.component/waiter/Waiter")
+);
+const DeliveryMan = React.lazy(() =>
+  import("./screens/management/manag.component/deliveryman/DeliveryMan")
+);
+const POS = React.lazy(() =>
+  import("./screens/management/manag.component/pos/POS")
+);
+const Suppliers = React.lazy(() =>
+  import("./screens/management/manag.component/suppliers/Suppliers")
+);
+const Purchase = React.lazy(() =>
+  import("./screens/management/manag.component/suppliers/Purchase")
+);
+const PurchaseReturn = React.lazy(() =>
+  import("./screens/management/manag.component/suppliers/PurchaseReturn")
+);
+const SupplierTransaction = React.lazy(() =>
+  import("./screens/management/manag.component/suppliers/SupplierTransaction")
+);
+const CategoryStock = React.lazy(() =>
+  import("./screens/management/manag.component/stock/CategoryStock")
+);
+const StockItem = React.lazy(() =>
+  import("./screens/management/manag.component/stock/StockItem")
+);
+const StockManag = React.lazy(() =>
+  import("./screens/management/manag.component/stock/StockManag")
+);
+const KitchenConsumption = React.lazy(() =>
+  import("./screens/management/manag.component/stock/KitchenConsumption")
+);
+const ExpenseItem = React.lazy(() =>
+  import("./screens/management/manag.component/expenses/Expense")
+);
+const DailyExpense = React.lazy(() =>
+  import("./screens/management/manag.component/expenses/dailyExpense")
+);
+const CashRegister = React.lazy(() =>
+  import("./screens/management/manag.component/cash/CashRegister")
+);
+const CashMovement = React.lazy(() =>
+  import("./screens/management/manag.component/cash/CashMovement")
+);
+const Users = React.lazy(() =>
+  import("./screens/management/manag.component/users/Users")
+);
+const Customers = React.lazy(() =>
+  import("./screens/management/manag.component/users/Customers")
+);
+const CustomerMessage = React.lazy(() =>
+  import("./screens/management/manag.component/users/CustomerMessage")
+);
 
 // const socket = io(process.env.REACT_APP_API_URL, {
 //   reconnection: true,
@@ -81,10 +145,10 @@ function App() {
   axios.defaults.withCredentials = true;
 
   const apiUrl = process.env.REACT_APP_API_URL;
-  const token = localStorage.getItem('token_e');
+  const token = localStorage.getItem("token_e");
   const config = {
     headers: {
-      'Authorization': `Bearer ${token}`,
+      Authorization: `Bearer ${token}`,
     },
   };
 
@@ -95,9 +159,9 @@ function App() {
     // Toggle dark mode styles
     const body = document.body;
     if (isDarkMode) {
-      body.classList.add('dark-mode');
+      body.classList.add("dark-mode");
     } else {
-      body.classList.remove('dark-mode');
+      body.classList.remove("dark-mode");
     }
   }, [isDarkMode]);
 
@@ -106,7 +170,7 @@ function App() {
   };
 
   // Reataurant data //
-  const [restaurantData, setrestaurantData] = useState({})
+  const [restaurantData, setrestaurantData] = useState({});
   const getRestaurant = async () => {
     try {
       const response = await axios.get(`${apiUrl}/api/restaurant/`, config);
@@ -117,57 +181,57 @@ function App() {
         const subscriptionEndDate = new Date(restaurantData.subscriptionEnd);
 
         if (currentDate > subscriptionEndDate) {
-          toast.error('انتهت صلاحية الاشتراك. يرجى تجديد الاشتراك للاستمرار في استخدام النظام.', {
-            position: toast.POSITION.TOP_CENTER,
-            autoClose: false,
-            className: 'big-toast',
-          });
+          toast.error(
+            "انتهت صلاحية الاشتراك. يرجى تجديد الاشتراك للاستمرار في استخدام النظام.",
+            {
+              position: toast.POSITION.TOP_CENTER,
+              autoClose: false,
+              className: "big-toast",
+            }
+          );
           // throw new Error('Subscription has ended.');
         }
         setrestaurantData(restaurantData);
         // toast.success('تم جلب بيانات المطعم بنجاح!');
       } else {
-        toast.error('لم يتم العثور على بيانات المطعم..');
-        throw new Error('لم يتم العثور على بيانات المطعم.');
+        toast.error("لم يتم العثور على بيانات المطعم..");
+        throw new Error("لم يتم العثور على بيانات المطعم.");
       }
     } catch (error) {
-      console.error('Error fetching restaurant data:', error);
-      toast.error('حدث خطأ أثناء جلب بيانات المطعم.');
+      console.error("Error fetching restaurant data:", error);
+      toast.error("حدث خطأ أثناء جلب بيانات المطعم.");
     }
   };
 
   //++++++++++++++++++++ pagination ++++++++++
 
-  const [startpagination, setstartpagination] = useState(0)
-  const [endpagination, setendpagination] = useState(5)
+  const [startpagination, setstartpagination] = useState(0);
+  const [endpagination, setendpagination] = useState(5);
 
   // const [pagination, setpagination] = useState(5)
   const EditPagination = (e) => {
-    if (e.target.innerHTML === 'التالي') {
-      setstartpagination(startpagination + 5)
-      setendpagination(endpagination + 5)
-    } else if (e.target.innerHTML === 'السابق') {
+    if (e.target.innerHTML === "التالي") {
+      setstartpagination(startpagination + 5);
+      setendpagination(endpagination + 5);
+    } else if (e.target.innerHTML === "السابق") {
       if (endpagination <= 5) {
-        setstartpagination(0)
-        setendpagination(5)
+        setstartpagination(0);
+        setendpagination(5);
       } else {
-        setstartpagination(startpagination - 5)
-        setendpagination(endpagination - 5)
+        setstartpagination(startpagination - 5);
+        setendpagination(endpagination - 5);
       }
     } else {
-      setstartpagination((e.target.innerHTML * 5) - 5)
-      setendpagination(e.target.innerHTML * 5)
-
+      setstartpagination(e.target.innerHTML * 5 - 5);
+      setendpagination(e.target.innerHTML * 5);
     }
-  }
-
-
+  };
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     const year = date.getFullYear();
-    const month = (date.getMonth() + 1).toString().padStart(2, '0');
-    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    const day = date.getDate().toString().padStart(2, "0");
     return `${year}-${month}-${day}`;
     // return `${day}/${month}/${year}`;
   };
@@ -176,10 +240,12 @@ function App() {
     const time = new Date(timeString);
     let hours = time.getHours();
     const minutes = time.getMinutes();
-    const ampm = hours >= 12 ? 'م' : 'ص';
+    const ampm = hours >= 12 ? "م" : "ص";
     hours = hours % 12;
     hours = hours ? hours : 12;
-    const formattedTime = `${hours}:${minutes < 10 ? '0' + minutes : minutes} ${ampm}`;
+    const formattedTime = `${hours}:${
+      minutes < 10 ? "0" + minutes : minutes
+    } ${ampm}`;
     return formattedTime;
   };
   const formatDateTime = (dateString) => {
@@ -189,79 +255,91 @@ function App() {
     let minutes = date.getMinutes();
 
     // Convert the hour to 12-hour format
-    const ampm = hours >= 12 ? 'م' : 'ص';
+    const ampm = hours >= 12 ? "م" : "ص";
     hours = hours % 12;
     hours = hours ? hours : 12; // 12-hour format 12 denotes noon
 
     // Add leading zero to hours and minutes if less than 10
-    hours = hours < 10 ? '0' + hours : hours;
-    minutes = minutes < 10 ? '0' + minutes : minutes;
+    hours = hours < 10 ? "0" + hours : hours;
+    minutes = minutes < 10 ? "0" + minutes : minutes;
 
     // Format the time
-    const formattedTime = hours + ':' + minutes + ' ' + ampm;
+    const formattedTime = hours + ":" + minutes + " " + ampm;
 
     // Format the date
-    const formattedDate = formatDate(date)
+    const formattedDate = formatDate(date);
 
-    return formattedDate + ' ' + formattedTime;
+    return formattedDate + " " + formattedTime;
   };
 
-
   const filterByTime = (timeRange, array) => {
-
     let filtered = [];
 
     const now = new Date();
-    const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const startOfToday = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate()
+    );
     const startOfWeek = new Date(now);
     startOfWeek.setDate(now.getDate() - now.getDay());
     startOfWeek.setHours(0, 0, 0, 0);
     const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
     const startOfYear = new Date(now.getFullYear(), 0, 1);
 
-    console.log({ now, startOfToday, startOfWeek, startOfMonth, startOfYear, day: new Date().getDay(), date: new Date().getDate(), month: new Date().getMonth(), year: new Date().getFullYear() })
+    console.log({
+      now,
+      startOfToday,
+      startOfWeek,
+      startOfMonth,
+      startOfYear,
+      day: new Date().getDay(),
+      date: new Date().getDate(),
+      month: new Date().getMonth(),
+      year: new Date().getFullYear(),
+    });
 
     switch (timeRange) {
-      case 'today':
-        filtered = array.filter(item =>
-          new Date(item.createdAt) >= startOfToday
+      case "today":
+        filtered = array.filter(
+          (item) => new Date(item.createdAt) >= startOfToday
         );
         break;
-      case 'week':
-        filtered = array.filter(item =>
-          new Date(item.createdAt) >= startOfWeek
+      case "week":
+        filtered = array.filter(
+          (item) => new Date(item.createdAt) >= startOfWeek
         );
         break;
-      case 'month':
-        filtered = array.filter(item =>
-          new Date(item.createdAt) >= startOfMonth
+      case "month":
+        filtered = array.filter(
+          (item) => new Date(item.createdAt) >= startOfMonth
         );
         break;
-      case 'year':
-        filtered = array.filter(item =>
-          new Date(item.createdAt) >= startOfYear
+      case "year":
+        filtered = array.filter(
+          (item) => new Date(item.createdAt) >= startOfYear
         );
         break;
       default:
         filtered = array;
     }
 
-    return filtered
+    return filtered;
   };
 
-  const [StartDate, setStartDate] = useState(new Date())
-  const [EndDate, setEndDate] = useState(new Date())
+  const [StartDate, setStartDate] = useState(new Date());
+  const [EndDate, setEndDate] = useState(new Date());
 
   const filterByDateRange = (array) => {
     const start = new Date(StartDate);
     const end = new Date(EndDate);
 
-    const filtered = array.filter(item => {
+    const filtered = array.filter((item) => {
       const createdAt = new Date(item.createdAt);
       return createdAt >= start && createdAt <= end;
     });
 
-    return filtered
+    return filtered;
   };
 
   //+++++++++++++++++ product ++++++++++++++++++++
@@ -272,12 +350,12 @@ function App() {
   const getAllProducts = async () => {
     try {
       // Fetch products from the API
-      const response = await axios.get(apiUrl + '/api/product');
+      const response = await axios.get(apiUrl + "/api/product");
       console.log({ employees: response });
 
       // Check if response is successful
       if (response.status !== 200) {
-        throw new Error('Failed to fetch products.');
+        throw new Error("Failed to fetch products.");
       }
 
       const productsList = response.data;
@@ -287,14 +365,15 @@ function App() {
         setAllProducts(productsList);
 
         // Filter products with discount
-        const proOffer = productsList&&productsList.filter(pro => pro.discount > 0);
+        const proOffer =
+          productsList && productsList.filter((pro) => pro.discount > 0);
         setProductsOffer(proOffer);
 
         // Filter products that have sizes with discount
         const sizOffer = [];
-        productsList.forEach(pro => {
+        productsList.forEach((pro) => {
           if (pro.hasSizes) {
-            pro.sizes.forEach(size => {
+            pro.sizes.forEach((size) => {
               if (size.sizeDiscount > 0) {
                 sizOffer.push(size);
               }
@@ -303,45 +382,49 @@ function App() {
         });
         setSizesOffer(sizOffer);
       }
-
     } catch (error) {
       // Handle errors
-      console.error('Error fetching products:', error);
+      console.error("Error fetching products:", error);
       // Additional error handling logic can be added here, such as displaying an error message to the user.
     }
-  }
+  };
 
   //+++++++ menucategory +++++++++++
-  const [allMenuCategories, setallMenuCategories] = useState([])
+  const [allMenuCategories, setallMenuCategories] = useState([]);
   const getAllMenuCategories = async () => {
     try {
-
       // Fetch all categories from the API
-      const response = await axios.get(apiUrl + '/api/menucategory', config);
+      const response = await axios.get(apiUrl + "/api/menucategory", config);
 
       // Check if response is successful
       if (response.status !== 200) {
-        throw new Error('Failed to fetch categories.');
+        throw new Error("Failed to fetch categories.");
       }
-      const allMenuCategories = response.data
-      const activeMenuCategories =  allMenuCategories&&allMenuCategories.filter(menucategory => menucategory.status === true);
+      const allMenuCategories = response.data;
+      const activeMenuCategories =
+        allMenuCategories &&
+        allMenuCategories.filter(
+          (menucategory) => menucategory.status === true
+        );
       // Set fetched categories in the state
-      console.log({ activeMenuCategories })
+      console.log({ activeMenuCategories });
 
       setallMenuCategories(activeMenuCategories);
 
-      const mainCategory = activeMenuCategories&&activeMenuCategories.filter(menucategory => menucategory.isMain === true)[0]
+      const mainCategory =
+        activeMenuCategories &&
+        activeMenuCategories.filter(
+          (menucategory) => menucategory.isMain === true
+        )[0];
       if (mainCategory) {
-        setMenuCategoryId(mainCategory._id)
+        setMenuCategoryId(mainCategory._id);
       }
     } catch (error) {
       // Handle errors
-      console.error('Error fetching categories:', error);
+      console.error("Error fetching categories:", error);
       // You can add additional error handling logic here, such as displaying an error message to the user.
     }
-  }
-
-
+  };
 
   // const calcTotalSalesOfCategory = (id) => {
   //   try {
@@ -363,34 +446,34 @@ function App() {
   // }
 
   // ++++++++++ order ++++++++++++
-  const [allOrders, setallOrders] = useState([])
+  const [allOrders, setallOrders] = useState([]);
   const getAllOrders = async () => {
     try {
       // Fetch all orders from the API
-      const response = await axios.get(apiUrl + '/api/order', config);
-      console.log({ order: response })
+      const response = await axios.get(apiUrl + "/api/order", config);
+      console.log({ order: response });
       // Check if response is successful
       if (response.status !== 200) {
-        throw new Error('Failed to fetch orders.');
+        throw new Error("Failed to fetch orders.");
       }
 
       // Set fetched orders in the state
       setallOrders(response.data.reverse());
     } catch (error) {
       // Handle errors
-      console.error('Error fetching orders:', error.message);
+      console.error("Error fetching orders:", error.message);
       // You can add additional error handling logic here, such as displaying an error message to the user.
     }
-  }
-
-
+  };
 
   //+++++++++++ table ++++++++++++++
-  const [allTable, setallTable] = useState([])
+  const [allTable, setallTable] = useState([]);
 
   const getAllTable = async () => {
     try {
-      const response = await axios.get(apiUrl + '/api/table', { timeout: 5000 });
+      const response = await axios.get(apiUrl + "/api/table", {
+        timeout: 5000,
+      });
       if (response.status === 200 && response.data) {
         setallTable(response.data);
       } else {
@@ -398,7 +481,7 @@ function App() {
       }
     } catch (error) {
       // إعادة المحاولة عند حدوث خطأ
-      if (error.code === 'ECONNABORTED') {
+      if (error.code === "ECONNABORTED") {
         setTimeout(getAllTable, 3000);
       } else {
         console.error("Error fetching table data:", error);
@@ -406,105 +489,103 @@ function App() {
     }
   };
 
-
   // +++++++++++++++ user +++++++++++++
-  const [allUsers, setallUsers] = useState([])
+  const [allUsers, setallUsers] = useState([]);
   const getAllUsers = async () => {
     try {
       const response = await axios.get(`${apiUrl}/api/user`);
       if (response.status === 200) {
         setallUsers(response.data);
       } else {
-        console.error('Failed to fetch users data: Unexpected response status', response.status);
+        console.error(
+          "Failed to fetch users data: Unexpected response status",
+          response.status
+        );
       }
     } catch (error) {
-      console.error('Error fetching users data:', error);
+      console.error("Error fetching users data:", error);
     }
   };
 
-  const [allEmployees, setallEmployees] = useState([])
+  const [allEmployees, setallEmployees] = useState([]);
   const getAllEmployees = async () => {
     try {
       if (!token) {
         // Handle case where token is not available
-        throw new Error('توكن غير متاح');
+        throw new Error("توكن غير متاح");
       }
       const response = await axios.get(`${apiUrl}/api/employee`, config);
 
       if (response.status === 200) {
         setallEmployees(response.data);
-        console.log('Employees data fetched successfully:', response.data);
+        console.log("Employees data fetched successfully:", response.data);
       } else {
-        console.error('Failed to fetch employees data: Unexpected response status', response.status);
+        console.error(
+          "Failed to fetch employees data: Unexpected response status",
+          response.status
+        );
         // يمكنك إطلاق استثناء هنا أو عرض رسالة خطأ للمستخدم
       }
     } catch (error) {
-      console.error('Error fetching employees data:', error);
+      console.error("Error fetching employees data:", error);
       // يمكنك إطلاق استثناء هنا أو عرض رسالة خطأ للمستخدم
     }
   };
 
-
-
-
-
-  // ++++++++ client screen +++++++++++++ 
-  const [MenuCategoryId, setMenuCategoryId] = useState('')
+  // ++++++++ client screen +++++++++++++
+  const [MenuCategoryId, setMenuCategoryId] = useState("");
 
   const filterByMenuCategoryId = (e) => {
     // console.log(e.target.value)
-    setMenuCategoryId(e.target.value)
-  }
+    setMenuCategoryId(e.target.value);
+  };
 
-
-
-  const [count, setcount] = useState(0)
-
+  const [count, setcount] = useState(0);
 
   const incrementProductQuantity = (productId, sizeId) => {
     try {
       // incrementProductQuantity the count state
       setcount(count + 1);
-      console.log({ productOrderToUpdate, productId, sizeId })
+      console.log({ productOrderToUpdate, productId, sizeId });
       // Find the product either in the order or in all products
-      const findProduct = productOrderToUpdate.length > 0 ?
-        productOrderToUpdate.find(product => product._id === productId) :
-        allProducts.find(product => product._id === productId);
+      const findProduct =
+        productOrderToUpdate.length > 0
+          ? productOrderToUpdate.find((product) => product._id === productId)
+          : allProducts.find((product) => product._id === productId);
 
       if (!findProduct) {
-        throw new Error('Product not found.');
+        throw new Error("Product not found.");
       }
 
       if (findProduct.hasSizes) {
-        findProduct.sizes.map(size => {
+        findProduct.sizes.map((size) => {
           if (size._id === sizeId) {
             // incrementProductQuantity the quantity of the found product
             size.sizeQuantity += 1;
           }
-        })
-        itemsInCart.map(item => {
+        });
+        itemsInCart.map((item) => {
           if (item.productid === productId && item.sizeId === sizeId) {
             item.quantity += 1;
           }
-        })
+        });
       } else if (!findProduct.hasSizes) {
         // incrementProductQuantity the quantity of the found product
         findProduct.quantity += 1;
-        itemsInCart.map(item => {
+        itemsInCart.map((item) => {
           if (item.productid === productId) {
             item.quantity += 1;
           }
-        })
+        });
       }
 
       console.log(findProduct);
       console.log(itemsInCart);
     } catch (error) {
-      console.error('Error incrementing product quantity:', error.message);
+      console.error("Error incrementing product quantity:", error.message);
       // You can handle the error appropriately, such as displaying an error message to the user.
     }
   };
-
 
   const decrementProductQuantity = (productId, sizeId) => {
     try {
@@ -512,127 +593,122 @@ function App() {
       setcount(count - 1);
 
       // Find the product either in the order or in all products
-      const findProduct = productOrderToUpdate.length > 0 ?
-        productOrderToUpdate.find(product => product._id === productId) :
-        allProducts.find(product => product._id === productId);
+      const findProduct =
+        productOrderToUpdate.length > 0
+          ? productOrderToUpdate.find((product) => product._id === productId)
+          : allProducts.find((product) => product._id === productId);
 
-      console.log({ findProduct })
+      console.log({ findProduct });
       if (!findProduct) {
-        throw new Error('Product not found.');
+        throw new Error("Product not found.");
       }
 
       if (findProduct.hasSizes) {
-        findProduct.sizes.map(size => {
+        findProduct.sizes.map((size) => {
           if (size._id === sizeId) {
             // incrementProductQuantity the quantity of the found product
             if (size.sizeQuantity < 2) {
               size.sizeQuantity = 0;
-              findProduct.notes = '';
+              findProduct.notes = "";
               deleteItemFromCart(productId, sizeId);
             } else {
               size.sizeQuantity -= 1;
-
             }
           }
-        })
-        itemsInCart.map(item => {
+        });
+        itemsInCart.map((item) => {
           if (item.productid === productId && item.sizeId === sizeId) {
             // incrementProductQuantity the quantity of the found product
             if (item.quantity < 2) {
               item.quantity = 0;
-              findProduct.notes = '';
+              findProduct.notes = "";
               deleteItemFromCart(productId, sizeId);
             } else {
               item.quantity -= 1;
             }
           }
-        })
+        });
       } else if (!findProduct.hasSizes) {
         // incrementProductQuantity the quantity of the found product
         if (findProduct.quantity < 2) {
           findProduct.quantity = 0;
-          findProduct.notes = '';
+          findProduct.notes = "";
           deleteItemFromCart(productId);
-
         } else {
           findProduct.quantity -= 1;
-          itemsInCart.map(item => {
+          itemsInCart.map((item) => {
             if (item.productid === productId) {
               item.quantity -= 1;
             }
-          })
+          });
         }
-
       }
-
-
     } catch (error) {
-      console.error('Error decrementing product quantity:', error.message);
+      console.error("Error decrementing product quantity:", error.message);
     }
   };
 
-
-
-  const [productNote, setproductNote] = useState('')
-
+  const [productNote, setproductNote] = useState("");
 
   const addNoteToProduct = (e, productId, sizeId) => {
     try {
       e.preventDefault();
-      console.log({ productNote, productId, sizeId })
+      console.log({ productNote, productId, sizeId });
       // Find the product either in the order or in all products
-      const findProduct = productOrderToUpdate.length > 0 ?
-        productOrderToUpdate.find(product => product._id === productId) :
-        allProducts.find(product => product._id === productId);
+      const findProduct =
+        productOrderToUpdate.length > 0
+          ? productOrderToUpdate.find((product) => product._id === productId)
+          : allProducts.find((product) => product._id === productId);
 
       if (!findProduct) {
-        throw new Error('Product not found.');
+        throw new Error("Product not found.");
       }
 
       if (sizeId) {
-        findProduct.sizes.map(size => {
+        findProduct.sizes.map((size) => {
           if (size._id === sizeId) {
             // incrementProductQuantity the quantity of the found product
             size.notes = productNote;
           }
-        })
-        itemsInCart.map(item => {
+        });
+        itemsInCart.map((item) => {
           if (item.productid === productId && item.sizeId === sizeId) {
             item.notes = productNote;
           }
-        })
+        });
       } else {
         // incrementProductQuantity the quantity of the found product
         findProduct.notes = productNote;
-        itemsInCart.map(item => {
+        itemsInCart.map((item) => {
           if (item.productid === productId) {
             item.notes = productNote;
           }
-        })
+        });
       }
 
       console.log(findProduct);
       console.log(itemsInCart);
     } catch (error) {
-      console.error('Error incrementing product quantity:', error.message);
+      console.error("Error incrementing product quantity:", error.message);
       // You can handle the error appropriately, such as displaying an error message to the user.
     }
   };
 
-
-
-  const [productExtras, setproductExtras] = useState([])
+  const [productExtras, setproductExtras] = useState([]);
 
   const handleAddProductExtras = (extra, ind) => {
     // console.log({productExtras, extra, ind})
     const newExtras = [...productExtras];
-    console.log({ newExtras1: newExtras })
+    console.log({ newExtras1: newExtras });
 
     if (newExtras.length > 0) {
       if (newExtras[ind]) {
-
-        const filteredExtraDetails = newExtras[ind].extraDetails.filter(detail => detail.extraId !== extra._id);
-        if (filteredExtraDetails.length !== newExtras[ind].extraDetails.length) {
+        const filteredExtraDetails = newExtras[ind].extraDetails.filter(
+          (detail) => detail.extraId !== extra._id
+        );
+        if (
+          filteredExtraDetails.length !== newExtras[ind].extraDetails.length
+        ) {
           // إذا كانت الإضافة موجودة وتمت إزالتها
           newExtras[ind].extraDetails = filteredExtraDetails;
           newExtras[ind].totalExtrasPrice -= extra.price; // تخفيض السعر بسعر الإضافة المزيلة
@@ -641,37 +717,40 @@ function App() {
           newExtras[ind].extraDetails.push({
             extraId: extra._id,
             name: extra.name,
-            price: extra.price
+            price: extra.price,
           });
           newExtras[ind].totalExtrasPrice += extra.price; // زيادة السعر بسعر الإضافة المضافة
         }
       } else {
         // إذا لم يكن هناك إضافات للمنتج بعد، قم بإنشاء إدخال جديد
         newExtras[ind] = {
-          extraDetails: [{
-            extraId: extra._id,
-            name: extra.name,
-            price: extra.price
-          }],
-          totalExtrasPrice: extra.price
+          extraDetails: [
+            {
+              extraId: extra._id,
+              name: extra.name,
+              price: extra.price,
+            },
+          ],
+          totalExtrasPrice: extra.price,
         };
       }
     } else {
       // إذا كانت المصفوفة فارغة بالكامل، قم بإنشاء إدخال جديد
       newExtras[ind] = {
-        extraDetails: [{
-          extraId: extra._id,
-          name: extra.name,
-          price: extra.price
-        }],
-        totalExtrasPrice: extra.price
+        extraDetails: [
+          {
+            extraId: extra._id,
+            name: extra.name,
+            price: extra.price,
+          },
+        ],
+        totalExtrasPrice: extra.price,
       };
     }
-    console.log({ newExtras2: newExtras })
-    calculateOrderCost()
+    console.log({ newExtras2: newExtras });
+    calculateOrderCost();
     setproductExtras(newExtras);
   };
-
 
   const addExtrasToProduct = (e, productId, sizeId) => {
     e.preventDefault();
@@ -681,22 +760,23 @@ function App() {
     }
     try {
       // Find the product either in the order or in all products
-      const findProduct = productOrderToUpdate.length > 0 ?
-        productOrderToUpdate.find(product => product._id === productId) :
-        allProducts.find(product => product._id === productId);
+      const findProduct =
+        productOrderToUpdate.length > 0
+          ? productOrderToUpdate.find((product) => product._id === productId)
+          : allProducts.find((product) => product._id === productId);
 
       if (!findProduct) {
-        throw new Error('Product not found.');
+        throw new Error("Product not found.");
       }
 
       if (sizeId) {
-        findProduct.sizes.map(size => {
+        findProduct.sizes.map((size) => {
           if (size._id === sizeId) {
             // Update the extras for the found product size
             size.extrasSelected = productExtras;
           }
         });
-        itemsInCart.map(item => {
+        itemsInCart.map((item) => {
           if (item.productid === productId && item.sizeId === sizeId) {
             item.extras = productExtras;
           }
@@ -704,7 +784,7 @@ function App() {
       } else {
         // Update the extras for the found product
         findProduct.extrasSelected = productExtras;
-        itemsInCart.map(item => {
+        itemsInCart.map((item) => {
           if (item.productid === productId) {
             item.extras = productExtras;
             // item.extrasSelected = productExtras;
@@ -714,15 +794,13 @@ function App() {
 
       console.log({ findProduct });
       console.log({ itemsInCart });
-      calculateOrderCost()
+      calculateOrderCost();
       setproductExtras([]);
     } catch (error) {
-      console.error('Error updating product extras:', error.message);
+      console.error("Error updating product extras:", error.message);
       // You can handle the error appropriately, such as displaying an error message to the user.
     }
   };
-
-
 
   const [itemId, setitemId] = useState([]);
   const [itemsInCart, setitemsInCart] = useState([]);
@@ -731,22 +809,22 @@ function App() {
     try {
       // setisLoading(true)
       // Find the product to add to the cart
-      const cartItem = allProducts.find(item => item._id === productId);
+      const cartItem = allProducts.find((item) => item._id === productId);
 
       if (cartItem) {
         let newItem = {
           productid: cartItem._id,
           name: cartItem.name,
           quantity: 0, // Default to adding one item
-          notes: '',
+          notes: "",
           price: 0,
           priceAfterDiscount: 0,
           hasExtras: cartItem.hasExtras,
-          image: cartItem.image
+          image: cartItem.image,
         };
 
         if (sizeId && cartItem.sizes && cartItem.sizes.length > 0) {
-          const size = cartItem.sizes.find(size => size._id === sizeId);
+          const size = cartItem.sizes.find((size) => size._id === sizeId);
           console.log({ size });
           if (size) {
             newItem.sizeId = size._id;
@@ -754,29 +832,33 @@ function App() {
             newItem.price = size.sizePrice;
             newItem.quantity = size.sizeQuantity;
             newItem.priceAfterDiscount = size.sizePriceAfterDiscount;
-            newItem.notes = size.notes ? size.notes : ''
-            newItem.extras = size.extrasSelected ? size.extrasSelected : []
+            newItem.notes = size.notes ? size.notes : "";
+            newItem.extras = size.extrasSelected ? size.extrasSelected : [];
           }
         } else {
           newItem.quantity = cartItem.quantity; // Set default quantity for products without sizes
           newItem.price = cartItem.price;
           newItem.priceAfterDiscount = cartItem.priceAfterDiscount;
-          newItem.notes = cartItem.notes ? cartItem.notes : ''
-          newItem.extras = cartItem.extrasSelected ? cartItem.extrasSelected : []
-
-
+          newItem.notes = cartItem.notes ? cartItem.notes : "";
+          newItem.extras = cartItem.extrasSelected
+            ? cartItem.extrasSelected
+            : [];
         }
 
         console.log({ newItem });
         if (itemsInCart.length > 0) {
           if (sizeId) {
-            const repeatedItem = itemsInCart.find(item => item.productid === productId && item.sizeId === sizeId);
+            const repeatedItem = itemsInCart.find(
+              (item) => item.productid === productId && item.sizeId === sizeId
+            );
             if (!repeatedItem) {
               setitemsInCart([...itemsInCart, newItem]);
               setitemId([...itemId, sizeId]);
             }
           } else {
-            const repeatedItem = itemsInCart.find(item => item.productid === productId);
+            const repeatedItem = itemsInCart.find(
+              (item) => item.productid === productId
+            );
             if (!repeatedItem) {
               setitemsInCart([...itemsInCart, newItem]);
               setitemId([...itemId, productId]);
@@ -788,43 +870,49 @@ function App() {
         }
       }
       // console.log({ itemsInCart })
-
     } catch (error) {
-      console.error('Error adding item to cart:', error.message);
+      console.error("Error adding item to cart:", error.message);
     } finally {
       setisLoading(false);
     }
   };
-
 
   // delete item from cart by id
 
   const resetProductQuantityAndNotes = (productId, sizeId) => {
     try {
       // Find the product either in the order or in all products
-      const productToUpdate = productOrderToUpdate.length > 0 ?
-        productOrderToUpdate.find(product => product._id === productId) :
-        allProducts.find(product => product._id === productId);
+      const productToUpdate =
+        productOrderToUpdate.length > 0
+          ? productOrderToUpdate.find((product) => product._id === productId)
+          : allProducts.find((product) => product._id === productId);
 
-      console.log({ productToUpdate })
+      console.log({ productToUpdate });
       if (!productToUpdate) {
-        throw new Error('Product not found.');
+        throw new Error("Product not found.");
       }
 
       if (productToUpdate.hasSizes) {
-        productToUpdate.sizes.filter(size => size._id === sizeId)[0].sizeQuantity = 0
-        productToUpdate.sizes.filter(size => size._id === sizeId)[0].extrasSelected = []
-        productToUpdate.sizes.filter(size => size._id === sizeId)[0].notes = ''
+        productToUpdate.sizes.filter(
+          (size) => size._id === sizeId
+        )[0].sizeQuantity = 0;
+        productToUpdate.sizes.filter(
+          (size) => size._id === sizeId
+        )[0].extrasSelected = [];
+        productToUpdate.sizes.filter((size) => size._id === sizeId)[0].notes =
+          "";
       } else {
         // Reset the quantity and notes of the found product to zero
         productToUpdate.quantity = 0;
         productToUpdate.extrasSelected = [];
-        productToUpdate.notes = '';
-
+        productToUpdate.notes = "";
       }
       // console.log({ productToUpdate })
     } catch (error) {
-      console.error('Error resetting product quantity and notes:', error.message);
+      console.error(
+        "Error resetting product quantity and notes:",
+        error.message
+      );
       // You can handle the error appropriately, such as displaying an error message to the user.
     }
   };
@@ -832,18 +920,20 @@ function App() {
   const deleteItemFromCart = (id, sizeId) => {
     try {
       if (sizeId) {
-
-        console.log({ itemsInCart, sizeId })
+        console.log({ itemsInCart, sizeId });
         // Determine which list to operate on based on the presence of items in productOrderToUpdate
-        const updatedList = productOrderToUpdate.length > 0 ?
-          productOrderToUpdate.filter(product => product.sizeId !== sizeId) :
-          itemsInCart.filter(item => item.sizeId !== sizeId);
+        const updatedList =
+          productOrderToUpdate.length > 0
+            ? productOrderToUpdate.filter(
+                (product) => product.sizeId !== sizeId
+              )
+            : itemsInCart.filter((item) => item.sizeId !== sizeId);
 
-        console.log({ updatedList })
+        console.log({ updatedList });
         // Update the list of item IDs
-        const updatedItemId = itemId.filter(itemId => itemId !== sizeId);
+        const updatedItemId = itemId.filter((itemId) => itemId !== sizeId);
         if (updatedList.length === 0) {
-          getAllProducts()
+          getAllProducts();
           // return
         }
         // console.log({ itemsInCart })
@@ -858,18 +948,18 @@ function App() {
         // Reset the quantity and notes of the deleted item
         resetProductQuantityAndNotes(id, sizeId);
       } else {
-
-        console.log({ itemsInCart, id })
+        console.log({ itemsInCart, id });
         // Determine which list to operate on based on the presence of items in productOrderToUpdate
-        const updatedList = productOrderToUpdate.length > 0 ?
-          productOrderToUpdate.filter(product => product.productid !== id) :
-          itemsInCart.filter(item => item.productid !== id);
+        const updatedList =
+          productOrderToUpdate.length > 0
+            ? productOrderToUpdate.filter((product) => product.productid !== id)
+            : itemsInCart.filter((item) => item.productid !== id);
 
-        console.log({ updatedList })
+        console.log({ updatedList });
         // Update the list of item IDs
-        const updatedItemId = itemId.filter(itemId => itemId !== id);
+        const updatedItemId = itemId.filter((itemId) => itemId !== id);
         if (updatedList.length === 0) {
-          getAllProducts()
+          getAllProducts();
           // return
         }
 
@@ -885,30 +975,31 @@ function App() {
         resetProductQuantityAndNotes(id, sizeId);
       }
     } catch (error) {
-      console.error('Error deleting item:', error.message);
+      console.error("Error deleting item:", error.message);
       // You can handle the error appropriately, such as displaying an error message to the user.
     }
   };
 
-
-
   // Calculate costOrder of cart item
-  const [costOrder, setcostOrder] = useState(0)
+  const [costOrder, setcostOrder] = useState(0);
   const calculateOrderCost = () => {
     try {
       let totalCost = 0;
 
       // Determine which list to operate on based on the presence of items in itemsInCart or productOrderToUpdate
-      const itemsList = itemsInCart.length > 0 ? itemsInCart : productOrderToUpdate;
+      const itemsList =
+        itemsInCart.length > 0 ? itemsInCart : productOrderToUpdate;
 
       // Calculate total cost based on the items in the list
-      itemsList.forEach(item => {
+      itemsList.forEach((item) => {
         let totalExtras = 0; // Reset totalExtras for each item
-        const itemTotalPrice = item.priceAfterDiscount > 0 ? item.priceAfterDiscount * item.quantity : item.price * item.quantity;
-
+        const itemTotalPrice =
+          item.priceAfterDiscount > 0
+            ? item.priceAfterDiscount * item.quantity
+            : item.price * item.quantity;
 
         if (item.extras.length > 0) {
-          item.extras.forEach(extra => {
+          item.extras.forEach((extra) => {
             if (extra) {
               totalExtras += extra.totalExtrasPrice;
             }
@@ -917,144 +1008,168 @@ function App() {
 
         item.totalprice = itemTotalPrice + totalExtras;
         totalCost += item.totalprice;
-        totalExtras = 0
+        totalExtras = 0;
       });
 
       console.log({ totalCost });
       // Update the state with the total cost
       setcostOrder(totalCost);
     } catch (error) {
-      console.error('Error calculating order cost:', error.message);
+      console.error("Error calculating order cost:", error.message);
       // You can handle the error appropriately, such as displaying an error message to the user.
     }
   };
 
-
-
-
-
-  const createDeliveryOrderByClient = async (userId, currentAddress, delivery_fee) => {
+  const createDeliveryOrderByClient = async (
+    userId,
+    currentAddress,
+    delivery_fee
+  ) => {
     try {
-      setisLoading(true)
+      setisLoading(true);
 
       // console.log({ itemsInCart })
       // Find the user's orders
-      const userOrders = allOrders && allOrders.filter((order) => order.user && order.user?._id === userId);
-      const lastUserOrder = userOrders.length > 0 ? userOrders[userOrders.length - 1] : null;
+      const userOrders =
+        allOrders &&
+        allOrders.filter((order) => order.user && order.user?._id === userId);
+      const lastUserOrder =
+        userOrders.length > 0 ? userOrders[userOrders.length - 1] : null;
 
       // Check if the last user order is active
       if (lastUserOrder && lastUserOrder.isActive) {
         const orderId = lastUserOrder._id;
         const oldProducts = lastUserOrder.products;
         const oldSubTotal = lastUserOrder.subTotal;
-        const newsalesTaxt = lastUserOrder.salesTax + salesTax
+        const newsalesTaxt = lastUserOrder.salesTax + salesTax;
         const subTotal = costOrder + oldSubTotal;
         const deliveryCost = delivery_fee;
         const total = subTotal + salesTax;
 
         // Update order if it's in 'Preparing' status
-        if (lastUserOrder.status === 'Preparing') {
-          const updatedProducts = itemsInCart.map((item) => ({ ...item, isAdd: true }));
+        if (lastUserOrder.status === "Preparing") {
+          const updatedProducts = itemsInCart.map((item) => ({
+            ...item,
+            isAdd: true,
+          }));
           const products = [...updatedProducts, ...oldProducts];
-          const status = 'Pending';
-          const orderType = 'Delivery';
+          const status = "Pending";
+          const orderType = "Delivery";
 
-          await axios.put(`${apiUrl}/api/order/${orderId}`, {
-            products,
-            subTotal,
-            deliveryCost,
-            salesTaxt: newsalesTaxt,
-            total,
-            status,
-            orderType
-          }, config);
+          await axios.put(
+            `${apiUrl}/api/order/${orderId}`,
+            {
+              products,
+              subTotal,
+              deliveryCost,
+              salesTaxt: newsalesTaxt,
+              total,
+              status,
+              orderType,
+            },
+            config
+          );
 
           setitemsInCart([]);
           setitemId([]);
           getAllProducts();
-          cashierSocket.emit("neworder",`اضافه طلبات الي اوردر ديليفري ${lastUserOrder.serial}`);
+          cashierSocket.emit(
+            "neworder",
+            `اضافه طلبات الي اوردر ديليفري ${lastUserOrder.serial}`
+          );
 
           toast.success("تم اضافه الاصناف الي الاوردر!");
         } else {
           const products = [...itemsInCart, ...oldProducts];
-          const status = 'Pending';
-          const orderType = 'Delivery';
+          const status = "Pending";
+          const orderType = "Delivery";
 
-          await axios.put(`${apiUrl}/api/order/${orderId}`, {
-            products,
-            subTotal,
-            deliveryCost,
-            salesTaxt: newsalesTaxt,
-            total,
-            status,
-            orderType
-          }, config);
+          await axios.put(
+            `${apiUrl}/api/order/${orderId}`,
+            {
+              products,
+              subTotal,
+              deliveryCost,
+              salesTaxt: newsalesTaxt,
+              total,
+              status,
+              orderType,
+            },
+            config
+          );
 
           setitemsInCart([]);
           getAllProducts();
-          cashierSocket.emit("neworder", 'تم تعديل ارودر ديفرري');
+          cashierSocket.emit("neworder", "تم تعديل ارودر ديفرري");
           toast.success("تم تعديل الاوردر بنجاح!");
         }
 
-        setisLoading(false)
+        setisLoading(false);
       } else {
         // Create a new order
-        const serial = allOrders && allOrders.length > 0 ? String(Number(allOrders[allOrders && allOrders.length - 1].serial) + 1).padStart(6, '0') : '000001';
+        const serial =
+          allOrders && allOrders.length > 0
+            ? String(
+                Number(allOrders[allOrders && allOrders.length - 1].serial) + 1
+              ).padStart(6, "0")
+            : "000001";
         const findUser = allUsers.find((u, i) => u._id === userId);
         const user = findUser ? userId : null;
         const products = [...itemsInCart];
         const subTotal = costOrder;
         const deliveryCost = delivery_fee;
-        const name = findUser ? findUser.username : '';
-        const phone = findUser ? findUser.phone : '';
+        const name = findUser ? findUser.username : "";
+        const phone = findUser ? findUser.phone : "";
         const address = currentAddress;
-        const orderType = 'Delivery';
+        const orderType = "Delivery";
         const total = subTotal + deliveryCost + salesTax;
 
-        await axios.post(`${apiUrl}/api/order`, {
-          serial,
-          products,
-          subTotal,
-          salesTax,
-          deliveryCost,
-          total,
-          user,
-          name,
-          address,
-          phone,
-          orderType,
-        }, config);
+        await axios.post(
+          `${apiUrl}/api/order`,
+          {
+            serial,
+            products,
+            subTotal,
+            salesTax,
+            deliveryCost,
+            total,
+            user,
+            name,
+            address,
+            phone,
+            orderType,
+          },
+          config
+        );
 
         setitemsInCart([]);
         setitemId([]);
         getAllProducts();
         toast.success("تم عمل اوردر جديد بنجاح!");
-        cashierSocket.emit("neworder", 'اوردر ديليفري جديد');
-        setisLoading(false)
-
+        cashierSocket.emit("neworder", "اوردر ديليفري جديد");
+        setisLoading(false);
       }
 
       setitemsInCart([]);
       setitemId([]);
-      setisLoading(false)
-
-
+      setisLoading(false);
     } catch (error) {
       console.error("An error occurred while processing the order:", error);
       toast.error("حدث خطأ اثناء عمل الاوردر رجاء المحاوله مره اخري");
-      setisLoading(false)
+      setisLoading(false);
     } finally {
       setisLoading(false);
     }
   };
 
-
   const createOrderForTableByClient = async (tableId) => {
-    setisLoading(true)
+    setisLoading(true);
     try {
       // Find orders for the specified table
-      const tableOrders = allOrders && allOrders.filter((order) => order.table._id === tableId);
-      const lastTableOrder = tableOrders.length > 0 ? tableOrders[tableOrders.length - 1] : {};
+      const tableOrders =
+        allOrders && allOrders.filter((order) => order.table._id === tableId);
+      const lastTableOrder =
+        tableOrders.length > 0 ? tableOrders[tableOrders.length - 1] : {};
       const lastTableOrderActive = lastTableOrder && lastTableOrder.isActive;
 
       if (lastTableOrderActive) {
@@ -1069,11 +1184,15 @@ function App() {
         const oldTotal = lastTableOrder.total;
         const status = lastTableOrder.status;
         const subTotal = costOrder + oldSubTotal;
-        const total = oldTotal + costOrder + salesTax + serviceTax + addition - discount;
+        const total =
+          oldTotal + costOrder + salesTax + serviceTax + addition - discount;
 
         // Update the existing order
-        if (status === 'Preparing') {
-          const updatedProducts = itemsInCart.map((item) => ({ ...item, isAdd: true }));
+        if (status === "Preparing") {
+          const updatedProducts = itemsInCart.map((item) => ({
+            ...item,
+            isAdd: true,
+          }));
           const products = [...updatedProducts, ...oldProducts];
           const newOrderData = {
             products,
@@ -1088,10 +1207,11 @@ function App() {
 
           await axios.put(`${apiUrl}/api/order/${orderId}`, newOrderData);
           // Toast for updating order
-          toast.success('تم تحديث الطلب بنجاح!');
-          cashierSocket.emit("neworder", ` اضافت طاولة${lastTableOrderActive.tableNumber} طلبات جديدة`);
-
-
+          toast.success("تم تحديث الطلب بنجاح!");
+          cashierSocket.emit(
+            "neworder",
+            ` اضافت طاولة${lastTableOrderActive.tableNumber} طلبات جديدة`
+          );
         } else {
           const products = [...itemsInCart, ...oldProducts];
           const newOrderData = {
@@ -1102,24 +1222,32 @@ function App() {
             salesTax: newsalesTaxt,
             serviceTax: newserviceTax,
             total,
-            status: 'Pending',
+            status: "Pending",
           };
 
           await axios.put(`${apiUrl}/api/order/${orderId}`, newOrderData);
           // Toast for updating order
-          cashierSocket.emit("neworder", ` اضافت طاولة${lastTableOrderActive.tableNumber} طلبات جديدة`);
+          cashierSocket.emit(
+            "neworder",
+            ` اضافت طاولة${lastTableOrderActive.tableNumber} طلبات جديدة`
+          );
 
-          toast.success('تم تحديث الطلب بنجاح!');
+          toast.success("تم تحديث الطلب بنجاح!");
         }
       } else {
         // Create a new order
-        const serial = allOrders && allOrders.length > 0 ? String(Number(allOrders[allOrders && allOrders.length - 1].serial) + 1).padStart(6, '0') : '000001';
+        const serial =
+          allOrders && allOrders.length > 0
+            ? String(
+                Number(allOrders[allOrders && allOrders.length - 1].serial) + 1
+              ).padStart(6, "0")
+            : "000001";
         const table = allTable.find((t) => t._id === tableId) ? tableId : null;
         const user = allUsers.find((u) => u._id === tableId) ? tableId : null;
         const products = [...itemsInCart];
         const subTotal = costOrder;
         const total = subTotal + salesTax + serviceTax;
-        const orderType = 'Internal';
+        const orderType = "Internal";
 
         const newOrderData = {
           serial,
@@ -1135,9 +1263,11 @@ function App() {
 
         await axios.post(`${apiUrl}/api/order`, newOrderData);
         // Toast for creating a new order
-        toast.success('تم إنشاء طلب جديد بنجاح!');
-        cashierSocket.emit("neworder", `اوردر جديد علي طاوله ${table.tableNumber}`);
-
+        toast.success("تم إنشاء طلب جديد بنجاح!");
+        cashierSocket.emit(
+          "neworder",
+          `اوردر جديد علي طاوله ${table.tableNumber}`
+        );
       }
 
       // Reset cart items and reload products
@@ -1147,53 +1277,53 @@ function App() {
     } catch (error) {
       console.error(error);
       // Toast for error
-      toast.error('حدث خطأ أثناء إنشاء/تحديث الطلب');
+      toast.error("حدث خطأ أثناء إنشاء/تحديث الطلب");
     } finally {
       setisLoading(false);
     }
   };
 
+  const [myOrder, setmyOrder] = useState({});
+  const [listProductsOrder, setlistProductsOrder] = useState([]);
+  const [orderUpdateDate, setorderUpdateDate] = useState("");
+  const [myOrderId, setmyOrderId] = useState();
+  const [tablenum, settablenum] = useState();
+  const [orderTotal, setorderTotal] = useState();
+  const [orderSubtotal, setorderSubtotal] = useState();
+  const [orderDeliveryCost, setorderDeliveryCost] = useState();
+  const [orderdiscount, setorderdiscount] = useState(0);
+  const [orderaddition, setorderaddition] = useState(0);
+  const [discount, setdiscount] = useState(0);
+  const [addition, setaddition] = useState(0);
 
+  const [clientname, setclientname] = useState("");
+  const [clientNotes, setclientNotes] = useState("");
+  const [clientphone, setclientphone] = useState("");
+  const [clientaddress, setclientaddress] = useState("");
+  const [deliveryAreaId, setdeliveryAreaId] = useState(0);
+  const [deliverycost, setdeliverycost] = useState(0);
 
-
-  const [myOrder, setmyOrder] = useState({})
-  const [listProductsOrder, setlistProductsOrder] = useState([])
-  const [orderUpdateDate, setorderUpdateDate] = useState('')
-  const [myOrderId, setmyOrderId] = useState()
-  const [tablenum, settablenum] = useState()
-  const [orderTotal, setorderTotal] = useState()
-  const [orderSubtotal, setorderSubtotal] = useState()
-  const [orderDeliveryCost, setorderDeliveryCost] = useState()
-  const [orderdiscount, setorderdiscount] = useState(0)
-  const [orderaddition, setorderaddition] = useState(0)
-  const [discount, setdiscount] = useState(0)
-  const [addition, setaddition] = useState(0)
-
-
-  const [clientname, setclientname] = useState('')
-  const [clientNotes, setclientNotes] = useState('')
-  const [clientphone, setclientphone] = useState('')
-  const [clientaddress, setclientaddress] = useState('')
-  const [deliveryAreaId, setdeliveryAreaId] = useState(0)
-  const [deliverycost, setdeliverycost] = useState(0)
-
-
-
-  const [salesTax, setsalesTax] = useState(0)
-  const [serviceTax, setserviceTax] = useState(0)
+  const [salesTax, setsalesTax] = useState(0);
+  const [serviceTax, setserviceTax] = useState(0);
 
   const createWaiterOrderForTable = async (tableId, waiterId) => {
     // setisLoading(true)
     try {
       // Check for active orders for the table
-      const tableOrder = allOrders && allOrders.filter((order) => order.table && order.table._id === tableId);
-      const lastTableOrder = tableOrder.length > 0 ? tableOrder[tableOrder.length - 1] : null;
-      const lastTableOrderActive = lastTableOrder ? lastTableOrder.isActive : false;
+      const tableOrder =
+        allOrders &&
+        allOrders.filter((order) => order.table && order.table._id === tableId);
+      const lastTableOrder =
+        tableOrder.length > 0 ? tableOrder[tableOrder.length - 1] : null;
+      const lastTableOrderActive = lastTableOrder
+        ? lastTableOrder.isActive
+        : false;
 
       if (lastTableOrderActive) {
         // Update the existing order
         const orderId = lastTableOrder._id;
-        const orderData = allOrders && allOrders.find((order) => order._id === orderId);
+        const orderData =
+          allOrders && allOrders.find((order) => order._id === orderId);
         const oldProducts = orderData.products;
         const oldSubTotal = orderData.subTotal;
         const oldTotal = orderData.total;
@@ -1203,147 +1333,188 @@ function App() {
         const newserviceTax = orderData.serviceTax + serviceTax;
         const products = [...itemsInCart, ...oldProducts];
         const subTotal = oldSubTotal + costOrder;
-        const total = oldTotal + costOrder + salesTax + serviceTax + addition - discount;
-        const status = 'Pending';
+        const total =
+          oldTotal + costOrder + salesTax + serviceTax + addition - discount;
+        const status = "Pending";
         const createdBy = waiterId;
 
-        const updatedOrder = await axios.put(`${apiUrl}/api/order/${orderId}`, {
-          products,
-          subTotal,
-          addition: newAddition,
-          discount: newDiscount,
-          salesTax: newsalesTaxt,
-          serviceTax: newserviceTax,
-          total,
-          status,
-          createdBy
-        }, config);
-        toast.success('تم تحديث الطلب بنجاح!');
-        cashierSocket.emit("neworder", 'اوردر جديد من الويتر');
+        const updatedOrder = await axios.put(
+          `${apiUrl}/api/order/${orderId}`,
+          {
+            products,
+            subTotal,
+            addition: newAddition,
+            discount: newDiscount,
+            salesTax: newsalesTaxt,
+            serviceTax: newserviceTax,
+            total,
+            status,
+            createdBy,
+          },
+          config
+        );
+        toast.success("تم تحديث الطلب بنجاح!");
+        cashierSocket.emit("neworder", "اوردر جديد من الويتر");
         setitemsInCart([]);
         setitemId([]);
         setaddition(0);
         setdiscount(0);
-        setclientname('');
-        setclientNotes('');
-        setclientphone('');
-        setclientaddress('');
+        setclientname("");
+        setclientNotes("");
+        setclientphone("");
+        setclientaddress("");
         setdeliveryAreaId(0);
         setdeliverycost(0);
         setsalesTax(0);
         setserviceTax(0);
-
       } else {
         // Create a new order
-        const serial = allOrders && allOrders.length > 0 ? String(Number(allOrders[allOrders && allOrders.length - 1].serial) + 1).padStart(6, '0') : '000001';
+        const serial =
+          allOrders && allOrders.length > 0
+            ? String(
+                Number(allOrders[allOrders && allOrders.length - 1].serial) + 1
+              ).padStart(6, "0")
+            : "000001";
         const products = [...itemsInCart];
         const subTotal = costOrder;
         const total = subTotal + salesTax + serviceTax + addition - discount;
-        const orderType = 'Internal';
+        const orderType = "Internal";
 
-        const newOrder = await axios.post(`${apiUrl}/api/order`, {
-          serial,
-          table: tableId,
-          products,
-          subTotal,
-          discount,
-          addition,
-          salesTax,
-          serviceTax,
-          total,
-          orderType,
-          createdBy: waiterId
-        }, config);
+        const newOrder = await axios.post(
+          `${apiUrl}/api/order`,
+          {
+            serial,
+            table: tableId,
+            products,
+            subTotal,
+            discount,
+            addition,
+            salesTax,
+            serviceTax,
+            total,
+            orderType,
+            createdBy: waiterId,
+          },
+          config
+        );
 
-        toast.success('تم إنشاء طلب جديد بنجاح!');
-        cashierSocket.emit("neworder", 'اوردر جديد من الويتر');
+        toast.success("تم إنشاء طلب جديد بنجاح!");
+        cashierSocket.emit("neworder", "اوردر جديد من الويتر");
         setitemsInCart([]);
         setitemId([]);
         setaddition(0);
         setdiscount(0);
-        setclientname('');
-        setclientNotes('');
-        setclientphone('');
-        setclientaddress('');
+        setclientname("");
+        setclientNotes("");
+        setclientphone("");
+        setclientaddress("");
         setdeliveryAreaId(0);
         setdeliverycost(0);
         setsalesTax(0);
         setserviceTax(0);
       }
-
     } catch (error) {
       console.error(error);
-      toast.error('حدث خطأ. يرجى المحاولة مرة أخرى.');
+      toast.error("حدث خطأ. يرجى المحاولة مرة أخرى.");
     } finally {
       setisLoading(false);
     }
   };
 
-
-  const createcashierOrder = async (cashierId, clientName, clientPhone, clientAddress, orderType, deliveryCost, discount, addition) => {
+  const createcashierOrder = async (
+    cashierId,
+    clientName,
+    clientPhone,
+    clientAddress,
+    orderType,
+    deliveryCost,
+    discount,
+    addition
+  ) => {
     // setisLoading(true)
     try {
+      const dayOrders =
+        allOrders &&
+        allOrders.filter(
+          (order) =>
+            new Date(order.createdAt).toDateString() ===
+            new Date().toDateString()
+        );
+      const takeawayOrders =
+        dayOrders &&
+        dayOrders.filter((order) => order.orderType === "Takeaway");
+      const orderNum =
+        orderType === "Takeaway"
+          ? takeawayOrders.length === 0
+            ? 1
+            : takeawayOrders[takeawayOrders.length - 1].orderNum + 1
+          : null;
 
-      const dayOrders = allOrders && allOrders.filter(order => new Date(order.createdAt).toDateString() === new Date().toDateString());
-      const takeawayOrders = dayOrders && dayOrders.filter(order => order.orderType === 'Takeaway');
-      const orderNum = orderType === 'Takeaway' ? takeawayOrders.length === 0 ? 1 : takeawayOrders[takeawayOrders.length - 1].orderNum + 1 : null;
-
-      const serial = allOrders && allOrders.length > 0 ? String(Number(allOrders[allOrders && allOrders.length - 1].serial) + 1).padStart(6, '0') : '000001';
+      const serial =
+        allOrders && allOrders.length > 0
+          ? String(
+              Number(allOrders[allOrders && allOrders.length - 1].serial) + 1
+            ).padStart(6, "0")
+          : "000001";
 
       const products = [...itemsInCart];
 
       const subTotal = costOrder;
 
-      const total = subTotal + salesTax + serviceTax + deliveryCost + addition - discount
+      const total =
+        subTotal + salesTax + serviceTax + deliveryCost + addition - discount;
 
       const name = clientName;
       const phone = clientPhone;
       const address = clientAddress;
       const createdBy = cashierId;
       const cashier = cashierId;
-      const status = 'Approved';
+      const status = "Approved";
 
-      const newOrder = await axios.post(`${apiUrl}/api/order`, {
-        serial,
-        orderNum,
-        products,
-        subTotal,
-        deliveryCost,
-        salesTax,
-        serviceTax,
-        discount,
-        addition,
-        total,
-        orderType,
-        createdBy,
-        cashier,
-        name,
-        phone,
-        address,
-        status
-      }, config);
+      const newOrder = await axios.post(
+        `${apiUrl}/api/order`,
+        {
+          serial,
+          orderNum,
+          products,
+          subTotal,
+          deliveryCost,
+          salesTax,
+          serviceTax,
+          discount,
+          addition,
+          total,
+          orderType,
+          createdBy,
+          cashier,
+          name,
+          phone,
+          address,
+          status,
+        },
+        config
+      );
 
       if (newOrder) {
-        toast.success('تم إنشاء الطلب بنجاح');
+        toast.success("تم إنشاء الطلب بنجاح");
         setitemsInCart([]);
         setitemId([]);
         setaddition(0);
         setdiscount(0);
-        setclientname('');
-        setclientNotes('');
-        setclientphone('');
-        setclientaddress('');
+        setclientname("");
+        setclientNotes("");
+        setclientphone("");
+        setclientaddress("");
         setdeliveryAreaId(0);
         setdeliverycost(0);
         setsalesTax(0);
         setserviceTax(0);
       } else {
-        throw new Error('هناك خطأ في إنشاء الطلب');
+        throw new Error("هناك خطأ في إنشاء الطلب");
       }
-
     } catch (error) {
       console.error(error);
-      toast.error('حدث خطأ. يرجى المحاولة مرة أخرى');
+      toast.error("حدث خطأ. يرجى المحاولة مرة أخرى");
     } finally {
       setisLoading(false);
     }
@@ -1360,14 +1531,26 @@ function App() {
       console.log(clientId);
 
       // Filter orders related to the client's table
-      const tableOrder = allOrders && allOrders.filter((order) => order.table && order.table._id === clientId);
-      const lastTableOrder = tableOrder.length > 0 ? tableOrder[tableOrder.length - 1] : null;
-      const lastTableOrderActive = lastTableOrder ? lastTableOrder.isActive : false;
+      const tableOrder =
+        allOrders &&
+        allOrders.filter(
+          (order) => order.table && order.table._id === clientId
+        );
+      const lastTableOrder =
+        tableOrder.length > 0 ? tableOrder[tableOrder.length - 1] : null;
+      const lastTableOrderActive = lastTableOrder
+        ? lastTableOrder.isActive
+        : false;
 
       // Filter orders related to the user
-      const userOrder = allOrders && allOrders.filter((order) => order.user && order.user._id === clientId);
-      const lastUserOrder = userOrder.length > 0 ? userOrder[userOrder.length - 1] : null;
-      const lastUserOrderActive = lastUserOrder ? lastUserOrder.isActive : false;
+      const userOrder =
+        allOrders &&
+        allOrders.filter((order) => order.user && order.user._id === clientId);
+      const lastUserOrder =
+        userOrder.length > 0 ? userOrder[userOrder.length - 1] : null;
+      const lastUserOrderActive = lastUserOrder
+        ? lastUserOrder.isActive
+        : false;
 
       // Fetch and set order details based on the active order found
       if (lastTableOrderActive) {
@@ -1407,23 +1590,22 @@ function App() {
     }
   };
 
-
   const checkout = async () => {
     try {
       const id = myOrderId;
       const isActive = false;
-      const help = 'Requesting the bill';
-      const helpStatus = 'Not send'
+      const help = "Requesting the bill";
+      const helpStatus = "Not send";
 
       // Update order to mark it for checkout
       const updatedOrder = await axios.put(`${apiUrl}/api/order/${id}`, {
         isActive,
         help,
-        helpStatus
+        helpStatus,
       });
       if (updatedOrder) {
         // Show success toast after successfully marking order for checkout
-        toast.success('تم طلب الحساب');
+        toast.success("تم طلب الحساب");
         cashierSocket.emit("helprequest", `  طاولة${tablenum} تطلب الحساب`);
 
         // Redirect after 10 minutes
@@ -1434,32 +1616,33 @@ function App() {
     } catch (error) {
       console.log(error);
       // Show error toast if there's an issue with marking the order for checkout
-      toast.error('حدث خطأ اثناء طلب الحساب ! حاول مره اخري');
+      toast.error("حدث خطأ اثناء طلب الحساب ! حاول مره اخري");
     }
   };
 
-
-
-
-  const [newlistofproductorder, setnewlistofproductorder] = useState([])
+  const [newlistofproductorder, setnewlistofproductorder] = useState([]);
   const getOrderProductForTable = async (e, tableId) => {
     e.preventDefault();
     if (!token) {
-      toast.error('رجاء تسجيل الدخول مره اخري');
+      toast.error("رجاء تسجيل الدخول مره اخري");
       return;
     }
 
     // setisLoading(true)
     try {
-
-      const tableorder = allOrders && allOrders.filter((order, i) => order.table && order.table._id === tableId);
-      const lasttableorder = tableorder.length > 0 ? tableorder[tableorder.length - 1] : [];
+      const tableorder =
+        allOrders &&
+        allOrders.filter(
+          (order, i) => order.table && order.table._id === tableId
+        );
+      const lasttableorder =
+        tableorder.length > 0 ? tableorder[tableorder.length - 1] : [];
       const lasttableorderactive = lasttableorder.isActive;
       // console.log({ lasttableorder });
       // console.log({ lasttableorderactive });
       if (lasttableorderactive) {
         const id = await lasttableorder._id;
-        const myOrder = await axios.get(apiUrl + '/api/order/' + id);
+        const myOrder = await axios.get(apiUrl + "/api/order/" + id);
         const data = myOrder.data;
         // console.log(data);
         // console.log(data._id);
@@ -1473,37 +1656,42 @@ function App() {
         setlistProductsOrder(data.products);
         setnewlistofproductorder(data.products);
         // console.log({ JSONlistProductsOrder: JSON.parse(JSON.stringify(data.products)) });
-
       }
     } catch (error) {
       console.error(error);
-      toast.error('حدث خطأ أثناء جلب بيانات الطلب. يرجى المحاولة مرة أخرى.');
+      toast.error("حدث خطأ أثناء جلب بيانات الطلب. يرجى المحاولة مرة أخرى.");
     } finally {
       setisLoading(false);
     }
   };
 
-
   const putNumOfPaid = (id, sizeid, numOfPaid) => {
     if (!token) {
       // Handle case where token is not available
-      toast.error('رجاء تسجيل الدخول مره اخري');
-      return
+      toast.error("رجاء تسجيل الدخول مره اخري");
+      return;
     }
     try {
       console.log({ listProductsOrder, newlistofproductorder });
 
-      const updatedProducts = newlistofproductorder.map(product => {
-        if ((sizeid && product.productid._id === id && product.sizeId === sizeid) ||
-          (!sizeid && product.productid._id === id && !product.sizeId)) {
-
-          const originalProduct = listProductsOrder.find(pro =>
-            (sizeid && pro.productid._id === id && pro.sizeId === sizeid) ||
-            (!sizeid && pro.productid._id === id && !pro.sizeId)
+      const updatedProducts = newlistofproductorder.map((product) => {
+        if (
+          (sizeid &&
+            product.productid._id === id &&
+            product.sizeId === sizeid) ||
+          (!sizeid && product.productid._id === id && !product.sizeId)
+        ) {
+          const originalProduct = listProductsOrder.find(
+            (pro) =>
+              (sizeid && pro.productid._id === id && pro.sizeId === sizeid) ||
+              (!sizeid && pro.productid._id === id && !pro.sizeId)
           );
 
           if (originalProduct) {
-            return { ...product, numOfPaid: originalProduct.numOfPaid + numOfPaid };
+            return {
+              ...product,
+              numOfPaid: originalProduct.numOfPaid + numOfPaid,
+            };
           }
         }
         return product;
@@ -1515,7 +1703,9 @@ function App() {
       calcSubtotalSplitOrder(updatedProducts);
     } catch (error) {
       console.error(error);
-      toast.error('An error occurred while updating the number of paid products.');
+      toast.error(
+        "An error occurred while updating the number of paid products."
+      );
     }
   };
 
@@ -1524,26 +1714,37 @@ function App() {
   const calcSubtotalSplitOrder = (products = newlistofproductorder) => {
     if (!token) {
       // Handle case where token is not available
-      toast.error('رجاء تسجيل الدخول مره اخري');
-      return
+      toast.error("رجاء تسجيل الدخول مره اخري");
+      return;
     }
     try {
       let total = 0;
 
-      products.forEach(product => {
+      products.forEach((product) => {
         let originalProduct;
 
         if (product.sizeId) {
-          originalProduct = listProductsOrder.find(pro => pro.productid._id === product.productid._id && pro.sizeId === product.sizeId);
+          originalProduct = listProductsOrder.find(
+            (pro) =>
+              pro.productid._id === product.productid._id &&
+              pro.sizeId === product.sizeId
+          );
         } else {
-          originalProduct = listProductsOrder.find(pro => pro.productid._id === product.productid._id);
+          originalProduct = listProductsOrder.find(
+            (pro) => pro.productid._id === product.productid._id
+          );
         }
 
         if (originalProduct) {
-          const numOfPaidDifference = Math.abs(originalProduct.numOfPaid - product.numOfPaid);
+          const numOfPaidDifference = Math.abs(
+            originalProduct.numOfPaid - product.numOfPaid
+          );
           console.log({ numOfPaidDifference });
 
-          const priceToUse = originalProduct.priceAfterDiscount > 0 ? originalProduct.priceAfterDiscount : originalProduct.price;
+          const priceToUse =
+            originalProduct.priceAfterDiscount > 0
+              ? originalProduct.priceAfterDiscount
+              : originalProduct.price;
           const subTotal = numOfPaidDifference * priceToUse;
 
           total += subTotal;
@@ -1554,7 +1755,7 @@ function App() {
       console.log({ total, products });
     } catch (error) {
       console.error(error);
-      toast.error('حدث خطأ أثناء حساب المجموع للطلب المقسم.');
+      toast.error("حدث خطأ أثناء حساب المجموع للطلب المقسم.");
     }
   };
 
@@ -1566,16 +1767,21 @@ function App() {
           extras: product.extras.map((extra, j) => {
             if (extra) {
               if (extra._id === extraId) {
-                isPaid ? setsubtotalSplitOrder(subtotalSplitOrder + extra.totalExtrasPrice) : setsubtotalSplitOrder(subtotalSplitOrder - extra.totalExtrasPrice)
+                isPaid
+                  ? setsubtotalSplitOrder(
+                      subtotalSplitOrder + extra.totalExtrasPrice
+                    )
+                  : setsubtotalSplitOrder(
+                      subtotalSplitOrder - extra.totalExtrasPrice
+                    );
                 return {
                   ...extra,
-                  isPaid: isPaid
+                  isPaid: isPaid,
                 };
-
               }
               return extra;
             }
-          })
+          }),
         };
       }
       return product;
@@ -1589,34 +1795,32 @@ function App() {
   const calculateExtrasSubtotal = (products) => {
     let total = subtotalSplitOrder;
 
-    products.forEach(product => {
-      product.extras && product.extras.forEach(extra => {
-        if (extra.isPaid) {
-          total += extra.totalExtrasPrice;
-        }
-      });
+    products.forEach((product) => {
+      product.extras &&
+        product.extras.forEach((extra) => {
+          if (extra.isPaid) {
+            total += extra.totalExtrasPrice;
+          }
+        });
     });
 
     setsubtotalSplitOrder(total);
   };
-
-
-
 
   // Function to split the invoice and pay a portion of it
   const splitInvoice = async (e) => {
     try {
       e.preventDefault();
 
-      console.log({ newlistofproductorder })
+      console.log({ newlistofproductorder });
       // Send a PUT request to update the order with split details
       const updateOrder = await axios.put(`${apiUrl}/api/order/${myOrderId}`, {
         products: newlistofproductorder,
         isSplit: true,
-        subtotalSplitOrder
+        subtotalSplitOrder,
       });
       if (updateOrder) {
-        console.log({ updateOrder })
+        console.log({ updateOrder });
         // Display a success toast message upon successful payment
         toast.success("تم دفع جزء من الفاتورة بنجاح");
 
@@ -1628,20 +1832,19 @@ function App() {
       toast.error("حدث خطأ أثناء دفع جزء من الفاتورة");
 
       // Log the error to the console
-      console.error('Error updating order:', error);
+      console.error("Error updating order:", error);
     }
   };
-
-
-
 
   const lastInvoiceByCashier = async (checkId) => {
     try {
       // Filter orders created by the employee
-      const employeeOrders = allOrders?.filter(order => order.createdBy?._id === checkId) || [];
+      const employeeOrders =
+        allOrders?.filter((order) => order.createdBy?._id === checkId) || [];
 
       // Get the last order created by the employee
-      const lastEmployeeOrder = employeeOrders[employeeOrders.length - 1] || null;
+      const lastEmployeeOrder =
+        employeeOrders[employeeOrders.length - 1] || null;
 
       if (lastEmployeeOrder) {
         // Check if the last employee order is active
@@ -1667,27 +1870,21 @@ function App() {
         }
       } else {
         // Handle the case when there are no orders for the employee
-        toast.info('No orders found for this employee.');
+        toast.info("No orders found for this employee.");
       }
     } catch (error) {
       // Log any errors that occur during the process
-      console.error('Error fetching the last invoice:', error);
+      console.error("Error fetching the last invoice:", error);
 
       // Display an error toast message
-      toast.error('An error occurred while fetching the invoice.');
+      toast.error("An error occurred while fetching the invoice.");
     }
   };
-
 
   //++++++++++++++++++++++++++ AUTH ++++++++++++++++++++++++++++
   //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-
   const [isLogin, setisLogin] = useState(false);
-
-
-
-
 
   const [permissionsList, setPermissionsList] = useState([]);
   const [userLoginInfo, setUserLoginInfo] = useState(null);
@@ -1697,13 +1894,13 @@ function App() {
   const getUserInfoFromToken = async () => {
     if (!token) {
       // Handle case where token is not available
-      toast.error('رجاء تسجيل الدخول مره اخري');
-      return
+      toast.error("رجاء تسجيل الدخول مره اخري");
+      return;
     }
     // setisLoading(true)
     try {
-      const userToken = localStorage.getItem('token_u');
-      const employeeToken = localStorage.getItem('token_e');
+      const userToken = localStorage.getItem("token_u");
+      const employeeToken = localStorage.getItem("token_e");
 
       let decodedToken = null;
 
@@ -1719,7 +1916,9 @@ function App() {
         if (decodedToken) {
           const userId = decodedToken.userinfo.id;
           if (userId) {
-            const clientResponse = await axios.get(`${apiUrl}/api/user/${userId}`);
+            const clientResponse = await axios.get(
+              `${apiUrl}/api/user/${userId}`
+            );
             setClientInfo(clientResponse.data);
           }
         }
@@ -1730,7 +1929,7 @@ function App() {
         setEmployeeLoginInfo(null);
       }
     } catch (error) {
-      console.error('Error fetching user info from token:', error);
+      console.error("Error fetching user info from token:", error);
     } finally {
       setisLoading(false);
     }
@@ -1741,20 +1940,25 @@ function App() {
       const id = decodedToken.id;
 
       if (id) {
-        const response = await axios.get(`${apiUrl}/api/permission/employee/${id}`, config);
+        const response = await axios.get(
+          `${apiUrl}/api/permission/employee/${id}`,
+          config
+        );
         if (response.status === 200) {
           const data = response.data.Permissions;
           setPermissionsList(data);
         } else {
-          throw new Error('Failed to fetch permissions: Unexpected status code');
+          throw new Error(
+            "Failed to fetch permissions: Unexpected status code"
+          );
         }
       }
     } catch (error) {
-      console.error('Error fetching permissions:', error.message);
+      console.error("Error fetching permissions:", error.message);
     }
   };
 
-  //######### get order ditalis by serial 
+  //######### get order ditalis by serial
 
   const [orderDetalisBySerial, setorderDetalisBySerial] = useState({});
   const [productOrderToUpdate, setproductOrderToUpdate] = useState([]);
@@ -1762,21 +1966,18 @@ function App() {
   const getOrderDetailsBySerial = async (e, serial) => {
     e.preventDefault();
     try {
-      const res = await axios.get(apiUrl + '/api/order');
+      const res = await axios.get(apiUrl + "/api/order");
       const data = res.data;
-      const order = data.find(o => o.serial === serial);
+      const order = data.find((o) => o.serial === serial);
       setorderDetalisBySerial(order);
       setproductOrderToUpdate(order.products);
       setaddition(order.addition);
       setdiscount(order.discount);
     } catch (error) {
-      console.error('Error fetching order details:', error);
-      toast('حدث خطأ أثناء جلب تفاصيل الطلب. يرجى المحاولة مرة أخرى.');
+      console.error("Error fetching order details:", error);
+      toast("حدث خطأ أثناء جلب تفاصيل الطلب. يرجى المحاولة مرة أخرى.");
     }
   };
-
-
-
 
   const updateOrder = async (e) => {
     e.preventDefault();
@@ -1804,22 +2005,21 @@ function App() {
         setproductOrderToUpdate([]);
         setaddition(0);
         setdiscount(0);
-        toast.success('تم تعديل الاوردر');
+        toast.success("تم تعديل الاوردر");
       } else {
-        throw new Error('هناك خطأ في تعديل الاوردر');
+        throw new Error("هناك خطأ في تعديل الاوردر");
       }
     } catch (error) {
-      console.error('Error updating order:', error);
-      toast.error('حدث خطأ أثناء تعديل الأوردر.');
+      console.error("Error updating order:", error);
+      toast.error("حدث خطأ أثناء تعديل الأوردر.");
     } finally {
       setisLoading(false);
     }
   };
 
-
   // ----------- reservation table------------//
   //============================================
-  const [allReservations, setallReservations] = useState([])
+  const [allReservations, setallReservations] = useState([]);
   const getAllReservations = async () => {
     try {
       const response = await axios.get(`${apiUrl}/api/reservation`);
@@ -1833,12 +2033,12 @@ function App() {
     }
   };
 
-  const [availableTableIds, setavailableTableIds] = useState([])
+  const [availableTableIds, setavailableTableIds] = useState([]);
 
   const getAvailableTables = (reservationDate, startTime, endTime) => {
     try {
       // Filter reservations by selected date and time range
-      const filterReservationsByTime = allReservations.filter(reservation => {
+      const filterReservationsByTime = allReservations.filter((reservation) => {
         const reservationDateObj = new Date(reservation.reservationDate);
         const selectedDateObj = new Date(reservationDate);
 
@@ -1858,24 +2058,31 @@ function App() {
 
         // Check for overlapping time ranges
         return (
-          (startReservationTime <= startSelectedTime && endReservationTime >= startSelectedTime) ||
-          (startReservationTime <= endSelectedTime && endReservationTime >= endSelectedTime) ||
-          (startSelectedTime <= startReservationTime && endSelectedTime >= endReservationTime)
+          (startReservationTime <= startSelectedTime &&
+            endReservationTime >= startSelectedTime) ||
+          (startReservationTime <= endSelectedTime &&
+            endReservationTime >= endSelectedTime) ||
+          (startSelectedTime <= startReservationTime &&
+            endSelectedTime >= endReservationTime)
         );
       });
-      console.log({ filterReservationsByTime })
+      console.log({ filterReservationsByTime });
       // Create a list of all tableIds
-      const allTableIds = allTable.map(table => table._id);
-      console.log({ allTableIds })
+      const allTableIds = allTable.map((table) => table._id);
+      console.log({ allTableIds });
 
       // Create a list of reserved tableIds in the selected time range
-      const reservedTableIds = filterReservationsByTime.map(reservation => reservation.tableId);
-      console.log({ reservedTableIds })
+      const reservedTableIds = filterReservationsByTime.map(
+        (reservation) => reservation.tableId
+      );
+      console.log({ reservedTableIds });
 
       // Find the difference between allTableIds and reservedTableIds to get available tableIds
-      const availableTableIds = allTableIds.filter(tableId => !reservedTableIds.includes(tableId));
-      console.log({ availableTableIds })
-      setavailableTableIds(availableTableIds)
+      const availableTableIds = allTableIds.filter(
+        (tableId) => !reservedTableIds.includes(tableId)
+      );
+      console.log({ availableTableIds });
+      setavailableTableIds(availableTableIds);
       return availableTableIds;
     } catch (error) {
       // Handle errors
@@ -1884,15 +2091,26 @@ function App() {
     }
   };
 
-
-  const createReservations = async (e, tableId, tableNumber, userId, numberOfGuests, customerName, customerPhone, reservationDate, startTime, endTime, reservationNote, createdBy) => {
+  const createReservations = async (
+    e,
+    tableId,
+    tableNumber,
+    userId,
+    numberOfGuests,
+    customerName,
+    customerPhone,
+    reservationDate,
+    startTime,
+    endTime,
+    reservationNote,
+    createdBy
+  ) => {
     try {
       e.preventDefault();
       // setisLoading(true)
 
       // Logging input data for debugging purposes
       // console.log({ tableId, tableNumber, userId, numberOfGuests, customerName, customerPhone, reservationDate, startTime, endTime, reservationNote, createdBy });
-
 
       // Convert reservationDate to Date object
       const selectedDate = new Date(reservationDate);
@@ -1901,38 +2119,48 @@ function App() {
       console.log({ selectedDate: selectedDate.getTime() });
 
       // Filter reservations by table and selected date
-      const filterReservationsByTable = allReservations.filter(reservation => {
-        const reservationDateObj = new Date(reservation.reservationDate);
-        const selectedDateObj = new Date(selectedDate);
+      const filterReservationsByTable = allReservations.filter(
+        (reservation) => {
+          const reservationDateObj = new Date(reservation.reservationDate);
+          const selectedDateObj = new Date(selectedDate);
 
-        return (
-          reservation.tableId === tableId &&
-          reservationDateObj.getFullYear() === selectedDateObj.getFullYear() &&
-          reservationDateObj.getMonth() === selectedDateObj.getMonth() &&
-          reservationDateObj.getDate() === selectedDateObj.getDate()
-        );
-      });
+          return (
+            reservation.tableId === tableId &&
+            reservationDateObj.getFullYear() ===
+              selectedDateObj.getFullYear() &&
+            reservationDateObj.getMonth() === selectedDateObj.getMonth() &&
+            reservationDateObj.getDate() === selectedDateObj.getDate()
+          );
+        }
+      );
 
       // Logging filterReservationsByTable for debugging purposes
       // console.log({ filterReservationsByTable });
       // Filter reservations by table and selected date
-      const conflictingReservation = filterReservationsByTable.find(reservation => {
-        const startReservationTime = new Date(reservation.startTime).getTime();
-        const endReservationTime = new Date(reservation.endTime).getTime();
-        const startSelectedTime = new Date(startTime).getTime();
-        const endSelectedTime = new Date(endTime).getTime();
-        return (
-          (startReservationTime <= startSelectedTime && endReservationTime >= startSelectedTime) ||
-          (startReservationTime <= endSelectedTime && endReservationTime >= endSelectedTime) ||
-          (startSelectedTime <= startReservationTime && endSelectedTime >= endReservationTime)
-        );
-      });
+      const conflictingReservation = filterReservationsByTable.find(
+        (reservation) => {
+          const startReservationTime = new Date(
+            reservation.startTime
+          ).getTime();
+          const endReservationTime = new Date(reservation.endTime).getTime();
+          const startSelectedTime = new Date(startTime).getTime();
+          const endSelectedTime = new Date(endTime).getTime();
+          return (
+            (startReservationTime <= startSelectedTime &&
+              endReservationTime >= startSelectedTime) ||
+            (startReservationTime <= endSelectedTime &&
+              endReservationTime >= endSelectedTime) ||
+            (startSelectedTime <= startReservationTime &&
+              endSelectedTime >= endReservationTime)
+          );
+        }
+      );
 
       // console.log({ conflictingReservation });
 
       // Display error message if there is a conflicting reservation
       if (conflictingReservation) {
-        toast.error('هذه الطاولة محجوزة في هذا الوقت');
+        toast.error("هذه الطاولة محجوزة في هذا الوقت");
         return;
       }
 
@@ -1973,119 +2201,132 @@ function App() {
   const getReservationById = async (id) => {
     try {
       if (!id) {
-        toast.error("رجاء اختيار الحجز بشكل صحيح")
-        return
+        toast.error("رجاء اختيار الحجز بشكل صحيح");
+        return;
       }
 
-      const reservation = await axios.get(`${apiUrl}/api/reservation/${id}`)
+      const reservation = await axios.get(`${apiUrl}/api/reservation/${id}`);
       if (!reservation) {
-        toast.error('هذا الحجز غير موجود')
+        toast.error("هذا الحجز غير موجود");
       }
-
     } catch (error) {
-      toast.error(' حدث خطأ اثناء الوصول الي الحجز !حاول مرة اخري')
+      toast.error(" حدث خطأ اثناء الوصول الي الحجز !حاول مرة اخري");
     }
-  }
+  };
 
-
-  const updateReservation = async (e, id, tableId, tableNumber, numberOfGuests, reservationDate, startTime, endTime, status) => {
+  const updateReservation = async (
+    e,
+    id,
+    tableId,
+    tableNumber,
+    numberOfGuests,
+    reservationDate,
+    startTime,
+    endTime,
+    status
+  ) => {
     e.preventDefault();
 
     try {
       if (!id) {
-        toast.error("رجاء اختيار الحجز بشكل صحيح")
-        return
+        toast.error("رجاء اختيار الحجز بشكل صحيح");
+        return;
       }
       // setisLoading(true)
 
-      const filterReservationsByTable = allReservations.filter(reservation => reservation.tableId === tableId && reservation.reservationDate === reservationDate)
-
-      const filterReservationsByTime = filterReservationsByTable.filter(reservation =>
-        (reservation.startTime <= startTime && reservation.endTime >= startTime) ||
-        (reservation.startTime <= endTime && reservation.endTime >= endTime) ||
-        (startTime <= reservation.startTime && endTime >= reservation.endTime)
+      const filterReservationsByTable = allReservations.filter(
+        (reservation) =>
+          reservation.tableId === tableId &&
+          reservation.reservationDate === reservationDate
       );
 
-      if (filterReservationsByTime.length === 1 && filterReservationsByTime[0]._id === id) {
+      const filterReservationsByTime = filterReservationsByTable.filter(
+        (reservation) =>
+          (reservation.startTime <= startTime &&
+            reservation.endTime >= startTime) ||
+          (reservation.startTime <= endTime &&
+            reservation.endTime >= endTime) ||
+          (startTime <= reservation.startTime && endTime >= reservation.endTime)
+      );
+
+      if (
+        filterReservationsByTime.length === 1 &&
+        filterReservationsByTime[0]._id === id
+      ) {
         const response = await axios.put(`${apiUrl}/api/reservation/${id}`, {
-          tableId, tableNumber, numberOfGuests, reservationDate, startTime, endTime, status
-        })
+          tableId,
+          tableNumber,
+          numberOfGuests,
+          reservationDate,
+          startTime,
+          endTime,
+          status,
+        });
         if (response.status === 200) {
-          getAllReservations()
+          getAllReservations();
 
-
-          toast.success('تم تعديل ميعاد الحجز بنجاح')
+          toast.success("تم تعديل ميعاد الحجز بنجاح");
         } else {
-          getAllReservations()
+          getAllReservations();
 
-
-          toast.error('حدث خطأ اثناء التعديل ! حاول مرة اخري')
+          toast.error("حدث خطأ اثناء التعديل ! حاول مرة اخري");
         }
       } else {
-        toast.error('لا يمكن تغير الحجز في هذا الميعاد')
+        toast.error("لا يمكن تغير الحجز في هذا الميعاد");
       }
-
-
     } catch (error) {
-
-      toast.error('حدث خطأاثناء تعديل الحجز ! حاول مرة اخري')
+      toast.error("حدث خطأاثناء تعديل الحجز ! حاول مرة اخري");
     } finally {
       setisLoading(false);
     }
-  }
-
+  };
 
   const confirmReservation = async (id, status) => {
     // setisLoading(true)
     try {
       if (!id) {
-        toast.error("رجاء اختيار الحجز بشكل صحيح")
-        return
+        toast.error("رجاء اختيار الحجز بشكل صحيح");
+        return;
       }
 
       const response = await axios.put(`${apiUrl}/api/reservation/${id}`, {
-        status
-      })
+        status,
+      });
       if (response.status === 200) {
-        getAllReservations()
-        toast.success('تم تاكيد الحجز بنجاح')
+        getAllReservations();
+        toast.success("تم تاكيد الحجز بنجاح");
       } else {
-        getAllReservations()
-        toast.error('حدث خطأ اثناء التاكيد ! حاول مرة اخري')
+        getAllReservations();
+        toast.error("حدث خطأ اثناء التاكيد ! حاول مرة اخري");
       }
-
-
     } catch (error) {
-      toast.error('حدث خطأاثناء تاكيد الحجز ! حاول مرة اخري')
+      toast.error("حدث خطأاثناء تاكيد الحجز ! حاول مرة اخري");
     } finally {
       setisLoading(false);
     }
-  }
+  };
 
   const deleteReservation = async (id) => {
     // setisLoading(true)
     try {
       if (!id) {
-        toast.error("رجاء اختيار الحجز بشكل صحيح")
-        return
+        toast.error("رجاء اختيار الحجز بشكل صحيح");
+        return;
       }
 
-      const response = await axios.delete(`${apiUrl}/api/reservation/${id}`)
+      const response = await axios.delete(`${apiUrl}/api/reservation/${id}`);
       if (response.status === 200) {
-        getAllReservations()
-        toast.success("تم حذف الحجز بنجاح")
+        getAllReservations();
+        toast.success("تم حذف الحجز بنجاح");
       } else {
-        toast.error("حدث خطأ اثناء حذف الحجز !حاول مره اخري")
+        toast.error("حدث خطأ اثناء حذف الحجز !حاول مره اخري");
       }
-
     } catch (error) {
-      toast.error('حدث خطاء عملية الحذف !حاول مره اخري')
+      toast.error("حدث خطاء عملية الحذف !حاول مره اخري");
     } finally {
       setisLoading(false);
     }
-  }
-
-
+  };
 
   const fetchData = async () => {
     setisLoading(true);
@@ -2101,160 +2342,473 @@ function App() {
         getAllOrders(),
         getAllTable(),
         getAllUsers(),
-        getAllReservations()
+        getAllReservations(),
       ]);
     } catch (error) {
-      console.error('Error fetching data:', error);
-      toast.error('Error fetching data');
+      console.error("Error fetching data:", error);
+      toast.error("Error fetching data");
     } finally {
       setisLoading(false);
     }
   };
 
-
-
   useEffect(() => {
     fetchData();
 
     const handleConnectError = (error) => {
-      console.error('Socket connection error:', error);
-      toast.error('هناك مشكلة في نظام الإشعارات');
+      console.error("Socket connection error:", error);
+      toast.error("هناك مشكلة في نظام الإشعارات");
     };
 
-    cashierSocket.on('connect_error', handleConnectError);
-    kitchenSocket.on('connect_error', handleConnectError);
-    waiterSocket.on('connect_error', handleConnectError);
+    cashierSocket.on("connect_error", handleConnectError);
+    kitchenSocket.on("connect_error", handleConnectError);
+    waiterSocket.on("connect_error", handleConnectError);
 
     return () => {
-      cashierSocket.off('connect_error', handleConnectError);
-      kitchenSocket.off('connect_error', handleConnectError);
-      waiterSocket.off('connect_error', handleConnectError);
-      
+      cashierSocket.off("connect_error", handleConnectError);
+      kitchenSocket.off("connect_error", handleConnectError);
+      waiterSocket.off("connect_error", handleConnectError);
+
       cashierSocket.disconnect();
       kitchenSocket.disconnect();
       waiterSocket.disconnect();
     };
   }, []);
 
-
-
-
-
   // useEffect(() => {
   //   Payment_pending_orders()
   // }, [allOrders])
 
   useEffect(() => {
-    calculateOrderCost()
-    getAllOrders()
-
-  }, [count, itemsInCart, productOrderToUpdate, isLogin])
+    calculateOrderCost();
+    getAllOrders();
+  }, [count, itemsInCart, productOrderToUpdate, isLogin]);
 
   return (
     <detacontext.Provider
       value={{
         // المعلومات الأساسية
-        restaurantData, clientInfo, apiUrl,
+        restaurantData,
+        clientInfo,
+        apiUrl,
 
         // الدوال المتعلقة بالمصادقة
-        userLoginInfo, employeeLoginInfo, permissionsList, getUserInfoFromToken,
+        userLoginInfo,
+        employeeLoginInfo,
+        permissionsList,
+        getUserInfoFromToken,
 
         // الدوال المتعلقة بالمنتجات والفئات
-        allProducts, productsOffer, sizesOffer, allMenuCategories, filterByMenuCategoryId,
-        setMenuCategoryId, deleteItemFromCart,
+        allProducts,
+        productsOffer,
+        sizesOffer,
+        allMenuCategories,
+        filterByMenuCategoryId,
+        setMenuCategoryId,
+        deleteItemFromCart,
 
         // الدوال المتعلقة بالمستخدمين، الطاولات، والطلبات
-        allUsers, allTable,  allOrders, allEmployees,
+        allUsers,
+        allTable,
+        allOrders,
+        allEmployees,
 
         // الدوال المتعلقة بتفاصيل المنتجات
-        setproductNote, addNoteToProduct, addExtrasToProduct, handleAddProductExtras,
-        setproductExtras, productExtras,
+        setproductNote,
+        addNoteToProduct,
+        addExtrasToProduct,
+        handleAddProductExtras,
+        setproductExtras,
+        productExtras,
 
         // الدوال المتعلقة بمعالجة الطلبات والحسابات
-        invoice, listProductsOrder, orderUpdateDate, myOrder, MenuCategoryId, itemsInCart,
-        costOrder, addItemToCart, setitemsInCart, incrementProductQuantity, decrementProductQuantity,
-        getOrderProductForTable, setdiscount, setaddition, discount, addition, orderaddition, orderdiscount,
+        invoice,
+        listProductsOrder,
+        orderUpdateDate,
+        myOrder,
+        MenuCategoryId,
+        itemsInCart,
+        costOrder,
+        addItemToCart,
+        setitemsInCart,
+        incrementProductQuantity,
+        decrementProductQuantity,
+        getOrderProductForTable,
+        setdiscount,
+        setaddition,
+        discount,
+        addition,
+        orderaddition,
+        orderdiscount,
 
         // الدوال المتعلقة بإنشاء أنواع مختلفة من الطلبات
-        checkout, createWaiterOrderForTable, createcashierOrder, createOrderForTableByClient, createDeliveryOrderByClient,
+        checkout,
+        createWaiterOrderForTable,
+        createcashierOrder,
+        createOrderForTableByClient,
+        createDeliveryOrderByClient,
         lastInvoiceByCashier,
-        clientname, setclientname, clientNotes, setclientNotes, clientphone, setclientphone, clientaddress,
-        setclientaddress, deliveryAreaId, setdeliveryAreaId, deliverycost, setdeliverycost,
+        clientname,
+        setclientname,
+        clientNotes,
+        setclientNotes,
+        clientphone,
+        setclientphone,
+        clientaddress,
+        setclientaddress,
+        deliveryAreaId,
+        setdeliveryAreaId,
+        deliverycost,
+        setdeliverycost,
 
         // الدوال المتعلقة بالتقسيم
-        setisLoading, EditPagination, startpagination, endpagination, setstartpagination, setendpagination,
+        setisLoading,
+        EditPagination,
+        startpagination,
+        endpagination,
+        setstartpagination,
+        setendpagination,
 
         // دوال أخرى أو متغيرات حالة
-        itemId, setitemId, formatDateTime, formatDate, formatTime, orderTotal, orderSubtotal,
-        setsalesTax, salesTax, setserviceTax, serviceTax, orderDeliveryCost, setorderDeliveryCost,
+        itemId,
+        setitemId,
+        formatDateTime,
+        formatDate,
+        formatTime,
+        orderTotal,
+        orderSubtotal,
+        setsalesTax,
+        salesTax,
+        setserviceTax,
+        serviceTax,
+        orderDeliveryCost,
+        setorderDeliveryCost,
 
         // الدوال المتعلقة بتفاصيل الطلبات
-        orderDetalisBySerial, setorderDetalisBySerial, productOrderToUpdate, setproductOrderToUpdate,
-        getOrderDetailsBySerial, updateOrder, putNumOfPaid, handlePayExtras, splitInvoice, subtotalSplitOrder,
+        orderDetalisBySerial,
+        setorderDetalisBySerial,
+        productOrderToUpdate,
+        setproductOrderToUpdate,
+        getOrderDetailsBySerial,
+        updateOrder,
+        putNumOfPaid,
+        handlePayExtras,
+        splitInvoice,
+        subtotalSplitOrder,
 
         // الدوال المتعلقة بالحجوزات
-        createReservations, getAvailableTables, availableTableIds, confirmReservation, updateReservation,
-        getAllReservations, allReservations, setallReservations, getReservationById, deleteReservation,
+        createReservations,
+        getAvailableTables,
+        availableTableIds,
+        confirmReservation,
+        updateReservation,
+        getAllReservations,
+        allReservations,
+        setallReservations,
+        getReservationById,
+        deleteReservation,
 
         // حالة التحميل وأدوات أخرى
-        isLoading, setisLoading, setStartDate, setEndDate, filterByDateRange, filterByTime
-      }}>
-
+        isLoading,
+        setisLoading,
+        setStartDate,
+        setEndDate,
+        filterByDateRange,
+        filterByTime,
+      }}
+    >
       {isLoading && <LoadingPage />}
 
       <BrowserRouter>
         <Routes>
-          <Route path='/' element={<Userscreen />} />
-          <Route path='/:id' element={<Userscreen />} />
-          <Route path='/login' element={<Login />} />
+          <Route path="/" element={<Userscreen />} />
+          <Route path="/:id" element={<Userscreen />} />
+          <Route path="/login" element={<Login />} />
 
-          <Route path='/management/*' element={
-            <Suspense fallback={<LoadingPage />}>
-              <ManagLayout />
-            </Suspense>
-          }>
-             <Route index element={
-                  employeeLoginInfo.role === 'chef' ? <Kitchen /> :
-                  employeeLoginInfo.role === 'waiter' ? <Waiter /> :
-                  employeeLoginInfo.role === 'deliveryMan' ? <DeliveryMan /> :
-                  <ManagerDash />
-                } />
+          <Route
+            path="/management/*"
+            element={
+              <Suspense fallback={<LoadingPage />}>
+                <ManagLayout />
+              </Suspense>
+            }
+          >
+            <Route
+              index
+              element={
+                <Suspense fallback={<LoadingPage />}>
+                  {employeeLoginInfo.role === "chef" ? (
+                    <Kitchen />
+                  ) : employeeLoginInfo.role === "waiter" ? (
+                    <Waiter />
+                  ) : employeeLoginInfo.role === "deliveryMan" ? (
+                    <DeliveryMan />
+                  ) : (
+                    <ManagerDash />
+                  )}
+                </Suspense>
+              }
+            />
             {/* <Route index element={<Suspense fallback={<LoadingPage />}><ManagerDash /></Suspense>} /> */}
-            <Route path='info' element={<Suspense fallback={<LoadingPage />}><Info /></Suspense>} />
-            <Route path='orders' element={<Suspense fallback={<LoadingPage />}><Orders /></Suspense>} />
-            <Route path='products' element={<Suspense fallback={<LoadingPage />}><Products /></Suspense>} />
-            <Route path='productrecipe' element={<Suspense fallback={<LoadingPage />}><ProductRecipe /></Suspense>} />
-            <Route path='tables' element={<Suspense fallback={<LoadingPage />}><Tables /></Suspense>} />
-            <Route path='tablespage' element={<Suspense fallback={<LoadingPage />}><TablesPage /></Suspense>} />
-            <Route path='reservation' element={<Suspense fallback={<LoadingPage />}><ReservationTables /></Suspense>} />
-            <Route path='employees' element={<Suspense fallback={<LoadingPage />}><Employees /></Suspense>} />
-            <Route path='permissions' element={<Suspense fallback={<LoadingPage />}><PermissionsComponent /></Suspense>} />
-            <Route path='employeetransactions' element={<Suspense fallback={<LoadingPage />}><EmployeeTransactions /></Suspense>} />
-            <Route path='payroll' element={<Suspense fallback={<LoadingPage />}><PayRoll /></Suspense>} />
-            <Route path='attendancerecord' element={<Suspense fallback={<LoadingPage />}><AttendanceManagement /></Suspense>} />
-            <Route path='menucategory' element={<Suspense fallback={<LoadingPage />}><MenuCategory /></Suspense>} />
-            <Route path='kitchen' element={<Suspense fallback={<LoadingPage />}><Kitchen /></Suspense>} />
-            <Route path='waiter' element={<Suspense fallback={<LoadingPage />}><Waiter /></Suspense>} />
-            <Route path='deliveryman' element={<Suspense fallback={<LoadingPage />}><DeliveryMan /></Suspense>} />
-            <Route path='pos' element={<Suspense fallback={<LoadingPage />}><POS /></Suspense>} />
-            <Route path='supplier' element={<Suspense fallback={<LoadingPage />}><Suppliers /></Suspense>} />
-            <Route path='purchase' element={<Suspense fallback={<LoadingPage />}><Purchase /></Suspense>} />
-            <Route path='purchasereturn' element={<Suspense fallback={<LoadingPage />}><PurchaseReturn /></Suspense>} />
-            <Route path='suppliertransaction' element={<Suspense fallback={<LoadingPage />}><SupplierTransaction /></Suspense>} />
-            <Route path='categoryStock' element={<Suspense fallback={<LoadingPage />}><CategoryStock /></Suspense>} />
-            <Route path='stockitem' element={<Suspense fallback={<LoadingPage />}><StockItem /></Suspense>} />
-            <Route path='stockmanag' element={<Suspense fallback={<LoadingPage />}><StockManag /></Suspense>} />
-            <Route path='kitchenconsumption' element={<Suspense fallback={<LoadingPage />}><KitchenConsumption /></Suspense>} />
-            <Route path='expenseitem' element={<Suspense fallback={<LoadingPage />}><ExpenseItem /></Suspense>} />
-            <Route path='dailyexpense' element={<Suspense fallback={<LoadingPage />}><DailyExpense /></Suspense>} />
-            <Route path='cashregister' element={<Suspense fallback={<LoadingPage />}><CashRegister /></Suspense>} />
-            <Route path='cashmovement' element={<Suspense fallback={<LoadingPage />}><CashMovement /></Suspense>} />
-            <Route path='users' element={<Suspense fallback={<LoadingPage />}><Users /></Suspense>} />
-            <Route path='customers' element={<Suspense fallback={<LoadingPage />}><Customers /></Suspense>} />
-            <Route path='message' element={<Suspense fallback={<LoadingPage />}><CustomerMessage /></Suspense>} />
+            <Route
+              path="info"
+              element={
+                <Suspense fallback={<LoadingPage />}>
+                  <Info />
+                </Suspense>
+              }
+            />
+            <Route
+              path="orders"
+              element={
+                <Suspense fallback={<LoadingPage />}>
+                  <Orders />
+                </Suspense>
+              }
+            />
+            <Route
+              path="products"
+              element={
+                <Suspense fallback={<LoadingPage />}>
+                  <Products />
+                </Suspense>
+              }
+            />
+            <Route
+              path="productrecipe"
+              element={
+                <Suspense fallback={<LoadingPage />}>
+                  <ProductRecipe />
+                </Suspense>
+              }
+            />
+            <Route
+              path="tables"
+              element={
+                <Suspense fallback={<LoadingPage />}>
+                  <Tables />
+                </Suspense>
+              }
+            />
+            <Route
+              path="tablespage"
+              element={
+                <Suspense fallback={<LoadingPage />}>
+                  <TablesPage />
+                </Suspense>
+              }
+            />
+            <Route
+              path="reservation"
+              element={
+                <Suspense fallback={<LoadingPage />}>
+                  <ReservationTables />
+                </Suspense>
+              }
+            />
+            <Route
+              path="employees"
+              element={
+                <Suspense fallback={<LoadingPage />}>
+                  <Employees />
+                </Suspense>
+              }
+            />
+            <Route
+              path="permissions"
+              element={
+                <Suspense fallback={<LoadingPage />}>
+                  <PermissionsComponent />
+                </Suspense>
+              }
+            />
+            <Route
+              path="employeetransactions"
+              element={
+                <Suspense fallback={<LoadingPage />}>
+                  <EmployeeTransactions />
+                </Suspense>
+              }
+            />
+            <Route
+              path="payroll"
+              element={
+                <Suspense fallback={<LoadingPage />}>
+                  <PayRoll />
+                </Suspense>
+              }
+            />
+            <Route
+              path="attendancerecord"
+              element={
+                <Suspense fallback={<LoadingPage />}>
+                  <AttendanceManagement />
+                </Suspense>
+              }
+            />
+            <Route
+              path="menucategory"
+              element={
+                <Suspense fallback={<LoadingPage />}>
+                  <MenuCategory />
+                </Suspense>
+              }
+            />
+            <Route
+              path="kitchen"
+              element={
+                <Suspense fallback={<LoadingPage />}>
+                  <Kitchen />
+                </Suspense>
+              }
+            />
+            <Route
+              path="waiter"
+              element={
+                <Suspense fallback={<LoadingPage />}>
+                  <Waiter />
+                </Suspense>
+              }
+            />
+            <Route
+              path="deliveryman"
+              element={
+                <Suspense fallback={<LoadingPage />}>
+                  <DeliveryMan />
+                </Suspense>
+              }
+            />
+            <Route
+              path="pos"
+              element={
+                <Suspense fallback={<LoadingPage />}>
+                  <POS />
+                </Suspense>
+              }
+            />
+            <Route
+              path="supplier"
+              element={
+                <Suspense fallback={<LoadingPage />}>
+                  <Suppliers />
+                </Suspense>
+              }
+            />
+            <Route
+              path="purchase"
+              element={
+                <Suspense fallback={<LoadingPage />}>
+                  <Purchase />
+                </Suspense>
+              }
+            />
+            <Route
+              path="purchasereturn"
+              element={
+                <Suspense fallback={<LoadingPage />}>
+                  <PurchaseReturn />
+                </Suspense>
+              }
+            />
+            <Route
+              path="suppliertransaction"
+              element={
+                <Suspense fallback={<LoadingPage />}>
+                  <SupplierTransaction />
+                </Suspense>
+              }
+            />
+            <Route
+              path="categoryStock"
+              element={
+                <Suspense fallback={<LoadingPage />}>
+                  <CategoryStock />
+                </Suspense>
+              }
+            />
+            <Route
+              path="stockitem"
+              element={
+                <Suspense fallback={<LoadingPage />}>
+                  <StockItem />
+                </Suspense>
+              }
+            />
+            <Route
+              path="stockmanag"
+              element={
+                <Suspense fallback={<LoadingPage />}>
+                  <StockManag />
+                </Suspense>
+              }
+            />
+            <Route
+              path="kitchenconsumption"
+              element={
+                <Suspense fallback={<LoadingPage />}>
+                  <KitchenConsumption />
+                </Suspense>
+              }
+            />
+            <Route
+              path="expenseitem"
+              element={
+                <Suspense fallback={<LoadingPage />}>
+                  <ExpenseItem />
+                </Suspense>
+              }
+            />
+            <Route
+              path="dailyexpense"
+              element={
+                <Suspense fallback={<LoadingPage />}>
+                  <DailyExpense />
+                </Suspense>
+              }
+            />
+            <Route
+              path="cashregister"
+              element={
+                <Suspense fallback={<LoadingPage />}>
+                  <CashRegister />
+                </Suspense>
+              }
+            />
+            <Route
+              path="cashmovement"
+              element={
+                <Suspense fallback={<LoadingPage />}>
+                  <CashMovement />
+                </Suspense>
+              }
+            />
+            <Route
+              path="users"
+              element={
+                <Suspense fallback={<LoadingPage />}>
+                  <Users />
+                </Suspense>
+              }
+            />
+            <Route
+              path="customers"
+              element={
+                <Suspense fallback={<LoadingPage />}>
+                  <Customers />
+                </Suspense>
+              }
+            />
+            <Route
+              path="message"
+              element={
+                <Suspense fallback={<LoadingPage />}>
+                  <CustomerMessage />
+                </Suspense>
+              }
+            />
           </Route>
 
-          <Route path='*' element={<Navigate to='/' />} />
+          <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </BrowserRouter>
     </detacontext.Provider>
