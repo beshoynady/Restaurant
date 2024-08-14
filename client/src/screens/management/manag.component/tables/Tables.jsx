@@ -8,7 +8,7 @@ import '../orders/Orders.css'
 
 const Tables = () => {
   const apiUrl = process.env.REACT_APP_API_URL;
-  const token = localStorage.getItem('token_e'); // Retrieve the token from localStorage
+  const token = localStorage.getItem('token_e'); 
   const config = {
     headers: {
       'Authorization': `Bearer ${token}`,
@@ -35,12 +35,8 @@ const Tables = () => {
       if (!token) {
         // Handle case where token is not available
         toast.error('رجاء تسجيل الدخول مره اخري');
-      }
-      // Ensure token exists
-      if (!token) {
         throw new Error("must login");
       }
-
       // Prepare table data
       const tableData = {
         description: tabledesc,
@@ -83,7 +79,9 @@ const Tables = () => {
         // Handle case where token is not available
         toast.error('رجاء تسجيل الدخول مره اخري');
       }
-      const response = await axios.put(`${apiUrl}/api/table/${tableid}`, { "description": tabledesc, tableNumber, chairs, sectionNumber, isValid }, config);
+      const response = await axios.put(`${apiUrl}/api/table/${tableid}`,
+         { "description": tabledesc, tableNumber, chairs, sectionNumber, isValid },
+          config);
       console.log(response.data);
       getAllTable();
     } catch (error) {
@@ -102,7 +100,9 @@ const Tables = () => {
 
       const URL = `https://${window.location.hostname}/${tableid}`;
       const qr = await axios.post(apiUrl + '/api/table/qr', { URL }, config);
-      setqrimage(qr.data);
+      const qrData = qr.data
+      console.log({qrData, URL})
+      setqrimage(qrData);
       toast.success('تم إنشاء رمز QR بنجاح!');
     } catch (error) {
       console.error("حدث خطأ أثناء إنشاء رمز QR:", error);
@@ -351,9 +351,11 @@ const Tables = () => {
                         <span className="material-symbols-outlined" data-toggle="tooltip" title="QR">qr_code_2_add</span>
                       </a></td>
                       <td>
-                        <a href="#editTableModal" className="edit" data-toggle="modal" onClick={() => { settableid(table._id); settableNumber(table.tableNumber); setchairs(table.chairs); settabledesc(table.description) }}><i className="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+                        <a href="#editTableModal" className="edit" data-toggle="modal" onClick={() => { settableid(table._id); settableNumber(table.tableNumber); setchairs(table.chairs); settabledesc(table.description) }}>
+                          <i className="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
 
-                        <a href="#deleteTableModal" className="delete" data-toggle="modal" onClick={() => settableid(table._id)}><i className="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+                        <a href="#deleteTableModal" className="delete" data-toggle="modal" onClick={() => settableid(table._id)}>
+                          <i className="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
                       </td>
                     </tr>
                   )

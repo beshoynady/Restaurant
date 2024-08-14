@@ -1,12 +1,7 @@
 const QRCode = require('qrcode');
 const TableModel = require('../models/Table.model');
 
-// Create a new table
-/**
- * Create a new table in the database.
- * @param {Object} req - The request object containing table details.
- * @param {Object} res - The response object to send the result or error.
- */
+
 const createTable = async (req, res) => {
     const { tableNumber, description, chairs, sectionNumber } = req.body;
 
@@ -20,12 +15,7 @@ const createTable = async (req, res) => {
     }
 };
 
-// Create QR code from URL
-/**
- * Generate a QR code for the provided URL.
- * @param {Object} req - The request object containing the URL.
- * @param {Object} res - The response object to send the QR code or error.
- */
+
 const createQR = async (req, res) => {
     const { URL } = req.body;
 
@@ -39,12 +29,7 @@ const createQR = async (req, res) => {
     }
 };
 
-// Retrieve all tables
-/**
- * Retrieve all tables from the database.
- * @param {Object} _req - The request object (not used).
- * @param {Object} res - The response object to send the list of tables or error.
- */
+
 const showAllTables = async (_req, res) => {
     try {
         // Find all table documents in the database
@@ -57,12 +42,7 @@ const showAllTables = async (_req, res) => {
     }
 };
 
-// Retrieve a single table by ID
-/**
- * Retrieve a specific table by its ID.
- * @param {Object} req - The request object containing the table ID in parameters.
- * @param {Object} res - The response object to send the table or error.
- */
+
 const showOneTable = async (req, res) => {
     const id = req.params.tableid;
 
@@ -78,12 +58,7 @@ const showOneTable = async (req, res) => {
     }
 };
 
-// Update a table by ID
-/**
- * Update details of a specific table by its ID.
- * @param {Object} req - The request object containing table details and ID in parameters.
- * @param {Object} res - The response object to send the updated table or error.
- */
+
 const updateTable = async (req, res) => {
     const id = req.params.tableid;
     const { tableNumber, description, chairs, sectionNumber, isValid } = req.body;
@@ -108,12 +83,7 @@ const updateTable = async (req, res) => {
     }
 };
 
-// Delete a table by ID
-/**
- * Delete a specific table by its ID.
- * @param {Object} req - The request object containing the table ID in parameters.
- * @param {Object} res - The response object to send the result or error.
- */
+
 const deleteTable = async (req, res) => {
     const id = req.params.tableid;
 

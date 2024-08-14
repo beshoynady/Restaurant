@@ -1,6 +1,6 @@
 const express = require("express");
-const authenticateToken = require('../utlits/authenticate')
-const checkSubscription = require('../utlits/checkSubscription')
+const authenticateToken = require("../utlits/authenticate");
+const checkSubscription = require("../utlits/checkSubscription");
 
 const {
   createTable,
@@ -8,13 +8,19 @@ const {
   showAllTables,
   showOneTable,
   updateTable,
-  deleteTable
+  deleteTable,
 } = require("../controllers/Table.controller");
 
 const router = express.Router();
 
-router.route('/').post(authenticateToken, checkSubscription, createTable).get(showAllTables);
-router.route('/:tableid').get(showOneTable).delete(authenticateToken, checkSubscription, deleteTable).put(authenticateToken, checkSubscription, updateTable);
-router.route('/qr').post(authenticateToken, checkSubscription, createQR)
+router
+  .route("/")
+  .post(authenticateToken, checkSubscription, createTable)
+  .get(showAllTables);
+router
+  .route("/:tableid")
+  .get(showOneTable)
+  .delete(authenticateToken, checkSubscription, deleteTable)
+  .put(authenticateToken, checkSubscription, updateTable);
+router.route("/qr").post(authenticateToken, checkSubscription, createQR);
 module.exports = router;
-
