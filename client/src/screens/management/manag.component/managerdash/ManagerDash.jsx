@@ -165,6 +165,7 @@ const ManagerDash = () => {
   };
 
   const paymentstatus = ["Pending", "Paid"];
+  const paymentstatusAr = ["انظار دفع", "دفع"];
 
   const [AllWaiters, setAllWaiters] = useState([]);
   const [deliverymen, setDeliverymen] = useState([]);
