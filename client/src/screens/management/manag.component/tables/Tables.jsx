@@ -99,8 +99,8 @@ const Tables = () => {
     try {
 
       const URL = `https://${window.location.hostname}/${tableid}`;
-      const qr = await axios.post(apiUrl + '/api/table/qr', { URL }, config);
-      const qrData = qr.data
+      const response = await axios.post(apiUrl + '/api/table/qr', { URL }, config);
+      const qrData =  response.data.QRCode
       console.log({qrData, URL})
       setqrimage(qrData);
       toast.success('تم إنشاء رمز QR بنجاح!');
