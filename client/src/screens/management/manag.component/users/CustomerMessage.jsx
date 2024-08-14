@@ -306,14 +306,14 @@ const CustomerMessage = () => {
             <thead>
               <tr>
                 <th>
-                  <span className="custom-checkbox">
+                  {/* <span className="custom-checkbox">
                     <input
                       type="checkbox"
                       className="form-check-input form-check-input-lg"
                       id="selectAll"
                     />
                     <label htmlFor="selectAll"></label>
-                  </span>
+                  </span> */}
                 </th>
                 <th>م</th>
                 <th>الاسم</th>

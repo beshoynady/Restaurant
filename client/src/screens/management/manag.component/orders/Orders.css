@@ -61,6 +61,7 @@
   flex-wrap: wrap;
   justify-content: space-between;
   max-width: max-content;
+  color: black;
 }
 
 .table-filter .filter-group {
@@ -77,12 +78,17 @@
   border-color: #ddd;
   font-size: 16px;
   color: #000000;
-  padding: 8px;
+  text-align: center;
+  padding: 5px;
   min-width: 75px;
 }
 .table-filter .form-control {
   max-width: max-content;
   min-width: 100%;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 800;
+  color: #000000;
 }
 .table-filter .btn {
   width: 70px;
@@ -91,6 +97,7 @@
 .table-filter label {
   font-weight: 600;
   margin-left: 10px;
+  color: #000;
 }
 
 .filter-icon {

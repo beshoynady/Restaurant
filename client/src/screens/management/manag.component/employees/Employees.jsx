@@ -451,7 +451,7 @@ const Employees = () => {
         <div className="table-wrapper">
           <div className="table-title">
             <div className="w-100 d-flex flex-wrap align-items-center justify-content-between">
-              <div className="col-6">
+              <div className="text-right">
                 <h2>
                   ادارة <b>الموظفين</b>
                 </h2>
