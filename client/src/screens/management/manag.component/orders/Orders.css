@@ -67,7 +67,7 @@
 .table-filter .filter-group {
   max-width: 150px;
   display: flex;
-  align-items: center;
+  align-items: right;
   margin-left: 15px;
   width: max-content;
 }
@@ -190,6 +190,7 @@ table.table .avatar {
   z-index: 1055 !important;
 }
 
+
 .modal .modal-dialog {
   width: 740px;
   /* max-width: 90%; */
@@ -256,8 +257,8 @@ table.table .avatar {
 
 @media (min-width: 576px) {
   .modal-dialog {
-    max-width: fit-content !important;
     margin: 1.75rem auto;
+    max-width: none;
   }
 }
 
