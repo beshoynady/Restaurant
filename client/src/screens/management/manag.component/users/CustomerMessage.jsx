@@ -282,7 +282,7 @@ const CustomerMessage = () => {
                   <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
                     <button
                       type="button"
-                      className="btn btn-primary  h-100 p-2 "
+                      className="btn btn-primary h-100 p-2 "
                       onClick={() =>
                         setallCustomerMessage(
                           filterByDateRange(allCustomerMessage)
@@ -293,8 +293,7 @@ const CustomerMessage = () => {
                     </button>
                     <button
                       type="button"
-                      className="btn btn-warning  h-100 p-2
-                      onClick={getAllCustomerMessage}
+                      className="btn btn-warning h-100 p-2" onClick={getAllCustomerMessage}
                     >
                       استعادة
                     </button>

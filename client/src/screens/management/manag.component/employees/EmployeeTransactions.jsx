@@ -201,10 +201,10 @@ const EmployeeTransactions = () => {
               </div>
               <div className="col-12 col-md-6 p-0 m-0 d-flex flex-wrap aliegn-items-center justify-content-end print-hide">
 
-                <a href="#addEmployeeTransactionsModal" className=" d-flex align-items-center justify-content-evenly col-3  h-100 p-2 m-0 btn btn-success" data-toggle="modal">
+                <a href="#addEmployeeTransactionsModal" className=" d-flex align-items-center justify-content-evenly col-3 h-100 p-2 m-0 btn btn-success" data-toggle="modal">
                   <span>اضافة حركة</span>
                 </a>
-                <a href="#" className=" d-flex align-items-center justify-content-evenly col-3  h-100 p-2 m-0 btn btn-info " data-toggle="modal" onClick={exportToExcel}>
+                <a href="#" className=" d-flex align-items-center justify-content-evenly col-3 h-100 p-2 m-0 btn btn-info " data-toggle="modal" onClick={exportToExcel}>
                   <span>تصدير</span>
                 </a>
                 <a href="#" className="d-flex align-items-center justify-content-center  h-100  m-0 btn btn-primary" data-toggle="modal" onClick={handlePrint}>
@@ -278,10 +278,10 @@ const EmployeeTransactions = () => {
                     <input type="date" className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => setEndDate(e.target.value)} placeholder="اختر التاريخ" />
                   </div>
                   <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
-                    <button type="button" className="btn btn-primary  h-100 p-2" onClick={() => setlistofEmployeeTransactions(filterByDateRange(listofEmployeeTransactions))}>
+                    <button type="button" className="btn btn-primary h-100 p-2" onClick={() => setlistofEmployeeTransactions(filterByDateRange(listofEmployeeTransactions))}>
                       <i className="fa fa-search"></i>
                     </button>
-                    <button type="button" className="btn btn-warning  h-100 p-2" onClick={getEmployeeTransactions}>
+                    <button type="button" className="btn btn-warning h-100 p-2" onClick={getEmployeeTransactions}>
                       استعادة
                     </button>
                   </div>

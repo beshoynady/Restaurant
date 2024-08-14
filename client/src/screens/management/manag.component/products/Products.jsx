@@ -478,10 +478,10 @@ const Products = () => {
                   </div>
 
                   <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
-                    <button type="button" className="btn btn-primary  h-100 p-2 " onClick={() => setallOrders(filterByDateRange(allOrders))}>
+                    <button type="button" className="btn btn-primary h-100 p-2 " onClick={() => setallOrders(filterByDateRange(allOrders))}>
                       <i className="fa fa-search"></i>
                     </button>
-                    <button type="button" className="btn btn-warning  h-100 p-2" onClick={getAllOrders}>استعادة
+                    <button type="button" className="btn btn-warning h-100 p-2" onClick={getAllOrders}>استعادة
                     </button>
                   </div>
                 </div>

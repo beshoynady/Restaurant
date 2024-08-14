@@ -307,7 +307,7 @@ const Orders = () => {
                   <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
                     <button
                       type="button"
-                      className="btn btn-primary  h-100 p-2 "
+                      className="btn btn-primary h-100 p-2 "
                       onClick={() =>
                         setlistOfOrders(filterByDateRange(listOfOrders))
                       }
@@ -316,8 +316,7 @@ const Orders = () => {
                     </button>
                     <button
                       type="button"
-                      className="btn btn-warning  h-100 p-2
-                      onClick={getOrders}
+                      className="btn btn-warning h-100 p-2" onClick={getOrders}
                     >
                       استعادة
                     </button>

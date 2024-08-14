@@ -490,10 +490,10 @@ const StockManag = () => {
                   </div>
 
                   <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
-                    <button type="button" className="btn btn-primary  h-100 p-2 " onClick={() => setAllStockactions(filterByDateRange(AllStockactions))}>
+                    <button type="button" className="btn btn-primary h-100 p-2 " onClick={() => setAllStockactions(filterByDateRange(AllStockactions))}>
                       <i className="fa fa-search"></i>
                     </button>
-                    <button type="button" className="btn btn-warning  h-100 p-2" onClick={getallStockaction}>استعادة
+                    <button type="button" className="btn btn-warning h-100 p-2" onClick={getallStockaction}>استعادة
                     </button>
                   </div>
                 </div>
