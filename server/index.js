@@ -189,8 +189,7 @@ cashierNamespace.on('connection', (socket) => {
   socket.on('orderkitchen', (notification) => {
     console.log("Order ready notification:", notification);
     kitchenNamespace.emit('orderkitchen', notification);
-    cashierNamespace.emit('orderready', notification);
-
+    // cashierNamespace.emit('orderready', notification);
   });
 
   socket.on('disconnect', () => {
@@ -228,6 +227,10 @@ kitchenNamespace.on('connection', (socket) => {
 waiterNamespace.on('connection', (socket) => {
   console.log('Waiter connected');
 
+  socket.on('orderready', (notification) => {
+    console.log("Help request received:", notification);
+    waiterNamespace.emit('orderready', notification);
+  });
   socket.on('helprequest', (notification) => {
     console.log("Help request received:", notification);
     cashierNamespace.emit('helprequest', notification);

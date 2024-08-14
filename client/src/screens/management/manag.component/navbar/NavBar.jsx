@@ -194,10 +194,14 @@ const NavBar = () => {
         employeeLoginInfo.role === "programer"
       ) {
         cashierSocket.off("neworder", handleNewOrderNotification);
+        cashierSocket.off("orderready", handleNewOrderNotification);
+
       } else if (employeeLoginInfo.role === "chef") {
         kitchenSocket.off("orderkitchen", handleNewOrderNotification);
       } else if (employeeLoginInfo.role === "waiter") {
         waiterSocket.off("neworder", handleNewOrderNotification);
+        waiterSocket.off("orderready", handleNewOrderNotification);
+
       }
     };
   }, []);
