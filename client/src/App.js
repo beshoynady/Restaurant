@@ -29,7 +29,6 @@ const EmployeeTransactions = React.lazy(() => import('./screens/management/manag
 const PayRoll = React.lazy(() => import('./screens/management/manag.component/employees/PayRoll'));
 const AttendanceManagement = React.lazy(() => import('./screens/management/manag.component/employees/attendance'));
 const MenuCategory = React.lazy(() => import('./screens/management/manag.component/products/MenuCategory'));
-const CategoryStock = React.lazy(() => import('./screens/management/manag.component/stock/CategoryStock'));
 const Kitchen = React.lazy(() => import('./screens/management/manag.component/kitchen/Kitchen'));
 const Waiter = React.lazy(() => import('./screens/management/manag.component/waiter/Waiter'));
 const DeliveryMan = React.lazy(() => import('./screens/management/manag.component/deliveryman/DeliveryMan'));
@@ -38,6 +37,7 @@ const Suppliers = React.lazy(() => import('./screens/management/manag.component/
 const Purchase = React.lazy(() => import('./screens/management/manag.component/suppliers/Purchase'));
 const PurchaseReturn = React.lazy(() => import('./screens/management/manag.component/suppliers/PurchaseReturn'));
 const SupplierTransaction = React.lazy(() => import('./screens/management/manag.component/suppliers/SupplierTransaction'));
+const CategoryStock = React.lazy(() => import('./screens/management/manag.component/stock/CategoryStock'));
 const StockItem = React.lazy(() => import('./screens/management/manag.component/stock/StockItem'));
 const StockManag = React.lazy(() => import('./screens/management/manag.component/stock/StockManag'));
 const KitchenConsumption = React.lazy(() => import('./screens/management/manag.component/stock/KitchenConsumption'));
@@ -2231,10 +2231,11 @@ function App() {
             <Route path='waiter' element={<Suspense fallback={<LoadingPage />}><Waiter /></Suspense>} />
             <Route path='deliveryman' element={<Suspense fallback={<LoadingPage />}><DeliveryMan /></Suspense>} />
             <Route path='pos' element={<Suspense fallback={<LoadingPage />}><POS /></Suspense>} />
-            <Route path='suppliers' element={<Suspense fallback={<LoadingPage />}><Suppliers /></Suspense>} />
+            <Route path='supplier' element={<Suspense fallback={<LoadingPage />}><Suppliers /></Suspense>} />
             <Route path='purchase' element={<Suspense fallback={<LoadingPage />}><Purchase /></Suspense>} />
             <Route path='purchasereturn' element={<Suspense fallback={<LoadingPage />}><PurchaseReturn /></Suspense>} />
             <Route path='suppliertransaction' element={<Suspense fallback={<LoadingPage />}><SupplierTransaction /></Suspense>} />
+            <Route path='categoryStock' element={<Suspense fallback={<LoadingPage />}><CategoryStock /></Suspense>} />
             <Route path='stockitem' element={<Suspense fallback={<LoadingPage />}><StockItem /></Suspense>} />
             <Route path='stockmanag' element={<Suspense fallback={<LoadingPage />}><StockManag /></Suspense>} />
             <Route path='kitchenconsumption' element={<Suspense fallback={<LoadingPage />}><KitchenConsumption /></Suspense>} />
@@ -2244,7 +2245,7 @@ function App() {
             <Route path='cashmovement' element={<Suspense fallback={<LoadingPage />}><CashMovement /></Suspense>} />
             <Route path='users' element={<Suspense fallback={<LoadingPage />}><Users /></Suspense>} />
             <Route path='customers' element={<Suspense fallback={<LoadingPage />}><Customers /></Suspense>} />
-            <Route path='customermessage' element={<Suspense fallback={<LoadingPage />}><CustomerMessage /></Suspense>} />
+            <Route path='message' element={<Suspense fallback={<LoadingPage />}><CustomerMessage /></Suspense>} />
           </Route>
 
           <Route path='*' element={<Navigate to='/' />} />
