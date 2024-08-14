@@ -2213,7 +2213,12 @@ function App() {
               <ManagLayout />
             </Suspense>
           }>
-            <Route index element={<Suspense fallback={<LoadingPage />}><ManagerDash /></Suspense>} />
+             <Route index element={
+                  employeeLoginInfo.role === 'chef' ? <Kitchen /> :
+                  employeeLoginInfo.role === 'waiter' ? <Waiter /> :
+                  <ManagerDash />
+                } />
+            {/* <Route index element={<Suspense fallback={<LoadingPage />}><ManagerDash /></Suspense>} /> */}
             <Route path='info' element={<Suspense fallback={<LoadingPage />}><Info /></Suspense>} />
             <Route path='orders' element={<Suspense fallback={<LoadingPage />}><Orders /></Suspense>} />
             <Route path='products' element={<Suspense fallback={<LoadingPage />}><Products /></Suspense>} />
