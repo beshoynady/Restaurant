@@ -1300,7 +1300,7 @@ const Employees = () => {
                       className="form-control border-primary m-0 p-2 h-auto"
                       min={0}
                       max={31}
-                      defaultValue={workingDays}
+                      value={workingDays}
                       required
                       onChange={(e) => setworkingDays(Number(e.target.value))}
                     />
@@ -1320,7 +1320,7 @@ const Employees = () => {
                       id="basicSalaryEdit"
                       className="form-control border-primary m-0 p-2 h-auto"
                       min={0}
-                      defaultValue={basicSalary}
+                      value={basicSalary}
                       required
                       onChange={(e) => setbasicSalary(Number(e.target.value))}
                     />
@@ -1341,7 +1341,7 @@ const Employees = () => {
                       className="form-control border-primary m-0 p-2 h-auto"
                       min={0}
                       max={100}
-                      defaultValue={taxRate}
+                      value={taxRate}
                       required
                       onChange={(e) => settaxRate(Number(e.target.value))}
                     />
@@ -1362,7 +1362,7 @@ const Employees = () => {
                       className="form-control border-primary m-0 p-2 h-auto"
                       min={0}
                       max={100}
-                      defaultValue={insuranceRate}
+                      value={insuranceRate}
                       required
                       onChange={(e) => setinsuranceRate(Number(e.target.value))}
                     />
@@ -1382,7 +1382,7 @@ const Employees = () => {
                         type="number"
                         id="sectionNumber"
                         className="form-control border-primary m-0 p-2 h-auto"
-                        defaultValue={sectionNumber}
+                        value={sectionNumber}
                         onChange={(e) =>
                           setsectionNumber(Number(e.target.value))
                         }
