@@ -827,7 +827,7 @@ const Tables = () => {
                   ref={printwepqr}
                   className="form-group qrprint w-100 h-auto p-3 d-flex align-items-center justify-content-center"
                 >
-                  <div className="w-100 text-center">
+                  <div className="w-100 text-center text-dark">
                     <p
                       className="mb-3"
                       style={{
