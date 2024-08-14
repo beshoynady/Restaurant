@@ -134,8 +134,8 @@ const NavBar = () => {
       const parts = message.split('-');
 
       if (parts.length===2) {
-        const messageText = match[1]; 
-        const waiterId = match[2];
+        const messageText = parts[1]; 
+        const waiterId = parts[2];
         const currentWaiterId = employeeLoginInfo.id;
         // Check if the waiter id matches the current user's waiter id
         if (waiterId === currentWaiterId) {
