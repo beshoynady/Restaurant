@@ -752,45 +752,47 @@ const Tables = () => {
         </div>
       )}
 
-      <div id="qrTableModal" className="modal fade">
-        <div className="modal-dialog modal-lg">
-          <div className="modal-content shadow-lg border-0 rounded ">
+      <div id="qrTableModal" className="modal fade" tabIndex="-1" role="dialog">
+        <div className="modal-dialog modal-lg" role="document">
+          <div className="modal-content shadow-lg border-0 rounded">
             <form onSubmit={createQR}>
-              <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
+              <div className="modal-header bg-primary text-light">
                 <h4 className="modal-title">استخراج QR</h4>
+                <button
+                  type="button"
+                  className="close"
+                  data-dismiss="modal"
+                  aria-label="Close"
+                >
+                  <span aria-hidden="true">&times;</span>
+                </button>
               </div>
-              <div className="modal-body d-flex flex-wrap align-items-center p-0 m-0 text-center">
+              <div className="modal-body text-center">
                 <div
                   ref={printtableqr}
-                  className="form-group qrprint w-100 h-auto p-0 m-2 d-flex align-items-center justify-content-center"
+                  className="qrprint p-3 d-flex flex-column align-items-center"
                 >
-                  <div className="w-100 text-center">
-                    <p
-                      className="mb-3 text-nowrap text-center text-dark"
-                      style={{
-                        fontSize: "26px",
-                        fontFamily: "Noto Nastaliq Urdu , serif",
-                      }}
-                    >
-                      طاولة رقم {tableNumber}
-                    </p>
-                    {qrimage && (
-                      <a href={qrimage} download>
-                        <img
-                          src={qrimage}
-                          className="img-fluid  w-100 h-75"
-                          alt="QR Code"
-                        />
-                      </a>
-                    )}
-                  </div>
+                  <p
+                    className="mb-3 text-dark"
+                    style={{
+                      fontSize: "26px",
+                      fontFamily: "Noto Nastaliq Urdu, serif",
+                    }}
+                  >
+                    طاولة رقم {tableNumber}
+                  </p>
+                  {qrimage && (
+                    <a href={qrimage} download className="d-block mb-3">
+                      <img src={qrimage} className="img-fluid" alt="QR Code" />
+                    </a>
+                  )}
                 </div>
               </div>
-              <div className="modal-footer p-0 m-0 d-flex flex-nowrap align-items-center justify-content-between">
+              <div className="modal-footer">
                 {qrimage ? (
                   <button
                     type="button"
-                    className="col-6 btn p-3 m-0 btn-info"
+                    className="btn btn-info col-6"
                     onClick={handlePrinttableqr}
                   >
                     طباعة
@@ -798,13 +800,13 @@ const Tables = () => {
                 ) : (
                   <input
                     type="submit"
-                    className="btn btn-success col-6 h-100 px-2 py-3 m-0"
+                    className="btn btn-success col-6"
                     value="استخراج"
                   />
                 )}
                 <button
                   type="button"
-                  className="btn btn-danger col-6 h-100 px-2 py-3 m-0"
+                  className="btn btn-danger col-6"
                   data-dismiss="modal"
                 >
                   اغلاق
@@ -815,45 +817,47 @@ const Tables = () => {
         </div>
       </div>
 
-      <div id="qrwebModal" className="modal fade">
-        <div className="modal-dialog modal-lg">
-          <div className="modal-content shadow-lg border-0 rounded ">
+      <div id="qrwebModal" className="modal fade" tabIndex="-1" role="dialog">
+        <div className="modal-dialog modal-lg" role="document">
+          <div className="modal-content shadow-lg border-0 rounded">
             <form onSubmit={createwebQR}>
-              <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
+              <div className="modal-header bg-primary text-light">
                 <h4 className="modal-title">استخراج QR</h4>
+                <button
+                  type="button"
+                  className="close"
+                  data-dismiss="modal"
+                  aria-label="Close"
+                >
+                  <span aria-hidden="true">&times;</span>
+                </button>
               </div>
-              <div className="modal-body d-flex flex-wrap align-items-center p-0 m-0 text-center">
+              <div className="modal-body text-center">
                 <div
                   ref={printwepqr}
-                  className="form-group qrprint w-100 h-auto p-0 m-0 d-flex align-items-center justify-content-center"
+                  className="qrprint p-3 d-flex flex-column align-items-center"
                 >
-                  <div className="w-100 text-center text-dark">
-                    <p
-                      className="mb-3"
-                      style={{
-                        fontSize: "26px",
-                        fontFamily: "Noto Nastaliq Urdu , serif",
-                      }}
-                    >
-                      {restaurantData && restaurantData.name}
-                    </p>
-                    {qrimage && (
-                      <a href={qrimage} download>
-                        <img
-                          src={qrimage}
-                          className="img-fluid  w-100 h-75"
-                          alt="QR Code"
-                        />
-                      </a>
-                    )}
-                  </div>
+                  <p
+                    className="mb-3 text-dark"
+                    style={{
+                      fontSize: "26px",
+                      fontFamily: "Noto Nastaliq Urdu, serif",
+                    }}
+                  >
+                    {restaurantData && restaurantData.name}
+                  </p>
+                  {qrimage && (
+                    <a href={qrimage} download className="d-block mb-3">
+                      <img src={qrimage} className="img-fluid" alt="QR Code" />
+                    </a>
+                  )}
                 </div>
               </div>
-              <div className="modal-footer p-0 m-0 d-flex flex-nowrap align-items-center justify-content-between">
+              <div className="modal-footer">
                 {qrimage ? (
                   <button
                     type="button"
-                    className="col-6 btn p-3 m-0 btn-info"
+                    className="btn btn-info col-6"
                     onClick={handlePrintwepqr}
                   >
                     طباعة
@@ -861,13 +865,13 @@ const Tables = () => {
                 ) : (
                   <input
                     type="submit"
-                    className="btn btn-success col-6 h-100 px-2 py-3 m-0"
+                    className="btn btn-success col-6"
                     value="استخراج"
                   />
                 )}
                 <button
                   type="button"
-                  className="btn btn-danger col-6 h-100 px-2 py-3 m-0"
+                  className="btn btn-danger col-6"
                   data-dismiss="modal"
                 >
                   اغلاق
