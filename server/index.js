@@ -169,6 +169,11 @@ cashierNamespace.on('connection', (socket) => {
     // إرسال الإشعار إلى المطبخ
     cashierNamespace.emit('neworder', notification);
   });
+  socket.on('orderready', (notification) => {
+    console.log("New order received:", notification);
+    // إرسال الإشعار إلى المطبخ
+    cashierNamespace.emit('orderready', notification);
+  });
 
   // استقبال إشعار من الكاشير إلى الويتر
   socket.on('helprequest', (notification) => {
@@ -184,6 +189,8 @@ cashierNamespace.on('connection', (socket) => {
   socket.on('orderkitchen', (notification) => {
     console.log("Order ready notification:", notification);
     kitchenNamespace.emit('orderkitchen', notification);
+    cashierNamespace.emit('orderready', notification);
+
   });
 
   socket.on('disconnect', () => {

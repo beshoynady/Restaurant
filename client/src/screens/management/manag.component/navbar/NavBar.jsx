@@ -179,10 +179,12 @@ const NavBar = () => {
       employeeLoginInfo.role === "programer"
     ) {
       cashierSocket.on("neworder", handleNewOrderNotification);
+      cashierSocket.on("orderready", handleNewOrderNotification);
     } else if (employeeLoginInfo.role === "chef") {
       kitchenSocket.on("orderkitchen", handleNewOrderNotification);
     } else if (employeeLoginInfo.role === "waiter") {
       waiterSocket.on("neworder", handleNewOrderNotification);
+      waiterSocket.on("orderready", handleNewOrderNotification);
     }
 
     // Clean up the socket connection on component unmount

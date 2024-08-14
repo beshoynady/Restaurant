@@ -2,9 +2,14 @@ import { useState, useEffect, useRef, useContext } from 'react';
 import axios from 'axios';
 import { detacontext } from '../../../../App'
 import { toast } from 'react-toastify';
+import io from "socket.io-client";
 
 
-
+const kitchenSocket = io(`${process.env.REACT_APP_API_URL}/kitchen`, {
+  reconnection: true,
+  reconnectionAttempts: Infinity,
+  reconnectionDelay: 1000,
+});
 
 
 const Kitchen = () => {
@@ -350,13 +355,17 @@ const Kitchen = () => {
       // Perform other operations if needed after the loop completes
       // Update order status or perform other tasks
 
-      // const status = 'Prepared';
-      // const updateproducts = products.map((prod) => ({ ...prod, isDone: true }));
-      // if (type === 'Internal') {
-      //   const waiter = await specifiedWaiter(id);
-      //   await axios.put(`${apiUrl}/api/order/${id}`, { products: updateproducts, status, waiter });
-      // }
-      // await axios.put(`${apiUrl}/api/order/${id}`, { products: updateproducts, status });
+      const status = 'Prepared';
+      const updateproducts = products.map((prod) => ({ ...prod, isDone: true }));
+      if (type === 'Internal') {
+        const waiter = await specifiedWaiter(id);
+        await axios.put(`${apiUrl}/api/order/${id}`, { products: updateproducts, status, waiter });
+        kitchenSocket.emit('orderready',`اورد جاهز -${waiter}`)
+        
+      }else{
+        await axios.put(`${apiUrl}/api/order/${id}`, { products: updateproducts, status });
+        kitchenSocket.emit('orderready',`اورد جاهز`)
+      }
       // Set all orders state
       getAllOrders()
       getKitchenConsumption()
