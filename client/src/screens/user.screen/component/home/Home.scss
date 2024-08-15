@@ -102,7 +102,7 @@
     background-image: url(../../../../image/main-cover-mob.jpg);
     background-repeat: no-repeat;
     background-size: cover;
-    background-position: center;
+    background-position: bottom;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -122,13 +122,13 @@
         flex-direction: column;
         flex-wrap: nowrap;
         align-content: center;
-        justify-content: space-between;
+        justify-content: space-evenly;
         align-items: center;
         margin-top: 0px;
         padding: 10px;
         text-align: center;
         width: 100%;
-        height: 50%;
+        height: 45%;
         right: 0;
 
         .main-title {
@@ -138,7 +138,7 @@
           text-align: center;
           margin-bottom: 15px;
           line-height: 1.4;
-          text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+          text-shadow: none;
           max-width: 90%;
         }
 
@@ -149,7 +149,7 @@
           text-align: center;
           margin-bottom: 20px;
           line-height: 1.4;
-          text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+          text-shadow: none;
           max-width: 90%;
         }
 
@@ -160,7 +160,7 @@
           list-style: none;
           padding: 0;
           width: 100%;
-          align-content: space-between;
+          align-content: space-evenly;
           justify-content: center;
 
           .main-li {
@@ -172,16 +172,16 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 45%;
+            width: 40%;
             font-size: 20px;
             font-weight: 800;
             margin-bottom: 10px;
-            padding: 10px;
+            padding: 5px;
 
             a {
               text-decoration: none;
               color: var(--secondary-color);
-              font-size: 20px;
+              font-size: 26px;
               font-weight: 800;
               display: block;
               width: 100%;
@@ -198,6 +198,6 @@
   .main-home {
     background-image: url("../../../../image/main-cover-mob.jpg");
     background-size: cover;
-    background-position: center;
+    background-position:bottom ;
   }
 }
