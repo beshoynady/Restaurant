@@ -1005,7 +1005,7 @@ const ManagerDash = () => {
                                 </a>
                               </td>
                               <td>
-                                {recent.waiter ? recent.waiter?.username : ""}
+                                {recent.waiter ? recent.waiter?.username : "بم يحدد"}
                               </td>
                               <td>
                                 {recent.orderType === "Delivery" && (
