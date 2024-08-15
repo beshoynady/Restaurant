@@ -31,7 +31,8 @@ const waiterSocket = io(`${process.env.REACT_APP_API_URL}/waiter`, {
 });
 
 const NavBar = () => {
-  const { permissionUserMassage, employeeLoginInfo } = useContext(detacontext);
+  const { permissionsList, employeeLoginInfo } = useContext(detacontext);
+
   const apiUrl = process.env.REACT_APP_API_URL;
   const token = localStorage.getItem("token_e");
 
@@ -40,6 +41,12 @@ const NavBar = () => {
       Authorization: `Bearer ${token}`,
     },
   };
+
+  const permissionUserMassage = permissionsList?.filter(
+    (permission) => permission.resource === "Messages"
+  )[0];
+  const role = employeeLoginInfo ? employeeLoginInfo.role : "";
+  const isProgrammer = role === "programer";
 
   const [showDropdown, setShowDropdown] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
@@ -131,10 +138,10 @@ const NavBar = () => {
     // Define the event handler
     const handleNewOrderNotification = (notification) => {
       const message = notification;
-      const parts = message.split('-');
+      const parts = message.split("-");
 
-      if (parts.length===2) {
-        const messageText = parts[1]; 
+      if (parts.length === 2) {
+        const messageText = parts[1];
         const waiterId = parts[2];
         const currentWaiterId = employeeLoginInfo.id;
         // Check if the waiter id matches the current user's waiter id
@@ -195,13 +202,11 @@ const NavBar = () => {
       ) {
         cashierSocket.off("neworder", handleNewOrderNotification);
         cashierSocket.off("orderready", handleNewOrderNotification);
-
       } else if (employeeLoginInfo.role === "chef") {
         kitchenSocket.off("orderkitchen", handleNewOrderNotification);
       } else if (employeeLoginInfo.role === "waiter") {
         waiterSocket.off("neworder", handleNewOrderNotification);
         waiterSocket.off("orderready", handleNewOrderNotification);
-
       }
     };
   }, []);
@@ -301,52 +306,55 @@ const NavBar = () => {
             </div>
           )}
         </div>
-        <div className="nav-item mx-1 dropdown">
-          <a
-            className="nav-link dropdown-toggle text-light"
-            href="#"
-            id="messagesDropdown"
-            onClick={toggleMessages}
-            aria-haspopup="true"
-            aria-expanded={showMessages ? "true" : "false"}
-          >
-            <i className="bx bx-envelope"></i>
-            <span className="badge badge-pill badge-danger">
-              {messages.length}
-            </span>
-          </a>
-          {showMessages && (
-            <div
-              className="dropdown-menu dropdown-menu-right flex-column show"
-              aria-labelledby="messagesDropdown"
-              style={{ position: "absolute" }}
+        {(isProgrammer || permissionUserMassage?.read) && (
+          <div className="nav-item mx-1 dropdown">
+            <a
+              className="nav-link dropdown-toggle text-light"
+              href="#"
+              id="messagesDropdown"
+              onClick={toggleMessages}
+              aria-haspopup="true"
+              aria-expanded={showMessages ? "true" : "false"}
             >
-              {messages.length > 0 ? (
-                messages.map((message, index) => (
-                  <Link
-                    to="message"
-                    key={index}
-                    className="dropdown-item text-right"
-                  >
-                    <i
-                      className="material-icons"
-                      data-toggle="tooltip"
-                      title="Delete"
-                      onClick={() => updateisSeenMessage(message._id)}
-                      style={{ marginRight: "8px", fontSize: "18px" }}
+              <i className="bx bx-envelope"></i>
+              <span className="badge badge-pill badge-danger">
+                {messages.length}
+              </span>
+            </a>
+            {showMessages && (
+              <div
+                className="dropdown-menu dropdown-menu-right flex-column show"
+                aria-labelledby="messagesDropdown"
+                style={{ position: "absolute" }}
+              >
+                {messages.length > 0 ? (
+                  messages.map((message, index) => (
+                    <Link
+                      to="message"
+                      key={index}
+                      className="dropdown-item text-right"
                     >
-                      close
-                    </i>
-                    <strong className="text-right">{message.name}</strong>:
-                    {message.message}
-                  </Link>
-                ))
-              ) : (
-                <p className="dropdown-item">لا يوجد رسائل</p>
-              )}
-            </div>
-          )}
-        </div>
+                      <i
+                        className="material-icons"
+                        data-toggle="tooltip"
+                        title="Delete"
+                        onClick={() => updateisSeenMessage(message._id)}
+                        style={{ marginRight: "8px", fontSize: "18px" }}
+                      >
+                        close
+                      </i>
+                      <strong className="text-right">{message.name}</strong>:
+                      {message.message}
+                    </Link>
+                  ))
+                ) : (
+                  <p className="dropdown-item">لا يوجد رسائل</p>
+                )}
+              </div>
+            )}
+          </div>
+        )}
+
         <div className="nav-item mx-1 dropdown">
           <a
             className="nav-link dropdown-toggle text-light"
