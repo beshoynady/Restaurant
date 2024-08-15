@@ -1,10 +1,11 @@
 .main-home {
   width: 100%;
   height: calc(100vh - 80px);
+  scroll-margin-top: 80px;
   background-image: url(../../../../image/main-cover.jpg);
   background-repeat: no-repeat;
   background-size: cover;
-  background-position: center;
+  background-position: left;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -18,7 +19,7 @@
   height: 100%;
 }
 .main-home .main-container .content {
-  width: 50%;
+  width: 45%;
   height: 75%;
   display: flex;
   flex-direction: column;
@@ -88,6 +89,7 @@
   .main-home {
     width: 100%;
     height: calc(100vh - 80px);
+    scroll-margin-top: 80px;
     background-image: url(../../../../image/main-cover-mob.jpg);
     background-repeat: no-repeat;
     background-size: cover;
