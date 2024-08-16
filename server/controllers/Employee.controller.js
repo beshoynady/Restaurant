@@ -40,7 +40,10 @@ const createEmployeeSchema = Joi.object({
   numberID: Joi.string().length(14).when('role', { is: Joi.not('programer').valid(), then: Joi.required(), otherwise: Joi.optional() }),
   username: Joi.string().min(3).max(100).when('role', { is: Joi.not('programer').valid(), then: Joi.required(), otherwise: Joi.optional() }),
   address: Joi.string().min(3).max(200).optional(),
-  email: Joi.string().email().min(10).max(100).optional(),
+  email: Joi.alternatives().try(
+    Joi.string().email().min(10).max(100),
+    Joi.allow(null)
+  ).optional(),
   phone: Joi.string().length(11).required(),
   password: Joi.string().min(3).max(200).required(),
   basicSalary: Joi.number().min(0).when('role', { is: Joi.not('programer').valid(), then: Joi.required(), otherwise: Joi.optional() }),
@@ -99,7 +102,10 @@ const updateEmployeeSchema = Joi.object({
   numberID: Joi.string().length(14).required(),
   username: Joi.string().min(3).max(100).required(),
   address: Joi.string().min(3).max(200).required(),
-  email: Joi.string().email().min(10).max(100).optional(),
+  email: Joi.alternatives().try(
+    Joi.string().email().min(10).max(100),
+    Joi.allow(null)
+  ).optional(),
   phone: Joi.string().length(11).required(),
   password: Joi.string().min(3).max(200).optional(),
   basicSalary: Joi.number().min(0).required(),
