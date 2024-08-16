@@ -127,6 +127,8 @@ const createEmployeeSchema = Joi.object({
   sectionNumber: Joi.number().optional(),
 });
 
+
+
 const createEmployee = async (req, res) => {
   try {
     const createdBy = req.employee.id;
