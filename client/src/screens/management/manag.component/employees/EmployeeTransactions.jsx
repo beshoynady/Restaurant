@@ -18,7 +18,7 @@ const EmployeeTransactions = () => {
   };
 
   const {
-    setStartDate, setEndDate, filterByDateRange, filterByTime, employeeLoginInfo, formatDateTime, allEmployees,
+    permissionsList, setStartDate, setEndDate, filterByDateRange, filterByTime, employeeLoginInfo, formatDateTime, allEmployees,
     setisLoadiog, EditPagination, startpagination, endpagination, setstartpagination, setendpagination,
   } = useContext(detacontext);
 
@@ -515,7 +515,7 @@ const EmployeeTransactions = () => {
           </div>
         </div>
       </div>
-      
+
       <div id="deleteEmployeeTransactionsModal" className="modal fade">
         <div className="modal-dialog modal-lg">
           <div className="modal-content shadow-lg border-0 rounded ">
