@@ -16,9 +16,11 @@ const StockItem = () => {
   };
 
 
-  const{restaurantData, permissionsList,setStartDate, setEndDate, filterByDateRange, filterByTime, employeeLoginInfo,  formatDate, formatDateTime, setisLoadiog, EditPagination, startpagination, endpagination, setstartpagination, setendpagination } = useContext(detacontext)
+  const{restaurantData, permissionsList,setStartDate, setEndDate, filterByDateRange, filterByTime, employeeLoginInfo, 
+    formatDate, formatDateTime, setisLoadiog, EditPagination, startpagination, endpagination, 
+    setstartpagination, setendpagination } = useContext(detacontext)
 
-  const permissionStockItem = permissionsList && permissionsList.filter(permission => permission.resource === 'stock Item')[0]
+  const stockItemPermission = permissionsList && permissionsList.filter(permission => permission.resource === 'stock Item')[0]
 
   const [itemName, setitemName] = useState('');
   const [stockItemId, setStockItemid] = useState('');
@@ -36,23 +38,26 @@ const StockItem = () => {
 
   // Function to create a stock item
   const createItem = async (e, userId) => {
-    if (permissionStockItem && !permissionStockItem.read) {
+    e.preventDefault();
+    if (!token) {
+      // Handle case where token is not available
+      toast.error('رجاء تسجيل الدخول مره اخري');
+      return
+    }
+    if (stockItemPermission && !stockItemPermission.read) {
       toast.warn('ليس لك صلاحية لانشاء عنصر جديد في المخزن')
       return
     }
-    e.preventDefault();
-    const createdBy = userId;
+    setisLoadiog(true)
     try{
-      if (!token) {
-        // Handle case where token is not available
-        toast.error('رجاء تسجيل الدخول مره اخري');
-        return
-      }
+      const createdBy = userId;
+
       const response = await axios.post(apiUrl + '/api/stockitem/', {
         itemName, categoryId, smallUnit, parts, costOfPart, largeUnit, currentBalance,
         minThreshold, price, createdBy,
       }, config);
       console.log(response.data);
+      
       if (response.data.error === 'Item name already exists') {
 
         toast.warn('هذا الاسم موجود من قبل ')
@@ -61,9 +66,10 @@ const StockItem = () => {
 
       // Notify on success
       toast.success('تم إنشاء عنصر المخزون بنجاح');
-    } catch (error) {
-      console.log(error);
-
+    setisLoadiog(false)
+  } catch (error) {
+    console.log(error);
+    setisLoadiog(false)
       // Notify on error
       toast.error('فشل في إنشاء عنصر المخزون');
     }
@@ -73,37 +79,41 @@ const StockItem = () => {
   const [allrecipes, setallrecipes] = useState([]);
 
   const getallrecipes = async () => {
+    if (!token) {
+      // Handle case where token is not available
+      toast.error('رجاء تسجيل الدخول مره اخري');
+      return
+    }
+    setisLoadiog(true)
     try{
-      if (!token) {
-        // Handle case where token is not available
-        toast.error('رجاء تسجيل الدخول مره اخري');
-        return
-      }
       const response = await axios.get(`${apiUrl}/api/recipe`, config);
       console.log(response)
       const allRecipe = await response.data;
       setallrecipes(allRecipe)
       console.log({ allRecipe })
 
-    } catch (error) {
-      console.log(error)
-    }
+    setisLoadiog(false)
+  } catch (error) {
+    console.log(error)
+  }
+  setisLoadiog(false)
 
   }
   // Function to edit a stock item
   const editStockItem = async (e, userId) => {
-    if (permissionStockItem && !permissionStockItem.update) {
+    e.preventDefault();
+    if (!token) {
+      // Handle case where token is not available
+      toast.error('رجاء تسجيل الدخول مره اخري');
+      return
+    }
+    if (stockItemPermission && !stockItemPermission.update) {
       toast.warn('ليس لك صلاحية لتعديل عناصر المخزن')
       return
     }
-    e.preventDefault();
     const createdBy = userId;
+    setisLoadiog(true)
     try{
-      if (!token) {
-        // Handle case where token is not available
-        toast.error('رجاء تسجيل الدخول مره اخري');
-        return
-      }
       const response = await axios.put(`${apiUrl}/api/stockitem/${stockItemId}`, {
         itemName,
         categoryId,
@@ -158,9 +168,10 @@ const StockItem = () => {
 
       // Notify on success
       toast.success('تم تحديث عنصر المخزون بنجاح');
-    } catch (error) {
-      console.log(error);
-
+    setisLoadiog(false)
+  } catch (error) {
+    console.log(error);
+    setisLoadiog(false)
       // Notify on error
       toast.error('فشل في تحديث عنصر المخزون');
     }
@@ -168,17 +179,18 @@ const StockItem = () => {
 
   // Function to delete a stock item
   const deleteStockItem = async (e) => {
-    if (permissionStockItem && !permissionStockItem.delete) {
+    e.preventDefault();
+    if (!token) {
+      // Handle case where token is not available
+      toast.error('رجاء تسجيل الدخول مره اخري');
+      return
+    }
+    if (stockItemPermission && !stockItemPermission.delete) {
       toast.warn('ليس لك صلاحية لحذف عنصر من المخزن')
       return
     }
-    e.preventDefault();
+    setisLoadiog(true)
     try{
-      if (!token) {
-        // Handle case where token is not available
-        toast.error('رجاء تسجيل الدخول مره اخري');
-        return
-      }
       const response = await axios.delete(`${apiUrl}/api/stockitem/${stockItemId}`, config);
       if (response.status === 200) {
         console.log(response);
@@ -187,9 +199,10 @@ const StockItem = () => {
         // Notify on success
         toast.success('تم حذف عنصر المخزون بنجاح');
       }
-    } catch (error) {
-      console.log(error);
-
+    setisLoadiog(false)
+  } catch (error) {
+    console.log(error);
+    setisLoadiog(false)
       // Notify on error
       toast.error('فشل في حذف عنصر المخزون');
     }
@@ -200,14 +213,14 @@ const StockItem = () => {
 
   // Function to retrieve all stock items
   const getStockItems = async () => {
+    if (!token) {
+      // Handle case where token is not available
+      toast.error('رجاء تسجيل الدخول مره اخري');
+      return
+    }
+    setisLoadiog(true)
     try{
-      if (!token) {
-        // Handle case where token is not available
-        toast.error('رجاء تسجيل الدخول مره اخري');
-        return
-      }
-      
-
+    
       const response = await axios.get(apiUrl + '/api/stockitem/', config);
 
       if (!response || !response.data) {
@@ -220,9 +233,11 @@ const StockItem = () => {
 
       // Notify on success
       toast.success('تم استرداد عناصر المخزون بنجاح');
-    } catch (error) {
-      console.error(error);
-
+    setisLoadiog(false)
+  } catch (error) {
+    console.error(error);
+    
+    setisLoadiog(false)
       // Notify on error
       toast.error('فشل في استرداد عناصر المخزون');
     }
@@ -233,17 +248,20 @@ const StockItem = () => {
 
   // Function to retrieve all category stock
   const getAllCategoryStock = async () => {
+    if (!token) {
+      // Handle case where token is not available
+      toast.error('رجاء تسجيل الدخول مره اخري');
+      return
+    }
+    setisLoadiog(true)
     try{
-      if (!token) {
-        // Handle case where token is not available
-        toast.error('رجاء تسجيل الدخول مره اخري');
-        return
-      }
       const response = await axios.get(apiUrl + "/api/categoryStock/", config);
       setAllCategoryStock(response.data.reverse());
-    } catch (error) {
-      console.error('Error fetching category stock:', error);
-      toast.error('حدث خطأ اثناء جلب بيانات التصنيفات ! اعد تحميل الصفحة')
+    setisLoadiog(false)
+  } catch (error) {
+    console.error('Error fetching category stock:', error);
+    toast.error('حدث خطأ اثناء جلب بيانات التصنيفات ! اعد تحميل الصفحة')
+    setisLoadiog(false)
     }
   };
 
@@ -289,11 +307,13 @@ const StockItem = () => {
               <div className="text-right">
                 <h2>ادارة <b>عناصر المخزن</b></h2>
               </div>
+              {stockItemPermission.create&&
               <div className="col-12 col-md-6 p-0 m-0 d-flex flex-wrap aliegn-items-center justify-content-end print-hide">
                 <a href="#addStockItemModal" className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-success" data-toggle="modal"> <span>اضافه منتج جديد</span></a>
 
                 {/* <a href="#deleteStockItemModal" className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-danger" data-toggle="modal"> <span>حذف</span></a> */}
               </div>
+              }
             </div>
           </div>
           <div className="table-filter print-hide">
@@ -371,11 +391,19 @@ const StockItem = () => {
                       <td>{item.createdBy?.fullname}</td>
                       <td>{formatDateTime(item.createdAt)}</td>
                       <td>
+                        {stockItemPermission.update&&
                         <a href="#editStockItemModal" className="edit" data-toggle="modal"
-                          onClick={() => { handelEditStockItemModal(item) }}><i className="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+                          onClick={() => { handelEditStockItemModal(item) }}>
+                            <i className="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i>
+                            </a>
+                        }
+                        {stockItemPermission.delete&&
 
                         <a href="#deleteStockItemModal" className="delete" data-toggle="modal"
-                          onClick={() => setStockItemid(item._id)}><i className="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+                          onClick={() => setStockItemid(item._id)}>
+                            <i className="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i>
+                          </a>
+                        }
                       </td>
                     </tr>
                   )

@@ -204,7 +204,8 @@ const CategoryStock = () => {
               </div>
               {stockCategoriesPermission.create&&
               <div className="col-12 col-md-6 p-0 m-0 d-flex flex-wrap aliegn-items-center justify-content-end print-hide">
-                <a href="#addCategoryStockModal" className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-success" data-toggle="modal"> <span>اضافه تصنيف</span></a>
+                <a href="#addCategoryStockModal" className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-success" data-toggle="modal"> 
+                  <span>اضافه تصنيف</span></a>
               </div>
               }
             </div>

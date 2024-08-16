@@ -70,10 +70,14 @@ const PermissionsComponent = () => {
      'Payroll', 'Cash Register', 'Cash Movement', 'stock Item', 
     'stock Categories', 'stock Management', 'Orders', 'Tables', 'Table Reservations', 'Restaurant Settings',
      'Permissions', 'Delivery Zones', 'Shifts', 'Expenses', 'Daily Expenses', 'Menu Categories',
-      'Products', 'Recipes', 'Kitchen Usage', 'Purchases', 'Purchase Returns', 'Supplier Data',
-       'Supplier Account', 'Supplier Movement', 'Users', 'Messages']);
+      'Products', 'Recipes', 'Kitchen Usage', 'Purchases', 'Purchase Returns',
+       'Supplier Data', 'Supplier Transactions', 'Users', 'Messages']);
 
-  const [permissionsListAr, setpermissionsListAr] = useState(['الموظفين', 'تسجيل الحضور', 'معاملات الموظفين', 'دفع المرتبات', 'سجل النقدية', 'حركة النقدية', 'عنصر المخزن', 'تصنيفات المخزن', 'إدارة المخزن', 'الطلبات', 'الطاولة', 'حجز الطاولات', 'اعدادات المطعم', 'الصلاحيات', 'مناطق التوصيل', 'الوردية', 'المصروفات', 'سجل المصروفات', 'تصنيفات المنيو', 'المنتجات', 'الوصفات', 'استهلاك المطبخ', 'المشتريات', 'مرتجع المشتريات', 'بيانات الموردين', 'حساب المورد', 'حركه الموردين', 'المستخدمين', 'الرسائل']);
+  const [permissionsListAr, setpermissionsListAr] = useState(['الموظفين', 'تسجيل الحضور', 'معاملات الموظفين', 'دفع المرتبات',
+     'سجل النقدية', 'حركة النقدية', 'عنصر المخزن', 'تصنيفات المخزن', 'إدارة المخزن', 'الطلبات', 'الطاولة',
+      'حجز الطاولات', 'اعدادات المطعم', 'الصلاحيات', 'مناطق التوصيل', 'الوردية', 'المصروفات', 'سجل المصروفات',
+       'تصنيفات المنيو', 'المنتجات', 'الوصفات', 'استهلاك المطبخ', 'المشتريات', 'مرتجع المشتريات',
+        'بيانات الموردين', 'تعاملات مع الموردين', 'المستخدمين', 'الرسائل']);
 
 
   const [employeeid, setemployeeid] = useState("")

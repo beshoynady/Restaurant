@@ -23,15 +23,20 @@ const PurchaseReturn = () => {
      formatDate, formatDateTime, setisLoadiog, EditPagination, startpagination, endpagination,
     setstartpagination, setendpagination } = useContext(detacontext)
 
+    const purchaseReturnPermission = permissionsList?.filter(
+      (permission) => permission.resource === "Purchases Returns"
+    )[0];
+
+
   const [AllStockactions, setAllStockactions] = useState([]);
 
   const getallStockaction = async () => {
+    if (!token) {
+      // Handle case where token is not available
+      toast.error('رجاء تسجيل الدخول مره اخري');
+      return
+    }
     try {
-      if (!token) {
-        // Handle case where token is not available
-        toast.error('رجاء تسجيل الدخول مره اخري');
-        return
-      }
       const response = await axios.get(apiUrl + '/api/stockmanag/', config);
       console.log(response.data)
       const Stockactions = await response.data;
@@ -45,12 +50,12 @@ const PurchaseReturn = () => {
   const [AllSuppliers, setAllSuppliers] = useState([]);
   // Function to retrieve all suppliers
   const getAllSuppliers = async () => {
+    if (!token) {
+      // Handle case where token is not available
+      toast.error('رجاء تسجيل الدخول مره اخري');
+      return
+    }
     try {
-      if (!token) {
-        // Handle case where token is not available
-        toast.error('رجاء تسجيل الدخول مره اخري');
-        return
-      }
       const response = await axios.get(apiUrl + '/api/supplier/', config);
 
       if (!response || !response.data) {
@@ -76,12 +81,12 @@ const PurchaseReturn = () => {
   const [AllCashRegisters, setAllCashRegisters] = useState([]);
   // Fetch all cash registers
   const getAllCashRegisters = async () => {
+    if (!token) {
+      // Handle case where token is not available
+      toast.error('رجاء تسجيل الدخول مره اخري');
+      return
+    }
     try {
-      if (!token) {
-        // Handle case where token is not available
-        toast.error('رجاء تسجيل الدخول مره اخري');
-        return
-      }
       const response = await axios.get(apiUrl + '/api/cashregister', config);
       setAllCashRegisters(response.data.reverse());
     } catch (err) {
@@ -92,12 +97,12 @@ const PurchaseReturn = () => {
   const [allrecipes, setallrecipes] = useState([]);
 
   const getallrecipes = async () => {
+    if (!token) {
+      // Handle case where token is not available
+      toast.error('رجاء تسجيل الدخول مره اخري');
+      return
+    }
     try {
-      if (!token) {
-        // Handle case where token is not available
-        toast.error('رجاء تسجيل الدخول مره اخري');
-        return
-      }
       const response = await axios.get(`${apiUrl}/api/recipe`, config);
       console.log(response)
       const allRecipe = await response.data;
@@ -110,12 +115,12 @@ const PurchaseReturn = () => {
 
   const [StockItems, setStockItems] = useState([]);
   const getaStockItems = async () => {
+    if (!token) {
+      // Handle case where token is not available
+      toast.error('رجاء تسجيل الدخول مره اخري');
+      return
+    }
     try {
-      if (!token) {
-        // Handle case where token is not available
-        toast.error('رجاء تسجيل الدخول مره اخري');
-        return
-      }
       const response = await axios.get(apiUrl + '/api/stockitem/', config);
       if (response) {
         console.log(response.data)
@@ -129,33 +134,33 @@ const PurchaseReturn = () => {
 
 
   const createStockAction = async (item, receiverid) => {
-    const itemId = item.itemId;
-    const quantity = item.quantity;
-    const price = Number(item.price);
-    const cost = item.cost;
-    const expirationDate = item.expirationDate
-    const movement = 'ReturnPurchase'
-    const receiver = receiverid
-    const itemPercentage = Number(price) / Number(netAmount)
-    const itemAdditionalCost = additionalCost * itemPercentage
-    const costOfItem = itemAdditionalCost + price
-    const stockItem = StockItems.filter(item => item._id === itemId)[0]
-    console.log({ stockItem })
-
-    // const itemName = stockItem.itemName
-    const oldBalance = stockItem.currentBalance
-    const parts = stockItem.parts
-    const currentBalance = Number(oldBalance) - Number(quantity);
-    const unit = stockItem.largeUnit
-    const costOfPart = Math.round((Number(costOfItem) / Number(parts)) * 100) / 100;
-    console.log({ itemPercentage, itemAdditionalCost, costOfItem, parts, price, costOfPart })
+    if (!token) {
+      // Handle case where token is not available
+      toast.error('رجاء تسجيل الدخول مره اخري');
+      return
+    }
+    
     try {
-      if (!token) {
-        // Handle case where token is not available
-        toast.error('رجاء تسجيل الدخول مره اخري');
-        return
-      }
-
+      const itemId = item.itemId;
+      const quantity = item.quantity;
+      const price = Number(item.price);
+      const cost = item.cost;
+      const expirationDate = item.expirationDate
+      const movement = 'ReturnPurchase'
+      const receiver = receiverid
+      const itemPercentage = Number(price) / Number(netAmount)
+      const itemAdditionalCost = additionalCost * itemPercentage
+      const costOfItem = itemAdditionalCost + price
+      const stockItem = StockItems.filter(item => item._id === itemId)[0]
+      console.log({ stockItem })
+  
+      // const itemName = stockItem.itemName
+      const oldBalance = stockItem.currentBalance
+      const parts = stockItem.parts
+      const currentBalance = Number(oldBalance) - Number(quantity);
+      const unit = stockItem.largeUnit
+      const costOfPart = Math.round((Number(costOfItem) / Number(parts)) * 100) / 100;
+      console.log({ itemPercentage, itemAdditionalCost, costOfItem, parts, price, costOfPart })
       // Update the stock item's movement
       const changeItem = await axios.put(`${apiUrl}/api/stockitem/movement/${itemId}`,
         { currentBalance, price, costOfPart }, config);
@@ -426,11 +431,15 @@ const PurchaseReturn = () => {
   const [returnInvoice, setreturnInvoice] = useState({})
 
   const getReturnInvoice = async (id) => {
+    if (!token) {
+      // Handle case where token is not available
+      toast.error('رجاء تسجيل الدخول مره اخري');
+      return
+    }
     try {
-      if (!token) {
-        // Handle case where token is not available
-        toast.error('رجاء تسجيل الدخول مره اخري');
-        return
+      if(purchaseReturnPermission&&!purchaseReturnPermission.read){
+        toast.warn('ليس لك صلاحية لعرض فواتير المرتجع');
+        return;
       }
       const resInvoice = await axios.get(`${apiUrl}/api/purchasereturn/${id}`, config)
       if (resInvoice) {
@@ -442,14 +451,18 @@ const PurchaseReturn = () => {
   }
 
   const createPurchaseReturn = async (e, receiverId) => {
-
     e.preventDefault()
+    if (!token) {
+      // Handle case where token is not available
+      toast.error('رجاء تسجيل الدخول مره اخري');
+      return
+    }
     try {
-      if (!token) {
-        // Handle case where token is not available
-        toast.error('رجاء تسجيل الدخول مره اخري');
-        return
+      if(purchaseReturnPermission&&!purchaseReturnPermission.create){
+        toast.warn('ليس لك صلاحية لانشاء فواتير المرتجع');
+        return;
       }
+
       const items = []
       returnedItems.map(item => {
         if (item.quantity > 0) {
@@ -508,11 +521,15 @@ const PurchaseReturn = () => {
 
   const [allPurchasesReturn, setallPurchasesReturn] = useState([])
   const getAllPurchasesReturn = async () => {
+    if (!token) {
+      // Handle case where token is not available
+      toast.error('رجاء تسجيل الدخول مره اخري');
+      return
+    }
     try {
-      if (!token) {
-        // Handle case where token is not available
-        toast.error('رجاء تسجيل الدخول مره اخري');
-        return
+      if(purchaseReturnPermission&&!purchaseReturnPermission.read){
+        toast.warn('ليس لك صلاحية لعرض فواتير المرتجع');
+        return;
       }
       const response = await axios.get(apiUrl + '/api/purchasereturn', config);
       console.log({ response })
@@ -529,12 +546,12 @@ const PurchaseReturn = () => {
 
   const [allPurchaseInvoice, setallPurchaseInvoice] = useState([])
   const getAllPurchases = async () => {
+    if (!token) {
+      // Handle case where token is not available
+      toast.error('رجاء تسجيل الدخول مره اخري');
+      return
+    }
     try {
-      if (!token) {
-        // Handle case where token is not available
-        toast.error('رجاء تسجيل الدخول مره اخري');
-        return
-      }
       const response = await axios.get(apiUrl + '/api/purchaseinvoice', config);
       console.log({ response })
       if (response.status === 200) {
@@ -569,12 +586,12 @@ const PurchaseReturn = () => {
     e.preventDefault();
     const updatedbalance = Number(CashRegisterBalance) + Number(refundedAmount); // Calculate the updated balance
 
+    if (!token) {
+      // Handle case where token is not available
+      toast.error('رجاء تسجيل الدخول مره اخري');
+      return
+    }
     try {
-      if (!token) {
-        // Handle case where token is not available
-        toast.error('رجاء تسجيل الدخول مره اخري');
-        return
-      }
 
       // await handleAddSupplierTransactionPaymentPurchase()
 
@@ -613,12 +630,12 @@ const PurchaseReturn = () => {
   };
 
   const confirmDeduct = async () => {
+    if (!token) {
+      // Handle case where token is not available
+      toast.error('رجاء تسجيل الدخول مره اخري');
+      return
+    }
     try {
-      if (!token) {
-        // Handle case where token is not available
-        toast.error('رجاء تسجيل الدخول مره اخري');
-        return
-      }
       let newCurrentBalance = 0
 
       const invoiceNumber = originalInvoice
@@ -699,10 +716,12 @@ const PurchaseReturn = () => {
               <div className="text-right">
                 <h2>ادارة <b>مرتجع المشتريات</b></h2>
               </div>
+              {purchaseReturnPermission.create&&
               <div className="col-12 col-md-6 p-0 m-0 d-flex flex-wrap aliegn-items-center justify-content-end print-hide">
                 <a href="#addPurchaseInvoiceModal" className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-success" data-toggle="modal"> <label className=" text-wrap text-right fw-bolder p-0 m-0">انشاء مرتجع مشتريات</label></a>
                 {/* <a href="#deleteStockactionModal" className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-danger" data-toggle="modal"> <label className=" text-wrap text-right fw-bolder p-0 m-0">حذف</label></a> */}
               </div>
+              }
             </div>
           </div>
           <div className="table-filter print-hide">
@@ -825,7 +844,7 @@ const PurchaseReturn = () => {
                       </td> */}
                       <td>{i + 1}</td>
                       <td>{formatDate(returnInvoice.returnDate)}</td>
-                      <td>{returnInvoice.originalInvoice.invoiceNumber}</td>
+                      <td>{returnInvoice.originalInvoice?.invoiceNumber}</td>
                       <td>{returnInvoice.supplier.name}</td>
                       <td>{returnInvoice.totalAmount}</td>
                       <td>{returnInvoice.discount}</td>
@@ -838,13 +857,15 @@ const PurchaseReturn = () => {
                       <td>{formatDate(returnInvoice.paymentDueDate)}</td>
                       <td>{returnInvoice.paymentMethod}</td>
                       <td>{returnInvoice.refundStatus}</td>
-                      <td>{returnInvoice.cashRegister.name}</td>
-                      <td>{returnInvoice.createdBy.fullname}</td>
+                      <td>{returnInvoice.cashRegister?.name}</td>
+                      <td>{returnInvoice.createdBy?.fullname}</td>
                       <td>{formatDateTime(returnInvoice.createdAt)}</td>
                       <td>{returnInvoice.notes}</td>
                       <td>
+                        {purchaseReturnPermission.read&&
                         <a href="#viewPurchaseReturnModal" data-toggle="modal" onClick={() => { getReturnInvoice(returnInvoice._id) }}><i className="material-icons text-primary" data-toggle="tooltip" title="aye">&#xE417;</i></a>
-                        {/* <a href="#deleteStockactionModal" className="delete" data-toggle="modal" onClick={() => }><i className="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a> */}
+                      }
+                      {/* <a href="#deleteStockactionModal" className="delete" data-toggle="modal" onClick={() => }><i className="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a> */}
                       </td>
                     </tr>
                   )

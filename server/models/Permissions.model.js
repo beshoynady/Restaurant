@@ -17,7 +17,7 @@ const permissionsSchema = new Schema(
              'stock Item', 'stock Categories', 'stock Management', 'Orders', 'Tables', 'Table Reservations',
               'Restaurant Settings','Permissions', 'Delivery Zones', 'Shifts', 'Expenses', 'Daily Expenses',
                'Menu Categories','Products', 'Recipes', 'Kitchen Usage', 'Purchases', 'Purchase Returns',
-                'Supplier Data','Supplier Account', 'Supplier Movement', 'Users', 'Messages'
+                'Supplier Data', 'Supplier Transactions', 'Users', 'Messages'
             ],
           required: true,
         },
