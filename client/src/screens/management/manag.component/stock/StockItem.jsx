@@ -290,9 +290,9 @@ const StockItem = () => {
                 <h2>ادارة <b>عناصر المخزن</b></h2>
               </div>
               <div className="col-12 col-md-6 p-0 m-0 d-flex flex-wrap aliegn-items-center justify-content-end print-hide">
-                <a href="#addStockItemModal" className="d-flex align-items-center justify-content-center  h-100  m-0 btn btn-success" data-toggle="modal"> <span>اضافه منتج جديد</span></a>
+                <a href="#addStockItemModal" className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-success" data-toggle="modal"> <span>اضافه منتج جديد</span></a>
 
-                {/* <a href="#deleteStockItemModal" className="d-flex align-items-center justify-content-center  h-100  m-0 btn btn-danger" data-toggle="modal"> <span>حذف</span></a> */}
+                {/* <a href="#deleteStockItemModal" className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-danger" data-toggle="modal"> <span>حذف</span></a> */}
               </div>
             </div>
           </div>

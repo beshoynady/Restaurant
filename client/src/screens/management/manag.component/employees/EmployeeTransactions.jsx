@@ -22,6 +22,9 @@ const EmployeeTransactions = () => {
     setisLoadiog, EditPagination, startpagination, endpagination, setstartpagination, setendpagination,
   } = useContext(detacontext);
 
+  const employeeTransactionsPermission = permissionsList && permissionsList.filter(perission => perission.resource === 'Employee Transactions')[0]
+
+
   const [listofTransactions] = useState(['سلف', 'خصم', 'مكافأة']);
   const [EmployeeTransactionsId, setEmployeeTransactionsId] = useState("");
   const [employeeId, setemployeeId] = useState("");
@@ -34,14 +37,18 @@ const EmployeeTransactions = () => {
 
   const addEmployeeTransactions = async (e) => {
     e.preventDefault();
-    const data = { employeeId, employeeName, transactionType, Amount, oldAmount, newAmount };
+    if (!token) {
+      // Handle case where token is not available
+      toast.error('رجاء تسجيل الدخول مره اخري');
+      return
+    }
     setisLoadiog(true)
     try {
-      if (!token) {
-        // Handle case where token is not available
-        toast.error('رجاء تسجيل الدخول مره اخري');
-        return
+      if (employeeTransactionsPermission && !employeeTransactionsPermission.create) {
+        toast.warn('ليس لك صلاحية لاضافه معامله ماليه للموظفين');
+        return;
       }
+      const data = { employeeId, employeeName, transactionType, Amount, oldAmount, newAmount };
       const response = await axios.post(`${apiUrl}/api/employeetransactions`, data, config);
       if (response) {
         getEmployeeTransactions();
@@ -49,7 +56,7 @@ const EmployeeTransactions = () => {
       }
     } catch (error) {
       console.log(error);
-      toast.error('An error occurred while adding the transaction');
+      toast.error('حدث خطاء اثناء اضافه معامله للموظف');
     } finally {
       setisLoadiog(false)
     }
@@ -57,14 +64,19 @@ const EmployeeTransactions = () => {
 
   const updateEmployeeTransactions = async (e) => {
     e.preventDefault();
-    const data = { employeeId, employeeName, transactionType, Amount, oldAmount, newAmount };
+    if (!token) {
+      // Handle case where token is not available
+      toast.error('رجاء تسجيل الدخول مره اخري');
+      return
+    }
     setisLoadiog(true)
     try {
-      if (!token) {
-        // Handle case where token is not available
-        toast.error('رجاء تسجيل الدخول مره اخري');
-        return
+      if (employeeTransactionsPermission && !employeeTransactionsPermission.update) {
+        toast.warn('ليس لك صلاحية لتعديل معامله ماليه للموظفين');
+        return;
       }
+
+      const data = { employeeId, employeeName, transactionType, Amount, oldAmount, newAmount };
       const response = await axios.put(`${apiUrl}/api/employeetransactions/${EmployeeTransactionsId}`, data, config);
       getEmployeeTransactions();
       toast.success('تم تعديل السجل بنجاح');
@@ -78,16 +90,22 @@ const EmployeeTransactions = () => {
 
   const deleteEmployeeTransactions = async (e) => {
     e.preventDefault();
+    if (!token) {
+      // Handle case where token is not available
+      toast.error('رجاء تسجيل الدخول مره اخري');
+      return
+    }
     setisLoadiog(true)
     try {
-      if (!token) {
-        // Handle case where token is not available
-        toast.error('رجاء تسجيل الدخول مره اخري');
-        return
+      if (employeeTransactionsPermission && !employeeTransactionsPermission.delete) {
+        toast.warn('ليس لك صلاحية لحذف معامله ماليه للموظفين');
+        return;
       }
       const response = await axios.delete(`${apiUrl}/api/employeetransactions/${EmployeeTransactionsId}`, config);
-      getEmployeeTransactions();
-      toast.success('تم حذف السجل بنجاح');
+      if(response){
+        getEmployeeTransactions();
+        toast.success('تم حذف السجل بنجاح');
+      }
     } catch (error) {
       console.log(error);
       toast.error('An error occurred while deleting the transaction');
@@ -104,8 +122,14 @@ const EmployeeTransactions = () => {
     }
     setisLoadiog(true)
     try {
+      if (employeeTransactionsPermission && !employeeTransactionsPermission.read) {
+        toast.warn('ليس لك صلاحية لعرض المعاملات الماليه للموظفين');
+        return;
+      }
       const response = await axios.get(`${apiUrl}/api/employeetransactions`, config);
-      setlistofEmployeeTransactions(response.data.reverse());
+      if(response){
+        setlistofEmployeeTransactions(response.data.reverse());
+      }
     } catch (error) {
       console.log(error);
     } finally {
@@ -199,24 +223,26 @@ const EmployeeTransactions = () => {
               <div className="text-right">
                 <h2>ادارة <b>تعاملات الموظفين</b></h2>
               </div>
-              <div className="col-12 col-md-6 p-0 m-0 d-flex flex-wrap aliegn-items-center justify-content-end print-hide">
-
-                <a href="#addEmployeeTransactionsModal" className=" d-flex align-items-center justify-content-evenly col-3 h-100 p-2 m-0 btn btn-success" data-toggle="modal">
+                {employeeTransactionsPermission.create&&(
+                  <div className="col-12 col-md-6 p-0 m-0 d-flex flex-wrap aliegn-items-center justify-content-end print-hide">
+                  <a href="#addEmployeeTransactionsModal" className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-success" data-toggle="modal">
                   <span>اضافة حركة</span>
                 </a>
-                <a href="#" className=" d-flex align-items-center justify-content-evenly col-3 h-100 p-2 m-0 btn btn-info " data-toggle="modal" onClick={exportToExcel}>
+                <a href="#" className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-info " data-toggle="modal" onClick={exportToExcel}>
                   <span>تصدير</span>
                 </a>
-                <a href="#" className="d-flex align-items-center justify-content-center  h-100  m-0 btn btn-primary" data-toggle="modal" onClick={handlePrint}>
+                <a href="#" className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-primary" data-toggle="modal" onClick={handlePrint}>
                   <span>طباعه</span>
                 </a>
               </div>
+                )
+                }
             </div>
           </div>
           <div className="table-filter print-hide">
             <div className="col-12 text-dark d-flex flex-wrap align-items-center justify-content-evenly p-3 m-0 bg-light rounded">
               <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
-                <span className="me-2">عرض</span>
+                <span className="form-label text-wrap text-right fw-bolder p-0 m-0">عرض</span>
                 <select className="form-select" onChange={(e) => { setstartpagination(0); setendpagination(e.target.value) }}>
                   {
                     (() => {
@@ -230,12 +256,12 @@ const EmployeeTransactions = () => {
                 </select>
               </div>
 
-              <div className="filter-group d-flex align-items-center col-3">
+              <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الاسم</label>
                 <input type="text" className="form-control border-primary m-0 p-2 h-auto" />
               </div>
 
-              <div className="filter-group d-flex align-items-center col-3">
+              <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الموظف</label>
                 <select className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => getEmployeeTransactionsByEmp(e.target.value)}>
                   <option>الكل</option>
@@ -245,7 +271,7 @@ const EmployeeTransactions = () => {
                 </select>
               </div>
 
-              <div className="filter-group d-flex align-items-center col-3">
+              <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">العملية</label>
                 <select className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => filterEmployeeTransactions(e.target.value)}>
                   <option>الكل</option>
@@ -255,8 +281,8 @@ const EmployeeTransactions = () => {
                 </select>
               </div>
 
-              <div className='col-12 d-flex align-items-center justify-content-start mt-3'>
-                <div className="filter-group d-flex align-items-center col-3">
+              <div className='col-12 d-flex align-items-center justify-content-between'>
+                <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">فلتر حسب الوقت</label>
                   <select className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => setlistofEmployeeTransactions(filterByTime(e.target.value, listofEmployeeTransactions))}>
                     <option value="">اختر</option>
@@ -318,8 +344,10 @@ const EmployeeTransactions = () => {
                       <td>{transaction.actionBy?.username}</td>
                       <td>{transaction.createdAt && formatDateTime(transaction.createdAt)}</td>
                       <td>
+                        {employeeTransactionsPermission.update&&
                         <a href="#editEmployeeTransactionsModal" className="edit" data-toggle="modal">
-                          <i className="material-icons" data-toggle="tooltip" title="Edit" onClick={() => {
+                          <i className="material-icons" data-toggle="tooltip" title="Edit" 
+                          onClick={() => {
                             setEmployeeTransactionsId(transaction._id);
                             setemployeeName(transaction.employeeName);
                             setAmount(transaction.Amount);
@@ -328,9 +356,12 @@ const EmployeeTransactions = () => {
                             settransactionType(transaction.transactionType);
                           }}>&#xE254;</i>
                         </a>
+                        }
+                        {employeeTransactionsPermission.delete&&
                         <a href="#deleteEmployeeTransactionsModal" className="delete" data-toggle="modal">
                           <i className="material-icons" data-toggle="tooltip" title="Delete" onClick={() => setEmployeeTransactionsId(transaction._id)}>&#xE872;</i>
                         </a>
+                        }
                       </td>
                     </tr>
                   );
@@ -484,6 +515,7 @@ const EmployeeTransactions = () => {
           </div>
         </div>
       </div>
+      
       <div id="deleteEmployeeTransactionsModal" className="modal fade">
         <div className="modal-dialog modal-lg">
           <div className="modal-content shadow-lg border-0 rounded ">

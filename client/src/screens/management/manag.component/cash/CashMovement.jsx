@@ -345,11 +345,11 @@ const CashMovement = () => {
                 <h2>ادارة <b>حركه النقدية</b></h2>
               </div>
               <div className="col-sm-6 h-100 d-flex justify-content-end">
-                <a href="#DepositModal" className="d-flex align-items-center justify-content-center  h-100  m-0 btn btn-success" data-toggle="modal" onClick={() => handelCashMovement(employeeLoginInfo.id, 'Deposit')}>
+                <a href="#DepositModal" className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-success" data-toggle="modal" onClick={() => handelCashMovement(employeeLoginInfo.id, 'Deposit')}>
                    <span>ايداع</span></a>
-                <a href="#WithdrawModal" className="d-flex align-items-center justify-content-center  h-100  m-0 btn btn-danger" data-toggle="modal" onClick={() => handelCashMovement(employeeLoginInfo.id, 'Withdraw')}>
+                <a href="#WithdrawModal" className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-danger" data-toggle="modal" onClick={() => handelCashMovement(employeeLoginInfo.id, 'Withdraw')}>
                    <span>سحب</span></a>
-                <a href="#Transferodal" className="d-flex align-items-center justify-content-center  h-100  m-0 btn btn-warning" data-toggle="modal" onClick={() => handelCashMovement(employeeLoginInfo.id, 'Transfer')}>
+                <a href="#Transferodal" className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-warning" data-toggle="modal" onClick={() => handelCashMovement(employeeLoginInfo.id, 'Transfer')}>
                    <span>تحويل</span></a>
               </div>
             </div>

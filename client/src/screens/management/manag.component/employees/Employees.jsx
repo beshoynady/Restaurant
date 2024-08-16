@@ -473,7 +473,7 @@ const Employees = () => {
                 )[0]?.create === true ? (
                   <a
                     href="#addEmployeeModal"
-                    className="d-flex align-items-center justify-content-center  h-100  m-0 btn btn-success"
+                    className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-success"
                     data-toggle="modal"
                   >
                     {" "}
@@ -482,7 +482,7 @@ const Employees = () => {
                 ) : null}
                 <a
                   href="#"
-                  className="d-flex align-items-center justify-content-center  h-100  m-0 btn btn-info"
+                  className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-info"
                   data-toggle="modal"
                   onClick={exportToExcel}
                 >
@@ -491,7 +491,7 @@ const Employees = () => {
                 </a>
                 <a
                   href="#"
-                  className="d-flex align-items-center justify-content-center  h-100  m-0 btn btn-primary"
+                  className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-primary"
                   data-toggle="modal"
                   onClick={handlePrint}
                 >

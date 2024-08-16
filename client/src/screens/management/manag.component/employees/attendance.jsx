@@ -449,9 +449,9 @@ const AttendanceManagement = () => {
                 <h2>ادارة <b>تسجيل الحضور و الانصراف و الاجازات و الغياب</b></h2>
               </div>
               <div className="col-12 col-md-6 p-0 m-0 d-flex flex-wrap aliegn-items-center justify-content-end print-hide">
-                <a href="#arrivalModal" className="d-flex align-items-center justify-content-center  h-100  m-0 btn btn-success" data-toggle="modal">
+                <a href="#arrivalModal" className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-success" data-toggle="modal">
                    <span>اضافه تسجيل</span></a>
-                {/* <a href="#deleteRecordModal" className="d-flex align-items-center justify-content-center  h-100  m-0 btn btn-danger" data-toggle="modal"> <span>حذف</span></a> */}
+                {/* <a href="#deleteRecordModal" className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-danger" data-toggle="modal"> <span>حذف</span></a> */}
               </div>
             </div>
           </div>
@@ -913,10 +913,10 @@ const AttendanceManagement = () => {
                 <h4 className="modal-title">حذف تصنيف</h4>
                 <button type="button" className="close m-0 p-1" data-dismiss="modal" aria-hidden="true">&times;</button>
               </div>
-              <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
-                <p>هل انت متاكد من حذف هذا التصنيف?</p>
-                <p className="text-warning text-center mt-3"><small>لا يمكن الرجوع فيه.</small></p>
-              </div>
+              <div className="modal-body text-center">
+          <p className="text-right text-dark fs-3 fw-800 mb-2">هل أنت متأكد من حذف هذا السجل؟</p>
+          <p className="text-warning text-center mt-3"><small>لا يمكن الرجوع في هذا الإجراء.</small></p>
+        </div>
               <div className="modal-footer w-100 d-flex flex-nowrap">
                 <input type="submit" className="btn btn-warning  col-6 h-100 px-2 py-3 m-0" value="حذف" />
                 <input type="button" className="col-md-6 col-12 h-100 p-0 m-0 btn btn-secondary" data-dismiss="modal" value="إغلاق" />

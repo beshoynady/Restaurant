@@ -14,7 +14,11 @@ const StockManag = () => {
     },
   };
 
-  const { employeeLoginInfo, formatDateTime, isLoading, setisLoading, EditPagination, startpagination, endpagination, setstartpagination, setendpagination, filterByTime, filterByDateRange, setStartDate, setEndDate } = useContext(detacontext)
+  const {permissionsList, employeeLoginInfo, formatDateTime, isLoading, setisLoading, EditPagination, startpagination, endpagination,
+     setstartpagination, setendpagination, filterByTime, filterByDateRange, setStartDate, setEndDate } = useContext(detacontext)
+
+  const productPermission = permissionsList && permissionsList.filter(perission => perission.resource === 'Products')[0]
+
 
   const [allrecipes, setallrecipes] = useState([]);
 
@@ -425,9 +429,9 @@ const StockManag = () => {
                 <h2>ادارة <b>حركه المخزن</b></h2>
               </div>
               <div className="col-12 col-md-6 p-0 m-0 d-flex flex-wrap aliegn-items-center justify-content-end print-hide">
-                <a href="#addStockactionModal" className="d-flex align-items-center justify-content-center  h-100  m-0 btn btn-success" data-toggle="modal">
+                <a href="#addStockactionModal" className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-success" data-toggle="modal">
                    <span>انشاء حركه مخزن</span></a>
-                <a href="#deleteStockactionModal" className="d-flex align-items-center justify-content-center  h-100  m-0 btn btn-danger" data-toggle="modal"> 
+                <a href="#deleteStockactionModal" className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-danger" data-toggle="modal"> 
                   <span>حذف</span></a>
               </div>
             </div>

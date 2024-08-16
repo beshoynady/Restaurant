@@ -443,9 +443,9 @@ const ProductRecipe = () => {
                 <h2>ادارة <b>تكاليف الانتاج</b></h2>
               </div>
               <div className="col-12 col-md-6 p-0 m-0 d-flex flex-wrap aliegn-items-center justify-content-end print-hide">
-                <a href="#addRecipeModal" className="d-flex align-items-center justify-content-center  h-100  m-0 btn btn-success" data-toggle="modal"> <span>اضافه منتج جديد</span></a>
+                <a href="#addRecipeModal" className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-success" data-toggle="modal"> <span>اضافه منتج جديد</span></a>
 
-                <a href="#deleteAllProductModal" className="d-flex align-items-center justify-content-center  h-100  m-0 btn btn-danger" data-toggle="modal"> <span>حذف الكل</span></a>
+                <a href="#deleteAllProductModal" className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-danger" data-toggle="modal"> <span>حذف الكل</span></a>
               </div>
             </div>
           </div>

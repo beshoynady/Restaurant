@@ -324,9 +324,9 @@ const KitchenConsumption = () => {
                 <h2>ادارة <b>الاستهلاك</b></h2>
               </div>
               <div className="col-12 col-md-6 p-0 m-0 d-flex flex-wrap aliegn-items-center justify-content-end print-hide">
-                <a href="#addItemModal" className="d-flex align-items-center justify-content-center  h-100  m-0 btn btn-success" data-toggle="modal"> <span>اضافه صنف جديد</span></a>
+                <a href="#addItemModal" className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-success" data-toggle="modal"> <span>اضافه صنف جديد</span></a>
 
-                {/* <a href="#updateItemModal" className="d-flex align-items-center justify-content-center  h-100  m-0 btn btn-danger" data-toggle="modal" > <span>حذف</span></a> */}
+                {/* <a href="#updateItemModal" className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-danger" data-toggle="modal" > <span>حذف</span></a> */}
               </div>
             </div>
           </div>

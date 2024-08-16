@@ -14,8 +14,11 @@ const CategoryStock = () => {
     },
   };
 
-  const { restaurantData, permissionsList, setStartDate, setEndDate, filterByDateRange, filterByTime, employeeLoginInfo,  formatDate, formatDateTime, setisLoadiog, EditPagination, startpagination, endpagination, setstartpagination, setendpagination } = useContext(detacontext)
+  const { restaurantData, permissionsList, setStartDate, setEndDate, filterByDateRange, filterByTime,
+     employeeLoginInfo,  formatDate, formatDateTime, setisLoadiog, EditPagination, startpagination, 
+     endpagination, setstartpagination, setendpagination } = useContext(detacontext)
 
+  const stockCategoriesPermission = permissionsList && permissionsList.filter(perission => perission.resource === 'stock Categories')[0]
 
 
   const [categoryStockname, setcategoryStockname] = useState('')
@@ -24,12 +27,15 @@ const CategoryStock = () => {
   const [allCategoryStock, setallCategoryStock] = useState([])
 
   const getallCategoryStock = async () => {
+    if (!token) {
+      toast.error('رجاء تسجيل الدخول مره اخري');
+      return;
+    }
 
     try {
-      if (!token) {
-        // Handle case where token is not available
-        toast.error('رجاء تسجيل الدخول مره اخري');
-        return
+      if (stockCategoriesPermission && !stockCategoriesPermission.read) {
+        toast.warn('ليس لك صلاحية لعرض تصنيفات المخزن');
+        return;
       }
       const response = await axios.get(apiUrl + "/api/categoryStock/", config);
       setallCategoryStock(response.data.reverse());
@@ -66,11 +72,15 @@ const CategoryStock = () => {
 
   const createCategoryStock = async (e) => {
     e.preventDefault()
+    if (!token) {
+      toast.error('رجاء تسجيل الدخول مره اخري');
+      return;
+    }
+
     try {
-      if (!token) {
-        // Handle case where token is not available
-        toast.error('رجاء تسجيل الدخول مره اخري');
-        return
+      if (stockCategoriesPermission && !stockCategoriesPermission.create) {
+        toast.warn('ليس لك صلاحية لاضافه تصنيفات المخزن');
+        return;
       }
       // Validate category stock name
       if (!categoryStockname.trim()) {
@@ -106,11 +116,15 @@ const CategoryStock = () => {
   const editCategoryStock = async (e) => {
     e.preventDefault();
     // console.log(categoryStockId); // Log the category stock ID
+    if (!token) {
+      toast.error('رجاء تسجيل الدخول مره اخري');
+      return;
+    }
+
     try {
-      if (!token) {
-        // Handle case where token is not available
-        toast.error('رجاء تسجيل الدخول مره اخري');
-        return
+      if (stockCategoriesPermission && !stockCategoriesPermission.update) {
+        toast.warn('ليس لك صلاحية لتعديل تصنيفات المخزن');
+        return;
       }
       // Attempt to send a PUT request to update the category stock
       const edit = await axios.put(apiUrl + "/api/categoryStock/" + categoryStockId, { name: categoryStockname }, config);
@@ -135,11 +149,15 @@ const CategoryStock = () => {
   const deleteCategoryStock = async (e) => {
     e.preventDefault();
 
+    if (!token) {
+      toast.error('رجاء تسجيل الدخول مره اخري');
+      return;
+    }
+
     try {
-      if (!token) {
-        // Handle case where token is not available
-        toast.error('رجاء تسجيل الدخول مره اخري');
-        return
+      if (stockCategoriesPermission && !stockCategoriesPermission.delete) {
+        toast.warn('ليس لك صلاحية لحذف تصنيفات المخزن');
+        return;
       }
       // Attempt to send a DELETE request to delete the category stock
       const deleted = await axios.delete(apiUrl + "/api/categoryStock/" + categoryStockId, config);
@@ -184,10 +202,11 @@ const CategoryStock = () => {
               <div className="text-right">
                 <h2>إدارة <b>اقسام المخزن</b></h2>
               </div>
+              {stockCategoriesPermission.create&&
               <div className="col-12 col-md-6 p-0 m-0 d-flex flex-wrap aliegn-items-center justify-content-end print-hide">
-                <a href="#addCategoryStockModal" className="d-flex align-items-center justify-content-center  h-100  m-0 btn btn-success" data-toggle="modal"> <span>اضافه تصنيف</span></a>
-                {/* <a href="#deleteCategoryStockModal" className="d-flex align-items-center justify-content-center  h-100  m-0 btn btn-danger" data-toggle="modal"> <span>حذف</span></a> */}
+                <a href="#addCategoryStockModal" className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-success" data-toggle="modal"> <span>اضافه تصنيف</span></a>
               </div>
+              }
             </div>
           </div>
           <div className="table-filter print-hide">
@@ -232,7 +251,7 @@ const CategoryStock = () => {
 
             </thead>
             <tbody>
-              {allCategoryStock.map((categoryStock, i) => {
+              {allCategoryStock&&allCategoryStock.map((categoryStock, i) => {
                 if (i >= startpagination & i < endpagination) {
                   return (
                     <tr key={i}>
@@ -241,10 +260,13 @@ const CategoryStock = () => {
                       <td>{AllStockItems ? AllStockItems.filter((Item) => Item.categoryId._id === categoryStock._id).length : 0}</td>
                       <td>{formatDateTime(categoryStock.createdAt)}</td>
                       <td>
+                        {stockCategoriesPermission.update&&
                         <a href="#editCategoryStockModal" className="edit" data-toggle="modal" onClick={() => setcategoryStockId(categoryStock._id)}><i className="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-
+                        }
+                        {stockCategoriesPermission.delete&&
                         <a href="#deleteCategoryStockModal" className="delete" data-toggle="modal" onClick={() => setcategoryStockId(categoryStock._id)}><i className="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
-                      </td>
+                        }
+                        </td>
                     </tr>
                   )
                 }
@@ -267,6 +289,7 @@ const CategoryStock = () => {
           </div>
         </div>
       </div>
+
       <div id="addCategoryStockModal" className="modal fade">
         <div className="modal-dialog modal-lg">
           <div className="modal-content shadow-lg border-0 rounded ">
@@ -290,6 +313,7 @@ const CategoryStock = () => {
           </div>
         </div>
       </div>
+
       <div id="editCategoryStockModal" className="modal fade">
         <div className="modal-dialog modal-lg">
           <div className="modal-content shadow-lg border-0 rounded ">
@@ -312,6 +336,7 @@ const CategoryStock = () => {
           </div>
         </div>
       </div>
+
       <div id="deleteCategoryStockModal" className="modal fade">
         <div className="modal-dialog modal-lg">
           <div className="modal-content shadow-lg border-0 rounded ">
@@ -320,10 +345,10 @@ const CategoryStock = () => {
                 <h4 className="modal-title">حذف تصنيف</h4>
                 <button type="button" className="close m-0 p-1" data-dismiss="modal" aria-hidden="true">&times;</button>
               </div>
-              <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
-                <p>هل انت متاكد من حذف هذا التصنيف?</p>
-                <p className="text-warning text-center mt-3"><small>لا يمكن الرجوع فيه.</small></p>
-              </div>
+              <div className="modal-body text-center">
+          <p className="text-right text-dark fs-3 fw-800 mb-2">هل أنت متأكد من حذف هذا السجل؟</p>
+          <p className="text-warning text-center mt-3"><small>لا يمكن الرجوع في هذا الإجراء.</small></p>
+        </div>
               <div className="modal-footer d-flex flex-nowrap align-items-center justify-content-between m-0 p-1">
                 <input type="submit" className="btn btn-warning col-6 h-100 px-2 py-3 m-0" value="حذف" />
                 <input type="button" className="btn btn-danger col-6 h-100 px-2 py-3 m-0" data-dismiss="modal" value="إغلاق" />
