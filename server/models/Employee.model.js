@@ -58,7 +58,6 @@ const employeeSchema = new mongoose.Schema(
     },
     email: {
       type: String,
-      unique: true,
       maxlength: 100,
       trim: true,
       validate: {
