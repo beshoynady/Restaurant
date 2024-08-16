@@ -274,7 +274,7 @@ const Employees = () => {
     setemployeeShift(employee.shift);
     settaxRate(employee.taxRate);
     setinsuranceRate(employee.insuranceRate);
-    setsectionNumber(employee.sectionNumber);
+    setsectionNumber(employee.sectionNumber?employee.sectionNumber:0);
   };
 
   const getEmployeesByJob = (role) => {
