@@ -109,6 +109,16 @@ const Employees = () => {
 
   const createEmployee = async (e) => {
     e.preventDefault();
+    console.log({fullname,
+      username,
+      basicSalary,
+      workingDays,
+      numberID,
+      password,
+      address,
+      phone,
+      shift,
+      role})
 
     if (isExecuting) {
       toast.warn("انتظر لانشاء حساب الموظف");
@@ -167,7 +177,7 @@ const Employees = () => {
         },
         config
       );
-
+      console.log({newEmployee})
       if (newEmployee) {
         notify("تم انشاء حساب الموظف بنجاح", "success");
       }

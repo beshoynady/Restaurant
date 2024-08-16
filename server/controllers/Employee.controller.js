@@ -71,8 +71,17 @@ const createEmployee = async (req, res) => {
       workingDays, basicSalary, role, sectionNumber, taxRate, insuranceRate, isActive,
     } = req.body;
 
-    if (!fullname || !phone || numberID||!req.body.password) {
-      return res.status(400).json({ message: "Invalid input: Fullname, Phone, numberID or Password missing" });
+    if (!fullname) {
+      return res.status(400).json({ message: "Invalid input: Fullname " });
+    }
+    if (!phone) {
+      return res.status(400).json({ message: "Invalid input: Phone" });
+    }
+    if (!numberID) {
+      return res.status(400).json({ message: "Invalid input: numberID " });
+    }
+    if (!req.body.password) {
+      return res.status(400).json({ message: "Invalid input: password missing" });
     }
 
     const isEmployeeFound = await EmployeeModel.findOne({ phone });
