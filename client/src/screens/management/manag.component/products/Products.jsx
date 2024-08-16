@@ -859,7 +859,7 @@ const Products = () => {
                   <div className="container w-100 p-0 m-0">
                     {sizes.map((size, index) => (
                       <div key={index} className="row col-12 mb-1">
-                        <div className="form-group w-100 h-auto px-3 d-flex flex-nowrap align-itmes-center justify-content-start col-12  col-md-4 ">
+                        <div className="form-group col-12 col-md-3">
                           <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                             اسم الحجم
                           </label>
@@ -876,7 +876,7 @@ const Products = () => {
                             }
                           />
                         </div>
-                        <div className="form-group w-100 h-auto px-3 d-flex flex-nowrap align-itmes-center justify-content-start col-12  col-md-4 ">
+                        <div className="form-group col-12 col-md-3">
                           <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                             السعر
                           </label>
@@ -895,11 +895,11 @@ const Products = () => {
                               })
                             }
                           />
-                          <div className="input-group-prepend">
+                          <div className="input-group-prepend col-6">
                             <span className="input-group-text">جنية</span>
                           </div>
                         </div>
-                        <div className="form-group w-100 h-auto px-3 d-flex flex-nowrap align-itmes-center justify-content-start col-12  col-md-4 ">
+                        <div className="form-group col-12 col-md-3">
                           <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                             التخفيض
                           </label>
@@ -922,7 +922,7 @@ const Products = () => {
                               })
                             }
                           />
-                          <div className="input-group-prepend">
+                          <div className="input-group-prepend col-6">
                             <span className="input-group-text">جنية</span>
                           </div>
                         </div>
@@ -1173,7 +1173,7 @@ const Products = () => {
                   <div className="container">
                     {sizes.map((size, index) => (
                       <div key={index} className="row mb-3">
-                        <div className="form-group col-12 col-md-4">
+                        <div className="form-group col-12 col-md-3">
                           <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                             اسم الحجم
                           </label>
@@ -1190,7 +1190,7 @@ const Products = () => {
                             }
                           />
                         </div>
-                        <div className="form-group col-12 col-md-4">
+                        <div className="form-group col-12 col-md-3">
                           <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                             السعر
                           </label>
@@ -1212,7 +1212,7 @@ const Products = () => {
                             <span className="input-group-text">جنية</span>
                           </div>
                         </div>
-                        <div className="form-group col-12 col-md-4">
+                        <div className="form-group col-12 col-md-3">
                           <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                             التخفيض
                           </label>
