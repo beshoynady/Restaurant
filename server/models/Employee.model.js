@@ -60,7 +60,6 @@ const employeeSchema = new mongoose.Schema(
       type: String,
       unique: true,
       maxlength: 100,
-      minlength: 10,
       trim: true,
       validate: {
         validator: function(value) {
@@ -69,7 +68,7 @@ const employeeSchema = new mongoose.Schema(
         message: "Email must be at least 10 characters long."
       },
       default: "",
-    },
+    },    
     isAdmin: {
       type: Boolean,
       default: true,

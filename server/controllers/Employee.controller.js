@@ -69,9 +69,7 @@ const createEmployeeSchema = Joi.object({
       otherwise: Joi.optional(),
     }),
   address: Joi.string().min(3).max(200).optional(),
-  email: Joi.alternatives()
-    .try(Joi.string().email().min(10).max(100), Joi.allow(""))
-    .optional(),
+  email: Joi.string().email().max(100).allow(""),
   phone: Joi.string().length(11).required(),
   password: Joi.string().min(3).max(200).required(),
   basicSalary: Joi.number()
@@ -213,9 +211,7 @@ const updateEmployeeSchema = Joi.object({
   numberID: Joi.string().length(14).required(),
   username: Joi.string().min(3).max(100).required(),
   address: Joi.string().min(3).max(200).required(),
-  email: Joi.alternatives()
-    .try(Joi.string().email().min(10).max(100), Joi.allow(""))
-    .optional(),
+  email: Joi.string().email().max(100).allow(""),
   phone: Joi.string().length(11).required(),
   password: Joi.string().min(3).max(200).optional(),
   basicSalary: Joi.number().min(0).required(),
