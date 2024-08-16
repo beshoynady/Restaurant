@@ -178,9 +178,9 @@ const CategoryStock = () => {
   return (
     <div className="w-100 px-3 d-flex align-itmes-center justify-content-start">
       <div className="table-responsive">
-        <div className="table-wrapper">
+        <div className="table-wrapper p-3 mw-100">
           <div className="table-title">
-            <div className="row ">
+            <div className="w-100 d-flex flex-wrap align-items-center justify-content-between">
               <div className="text-right">
                 <h2>إدارة <b>اقسام المخزن</b></h2>
               </div>
@@ -276,7 +276,7 @@ const CategoryStock = () => {
                 <button type="button" className="close m-0 p-1" data-dismiss="modal" aria-hidden="true">&times;</button>
               </div>
               <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
-                <div className="form-group w-100 h-auto px-3 d-flex align-itmes-center justify-content-start col-12 ">
+                <div className="form-group col-12 ">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الاسم</label>
                   <input type="text" className="form-control border-primary m-0 p-2 h-auto" required onChange={(e) => setcategoryStockname(e.target.value)} />
                 </div>
@@ -299,7 +299,7 @@ const CategoryStock = () => {
                 <button type="button" className="close m-0 p-1" data-dismiss="modal" aria-hidden="true">&times;</button>
               </div>
               <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
-                <div className="form-group w-100 h-auto px-3 d-flex align-itmes-center justify-content-start col-12 ">
+                <div className="form-group col-12">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الاسم</label>
                   <input type="text" className="form-control border-primary m-0 p-2 h-auto" required onChange={(e) => setcategoryStockname(e.target.value)} />
                 </div>

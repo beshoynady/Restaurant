@@ -220,7 +220,7 @@ const SideBar = () => {
                             <li><Link to="attendancerecord">الحضور والانصراف</Link></li>
                           )}
                           {(isProgrammer || permissionsList?.filter(permission => permission.resource === 'Employee Transactions')[0]?.read) && (
-                            <li><Link to="employeetransactions">الرواتب</Link></li>
+                            <li><Link to="employeetransactions">معاملات الموظفين</Link></li>
                           )}
                           {(isProgrammer || permissionsList?.filter(permission => permission.resource === 'Payroll')[0]?.read) && (
                             <li><Link to="payroll">المرتبات</Link></li>
@@ -270,7 +270,7 @@ const SideBar = () => {
                           <li><Link to="stockitem">الأصناف</Link></li>
                         )}
                         {(isProgrammer || permissionsList?.filter(permission => permission.resource === 'stock Management')[0]?.read) && (
-                          <li><Link to="stockmang">إدارة المخزون</Link></li>
+                          <li><Link to="stockmanag">إدارة المخزون</Link></li>
                         )}
                         {(isProgrammer || permissionsList?.filter(permission => permission.resource === 'Kitchen Usage')[0]?.read) && (
                           <li><Link to="kitchenconsumption">استهلاك المطبخ</Link></li>

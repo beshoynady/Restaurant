@@ -209,7 +209,7 @@ const CashRegister = () => {
         return (
           <div className="w-100 px-3 d-flex align-itmes-center justify-content-start">
             <div className="table-responsive">
-              <div className="table-wrapper">
+              <div className="table-wrapper p-3 mw-100">
                 <div className="table-title">
                   <div className="w-100 d-flex flex-wrap align-items-center justify-content-between">
                     <div className="text-right">

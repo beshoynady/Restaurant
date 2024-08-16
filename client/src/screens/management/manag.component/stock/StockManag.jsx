@@ -418,16 +418,17 @@ const StockManag = () => {
   return (
     <div className="w-100 px-3 d-flex align-itmes-center justify-content-start">
       <div className="table-responsive">
-        <div className="table-wrapper">
+        <div className="table-wrapper p-3 mw-100">
           <div className="table-title">
             <div className="w-100 d-flex flex-wrap align-items-center justify-content-between">
               <div className="text-right">
                 <h2>ادارة <b>حركه المخزن</b></h2>
               </div>
               <div className="col-12 col-md-6 p-0 m-0 d-flex flex-wrap aliegn-items-center justify-content-end print-hide">
-                <a href="#addStockactionModal" className="d-flex align-items-center justify-content-center  h-100  m-0 btn btn-success" data-toggle="modal"> <span>انشاء حركه مخزن</span></a>
-
-                <a href="#deleteStockactionModal" className="d-flex align-items-center justify-content-center  h-100  m-0 btn btn-danger" data-toggle="modal"> <span>حذف</span></a>
+                <a href="#addStockactionModal" className="d-flex align-items-center justify-content-center  h-100  m-0 btn btn-success" data-toggle="modal">
+                   <span>انشاء حركه مخزن</span></a>
+                <a href="#deleteStockactionModal" className="d-flex align-items-center justify-content-center  h-100  m-0 btn btn-danger" data-toggle="modal"> 
+                  <span>حذف</span></a>
               </div>
             </div>
           </div>
