@@ -219,7 +219,7 @@ const SideBar = () => {
                           {(isProgrammer || permissionsList?.filter(permission => permission.resource === 'Attendance')[0]?.read) && (
                             <li><Link to="attendancerecord">الحضور والانصراف</Link></li>
                           )}
-                          {(isProgrammer || permissionsList?.filter(permission => permission.resource === 'Salaries')[0]?.read) && (
+                          {(isProgrammer || permissionsList?.filter(permission => permission.resource === 'Employee Transactions')[0]?.read) && (
                             <li><Link to="employeetransactions">الرواتب</Link></li>
                           )}
                           {(isProgrammer || permissionsList?.filter(permission => permission.resource === 'Payroll')[0]?.read) && (

@@ -104,13 +104,13 @@ const PayRoll = () => {
         const currentYear = currentDate.getFullYear();
         const currentMonth = currentDate.getMonth() + 1;
 
-        // Filter salaries for the current year and month
-        const filteredSalaries = response.data.filter((salary) => {
+        // Filter Employee Transactions for the current year and month
+        const filteredEmployee Transactions = response.data.filter((salary) => {
           return salary.Year === currentYear && salary.Month === currentMonth;
         });
-        console.log({ filteredSalaries })
+        console.log({ filteredEmployee Transactions })
         // Set current payroll data
-        setcurrentPayRoll(filteredSalaries);
+        setcurrentPayRoll(filteredEmployee Transactions);
       }
     } catch (error) {
       // Handle error
@@ -433,7 +433,7 @@ const PayRoll = () => {
     } catch (error) {
       // Handle errors and display an appropriate error message to the user
       console.error(error);
-      toast.error('An issue occurred while processing salaries. Please try again.');
+      toast.error('An issue occurred while processing Employee Transactions. Please try again.');
     }
   };
 
