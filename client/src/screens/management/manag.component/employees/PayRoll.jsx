@@ -105,12 +105,12 @@ const PayRoll = () => {
         const currentMonth = currentDate.getMonth() + 1;
 
         // Filter Employee Transactions for the current year and month
-        const filteredEmployee Transactions = response.data.filter((salary) => {
+        const filteredEmployeeTransactions = response.data.filter((salary) => {
           return salary.Year === currentYear && salary.Month === currentMonth;
         });
-        console.log({ filteredEmployee Transactions })
+        console.log({ filteredEmployeeTransactions })
         // Set current payroll data
-        setcurrentPayRoll(filteredEmployee Transactions);
+        setcurrentPayRoll(filteredEmployeeTransactions);
       }
     } catch (error) {
       // Handle error

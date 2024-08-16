@@ -66,7 +66,8 @@ const PermissionsComponent = () => {
 
 
 
-  const [permissionsListEn, setpermissionsListEn] = useState(['Employees', 'Attendance', 'Employee Transactions', 'Payroll', 'Cash Register', 'Cash Movement', 'stock Item', 
+  const [permissionsListEn, setpermissionsListEn] = useState(['Employees', 'Attendance', 'Employee Transactions',
+     'Payroll', 'Cash Register', 'Cash Movement', 'stock Item', 
     'stock Categories', 'stock Management', 'Orders', 'Tables', 'Table Reservations', 'Restaurant Settings',
      'Permissions', 'Delivery Zones', 'Shifts', 'Expenses', 'Daily Expenses', 'Menu Categories',
       'Products', 'Recipes', 'Kitchen Usage', 'Purchases', 'Purchase Returns', 'Supplier Data',
