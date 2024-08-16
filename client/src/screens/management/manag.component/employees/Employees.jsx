@@ -105,7 +105,7 @@ const Employees = () => {
   const [isActive, setisActive] = useState(true);
   const [isAdmin, setisAdmin] = useState(true);
   const [role, setrole] = useState("");
-  const [sectionNumber, setsectionNumber] = useState();
+  const [sectionNumber, setsectionNumber] = useState(0);
 
   const createEmployee = async (e) => {
     e.preventDefault();
@@ -1233,7 +1233,7 @@ const Employees = () => {
                       required
                       onChange={(e) => setisActive(e.target.value)}
                     >
-                      <option value="">اختر</option>
+                      <option value={isActive}>{isActive?'متاح': 'ليس متاح'}</option>
                       <option value={true}>متاح</option>
                       <option value={false}>ليس متاح</option>
                     </select>
@@ -1278,7 +1278,7 @@ const Employees = () => {
                       required
                       onChange={(e) => setrole(e.target.value)}
                     >
-                      <option value="">اختر وظيفة</option>
+                      <option value={role}>{role}</option>
                       <option value="owner">مالك</option>
                       <option value="manager">مدير</option>
                       <option value="cashier">كاشير</option>
