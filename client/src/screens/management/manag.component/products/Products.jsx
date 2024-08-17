@@ -789,9 +789,6 @@ const Products = () => {
         </div>
       </div>
 
-
-
-
       <div id="addProductModal" className="modal fade">
         <div className="modal-dialog modal-lg">
           <div className="modal-content shadow-lg border-0 rounded">
@@ -858,7 +855,10 @@ const Products = () => {
                 {hasSizes ? (
                   <div className="container w-100 p-0 m-0">
                     {sizes.map((size, index) => (
-                      <div key={index} className="row d-flex align-items-center justify-content-between col-12 mb-1">
+                      <div
+                        key={index}
+                        className="row d-flex align-items-center justify-content-between col-12 mb-1"
+                      >
                         <div className="form-group col-12 col-md-3">
                           <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                             اسم الحجم
@@ -880,50 +880,54 @@ const Products = () => {
                           <label className="form-label w-100 text-wrap text-right fw-bolder p-0 m-0">
                             السعر
                           </label>
-                          <input
-                            type="number"
-                            min={0}
-                            className="form-control col-6"
-                            value={size.sizePrice}
-                            onChange={(e) =>
-                              setsizes((prevState) => {
-                                const newSizes = [...prevState];
-                                newSizes[index].sizePrice = parseFloat(
-                                  e.target.value
-                                );
-                                return newSizes;
-                              })
-                            }
-                          />
-                          <div className="input-group-prepend col-6">
-                            <span className="input-group-text">جنية</span>
+                          <div className="input-group">
+                            <input
+                              type="number"
+                              min={0}
+                              className="form-control col-6"
+                              value={size.sizePrice}
+                              onChange={(e) =>
+                                setsizes((prevState) => {
+                                  const newSizes = [...prevState];
+                                  newSizes[index].sizePrice = parseFloat(
+                                    e.target.value
+                                  );
+                                  return newSizes;
+                                })
+                              }
+                            />
+                            <div className="input-group-prepend col-6">
+                              <span className="input-group-text">جنية</span>
+                            </div>
                           </div>
                         </div>
                         <div className="form-group col-12 col-md-3">
                           <label className="form-label w-100 text-wrap text-right fw-bolder p-0 m-0">
                             التخفيض
                           </label>
-                          <input
-                            type="number"
-                            min={0}
-                            max={size.sizePrice}
-                            className="form-control col-6 "
-                            // value={size.sizeDiscount}
-                            onChange={(e) =>
-                              setsizes((prevState) => {
-                                const newSizes = [...prevState];
-                                newSizes[index].sizeDiscount = parseFloat(
-                                  e.target.value
-                                );
-                                newSizes[index].sizePriceAfterDiscount =
-                                  newSizes[index].sizePrice -
-                                  parseFloat(e.target.value);
-                                return newSizes;
-                              })
-                            }
-                          />
-                          <div className="input-group-prepend col-6">
-                            <span className="input-group-text">جنية</span>
+                          <div className="input-group">
+                            <input
+                              type="number"
+                              min={0}
+                              max={size.sizePrice}
+                              className="form-control col-6 "
+                              // value={size.sizeDiscount}
+                              onChange={(e) =>
+                                setsizes((prevState) => {
+                                  const newSizes = [...prevState];
+                                  newSizes[index].sizeDiscount = parseFloat(
+                                    e.target.value
+                                  );
+                                  newSizes[index].sizePriceAfterDiscount =
+                                    newSizes[index].sizePrice -
+                                    parseFloat(e.target.value);
+                                  return newSizes;
+                                })
+                              }
+                            />
+                            <div className="input-group-prepend col-6">
+                              <span className="input-group-text">جنية</span>
+                            </div>
                           </div>
                         </div>
                         <div className="col-12">
@@ -1051,15 +1055,12 @@ const Products = () => {
                   </div>
                 )}
 
-
-
-                
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                     متاح
                   </label>
                   <select
-                  className="form-control border-primary m-0 p-2 h-auto"
+                    className="form-control border-primary m-0 p-2 h-auto"
                     name="category"
                     id="category"
                     form="carform"
@@ -1145,7 +1146,7 @@ const Products = () => {
                     التصنيف
                   </label>
                   <select
-                  className="form-control border-primary m-0 p-2 h-auto"
+                    className="form-control border-primary m-0 p-2 h-auto"
                     name="category"
                     id="category"
                     form="carform"
@@ -1176,7 +1177,10 @@ const Products = () => {
                 {hasSizes ? (
                   <div className="container">
                     {sizes.map((size, index) => (
-                      <div key={index} className="row d-flex align-items-center justify-content-between col-12 mb-1">
+                      <div
+                        key={index}
+                        className="row d-flex align-items-center justify-content-between col-12 mb-1"
+                      >
                         <div className="form-group col-12 col-md-3">
                           <label className="form-label w-100 text-wrap text-right fw-bolder p-0 m-0">
                             اسم الحجم
@@ -1198,51 +1202,57 @@ const Products = () => {
                           <label className="form-label w-100 text-wrap text-right fw-bolder p-0 m-0">
                             السعر
                           </label>
-                          <input
-                            type="number"
-                            className="form-control col-6"
-                            value={size.sizePrice}
-                            onChange={(e) =>
-                              setsizes((prevState) => {
-                                const newSizes = [...prevState];
-                                newSizes[index].sizePrice = parseFloat(
-                                  e.target.value
-                                );
-                                return newSizes;
-                              })
-                            }
-                          />
-                          <div className="input-group-prepend col-6">
-                            <span className="input-group-text">جنية</span>
+                          <div className="input-group">
+                            <input
+                              type="number"
+                              className="form-control"
+                              value={size.sizePrice}
+                              onChange={(e) =>
+                                setsizes((prevState) => {
+                                  const newSizes = [...prevState];
+                                  newSizes[index].sizePrice = parseFloat(
+                                    e.target.value
+                                  );
+                                  return newSizes;
+                                })
+                              }
+                            />
+                            <div className="input-group-append">
+                              <span className="input-group-text">جنية</span>
+                            </div>
                           </div>
                         </div>
+
                         <div className="form-group col-12 col-md-3">
                           <label className="form-label w-100 text-wrap text-right fw-bolder p-0 m-0">
                             التخفيض
                           </label>
-                          <input
-                            type="number"
-                            className="form-control col-6"
-                            value={size.sizeDiscount}
-                            min={0}
-                            max={size.sizePrice}
-                            onChange={(e) =>
-                              setsizes((prevState) => {
-                                const newSizes = [...prevState];
-                                newSizes[index].sizeDiscount = parseFloat(
-                                  e.target.value
-                                );
-                                newSizes[index].sizePriceAfterDiscount =
-                                  newSizes[index].sizePrice -
-                                  parseFloat(e.target.value);
-                                return newSizes;
-                              })
-                            }
-                          />
-                          <div className="input-group-prepend col-4">
-                            <span className="input-group-text">جنية</span>
+                          <div className="input-group">
+                            <input
+                              type="number"
+                              className="form-control"
+                              value={size.sizeDiscount}
+                              min={0}
+                              max={size.sizePrice}
+                              onChange={(e) =>
+                                setsizes((prevState) => {
+                                  const newSizes = [...prevState];
+                                  newSizes[index].sizeDiscount = parseFloat(
+                                    e.target.value
+                                  );
+                                  newSizes[index].sizePriceAfterDiscount =
+                                    newSizes[index].sizePrice -
+                                    parseFloat(e.target.value);
+                                  return newSizes;
+                                })
+                              }
+                            />
+                            <div className="input-group-append">
+                              <span className="input-group-text">جنية</span>
+                            </div>
                           </div>
                         </div>
+
                         <div className="col-12">
                           {sizes.length === index + 1 || sizes.length === 0 ? (
                             <button
@@ -1380,7 +1390,7 @@ const Products = () => {
                     متاح
                   </label>
                   <select
-                  className="form-control border-primary m-0 p-2 h-auto"
+                    className="form-control border-primary m-0 p-2 h-auto"
                     name="category"
                     id="category"
                     form="carform"
