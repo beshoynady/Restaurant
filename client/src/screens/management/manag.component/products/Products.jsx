@@ -92,69 +92,63 @@ const Products = () => {
 
   const createProduct = async (e) => {
     e.preventDefault();
-
+  
     if (!token) {
       toast.error("رجاء تسجيل الدخول مره اخري");
       return;
     }
-
+  
     try {
       if (productPermission && !productPermission.create) {
         toast.warn("ليس لك صلاحية لاضافه الاصناف");
         return;
       }
-
-      // إعداد جسم الطلب باستخدام FormData
-      const formData = new FormData();
-      formData.append("productname", productname);
-      formData.append("productdescription", productdescription);
-      formData.append("productcategoryid", productcategoryid);
-      formData.append("available", available);
-      formData.append("isAddon", isAddon);
-
+  
+      // إعداد جسم الطلب باستخدام كائن عادي
+      const formData = {
+        productname,
+        productdescription,
+        productcategoryid,
+        available,
+        isAddon,
+      };
+  
       if (hasSizes) {
-        formData.append("hasSizes", hasSizes);
-        sizes.forEach((size, index) => {
-          formData.append(`sizes[${index}]`, size);
-        });
+        formData.hasSizes = hasSizes;
+        formData.sizes = sizes; 
       } else {
-        formData.append("productprice", productprice);
-
+        formData.productprice = productprice;
+  
         if (productdiscount > 0) {
-          formData.append("productdiscount", productdiscount);
+          formData.productdiscount = productdiscount;
           const priceAfterDiscount = productprice - productdiscount;
-          formData.append(
-            "priceAfterDiscount",
-            priceAfterDiscount > 0 ? priceAfterDiscount : 0
-          );
+          formData.priceAfterDiscount = priceAfterDiscount > 0 ? priceAfterDiscount : 0;
         }
       }
-
+  
       if (hasExtras) {
-        formData.append("hasExtras", hasExtras);
-        extras.forEach((extra, index) => {
-          formData.append(`extras[${index}]`, extra);
-        });
+        formData.hasExtras = hasExtras;
+        formData.extras = extras; 
       }
-
+  
       if (productimg) {
-        formData.append("image", productimg);
+        formData.image = productimg;
       } else {
         toast.error("يجب إضافة صورة للمنتج");
         return;
       }
-
+  
       console.log({ formData });
-
+  
       const response = await axios.post(apiUrl + "/api/product/", formData, {
         headers: {
-          "Content-Type": "multipart/form-data",
+          "Content-Type": "application/json", // نوع المحتوى JSON
           ...config.headers,
         },
       });
-
+  
       console.log({ responsecreateproduct: response });
-
+  
       if (response.status === 201) {
         getallproducts();
         console.log(response.data);
@@ -174,6 +168,7 @@ const Products = () => {
       });
     }
   };
+  
 
   const handleFileUpload = (e) => {
     const file = e.target.files[0];
