@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const { ObjectId } = mongoose.Schema;
 
 const productSchema = new mongoose.Schema(
@@ -6,17 +6,17 @@ const productSchema = new mongoose.Schema(
     name: {
       type: String,
       trim: true,
-      required: [true, 'Name is required'],
-      unique: [true, 'Name must be unique'],
-      maxlength: [50, 'Name cannot exceed 50 characters'],
-      minlength: [2, 'Name must have at least 2 characters'],
+      required: [true, "Name is required"],
+      unique: [true, "Name must be unique"],
+      maxlength: [50, "Name cannot exceed 50 characters"],
+      minlength: [2, "Name must have at least 2 characters"],
     },
 
     description: {
       type: String,
-      maxlength: [100, 'Description cannot exceed 100 characters'],
-      minlength: [3, 'Description must have at least 3 characters'],
-      default: ''
+      maxlength: [100, "Description cannot exceed 100 characters"],
+      minlength: [3, "Description must have at least 3 characters"],
+      default: "",
     },
     hasSizes: {
       type: Boolean,
@@ -31,37 +31,38 @@ const productSchema = new mongoose.Schema(
         },
         sizeRecipe: {
           type: ObjectId,
-          ref: 'Recipe',
+          ref: "Recipe",
         },
         sizeQuantity: {
           type: Number,
           default: 0,
-          required: true
+          required: true,
         },
         sizePrice: {
           type: Number,
-          required: [true, 'Price is required'],
-          max: [10000, 'Price cannot exceed 10000'],
-          min: [0, 'Price cannot be negative'],
+          required: [true, "Price is required"],
+          max: [10000, "Price cannot exceed 10000"],
+          min: [0, "Price cannot be negative"],
         },
         sizeDiscount: {
           type: Number,
-          required: [true, 'Discount is required'],
-          min: [0, 'Discount cannot be negative'],
+          required: [true, "Discount is required"],
+          min: [0, "Discount cannot be negative"],
           default: 0,
           validate: {
             validator: function (v) {
               return v >= 0;
             },
-            message: props => `${props.value} is not a valid value for discount`,
+            message: (props) =>
+              `${props.value} is not a valid value for discount`,
           },
         },
         sizePriceAfterDiscount: {
           type: Number,
-          min: [0, 'Price after discount cannot be negative'],
+          min: [0, "Price after discount cannot be negative"],
           default: 0,
         },
-      }
+      },
     ],
     isAddon: {
       type: Boolean,
@@ -73,40 +74,40 @@ const productSchema = new mongoose.Schema(
     },
     extras: {
       type: [ObjectId],
-      ref: 'Product',
+      ref: "Product",
     },
     productRecipe: {
       type: ObjectId,
-      ref: 'Recipe',
+      ref: "Recipe",
     },
     price: {
       type: Number,
       default: 0,
-      required: [true, 'Price is required'],
-      max: [10000, 'Price cannot exceed 10000'],
-      min: [0, 'Price cannot be negative'],
+      required: [true, "Price is required"],
+      max: [10000, "Price cannot exceed 10000"],
+      min: [0, "Price cannot be negative"],
     },
     discount: {
       type: Number,
-      required: [true, 'Discount is required'],
-      min: [0, 'Discount cannot be negative'],
+      required: [true, "Discount is required"],
+      min: [0, "Discount cannot be negative"],
       default: 0,
       validate: {
         validator: function (v) {
           return v >= 0;
         },
-        message: props => `${props.value} is not a valid value for discount`,
+        message: (props) => `${props.value} is not a valid value for discount`,
       },
     },
     priceAfterDiscount: {
       type: Number,
-      min: [0, 'Price after discount cannot be negative'],
+      min: [0, "Price after discount cannot be negative"],
       default: 0,
     },
     quantity: {
       type: Number,
       default: 0,
-      required: [true, 'Quantity is required'],
+      required: [true, "Quantity is required"],
     },
     numberofcomments: {
       type: Number,
@@ -114,13 +115,13 @@ const productSchema = new mongoose.Schema(
     },
     category: {
       type: ObjectId,
-      ref: 'MenuCategory',
-      required: [true, 'Category is required'],
+      ref: "MenuCategory",
+      required: [true, "Category is required"],
     },
     ratingsAverage: {
       type: Number,
-      min: [1, 'Minimum rating is 1'],
-      max: [5, 'Maximum rating is 5'],
+      min: [1, "Minimum rating is 1"],
+      max: [5, "Maximum rating is 5"],
     },
     ratingsQuantity: {
       type: Number,
@@ -129,7 +130,7 @@ const productSchema = new mongoose.Schema(
     available: {
       type: Boolean,
       default: true,
-      required: true
+      required: true,
     },
     image: {
       type: String,
@@ -138,6 +139,6 @@ const productSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const ProductModel = mongoose.model('Product', productSchema);
+const ProductModel = mongoose.model("Product", productSchema);
 
 module.exports = ProductModel;

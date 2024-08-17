@@ -419,21 +419,21 @@ export default function Offers() {
                             <div className="w-100 p-1 m-0 d-flex justify-content-between align-items-center">
                               <div className="col-8 p-0 m-0 d-flex flex-nowrap align-items-center justify-content-between" style={{ borderRadius: '15px' }}>
                                 <button className="btn btn-danger py-2 px-3 fs-3 fw-800 col" onClick={() => { decrementProductQuantity(product._id, '') }}>-</button>
-                                <input type='text' readOnly className="form-control text-center text-dark col" style={{fontSize:"16px", fontWeight:'700'}}  value={product.productQuantity>0?product.productQuantity:0} />
+                                <input type='text' readOnly className="form-control text-center text-dark col" style={{fontSize:"16px", fontWeight:'700'}}  value={product.quantity} />
                                 <button className="btn btn-primary py-2 px-3 fs-3 fw-800 col" onClick={() => { incrementProductQuantity(product._id, '') }}>+</button>
                               </div>
                               <div style={{ fontSize: '18px', fontWeight: '600' }}>
-                                {product.productPriceAfterDiscount}ج
-                                <sup><del style={{ fontSize: '14px' }}>{product.productPrice}</del></sup>
+                                {product.priceAfterDiscount}ج
+                                <sup><del style={{ fontSize: '14px' }}>{product.price}</del></sup>
                               </div>
                             </div>
                             <div className="w-100 h-25 p-0 mt-2">
-                              {itemId.filter((i) => i === product._id).length > 0 && product.productQuantity > 0 ? (
+                              {itemId.filter((i) => i === product._id).length > 0 && product.quantity > 0 ? (
                                 <button className="btn btn-danger w-100 h-100 m-0" onClick={() => { deleteItemFromCart(product._id, ''); }}>
                                   احذف من الطلبات
                                 </button>
                               ) : (
-                                <button className="btn btn-success w-100 h-100 m-0" onClick={() => { if (product.productQuantity > 0) { addItemToCart(product._id, '') } }}>
+                                <button className="btn btn-success w-100 h-100 m-0" onClick={() => { if (product.quantity > 0) { addItemToCart(product._id, '') } }}>
                                   اضف الي طلباتي
                                 </button>
                               )}
