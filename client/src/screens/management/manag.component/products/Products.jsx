@@ -1041,7 +1041,7 @@ const Products = () => {
                                     onChange={(e) => addExtra(e.target.value)}
                                   />
                                   <label
-                                    className="form-check-label mr-4"
+                                    className="form-check-label pr-5"
                                     style={{ cursor: "pointer" }}
                                     onClick={(e) => addExtra(ProductsAddon._id)}
                                   >
@@ -1367,7 +1367,7 @@ const Products = () => {
                                     onChange={(e) => addExtra(e.target.value)}
                                   />
                                   <label
-                                    className="form-check-label mr-4"
+                                    className="form-check-label pr-5"
                                     style={{ cursor: "pointer" }}
                                     onClick={(e) => addExtra(ProductsAddon._id)}
                                   >
