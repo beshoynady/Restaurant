@@ -90,85 +90,6 @@ const Products = () => {
     }
   };
 
-  const createProduct = async (e) => {
-    e.preventDefault();
-  
-    if (!token) {
-      toast.error("رجاء تسجيل الدخول مره اخري");
-      return;
-    }
-  
-    try {
-      if (productPermission && !productPermission.create) {
-        toast.warn("ليس لك صلاحية لاضافه الاصناف");
-        return;
-      }
-  
-      const formData = {
-        productname,
-        productdescription,
-        productcategoryid,
-        available,
-        isAddon,
-      };
-  
-      if (hasSizes) {
-        formData.hasSizes = hasSizes;
-        formData.sizes = sizes; 
-      } else {
-        formData.productprice = productprice;
-  
-        if (productdiscount > 0) {
-          formData.productdiscount = productdiscount;
-          const priceAfterDiscount = productprice - productdiscount;
-          formData.priceAfterDiscount = priceAfterDiscount > 0 ? priceAfterDiscount : 0;
-        }
-      }
-  
-      if (hasExtras) {
-        formData.hasExtras = hasExtras;
-        formData.extras = extras; 
-      }
-  
-      if (productimg) {
-        formData.image = productimg;
-      } else {
-        toast.error("يجب إضافة صورة للمنتج");
-        return;
-      }
-  
-      console.log({ formData });
-  
-      const response = await axios.post(apiUrl + "/api/product/", formData, {
-        headers: {
-          "Content-Type": "application/json", // نوع المحتوى JSON
-          ...config.headers,
-        },
-      });
-  
-      console.log({ responsecreateproduct: response });
-  
-      if (response.status === 201) {
-        getallproducts();
-        console.log(response.data);
-        toast.success("تم إنشاء المنتج بنجاح.");
-      } else {
-        throw new Error(
-          "فشلت عملية إضافة المنتج إلى القائمة! يرجى المحاولة مرة أخرى."
-        );
-      }
-    } catch (error) {
-      console.error(
-        "حدث خطأ أثناء إضافة المنتج! يرجى المحاولة مرة أخرى:",
-        error
-      );
-      toast.error("فشل إنشاء المنتج. يرجى المحاولة مرة أخرى لاحقًا.", {
-        position: toast.POSITION.TOP_RIGHT,
-      });
-    }
-  };
-  
-
   const handleFileUpload = (e) => {
     const file = e.target.files[0];
     const maxSize = 1024 * 1024; // 1 MB
@@ -230,54 +151,133 @@ const Products = () => {
     }
   };
 
-  const [productid, setproductid] = useState("");
-  const editProduct = async (e) => {
+  const createProduct = async (e) => {
     e.preventDefault();
+
     if (!token) {
-      // Handle case where token is not available
       toast.error("رجاء تسجيل الدخول مره اخري");
       return;
     }
+
+    try {
+      if (productPermission && !productPermission.create) {
+        toast.warn("ليس لك صلاحية لاضافه الاصناف");
+        return;
+      }
+
+      // إعداد جسم الطلب باستخدام FormData
+      const formData = new FormData();
+      formData.append("productname", productname);
+      formData.append("productdescription", productdescription);
+      formData.append("productcategoryid", productcategoryid);
+      formData.append("available", available);
+      formData.append("isAddon", isAddon);
+
+      if (hasSizes) {
+        formData.append("hasSizes", hasSizes);
+        sizes.forEach((size, index) => {
+          formData.append(`sizes[]`, size);
+        });
+      } else {
+        formData.append("productprice", productprice);
+
+        if (productdiscount > 0) {
+          formData.append("productdiscount", productdiscount);
+          const priceAfterDiscount = productprice - productdiscount;
+          formData.append(
+            "priceAfterDiscount",
+            priceAfterDiscount > 0 ? priceAfterDiscount : 0
+          );
+        }
+      }
+
+      if (hasExtras) {
+        formData.append("hasExtras", hasExtras);
+        extras.forEach((extra, index) => {
+          formData.append(`extras[]`, extra);
+        });
+      }
+
+      if (productimg) {
+        formData.append("image", productimg);
+      } else {
+        toast.error("يجب إضافة صورة للمنتج");
+        return;
+      }
+
+      const response = await axios.post(apiUrl + "/api/product/", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          ...config.headers,
+        },
+      });
+
+      if (response.status === 201) {
+        getallproducts();
+        toast.success("تم إنشاء المنتج بنجاح.");
+      } else {
+        throw new Error(
+          "فشلت عملية إضافة المنتج إلى القائمة! يرجى المحاولة مرة أخرى."
+        );
+      }
+    } catch (error) {
+      toast.error("فشل إنشاء المنتج. يرجى المحاولة مرة أخرى لاحقًا.");
+    }
+  };
+
+  const [productid, setproductid] = useState("");
+  const editProduct = async (e) => {
+    e.preventDefault();
+
+    if (!token) {
+      toast.error("رجاء تسجيل الدخول مره اخري");
+      return;
+    }
+
     try {
       if (productPermission && !productPermission.update) {
         toast.warn("ليس لك صلاحية لتعديل الاصناف");
         return;
       }
-      // Prepare request body
-      const requestBody = {
-        productname: productname,
-        productdescription: productdescription,
-        productcategoryid: productcategoryid,
-        available: available,
-        isAddon: isAddon,
-      };
 
-      // If product has sizes, include sizes in the request body
+      // إعداد جسم الطلب باستخدام FormData
+      const formData = new FormData();
+      formData.append("productname", productname);
+      formData.append("productdescription", productdescription);
+      formData.append("productcategoryid", productcategoryid);
+      formData.append("available", available);
+      formData.append("isAddon", isAddon);
+
       if (hasSizes) {
-        requestBody.hasSizes = hasSizes;
-        requestBody.sizes = sizes;
+        formData.append("hasSizes", hasSizes);
+        sizes.forEach((size, index) => {
+          formData.append(`sizes[]`, size); // إرسال كل عنصر كجزء من المصفوفة
+        });
       } else {
-        requestBody.productprice = productprice;
-        requestBody.productdiscount = productdiscount;
-        const priceAfterDiscount = productprice - productdiscount;
-        requestBody.priceAfterDiscount =
-          priceAfterDiscount > 0 ? priceAfterDiscount : 0;
+        formData.append("productprice", productprice);
+        if (productdiscount > 0) {
+          formData.append("productdiscount", productdiscount);
+          const priceAfterDiscount = productprice - productdiscount;
+          formData.append(
+            "priceAfterDiscount",
+            priceAfterDiscount > 0 ? priceAfterDiscount : 0
+          );
+        }
       }
 
       if (hasExtras) {
-        requestBody.hasExtras = hasExtras;
-        requestBody.extras = extras;
+        formData.append("hasExtras", hasExtras);
+        extras.forEach((extra, index) => {
+          formData.append(`extras[]`, extra); // إرسال كل عنصر كجزء من المصفوفة
+        });
       }
 
       if (productimg) {
-        requestBody.image = productimg;
+        formData.append("image", productimg);
       }
 
-      console.log({ requestBody });
-
-      // Perform the API request to update the product
-      const response = requestBody.image
-        ? await axios.put(`${apiUrl}/api/product/${productid}`, requestBody, {
+      const response = productimg
+        ? await axios.put(`${apiUrl}/api/product/${productid}`, formData, {
             headers: {
               "Content-Type": "multipart/form-data",
               ...config.headers,
@@ -285,25 +285,16 @@ const Products = () => {
           })
         : await axios.put(
             `${apiUrl}/api/product/withoutimage/${productid}`,
-            requestBody,
+            formData,
             config
           );
 
-      // Handle successful response
-      console.log(response.data);
       if (response) {
-        // Refresh categories and products after successful update
         getallCategories();
         getallproducts();
-
-        // Show success toast
         toast.success("تم تحديث المنتج بنجاح.");
       }
     } catch (error) {
-      // Handle errors
-      console.log(error);
-
-      // Show error toast
       toast.error("حدث خطأ أثناء تحديث المنتج. الرجاء المحاولة مرة أخرى.");
     }
   };
@@ -890,45 +881,45 @@ const Products = () => {
                           <label className="form-label w-100 text-wrap text-right fw-bolder p-0 m-0">
                             السعر
                           </label>
-                            <input
-                              type="number"
-                              min={0}
-                              className="form-control border-primary m-0 p-2 h-auto"
-                              value={size.sizePrice}
-                              onChange={(e) =>
-                                setsizes((prevState) => {
-                                  const newSizes = [...prevState];
-                                  newSizes[index].sizePrice = parseFloat(
-                                    e.target.value
-                                  );
-                                  return newSizes;
-                                })
-                              }
-                            />
+                          <input
+                            type="number"
+                            min={0}
+                            className="form-control border-primary m-0 p-2 h-auto"
+                            value={size.sizePrice}
+                            onChange={(e) =>
+                              setsizes((prevState) => {
+                                const newSizes = [...prevState];
+                                newSizes[index].sizePrice = parseFloat(
+                                  e.target.value
+                                );
+                                return newSizes;
+                              })
+                            }
+                          />
                         </div>
                         <div className="form-group col-12 col-md-3">
                           <label className="form-label w-100 text-wrap text-right fw-bolder p-0 m-0">
                             التخفيض
                           </label>
-                            <input
-                              type="number"
-                              min={0}
-                              max={size.sizePrice}
-                              className="form-control border-primary m-0 p-2 h-auto"
-                              // value={size.sizeDiscount}
-                              onChange={(e) =>
-                                setsizes((prevState) => {
-                                  const newSizes = [...prevState];
-                                  newSizes[index].sizeDiscount = parseFloat(
-                                    e.target.value
-                                  );
-                                  newSizes[index].sizePriceAfterDiscount =
-                                    newSizes[index].sizePrice -
-                                    parseFloat(e.target.value);
-                                  return newSizes;
-                                })
-                              }
-                            />
+                          <input
+                            type="number"
+                            min={0}
+                            max={size.sizePrice}
+                            className="form-control border-primary m-0 p-2 h-auto"
+                            // value={size.sizeDiscount}
+                            onChange={(e) =>
+                              setsizes((prevState) => {
+                                const newSizes = [...prevState];
+                                newSizes[index].sizeDiscount = parseFloat(
+                                  e.target.value
+                                );
+                                newSizes[index].sizePriceAfterDiscount =
+                                  newSizes[index].sizePrice -
+                                  parseFloat(e.target.value);
+                                return newSizes;
+                              })
+                            }
+                          />
                         </div>
                         <div className="col-12">
                           {sizes.length === index + 1 || sizes.length === 0 ? (
@@ -1205,48 +1196,46 @@ const Products = () => {
                           <label className="form-label w-100 text-wrap text-right fw-bolder p-0 m-0">
                             السعر
                           </label>
-                            <input
-                              type="number"
-                              className="form-control border-primary m-0 p-2 h-auto"
-                              value={size.sizePrice}
-                              onChange={(e) =>
-                                setsizes((prevState) => {
-                                  const newSizes = [...prevState];
-                                  newSizes[index].sizePrice = parseFloat(
-                                    e.target.value
-                                  );
-                                  return newSizes;
-                                })
-                              }
-                            />
-                            
+                          <input
+                            type="number"
+                            className="form-control border-primary m-0 p-2 h-auto"
+                            value={size.sizePrice}
+                            onChange={(e) =>
+                              setsizes((prevState) => {
+                                const newSizes = [...prevState];
+                                newSizes[index].sizePrice = parseFloat(
+                                  e.target.value
+                                );
+                                return newSizes;
+                              })
+                            }
+                          />
                         </div>
 
                         <div className="form-group col-12 col-md-3">
                           <label className="form-label w-100 text-wrap text-right fw-bolder p-0 m-0">
                             التخفيض
                           </label>
-                            <input
-                              type="number"
-                              className="form-control border-primary m-0 p-2 h-auto"
-                              value={size.sizeDiscount}
-                              min={0}
-                              max={size.sizePrice}
-                              onChange={(e) =>
-                                setsizes((prevState) => {
-                                  const newSizes = [...prevState];
-                                  newSizes[index].sizeDiscount = parseFloat(
-                                    e.target.value
-                                  );
-                                  newSizes[index].sizePriceAfterDiscount =
-                                    newSizes[index].sizePrice -
-                                    parseFloat(e.target.value);
-                                  return newSizes;
-                                })
-                              }
-                            />
-                            
-                          </div>
+                          <input
+                            type="number"
+                            className="form-control border-primary m-0 p-2 h-auto"
+                            value={size.sizeDiscount}
+                            min={0}
+                            max={size.sizePrice}
+                            onChange={(e) =>
+                              setsizes((prevState) => {
+                                const newSizes = [...prevState];
+                                newSizes[index].sizeDiscount = parseFloat(
+                                  e.target.value
+                                );
+                                newSizes[index].sizePriceAfterDiscount =
+                                  newSizes[index].sizePrice -
+                                  parseFloat(e.target.value);
+                                return newSizes;
+                              })
+                            }
+                          />
+                        </div>
 
                         <div className="col-12">
                           {sizes.length === index + 1 || sizes.length === 0 ? (
