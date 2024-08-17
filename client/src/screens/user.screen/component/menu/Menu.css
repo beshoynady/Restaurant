@@ -1,6 +1,6 @@
 #menu {
   width: 100%;
-  height: calc(100vh - 80px);
+  height:auto;
   margin-top: 80px;
   scroll-margin-top: 80px;
   display: flex;

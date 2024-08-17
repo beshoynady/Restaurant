@@ -232,7 +232,7 @@
 
 .side .total-order {
   align-items: center;
-  background-color: var(--u-main-color);
+  background-color: var(--accent-color);
   bottom: 0;
   display: flex;
   height: 70px;

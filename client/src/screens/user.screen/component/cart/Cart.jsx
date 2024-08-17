@@ -310,9 +310,8 @@ const Cart = (props) => {
             <div className="invoice side">
               <div
                 ref={printContainer}
-                className="max-w-400px p-1 mb-7 printpage"
+                className="w-100 p-1 mb-7 printpage"
                 style={{
-                  Width: "100%",
                   height: "80%",
                   textAlign: "center",
                   overflowY: "auto",
