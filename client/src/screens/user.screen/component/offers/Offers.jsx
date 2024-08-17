@@ -17,7 +17,7 @@ import './Offers.css';
 // import required modules
 import { EffectCoverflow, Pagination } from 'swiper/modules';
 
-export default function Offers() {
+export default function () {
 
   const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -348,14 +348,14 @@ export default function Offers() {
                           ) : ''}
 
                           {product._id === productid && extraArea === true ?
-                            product.productQuantity > 0 ?
+                            product.quantity > 0 ?
                               (<div className="position-absolute w-100 h-50 top-0 start-0 p-2 m-0 bg-white d-flex flex-column align-items-center justify-content-center"
                                 style={{ zIndex: 100 }}>
                                 <form onSubmit={(e) => { if (product.extras.length > 0) { addExtrasToProduct(e, product._id, ''); }; setSelectedButtonIndex(1); setextraArea(!extraArea); }}
                                   className="w-100 h-100 top-0 start-0 bg-white rounded-3 d-flex flex-column align-items-center justify-content-between m-0 p-0" >
                                   {/* أزرار الأصناف */}
                                   <div className='d-flex align-items-center justify-content-center flex-wrap w-100 h-auto'>
-                                    {Array.from({ length: product.productQuantity }).map((_, ind) => (
+                                    {Array.from({ length: product.quantity }).map((_, ind) => (
                                       <div key={ind} style={{ margin: '5px' }}>
                                         <button type="button" className='h-100 btn btn-info' onClick={() => setSelectedButtonIndex(ind + 1)}>
                                           {ind + 1}
@@ -365,7 +365,7 @@ export default function Offers() {
                                   </div>
 
                                   <div className="form-group d-flex flex-wrap w-100 h-50 p-0 m-0 mt-1">
-                                    {Array.from({ length: product.productQuantity }).map((_, ind) => (
+                                    {Array.from({ length: product.quantity }).map((_, ind) => (
                                       selectedButtonIndex === ind + 1 && (
                                         <div key={ind} className="form-group w-100 h-100 d-flex align-items-center justify-content-between flex-wrap" style={{ padding: '5px', overflowY: "auto" }}>
                                           {product.extras.map((extra, i) => (

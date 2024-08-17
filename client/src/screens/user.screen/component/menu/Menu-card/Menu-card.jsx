@@ -59,7 +59,7 @@ const MenuCard = () => {
                             width: "100%",
                             height: "215px",
                             margin: "0 0 10px 10px",
-                            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)"
+                            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
                           }}
                         >
                           {/* nots */}
@@ -466,12 +466,18 @@ const MenuCard = () => {
                                                     <s>{size.sizePrice}ج</s>
                                                   </small>
                                                 </sup>
-                                                <span className="text-danger fw-bold" style={{fontWeight:"700"}}>
+                                                <span
+                                                  className="text-danger fw-bold"
+                                                  style={{ fontWeight: "700" }}
+                                                >
                                                   {size.sizePriceAfterDescount}ج
                                                 </span>
                                               </>
                                             ) : (
-                                              <span className="text-danger fw-bold" style={{fontWeight:"700"}}>
+                                              <span
+                                                className="text-danger fw-bold"
+                                                style={{ fontWeight: "700" }}
+                                              >
                                                 {size.sizePrice}ج
                                               </span>
                                             )}
@@ -543,7 +549,7 @@ const MenuCard = () => {
                             width: "100%",
                             height: "210px",
                             margin: "0 0 10px 10px",
-                            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)"
+                            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
                           }}
                         >
                           {product._id === productid && noteArea === true ? (
@@ -588,7 +594,8 @@ const MenuCard = () => {
                           {product._id === productid && extraArea === true ? (
                             product.quantity > 0 ? (
                               <div
-                                className="position-absolute w-100 h-100 top-0 start-0 bg-white rounded-3 d-flex flex-column align-items-center justify-content-center overflow-hidden"
+                                className="position-absolute w-100 h-100 top-0 start-0 bg-white rounded-3 d-flex flex-column align-items-center 
+                                justify-content-center overflow-hidden"
                                 style={{ zIndex: 10 }}
                               >
                                 <form
@@ -660,9 +667,6 @@ const MenuCard = () => {
                                                     paddingLeft: "5px",
                                                   }}
                                                 >
-                                                  {console.log({
-                                                    productExtras,
-                                                  })}
                                                   <input
                                                     type="checkbox"
                                                     className="form-check-input "
@@ -875,16 +879,25 @@ const MenuCard = () => {
                                   {product.discount > 0 ? (
                                     <div>
                                       <sup>
-                                        <small className="text-muted" style={{fontWeight:"700"}}>
+                                        <small
+                                          className="text-muted"
+                                          style={{ fontWeight: "700" }}
+                                        >
                                           <s>{product.price}ج</s>
                                         </small>
                                       </sup>
-                                      <span className="text-danger fw-700" style={{fontWeight:"700"}}>
+                                      <span
+                                        className="text-danger fw-700"
+                                        style={{ fontWeight: "700" }}
+                                      >
                                         {product.priceAfterDiscount}ج
                                       </span>
                                     </div>
                                   ) : (
-                                    <span className="text-danger fw-700" style={{fontWeight:"700"}}>
+                                    <span
+                                      className="text-danger fw-700"
+                                      style={{ fontWeight: "700" }}
+                                    >
                                       {product.price}ج
                                     </span>
                                   )}
