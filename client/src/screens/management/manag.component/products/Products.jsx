@@ -850,7 +850,14 @@ const Products = () => {
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                     أحجام المنتج
                   </label>
-                  <input type="checkbox" onChange={handleCheckboxChange} />
+                  <div className="form-check ms-2">
+                    <input
+                      type="checkbox"
+                      className="form-check-input"
+                      style={{ width: "10px", height: "10px" }}
+                      onChange={handleCheckboxChange}
+                    />
+                  </div>
                 </div>
                 {hasSizes ? (
                   <div className="container w-100 p-0 m-0">
@@ -989,19 +996,27 @@ const Products = () => {
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                     هل هذا المنتج اضافه
                   </label>
-                  <input
-                    type="checkbox"
-                    onChange={handleIsAddonCheckboxChange}
-                  />
+                  <div className="form-check ms-2">
+                    <input
+                      type="checkbox"
+                      className="form-check-input"
+                      style={{ width: "10px", height: "10px" }}
+                      onChange={handleIsAddonCheckboxChange}
+                    />
+                  </div>
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                     هل له اضافات
                   </label>
-                  <input
-                    type="checkbox"
-                    onChange={handleIsHasExtrasCheckboxChange}
-                  />
+                  <div className="form-check ms-2">
+                    <input
+                      type="checkbox"
+                      className="form-check-input"
+                      style={{ width: "10px", height: "10px" }}
+                      onChange={handleIsHasExtrasCheckboxChange}
+                    />
+                  </div>
                 </div>
                 {hasExtras && (
                   <div
@@ -1022,17 +1037,18 @@ const Products = () => {
                                   key={i}
                                   style={{ minWidth: "200px" }}
                                 >
-                                  <input
-                                    style={{
-                                      fontSize: "16px",
-                                      border: "2px solid red",
-                                    }}
-                                    type="checkbox"
-                                    className="form-check-input"
-                                    value={ProductsAddon._id}
-                                    checked={extras.includes(ProductsAddon._id)}
-                                    onChange={(e) => addExtra(e.target.value)}
-                                  />
+                                  <div className="form-check ms-2">
+                                    <input
+                                      type="checkbox"
+                                      className="form-check-input"
+                                      style={{ width: "10px", height: "10px" }}
+                                      value={ProductsAddon._id}
+                                      checked={extras.includes(
+                                        ProductsAddon._id
+                                      )}
+                                      onChange={(e) => addExtra(e.target.value)}
+                                    />
+                                  </div>
                                   <label
                                     className="form-check-label mr-4"
                                     style={{ cursor: "pointer" }}
@@ -1168,11 +1184,15 @@ const Products = () => {
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                     أحجام المنتج
                   </label>
-                  <input
-                    type="checkbox"
-                    checked={hasSizes}
-                    onChange={handleCheckboxChange}
-                  />
+                  <div className="form-check ms-2">
+                    <input
+                      type="checkbox"
+                      className="form-check-input"
+                      style={{ width: "10px", height: "10px" }}
+                      checked={hasSizes}
+                      onChange={handleCheckboxChange}
+                    />
+                  </div>
                 </div>
                 {hasSizes ? (
                   <div className="container">
@@ -1318,21 +1338,29 @@ const Products = () => {
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                     هل هذا المنتج اضافه
                   </label>
-                  <input
-                    type="checkbox"
-                    checked={isAddon}
-                    onChange={handleIsAddonCheckboxChange}
-                  />
+                  <div className="form-check ms-2">
+                    <input
+                      type="checkbox"
+                      className="form-check-input"
+                      style={{ width: "10px", height: "10px" }}
+                      checked={isAddon}
+                      onChange={handleIsAddonCheckboxChange}
+                    />
+                  </div>
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                     هل له اضافات
                   </label>
-                  <input
-                    type="checkbox"
-                    checked={hasExtras}
-                    onChange={handleIsHasExtrasCheckboxChange}
-                  />
+                  <div className="form-check ms-2">
+                    <input
+                      type="checkbox"
+                      className="form-check-input"
+                      style={{ width: "10px", height: "10px" }}
+                      checked={hasExtras}
+                      onChange={handleIsHasExtrasCheckboxChange}
+                    />
+                  </div>
                 </div>
                 {hasExtras && (
                   <div
@@ -1353,17 +1381,18 @@ const Products = () => {
                                   key={i}
                                   style={{ minWidth: "200px" }}
                                 >
-                                  <input
-                                    style={{
-                                      fontSize: "16px",
-                                      border: "2px solid red",
-                                    }}
-                                    type="checkbox"
-                                    className="form-check-input"
-                                    value={ProductsAddon._id}
-                                    checked={extras.includes(ProductsAddon._id)}
-                                    onChange={(e) => addExtra(e.target.value)}
-                                  />
+                                  <div className="form-check ms-2">
+                                    <input
+                                      type="checkbox"
+                                      className="form-check-input"
+                                      style={{ width: "10px", height: "10px" }}
+                                      value={ProductsAddon._id}
+                                      checked={extras.includes(
+                                        ProductsAddon._id
+                                      )}
+                                      onChange={(e) => addExtra(e.target.value)}
+                                    />
+                                  </div>
                                   <label
                                     className="form-check-label mr-4"
                                     style={{ cursor: "pointer" }}
