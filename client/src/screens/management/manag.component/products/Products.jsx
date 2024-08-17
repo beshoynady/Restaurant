@@ -869,7 +869,7 @@ const Products = () => {
                   />
                 </div>
                 {hasSizes ? (
-                  <div className="container w-100 p-0 m-0">
+                  <div className="container flex-column w-100 p-0 m-0">
                     {sizes.map((size, index) => (
                       <div
                         key={index}
@@ -1184,7 +1184,7 @@ const Products = () => {
                   />
                 </div>
                 {hasSizes ? (
-                  <div className="container">
+                  <div className="container flex-column w-100 p-0 m-0">
                     {sizes.map((size, index) => (
                       <div
                         key={index}
