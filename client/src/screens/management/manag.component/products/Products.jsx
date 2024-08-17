@@ -212,10 +212,17 @@ const Products = () => {
     setproductdiscount(product.discount);
     setproductcategoryid(product.category._id);
     setavailable(product.available);
-    setsizes(product.sizes?product.sizes
-      :[
-        { sizeName: "", sizePrice: 0, sizeDiscount: 0, sizePriceAfterDiscount: 0 },
-      ]
+    setsizes(
+      product.sizes
+        ? product.sizes
+        : [
+            {
+              sizeName: "",
+              sizePrice: 0,
+              sizeDiscount: 0,
+              sizePriceAfterDiscount: 0,
+            },
+          ]
     );
     setHasSizes(product.hasSizes);
     setIsAddon(product.isAddon);
@@ -854,13 +861,13 @@ const Products = () => {
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                     أحجام المنتج
                   </label>
-                    <input
-                      type="checkbox"
-                      className="form-check-input border-primary mr-2"
-                      style={{ width: "21px", height: "21px" }}
-                      onChange={handleCheckboxChange}
-                    />
-                  </div>
+                  <input
+                    type="checkbox"
+                    className="form-check-input border-primary mr-2"
+                    style={{ width: "21px", height: "21px" }}
+                    onChange={handleCheckboxChange}
+                  />
+                </div>
                 {hasSizes ? (
                   <div className="container w-100 p-0 m-0">
                     {sizes.map((size, index) => (
@@ -889,11 +896,10 @@ const Products = () => {
                           <label className="form-label w-100 text-wrap text-right fw-bolder p-0 m-0">
                             السعر
                           </label>
-                          <div className="input-group d-flex">
                             <input
                               type="number"
                               min={0}
-                              className="form-control col-6"
+                              className="form-control border-primary m-0 p-2 h-auto"
                               value={size.sizePrice}
                               onChange={(e) =>
                                 setsizes((prevState) => {
@@ -905,21 +911,16 @@ const Products = () => {
                                 })
                               }
                             />
-                            <div className="input-group-prepend col-6">
-                              <span className="input-group-text">جنية</span>
-                            </div>
-                          </div>
                         </div>
                         <div className="form-group col-12 col-md-3">
                           <label className="form-label w-100 text-wrap text-right fw-bolder p-0 m-0">
                             التخفيض
                           </label>
-                          <div className="input-group d-flex">
                             <input
                               type="number"
                               min={0}
                               max={size.sizePrice}
-                              className="form-control col-6 "
+                              className="form-control border-primary m-0 p-2 h-auto"
                               // value={size.sizeDiscount}
                               onChange={(e) =>
                                 setsizes((prevState) => {
@@ -934,10 +935,6 @@ const Products = () => {
                                 })
                               }
                             />
-                            <div className="input-group-prepend col-6">
-                              <span className="input-group-text">جنية</span>
-                            </div>
-                          </div>
                         </div>
                         <div className="col-12">
                           {sizes.length === index + 1 || sizes.length === 0 ? (
@@ -998,23 +995,23 @@ const Products = () => {
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                     هل هذا المنتج اضافه
                   </label>
-                    <input
-                      type="checkbox"
-                      className="form-check-input border-primary mr-2"
-                      style={{ width: "21px", height: "21px" }}
-                      onChange={handleIsAddonCheckboxChange}
-                    />
+                  <input
+                    type="checkbox"
+                    className="form-check-input border-primary mr-2"
+                    style={{ width: "21px", height: "21px" }}
+                    onChange={handleIsAddonCheckboxChange}
+                  />
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                     هل له اضافات
                   </label>
-                    <input
-                      type="checkbox"
-                      className="form-check-input border-primary mr-2"
-                      style={{ width: "21px", height: "21px" }}
-                      onChange={handleIsHasExtrasCheckboxChange}
-                    />
+                  <input
+                    type="checkbox"
+                    className="form-check-input border-primary mr-2"
+                    style={{ width: "21px", height: "21px" }}
+                    onChange={handleIsHasExtrasCheckboxChange}
+                  />
                 </div>
                 {hasExtras && (
                   <div
@@ -1035,16 +1032,14 @@ const Products = () => {
                                   key={i}
                                   style={{ minWidth: "200px" }}
                                 >
-                                    <input
-                                      type="checkbox"
-                                      className="form-check-input border-primary mr-2"
-                                      style={{ width: "21px", height: "21px" }}
-                                      value={ProductsAddon._id}
-                                      checked={extras.includes(
-                                        ProductsAddon._id
-                                      )}
-                                      onChange={(e) => addExtra(e.target.value)}
-                                    />
+                                  <input
+                                    type="checkbox"
+                                    className="form-check-input border-primary mr-2"
+                                    style={{ width: "21px", height: "21px" }}
+                                    value={ProductsAddon._id}
+                                    checked={extras.includes(ProductsAddon._id)}
+                                    onChange={(e) => addExtra(e.target.value)}
+                                  />
                                   <label
                                     className="form-check-label mr-4"
                                     style={{ cursor: "pointer" }}
@@ -1180,14 +1175,14 @@ const Products = () => {
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                     أحجام المنتج
                   </label>
-                    <input
-                      type="checkbox"
-                      className="form-check-input border-primary mr-2"
-                      style={{ width: "21px", height: "21px" }}
-                      checked={hasSizes}
-                      onChange={handleCheckboxChange}
-                    />
-                  </div>
+                  <input
+                    type="checkbox"
+                    className="form-check-input border-primary mr-2"
+                    style={{ width: "21px", height: "21px" }}
+                    checked={hasSizes}
+                    onChange={handleCheckboxChange}
+                  />
+                </div>
                 {hasSizes ? (
                   <div className="container">
                     {sizes.map((size, index) => (
@@ -1216,10 +1211,9 @@ const Products = () => {
                           <label className="form-label w-100 text-wrap text-right fw-bolder p-0 m-0">
                             السعر
                           </label>
-                          <div className="input-group d-flex">
                             <input
                               type="number"
-                              className="d-flex align-items-center justify-content-between col-6 border-primary"
+                              className="form-control border-primary m-0 p-2 h-auto"
                               value={size.sizePrice}
                               onChange={(e) =>
                                 setsizes((prevState) => {
@@ -1231,20 +1225,16 @@ const Products = () => {
                                 })
                               }
                             />
-                            <div className="input-group-append col-6">
-                              <span className="input-group-text">جنية</span>
-                            </div>
-                          </div>
+                            
                         </div>
 
                         <div className="form-group col-12 col-md-3">
                           <label className="form-label w-100 text-wrap text-right fw-bolder p-0 m-0">
                             التخفيض
                           </label>
-                          <div className="input-group d-flex">
                             <input
                               type="number"
-                              className="d-flex align-items-center justify-content-between col-6 border-primary"
+                              className="form-control border-primary m-0 p-2 h-auto"
                               value={size.sizeDiscount}
                               min={0}
                               max={size.sizePrice}
@@ -1261,11 +1251,8 @@ const Products = () => {
                                 })
                               }
                             />
-                            <div className="input-group-append col-6">
-                              <span className="input-group-text">جنية</span>
-                            </div>
+                            
                           </div>
-                        </div>
 
                         <div className="col-12">
                           {sizes.length === index + 1 || sizes.length === 0 ? (
@@ -1298,7 +1285,7 @@ const Products = () => {
                       </label>
                       <input
                         type="number"
-                        className="form-control col-6"
+                        className="form-control border-primary m-0 p-2 h-auto"
                         defaultValue={productprice}
                         placeholder={productprice}
                         required
@@ -1332,26 +1319,26 @@ const Products = () => {
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                     هل هذا المنتج اضافه
                   </label>
-                    <input
-                      type="checkbox"
-                      className="form-check-input border-primary mr-2"
-                      style={{ width: "21px", height: "21px" }}
-                      checked={isAddon}
-                      onChange={handleIsAddonCheckboxChange}
-                    />
+                  <input
+                    type="checkbox"
+                    className="form-check-input border-primary mr-2"
+                    style={{ width: "21px", height: "21px" }}
+                    checked={isAddon}
+                    onChange={handleIsAddonCheckboxChange}
+                  />
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                     هل له اضافات
                   </label>
-                    <input
-                      type="checkbox"
-                      className="form-check-input border-primary mr-2"
-                      style={{ width: "21px", height: "21px" }}
-                      checked={hasExtras}
-                      onChange={handleIsHasExtrasCheckboxChange}
-                    />
-                  </div>
+                  <input
+                    type="checkbox"
+                    className="form-check-input border-primary mr-2"
+                    style={{ width: "21px", height: "21px" }}
+                    checked={hasExtras}
+                    onChange={handleIsHasExtrasCheckboxChange}
+                  />
+                </div>
                 {hasExtras && (
                   <div
                     className="form-group "
@@ -1371,16 +1358,14 @@ const Products = () => {
                                   key={i}
                                   style={{ minWidth: "200px" }}
                                 >
-                                    <input
-                                      type="checkbox"
-                                      className="form-check-input border-primary mr-2"
-                                      style={{ width: "21px", height: "21px" }}
-                                      value={ProductsAddon._id}
-                                      checked={extras.includes(
-                                        ProductsAddon._id
-                                      )}
-                                      onChange={(e) => addExtra(e.target.value)}
-                                    />
+                                  <input
+                                    type="checkbox"
+                                    className="form-check-input border-primary mr-2"
+                                    style={{ width: "21px", height: "21px" }}
+                                    value={ProductsAddon._id}
+                                    checked={extras.includes(ProductsAddon._id)}
+                                    onChange={(e) => addExtra(e.target.value)}
+                                  />
                                   <label
                                     className="form-check-label mr-4"
                                     style={{ cursor: "pointer" }}
