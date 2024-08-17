@@ -858,7 +858,7 @@ const Products = () => {
                 {hasSizes ? (
                   <div className="container w-100 p-0 m-0">
                     {sizes.map((size, index) => (
-                      <div key={index} className="row col-12 mb-1">
+                      <div key={index} className="row d-flex align-items-center justify-content-between col-12 mb-1">
                         <div className="form-group col-12 col-md-3">
                           <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                             اسم الحجم
@@ -877,7 +877,7 @@ const Products = () => {
                           />
                         </div>
                         <div className="form-group col-12 col-md-3">
-                          <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                          <label className="form-label w-100 text-wrap text-right fw-bolder p-0 m-0">
                             السعر
                           </label>
                           <input
@@ -900,14 +900,14 @@ const Products = () => {
                           </div>
                         </div>
                         <div className="form-group col-12 col-md-3">
-                          <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                          <label className="form-label w-100 text-wrap text-right fw-bolder p-0 m-0">
                             التخفيض
                           </label>
                           <input
                             type="number"
                             min={0}
                             max={size.sizePrice}
-                            className="form-control col-6"
+                            className="form-control col-6 "
                             // value={size.sizeDiscount}
                             onChange={(e) =>
                               setsizes((prevState) => {
@@ -1050,6 +1050,10 @@ const Products = () => {
                     )}
                   </div>
                 )}
+
+
+
+                
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                     متاح
@@ -1172,9 +1176,9 @@ const Products = () => {
                 {hasSizes ? (
                   <div className="container">
                     {sizes.map((size, index) => (
-                      <div key={index} className="row mb-3">
+                      <div key={index} className="row d-flex align-items-center justify-content-between col-12 mb-1">
                         <div className="form-group col-12 col-md-3">
-                          <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                          <label className="form-label w-100 text-wrap text-right fw-bolder p-0 m-0">
                             اسم الحجم
                           </label>
                           <input
@@ -1191,7 +1195,7 @@ const Products = () => {
                           />
                         </div>
                         <div className="form-group col-12 col-md-3">
-                          <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                          <label className="form-label w-100 text-wrap text-right fw-bolder p-0 m-0">
                             السعر
                           </label>
                           <input
@@ -1213,7 +1217,7 @@ const Products = () => {
                           </div>
                         </div>
                         <div className="form-group col-12 col-md-3">
-                          <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                          <label className="form-label w-100 text-wrap text-right fw-bolder p-0 m-0">
                             التخفيض
                           </label>
                           <input
