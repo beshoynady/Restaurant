@@ -193,7 +193,7 @@ export default function Offers() {
                         return (
                           <SwiperSlide key={size._id}>
                             <div className="card h-100">
-                              <img src={`${apiUrl}/images/${product.image}`} alt="Delicious soup" className="card-img-top" />
+                              <img src={`${apiUrl}/images/${product.image}`} alt="Delicious soup" className="card-img-top" style={{height:'40%'}} />
                               {size._id === productid && noteArea === true ? (
                                 <form
                                   onSubmit={(e) => {
@@ -276,7 +276,7 @@ export default function Offers() {
                                   </div>
                                 : ''}
 
-                              <div className="card-body d-flex flex-column flex-nowrap align-items-center justify-content-between w-100 p-0 m-0">
+                              <div className="card-body d-flex flex-column flex-nowrap align-items-center justify-content-between w-100 p-0 m-0" style={{height:'60%'}}>
 
                                 <h5 className="card-title w-100 p-1 m-0 d-flex justify-content-between align-items-center">
                                   {`${product.name} - ${size.sizeName}`}
@@ -287,11 +287,11 @@ export default function Offers() {
                                       onClick={() => { setproductExtras(product.extrasSelected ? product.extrasSelected : []); setextraArea(!extraArea); setproductid(size._id) }}>add_circle</span>
                                   }
                                 </h5>
-                                <p className="card-text text-center">{size.description}</p>
+                                <p className="card-text text-center" style={{maxHeight:"25%", fontSize:'12px', fontWeight:'700', textOverflow:'hidden'}}>{size.description}</p>
                                 <div className="w-100 p-1 m-0 d-flex justify-content-between align-items-center">
                                   <div className="col-8 p-0 m-0 d-flex flex-nowrap align-items-center justify-content-between" style={{ borderRadius: '10px' }}>
                                     <button className="btn btn-danger py-2 px-3 fs-3 fw-800 col col" onClick={() => { decrementProductQuantity(product._id, size._id) }}>-</button>
-                                    <input type='text' readOnly className="form-control text-center col" value={size.sizeQuantity} />
+                                    <input type='text' readOnly className="form-control text-center text-dark col" style={{fontSize:"16px", fontWeight:'700'}}  value={size.sizeQuantity} />
                                     <button className="btn btn-primary py-2 px-3 fs-3 fw-800 col" onClick={() => { incrementProductQuantity(product._id, size._id) }}>+</button>
                                   </div>
                                   <div style={{ fontSize: '18px', fontWeight: '600'}}>
@@ -321,7 +321,7 @@ export default function Offers() {
                     return (
                       <SwiperSlide key={product._id}>
                         <div className="card h-100">
-                          <img src={`${apiUrl}/images/${product.image}`} alt="Delicious soup" className="card-img-top" />
+                          <img src={`${apiUrl}/images/${product.image}`} alt="Delicious soup" className="card-img-top" style={{height:'40%'}} />
                           {product._id === productid && noteArea === true ? (
                             <form
                               onSubmit={(e) => {
@@ -404,7 +404,7 @@ export default function Offers() {
                               </div>
                             : ''}
 
-                          <div className="card-body d-flex flex-column flex-nowrap align-items-center justify-content-between w-100 p-0 m-0">
+                          <div className="card-body d-flex flex-column flex-nowrap align-items-center justify-content-between w-100 p-0 m-0" style={{height:'60%'}}>
 
                             <h5 className="card-title w-100 p-1 m-0 d-flex justify-content-between align-items-center">
                               {`${product.name}`}
@@ -415,11 +415,11 @@ export default function Offers() {
                                   onClick={() => { setproductExtras(product.extrasSelected ? product.extrasSelected : []); setextraArea(!extraArea); setproductid(product._id) }}>add_circle</span>
                               }
                             </h5>
-                            <p className="card-text text-center">{product.description}</p>
+                            <p className="card-text text-center" style={{maxHeight:"25%", fontSize:'12px', fontWeight:'700', textOverflow:'hidden'}}>{product.description}</p>
                             <div className="w-100 p-1 m-0 d-flex justify-content-between align-items-center">
                               <div className="col-8 p-0 m-0 d-flex flex-nowrap align-items-center justify-content-between" style={{ borderRadius: '15px' }}>
                                 <button className="btn btn-danger py-2 px-3 fs-3 fw-800 col" onClick={() => { decrementProductQuantity(product._id, '') }}>-</button>
-                                <input type='text' readOnly className="form-control text-center col" value={product.productQuantity} />
+                                <input type='text' readOnly className="form-control text-center text-dark col" style={{fontSize:"16px", fontWeight:'700'}}  value={product.productQuantity>0?product.productQuantity:0} />
                                 <button className="btn btn-primary py-2 px-3 fs-3 fw-800 col" onClick={() => { incrementProductQuantity(product._id, '') }}>+</button>
                               </div>
                               <div style={{ fontSize: '18px', fontWeight: '600' }}>

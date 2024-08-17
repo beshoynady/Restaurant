@@ -15,7 +15,7 @@ const createProduct = async (req, res) => {
       hasSizes,
       hasExtras,
       isAddon,
-    } = req.body;
+    } = req.body;     
     const sizes = req.body.sizes ? JSON.parse(req.body.sizes) : [];
     const extras = req.body.extras ? JSON.parse(req.body.extras) : [];
 
