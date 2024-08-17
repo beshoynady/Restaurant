@@ -212,7 +212,11 @@ const Products = () => {
     setproductdiscount(product.discount);
     setproductcategoryid(product.category._id);
     setavailable(product.available);
-    setsizes(product.sizes);
+    setsizes(product.sizes?product.sizes
+      :[
+        { sizeName: "", sizePrice: 0, sizeDiscount: 0, sizePriceAfterDiscount: 0 },
+      ]
+    );
     setHasSizes(product.hasSizes);
     setIsAddon(product.isAddon);
     setHasExtras(product.hasExtras);
@@ -590,7 +594,7 @@ const Products = () => {
               <tr>
                 {/* <th>
                           <span className="custom-checkbox">
-                            <input type="checkbox" className="form-check-input form-check-input-lg" id="selectAll" />
+                            <input type="checkbox" className="form-check-input border-primary form-check-input border-primary-lg" id="selectAll" />
                             <label htmlFor="selectAll"></label>
                           </span>
                         </th> */}
@@ -619,7 +623,7 @@ const Products = () => {
                         <tr>
                           {/* <td>
             <span className="custom-checkbox">
-              <input type="checkbox" className="form-check-input form-check-input-lg" id={`checkbox${i}`} name="options[]" value="1" />
+              <input type="checkbox" className="form-check-input border-primary form-check-input border-primary-lg" id={`checkbox${i}`} name="options[]" value="1" />
               <label htmlFor={`checkbox${i}`}></label>
             </span>
           </td> */}
@@ -692,7 +696,7 @@ const Products = () => {
                             <tr key={j + i}>
                               {/* <td>
               <span className="custom-checkbox">
-                <input type="checkbox" className="form-check-input form-check-input-lg" id={`checkbox${j + i}`} name="options[]" value="1" />
+                <input type="checkbox" className="form-check-input border-primary form-check-input border-primary-lg" id={`checkbox${j + i}`} name="options[]" value="1" />
                 <label htmlFor={`checkbox${j + i}`}></label>
               </span>
             </td> */}
@@ -853,8 +857,8 @@ const Products = () => {
                   <div className="form-check ms-2">
                     <input
                       type="checkbox"
-                      className="form-check-input"
-                      style={{ width: "10px", height: "10px" }}
+                      className="form-check-input border-primary"
+                      style={{ width: "21px", height: "21px" }}
                       onChange={handleCheckboxChange}
                     />
                   </div>
@@ -999,8 +1003,8 @@ const Products = () => {
                   <div className="form-check ms-2">
                     <input
                       type="checkbox"
-                      className="form-check-input"
-                      style={{ width: "10px", height: "10px" }}
+                      className="form-check-input border-primary"
+                      style={{ width: "21px", height: "21px" }}
                       onChange={handleIsAddonCheckboxChange}
                     />
                   </div>
@@ -1012,8 +1016,8 @@ const Products = () => {
                   <div className="form-check ms-2">
                     <input
                       type="checkbox"
-                      className="form-check-input"
-                      style={{ width: "10px", height: "10px" }}
+                      className="form-check-input border-primary"
+                      style={{ width: "21px", height: "21px" }}
                       onChange={handleIsHasExtrasCheckboxChange}
                     />
                   </div>
@@ -1040,8 +1044,8 @@ const Products = () => {
                                   <div className="form-check ms-2">
                                     <input
                                       type="checkbox"
-                                      className="form-check-input"
-                                      style={{ width: "10px", height: "10px" }}
+                                      className="form-check-input border-primary"
+                                      style={{ width: "21px", height: "21px" }}
                                       value={ProductsAddon._id}
                                       checked={extras.includes(
                                         ProductsAddon._id
@@ -1187,8 +1191,8 @@ const Products = () => {
                   <div className="form-check ms-2">
                     <input
                       type="checkbox"
-                      className="form-check-input"
-                      style={{ width: "10px", height: "10px" }}
+                      className="form-check-input border-primary"
+                      style={{ width: "21px", height: "21px" }}
                       checked={hasSizes}
                       onChange={handleCheckboxChange}
                     />
@@ -1225,7 +1229,7 @@ const Products = () => {
                           <div className="input-group">
                             <input
                               type="number"
-                              className="form-control"
+                              className="d-flex align-items-center justify-content-between col-6 border-primary"
                               value={size.sizePrice}
                               onChange={(e) =>
                                 setsizes((prevState) => {
@@ -1237,7 +1241,7 @@ const Products = () => {
                                 })
                               }
                             />
-                            <div className="input-group-append">
+                            <div className="input-group-append col-">
                               <span className="input-group-text">جنية</span>
                             </div>
                           </div>
@@ -1250,7 +1254,7 @@ const Products = () => {
                           <div className="input-group">
                             <input
                               type="number"
-                              className="form-control"
+                              className="d-flex align-items-center justify-content-between col-6 border-primary"
                               value={size.sizeDiscount}
                               min={0}
                               max={size.sizePrice}
@@ -1267,7 +1271,7 @@ const Products = () => {
                                 })
                               }
                             />
-                            <div className="input-group-append">
+                            <div className="input-group-append col-">
                               <span className="input-group-text">جنية</span>
                             </div>
                           </div>
@@ -1341,8 +1345,8 @@ const Products = () => {
                   <div className="form-check ms-2">
                     <input
                       type="checkbox"
-                      className="form-check-input"
-                      style={{ width: "10px", height: "10px" }}
+                      className="form-check-input border-primary"
+                      style={{ width: "21px", height: "21px" }}
                       checked={isAddon}
                       onChange={handleIsAddonCheckboxChange}
                     />
@@ -1355,8 +1359,8 @@ const Products = () => {
                   <div className="form-check ms-2">
                     <input
                       type="checkbox"
-                      className="form-check-input"
-                      style={{ width: "10px", height: "10px" }}
+                      className="form-check-input border-primary"
+                      style={{ width: "21px", height: "21px" }}
                       checked={hasExtras}
                       onChange={handleIsHasExtrasCheckboxChange}
                     />
@@ -1384,8 +1388,8 @@ const Products = () => {
                                   <div className="form-check ms-2">
                                     <input
                                       type="checkbox"
-                                      className="form-check-input"
-                                      style={{ width: "10px", height: "10px" }}
+                                      className="form-check-input border-primary"
+                                      style={{ width: "21px", height: "21px" }}
                                       value={ProductsAddon._id}
                                       checked={extras.includes(
                                         ProductsAddon._id
