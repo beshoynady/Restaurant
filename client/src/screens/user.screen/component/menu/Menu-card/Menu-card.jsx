@@ -170,7 +170,7 @@ const MenuCard = () => {
                                         selectedButtonIndex === ind + 1 && (
                                           <div
                                             key={ind}
-                                            className="form-group w-100 h-100 d-flex flex-column align-items-start justify-content-start flex-wrap"
+                                            className="form-group w-100 h-auto d-flex align-items-start justify-content-start flex-wrap"
                                             style={{
                                               padding: "5px",
                                               overflowY: "auto",
@@ -650,7 +650,7 @@ const MenuCard = () => {
                                         selectedButtonIndex === ind + 1 && (
                                           <div
                                             key={ind}
-                                            className="form-group w-100 h-100 d-flex flex-column align-items-start justify-content-start flex-wrap"
+                                            className="form-group w-100 h-auto d-flex align-items-start justify-content-start flex-wrap"
                                             style={{
                                               padding: "5px",
                                               overflowY: "scroll",
