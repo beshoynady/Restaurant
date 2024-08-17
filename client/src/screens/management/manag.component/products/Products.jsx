@@ -205,6 +205,8 @@ const Products = () => {
         return;
       }
 
+      console.log(formDataToObject(formData));
+
       const response = await axios.post(apiUrl + "/api/product/", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
