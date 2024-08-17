@@ -104,7 +104,6 @@ const Products = () => {
         return;
       }
   
-      // إعداد جسم الطلب باستخدام كائن عادي
       const formData = {
         productname,
         productdescription,
