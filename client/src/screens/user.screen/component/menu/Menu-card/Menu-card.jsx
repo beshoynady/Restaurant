@@ -401,12 +401,11 @@ const MenuCard = () => {
                                       cursor: "pointer",
                                     }}
                                     onClick={() => {
-                                      if(product.sizes.includes(
-                                        (size) => size._id === sizeId
-                                      )===false){
-                                        toast.warn('اختر الحجم اولا')
-                                        return
+                                      if (product.sizes.some((size) => size._id === sizeId) === false) {
+                                        toast.warn('اختر الحجم اولا');
+                                        return;
                                       }
+                                      
                                       setproductid(product._id);
                                       setextraArea(!extraArea);
                                       setproductExtras(
