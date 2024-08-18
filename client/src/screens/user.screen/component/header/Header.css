@@ -31,11 +31,12 @@
   color: var(--primary-color) !important;
 }
 .header-client .container-lg {
+  height: 100%;
+  padding: 10px 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   flex-wrap: nowrap;
-  padding: 0;
 }
 .header-client .container-lg .mob-menu {
   display: none;
@@ -186,7 +187,7 @@ ul.borderYtoX li:hover:after {
     height: 80px;
   }
   .header-client.scroll {
-    background: linear-gradient(200deg, var(--secondary-color) 19%, var(--primary-color) 80%);
+    background: linear-gradient(230deg, var(--secondary-color) 60%, var(--primary-color) 85%);
   }
   .header-client.scroll .nav .navigator a {
     color: var(--white-color) !important;
@@ -206,6 +207,8 @@ ul.borderYtoX li:hover:after {
     color: var(--primary-color) !important;
   }
   .header-client .container-lg {
+    height: 100%;
+    padding: 10px 20px;
     justify-content: space-between;
   }
   .header-client .container-lg .mob-menu {
@@ -286,14 +289,14 @@ ul.borderYtoX li:hover:after {
     width: 30%;
     height: 100%;
     display: flex;
-    justify-content: space-around;
+    justify-content: space-evenly;
     flex-direction: row;
     flex-wrap: nowrap;
     align-content: center;
     align-items: center;
   }
   .header-client .container-lg .right-nav .nav-logout {
-    width: 50px;
+    width: 45px;
     height: 45px;
     font-size: 18px;
     color: var(--white-color);
@@ -308,7 +311,7 @@ ul.borderYtoX li:hover:after {
     display: none;
   }
   .header-client .container-lg .right-nav .nav-login {
-    width: 50px;
+    width: 45px;
     height: 45px;
     font-size: 18px;
     display: flex;
@@ -322,7 +325,7 @@ ul.borderYtoX li:hover:after {
     display: none;
   }
   .header-client .container-lg .right-nav .cart-icon {
-    width: 50px;
+    width: 45px;
     height: 45px;
     text-align: center;
     position: relative;
