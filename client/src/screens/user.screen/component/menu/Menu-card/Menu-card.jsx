@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { detacontext } from "../../../../../App";
+import {toast } from 'react-toastify';
 
 const MenuCard = () => {
   const apiUrl = process.env.REACT_APP_API_URL;
@@ -400,17 +401,18 @@ const MenuCard = () => {
                                       cursor: "pointer",
                                     }}
                                     onClick={() => {
+                                      if(product.sizes.filter(
+                                        (size) => size._id === sizeId
+                                      )){
+                                        toast.warn('اختر الحجم اولا')
+                                        return
+                                      }
                                       setproductid(product._id);
                                       setextraArea(!extraArea);
                                       setproductExtras(
                                         product.sizes.filter(
                                           (size) => size._id === sizeId
-                                        )[0].extrasSelected
-                                          ? product.sizes.filter(
-                                              (size) => size._id === sizeId
-                                            )[0].extrasSelected
-                                          : []
-                                        );
+                                        )[0]?.extrasSelected);
                                     }}
                                   >
                                     add_circle
@@ -597,7 +599,7 @@ const MenuCard = () => {
                             ""
                           )}
 
-                          {product._id === productid && extraArea === true ? (
+                          {product._id === productid && !product.hasExtras && extraArea === true ? (
                             product.quantity > 0 ? (
                               <div
                                 className="position-absolute w-100 h-100 top-0 start-0 bg-white rounded-3 d-flex flex-column align-items-center 
