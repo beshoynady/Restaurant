@@ -1,11 +1,11 @@
 @import url("https://fonts.googleapis.com/css2?family=Marhey:wght@600;700&display=swap");
 :root {
-  --primary-color: #f40606;
-  --secondary-color: #f2b50f;
+  --primary-color: #b12122;
+  --secondary-color: #feb914;
   --white-color: #FFFFFF;
   --dark-color: #a91418;
   --text-color: #b22828;
-  --accent-color: #B6261B;
+  --accent-color: #f40606;
 }
 
 .userscreen {

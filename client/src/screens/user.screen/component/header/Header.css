@@ -4,36 +4,57 @@
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  background: var(--primary-color);
+  background: var(--white-color);
   z-index: 1000;
   position: sticky;
   top: 0;
   left: 0;
 }
 .header-client.scroll {
-  background: linear-gradient(270deg, var(--secondary-color) 19%, var(--primary-color));
+  background: linear-gradient(200deg, var(--secondary-color) 19%, var(--primary-color) 80%);
 }
 .header-client.scroll a {
   color: var(--white-color);
 }
+.header-client.scroll .nav-logout {
+  background-color: var(--secondary-color);
+  color: var(--primary-color);
+}
+.header-client.scroll .nav-logout > span {
+  color: var(--primary-color);
+}
 .header-client.scroll .shopping_cart {
-  color: var(--white-color);
+  color: var(--secondary-color);
+}
+.header-client.scroll .cartcounter {
+  background-color: var(--secondary-color);
+  color: var(--primary-color);
 }
 .header-client .container-lg {
   display: flex;
   align-items: center;
   justify-content: space-between;
   flex-wrap: nowrap;
+  padding: 0;
+}
+.header-client .container-lg .mob-menu {
+  display: none;
 }
 .header-client .container-lg .logo {
-  width: 90px;
+  max-width: 100px;
+  width: 30%;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 0;
+  margin: 0;
 }
-.header-client .container-lg .logo .mob-menu {
-  display: none;
+.header-client .container-lg .logo > img {
+  height: 100%;
+  width: 100%;
+  padding: 0;
+  margin: 0;
 }
 .header-client .container-lg .logo .res-name {
   font-size: 30px;
@@ -69,7 +90,7 @@
 }
 .header-client .container-lg .nav > .navigator li a {
   font-size: 20px;
-  color: var(--white-color);
+  color: var(--text-color);
   font-weight: 900;
 }
 .header-client .container-lg .right-nav {
@@ -112,10 +133,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-}
-.header-client .container-lg .right-nav .nav-login:hover {
-  color: var(--secondary-color);
-  background-color: var(--dark-color);
 }
 .header-client .container-lg .right-nav .nav-login > span {
   font-size: 20px;
@@ -168,15 +185,11 @@ ul.borderYtoX li:hover:after {
     width: 100%;
     height: 80px;
   }
-  .header-client .container-lg .logo {
-    width: 50%;
-    height: 100%;
-    display: flex;
-    align-items: center;
+  .header-client .container-lg {
     justify-content: space-between;
   }
-  .header-client .container-lg .logo .mob-menu {
-    max-width: 20%;
+  .header-client .container-lg .mob-menu {
+    width: 30%;
     min-width: 50px;
     height: 100%;
     display: flex;
@@ -186,13 +199,20 @@ ul.borderYtoX li:hover:after {
     cursor: pointer;
     scale: 1;
   }
-  .header-client .container-lg .logo .mob-menu span {
+  .header-client .container-lg .mob-menu span {
     width: 100%;
     height: 3px;
     display: block;
     background-color: var(--dark-color);
     color: var(--white-color);
     margin-bottom: 10px;
+  }
+  .header-client .container-lg .logo {
+    width: 30%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
   .header-client .container-lg .logo .res-name {
     width: 75%;
@@ -206,7 +226,7 @@ ul.borderYtoX li:hover:after {
     height: calc(100vh - 80px) !important;
     display: none;
     align-items: center;
-    justify-content: center;
+    justify-content: space-evenly;
     position: absolute;
     top: 80px;
     left: 0;
@@ -241,10 +261,10 @@ ul.borderYtoX li:hover:after {
     margin-right: 15px;
   }
   .header-client .container-lg .right-nav {
-    display: flex;
-    height: 100%;
-    justify-content: space-around;
     width: 30%;
+    height: 100%;
+    display: flex;
+    justify-content: space-around;
     flex-direction: row;
     flex-wrap: nowrap;
     align-content: center;

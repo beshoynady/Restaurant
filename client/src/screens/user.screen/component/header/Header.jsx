@@ -50,14 +50,14 @@ const Header = () => {
   return (
         <header className={`header-client ${isScroll ? 'scroll' : ''}`}>
           <div className="container-lg">
-            <div className='logo'>
               <div className="mob-menu" onClick={toggleMobileMenu}>
                 <span id='line-1'></span>
                 <span id='line-2'></span>
                 <span id='line-3'></span>
               </div>
+            <div className='logo'>
               {restaurantData.image?
-              <img src={`${apiUrl}/images/${restaurantData.image}`} alt={restaurantData.name} style={{height:'100%', width:'90px'}} />
+              <img src={`${apiUrl}/images/${restaurantData.image}`} alt={restaurantData.name} />
               :<a href="/" className='res-name'>{restaurantData.name}</a>
               }
             </div>
