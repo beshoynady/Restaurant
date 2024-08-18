@@ -394,6 +394,7 @@ const MenuCard = () => {
                                       cursor: "pointer",
                                     }}
                                     onClick={() => {
+                                      setextraArea(!extraArea);
                                       setproductExtras(
                                         product.sizes.filter(
                                           (size) => size._id === sizeId
@@ -402,8 +403,7 @@ const MenuCard = () => {
                                               (size) => size._id === sizeId
                                             )[0].extrasSelected
                                           : []
-                                      );
-                                      setextraArea(!extraArea);
+                                        );
                                       setproductid(product._id);
                                     }}
                                   >

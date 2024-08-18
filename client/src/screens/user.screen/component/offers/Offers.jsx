@@ -239,7 +239,7 @@ export default function Offers() {
                                       <div className="form-group d-flex flex-wrap w-100 h-auto p-0 m-0 mt-1">
                                         {Array.from({ length: product.sizes.filter(si => si._id === size._id)[0].sizeQuantity }).map((_, ind) => (
                                           selectedButtonIndex === ind + 1 && (
-                                            <div key={ind} className="form-group w-100 h-auto d-flex align-items-start justify-content-start flex-wrap"
+                                            <div key={ind} className="form-group w-100 h-auto d-flex align-items-start justify-content-between flex-wrap"
                                              style={{ padding: '5px', overflowY: "auto" }}>
                                               {product.extras.map((extra, i) => (
                                                 <div className="d-flex align-items-center justify-content-between p-0 m-0 pl-1 mb-1" key={i}>
@@ -368,7 +368,7 @@ export default function Offers() {
                                   <div className="form-group d-flex flex-wrap w-100 h-auto p-0 m-0 mt-1">
                                     {Array.from({ length: product.quantity }).map((_, ind) => (
                                       selectedButtonIndex === ind + 1 && (
-                                        <div key={ind} className="form-group w-100 h-auto d-flex align-items-start justify-content-start flex-wrap"
+                                        <div key={ind} className="form-group w-100 h-auto d-flex align-items-start justify-content-between flex-wrap"
                                          style={{ padding: '5px', overflowY: "auto" }}>
                                           {product.extras.map((extra, i) => (
                                             <div className="mb-1 d-flex align-items-center justify-content-between pl-1" key={i}>
