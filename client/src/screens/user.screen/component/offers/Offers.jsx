@@ -223,12 +223,11 @@ export default function Offers() {
                                 size.sizeQuantity > 0 ?
                                   (<div className="position-absolute w-100 h-50 top-0 start-0 p-2 m-0 bg-white d-flex flex-column align-items-center justify-content-center"
                                     style={{ zIndex: 100 }}>
-                                    {console.log({size})}
                                     <form onSubmit={(e) => { if (product.extras.length > 0) { addExtrasToProduct(e, product._id, size._id); }; setSelectedButtonIndex(1); setextraArea(!extraArea); }}
                                       className="w-100 h-100 top-0 start-0 bg-white rounded-3 d-flex flex-column align-items-center justify-content-between m-0 p-0" >
                                       {/* أزرار الأصناف */}
                                       <div className='d-flex align-items-center justify-content-center flex-wrap w-100 h-auto'>
-                                        {size.sizeQuantity.map((_, ind) => (
+                                        {Array.from({ length: product.sizes.filter(si => si._id === size._id)[0].sizeQuantity }).map((_, ind) => (
                                           <div key={ind} style={{ margin: '5px' }}>
                                             <button type="button" className='h-100 btn btn-info' onClick={() => setSelectedButtonIndex(ind + 1)}>
                                               {ind + 1}
@@ -238,13 +237,12 @@ export default function Offers() {
                                       </div>
 
                                       <div className="form-group d-flex flex-wrap w-100 h-50 p-0 m-0 mt-1">
-                                        {size.sizeQuantity.map((_, ind) => (
+                                        {Array.from({ length: product.sizes.filter(size => size._id === size._id)[0].sizeQuantity }).map((_, ind) => (
                                           selectedButtonIndex === ind + 1 && (
                                             <div key={ind} className="form-group w-100 h-auto d-flex align-items-start justify-content-start flex-wrap"
-                                             style={{ padding: '5px', overflowY: "auto" }}>
+                                             style={{ padding: '5px', overflowY: "scroll" }}>
                                               {product.extras.map((extra, i) => (
-                                                <div className=" mb-1 d-flex align-items-center justify-content-between col-6 pl-1" key={i}>
-                                                {console.log({extra})}
+                                                <div className="d-flex align-items-center justify-content-between col-6 p-0 m-0 pl-1 mb-1" key={i}>
                                                   <input
                                                     type="checkbox"
                                                     className="fs-3 ml-1"
@@ -270,16 +268,11 @@ export default function Offers() {
                                       </div>
                                     </form>
                                   </div>
-                                  )
-                                  
-                                  : <div className='position-absolute w-100 h-50 top-0 start-0 p-2 bg-white rounded-3 d-flex flex-column align-items-center justify-content-between overflow-hidden'
+                                  ) : <div className='position-absolute w-100 h-50 top-0 start-0 p-2 bg-white rounded-3 d-flex flex-column align-items-center justify-content-between overflow-hidden'
                                     style={{ zIndex: 10 }}>
-                                    <p className='d-flex align-items-center justify-content-center w-100 h-75' 
-                                    style={{ fontSize: '18px', fontWeight: '900' }}>اختر اولا الحجم و الكمية</p>
-                                    <div className="note-btn d-flex align-items-center justify-content-center w-100 mt-2" 
-                                    style={{ height: '40px', button: '0' }}>
-                                      <button type="button" onClick={() => setextraArea(!extraArea)} className="h-100 btn btn-danger rounded-2" 
-                                      style={{ width: '100%' }}>اغلاق</button>
+                                    <p className='d-flex align-items-center justify-content-center w-100 h-75' style={{ fontSize: '18px', fontWeight: '900' }}>اختر اولا الحجم و الكمية</p>
+                                    <div className="note-btn d-flex align-items-center justify-content-center w-100 mt-2" style={{ height: '40px', button: '0' }}>
+                                      <button type="button" onClick={() => setextraArea(!extraArea)} className="h-100 btn btn-danger rounded-2" style={{ width: '100%' }}>اغلاق</button>
                                     </div>
                                   </div>
                                 : ''}
@@ -292,7 +285,7 @@ export default function Offers() {
                                     onClick={() => { setnoteArea(!noteArea); setproductid(size._id); }}>note_alt</span>
                                   {product.hasExtras &&
                                     <span className="material-icons" style={{ color: "green", fontSize: "45px", cursor: 'pointer' }}
-                                      onClick={() => { setproductExtras(product.extrasSelected ? product.extrasSelected : []); setextraArea(!extraArea); setproductid(size._id) }}>add_circle</span>
+                                      onClick={() => { setproductExtras(product.extrasSelected ? product.extrasSelected : []); setextraArea(!extraArea); setproductid(size._id); console.log({sizeid:size._id}) }}>add_circle</span>
                                   }
                                 </h5>
                                 <p className="card-text text-center" style={{maxHeight:"25%", fontSize:'12px', fontWeight:'700', textOverflow:'hidden'}}>{size.description}</p>
