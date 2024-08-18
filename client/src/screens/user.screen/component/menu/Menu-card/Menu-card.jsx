@@ -129,7 +129,7 @@ const MenuCard = () => {
                                         sizeId
                                       );
                                     }
-                                    // setproductid('')
+                                    setproductid('')
                                     setSelectedButtonIndex(1);
                                     setextraArea(!extraArea);
                                   }}
@@ -406,9 +406,8 @@ const MenuCard = () => {
                                       setproductid(product._id);
                                       setextraArea(!extraArea);
                                       setproductExtras(
-                                        product.sizes.filter(
-                                          (size) => size._id === sizeId
-                                        )[0]?.extrasSelected);
+                                        product.sizes.find((size) => size._id === sizeId)?.extrasSelected || []
+                                      );;
                                     }}
                                   >
                                     add_circle

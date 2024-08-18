@@ -697,7 +697,7 @@ function App() {
   const [productExtras, setproductExtras] = useState([]);
 
   const handleAddProductExtras = (extra, ind) => {
-    console.log({ extra, ind})
+    // console.log({productExtras, extra, ind})
     const newExtras = [...productExtras];
     console.log({ newExtras1: newExtras });
 
