@@ -542,6 +542,20 @@ const MenuCard = () => {
                           </div>
                         </div>
                       );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                     } else {
                       return (
                         <div
@@ -595,7 +609,7 @@ const MenuCard = () => {
                             ""
                           )}
 
-                          {product._id === productid && !product.hasExtras && extraArea === true ? (
+                          {product._id === productid && !product.hasSizes && extraArea === true ? (
                             product.quantity > 0 ? (
                               <div
                                 className="position-absolute w-100 h-100 top-0 start-0 bg-white rounded-3 d-flex flex-column align-items-center 
