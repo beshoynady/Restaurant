@@ -64,7 +64,7 @@ export default function Offers() {
                               <img className='offer-img' src={`${apiUrl}/images/${product.image}`} alt="Delicious soup" />
                               {size._id === productid && noteArea === true ?
                                 <form onSubmit={(e) => { addNoteToProduct(e, product._id, size._id); setnoteArea(!noteArea); }}
-                                  className="position-absolute w-100 h-50 top-0 start-0 p-2 m-0 bg-white rounded-3 d-flex flex-column align-items-center justify-content-center overflow-hidden"
+                                  className="position-absolute w-100 h-100 top-0 start-0 p-1 m-0 bg-white rounded-3 d-flex flex-column align-items-center justify-content-center overflow-hidden"
                                   style={{ zIndex: 10 , height:'40%'}}
                                 >
                                   <textarea
@@ -128,7 +128,7 @@ export default function Offers() {
                           <img className='offer-img' src={`${apiUrl}/images/${product.image}`} alt="Delicious soup" />
                           {product._id === productid && noteArea === true ?
                           <form onSubmit={(e) => { addNoteToProduct(e, product._id, ''); setnoteArea(!noteArea); }} 
-                          className="position-absolute w-100 h-50 top-0 start-0 p-2 m-0 bg-white rounded-3 d-flex flex-column align-items-center justify-content-center overflow-hidden"
+                          className="position-absolute w-100 h-100 top-0 start-0 p-1 m-0 bg-white rounded-3 d-flex flex-column align-items-center justify-content-center overflow-hidden"
                             style={{ zIndex: 10, height:'40%' }}
                           >
                             <textarea
@@ -200,7 +200,7 @@ export default function Offers() {
                                     addNoteToProduct(e, product._id, size._id);
                                     setnoteArea(!noteArea);
                                   }}
-                                  className="position-absolute w-100 h-50 top-0 start-0 p-2 m-0 bg-white d-flex flex-column align-items-center justify-content-center"
+                                  className="position-absolute w-100 h-100 top-0 start-0 p-1 m-0 bg-white d-flex flex-column align-items-center justify-content-center"
                                   style={{ zIndex: 100 }}
                                 >
                                   <textarea
@@ -221,7 +221,7 @@ export default function Offers() {
 
                               {size._id === productid && extraArea === true ?
                                 size.sizeQuantity > 0 ?
-                                  (<div className="position-absolute w-100 h-50 top-0 start-0 p-2 m-0 bg-white d-flex flex-column align-items-center justify-content-center"
+                                  (<div className="position-absolute w-100 h-100 top-0 start-0 p-1 m-0 bg-white d-flex flex-column align-items-center justify-content-center"
                                     style={{ zIndex: 100 }}>
                                     <form onSubmit={(e) => { if (product.extras.length > 0) { addExtrasToProduct(e, product._id, size._id); }; setSelectedButtonIndex(1); setextraArea(!extraArea); }}
                                       className="w-100 h-100 top-0 start-0 bg-white rounded-3 d-flex flex-column align-items-center justify-content-between m-0 p-0" >
@@ -236,13 +236,13 @@ export default function Offers() {
                                         ))}
                                       </div>
 
-                                      <div className="form-group d-flex flex-wrap w-100 h-50 p-0 m-0 mt-1">
-                                        {Array.from({ length: product.sizes.filter(size => size._id === size._id)[0].sizeQuantity }).map((_, ind) => (
+                                      <div className="form-group d-flex flex-wrap w-100 h-auto p-0 m-0 mt-1">
+                                        {Array.from({ length: product.sizes.filter(si => si._id === size._id)[0].sizeQuantity }).map((_, ind) => (
                                           selectedButtonIndex === ind + 1 && (
                                             <div key={ind} className="form-group w-100 h-auto d-flex align-items-start justify-content-start flex-wrap"
-                                             style={{ padding: '5px', overflowY: "scroll" }}>
+                                             style={{ padding: '5px', overflowY: "auto" }}>
                                               {product.extras.map((extra, i) => (
-                                                <div className="d-flex align-items-center justify-content-between col-6 p-0 m-0 pl-1 mb-1" key={i}>
+                                                <div className="d-flex align-items-center justify-content-between p-0 m-0 pl-1 mb-1" key={i}>
                                                   <input
                                                     type="checkbox"
                                                     className="fs-3 ml-1"
@@ -329,7 +329,7 @@ export default function Offers() {
                                 addNoteToProduct(e, product._id, '');
                                 setnoteArea(!noteArea);
                               }}
-                              className="position-absolute w-100 h-50 top-0 start-0 p-2 m-0 bg-white d-flex flex-column align-items-center justify-content-center"
+                              className="position-absolute w-100 h-100 top-0 start-0 p-1 m-0 bg-white d-flex flex-column align-items-center justify-content-center"
                               style={{ zIndex: 100 }}
                             >
                               <textarea
@@ -350,7 +350,7 @@ export default function Offers() {
 
                           {product._id === productid && extraArea === true ?
                             product.quantity > 0 ?
-                              (<div className="position-absolute w-100 h-50 top-0 start-0 p-2 m-0 bg-white d-flex flex-column align-items-center justify-content-center"
+                              (<div className="position-absolute w-100 h-100 top-0 start-0 p-1 m-0 bg-white d-flex flex-column align-items-center justify-content-center"
                                 style={{ zIndex: 100 }}>
                                 <form onSubmit={(e) => { if (product.extras.length > 0) { addExtrasToProduct(e, product._id, ''); }; setSelectedButtonIndex(1); setextraArea(!extraArea); }}
                                   className="w-100 h-100 top-0 start-0 bg-white rounded-3 d-flex flex-column align-items-center justify-content-between m-0 p-0" >
@@ -365,13 +365,13 @@ export default function Offers() {
                                     ))}
                                   </div>
 
-                                  <div className="form-group d-flex flex-wrap w-100 h-50 p-0 m-0 mt-1">
+                                  <div className="form-group d-flex flex-wrap w-100 h-auto p-0 m-0 mt-1">
                                     {Array.from({ length: product.quantity }).map((_, ind) => (
                                       selectedButtonIndex === ind + 1 && (
                                         <div key={ind} className="form-group w-100 h-auto d-flex align-items-start justify-content-start flex-wrap"
                                          style={{ padding: '5px', overflowY: "auto" }}>
                                           {product.extras.map((extra, i) => (
-                                            <div className="mb-1 d-flex align-items-center justify-content-between col-6 pl-1" key={i}>
+                                            <div className="mb-1 d-flex align-items-center justify-content-between pl-1" key={i}>
                                               <input
                                                 type="checkbox"
                                                 className="fs-3 ml-1 "
