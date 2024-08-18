@@ -401,9 +401,9 @@ const MenuCard = () => {
                                       cursor: "pointer",
                                     }}
                                     onClick={() => {
-                                      if(product.sizes.filter(
+                                      if(product.sizes.includes(
                                         (size) => size._id === sizeId
-                                      )){
+                                      )===false){
                                         toast.warn('اختر الحجم اولا')
                                         return
                                       }
