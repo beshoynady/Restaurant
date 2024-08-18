@@ -14,6 +14,8 @@ const MenuCard = () => {
   const [sizePriceAfterDescount, setsizePriceAfterDescount] = useState();
 
   const handleSelectSize = (size) => {
+    setnoteArea(false);
+    setextraArea(false)
     setsize(size);
     setsizeId(size._id);
     setsizeQuantity(size.sizeQuantity);
@@ -123,6 +125,7 @@ const MenuCard = () => {
                                         sizeId
                                       );
                                     }
+                                    setproductid('')
                                     setSelectedButtonIndex(1);
                                     setextraArea(!extraArea);
                                   }}
@@ -262,7 +265,7 @@ const MenuCard = () => {
                                     </button>
                                     <button
                                       type="button"
-                                      onClick={() => setextraArea(!extraArea)}
+                                      onClick={() => {setextraArea(!extraArea); setproductid('')}}
                                       className="h-100 btn btn-danger rounded-2"
                                       style={{ width: "50%" }}
                                     >
@@ -394,6 +397,7 @@ const MenuCard = () => {
                                       cursor: "pointer",
                                     }}
                                     onClick={() => {
+                                      setproductid(product._id);
                                       setextraArea(!extraArea);
                                       setproductExtras(
                                         product.sizes.filter(
@@ -404,7 +408,6 @@ const MenuCard = () => {
                                             )[0].extrasSelected
                                           : []
                                         );
-                                      setproductid(product._id);
                                     }}
                                   >
                                     add_circle
@@ -607,6 +610,7 @@ const MenuCard = () => {
                                         sizeId
                                       );
                                     }
+                                    setproductid('')
                                     setSelectedButtonIndex(1);
                                     setextraArea(!extraArea);
                                   }}

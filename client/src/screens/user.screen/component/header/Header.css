@@ -94,7 +94,7 @@
   color: var(--text-color);
   font-weight: 900;
 }
-.header-client .container-lg .right-nav {
+.header-client .container-lg .left-nav {
   display: flex;
   height: 100%;
   justify-content: space-between;
@@ -104,7 +104,7 @@
   align-content: center;
   align-items: center;
 }
-.header-client .container-lg .right-nav .nav-logout {
+.header-client .container-lg .left-nav .nav-logout {
   width: 50px;
   height: 50px;
   background-color: var(--dark-color);
@@ -117,12 +117,12 @@
   border-radius: 10px;
   cursor: pointer;
 }
-.header-client .container-lg .right-nav .nav-logout > span {
+.header-client .container-lg .left-nav .nav-logout > span {
   color: var(--white-color);
   font-size: 20px;
   font-weight: 900;
 }
-.header-client .container-lg .right-nav .nav-login {
+.header-client .container-lg .left-nav .nav-login {
   width: 50px;
   height: 50px;
   background-color: var(--secondary-color);
@@ -135,22 +135,22 @@
   align-items: center;
   justify-content: center;
 }
-.header-client .container-lg .right-nav .nav-login > span {
+.header-client .container-lg .left-nav .nav-login > span {
   font-size: 20px;
   font-weight: 900;
 }
-.header-client .container-lg .right-nav .cart-icon {
+.header-client .container-lg .left-nav .cart-icon {
   width: 50px;
   height: 50px;
   text-align: center;
   position: relative;
   cursor: pointer;
 }
-.header-client .container-lg .right-nav .cart-icon .shopping_cart {
+.header-client .container-lg .left-nav .cart-icon .shopping_cart {
   font-size: 55px;
   color: var(--dark-color);
 }
-.header-client .container-lg .right-nav .cart-icon .cartcounter {
+.header-client .container-lg .left-nav .cart-icon .cartcounter {
   width: 25px;
   height: 25px;
   background-color: var(--dark-color);
@@ -208,7 +208,7 @@ ul.borderYtoX li:hover:after {
   }
   .header-client .container-lg {
     height: 100%;
-    padding: 10px 20px;
+    padding: 5px 10px;
     justify-content: space-between;
   }
   .header-client .container-lg .mob-menu {
@@ -225,7 +225,7 @@ ul.borderYtoX li:hover:after {
   }
   .header-client .container-lg .mob-menu span {
     width: 100%;
-    max-width: 67px;
+    max-width: 55px;
     height: 3px;
     display: block;
     background-color: var(--dark-color);
@@ -285,7 +285,7 @@ ul.borderYtoX li:hover:after {
     font-weight: 900;
     margin-right: 15px;
   }
-  .header-client .container-lg .right-nav {
+  .header-client .container-lg .left-nav {
     width: 30%;
     height: 100%;
     display: flex;
@@ -294,8 +294,10 @@ ul.borderYtoX li:hover:after {
     flex-wrap: nowrap;
     align-content: center;
     align-items: center;
+    padding: 0;
+    margin: 0;
   }
-  .header-client .container-lg .right-nav .nav-logout {
+  .header-client .container-lg .left-nav .nav-logout {
     width: 45px;
     height: 45px;
     font-size: 18px;
@@ -307,10 +309,10 @@ ul.borderYtoX li:hover:after {
     cursor: pointer;
     margin: 0;
   }
-  .header-client .container-lg .right-nav .nav-logout > span {
+  .header-client .container-lg .left-nav .nav-logout > span {
     display: none;
   }
-  .header-client .container-lg .right-nav .nav-login {
+  .header-client .container-lg .left-nav .nav-login {
     width: 45px;
     height: 45px;
     font-size: 18px;
@@ -321,20 +323,20 @@ ul.borderYtoX li:hover:after {
     cursor: pointer;
     margin: 0;
   }
-  .header-client .container-lg .right-nav .nav-login > span {
+  .header-client .container-lg .left-nav .nav-login > span {
     display: none;
   }
-  .header-client .container-lg .right-nav .cart-icon {
+  .header-client .container-lg .left-nav .cart-icon {
     width: 45px;
     height: 45px;
     text-align: center;
     position: relative;
     margin-right: 5px;
   }
-  .header-client .container-lg .right-nav .cart-icon .shopping_cart {
+  .header-client .container-lg .left-nav .cart-icon .shopping_cart {
     font-size: 45px;
   }
-  .header-client .container-lg .right-nav .cart-icon .cartcounter {
+  .header-client .container-lg .left-nav .cart-icon .cartcounter {
     width: 25px;
     height: 25px;
     font-size: 15px;

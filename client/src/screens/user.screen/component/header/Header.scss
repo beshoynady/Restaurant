@@ -106,7 +106,7 @@
       }
     }
 
-    .right-nav {
+    .left-nav {
       display: flex;
       height: 100%;
       justify-content: space-between;
@@ -236,7 +236,7 @@ ul.borderYtoX li:hover:after {
     }
     .container-lg {
       height: 100%;
-      padding: 10px 20px;
+      padding: 5px 10px;
       justify-content: space-between;
       .mob-menu {
         width: 30%;
@@ -252,7 +252,7 @@ ul.borderYtoX li:hover:after {
 
         span {
           width: 100%;
-          max-width: 67px;
+          max-width: 55px;
           height: 3px;
           display: block;
           background-color: var(--dark-color);
@@ -325,7 +325,7 @@ ul.borderYtoX li:hover:after {
         }
       }
 
-      .right-nav {
+      .left-nav {
         width: 30%;
         height: 100%;
         display: flex;
@@ -334,7 +334,8 @@ ul.borderYtoX li:hover:after {
         flex-wrap: nowrap;
         align-content: center;
         align-items: center;
-
+        padding: 0;
+        margin: 0;
         .nav-logout {
           width: 45px;
           height: 45px;

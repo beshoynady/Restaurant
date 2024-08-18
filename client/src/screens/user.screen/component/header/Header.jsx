@@ -74,7 +74,7 @@ const Header = () => {
                 <li onClick={toggleMobileMenu}><a href="#contact">تواصل معنا</a></li>
               </ul>
             </nav>
-            <div className='right-nav'>
+            <div className='left-nav'>
               {!id && (
                 <>
                   {userLoginInfo && userLoginInfo.userinfo ? (
