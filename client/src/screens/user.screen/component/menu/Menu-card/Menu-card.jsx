@@ -143,7 +143,7 @@ const MenuCard = () => {
                                     {Array.from({
                                       length: product.sizes.filter(
                                         (size) => size._id === sizeId
-                                      )[0].sizeQuantity,
+                                      )[0]?.sizeQuantity,
                                     }).map((_, ind) => (
                                       <div key={ind} style={{ margin: "5px" }}>
                                         <button
@@ -160,18 +160,15 @@ const MenuCard = () => {
                                   </div>
 
                                   <div
-                                    className="form-group d-flex flex-wrap mt-1"
+                                    className="form-group d-flex flex-wrap w-100 h-50 p-0 m-0 mt-1"
                                     style={{
-                                      width: "100%",
-                                      height: "50%",
-                                      padding: "0",
-                                      margin: "0",
+                                      overflowY:'auto'
                                     }}
                                   >
                                     {Array.from({
                                       length: product.sizes.filter(
                                         (size) => size._id === sizeId
-                                      )[0].sizeQuantity,
+                                      )[0]?.sizeQuantity,
                                     }).map(
                                       (_, ind) =>
                                         selectedButtonIndex === ind + 1 && (
@@ -209,11 +206,11 @@ const MenuCard = () => {
                                                     (product.sizes.filter(
                                                       (size) =>
                                                         size._id === sizeId
-                                                    )[0].extrasSelected &&
+                                                    )[0]?.extrasSelected &&
                                                       product.sizes.filter(
                                                         (size) =>
                                                           size._id === sizeId
-                                                      )[0].extrasSelected[
+                                                      )[0]?.extrasSelected[
                                                         ind
                                                       ] &&
                                                       product.sizes
@@ -643,12 +640,9 @@ const MenuCard = () => {
                                   </div>
 
                                   <div
-                                    className="form-group d-flex flex-wrap mt-1"
+                                    className="form-group d-flex flex-wrap w-100 h-50 p-0 m-0 mt-1"
                                     style={{
-                                      width: "100%",
-                                      height: "50%",
-                                      padding: "0",
-                                      margin: "0",
+                                      overflowY:'auto'
                                     }}
                                   >
                                     {Array.from({
