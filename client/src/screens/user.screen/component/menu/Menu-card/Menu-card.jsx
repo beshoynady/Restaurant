@@ -129,7 +129,7 @@ const MenuCard = () => {
                                         sizeId
                                       );
                                     }
-                                    setproductid('')
+                                    // setproductid('')
                                     setSelectedButtonIndex(1);
                                     setextraArea(!extraArea);
                                   }}
