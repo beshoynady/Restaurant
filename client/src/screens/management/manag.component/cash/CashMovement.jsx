@@ -7,7 +7,7 @@ import "../orders/Orders.css";
 
 const CashMovement = () => {
   const apiUrl = process.env.REACT_APP_API_URL;
-  const token = localStorage.getItem("token_e"); 
+  const token = localStorage.getItem("token_e");
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -39,26 +39,12 @@ const CashMovement = () => {
     (permission) => permission.resource === "Cash Register"
   )[0];
 
-
-  // const [EmployeeLoginInfo, setEmployeeLoginInfo] = useState({})
-  // // Function to retrieve user info from tokens
-  // const getEmployeeInfoFromToken = () => {
-  //   const employeeToken = localStorage.getItem('token_e');
-  //   let decodedToken = null;
-  //   if (employeeToken) {
-  //     decodedToken = jwt_decode(employeeToken);
-  //     // Set employee login info
-  //     // setEmployeeLoginInfo(decodedToken);
-  //     console.log({ EmployeeInfoFromToken: decodedToken });
-  //     return decodedToken.id
-  //   }
-  // };
-
   const [cashRegister, setcashRegister] = useState("");
   const [employeeCashRegisters, setemployeeCashRegisters] = useState([]);
   const [CashRegisterBalance, setCashRegisterBalance] = useState();
 
   const [AllCashRegisters, setAllCashRegisters] = useState([]);
+  const [listOfCashRegisters, setlistOfCashRegisters] = useState([]);
   // Fetch all cash registers
 
   const getAllCashRegisters = async () => {
@@ -71,22 +57,27 @@ const CashMovement = () => {
       toast.warn("ليس لك صلاحية لعرض حسابات الخزينه");
       return;
     }
-  
+
     try {
-      const employeeId = await employeeLoginInfo.id
+      const employeeId = await employeeLoginInfo.id;
 
       const response = await axios.get(apiUrl + "/api/cashregister", config);
-      const cashRegisterData = response.data.reverse()
+      const cashRegisterData = response.data.reverse();
+      setlistOfCashRegisters(cashRegisterData)
 
-      if(cashRegisterData.length>0){
-        if(employeeLoginInfo.role === "owner" || employeeLoginInfo.role === "manager"){
+      if (cashRegisterData.length > 0) {
+        if (
+          employeeLoginInfo.role === "owner" ||
+          employeeLoginInfo.role === "manager"
+        ) {
           setAllCashRegisters(cashRegisterData);
-          console.log({ cashRegisterData })
-        }else{
-          const myCashRegister = cashRegisterData.filter(CashRegister => CashRegister.employee?._id === employeeId)
-          console.log({ myCashRegister })
-          setAllCashRegisters(myCashRegister)
-  
+          console.log({ cashRegisterData });
+        } else {
+          const myCashRegister = cashRegisterData.filter(
+            (CashRegister) => CashRegister.employee?._id === employeeId
+          );
+          console.log({ myCashRegister });
+          setAllCashRegisters(myCashRegister);
         }
       }
     } catch (err) {
@@ -140,25 +131,29 @@ const CashMovement = () => {
     }
 
     try {
-      const employeeId = await employeeLoginInfo.id
-      console.log({ employeeId })
-      
+      const employeeId = await employeeLoginInfo.id;
+      console.log({ employeeId });
+
       const response = await axios.get(apiUrl + "/api/cashmovement/", config);
       const AllCashMovement = response.data.reverse();
-      if(AllCashMovement.length>0){
-        if(employeeLoginInfo.role === "owner" || employeeLoginInfo.role === "manager"){
+      if (AllCashMovement.length > 0) {
+        if (
+          employeeLoginInfo.role === "owner" ||
+          employeeLoginInfo.role === "manager"
+        ) {
           console.log({ AllCashMovement });
           setAllCashMovement(AllCashMovement);
-        }else{
-          const myCashMovement = AllCashMovement.filter(movement => movement.registerId?.employee === employeeId)
-          console.log({ myCashMovement })
-          setAllCashMovement(myCashMovement)
+        } else {
+          const myCashMovement = AllCashMovement.filter(
+            (movement) => movement.registerId?.employee === employeeId
+          );
+          console.log({ myCashMovement });
+          setAllCashMovement(myCashMovement);
         }
       }
     } catch (error) {
       console.log(error);
       toast.error("حدث خطأ أثناء جلب بيانات حركة الخزينه. حاول مرة أخرى .");
-
     }
   };
 
@@ -301,10 +296,10 @@ const CashMovement = () => {
         sendCashMovementData,
         config
       );
-      if(sendCashMovementResponse){
+      if (sendCashMovementResponse) {
         const sendCashMovementResult = sendCashMovementResponse.data;
         const movementId = sendCashMovementResult.cashMovement._id;
-  
+
         const receivCashMovementData = {
           registerId: receivRegister,
           createdBy,
@@ -315,25 +310,26 @@ const CashMovement = () => {
           status: "Pending",
           movementId,
         };
-  
+
         const receivCashMovementResponse = await axios.post(
           `${apiUrl}/api/cashmovement/`,
           receivCashMovementData,
           config
         );
         const receivCashMovementResult = receivCashMovementResponse.data;
-  
+
         if (receivCashMovementResult) {
           toast.success("تم تسجيل التحويل وينتظر الموافقة من المستلم");
           getCashMovement();
           getAllCashRegisters();
-        }else{
+        } else {
           const sendCashMovementResponse = await axios.delete(
             `${apiUrl}/api/cashmovement/${movementId}`,
             config
           );
-          toast.warn("حدث خطا اثناء تسجيل حركه التحويل !اعد تحميل الصفحة و حاول مره اخري");
-
+          toast.warn(
+            "حدث خطا اثناء تسجيل حركه التحويل !اعد تحميل الصفحة و حاول مره اخري"
+          );
         }
       }
     } catch (error) {
@@ -482,40 +478,40 @@ const CashMovement = () => {
                 </h2>
               </div>
               <div className="col-sm-6 h-100 d-flex justify-content-end">
-                {cashMovementPermissions?.create&&
-                <>
-                <a
-                  href="#DepositModal"
-                  className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-success"
-                  data-toggle="modal"
-                  onClick={() =>
-                    handelCashMovement(employeeLoginInfo.id, "Deposit")
-                  }
-                >
-                  <span>ايداع</span>
-                </a>
-                <a
-                  href="#WithdrawModal"
-                  className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-danger"
-                  data-toggle="modal"
-                  onClick={() =>
-                    handelCashMovement(employeeLoginInfo.id, "Withdraw")
-                  }
-                >
-                  <span>سحب</span>
-                </a>
-                <a
-                  href="#Transferodal"
-                  className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-warning"
-                  data-toggle="modal"
-                  onClick={() =>
-                    handelCashMovement(employeeLoginInfo.id, "Transfer")
-                  }
-                >
-                  <span>تحويل</span>
-                </a>
-                </>
-                }
+                {cashMovementPermissions?.create && (
+                  <>
+                    <a
+                      href="#DepositModal"
+                      className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-success"
+                      data-toggle="modal"
+                      onClick={() =>
+                        handelCashMovement(employeeLoginInfo.id, "Deposit")
+                      }
+                    >
+                      <span>ايداع</span>
+                    </a>
+                    <a
+                      href="#WithdrawModal"
+                      className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-danger"
+                      data-toggle="modal"
+                      onClick={() =>
+                        handelCashMovement(employeeLoginInfo.id, "Withdraw")
+                      }
+                    >
+                      <span>سحب</span>
+                    </a>
+                    <a
+                      href="#Transferodal"
+                      className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-warning"
+                      data-toggle="modal"
+                      onClick={() =>
+                        handelCashMovement(employeeLoginInfo.id, "Transfer")
+                      }
+                    >
+                      <span>تحويل</span>
+                    </a>
+                  </>
+                )}
               </div>
             </div>
           </div>
@@ -555,7 +551,11 @@ const CashMovement = () => {
                 >
                   <option value={""}>الكل</option>
                   {cashMovementTypeEn.map((type, i) => {
-                    return <option value={type} key={i}>{cashMovementTypeAr[i]}</option>;
+                    return (
+                      <option value={type} key={i}>
+                        {cashMovementTypeAr[i]}
+                      </option>
+                    );
                   })}
                 </select>
               </div>
@@ -567,18 +567,18 @@ const CashMovement = () => {
                   class="form-control border-primary m-0 p-2 h-auto"
                   onChange={(e) => filterByCashRegisters(e.target.value)}
                 >
-                <option value="">الكل</option>
-                {AllCashRegisters && AllCashRegisters.length > 0 ? (
-                  AllCashRegisters.map((CashRegister) => (
-                    <option value={CashRegister._id} key={CashRegister._id}>
-                      {CashRegister.name}
+                  <option value="">الكل</option>
+                  {AllCashRegisters && AllCashRegisters.length > 0 ? (
+                    AllCashRegisters.map((CashRegister) => (
+                      <option value={CashRegister._id} key={CashRegister._id}>
+                        {CashRegister.name}
+                      </option>
+                    ))
+                  ) : (
+                    <option value="" disabled>
+                      لا توجد خزائن
                     </option>
-                  ))
-                ) : (
-                  <option value="" disabled>
-                    لا توجد خزائن
-                  </option>
-                )}
+                  )}
                 </select>
               </div>
               <div className="col-12 d-flex align-items-center justify-content-between">
@@ -915,6 +915,7 @@ const CashMovement = () => {
                     className="form-control border-primary m-0 p-2 h-auto"
                     onChange={(e) => selectCashRegister(e.target.value)}
                   >
+                    <option value="">اختر الخزينه</option>;
                     {employeeCashRegisters.map((cashRegister) => {
                       return (
                         <option value={cashRegister._id}>
@@ -988,6 +989,7 @@ const CashMovement = () => {
           </div>
         </div>
       </div>
+
       <div id="Transferodal" className="modal fade">
         <div className="modal-dialog modal-lg">
           <div className="modal-content shadow-lg border-0 rounded ">
@@ -1015,6 +1017,7 @@ const CashMovement = () => {
                       setsendRegister(e.target.value);
                     }}
                   >
+                    <option value="">اختر الخزينه</option>;
                     {employeeCashRegisters.map((cashRegister) => {
                       return (
                         <option value={cashRegister._id}>
@@ -1068,7 +1071,7 @@ const CashMovement = () => {
                     onChange={(e) => setreceivRegister(e.target.value)}
                   >
                     <option value={""}>اختر</option>
-                    {AllCashRegisters.map((Register, i) => (
+                    {listOfCashRegisters.map((Register, i) => (
                       <option key={i} value={Register._id}>
                         {Register.name} المسؤول: {Register.employee?.username}
                       </option>
@@ -1104,6 +1107,8 @@ const CashMovement = () => {
           </div>
         </div>
       </div>
+
+      
       {/* <div id="deleteStockactionModal" className="modal fade">
                 <div className="modal-dialog modal-lg">
                   <div className="modal-content shadow-lg border-0 rounded ">
