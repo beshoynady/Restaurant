@@ -7,7 +7,7 @@ import "../orders/Orders.css";
 
 const CashMovement = () => {
   const apiUrl = process.env.REACT_APP_API_URL;
-  const token = localStorage.getItem("token_e"); // Retrieve the token from localStorage
+  const token = localStorage.getItem("token_e"); 
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
