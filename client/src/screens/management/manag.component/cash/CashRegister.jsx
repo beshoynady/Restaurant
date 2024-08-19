@@ -283,7 +283,7 @@ const CashRegister = () => {
                 </h2>
               </div>
               <div className="col-12 col-md-6 p-0 m-0 d-flex flex-wrap aliegn-items-center justify-content-end print-hide">
-                {cashRegisterPermissions.create&&
+                {cashRegisterPermissions?.create &&
                 <a
                   href="#addCashRegisterModal"
                   className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-success"
@@ -293,7 +293,7 @@ const CashRegister = () => {
                   <span>اضافه خزنه</span>
                 </a>
                 }
-                {cashRegisterPermissions.delete&&
+                {cashRegisterPermissions?.delete &&
                 <a
                   href="#deleteListCashRegisterModal"
                   className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-danger"
@@ -404,7 +404,7 @@ const CashRegister = () => {
                           <td>{cashRegister.employee?.fullname}</td>
                           <td>{cashRegister.balance}</td>
                           <td>
-                            {cashRegisterPermissions.update&&
+                            {cashRegisterPermissions?.update &&
                             <a
                               href="#editCashRegisterModal"
                               className="edit"
@@ -428,7 +428,7 @@ const CashRegister = () => {
                               </i>
                             </a>
                             }
-                            {cashRegisterPermissions.delete&&
+                            {cashRegisterPermissions?.delete &&
                             <a
                               href="#deleteCashRegisterModal"
                               className="delete"
