@@ -18,9 +18,9 @@ const Employees = () => {
   const [isExecuting, setIsExecuting] = useState(false);
 
   const {
+    permissionsList,
     restaurantData,
     formatDateTime,
-    permissionsList,
     setisLoadiog,
     EditPagination,
     startpagination,
@@ -60,7 +60,7 @@ const Employees = () => {
         }
         // console.log({ data });
       } catch (error) {
-        // console.log(error);
+        console.log(error);
       }
     } else {
       toast.error("ليس لك صلاحية لعرض بيانات الموظفين");
