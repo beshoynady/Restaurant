@@ -37,6 +37,17 @@ const Employees = () => {
     (permission) => permission.resource === "Employees"
   )[0];
 
+  const roleEn = [
+    "owner",
+    "manager",
+    "cashier",
+    "waiter",
+    "deliveryman",
+    "chef",
+  ];
+
+  const roleAr = ["مالك", "مدير", "كاشير", "ويتر", "ديليفري مان", "شيف"];
+
   const [listOfEmployees, setListOfEmployees] = useState([]);
 
   const getEmployees = async () => {
@@ -109,16 +120,18 @@ const Employees = () => {
 
   const createEmployee = async (e) => {
     e.preventDefault();
-    console.log({fullname,
-      username,
-      basicSalary,
-      workingDays,
-      numberID,
-      password,
-      address,
-      phone,
-      shift,
-      role})
+    // console.log({
+    //   fullname,
+    //   username,
+    //   basicSalary,
+    //   workingDays,
+    //   numberID,
+    //   password,
+    //   address,
+    //   phone,
+    //   shift,
+    //   role,
+    // });
 
     if (isExecuting) {
       toast.warn("انتظر لانشاء حساب الموظف");
@@ -177,7 +190,7 @@ const Employees = () => {
         },
         config
       );
-      console.log({newEmployee})
+      console.log({ newEmployee });
       if (newEmployee) {
         notify("تم انشاء حساب الموظف بنجاح", "success");
       }
@@ -193,21 +206,21 @@ const Employees = () => {
 
   const editEmployee = async (e) => {
     e.preventDefault();
+    if (!token) {
+      // Handle case where token is not available
+      toast.error("رجاء تسجيل الدخول مره اخري");
+      return;
+    }
+    if (permissionsForEmployee && permissionsForEmployee.update === false) {
+      notify("ليس لك صلاحية لتعديل حساب الموظف", "info");
+      return;
+    }
     if (isExecuting) {
       toast.warn("انتظر لتعديل حساب الموظف");
       return;
     }
 
-    if (permissionsForEmployee && permissionsForEmployee.update === false) {
-      notify("ليس لك صلاحية لتعديل حساب الموظف", "info");
-      return;
-    }
     try {
-      if (!token) {
-        // Handle case where token is not available
-        toast.error("رجاء تسجيل الدخول مره اخري");
-        return;
-      }
       setIsExecuting(true);
       if (permissionsForEmployee && permissionsForEmployee.update === true) {
         const updateData = password
@@ -268,7 +281,7 @@ const Employees = () => {
 
   const [employeeShift, setemployeeShift] = useState({});
   const handleEditEmployee = (employeeData) => {
-    const employee= JSON.parse(employeeData)
+    const employee = JSON.parse(employeeData);
     setemployeeid(employee._id);
     setfullname(employee.fullname);
     setnumberID(employee.numberID);
@@ -284,7 +297,7 @@ const Employees = () => {
     setemployeeShift(employee.shift);
     settaxRate(employee.taxRate);
     setinsuranceRate(employee.insuranceRate);
-    setsectionNumber(employee.sectionNumber?employee.sectionNumber:0);
+    setsectionNumber(employee.sectionNumber ? employee.sectionNumber : 0);
   };
 
   const getEmployeesByJob = (role) => {
@@ -546,11 +559,13 @@ const Employees = () => {
                   onChange={(e) => getEmployeesByJob(e.target.value)}
                 >
                   <option value="all">الكل</option>
-                  <option value="owner">مالك</option>
-                  <option value="manager">مدير</option>
-                  <option value="cashier">كاشير</option>
-                  <option value="waiter">ويتر</option>
-                  <option value="Chef">شيف</option>
+                  {roleEn.map((role, i) => {
+                    return (
+                      <option value={role} key={i}>
+                        {roleAr[i]}
+                      </option>
+                    );
+                  })}
                 </select>
               </div>
               <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
@@ -659,7 +674,9 @@ const Employees = () => {
                                   className="material-icons"
                                   data-toggle="tooltip"
                                   title="Edit"
-                                  onClick={() => handleEditEmployee(JSON.stringify(employee))}
+                                  onClick={() =>
+                                    handleEditEmployee(JSON.stringify(employee))
+                                  }
                                 >
                                   &#xE254;
                                 </i>
@@ -959,12 +976,13 @@ const Employees = () => {
                       onChange={(e) => setrole(e.target.value)}
                     >
                       <option value="">اختر وظيفة</option>
-                      <option value="owner">مالك</option>
-                      <option value="manager">مدير</option>
-                      <option value="cashier">كاشير</option>
-                      <option value="deliveryman">الديلفري</option>
-                      <option value="waiter">ويتر</option>
-                      <option value="chef">شيف</option>
+                      {roleEn.map((role, i) => {
+                        return (
+                          <option value={role} key={i}>
+                            {roleAr[i]}
+                          </option>
+                        );
+                      })}
                     </select>
                   </div>
                   <div className="form-group col-12 col-md-6">
@@ -1243,7 +1261,9 @@ const Employees = () => {
                       required
                       onChange={(e) => setisActive(e.target.value)}
                     >
-                      <option value={isActive}>{isActive?'متاح': 'ليس متاح'}</option>
+                      <option value={isActive}>
+                        {isActive ? "متاح" : "ليس متاح"}
+                      </option>
                       <option value={true}>متاح</option>
                       <option value={false}>ليس متاح</option>
                     </select>
@@ -1289,12 +1309,13 @@ const Employees = () => {
                       onChange={(e) => setrole(e.target.value)}
                     >
                       <option value={role}>{role}</option>
-                      <option value="owner">مالك</option>
-                      <option value="manager">مدير</option>
-                      <option value="cashier">كاشير</option>
-                      <option value="deliveryman">الديلفري</option>
-                      <option value="waiter">ويتر</option>
-                      <option value="chef">شيف</option>
+                      {roleEn.map((role, i) => {
+                        return (
+                          <option value={role} key={i}>
+                            {roleAr[i]}
+                          </option>
+                        );
+                      })}
                     </select>
                   </div>
                   <div className="form-group col-12 col-md-6">
