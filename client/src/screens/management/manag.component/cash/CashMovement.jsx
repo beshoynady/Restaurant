@@ -73,8 +73,22 @@ const CashMovement = () => {
     }
   
     try {
+      const employeeId = await employeeLoginInfo.id
+
       const response = await axios.get(apiUrl + "/api/cashregister", config);
-      setAllCashRegisters(response.data.reverse());
+      const cashRegisterData = response.data.reverse()
+
+      if(cashRegisterData.length>0){
+        if(employeeLoginInfo.role === "owner" || employeeLoginInfo.role === "manager"){
+          setAllCashRegisters(cashRegisterData);
+          console.log({ cashRegisterData })
+        }else{
+          const myCashRegister = cashRegisterData.filter(CashRegister => CashRegister.employee?._id === employeeId)
+          console.log({ myCashRegister })
+          setAllCashRegisters(myCashRegister)
+  
+        }
+      }
     } catch (err) {
       console.error("Error fetching cash registers:", err);
       toast.error(
@@ -131,14 +145,15 @@ const CashMovement = () => {
       
       const response = await axios.get(apiUrl + "/api/cashmovement/", config);
       const AllCashMovement = response.data.reverse();
-      console.log({ AllCashMovement });
-      if(employeeLoginInfo.role === "owner" || employeeLoginInfo.role === "manager"){
-        setAllCashMovement(AllCashMovement);
-      }else{
-        const myCashMovement = AllCashMovement.filter(movement => movement.registerId?.employee === employeeId)
-        console.log({ myCashMovement })
-        setAllCashMovement(myCashMovement)
-
+      if(AllCashMovement.length>0){
+        if(employeeLoginInfo.role === "owner" || employeeLoginInfo.role === "manager"){
+          console.log({ AllCashMovement });
+          setAllCashMovement(AllCashMovement);
+        }else{
+          const myCashMovement = AllCashMovement.filter(movement => movement.registerId?.employee === employeeId)
+          console.log({ myCashMovement })
+          setAllCashMovement(myCashMovement)
+        }
       }
     } catch (error) {
       console.log(error);
@@ -540,7 +555,7 @@ const CashMovement = () => {
                 >
                   <option value={""}>الكل</option>
                   {cashMovementTypeEn.map((type, i) => {
-                    <option value={type}>{cashMovementTypeAr[i]}</option>;
+                    return <option value={type} key={i}>{cashMovementTypeAr[i]}</option>;
                   })}
                 </select>
               </div>
@@ -553,9 +568,9 @@ const CashMovement = () => {
                   onChange={(e) => filterByCashRegisters(e.target.value)}
                 >
                   <option value={""}>الكل</option>
-                  {AllCashRegisters.map((CashRegisters, i) => {
-                    <option value={CashRegisters._id} key={i}>
-                      {CashRegisters.name}
+                  {AllCashRegisters.map((CashRegister, i) => {
+                    <option value={CashRegister._id} key={i}>
+                      {CashRegister.name}
                     </option>;
                   })}
                 </select>
@@ -637,7 +652,7 @@ const CashMovement = () => {
               <tr>
                 <th>م</th>
                 <th>الخزنه</th>
-                <th>المسؤل</th>
+                {/* <th>المسؤل</th> */}
                 <th>النوع</th>
                 <th>بواسطه</th>
                 <th>المبلغ</th>
@@ -659,7 +674,7 @@ const CashMovement = () => {
                               ? movement.registerId.name
                               : "No register found"}
                           </td>
-                          <td>{movement.registerId?.employee?.fullname}</td>
+                          {/* <td>{movement.registerId?.employee?.fullname}</td> */}
                           <td>{movement.type}</td>
                           <td>{movement.createdBy?.fullname}</td>
                           <td>{movement.amount}</td>
