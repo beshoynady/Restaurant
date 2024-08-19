@@ -567,12 +567,18 @@ const CashMovement = () => {
                   class="form-control border-primary m-0 p-2 h-auto"
                   onChange={(e) => filterByCashRegisters(e.target.value)}
                 >
-                  <option value={""}>الكل</option>
-                  {AllCashRegisters.map((CashRegister, i) => {
-                    <option value={CashRegister._id} key={i}>
+                <option value="">الكل</option>
+                {AllCashRegisters && AllCashRegisters.length > 0 ? (
+                  AllCashRegisters.map((CashRegister) => (
+                    <option value={CashRegister._id} key={CashRegister._id}>
                       {CashRegister.name}
-                    </option>;
-                  })}
+                    </option>
+                  ))
+                ) : (
+                  <option value="" disabled>
+                    لا توجد خزائن
+                  </option>
+                )}
                 </select>
               </div>
               <div className="col-12 d-flex align-items-center justify-content-between">
