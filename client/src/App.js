@@ -2751,7 +2751,7 @@ function App() {
               }
             />
             <Route
-              path="expenseitem"
+              path="expense"
               element={
                 <Suspense fallback={<LoadingPage />}>
                   <ExpenseItem />
