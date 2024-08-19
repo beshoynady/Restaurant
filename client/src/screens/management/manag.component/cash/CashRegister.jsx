@@ -178,9 +178,9 @@ const CashRegister = () => {
         `${apiUrl}/api/cashregister/${cashID}`,
         config
       );
-      const cashRegisterData = getAllCashRegisters.data
+      const cashRegisterData = getCashRegister.data
       const balance = cashRegisterData.balance
-      if(balance>0){
+      if(balance > 0){
         toast.warn('لا يمكن حذف الخزينه لان بها رصيد')
         return
       }
@@ -209,7 +209,7 @@ const CashRegister = () => {
           `${apiUrl}/api/cashregister/${Id}`,
           config
         );
-        const cashRegisterData = getAllCashRegisters.data
+        const cashRegisterData = getCashRegister.data
         const balance = cashRegisterData.balance
         if(balance>0){
           toast.warn(`لا يمكن حذف خزينه ${cashRegisterData.name} لان بها رصيد`)
@@ -588,7 +588,7 @@ const CashRegister = () => {
                 </button>
               </div>
               <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
-                <div className="form-group w-100 h-auto px-3 d-flex align-itmes-center justify-content-start col-12">
+                <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                     الاسم
                   </label>
@@ -600,7 +600,7 @@ const CashRegister = () => {
                     onChange={(e) => setname(e.target.value)}
                   />
                 </div>
-                <div className="form-group w-100 h-auto px-3 d-flex align-itmes-center justify-content-start col-12">
+                <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                     المسؤل
                   </label>
