@@ -45,8 +45,10 @@ exports.createCashMovement = async (req, res) => {
 exports.getAllCashMovements = async (req, res) => {
   try {
     const cashMovements = await CashMovement.find()
-      .populate('registerId').populate('createdBy')
-      .populate('transferTo').populate('transferFrom')
+      .populate('registerId')
+      .populate('createdBy')
+      .populate('transferTo')
+      .populate('transferFrom')
       .populate('movementId');
     res.status(200).json(cashMovements)
   } catch (error) {

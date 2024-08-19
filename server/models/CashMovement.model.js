@@ -43,7 +43,9 @@ const cashMovementSchema = new mongoose.Schema({
     required: true,
     default: 'Completed',
   },
-}, { timestamps: true });
+}, {
+  timestamps: true
+});
 
 const CashMovement = mongoose.model('CashMovement', cashMovementSchema);
 
