@@ -57,8 +57,8 @@ const PayRoll = () => {
   const [expenseDescription, setexpenseDescription] = useState("");
   const [amount, setamount] = useState();
   const [balance, setbalance] = useState();
-  const [cashRegister, setcashRegister] = useState("");
-  const [cashRegistername, setcashRegistername] = useState("");
+  const [myCashRegister, setmyCashRegister] = useState([]);
+  const [cashRegister, setcashRegister] = useState('');
   const [paidBy, setpaidBy] = useState("");
   const [employeeId, setemployeeId] = useState("");
   const [employeeName, setemployeeName] = useState("");
@@ -515,14 +515,13 @@ const PayRoll = () => {
       console.log(allCashRegisters);
       // // Find the appropriate cash register
       const cashRegister = allCashRegisters
-        ? allCashRegisters.filter((cash) => cash.employee === manager)
+        ? allCashRegisters.filter(
+          (CashRegister) => CashRegister.employee?._id === employee
+        )
         : [];
       console.log(cashRegister);
       // // Update selected cash register data
-      setcashRegister(cashRegister[0]._id);
-      console.log(cashRegister[0]._id);
-      setcashRegistername(cashRegister.name);
-      setbalance(cashRegister[0].balance);
+      setmyCashRegister(cashRegister);
       // Set values and variables
       setamount(salary);
       setpaidBy(manager);
@@ -545,28 +544,11 @@ const PayRoll = () => {
     }
   };
 
-  // // Fetch all cash registers from the API
-  // const getAllcashRegisters = async () => {
-  //   try{
-  // if (!token) {
-  // Handle case where token is not available
-  //   toast.error('رجاء تسجيل الدخول مره اخري');
-  //   return
-  // }
-  //     const response = await axios.get(apiUrl+'/api/cashRegister');
-  //     setAllcashRegisters(response.data);
-  //   } catch (err) {
-  //     toast.error('Error fetching cash registers');
-  //   }
-  // };
-
-  // const handlecashRegister = (id) => {
-  //   const cashRegister = AllcashRegisters ? AllcashRegisters.find((cash) => cash.employee === id) : {};
-  //   setcashRegister(cashRegister._id);
-  //   setcashRegistername(cashRegister.name);
-  //   setbalance(cashRegister.balance);
-  //   // setpaidBy(id);
-  // };
+  const selectCashRegister = (cashRegister) => {
+    const cashRegisterSelected = JSON.parse(cashRegister)
+    setcashRegister(cashRegisterSelected._id);
+    setbalance(cashRegisterSelected.balance);
+  };
 
   // Create daily expense based on selected cash register
   const createDailyExpense = async () => {
@@ -992,18 +974,35 @@ const PayRoll = () => {
                 </button>
               </div>
               <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
-                <p
-                  className="text-center"
-                  style={{ fontSize: "20px", marginBottom: "1" }}
-                >
-                  هل أنت متأكد من دفع {amount} مرتب {employeeName} ؟
-                </p>
-                <p
-                  className="text-center text-warning"
-                  style={{ fontSize: "16px", marginBottom: "0" }}
-                >
-                  لا يمكن الرجوع في هذا الإجراء.
-                </p>
+              <div className="form-group col-12 col-md-6">
+                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                    الخزينه{" "}
+                  </label>
+                  <select
+                    className="form-control border-primary m-0 p-2 h-auto"
+                    onChange={(e) => selectCashRegister(e.target.value)}
+                  >
+                    <option value="">اختر الخزينه</option>;
+                    {myCashRegister.map((cashRegister) => {
+                      return (
+                        <option value={JSON.stringify(cashRegister)}>
+                          {cashRegister.name}
+                        </option>
+                      );
+                    })}
+                  </select>
+                </div>
+                <div className="form-group col-12 col-md-6">
+                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                    الرصيد
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control border-primary m-0 p-2 h-auto"
+                    Value={balance}
+                    readOnly
+                  />
+                </div>
               </div>
               <div className="modal-footer d-flex flex-nowrap align-items-center justify-content-between m-0 p-1">
                 <input
