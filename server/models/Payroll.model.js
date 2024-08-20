@@ -124,7 +124,6 @@ const payrollSchema = new mongoose.Schema({
   },
   NetSalary: {
     type: Number,
-    min: 0,
     default: 0,
   },
   isPaid: {
