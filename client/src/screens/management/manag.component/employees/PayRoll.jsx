@@ -332,9 +332,10 @@ const PayRoll = () => {
           Math.max(0, Number(attendanceDays) + Number(leaveDays))
         ).toFixed(2);
         Insurance =
-          Number(InsuranceRate) > 0 && Number(basicSalary) > 0
+          Number(InsuranceRate) > 0 && Number(basicSalary) > 0 && Number(attendanceDays) > 0
             ? (Number(InsuranceRate) * Number(basicSalary)).toFixed(2)
-            : "0.00";
+            : 0;
+
         TotalDue = (
           parseFloat(salary) +
           parseFloat(Bonus) +
