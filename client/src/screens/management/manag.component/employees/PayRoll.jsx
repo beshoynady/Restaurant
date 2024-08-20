@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { detacontext } from "../../../../App";
 import { toast } from "react-toastify";
@@ -321,7 +321,7 @@ const PayRoll = () => {
           EmployeAttendanceRecords.filter(
             (Record) => Record.status === "Vacation"
           );
-          
+
         leaveDays = filterVacationRecords.length;
 
         AbsenceDeduction = (dailySalary * AbsenceDays).toFixed(2);
