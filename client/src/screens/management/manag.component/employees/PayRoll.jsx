@@ -511,15 +511,15 @@ const PayRoll = () => {
       // Fetch all cash registers
       const response = await axios.get(apiUrl + "/api/cashRegister", config);
       const allCashRegisters = await response.data;
-      console.log(response);
-      console.log(allCashRegisters);
+      // console.log(response);
+      // console.log(allCashRegisters);
       // // Find the appropriate cash register
       const cashRegister = allCashRegisters
         ? allCashRegisters.filter(
           (CashRegister) => CashRegister.employee?._id === manager
         )
         : [];
-      console.log(cashRegister);
+      // console.log(cashRegister);
       // // Update selected cash register data
       setmyCashRegister(cashRegister);
       // Set values and variables
@@ -552,8 +552,9 @@ const PayRoll = () => {
 
   // Create daily expense based on selected cash register
   const createDailyExpense = async () => {
-    console.log({ balance });
-    console.log({ amount });
+    // console.log({ balance });
+    // console.log({ amount });
+
     const updatedBalance = balance - amount;
     console.log({ updatedBalance });
 
@@ -616,6 +617,10 @@ const PayRoll = () => {
       // Handle case where token is not available
       toast.error("رجاء تسجيل الدخول مره اخري");
       return;
+    }
+    if(amount> balance){
+      toast.error('رصيد الخزينه لا يكفي لدفع هذا الراتب')
+      return
     }
     try {
       // Prepare payload for updating payroll status
@@ -695,7 +700,7 @@ const PayRoll = () => {
               </div>
               <div className="col-12 col-md-6 p-0 m-0 d-flex flex-wrap aliegn-items-center justify-content-end print-hide">
                 <a
-                  className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-primary"
+                  className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-warning text-dark fs-3 fw-700"
                   onClick={addPayRoll}
                 >
                   <span>تحديث كشف المرتبات</span>
