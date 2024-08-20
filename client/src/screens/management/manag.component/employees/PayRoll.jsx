@@ -341,8 +341,8 @@ const PayRoll = () => {
           parseFloat(OvertimeValue)
         ).toFixed(2);
 
-        let taxableIncome =TotalDue>0? TotalDue - Insurance: 0;
-        Tax = taxRate > 0  ? (taxableIncome * taxRate).toFixed(2) : 0;
+        let taxableIncome = TotalDue > 0 ? TotalDue - Insurance : 0;
+        Tax = taxRate > 0 ? (taxableIncome * taxRate).toFixed(2) : 0;
         TotalDeductible = (
           Math.max(0, parseFloat(AbsenceDeduction)) +
           Math.max(0, parseFloat(lateDeduction)) +
@@ -882,7 +882,7 @@ const PayRoll = () => {
                                     href="#paidModal"
                                     type="button"
                                     data-toggle="modal"
-                                    className="btn btn-success col-6 h-100 px-2 py-3 m-0"
+                                    className="btn btn-primary text-light h-100 px-2 py-3 m-0"
                                     onClick={() =>
                                       handelPaid(
                                         Roll._id,
