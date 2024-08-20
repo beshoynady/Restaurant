@@ -341,8 +341,8 @@ const PayRoll = () => {
           parseFloat(OvertimeValue)
         ).toFixed(2);
 
-        let taxableIncome = TotalDue - Insurance;
-        Tax = taxRate > 0 ? (taxableIncome * taxRate).toFixed(2) : 0;
+        let taxableIncome =TotalDue>0? TotalDue - Insurance: 0;
+        Tax = taxRate > 0  ? (taxableIncome * taxRate).toFixed(2) : 0;
         TotalDeductible = (
           Math.max(0, parseFloat(AbsenceDeduction)) +
           Math.max(0, parseFloat(lateDeduction)) +
