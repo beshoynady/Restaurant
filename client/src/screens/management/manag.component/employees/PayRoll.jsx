@@ -516,7 +516,7 @@ const PayRoll = () => {
       // // Find the appropriate cash register
       const cashRegister = allCashRegisters
         ? allCashRegisters.filter(
-          (CashRegister) => CashRegister.employee?._id === employee
+          (CashRegister) => CashRegister.employee?._id === manager
         )
         : [];
       console.log(cashRegister);
@@ -695,7 +695,7 @@ const PayRoll = () => {
               </div>
               <div className="col-12 col-md-6 p-0 m-0 d-flex flex-wrap aliegn-items-center justify-content-end print-hide">
                 <a
-                  className="btn btn-success col-4 h-100 p-2 m-0"
+                  className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-primary"
                   onClick={addPayRoll}
                 >
                   <span>تحديث كشف المرتبات</span>
@@ -1006,15 +1006,15 @@ const PayRoll = () => {
               </div>
               <div className="modal-footer d-flex flex-nowrap align-items-center justify-content-between m-0 p-1">
                 <input
+                  type="submit"
+                  className="btn btn-success col-6 h-100 px-2 py-3 m-0"
+                  value="تاكيد الدفع"
+                />
+                <input
                   type="button"
                   className="btn btn-danger col-6 h-100 px-2 py-3 m-0"
                   data-dismiss="modal"
                   value="الغاء"
-                />
-                <input
-                  type="submit"
-                  className="btn btn-danger col-6 h-100 px-2 py-3 m-0"
-                  value="تاكيد الدفع"
                 />
               </div>
             </form>
