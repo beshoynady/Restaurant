@@ -39,6 +39,8 @@ const CashMovement = () => {
     (permission) => permission.resource === "Cash Register"
   )[0];
 
+
+
   const [cashRegister, setcashRegister] = useState("");
   const [employeeCashRegisters, setemployeeCashRegisters] = useState([]);
   const [CashRegisterBalance, setCashRegisterBalance] = useState();
@@ -157,7 +159,7 @@ const CashMovement = () => {
     }
   };
 
-  const cashMovementTypeEn = [
+  const operationTypesEN = [
     "Deposit",
     "Withdraw",
     "Revenue",
@@ -166,7 +168,7 @@ const CashMovement = () => {
     "Payment",
     "Refund",
   ];
-  const cashMovementTypeAr = [
+  const operationTypesAR = [
     "إيداع",
     "سحب",
     "إيراد",
@@ -175,6 +177,8 @@ const CashMovement = () => {
     "دفع مشتريات",
     "استرداد",
   ];
+  const operationStatusEN = ['Pending', 'Completed', 'Rejected'];
+  const operationStatusAr = ['انتظار', 'مكتمل', 'مرفوض'];
   const [createdBy, setcreatedBy] = useState("");
   const [amount, setAmount] = useState();
   const [type, setType] = useState("");
@@ -681,7 +685,7 @@ const CashMovement = () => {
                               : "No register found"}
                           </td>
                           {/* <td>{movement.registerId?.employee?.fullname}</td> */}
-                          <td>{movement.type}</td>
+                          <td>{operationTypesAR[operationTypesEN.findIndex(type => type === movement.type)]}</td>
                           <td>{movement.createdBy?.fullname}</td>
                           <td>{movement.amount}</td>
                           <td>{movement.description}</td>
@@ -713,7 +717,8 @@ const CashMovement = () => {
                                 </button>
                               </>
                             ) : (
-                              movement.status
+                              <td>{operationStatusAr[operationStatusEN.findIndex(status => status === movement.status)]}</td>
+                              
                             )}
                           </td>
                           <td>{formatDateTime(movement.createdAt)}</td>
