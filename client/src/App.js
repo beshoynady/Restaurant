@@ -1027,7 +1027,7 @@ function App() {
         allOrders &&
         allOrders.filter((order) => order.user && order.user?._id === userId);
       const lastUserOrder =
-        userOrders.length > 0 ? userOrders[userOrders.length - 1] : null;
+        userOrders.length > 0 ? userOrders[0] : null;
 
       // Check if the last user order is active
       if (lastUserOrder && lastUserOrder.isActive) {
@@ -1157,7 +1157,7 @@ function App() {
       const tableOrders =
         allOrders && allOrders.filter((order) => order.table._id === tableId);
       const lastTableOrder =
-        tableOrders.length > 0 ? tableOrders[tableOrders.length - 1] : {};
+        tableOrders.length > 0 ? tableOrders[0] : {};
       const lastTableOrderActive = lastTableOrder && lastTableOrder.isActive;
 
       if (lastTableOrderActive) {
@@ -1297,7 +1297,7 @@ function App() {
         allOrders &&
         allOrders.filter((order) => order.table && order.table._id === tableId);
       const lastTableOrder =
-        tableOrder.length > 0 ? tableOrder[tableOrder.length - 1] : null;
+        tableOrder.length > 0 ? tableOrder[0] : null;
       const lastTableOrderActive = lastTableOrder
         ? lastTableOrder.isActive
         : false;
@@ -1425,15 +1425,10 @@ function App() {
         orderType === "Takeaway"
           ? takeawayOrders.length === 0
             ? 1
-            : takeawayOrders[takeawayOrders.length - 1].orderNum + 1
+            : takeawayOrders[0].orderNum + 1
           : null;
 
-      const serial =
-        allOrders && allOrders.length > 0
-          ? String(
-              Number(allOrders[allOrders && allOrders.length - 1].serial) + 1
-            ).padStart(6, "0")
-          : "000001";
+      const serial = createSerial();
 
       const products = [...itemsInCart];
 
