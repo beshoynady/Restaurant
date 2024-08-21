@@ -17,7 +17,7 @@ const Suppliers = () => {
     permissionsList,
     employeeLoginInfo,
     formatDateTime,
-    setisLoadiog,
+    setisLoading,
     EditPagination,
     startpagination,
     endpagination,

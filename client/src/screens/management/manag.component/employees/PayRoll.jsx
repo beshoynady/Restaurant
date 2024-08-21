@@ -16,7 +16,7 @@ const PayRoll = () => {
 
   const {
     permissionsList,
-    setisLoadiog,
+    setisLoading,
     EditPagination,
     employeeLoginInfo,
     endpagination,

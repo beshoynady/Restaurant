@@ -16,7 +16,7 @@ const Users = () => {
     },
   };
 
-  const { setStartDate, setEndDate, filterByDateRange, filterByTime, restaurantData, formatDateTime, permissionsList,setisLoadiog, formatDate, formatTime,
+  const { setStartDate, setEndDate, filterByDateRange, filterByTime, restaurantData, formatDateTime, permissionsList,setisLoading, formatDate, formatTime,
     EditPagination, startpagination, endpagination, setstartpagination, setendpagination } = useContext(detacontext);
 
   const permissionUser = permissionsList?.filter(permission => permission.resource === 'Users')[0]

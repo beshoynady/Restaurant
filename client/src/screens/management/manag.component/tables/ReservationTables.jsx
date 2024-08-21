@@ -12,7 +12,7 @@ const ReservationTables = () => {
       'Authorization': `Bearer ${token}`,
     },
   };
-  const { setisLoadiog, EditPagination, startpagination, endpagination, setstartpagination, setendpagination, createReservations, confirmReservation, updateReservation, getAllReservations, allReservations, setallReservations, getReservationById, deleteReservation, employeeLoginInfo, allusers, allTable, getAvailableTables, availableTableIds, setStartDate, setEndDate,
+  const { setisLoading, EditPagination, startpagination, endpagination, setstartpagination, setendpagination, createReservations, confirmReservation, updateReservation, getAllReservations, allReservations, setallReservations, getReservationById, deleteReservation, employeeLoginInfo, allusers, allTable, getAvailableTables, availableTableIds, setStartDate, setEndDate,
     formatDate, formatTime , filterByDateRange, filterByTime} = useContext(detacontext)
 
   const createdBy = employeeLoginInfo?.id;

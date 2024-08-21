@@ -15,7 +15,7 @@ const CashRegister = () => {
 
   const {
     permissionsList,
-    setisLoadiog,
+    setisLoading,
     EditPagination,
     startpagination,
     endpagination,

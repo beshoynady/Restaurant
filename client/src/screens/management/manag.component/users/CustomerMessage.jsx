@@ -22,7 +22,7 @@ const CustomerMessage = () => {
     restaurantData,
     formatDateTime,
     permissionsList,
-    setisLoadiog,
+    setisLoading,
     formatDate,
     formatTime,
     EditPagination,

@@ -23,7 +23,7 @@ const Products = () => {
     employeeLoginInfo,
     formatDate,
     formatDateTime,
-    setisLoadiog,
+    setisLoading,
     EditPagination,
     startpagination,
     endpagination,

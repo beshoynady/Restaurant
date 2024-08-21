@@ -23,7 +23,7 @@ const ProductRecipe = () => {
     employeeLoginInfo,
     formatDate,
     formatDateTime,
-    setisLoadiog,
+    setisLoading,
     EditPagination,
     startpagination,
     endpagination,

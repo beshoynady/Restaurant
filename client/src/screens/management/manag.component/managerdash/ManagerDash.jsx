@@ -36,7 +36,7 @@ const ManagerDash = () => {
     restaurantData,
     employeeLoginInfo,
     formatDate,
-    setisLoadiog,
+    setisLoading,
     EditPagination,
     startpagination,
     endpagination,

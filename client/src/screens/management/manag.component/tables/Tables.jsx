@@ -23,7 +23,7 @@ const Tables = () => {
     employeeLoginInfo,
     formatDate,
     formatDateTime,
-    setisLoadiog,
+    setisLoading,
     EditPagination,
     startpagination,
     endpagination,

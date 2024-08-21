@@ -19,7 +19,7 @@ const EmployeeTransactions = () => {
 
   const {
     permissionsList, setStartDate, setEndDate, filterByDateRange, filterByTime, employeeLoginInfo, formatDateTime, allEmployees,
-    setisLoadiog, EditPagination, startpagination, endpagination, setstartpagination, setendpagination,
+    setisLoading, EditPagination, startpagination, endpagination, setstartpagination, setendpagination,
   } = useContext(detacontext);
 
   const employeeTransactionsPermission = permissionsList && permissionsList.filter(perission => perission.resource === 'Employee Transactions')[0]
@@ -42,7 +42,7 @@ const EmployeeTransactions = () => {
       toast.error('رجاء تسجيل الدخول مره اخري');
       return
     }
-    setisLoadiog(true)
+    setisLoading(true)
     try {
       if (employeeTransactionsPermission && !employeeTransactionsPermission.create) {
         toast.warn('ليس لك صلاحية لاضافه معامله ماليه للموظفين');
@@ -58,7 +58,7 @@ const EmployeeTransactions = () => {
       console.log(error);
       toast.error('حدث خطاء اثناء اضافه معامله للموظف');
     } finally {
-      setisLoadiog(false)
+      setisLoading(false)
     }
   };
 
@@ -69,7 +69,7 @@ const EmployeeTransactions = () => {
       toast.error('رجاء تسجيل الدخول مره اخري');
       return
     }
-    setisLoadiog(true)
+    setisLoading(true)
     try {
       if (employeeTransactionsPermission && !employeeTransactionsPermission.update) {
         toast.warn('ليس لك صلاحية لتعديل معامله ماليه للموظفين');
@@ -84,7 +84,7 @@ const EmployeeTransactions = () => {
       console.log(error);
       toast.error('An error occurred while updating the transaction');
     } finally {
-      setisLoadiog(false)
+      setisLoading(false)
     }
   };
 
@@ -95,7 +95,7 @@ const EmployeeTransactions = () => {
       toast.error('رجاء تسجيل الدخول مره اخري');
       return
     }
-    setisLoadiog(true)
+    setisLoading(true)
     try {
       if (employeeTransactionsPermission && !employeeTransactionsPermission.delete) {
         toast.warn('ليس لك صلاحية لحذف معامله ماليه للموظفين');
@@ -110,7 +110,7 @@ const EmployeeTransactions = () => {
       console.log(error);
       toast.error('An error occurred while deleting the transaction');
     } finally {
-      setisLoadiog(false)
+      setisLoading(false)
     }
   };
 
@@ -120,7 +120,7 @@ const EmployeeTransactions = () => {
       toast.error('رجاء تسجيل الدخول مره اخري');
       return
     }
-    setisLoadiog(true)
+    setisLoading(true)
     try {
       if (employeeTransactionsPermission && !employeeTransactionsPermission.read) {
         toast.warn('ليس لك صلاحية لعرض المعاملات الماليه للموظفين');
@@ -133,7 +133,7 @@ const EmployeeTransactions = () => {
     } catch (error) {
       console.log(error);
     } finally {
-      setisLoadiog(false)
+      setisLoading(false)
     }
   };
 

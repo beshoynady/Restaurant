@@ -21,7 +21,7 @@ const Employees = () => {
     permissionsList,
     restaurantData,
     formatDateTime,
-    setisLoadiog,
+    setisLoading,
     EditPagination,
     startpagination,
     endpagination,

@@ -18,7 +18,7 @@ const DailyExpense = () => {
   };
 
   const{restaurantData, permissionsList,setStartDate, setEndDate, filterByDateRange, filterByTime,
-    employeeLoginInfo, formatDate, formatDateTime, setisLoadiog, EditPagination, startpagination,
+    employeeLoginInfo, formatDate, formatDateTime, setisLoading, EditPagination, startpagination,
     endpagination, setstartpagination, setendpagination } = useContext(detacontext)
 
   const permissionDailyExpense = permissionsList && permissionsList.filter(permission => permission.resource === 'Daily Expenses')[0]

@@ -301,7 +301,7 @@ const PermissionsComponent = () => {
   return (
     <detacontext.Consumer>
       {
-        ({ restaurantData, setisLoadiog, EditPagination, startpagination, endpagination, setstartpagination, setendpagination }) => {
+        ({ restaurantData, setisLoading, EditPagination, startpagination, endpagination, setstartpagination, setendpagination }) => {
           return (
             <div className="col-md-8 co;-12 px-3 d-flex align-itmes-center justify-content-start">
               <div className="table-responsive">

@@ -275,7 +275,7 @@ const MenuCategory = () => {
   return (
     <detacontext.Consumer>
       {
-        ({ allProducts, setisLoadiog, EditPagination, startpagination, endpagination, setstartpagination, setendpagination }) => {
+        ({ allProducts, setisLoading, EditPagination, startpagination, endpagination, setstartpagination, setendpagination }) => {
           return (
             <div className="w-100 px-3 d-flex align-itmes-center justify-content-start">
               <div className="table-responsive">
@@ -403,7 +403,7 @@ const MenuCategory = () => {
               <div id="addCategoryModal" className="modal fade">
                 <div className="modal-dialog modal-lg">
                   <div className="modal-content shadow-lg border-0 rounded ">
-                    <form onSubmit={(e) => createCategory(e, setisLoadiog)}>
+                    <form onSubmit={(e) => createCategory(e, setisLoading)}>
                       <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                         <h4 className="modal-title">اضافه تصنيف</h4>
                         <button type="button" className="close m-0 p-1" data-dismiss="modal" aria-hidden="true">&times;</button>

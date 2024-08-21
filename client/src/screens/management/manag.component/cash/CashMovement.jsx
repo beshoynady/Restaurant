@@ -23,7 +23,7 @@ const CashMovement = () => {
     filterByTime,
     employeeLoginInfo,
     formatDate,
-    setisLoadiog,
+    setisLoading,
     EditPagination,
     startpagination,
     endpagination,

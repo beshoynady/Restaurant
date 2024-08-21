@@ -15,7 +15,7 @@ const CategoryStock = () => {
   };
 
   const { restaurantData, permissionsList, setStartDate, setEndDate, filterByDateRange, filterByTime,
-     employeeLoginInfo,  formatDate, formatDateTime, setisLoadiog, EditPagination, startpagination, 
+     employeeLoginInfo,  formatDate, formatDateTime, setisLoading, EditPagination, startpagination, 
      endpagination, setstartpagination, setendpagination } = useContext(detacontext)
 
   const stockCategoriesPermission = permissionsList && permissionsList.filter(perission => perission.resource === 'stock Categories')[0]
