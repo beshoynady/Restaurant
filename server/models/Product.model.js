@@ -76,6 +76,16 @@ const productSchema = new mongoose.Schema(
       type: [ObjectId],
       ref: "Product",
     },
+    isCombo: {
+      type: Boolean,
+      default: false,
+    },
+    comboItems: [
+      {
+        type: ObjectId,
+        ref: "Product",
+      },
+    ],
     productRecipe: {
       type: ObjectId,
       ref: "Recipe",
