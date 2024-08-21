@@ -287,17 +287,17 @@ function App() {
     const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
     const startOfYear = new Date(now.getFullYear(), 0, 1);
 
-    console.log({
-      now,
-      startOfToday,
-      startOfWeek,
-      startOfMonth,
-      startOfYear,
-      day: new Date().getDay(),
-      date: new Date().getDate(),
-      month: new Date().getMonth(),
-      year: new Date().getFullYear(),
-    });
+    // console.log({
+    //   now,
+    //   startOfToday,
+    //   startOfWeek,
+    //   startOfMonth,
+    //   startOfYear,
+    //   day: new Date().getDay(),
+    //   date: new Date().getDate(),
+    //   month: new Date().getMonth(),
+    //   year: new Date().getFullYear(),
+    // });
 
     switch (timeRange) {
       case "today":
@@ -426,24 +426,6 @@ function App() {
     }
   };
 
-  // const calcTotalSalesOfCategory = (id) => {
-  //   try {
-  //     let totalSalesOfCategory = 0;
-
-  //     // Filter products based on the menucategory ID
-  //     const productsOfCategory = allProducts.filter((product) => product.menucategory === id);
-
-  //     // Calculate total sales
-  //     for (let i = 0; i < productsOfCategory.length; i++) {
-  //       totalSalesOfCategory += productsOfCategory[i].sales;
-  //     }
-
-  //     return totalSalesOfCategory;
-  //   } catch (error) {
-  //     console.error('Error calculating total sales of menucategory:', error.message);
-  //     return 0;
-  //   }
-  // }
 
   // ++++++++++ order ++++++++++++
   const [allOrders, setallOrders] = useState([]);
@@ -1020,6 +1002,17 @@ function App() {
     }
   };
 
+
+  const createSerial = ()=>{
+    const serial =
+          allOrders && allOrders.length > 0
+            ? String(
+                Number(allOrders[0].serial) + 1
+              ).padStart(6, "0")
+            : "000001";
+    return serial        
+  }
+
   const createDeliveryOrderByClient = async (
     userId,
     currentAddress,
@@ -1107,12 +1100,7 @@ function App() {
         setisLoading(false);
       } else {
         // Create a new order
-        const serial =
-          allOrders && allOrders.length > 0
-            ? String(
-                Number(allOrders[allOrders && allOrders.length - 1].serial) + 1
-              ).padStart(6, "0")
-            : "000001";
+        const serial = createSerial();
         const findUser = allUsers.find((u, i) => u._id === userId);
         const user = findUser ? userId : null;
         const products = [...itemsInCart];
@@ -1236,12 +1224,7 @@ function App() {
         }
       } else {
         // Create a new order
-        const serial =
-          allOrders && allOrders.length > 0
-            ? String(
-                Number(allOrders[allOrders && allOrders.length - 1].serial) + 1
-              ).padStart(6, "0")
-            : "000001";
+        const serial = createSerial();
         const table = allTable.find((t) => t._id === tableId) ? tableId : null;
         const user = allUsers.find((u) => u._id === tableId) ? tableId : null;
         const products = [...itemsInCart];
@@ -1369,12 +1352,7 @@ function App() {
         setserviceTax(0);
       } else {
         // Create a new order
-        const serial =
-          allOrders && allOrders.length > 0
-            ? String(
-                Number(allOrders[allOrders && allOrders.length - 1].serial) + 1
-              ).padStart(6, "0")
-            : "000001";
+        const serial = createSerial();
         const products = [...itemsInCart];
         const subTotal = costOrder;
         const total = subTotal + salesTax + serviceTax + addition - discount;
