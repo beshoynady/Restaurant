@@ -99,7 +99,7 @@ const Kitchen = () => {
               // console.log({ productIngredients })
 
               // Update consumptionOrderActive
-              productIngredients.forEach((item) => {
+              productIngredients&&productIngredients.forEach((item) => {
                 const existingItemIndex =
                   updatedConsumptionOrderActive.findIndex(
                     (con) => con.itemId?._id === item.itemId?._id
@@ -169,6 +169,10 @@ const Kitchen = () => {
       console.error("Error fetching orders:", error);
     }
   };
+
+
+
+
 
   const today = formatDate(new Date());
   const [date, setDate] = useState(today);
@@ -667,7 +671,7 @@ const Kitchen = () => {
                   >
                     <div className="card-body text-right d-flex justify-content-between p-0 m-1"
                     style={{fontSize:'14px', fontWeight:'500'}}>
-                      <div className="col-6">
+                      <div className="col-6 p-0">
                         <p className="card-text">
                           {" "}
                           {order.table != null
@@ -685,7 +689,7 @@ const Kitchen = () => {
                         </p>
                       </div>
 
-                      <div className="col-6">
+                      <div className="col-6 p-0">
                         {order.waiter ? (
                           <p className="card-text">
                             الويتر: {order.waiter && order.waiter?.username}
@@ -825,7 +829,7 @@ const Kitchen = () => {
                   >
                     <div className="card-body text-right d-flex justify-content-between p-0 m-1"
                     style={{fontSize:'14px', fontWeight:'500'}}>
-                      <div className="col-6">
+                      <div className="col-6 p-0">
                         <p className="card-text">
                           {" "}
                           {order.table != null
@@ -843,7 +847,7 @@ const Kitchen = () => {
                         </p>
                       </div>
 
-                      <div className="col-6">
+                      <div className="col-6 p-0">
                         {order.waiter ? (
                           <p className="card-text">
                             الويتر: {order.waiter && order.waiter.username}
