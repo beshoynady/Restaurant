@@ -49,10 +49,10 @@ const getOrder = async (req, res) => {
             .populate('products.extras.extraDetails.extraId', '_id name price')
             .populate('table', '_id tableNumber sectionNumber')
             .populate('user', '_id username address deliveryArea phone')
-            .populate('createdBy', '_id fullname role shift sectionNumber')
-            .populate('cashier', '_id fullname role shift sectionNumber')
-            .populate('waiter', '_id fullname role shift sectionNumber')
-            .populate('deliveryMan', '_id fullname role shift ');
+            .populate('createdBy', '_id fullname username role shift sectionNumber')
+            .populate('cashier', '_id fullname username role shift sectionNumber')
+            .populate('waiter', '_id fullname username role shift sectionNumber')
+            .populate('deliveryMan', '_id fullname username role shift ');
         if (!order) {
             return res.status(404).json({ error: 'Order not found' });
         }
@@ -71,10 +71,10 @@ const getOrders = async (req, res) => {
             .populate('products.extras.extraDetails.extraId', '_id name price')
             .populate('table', '_id tableNumber sectionNumber')
             .populate('user', '_id username address deliveryArea phone')
-            .populate('createdBy', '_id fullname role shift sectionNumber')
-            .populate('cashier', '_id fullname role shift sectionNumber')
-            .populate('waiter', '_id fullname role shift sectionNumber')
-            .populate('deliveryMan', '_id fullname role shift ');
+            .populate('createdBy', '_id fullname username role shift sectionNumber')
+            .populate('cashier', '_id fullname username role shift sectionNumber')
+            .populate('waiter', '_id fullname username role shift sectionNumber')
+            .populate('deliveryMan', '_id fullname username role shift ');
 
         if (!orders || orders.length === 0) {
             return res.status(404).json({ error: 'No orders found' });
@@ -103,10 +103,10 @@ const getLimitOrders = async (req, res) => {
             .populate('products.extras.extraDetails.extraId', '_id name price')
             .populate('table', '_id tableNumber sectionNumber')
             .populate('user', '_id username address deliveryArea phone')
-            .populate('createdBy', '_id fullname role shift sectionNumber')
-            .populate('cashier', '_id fullname role shift sectionNumber')
-            .populate('waiter', '_id fullname role shift sectionNumber')
-            .populate('deliveryMan', '_id fullname role shift');
+            .populate('createdBy', '_id fullname username role shift sectionNumber')
+            .populate('cashier', '_id fullname username role shift sectionNumber')
+            .populate('waiter', '_id fullname username role shift sectionNumber')
+            .populate('deliveryMan', '_id fullname username role shift ');
 
         if (!orders || orders.length === 0) {
             return res.status(404).json({ error: 'No orders found' });
