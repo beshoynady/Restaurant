@@ -446,7 +446,7 @@ const Kitchen = () => {
       }));
 
 
-      
+
       if (type === "Internal") {
         const waiter = await specifiedWaiter(id);
         await axios.put(
@@ -455,6 +455,7 @@ const Kitchen = () => {
           config
         );
         kitchenSocket.emit("orderready", `اورد جاهز -${waiter}`);
+        
       } else {
         await axios.put(
           `${apiUrl}/api/order/${id}`,

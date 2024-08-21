@@ -139,11 +139,11 @@ const NavBar = () => {
     const handleNewOrderNotification = (notification) => {
       const message = notification;
       const parts = message.split("-");
-      console.log({notification, parts})
+      // console.log({notification, parts})
       
       if (parts.length === 2) {
-        const messageText = parts[1];
-        const waiterId = parts[2];
+        const messageText = parts[0];
+        const waiterId = parts[1];
         const currentWaiterId = employeeLoginInfo.id;
         // Check if the waiter id matches the current user's waiter id
         if (waiterId === currentWaiterId) {
