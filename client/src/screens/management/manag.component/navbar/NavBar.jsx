@@ -139,7 +139,8 @@ const NavBar = () => {
     const handleNewOrderNotification = (notification) => {
       const message = notification;
       const parts = message.split("-");
-
+      console.log({notification, parts})
+      
       if (parts.length === 2) {
         const messageText = parts[1];
         const waiterId = parts[2];
@@ -190,8 +191,8 @@ const NavBar = () => {
     } else if (employeeLoginInfo.role === "chef") {
       kitchenSocket.on("orderkitchen", handleNewOrderNotification);
     } else if (employeeLoginInfo.role === "waiter") {
-      waiterSocket.on("neworder", handleNewOrderNotification);
       waiterSocket.on("orderready", handleNewOrderNotification);
+      waiterSocket.on("neworder", handleNewOrderNotification);
     }
 
     // Clean up the socket connection on component unmount

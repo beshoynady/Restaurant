@@ -444,6 +444,9 @@ const Kitchen = () => {
         ...prod,
         isDone: true,
       }));
+
+
+      
       if (type === "Internal") {
         const waiter = await specifiedWaiter(id);
         await axios.put(
@@ -460,10 +463,13 @@ const Kitchen = () => {
         );
         kitchenSocket.emit("orderready", `اورد جاهز`);
       }
+
+
       // Set all orders state
       getAllOrders();
       getKitchenConsumption();
       toast.success("تم تجهيز الاوردر !");
+
     } catch (error) {
       console.log(error);
       toast.error(
