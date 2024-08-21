@@ -5,7 +5,7 @@ import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 
 const Waiter = () => {
-  const {employeeLoginInfo} = useContext(detacontext)
+  const { employeeLoginInfo } = useContext(detacontext);
 
   const apiUrl = process.env.REACT_APP_API_URL;
   const token = localStorage.getItem("token_e");
@@ -32,12 +32,14 @@ const Waiter = () => {
         return;
       }
       const res = await axios.get(apiUrl + "/api/order/limit/50", config);
-      const filterMyOrder = res.data?.filter(order=> order.waiter?._id === employeeLoginInfo.id)
-      if(filterMyOrder.length>0){
+      const filterMyOrder = res.data?.filter(
+        (order) => order.waiter?._id === employeeLoginInfo.id
+      );
+      if (filterMyOrder.length > 0) {
         const recentStatus = filterMyOrder.filter(
           (order) => order.status === "Pending"
         );
-  
+
         const recentPaymentStatus = filterMyOrder.filter(
           (order) => order.payment_status === "Pending"
         );
@@ -62,7 +64,9 @@ const Waiter = () => {
       }
       const res = await axios.get(apiUrl + "/api/order/limit/50", config);
 
-      const filterMyOrder = res.data?.filter(order=> order.waiter?._id === employeeLoginInfo.id)
+      const filterMyOrder = res.data?.filter(
+        (order) => order.waiter?._id === employeeLoginInfo.id
+      );
 
       const activeOrders = filterMyOrder.filter(
         (order) => order.isActive === true
@@ -106,10 +110,10 @@ const Waiter = () => {
       await axios.put(`${apiUrl}/api/order/${id}`, { status }, config);
       fetchInternalOrders();
       fetchPendingData();
-      toast.success("Order is on the way!");
+      toast.success("تم تاكيد استلام الاوردر!");
     } catch (error) {
       console.log(error);
-      toast.error("Error updating order status!");
+      toast.error("حدث خطا اثناء قبول الاوردر!");
     }
   };
 
@@ -132,11 +136,11 @@ const Waiter = () => {
       if (updateOrder.status === 200) {
         fetchInternalOrders();
         fetchPendingData();
-        toast.success("Order has been delivered!");
+        toast.success("تم تاكيد توصيل الاوردر!");
       }
     } catch (error) {
       console.log(error);
-      toast.error("Error delivering order!");
+      toast.error("حدث خطا اثناء تاكيد توصيل الاوردر!");
     }
   };
 
@@ -156,11 +160,11 @@ const Waiter = () => {
       if (res.status === 200) {
         fetchInternalOrders();
         fetchPendingData();
-        toast.success("Help is on the way!");
+        toast.success("تم تاكيد الاتجاه لتقديم المساعده!");
       }
     } catch (error) {
       console.log(error);
-      toast.error("Error sending help!");
+      toast.error("حدث خطاء اثناء تاكيد الاتجاه للعميل!");
     }
   };
 
@@ -175,10 +179,10 @@ const Waiter = () => {
       await axios.put(`${apiUrl}/api/order/${id}`, { helpStatus }, config);
       fetchPendingData();
       fetchInternalOrders();
-      toast.success("Assistance has been provided!");
+      toast.success("تم تاكيد تقديم المساعده!");
     } catch (error) {
       console.log(error);
-      toast.error("Error providing assistance!");
+      toast.error("حدث خطا اثناء تاكيد تقديم المساعدع!");
     }
   };
 
