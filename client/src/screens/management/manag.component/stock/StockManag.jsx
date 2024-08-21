@@ -932,15 +932,7 @@ const StockManag = () => {
                         readOnly
                       />
                     </div>
-                  ) : (
-                    // Default input if no matching movement
-                    <input
-                      type="text"
-                      className="form-control border-primary m-0 p-2 h-auto"
-                      readOnly
-                      value="0"
-                    />
-                  )}
+                  ) : ''}
                 </div>
 
                 {/* {movement === "Purchase" &&   
@@ -967,7 +959,7 @@ const StockManag = () => {
                       required
                       Value={costOfPart}
                     />
-                  ) : (
+                  ) : ["Purchase", "ReturnPurchase"].includes(movement) ?(
                     <input
                       type="Number"
                       className="form-control border-primary m-0 p-2 h-auto"
@@ -977,8 +969,12 @@ const StockManag = () => {
                         setcost(Number(e.target.value) * quantity);
                       }}
                     />
-                  )}
+                  )
+                :''}
                 </div>
+
+
+                {["Purchase", "ReturnPurchase"].includes(movement) ? (
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                     التكلفة
@@ -989,7 +985,9 @@ const StockManag = () => {
                     Value={cost}
                     readOnly
                   />
-                </div>
+                </div>):""}
+
+
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                     الرصيد
