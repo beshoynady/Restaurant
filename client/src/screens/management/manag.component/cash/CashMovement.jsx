@@ -554,10 +554,10 @@ const CashMovement = () => {
                   onChange={(e) => filterByType(e.target.value)}
                 >
                   <option value={""}>الكل</option>
-                  {cashMovementTypeEn.map((type, i) => {
+                  {operationTypesEN.map((type, i) => {
                     return (
                       <option value={type} key={i}>
-                        {cashMovementTypeAr[i]}
+                        {operationTypesAR[i]}
                       </option>
                     );
                   })}
@@ -799,6 +799,8 @@ const CashMovement = () => {
           </div>
         </div>
       </div>
+
+
       <div id="DepositModal" className="modal fade">
         <div className="modal-dialog modal-lg">
           <div className="modal-content shadow-lg border-0 rounded ">
