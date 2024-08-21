@@ -5,7 +5,7 @@ import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 
 const Waiter = () => {
-  const { employeeLoginInfo } = useContext(detacontext);
+  const { employeeLoginInfo , isRefresh, setisRefresh } = useContext(detacontext);
 
   const apiUrl = process.env.REACT_APP_API_URL;
   const token = localStorage.getItem("token_e");
@@ -191,6 +191,10 @@ const Waiter = () => {
     fetchPendingData();
     fetchInternalOrders();
   }, []);
+  useEffect(() => {
+    fetchPendingData();
+    fetchInternalOrders();
+  }, [isRefresh]);
 
   return (
     <div className="container-fluid d-flex flex-wrap align-content-start justify-content-around align-items-start h-100 overflow-auto bg-transparent py-5 px-3">

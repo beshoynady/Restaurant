@@ -152,6 +152,7 @@ function App() {
     },
   };
 
+  const [isRefresh, setisRefresh] = useState(false);
   const [isLoading, setisLoading] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
 
@@ -2326,6 +2327,11 @@ function App() {
   };
 
   useEffect(() => {
+    getAllOrders()
+  }, [isRefresh])
+  
+
+  useEffect(() => {
     fetchData();
 
     const handleConnectError = (error) => {
@@ -2488,6 +2494,8 @@ function App() {
         setEndDate,
         filterByDateRange,
         filterByTime,
+        isRefresh,
+       setisRefresh
       }}
     >
       {isLoading && <LoadingPage />}

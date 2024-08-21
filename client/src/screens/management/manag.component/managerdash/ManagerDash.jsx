@@ -42,6 +42,8 @@ const ManagerDash = () => {
     endpagination,
     setstartpagination,
     setendpagination,
+    isRefresh,
+    setisRefresh
   } = useContext(detacontext);
 
   const [showModal, setShowModal] = useState(false);
@@ -131,6 +133,11 @@ const ManagerDash = () => {
     }
   };
 
+  useEffect(() => {
+    fetchOrdersData()
+  }, [isRefresh])
+  
+
   const orderTypeEN = ['Internal', 'Delivery', 'Takeaway'];
   const orderTypeAR = ["داخلي", "ديليفري", "تيك اوي"];
 
@@ -177,6 +184,7 @@ const ManagerDash = () => {
 
         if (status === "Approved") {
           setupdate(!update);
+          setisRefresh(!isRefresh)
           cashierSocket.emit("orderkitchen", "استلام اوردر جديد");
         }
       }
@@ -277,7 +285,7 @@ const ManagerDash = () => {
         const lastWaiterIndex = sectionWaiters.findIndex(
           (waiter) => waiter._id === lastWaiterId
         );
-        console.log({ lastWaiterId, lastWaiterIndex });
+        // console.log({ lastWaiterId, lastWaiterIndex });
 
         waiterId =
           lastWaiterIndex !== -1 && lastWaiterIndex < sectionWaiters.length - 1
@@ -321,8 +329,10 @@ const ManagerDash = () => {
       if (orderData) {
         setupdate(!update);
         if (orderData.help === "Requests assistance") {
+          setisRefresh(!isRefresh)
           cashierSocket.emit("helprequest", `عميل يطلب مساعده-${waiter}`);
         } else if (orderData.help === "Requests bill") {
+          setisRefresh(!isRefresh)
           cashierSocket.emit("helprequest", `عميل يطلب الحساب-${waiter}`);
         }
       }

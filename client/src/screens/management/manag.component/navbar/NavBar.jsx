@@ -31,7 +31,7 @@ const waiterSocket = io(`${process.env.REACT_APP_API_URL}/waiter`, {
 });
 
 const NavBar = () => {
-  const { permissionsList, employeeLoginInfo } = useContext(detacontext);
+  const { permissionsList, employeeLoginInfo, isRefresh, setisRefresh } = useContext(detacontext);
 
   const apiUrl = process.env.REACT_APP_API_URL;
   const token = localStorage.getItem("token_e");
@@ -155,7 +155,7 @@ const NavBar = () => {
               "notifications",
               JSON.stringify(updatedNotifications)
             );
-
+            setisRefresh(!isRefresh)
             const audio = new Audio(notificationSound);
             audio.play().catch((error) => {
               console.error("Error playing sound:", error);
@@ -171,7 +171,7 @@ const NavBar = () => {
             "notifications",
             JSON.stringify(updatedNotifications)
           );
-
+          setisRefresh(!isRefresh)
           const audio = new Audio(notificationSound);
           audio.play().catch((error) => {
             console.error("Error playing sound:", error);

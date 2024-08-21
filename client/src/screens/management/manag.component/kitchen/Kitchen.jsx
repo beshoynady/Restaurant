@@ -19,7 +19,7 @@ const Kitchen = () => {
     },
   };
 
-  const { formatDate, formatTime } = useContext(detacontext);
+  const { formatDate, formatTime , isRefresh, setisRefresh  } = useContext(detacontext);
 
   const start = useRef();
   const ready = useRef();
@@ -580,24 +580,7 @@ const Kitchen = () => {
     return minutesPassed;
   };
 
-  const updateOrderStatus = async (id, type, products) => {
-    const status = "Prepared";
-    const updatedProducts = products&&products.map((prod) => ({ ...prod, isDone: true }));
 
-    if (type === "Internal") {
-      const waiter = await specifiedWaiter(id);
-      await axios.put(`${apiUrl}/api/order/${id}`, {
-        products: updatedProducts,
-        status,
-        waiter,
-      });
-    } else {
-      await axios.put(`${apiUrl}/api/order/${id}`, {
-        products: updatedProducts,
-        status,
-      });
-    }
-  };
 
   // Fetches orders and active waiters on initial render
   useEffect(() => {
@@ -607,9 +590,13 @@ const Kitchen = () => {
     getKitchenConsumption();
   }, []);
 
-  // useEffect(() => {
-  //   getKitchenConsumption();
-  // }, [date]);
+  useEffect(() => {
+    getAllRecipe();
+    getAllWaiters();
+    getAllOrders();
+    getKitchenConsumption();
+  }, [isRefresh]);
+
 
   return (
     <div
