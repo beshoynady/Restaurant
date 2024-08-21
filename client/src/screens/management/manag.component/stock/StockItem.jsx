@@ -58,7 +58,7 @@ const StockItem = () => {
       toast.error("رجاء تسجيل الدخول مره اخري");
       return;
     }
-    if (stockItemPermission && !stockItemPermission.read) {
+    if (stockItemPermission && !stockItemPermission.create) {
       toast.warn("ليس لك صلاحية لانشاء عنصر جديد في المخزن");
       return;
     }
@@ -122,6 +122,7 @@ const StockItem = () => {
     }
     setisLoadiog(false);
   };
+
   // Function to edit a stock item
   const editStockItem = async (e, userId) => {
     e.preventDefault();
@@ -255,6 +256,10 @@ const StockItem = () => {
       toast.error("رجاء تسجيل الدخول مره اخري");
       return;
     }
+    if (stockItemPermission && !stockItemPermission.read) {
+      toast.warn("ليس لك صلاحية لعرض عناصر المخزن");
+      return;
+    }
     setisLoadiog(true);
     try {
       const response = await axios.get(apiUrl + "/api/stockitem/", config);
@@ -342,6 +347,7 @@ const StockItem = () => {
     getStockItems();
     getAllCategoryStock();
   }, []);
+
   return (
     <div className="w-100 px-3 d-flex align-itmes-center justify-content-start">
       <div className="table-responsive mt-1">
