@@ -370,7 +370,7 @@ const ManagerDash = () => {
         toast.info("لم يتم العثور على  لهذا الموظف");
         return;
       }
-      
+
       if (registers.length > 0) {
         setregisters(registers);
         setregisterSelected(registers[0]);
@@ -479,7 +479,7 @@ const ManagerDash = () => {
         paymentMethod,
         isActive,
         cashier,
-      });
+      }, config);
       const changePaymentstautsData = changePaymentstauts.data;
       if (changePaymentstautsData) {
         await RevenueRecording(changePaymentstautsData.total, revenueAmount);
