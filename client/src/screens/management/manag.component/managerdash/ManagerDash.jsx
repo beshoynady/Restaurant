@@ -131,6 +131,24 @@ const ManagerDash = () => {
 
   const status = ["Pending", "Approved", "Cancelled"];
   const statusAR = ["انتظار", "موافق", "ملغي"];
+  const allStatus = [
+    "Pending",
+    "Approved",
+    "Preparing",
+    "Prepared",
+    "On the way",
+    "Delivered",
+    "Cancelled",
+  ];
+  const allStatusAR = [
+    "انتظار",
+    "موافق",
+    "قيد التحضير",
+    "تم التحضير",
+    "في الطريق",
+    "تم التسليم",
+    "ملغي",
+  ];
   const [update, setupdate] = useState(false);
 
   const changeorderstauts = async (e, orderId, cashier) => {
@@ -152,7 +170,6 @@ const ManagerDash = () => {
 
         toast.success("تم تغيير حالة الطلب بنجاح");
 
-        
         if (status === "Approved") {
           setupdate(!update);
           cashierSocket.emit("orderkitchen", "استلام اوردر جديد");
@@ -287,10 +304,14 @@ const ManagerDash = () => {
         return;
       }
       const helpStatus = "Send waiter";
-      const order = await axios.put(apiUrl + "/api/order/" + id, {
-        waiter,
-        helpStatus,
-      },config);
+      const order = await axios.put(
+        apiUrl + "/api/order/" + id,
+        {
+          waiter,
+          helpStatus,
+        },
+        config
+      );
       const orderData = order.data;
       console.log(orderData);
       if (orderData) {
@@ -314,9 +335,13 @@ const ManagerDash = () => {
         toast.error("رجاء تسجيل الدخول مره اخري");
       }
       const deliveryMan = id;
-      const order = await axios.put(apiUrl + "/api/order/" + orderid, {
-        deliveryMan,
-      },config);
+      const order = await axios.put(
+        apiUrl + "/api/order/" + orderid,
+        {
+          deliveryMan,
+        },
+        config
+      );
       setupdate(!update);
       console.log(order.data);
     } catch (error) {
@@ -342,12 +367,12 @@ const ManagerDash = () => {
       const registers = response.data;
       // console.log({response})
       if (registers.length === 0) {
-        toast.info("لم يتم العثور على حسابات النقدية لهذا الموظف");
+        toast.info("لم يتم العثور على  لهذا الموظف");
         return;
       }
-      if (registers.length > 1) {
+      
+      if (registers.length > 0) {
         setregisters(registers);
-      } else if (registers.length === 1) {
         setregisterSelected(registers[0]);
       }
     } catch (error) {
@@ -641,7 +666,7 @@ const ManagerDash = () => {
       // }
 
       // Update order status or perform other tasks
-      
+
       const status = "Prepared";
       const updateproducts = products.map((prod) => ({
         ...prod,
@@ -981,8 +1006,8 @@ const ManagerDash = () => {
                                 >
                                   <option value={recent.status}>
                                     {
-                                      statusAR[
-                                        status.findIndex(
+                                      allStatusAR[
+                                        allStatus.findIndex(
                                           (state) => state === recent.status
                                         )
                                       ]
@@ -1005,7 +1030,9 @@ const ManagerDash = () => {
                                 </a>
                               </td>
                               <td>
-                                {recent.waiter ? recent.waiter?.username : "بم يحدد"}
+                                {recent.waiter
+                                  ? recent.waiter?.username
+                                  : "بم يحدد"}
                               </td>
                               <td>
                                 {recent.orderType === "Delivery" && (
@@ -1234,7 +1261,7 @@ const ManagerDash = () => {
 
       {/* تاكيد الدفع */}
       <div id="paymentModal" className="modal fade">
-        <div className="modal-dialog modal-lg">
+        <div className="modal-dialog modal-lg" style={{width:'350px', maxWidth:'95%'}}>
           <div className="modal-content shadow-lg border-0 rounded ">
             <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
               <h4 className="modal-title">تاكيد دفع الفاتورة</h4>
@@ -1248,109 +1275,111 @@ const ManagerDash = () => {
               </button>
             </div>
             <form
-              className="p-1"
               onSubmit={(e) => {
                 changePaymentorderstauts(e);
               }}
             >
-              <div className="form-group w-100 d-flex align-items-center justify-content-between">
-                <label htmlFor="totalOrder" className="col-6 text-dark">
-                  اجمالي المطلوب:
-                </label>
-                <input
-                  type="text"
-                  id="totalOrder"
-                  className="form-control border-primary col-6"
-                  value={orderdata.total}
-                  readOnly
-                />
-              </div>
-              <div className="form-group w-100 d-flex align-items-center justify-content-between">
-                <label htmlFor="paidAmount" className="col-6 text-dark">
-                  المدفوع:
-                </label>
-                <input
-                  type="number"
-                  id="paidAmount"
-                  className="form-control border-primary col-6"
-                  min={parseFloat(orderdata.total)}
-                  required
-                  onChange={(e) => setPaidAmount(e.target.value)}
-                />
-              </div>
-              <div className="form-group w-100 d-flex align-items-center justify-content-between">
-                <label htmlFor="remainingAmount" className="col-6 text-dark">
-                  الباقي:
-                </label>
-                <input
-                  type="text"
-                  id="remainingAmount"
-                  className="form-control border-primary col-6"
-                  value={remainingAmount}
-                  readOnly
-                />
-              </div>
-              <div className="form-group w-100 d-flex align-items-center justify-content-between">
-                <label htmlFor="cashOutAmount" className="col-6 text-dark">
-                  المبلغ الخارج من الخزينة:
-                </label>
-                <input
-                  type="number"
-                  id="cashOutAmount"
-                  className="form-control border-primary col-6"
-                  max={parseFloat(remainingAmount)}
-                  onChange={(e) => setCashOutAmount(e.target.value)}
-                />
-              </div>
-              <div className="form-group d-flex flex-nowrap w-100">
-                <label htmlFor="paymentMethod" className="col-6 text-dark">
-                  طريقه الدفع:
-                </label>
-                <select
-                  id="paymentMethod"
-                  className="form-control border-primary m-0 p-2 h-auto"
-                  required
-                  onChange={(e) => setpaymentMethod(e.target.value)}
-                >
-                  <option>اختر طريقه الدفع</option>
-                  {restaurantData.acceptedPayments &&
-                    restaurantData.acceptedPayments.map((method, i) => (
-                      <option value={method} key={i}>
-                        {method}
-                      </option>
-                    ))}
-                </select>
-              </div>
-              <div className="form-group d-flex flex-nowrap w-100">
-                <label htmlFor="registerSelected" className="col-6 text-dark">
-                  الخزينة:
-                </label>
-                {registers.length > 1 ? (
-                  <select
-                    id="registerSelected"
-                    className="form-control border-primary m-0 p-2 h-auto"
-                    required
-                    onChange={(e) => setregisterSelected(e.target.value)}
-                  >
-                    <option>اختر الخزينه</option>
-                    {registers.map((register, i) => (
-                      <option value={register._id} key={i}>
-                        {register.name}
-                      </option>
-                    ))}
-                  </select>
-                ) : registers.length === 1 ? (
+              <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
+                <div className="form-group w-100 d-flex align-items-center justify-content-between">
+                  <label htmlFor="totalOrder" className="form-label col-6 text-dark text-right">
+                    اجمالي المطلوب:
+                  </label>
                   <input
                     type="text"
-                    id="registerSelected"
-                    className="form-control border-primary col-6"
-                    value={registers[0].name}
+                    id="totalOrder"
+                    className="form-control border-primary col-4"
+                    value={orderdata.total}
                     readOnly
                   />
-                ) : (
-                  "لم يوجد خزينه"
-                )}
+                </div>
+                <div className="form-group w-100 d-flex align-items-center justify-content-between">
+                  <label htmlFor="paidAmount" className="form-label col-6 text-dark text-right">
+                    المدفوع:
+                  </label>
+                  <input
+                    type="number"
+                    id="paidAmount"
+                    className="form-control border-primary col-4"
+                    min={parseFloat(orderdata.total)}
+                    required
+                    onChange={(e) => setPaidAmount(e.target.value)}
+                  />
+                </div>
+                <div className="form-group w-100 d-flex align-items-center justify-content-between">
+                  <label htmlFor="remainingAmount" className="form-label col-6 text-dark text-right">
+                    الباقي:
+                  </label>
+                  <input
+                    type="text"
+                    id="remainingAmount"
+                    className="form-control border-primary col-4"
+                    value={remainingAmount}
+                    readOnly
+                  />
+                </div>
+                <div className="form-group w-100 d-flex align-items-center justify-content-between">
+                  <label htmlFor="cashOutAmount" className="form-label col-6 text-dark text-right">
+                    المبلغ الخارج من الخزينة:
+                  </label>
+                  <input
+                    type="number"
+                    id="cashOutAmount"
+                    className="form-control border-primary col-4"
+                    max={parseFloat(remainingAmount)}
+                    onChange={(e) => setCashOutAmount(e.target.value)}
+                  />
+                </div>
+                <div className="form-group d-flex flex-nowrap w-100">
+                  <label htmlFor="paymentMethod" className="form-label col-6 text-dark text-right">
+                    طريقه الدفع:
+                  </label>
+                  <select
+                    id="paymentMethod"
+                    className="form-control border-primary m-0 p-2 h-auto"
+                    required
+                    onChange={(e) => setpaymentMethod(e.target.value)}
+                  >
+                    <option>اختر طريقه الدفع</option>
+                    {restaurantData.acceptedPayments &&
+                      restaurantData.acceptedPayments.map((method, i) => (
+                        <option value={method} key={i}>
+                          {method}
+                        </option>
+                      ))}
+                  </select>
+                </div>
+                <div className="form-group d-flex flex-nowrap w-100">
+                  <label htmlFor="registerSelected" className="form-label col-6 text-dark text-right">
+                    الخزينة:
+                  </label>
+                  {registers.length > 0 ? (
+                    <select
+                      id="registerSelected"
+                      className="form-control border-primary m-0 p-2 h-auto"
+                      required
+                      onChange={(e) => setregisterSelected(e.target.value)}
+                    >
+                      <option>اختر الخزينه</option>
+                      {registers.map((register, i) => (
+                        <option value={register._id} key={i}>
+                          {register.name}
+                        </option>
+                      ))}
+                    </select>
+                  ) : registers.length === 1 ? (
+                    <input
+                      type="text"
+                      id="registerSelected"
+                      className="form-control border-primary col-4"
+                      value={registers[0].name}
+                      readOnly
+                    />
+                  ) : (
+                    "لم يوجد خزينه"
+                  )}
+                </div>
               </div>
+
               <div className="modal-footer w-100 d-flex flex-row flex-nowrap align-items-center justify-content-between">
                 <input
                   type="submit"

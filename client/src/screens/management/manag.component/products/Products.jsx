@@ -1113,7 +1113,6 @@ const Products = () => {
       <div id="editProductModal" className="modal fade">
         <div className="modal-dialog modal-lg">
           <div className="modal-content shadow-lg border-0 rounded">
-            <form onSubmit={editProduct}>
               <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                 <h4 className="modal-title">تعديل منتج</h4>
                 <button
@@ -1125,6 +1124,8 @@ const Products = () => {
                   &times;
                 </button>
               </div>
+              <form onSubmit={editProduct}>
+
               <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
