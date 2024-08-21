@@ -254,14 +254,14 @@ const StockManag = () => {
       console.log(error);
       // Toast notification for error
       toast.error("فشل تسجيل حركه المخزن ! حاول مره اخري");
-    }finally{
+    } finally {
       setisLoading(!false);
     }
   };
 
   const updateStockaction = async (e, employeeId) => {
     e.preventDefault();
-    
+
     if (!token) {
       // Handle case where token is not available
       toast.error("رجاء تسجيل الدخول مره اخري");
@@ -383,11 +383,11 @@ const StockManag = () => {
       return;
     }
     setisLoading(true);
-      try {
-        if (stockManagementPermission && !stockManagementPermission.delete) {
-          toast.warn("ليس لك صلاحية لحذف حركه المخزن");
-          return;
-        }
+    try {
+      if (stockManagementPermission && !stockManagementPermission.delete) {
+        toast.warn("ليس لك صلاحية لحذف حركه المخزن");
+        return;
+      }
       // Delete the selected stock action
       const response = await axios.delete(
         `${apiUrl}/api/stockmanag/${actionId}`,
@@ -407,8 +407,7 @@ const StockManag = () => {
       console.log(error);
       // Toast notification for error
       toast.error("فشل حذف حركه المخزن ! حاول مره اخري ");
-    }finally{
-      
+    } finally {
       setisLoading(false);
     }
   };
@@ -510,24 +509,24 @@ const StockManag = () => {
                 </h2>
               </div>
               <div className="col-12 col-md-6 p-0 m-0 d-flex flex-wrap aliegn-items-center justify-content-end print-hide">
-                {stockManagementPermission.create&&
-                <a
-                  href="#addStockactionModal"
-                  className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-success"
-                  data-toggle="modal"
-                >
-                  <span>انشاء حركه مخزن</span>
-                </a>
-                }
-                {stockManagementPermission.delete&&
-                <a
-                  href="#deleteStockactionModal"
-                  className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-danger"
-                  data-toggle="modal"
-                >
-                  <span>حذف</span>
-                </a>
-                }
+                {stockManagementPermission.create && (
+                  <a
+                    href="#addStockactionModal"
+                    className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-success"
+                    data-toggle="modal"
+                  >
+                    <span>انشاء حركه مخزن</span>
+                  </a>
+                )}
+                {stockManagementPermission.delete && (
+                  <a
+                    href="#deleteStockactionModal"
+                    className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-danger"
+                    data-toggle="modal"
+                  >
+                    <span>حذف</span>
+                  </a>
+                )}
               </div>
             </div>
           </div>
@@ -687,76 +686,77 @@ const StockManag = () => {
               </tr>
             </thead>
             <tbody>
-              {AllStockactions&&AllStockactions.map((action, i) => {
-                if ((i >= startpagination) & (i < endpagination)) {
-                  return (
-                    <tr key={i}>
-                      <td>
-                        <span className="custom-checkbox">
-                          <input
-                            type="checkbox"
-                            className="form-check-input form-check-input-lg"
-                            id="checkbox1"
-                            name="options[]"
-                            value="1"
-                          />
-                          <label htmlFor="checkbox1"></label>
-                        </span>
-                      </td>
-                      <td>{i + 1}</td>
-                      <td>{action.itemId?.itemName}</td>
-                      <td>{action.movement}</td>
-                      <td>{action.quantity}</td>
-                      <td>{action.unit}</td>
-                      <td>{action.price}</td>
-                      <td>{action.cost}</td>
-                      <td>{action.oldBalance}</td>
-                      <td>{action.balance}</td>
-                      <td>{formatDateTime(action.createdAt)}</td>
-                      <td>{action.actionBy?.fullname}</td>
-                      <td>
-                        {stockManagementPermission.update&&
-                        <a
-                          href="#editStockactionModal"
-                          className="edit"
-                          data-toggle="modal"
-                          onClick={() => {
-                            setactionId(action._id);
-                            setitemName(action.itemName);
-                            setoldBalance(action.oldBalance);
-                            setprice(action.price);
-                          }}
-                        >
-                          <i
-                            className="material-icons"
-                            data-toggle="tooltip"
-                            title="Edit"
-                          >
-                            &#xE254;
-                          </i>
-                        </a>
-                        }
-                        {stockManagementPermission.delete&&
-                        <a
-                          href="#deleteStockactionModal"
-                          className="delete"
-                          data-toggle="modal"
-                          onClick={() => setactionId(action._id)}
-                        >
-                          <i
-                            className="material-icons"
-                            data-toggle="tooltip"
-                            title="Delete"
-                          >
-                            &#xE872;
-                          </i>
-                        </a>
-                        }
-                      </td>
-                    </tr>
-                  );
-                }
-              })}
+              {AllStockactions &&
+                AllStockactions.map((action, i) => {
+                  if ((i >= startpagination) & (i < endpagination)) {
+                    return (
+                      <tr key={i}>
+                        <td>
+                          <span className="custom-checkbox">
+                            <input
+                              type="checkbox"
+                              className="form-check-input form-check-input-lg"
+                              id="checkbox1"
+                              name="options[]"
+                              value="1"
+                            />
+                            <label htmlFor="checkbox1"></label>
+                          </span>
+                        </td>
+                        <td>{i + 1}</td>
+                        <td>{action.itemId?.itemName}</td>
+                        <td>{action.movement}</td>
+                        <td>{action.quantity}</td>
+                        <td>{action.unit}</td>
+                        <td>{action.price}</td>
+                        <td>{action.cost}</td>
+                        <td>{action.oldBalance}</td>
+                        <td>{action.balance}</td>
+                        <td>{formatDateTime(action.createdAt)}</td>
+                        <td>{action.actionBy?.fullname}</td>
+                        <td>
+                          {stockManagementPermission.update && (
+                            <a
+                              href="#editStockactionModal"
+                              className="edit"
+                              data-toggle="modal"
+                              onClick={() => {
+                                setactionId(action._id);
+                                setitemName(action.itemName);
+                                setoldBalance(action.oldBalance);
+                                setprice(action.price);
+                              }}
+                            >
+                              <i
+                                className="material-icons"
+                                data-toggle="tooltip"
+                                title="Edit"
+                              >
+                                &#xE254;
+                              </i>
+                            </a>
+                          )}
+                          {stockManagementPermission.delete && (
+                            <a
+                              href="#deleteStockactionModal"
+                              className="delete"
+                              data-toggle="modal"
+                              onClick={() => setactionId(action._id)}
+                            >
+                              <i
+                                className="material-icons"
+                                data-toggle="tooltip"
+                                title="Delete"
+                              >
+                                &#xE872;
+                              </i>
+                            </a>
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  }
+                })}
             </tbody>
           </table>
           <div className="clearfix">
@@ -885,16 +885,13 @@ const StockManag = () => {
                   </select>
                 </div>
 
-                <div className="form-group col-12 col-md-6">
-                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
-                    الكمية
-                  </label>
-                  {[
-                    "Issuance",
-                    "ReturnIssuance",
-                    "Wastage",
-                    "Damaged",
-                  ].includes(movement) ? (
+                {["Issuance", "ReturnIssuance", "Wastage", "Damaged"].includes(
+                  movement
+                ) ? (
+                  <div className="form-group col-12 col-md-6">
+                    <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                      الكمية
+                    </label>
                     <div className="d-flex align-items-center">
                       {/* Input for quantity */}
                       <input
@@ -913,7 +910,12 @@ const StockManag = () => {
                         readOnly
                       />
                     </div>
-                  ) : ["Purchase", "ReturnPurchase"].includes(movement) ? (
+                  </div>
+                ) : ["Purchase", "ReturnPurchase"].includes(movement) ? (
+                  <div className="form-group col-12 col-md-6">
+                    <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                      الكمية
+                    </label>
                     <div className="d-flex align-items-center">
                       {/* Input for quantity */}
                       <input
@@ -932,8 +934,10 @@ const StockManag = () => {
                         readOnly
                       />
                     </div>
-                  ) : ''}
-                </div>
+                  </div>
+                ) : (
+                  ""
+                )}
 
                 {/* {movement === "Purchase" &&   
                 <>
@@ -946,12 +950,12 @@ const StockManag = () => {
                           </>
                         } */}
 
-                <div className="form-group col-12 col-md-6">
-                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0">{`سعر ${smallUnit}`}</label>
-                  {movement === "Issuance" ||
-                  movement === "ReturnIssuance" ||
-                  movement === "Wastage" ||
-                  movement === "Damaged" ? (
+                {movement === "Issuance" ||
+                movement === "ReturnIssuance" ||
+                movement === "Wastage" ||
+                movement === "Damaged" ? (
+                  <div className="form-group col-12 col-md-6">
+                    <label className="form-label text-wrap text-right fw-bolder p-0 m-0">{`سعر ${smallUnit}`}</label>
                     <input
                       type="text"
                       className="form-control border-primary m-0 p-2 h-auto"
@@ -959,7 +963,11 @@ const StockManag = () => {
                       required
                       Value={costOfPart}
                     />
-                  ) : ["Purchase", "ReturnPurchase"].includes(movement) ?(
+                  </div>
+                ) : ["Purchase", "ReturnPurchase"].includes(movement) ? (
+                  <div className="form-group col-12 col-md-6">
+                    <label className="form-label text-wrap text-right fw-bolder p-0 m-0">{`سعر ${smallUnit}`}</label>
+
                     <input
                       type="Number"
                       className="form-control border-primary m-0 p-2 h-auto"
@@ -969,24 +977,26 @@ const StockManag = () => {
                         setcost(Number(e.target.value) * quantity);
                       }}
                     />
-                  )
-                :''}
-                </div>
-
+                  </div>
+                ) : (
+                  ""
+                )}
 
                 {["Purchase", "ReturnPurchase"].includes(movement) ? (
-                <div className="form-group col-12 col-md-6">
-                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
-                    التكلفة
-                  </label>
-                  <input
-                    type="Number"
-                    className="form-control border-primary m-0 p-2 h-auto"
-                    Value={cost}
-                    readOnly
-                  />
-                </div>):""}
-
+                  <div className="form-group col-12 col-md-6">
+                    <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                      التكلفة
+                    </label>
+                    <input
+                      type="Number"
+                      className="form-control border-primary m-0 p-2 h-auto"
+                      Value={cost}
+                      readOnly
+                    />
+                  </div>
+                ) : (
+                  ""
+                )}
 
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
