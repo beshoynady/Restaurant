@@ -701,7 +701,7 @@ const PayRoll = () => {
               </div>
               <div className="col-12 col-md-6 p-0 m-0 d-flex flex-wrap aliegn-items-center justify-content-end print-hide">
                 <a
-                  className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-warning text-dark fs-3 fw-700"
+                  className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-warning text-dark fs-5 fw-700"
                   onClick={addPayRoll}
                 >
                   <span>تحديث كشف المرتبات</span>
