@@ -68,7 +68,7 @@ const ManagerDash = () => {
 
       // Fetch orders from API
       const res = await axios.get(apiUrl + "/api/order", config);
-      const orders = res.data;
+      const orders = res.data.reverse();
 
       // Update all orders state
       setAllOrders(orders);
@@ -84,8 +84,8 @@ const ManagerDash = () => {
         (order) =>
           order.payment_status === "Pending" && order.status !== "Cancelled"
       );
-      setPendingPayment(pendingPayments.reverse());
-      setlistOrderShow(pendingPayments.reverse());
+      setPendingPayment(pendingPayments);
+      setlistOrderShow(pendingPayments);
       // Filter today's orders
       const today = new Date().toDateString();
       const dayOrders = orders.filter(
@@ -114,9 +114,11 @@ const ManagerDash = () => {
         `${apiUrl}/api/shift/${shiftId}`,
         config
       );
-      const startTime = new Date(shiftData.data.startTime).getTime();
-      const endTime = new Date(shiftData.data.endTime).getTime();
+      const todayDate = new Date().toISOString().split('T')[0];
 
+      const startTime = new Date(`${todayDate}T${shiftData.data.startTime}:00Z`).getTime();
+      const endTime = new Date(`${todayDate}T${shiftData.data.endTime}:00Z`).getTime();
+      
       const shiftOrders = dayOrders.filter((order) => {
         const orderTime = new Date(order.createdAt).getTime();
         return orderTime >= startTime && orderTime <= endTime;
@@ -129,9 +131,12 @@ const ManagerDash = () => {
     }
   };
 
-  const status = ["Pending", "Approved", "Cancelled"];
+  const orderTypeEN = ['Internal', 'Delivery', 'Takeaway'];
+  const orderTypeAR = ["داخلي", "ديليفري", "تيك اوي"];
+
+  const statusEN = ["Pending", "Approved", "Cancelled"];
   const statusAR = ["انتظار", "موافق", "ملغي"];
-  const allStatus = [
+  const allStatusEN = [
     "Pending",
     "Approved",
     "Preparing",
@@ -204,7 +209,6 @@ const ManagerDash = () => {
       if (allWaiters) {
         setAllWaiters(allWaiters);
       } else {
-        // إذا لم يتم العثور على نوادل، قد يكون من الجيد إخطار المستخدم
         toast.warning("لم يتم العثور على ويتر نشط الان.");
       }
 
@@ -440,7 +444,6 @@ const ManagerDash = () => {
       }
     } catch (error) {
       console.log(error);
-      // إخطار المستخدم بالفشل
       toast.error("فشل في تسجيل الإيراد");
     }
   };
@@ -1007,13 +1010,13 @@ const ManagerDash = () => {
                                   <option value={recent.status}>
                                     {
                                       allStatusAR[
-                                        allStatus.findIndex(
+                                        allStatusEN.findIndex(
                                           (state) => state === recent.status
                                         )
                                       ]
                                     }
                                   </option>
-                                  {status.map((state, i) => (
+                                  {statusEN.map((state, i) => (
                                     <option value={state} key={i}>
                                       {statusAR[i]}
                                     </option>
@@ -1032,7 +1035,7 @@ const ManagerDash = () => {
                               <td>
                                 {recent.waiter
                                   ? recent.waiter?.username
-                                  : "بم يحدد"}
+                                  : "لم يحدد"}
                               </td>
                               <td>
                                 {recent.orderType === "Delivery" && (
@@ -1056,7 +1059,7 @@ const ManagerDash = () => {
                                   </select>
                                 )}
                               </td>
-                              <td>{recent.orderType}</td>
+                              <td>{orderTypeAR[orderTypeEN.findIndex(type=> type === recent.orderType)]}</td>
                               <td>
                                 {recent.payment_status === "Pending" ? (
                                   <a
