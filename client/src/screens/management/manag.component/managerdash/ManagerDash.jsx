@@ -134,6 +134,7 @@ const ManagerDash = () => {
   };
 
   useEffect(() => {
+    console.log({isRefresh})
     fetchOrdersData()
   }, [isRefresh])
   
