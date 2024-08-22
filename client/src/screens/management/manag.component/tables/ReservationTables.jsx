@@ -199,7 +199,7 @@ const ReservationTables = () => {
     console.log(userId);
   };
 
-  const searchByNum = (num) => {
+  const searchBytableNum = (num) => {
     if (!num) {
       getAllReservations();
       return;
@@ -217,6 +217,15 @@ const ReservationTables = () => {
       return
     }
     const filter = allReservations.filter(reservation => reservation.status === status)
+    setallReservations(filter)
+  }
+
+  const filterByPhone = (phone) => {
+    if(phone ===''){
+      getAllReservations()
+      return
+    }
+    const filter = allReservations.filter(reservation => reservation.phone === phone)
     setallReservations(filter)
   }
 
@@ -346,9 +355,41 @@ const ReservationTables = () => {
                 <input
                   type="text"
                   className="form-control border-primary m-0 p-2 h-auto"
-                  onChange={(e) => searchByNum(e.target.value)}
+                  onChange={(e) => searchBytableNum(e.target.value)}
                 />
               </div>
+              
+              <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
+                <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                  رقم الطاولة
+                </label>
+                <input
+                  type="text"
+                  className="form-control border-primary m-0 p-2 h-auto"
+                  onChange={(e) => filterByPhone(e.target.value)}
+                />
+              </div>
+
+
+              <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
+                <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                  حسب الحاله
+                </label>
+                <select
+                  className="form-control border-primary m-0 p-2 h-auto"
+                  onChange={(e) => filterByStatus(e.target.value)}
+                >
+                  <option value={""}>الكل</option>
+                  {statusesEn.map((status, i) => {
+                    return (
+                      <option value={status} key={i}>
+                        {statusesAr[i]}
+                      </option>
+                    );
+                  })}
+                </select>
+              </div>
+
 
               <div className="col-12 d-flex align-items-center justify-content-between">
                 <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
