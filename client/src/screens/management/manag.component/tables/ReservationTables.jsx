@@ -42,11 +42,13 @@ const ReservationTables = () => {
 
   const createdBy = employeeLoginInfo?.id;
   const [reservationId, setReservationId] = useState("");
+  const [tableId, settableId] = useState("");
+  const [tableNumber,settableNumber] = useState("");
+  
   const [customerName, setCustomerName] = useState("");
   const [customerPhone, setCustomerPhone] = useState("");
   const [reservationNote, setReservationNote] = useState("");
   const [numberOfGuests, setNumberOfGuests] = useState("");
-  const [tableInfo, setTableInfo] = useState({});
   const [reservationDate, setReservationDate] = useState();
   const [startTime, setStartTime] = useState();
   const [endTime, setEndTime] = useState();
@@ -80,7 +82,10 @@ const ReservationTables = () => {
       numberOfGuests,
       reservationDate,
       startTime,
-      endTime})
+      endTime,
+      reservationNote,
+
+    })
     try {
       if (!id) {
         toast.error("رجاء اختيار الحجز بشكل صحيح");
@@ -114,6 +119,7 @@ const ReservationTables = () => {
           reservationDate,
           startTime,
           endTime,
+          reservationNote
         });
         if (response.status === 200) {
           getAllReservations();
@@ -526,10 +532,8 @@ const ReservationTables = () => {
                             setStartTime(reservation.startTime);
                             setReservationDate(reservation.reservationDate);
                             setReservationNote(reservation.reservationNotes);
-                            setTableInfo({
-                              id: reservation.tableId,
-                              tableNumber: reservation.tableNumber,
-                            });
+                            settableId(reservation.tableId)
+                            settableNumber(reservation.tableNumber);
                           }}
                         >
                           <i
@@ -876,21 +880,7 @@ const ReservationTables = () => {
           <div className="modal-content shadow-lg border-0 rounded ">
             <form
               onSubmit={(e) =>
-                updateReservation(
-                  e,
-                  reservationId,
-                  tableInfo.id,
-                  tableInfo.tableNumber,
-                  userId,
-                  numberOfGuests,
-                  customerName,
-                  customerPhone,
-                  reservationDate,
-                  startTime,
-                  endTime,
-                  reservationNote,
-                  createdBy
-                )
+                updateReservation( e)
               }
             >
               <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
