@@ -129,88 +129,7 @@ const NavBar = () => {
     setMessages((prevMessages) => prevMessages.filter((_, i) => i !== index));
   };
 
-  useEffect(() => {
-    // Load notifications from localStorage on component mount
-    const savedNotifications =
-      JSON.parse(localStorage.getItem("notifications")) || [];
-    setNotifications(savedNotifications);
 
-    // Define the event handler
-    const handleNewOrderNotification = (notification) => {
-      const message = notification;
-      const parts = message.split("-");
-      // console.log({notification, parts})
-      
-      if (parts.length === 2) {
-        const messageText = parts[0];
-        const waiterId = parts[1];
-        const currentWaiterId = employeeLoginInfo.id;
-        // Check if the waiter id matches the current user's waiter id
-        if (waiterId === currentWaiterId) {
-          // Assuming currentWaiterId is the ID of the current waiter
-          setNotifications((prevNotifications) => {
-            const updatedNotifications = [...prevNotifications, messageText];
-            // Save notifications to localStorage
-            localStorage.setItem(
-              "notifications",
-              JSON.stringify(updatedNotifications)
-            );
-            setisRefresh(!isRefresh)
-            const audio = new Audio(notificationSound);
-            audio.play().catch((error) => {
-              console.error("Error playing sound:", error);
-            });
-            return updatedNotifications;
-          });
-        }
-      } else {
-        setNotifications((prevNotifications) => {
-          const updatedNotifications = [...prevNotifications, notification];
-          // Save notifications to localStorage
-          localStorage.setItem(
-            "notifications",
-            JSON.stringify(updatedNotifications)
-          );
-          setisRefresh(!isRefresh)
-          const audio = new Audio(notificationSound);
-          audio.play().catch((error) => {
-            console.error("Error playing sound:", error);
-          });
-          return updatedNotifications;
-        });
-      }
-    };
-
-    // Listen for new order notifications
-    if (
-      employeeLoginInfo.role === "cashier" ||
-      employeeLoginInfo.role === "programer"
-    ) {
-      cashierSocket.on("neworder", handleNewOrderNotification);
-      cashierSocket.on("orderready", handleNewOrderNotification);
-    } else if (employeeLoginInfo.role === "chef") {
-      kitchenSocket.on("orderkitchen", handleNewOrderNotification);
-    } else if (employeeLoginInfo.role === "waiter") {
-      waiterSocket.on("orderready", handleNewOrderNotification);
-      waiterSocket.on("neworder", handleNewOrderNotification);
-    }
-
-    // Clean up the socket connection on component unmount
-    return () => {
-      if (
-        employeeLoginInfo.role === "cashier" ||
-        employeeLoginInfo.role === "programer"
-      ) {
-        cashierSocket.off("neworder", handleNewOrderNotification);
-        cashierSocket.off("orderready", handleNewOrderNotification);
-      } else if (employeeLoginInfo.role === "chef") {
-        kitchenSocket.off("orderkitchen", handleNewOrderNotification);
-      } else if (employeeLoginInfo.role === "waiter") {
-        waiterSocket.off("neworder", handleNewOrderNotification);
-        waiterSocket.off("orderready", handleNewOrderNotification);
-      }
-    };
-  }, []);
 
   const employeeLogout = () => {
     try {
@@ -255,6 +174,94 @@ const NavBar = () => {
       setFullscreen(false);
     }
   };
+
+
+
+
+  useEffect(() => {
+    // Load notifications from localStorage on component mount
+    const savedNotifications =
+      JSON.parse(localStorage.getItem("notifications")) || [];
+    setNotifications(savedNotifications);
+
+    // Define the event handler
+    const handleNewOrderNotification = (notification) => {
+      const parts = notification.split("-");
+      // console.log({notification, parts})
+      
+      if (parts.length === 2) {
+        const notificationText = parts[0];
+        const waiterId = parts[1];
+        const currentWaiterId = employeeLoginInfo.id;
+        // Check if the waiter id matches the current user's waiter id
+        if (waiterId === currentWaiterId) {
+          // Assuming currentWaiterId is the ID of the current waiter
+          setNotifications((prevNotifications) => {
+            const updatedNotifications = [...prevNotifications, notificationText];
+            setisRefresh(updatedNotifications.length)
+
+            // Save notifications to localStorage
+            localStorage.setItem(
+              "notifications",
+              JSON.stringify(updatedNotifications)
+            );
+            const audio = new Audio(notificationSound);
+            audio.play().catch((error) => {
+              console.error("Error playing sound:", error);
+            });
+            return updatedNotifications;
+          });
+        }
+      } else {
+        setNotifications((prevNotifications) => {
+          const updatedNotifications = [...prevNotifications, notification];
+          // Save notifications to localStorage
+          setisRefresh(updatedNotifications.length)
+
+          localStorage.setItem(
+            "notifications",
+            JSON.stringify(updatedNotifications)
+          );
+          const audio = new Audio(notificationSound);
+          audio.play().catch((error) => {
+            console.error("Error playing sound:", error);
+          });
+          return updatedNotifications;
+        });
+      }
+    };
+
+    // Listen for new order notifications
+    if (
+      employeeLoginInfo.role === "cashier" ||
+      employeeLoginInfo.role === "programer"
+    ) {
+      cashierSocket.on("neworder", handleNewOrderNotification);
+      cashierSocket.on("orderready", handleNewOrderNotification);
+    } else if (employeeLoginInfo.role === "chef") {
+      kitchenSocket.on("orderkitchen", handleNewOrderNotification);
+    } else if (employeeLoginInfo.role === "waiter") {
+      waiterSocket.on("orderready", handleNewOrderNotification);
+      waiterSocket.on("neworder", handleNewOrderNotification);
+    }
+
+    // Clean up the socket connection on component unmount
+    return () => {
+      if (
+        employeeLoginInfo.role === "cashier" ||
+        employeeLoginInfo.role === "programer"
+      ) {
+        cashierSocket.off("neworder", handleNewOrderNotification);
+        cashierSocket.off("orderready", handleNewOrderNotification);
+      } else if (employeeLoginInfo.role === "chef") {
+        kitchenSocket.off("orderkitchen", handleNewOrderNotification);
+      } else if (employeeLoginInfo.role === "waiter") {
+        waiterSocket.off("neworder", handleNewOrderNotification);
+        waiterSocket.off("orderready", handleNewOrderNotification);
+      }
+    };
+  }, []);
+
 
   useEffect(() => {
     getAllCustomerMessage();
