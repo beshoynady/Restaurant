@@ -62,6 +62,10 @@ const ReservationSchema = new Schema(
             type: Schema.Types.ObjectId,
             ref: 'Employee',
         },
+        updateBy: {
+            type: Schema.Types.ObjectId,
+            ref: 'Employee',
+        },
         // Reservation status: awaiting confirmation, confirmed, canceled, Missed reservation time
         status: {
             type: String,

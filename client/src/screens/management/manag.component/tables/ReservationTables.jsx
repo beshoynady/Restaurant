@@ -84,10 +84,10 @@ const ReservationTables = () => {
       startTime,
       endTime,
       reservationNote,
-
+      updateBy:employeeLoginInfo?.id
     })
     try {
-      if (!id) {
+      if (!reservationId) {
         toast.error("رجاء اختيار الحجز بشكل صحيح");
         return;
       }
@@ -107,7 +107,7 @@ const ReservationTables = () => {
             reservation.endTime >= endTime) ||
           (startTime <= reservation.startTime && endTime >= reservation.endTime)
       );
-       console.log({id, filterReservationsByTable, filterReservationsByTime})
+       console.log({filterReservationsByTable, filterReservationsByTime})
       if (
         filterReservationsByTime.length === 1 &&
         filterReservationsByTime[0]._id === reservationId
@@ -119,7 +119,8 @@ const ReservationTables = () => {
           reservationDate,
           startTime,
           endTime,
-          reservationNote
+          reservationNote,
+          updateBy:employeeLoginInfo?.id
         });
         if (response.status === 200) {
           getAllReservations();
@@ -625,8 +626,8 @@ const ReservationTables = () => {
               onSubmit={(e) =>
                 createReservations(
                   e,
-                  tableInfo.id,
-                  tableInfo.tableNumber,
+                  tableId,
+                  tableNumber,
                   userId,
                   numberOfGuests,
                   customerName,
@@ -806,12 +807,10 @@ const ReservationTables = () => {
                       <select
                         className="form-control border-primary m-0 p-2 h-auto"
                         id="tableNumber"
-                        onChange={(e) =>
-                          setTableInfo({
-                            id: e.target.value,
-                            tableNumber:
-                              e.target.options[e.target.selectedIndex].text,
-                          })
+                        onChange={(e) =>{
+                          settableId(e.target.value);  
+                          settableNumber(e.target.options[e.target.selectedIndex].text)
+                        }
                         }
                       >
                         <option>الطاولات المتاحة في هذا الوقت</option>
@@ -861,7 +860,7 @@ const ReservationTables = () => {
                 <input
                   type="submit"
                   className="btn btn-success col-6 h-100 px-2 py-3 m-0"
-                  value="ضافه"
+                  value="اضافه"
                 />
                 <input
                   type="button"
@@ -1073,12 +1072,10 @@ const ReservationTables = () => {
                         className="form-control border-primary m-0 p-2 h-auto"
                         id="tableNumber"
                         defaultValue={tableInfo.tableNumber}
-                        onChange={(e) =>
-                          setTableInfo({
-                            id: e.target.value,
-                            tableNumber:
-                              e.target.options[e.target.selectedIndex].text,
-                          })
+                        onChange={(e) =>{
+                          settableId(e.target.value);  
+                          settableNumber(e.target.options[e.target.selectedIndex].text)
+                        }
                         }
                       >
                         <option>{tableInfo.tableNumber}</option>
@@ -1130,7 +1127,7 @@ const ReservationTables = () => {
                 <input
                   type="submit"
                   className="btn btn-success col-6 h-100 px-2 py-3 m-0"
-                  value="ضافه"
+                  value="تعديل"
                 />
                 <input
                   type="button"
