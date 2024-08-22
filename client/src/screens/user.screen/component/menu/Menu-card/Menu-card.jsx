@@ -344,7 +344,7 @@ const MenuCard = () => {
                                           sizeId && product.sizes?.find(size =>size._id === sizeId) ) {
                                           addItemToCart(product._id, size._id);
                                         }else{
-                                          toast.warn('اختر الحجم اولا')
+                                          toast.warn('اختر الحجم و الكمية اولا')
                                         }
                                       }}
                                     >

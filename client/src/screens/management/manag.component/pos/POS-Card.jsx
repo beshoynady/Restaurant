@@ -41,7 +41,7 @@ const POSCard = () => {
                               if (sizeId && product.sizes?.find(size =>size._id === sizeId) ) {
                                 addItemToCart(product._id, sizeId);
                               }else{
-                                toast.warn('اختر الحجم اولا')
+                                toast.warn('اختر الحجم lاولا')
                               }
                             }}
                            
