@@ -100,17 +100,24 @@ const ReservationTables = () => {
       );
 
       const filterReservationsByTime = filterReservationsByTable.filter(
-        (reservation) =>
-          (reservation.startTime <= startTime &&
-            reservation.endTime >= startTime) || 
-          (reservation.startTime <= endTime &&
-            reservation.endTime >= endTime) ||
-          (startTime <= reservation.startTime && endTime >= reservation.endTime)
+        (reservation) => {
+          const reservationStartTime = new Date(reservation.startTime);
+          const reservationEndTime = new Date(reservation.endTime);
+          const newStartTime = new Date(startTime);
+          const newEndTime = new Date(endTime);
+      
+          return (
+            (reservationStartTime <= newStartTime && reservationEndTime >= newStartTime) ||
+            (reservationStartTime <= newEndTime && reservationEndTime >= newEndTime) ||
+            (newStartTime <= reservationStartTime && newEndTime >= reservationEndTime)
+          );
+        }
       );
+      
        console.log({filterReservationsByTable, filterReservationsByTime})
       if (
-        filterReservationsByTime.length === 1 &&
-        filterReservationsByTime[0]._id === reservationId
+        filterReservationsByTime.length === 0 ||
+          (filterReservationsByTime.length === 1 && filterReservationsByTime[0]._id === reservationId)
       ) {
         const response = await axios.put(`${apiUrl}/api/reservation/${reservationId}`, {
           tableId,
