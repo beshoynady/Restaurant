@@ -98,12 +98,12 @@ const ReservationTables = () => {
       const filterReservationsByTime = filterReservationsByTable.filter(
         (reservation) =>
           (reservation.startTime <= startTime &&
-            reservation.endTime >= startTime) ||
+            reservation.endTime >= startTime) || 
           (reservation.startTime <= endTime &&
             reservation.endTime >= endTime) ||
           (startTime <= reservation.startTime && endTime >= reservation.endTime)
       );
-
+       console.log({id, filterReservationsByTable, filterReservationsByTime})
       if (
         filterReservationsByTime.length === 1 &&
         filterReservationsByTime[0]._id === id
