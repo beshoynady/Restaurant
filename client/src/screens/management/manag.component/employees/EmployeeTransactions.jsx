@@ -281,7 +281,7 @@ const EmployeeTransactions = () => {
                 </select>
               </div>
 
-              <div className='col-12 d-flex align-items-center justify-content-between'>
+              <div className='col-12 d-flex align-items-center justify-content-between p-0 m-0 mt-3'>
                 <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">فلتر حسب الوقت</label>
                   <select className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => setlistofEmployeeTransactions(filterByTime(e.target.value, listofEmployeeTransactions))}>

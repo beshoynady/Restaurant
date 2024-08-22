@@ -395,7 +395,7 @@ const ReservationTables = () => {
               </div>
 
 
-              <div className="col-12 d-flex align-items-center justify-content-between">
+              <div className="col-12 d-flex align-items-center justify-content-between p-0 m-0 mt-3">
                 <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                     فلتر حسب الوقت
@@ -417,7 +417,7 @@ const ReservationTables = () => {
                 </div>
 
                 <div className="d-flex align-items-stretch justify-content-between flex-nowrap p-0 m-0 px-1">
-                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                  <label className="form-label text-nowrap d-flex align-items-center justify-content-center p-0 m-0 ml-1">
                     <strong>مدة محددة:</strong>
                   </label>
 
@@ -519,6 +519,7 @@ const ReservationTables = () => {
                           className="edit"
                           data-toggle="modal"
                           onClick={(e) => {
+                            setCustomerName(reservation.customerName)
                             setReservationId(reservation._id);
                             setCustomerName(reservation.customerName);
                             setCustomerPhone(reservation.customerPhone);
@@ -907,7 +908,7 @@ const ReservationTables = () => {
               </div>
               <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
                 <div className="container flex-column">
-                  <div className="row">
+                  <div className="w-100 d-flex flex-wrap align-items-center justify-content-between">
                     <div className="col-12 col-md-7 mb-1">
                       <label
                         htmlFor="name"
@@ -919,6 +920,7 @@ const ReservationTables = () => {
                         type="text"
                         className="form-control border-primary m-0 p-2 h-auto"
                         id="name"
+                        defaultValue={customerName}
                         onChange={(e) => clientByName(allusers, e.target.value)}
                       />
                       <ul>

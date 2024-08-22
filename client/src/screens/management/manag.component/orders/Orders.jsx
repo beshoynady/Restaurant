@@ -254,7 +254,7 @@ const Orders = () => {
                 <span className="filter-icon"><i className="fa fa-filter"></i></span> */}
               </div>
 
-              <div className="col-12 d-flex align-items-center justify-content-between">
+              <div className="col-12 d-flex align-items-center justify-content-between p-0 m-0 mt-3">
                 <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                     فلتر حسب الوقت
@@ -276,7 +276,7 @@ const Orders = () => {
                 </div>
 
                 <div className="d-flex align-items-stretch justify-content-between flex-nowrap p-0 m-0 px-1">
-                  <label className="form-label text-nowrap">
+                  <label className="form-label text-nowrap d-flex align-items-center justify-content-center p-0 m-0 ml-1">
                     <strong>مدة محددة:</strong>
                   </label>
 
