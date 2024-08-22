@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-// import './Menu-card.css';
+import {toast } from 'react-toastify';
 import { detacontext } from "../../../../App";
 
 const POSCard = () => {
