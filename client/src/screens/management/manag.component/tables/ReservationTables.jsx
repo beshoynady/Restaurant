@@ -211,10 +211,14 @@ const ReservationTables = () => {
     setallReservations(tables);
   };
 
-  // const filterByStatus = (Status) => {
-  //   const filter = allReservations.filter(table => reservation.isValid === Status)
-  //   settableFiltered(filter)
-  // }
+  const filterByStatus = (status) => {
+    if(status ===''){
+      getAllReservations()
+      return
+    }
+    const filter = allReservations.filter(reservation => reservation.status === status)
+    setallReservations(filter)
+  }
 
   // const [selectedIds, setSelectedIds] = useState([]);
   // const handleCheckboxChange = (e) => {
@@ -565,9 +569,9 @@ const ReservationTables = () => {
           </div>
         </div>
       </div>
-      
+
       <div id="createreservationModal" className="modal fade">
-        <div className="modal-dialog ">
+        <div className="modal-dialog modal-lg">
           <div className="modal-content shadow-lg border-0 rounded ">
             <form
               onSubmit={(e) =>
@@ -599,7 +603,7 @@ const ReservationTables = () => {
                 </button>
               </div>
               <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
-                <div className="container">
+                <div className="container flex-column">
                   <div className="w-100 d-flex flex-wrap align-items-center justify-content-between">
                     <div className="col-12 col-md-8 mb-1">
                       <label
@@ -743,7 +747,7 @@ const ReservationTables = () => {
                       )}
                     </div>
                   </div>
-                  <div className="row mb-1">
+                  <div className="w-100 d-flex flex-wrap align-items-center justify-content-between">
                     <div className="col-12 col-md-7">
                       <label
                         htmlFor="tableNumber"
@@ -752,7 +756,7 @@ const ReservationTables = () => {
                         رقم الطاولة
                       </label>
                       <select
-                        className="form-select border-primary col-12"
+                        className="form-control border-primary m-0 p-2 h-auto"
                         id="tableNumber"
                         onChange={(e) =>
                           setTableInfo({
@@ -857,7 +861,7 @@ const ReservationTables = () => {
                 </button>
               </div>
               <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
-                <div className="container">
+                <div className="container flex-column">
                   <div className="row">
                     <div className="col-12 col-md-7 mb-1">
                       <label
@@ -896,7 +900,7 @@ const ReservationTables = () => {
                     </div>
                   </div>
 
-                  <div className="row mb-1">
+                  <div className="w-100 d-flex flex-wrap align-items-center justify-content-between">
                     <div className="col-12 col-md-4 mb-1">
                       <label
                         htmlFor="date"
@@ -1022,7 +1026,7 @@ const ReservationTables = () => {
                     </div>
                   </div>
 
-                  <div className="row mb-1">
+                  <div className="w-100 d-flex flex-wrap align-items-center justify-content-between">
                     <div className="col-12 col-md-7">
                       <label
                         htmlFor="tableNumber"
@@ -1031,7 +1035,7 @@ const ReservationTables = () => {
                         رقم الطاولة
                       </label>
                       <select
-                        className="form-select border-primary col-12"
+                        className="form-control border-primary m-0 p-2 h-auto"
                         id="tableNumber"
                         defaultValue={tableInfo.tableNumber}
                         onChange={(e) =>
