@@ -1038,7 +1038,7 @@ function App() {
         const newsalesTaxt = lastUserOrder.salesTax + salesTax;
         const subTotal = costOrder + oldSubTotal;
         const deliveryCost = delivery_fee;
-        const total = subTotal + salesTax;
+        const total = subTotal + salesTax + deliveryCost;
 
         // Update order if it's in 'Preparing' status
         if (lastUserOrder.status === "Preparing") {
@@ -2158,135 +2158,6 @@ function App() {
     }
   };
 
-  const getReservationById = async (id) => {
-    try {
-      if (!id) {
-        toast.error("رجاء اختيار الحجز بشكل صحيح");
-        return;
-      }
-
-      const reservation = await axios.get(`${apiUrl}/api/reservation/${id}`);
-      if (!reservation) {
-        toast.error("هذا الحجز غير موجود");
-      }
-    } catch (error) {
-      toast.error(" حدث خطأ اثناء الوصول الي الحجز !حاول مرة اخري");
-    }
-  };
-
-  const updateReservation = async (
-    e,
-    id,
-    tableId,
-    tableNumber,
-    numberOfGuests,
-    reservationDate,
-    startTime,
-    endTime,
-    status
-  ) => {
-    e.preventDefault();
-
-    try {
-      if (!id) {
-        toast.error("رجاء اختيار الحجز بشكل صحيح");
-        return;
-      }
-      // setisLoading(true)
-
-      const filterReservationsByTable = allReservations.filter(
-        (reservation) =>
-          reservation.tableId === tableId &&
-          reservation.reservationDate === reservationDate
-      );
-
-      const filterReservationsByTime = filterReservationsByTable.filter(
-        (reservation) =>
-          (reservation.startTime <= startTime &&
-            reservation.endTime >= startTime) ||
-          (reservation.startTime <= endTime &&
-            reservation.endTime >= endTime) ||
-          (startTime <= reservation.startTime && endTime >= reservation.endTime)
-      );
-
-      if (
-        filterReservationsByTime.length === 1 &&
-        filterReservationsByTime[0]._id === id
-      ) {
-        const response = await axios.put(`${apiUrl}/api/reservation/${id}`, {
-          tableId,
-          tableNumber,
-          numberOfGuests,
-          reservationDate,
-          startTime,
-          endTime,
-          status,
-        });
-        if (response.status === 200) {
-          getAllReservations();
-
-          toast.success("تم تعديل ميعاد الحجز بنجاح");
-        } else {
-          getAllReservations();
-
-          toast.error("حدث خطأ اثناء التعديل ! حاول مرة اخري");
-        }
-      } else {
-        toast.error("لا يمكن تغير الحجز في هذا الميعاد");
-      }
-    } catch (error) {
-      toast.error("حدث خطأاثناء تعديل الحجز ! حاول مرة اخري");
-    } finally {
-      setisLoading(false);
-    }
-  };
-
-  const confirmReservation = async (id, status) => {
-    // setisLoading(true)
-    try {
-      if (!id) {
-        toast.error("رجاء اختيار الحجز بشكل صحيح");
-        return;
-      }
-
-      const response = await axios.put(`${apiUrl}/api/reservation/${id}`, {
-        status,
-      }, config);
-      if (response.status === 200) {
-        getAllReservations();
-        toast.success("تم تاكيد الحجز بنجاح");
-      } else {
-        getAllReservations();
-        toast.error("حدث خطأ اثناء التاكيد ! حاول مرة اخري");
-      }
-    } catch (error) {
-      toast.error("حدث خطأاثناء تاكيد الحجز ! حاول مرة اخري");
-    } finally {
-      setisLoading(false);
-    }
-  };
-
-  const deleteReservation = async (id) => {
-    // setisLoading(true)
-    try {
-      if (!id) {
-        toast.error("رجاء اختيار الحجز بشكل صحيح");
-        return;
-      }
-
-      const response = await axios.delete(`${apiUrl}/api/reservation/${id}`);
-      if (response.status === 200) {
-        getAllReservations();
-        toast.success("تم حذف الحجز بنجاح");
-      } else {
-        toast.error("حدث خطأ اثناء حذف الحجز !حاول مره اخري");
-      }
-    } catch (error) {
-      toast.error("حدث خطاء عملية الحذف !حاول مره اخري");
-    } finally {
-      setisLoading(false);
-    }
-  };
 
   const fetchData = async () => {
     setisLoading(true);
