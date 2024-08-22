@@ -70,18 +70,17 @@ const ReservationTables = () => {
   };
 
   const updateReservation = async (
-    e,
-    id,
-    tableId,
-    tableNumber,
-    numberOfGuests,
-    reservationDate,
-    startTime,
-    endTime,
-    status
+    e
   ) => {
     e.preventDefault();
-
+    console.log({
+      reservationId,
+      tableId,
+      tableNumber,
+      numberOfGuests,
+      reservationDate,
+      startTime,
+      endTime})
     try {
       if (!id) {
         toast.error("رجاء اختيار الحجز بشكل صحيح");
@@ -106,16 +105,15 @@ const ReservationTables = () => {
        console.log({id, filterReservationsByTable, filterReservationsByTime})
       if (
         filterReservationsByTime.length === 1 &&
-        filterReservationsByTime[0]._id === id
+        filterReservationsByTime[0]._id === reservationId
       ) {
-        const response = await axios.put(`${apiUrl}/api/reservation/${id}`, {
+        const response = await axios.put(`${apiUrl}/api/reservation/${reservationId}`, {
           tableId,
           tableNumber,
           numberOfGuests,
           reservationDate,
           startTime,
           endTime,
-          status,
         });
         if (response.status === 200) {
           getAllReservations();
