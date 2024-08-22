@@ -340,8 +340,11 @@ const MenuCard = () => {
                                       className="h-25 p-0 m-0 btn btn-success btn-block"
                                       style={{ fontSize: "14px" }}
                                       onClick={() => {
-                                        if (sizeQuantity > 0) {
+                                        if (sizeQuantity > 0 &&
+                                          sizeId && product.sizes?.map(size =>size._id === sizeId) ) {
                                           addItemToCart(product._id, size._id);
+                                        }else{
+                                          toast.warn('اختر الحجم اولا')
                                         }
                                       }}
                                     >
