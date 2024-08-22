@@ -1071,14 +1071,14 @@ const ReservationTables = () => {
                       <select
                         className="form-control border-primary m-0 p-2 h-auto"
                         id="tableNumber"
-                        defaultValue={tableInfo.tableNumber}
+                        defaultValue={tableNumber}
                         onChange={(e) =>{
                           settableId(e.target.value);  
                           settableNumber(e.target.options[e.target.selectedIndex].text)
                         }
                         }
                       >
-                        <option>{tableInfo.tableNumber}</option>
+                        <option>{tableNumber}</option>
                         <option>الطاولات المتاحة في هذا الوقت</option>
                         {allTable.map(
                           (table, i) =>
