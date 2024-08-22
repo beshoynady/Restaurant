@@ -1765,21 +1765,7 @@ function App() {
     // calculateExtrasSubtotal(updatedProducts);
   };
 
-  // Function to calculate the subtotal for paid extras
-  const calculateExtrasSubtotal = (products) => {
-    let total = subtotalSplitOrder;
 
-    products.forEach((product) => {
-      product.extras &&
-        product.extras.forEach((extra) => {
-          if (extra.isPaid) {
-            total += extra.totalExtrasPrice;
-          }
-        });
-    });
-
-    setsubtotalSplitOrder(total);
-  };
 
   // Function to split the invoice and pay a portion of it
   const splitInvoice = async (e) => {
@@ -1996,7 +1982,7 @@ function App() {
   const [allReservations, setallReservations] = useState([]);
   const getAllReservations = async () => {
     try {
-      const response = await axios.get(`${apiUrl}/api/reservation`);
+      const response = await axios.get(`${apiUrl}/api/reservation`,config);
       if (response.data) {
         setallReservations(response.data);
       } else {
@@ -2265,7 +2251,7 @@ function App() {
 
       const response = await axios.put(`${apiUrl}/api/reservation/${id}`, {
         status,
-      });
+      }, config);
       if (response.status === 200) {
         getAllReservations();
         toast.success("تم تاكيد الحجز بنجاح");
@@ -2476,16 +2462,16 @@ function App() {
         subtotalSplitOrder,
 
         // الدوال المتعلقة بالحجوزات
-        createReservations,
         getAvailableTables,
         availableTableIds,
-        confirmReservation,
-        updateReservation,
+        createReservations,
         getAllReservations,
         allReservations,
         setallReservations,
-        getReservationById,
-        deleteReservation,
+        // confirmReservation,
+        // updateReservation,
+        // getReservationById,
+        // deleteReservation,
 
         // حالة التحميل وأدوات أخرى
         isLoading,

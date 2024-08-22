@@ -65,7 +65,7 @@ const ReservationSchema = new Schema(
         // Reservation status: awaiting confirmation, confirmed, canceled, Missed reservation time
         status: {
             type: String,
-            enum: ['awaiting confirmation', 'confirmed', 'canceled', 'Missed reservation time'],
+            enum: ['awaiting confirmation', 'confirmed', 'canceled', 'Missed reservation time', 'client arrived'],
             default: 'awaiting confirmation'
         }
     },

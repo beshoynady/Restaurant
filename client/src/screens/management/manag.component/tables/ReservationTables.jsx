@@ -1,26 +1,47 @@
-import React, { useState, useEffect, useRef,useContext } from 'react'
-import { detacontext } from '../../../../App';
+import React, { useState, useEffect, useRef, useContext } from "react";
+import { detacontext } from "../../../../App";
 
-import '../orders/Orders.css'
-
+import "../orders/Orders.css";
 
 const ReservationTables = () => {
   const apiUrl = process.env.REACT_APP_API_URL;
-  const token = localStorage.getItem('token_e'); // Retrieve the token from localStorage
+  const token = localStorage.getItem("token_e"); // Retrieve the token from localStorage
   const config = {
     headers: {
-      'Authorization': `Bearer ${token}`,
+      Authorization: `Bearer ${token}`,
     },
   };
-  const { setisLoading, EditPagination, startpagination, endpagination, setstartpagination, setendpagination, createReservations, confirmReservation, updateReservation, getAllReservations, allReservations, setallReservations, getReservationById, deleteReservation, employeeLoginInfo, allusers, allTable, getAvailableTables, availableTableIds, setStartDate, setEndDate,
-    formatDate, formatTime , filterByDateRange, filterByTime} = useContext(detacontext)
+  const {
+    setisLoading,
+    EditPagination,
+    startpagination,
+    endpagination,
+    setstartpagination,
+    setendpagination,
+    createReservations,
+    // confirmReservation, updateReservation, getReservationById, deleteReservation,
+    getAllReservations,
+    allReservations,
+    setallReservations,
+    employeeLoginInfo,
+    allusers,
+    allTable,
+    getAvailableTables,
+    availableTableIds,
+    setStartDate,
+    setEndDate,
+    formatDate,
+    formatTime,
+    filterByDateRange,
+    filterByTime,
+  } = useContext(detacontext);
 
   const createdBy = employeeLoginInfo?.id;
-  const [reservationId, setReservationId] = useState('');
-  const [customerName, setCustomerName] = useState('');
-  const [customerPhone, setCustomerPhone] = useState('');
-  const [reservationNote, setReservationNote] = useState('');
-  const [numberOfGuests, setNumberOfGuests] = useState('');
+  const [reservationId, setReservationId] = useState("");
+  const [customerName, setCustomerName] = useState("");
+  const [customerPhone, setCustomerPhone] = useState("");
+  const [reservationNote, setReservationNote] = useState("");
+  const [numberOfGuests, setNumberOfGuests] = useState("");
   const [tableInfo, setTableInfo] = useState({});
   const [reservationDate, setReservationDate] = useState();
   const [startTime, setStartTime] = useState();
@@ -28,31 +49,167 @@ const ReservationTables = () => {
   const [startTimeClicked, setStartTimeClicked] = useState(false);
   const [endTimeClicked, setEndTimeClicked] = useState(false);
 
+  const getReservationById = async (id) => {
+    try {
+      if (!id) {
+        toast.error("رجاء اختيار الحجز بشكل صحيح");
+        return;
+      }
 
+      const reservation = await axios.get(`${apiUrl}/api/reservation/${id}`);
+      if (!reservation) {
+        toast.error("هذا الحجز غير موجود");
+      }
+    } catch (error) {
+      toast.error(" حدث خطأ اثناء الوصول الي الحجز !حاول مرة اخري");
+    }
+  };
+
+  const updateReservation = async (
+    e,
+    id,
+    tableId,
+    tableNumber,
+    numberOfGuests,
+    reservationDate,
+    startTime,
+    endTime,
+    status
+  ) => {
+    e.preventDefault();
+
+    try {
+      if (!id) {
+        toast.error("رجاء اختيار الحجز بشكل صحيح");
+        return;
+      }
+      // setisLoading(true)
+
+      const filterReservationsByTable = allReservations.filter(
+        (reservation) =>
+          reservation.tableId === tableId &&
+          reservation.reservationDate === reservationDate
+      );
+
+      const filterReservationsByTime = filterReservationsByTable.filter(
+        (reservation) =>
+          (reservation.startTime <= startTime &&
+            reservation.endTime >= startTime) ||
+          (reservation.startTime <= endTime &&
+            reservation.endTime >= endTime) ||
+          (startTime <= reservation.startTime && endTime >= reservation.endTime)
+      );
+
+      if (
+        filterReservationsByTime.length === 1 &&
+        filterReservationsByTime[0]._id === id
+      ) {
+        const response = await axios.put(`${apiUrl}/api/reservation/${id}`, {
+          tableId,
+          tableNumber,
+          numberOfGuests,
+          reservationDate,
+          startTime,
+          endTime,
+          status,
+        });
+        if (response.status === 200) {
+          getAllReservations();
+
+          toast.success("تم تعديل ميعاد الحجز بنجاح");
+        } else {
+          getAllReservations();
+
+          toast.error("حدث خطأ اثناء التعديل ! حاول مرة اخري");
+        }
+      } else {
+        toast.error("لا يمكن تغير الحجز في هذا الميعاد");
+      }
+    } catch (error) {
+      toast.error("حدث خطأاثناء تعديل الحجز ! حاول مرة اخري");
+    } finally {
+      setisLoading(false);
+    }
+  };
+
+  const confirmReservation = async (id, status) => {
+    // setisLoading(true)
+    try {
+      if (!id) {
+        toast.error("رجاء اختيار الحجز بشكل صحيح");
+        return;
+      }
+
+      const response = await axios.put(
+        `${apiUrl}/api/reservation/${id}`,
+        {
+          status,
+        },
+        config
+      );
+      if (response.status === 200) {
+        getAllReservations();
+        toast.success("تم تاكيد الحجز بنجاح");
+      } else {
+        getAllReservations();
+        toast.error("حدث خطأ اثناء التاكيد ! حاول مرة اخري");
+      }
+    } catch (error) {
+      toast.error("حدث خطأاثناء تاكيد الحجز ! حاول مرة اخري");
+    } finally {
+      setisLoading(false);
+    }
+  };
+
+  const deleteReservation = async (id) => {
+    // setisLoading(true)
+    try {
+      if (!id) {
+        toast.error("رجاء اختيار الحجز بشكل صحيح");
+        return;
+      }
+
+      const response = await axios.delete(`${apiUrl}/api/reservation/${id}`);
+      if (response.status === 200) {
+        getAllReservations();
+        toast.success("تم حذف الحجز بنجاح");
+      } else {
+        toast.error("حدث خطأ اثناء حذف الحجز !حاول مره اخري");
+      }
+    } catch (error) {
+      toast.error("حدث خطاء عملية الحذف !حاول مره اخري");
+    } finally {
+      setisLoading(false);
+    }
+  };
 
   const [userId, setUserId] = useState("");
   const [filteredClients, setFilteredClients] = useState([]);
 
   const clientByName = (allusers, name) => {
     setCustomerName(name);
-    const client = allusers.filter(user => user.username.startsWith(name) === true);
-    setFilteredClients(client)
-    const userId = client._id
-    setUserId(userId)
+    const client = allusers.filter(
+      (user) => user.username.startsWith(name) === true
+    );
+    setFilteredClients(client);
+    const userId = client._id;
+    setUserId(userId);
     console.log(client);
     console.log(name);
     console.log(userId);
-  }
-
+  };
 
   const searchByNum = (num) => {
-    if(!num){
-      getAllReservations()
-      return
+    if (!num) {
+      getAllReservations();
+      return;
     }
-    const tables = allReservations.filter((reservation) => reservation.tableNumber.toString().startsWith(num) === true)
-    setallReservations(tables)
-  }
+    const tables = allReservations.filter(
+      (reservation) =>
+        reservation.tableNumber.toString().startsWith(num) === true
+    );
+    setallReservations(tables);
+  };
 
   // const filterByStatus = (Status) => {
   //   const filter = allReservations.filter(table => reservation.isValid === Status)
@@ -94,20 +251,34 @@ const ReservationTables = () => {
 
   const translateStatus = (status) => {
     switch (status) {
-      case 'confirmed':
-        return 'تم التأكيد';
-      case 'awaiting confirmation':
-        return 'في انتظار التأكيد';
-      case 'canceled':
-        return 'تم الإلغاء';
-      case 'Missed reservation time':
-        return 'تم التخلف عن الميعاد';
+      case "awaiting confirmation":
+        return "في انتظار التأكيد";
+      case "confirmed":
+        return "تم التأكيد";
+      case "canceled":
+        return "تم الإلغاء";
+      case "Missed reservation time":
+        return "تم التخلف عن الميعاد";
       default:
         return status;
     }
   };
 
+  const statusesEn = [
+    "awaiting confirmation",
+    "confirmed",
+    "canceled",
+    "Missed reservation time",
+    "client arrived",
+  ];
 
+  const statusesAr = [
+    "في انتظار التأكيد",
+    "تم التأكيد",
+    "تم الإلغاء",
+    "تم التخلف عن الميعاد",
+    "العميل حضر في الميعاد",
+  ];
 
   return (
     <div className="w-100 px-3 d-flex align-itmes-center justify-content-start">
@@ -116,39 +287,78 @@ const ReservationTables = () => {
           <div className="table-title">
             <div className="w-100 d-flex flex-wrap align-items-center justify-content-between">
               <div className="text-right">
-                <h2>ادارة <b>حجز الطاولات</b></h2>
+                <h2>
+                  ادارة <b>حجز الطاولات</b>
+                </h2>
               </div>
-              <div className="col-12 col-12 col-md-6 p-0 m-0 d-flex flex-wrap aliegn-items-center  justify-content-evenly">
-                <a href="#createreservationModal" className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-success" data-toggle="modal"> <span>انشاء حجز جديد</span></a>
-                <a href="#deleteListTableModal" className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-danger" data-toggle="modal"> <span>حذف</span></a>
+              <div className="col-12 col-md-6 p-0 m-0 d-flex flex-wrap aliegn-items-center justify-content-end print-hide">
+                <a
+                  href="#createreservationModal"
+                  className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-success"
+                  data-toggle="modal"
+                >
+                  <span>انشاء حجز جديد</span>
+                </a>
+                <a
+                  href="#deleteListTableModal"
+                  className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-danger"
+                  data-toggle="modal"
+                >
+                  <span>حذف</span>
+                </a>
               </div>
             </div>
           </div>
           <div className="table-filter print-hide">
             <div className="col-12 text-dark d-flex flex-wrap align-items-center justify-content-evenly p-0 m-0">
-                <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
-                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0">عرض</label>
-                  <select className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => { setstartpagination(0); setendpagination(e.target.value) }}>
-                   {
-                    (() => {
-                      const options = [];
-                      for (let i = 5; i < 100; i += 5) {
-                        options.push(<option key={i} value={i}>{i}</option>);
-                      }
-                      return options;
-                    })()
-                  }
-                  </select>
-                </div>
               <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
-                <label className="form-label text-wrap text-right fw-bolder p-0 m-0">رقم الطاولة</label>
-                <input type="text" className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => searchByNum(e.target.value)} />
+                <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                  عرض
+                </label>
+                <select
+                  className="form-control border-primary m-0 p-2 h-auto"
+                  onChange={(e) => {
+                    setstartpagination(0);
+                    setendpagination(e.target.value);
+                  }}
+                >
+                  {(() => {
+                    const options = [];
+                    for (let i = 5; i < 100; i += 5) {
+                      options.push(
+                        <option key={i} value={i}>
+                          {i}
+                        </option>
+                      );
+                    }
+                    return options;
+                  })()}
+                </select>
+              </div>
+              <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
+                <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                  رقم الطاولة
+                </label>
+                <input
+                  type="text"
+                  className="form-control border-primary m-0 p-2 h-auto"
+                  onChange={(e) => searchByNum(e.target.value)}
+                />
               </div>
 
-              <div className='col-12 d-flex align-items-center justify-content-between flex-wrap'>
-                <div className="filter-group d-flex align-items-center justify-content-between col-md-4 col-sm-12 p-0 mb-2">
-                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0">فلتر حسب الوقت</label>
-                  <select className="form-control border-primary m-0 p-2 h-auto"  onChange={(e) => setallReservations(filterByTime(e.target.value, allReservations))}>
+              <div className="col-12 d-flex align-items-center justify-content-between">
+                <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
+                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                    فلتر حسب الوقت
+                  </label>
+                  <select
+                    className="form-control border-primary m-0 p-2 h-auto"
+                    onChange={(e) =>
+                      setallReservations(
+                        filterByTime(e.target.value, allReservations)
+                      )
+                    }
+                  >
                     <option value="">اختر</option>
                     <option value="today">اليوم</option>
                     <option value="week">هذا الأسبوع</option>
@@ -157,29 +367,55 @@ const ReservationTables = () => {
                   </select>
                 </div>
 
-                <div className="filter-group d-flex flex-wrap align-items-center col-md-8 col-sm-12">
-                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0"><strong>مدة محددة:</strong></label>
+                <div className="d-flex align-items-stretch justify-content-between flex-nowrap p-0 m-0 px-1">
+                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                    <strong>مدة محددة:</strong>
+                  </label>
 
-                  <div className="d-flex align-items-center me-2">
-                    <label className="form-label text-wrap text-right fw-bolder p-0 m-0">من</label>
-                    <input type="date" className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => setStartDate(e.target.value)} placeholder="اختر التاريخ" />
+                  <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
+                    <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                      من
+                    </label>
+                    <input
+                      type="date"
+                      className="form-control border-primary m-0 p-2 h-auto"
+                      onChange={(e) => setStartDate(e.target.value)}
+                      placeholder="اختر التاريخ"
+                    />
                   </div>
 
-                  <div className="d-flex align-items-center me-2">
-                    <label className="form-label text-wrap text-right fw-bolder p-0 m-0">إلى</label>
-                    <input type="date" className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => setEndDate(e.target.value)} placeholder="اختر التاريخ" />
+                  <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
+                    <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                      إلى
+                    </label>
+                    <input
+                      type="date"
+                      className="form-control border-primary m-0 p-2 h-auto"
+                      onChange={(e) => setEndDate(e.target.value)}
+                      placeholder="اختر التاريخ"
+                    />
                   </div>
 
-                  <div className="d-flex align-items-center">
-                    <button type="button" className="btn btn-primary me-2 p-2" onClick={() => setallReservations(filterByDateRange(allReservations))}>
+                  <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
+                    <button
+                      type="button"
+                      className="btn btn-primary h-100 p-2"
+                      onClick={() =>
+                        setallReservations(filterByDateRange(allReservations))
+                      }
+                    >
                       <i className="fa fa-search"></i>
                     </button>
-                    <button type="button" className="btn btn-warning p-2" onClick={getAllReservations}>استعادة</button>
+                    <button
+                      type="button"
+                      className="btn btn-warning h-100 p-2"
+                      onClick={getAllReservations}
+                    >
+                      استعادة
+                    </button>
                   </div>
                 </div>
               </div>
-
-
             </div>
           </div>
           <table className="table table-striped table-hover">
@@ -198,82 +434,217 @@ const ReservationTables = () => {
               </tr>
             </thead>
             <tbody>
-              {
-                allReservations.map((reservation, i) => {
-                  if (i >= startpagination & i < endpagination) {
-                    return (
-                      <tr key={i}>
-                        <td>{i + 1}</td>
-                        <td>{reservation.tableNumber}</td>
-                        <td>{reservation.customerName}</td>
-                        <td>{reservation.customerPhone}</td>
-                        <td>{reservation.numberOfGuests}</td>
-                        <td>{formatDate(reservation.reservationDate)}</td>
-                        <td>{formatTime(reservation.startTime)}</td>
-                        <td>{formatTime(reservation.endTime)}</td>
-                        <td>
-                          <select className="form-control border-primary m-0 p-2 h-auto"  name="status" id="status" onChange={(e) => confirmReservation(reservation._id, e.target.value)}>
-                            <option >{translateStatus(reservation.status)}</option>
-                            <option value='confirmed'>تاكيد</option>
-                            <option value='awaiting confirmation'>انتظار التاكيد</option>
-                            <option value='canceled'>الغاء</option>
-                            <option value='Missed reservation time'>تخلف عن الميعاد</option>
-                          </select>
-                        </td>
-                        <td>
-                          <a href="#updatereservationModal" className="edit" data-toggle="modal" onClick={(e) => { setReservationId(reservation._id); setCustomerName(reservation.customerName); setCustomerPhone(reservation.customerPhone); setNumberOfGuests(reservation.numberOfGuests); setEndTime(reservation.endTime); setStartTime(reservation.startTime); setReservationDate(reservation.reservationDate); setReservationNote(reservation.reservationNotes); setTableInfo({ id: reservation.tableId, tableNumber: reservation.tableNumber }) }}
-                          ><i className="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-                        </td>
-                      </tr>
-                    )
-                  }
-                })
-              }
+              {allReservations.map((reservation, i) => {
+                if ((i >= startpagination) & (i < endpagination)) {
+                  return (
+                    <tr key={i}>
+                      <td>{i + 1}</td>
+                      <td>{reservation.tableNumber}</td>
+                      <td>{reservation.customerName}</td>
+                      <td>{reservation.customerPhone}</td>
+                      <td>{reservation.numberOfGuests}</td>
+                      <td>{formatDate(reservation.reservationDate)}</td>
+                      <td>{formatTime(reservation.startTime)}</td>
+                      <td>{formatTime(reservation.endTime)}</td>
+                      <td>
+                        <select
+                          className="form-control border-primary m-0 p-2 h-auto"
+                          name="status"
+                          id="status"
+                          onChange={(e) =>
+                            confirmReservation(reservation._id, e.target.value)
+                          }
+                        >
+                          <option>{translateStatus(reservation.status)}</option>
+                          {statusesEn.map((status, i)=>
+                            (
+                              <option value={status} key={i}>{statusesAr[i]}</option>
+                            )
+                          )}
+                          
+                        </select>
+                      </td>
+                      <td>
+                        <a
+                          href="#updatereservationModal"
+                          className="edit"
+                          data-toggle="modal"
+                          onClick={(e) => {
+                            setReservationId(reservation._id);
+                            setCustomerName(reservation.customerName);
+                            setCustomerPhone(reservation.customerPhone);
+                            setNumberOfGuests(reservation.numberOfGuests);
+                            setEndTime(reservation.endTime);
+                            setStartTime(reservation.startTime);
+                            setReservationDate(reservation.reservationDate);
+                            setReservationNote(reservation.reservationNotes);
+                            setTableInfo({
+                              id: reservation.tableId,
+                              tableNumber: reservation.tableNumber,
+                            });
+                          }}
+                        >
+                          <i
+                            className="material-icons"
+                            data-toggle="tooltip"
+                            title="Edit"
+                          >
+                            &#xE254;
+                          </i>
+                        </a>
+                      </td>
+                    </tr>
+                  );
+                }
+              })}
             </tbody>
           </table>
           <div className="clearfix">
-            <div className="hint-text text-dark">عرض <b>{allReservations.length > endpagination ? endpagination : allReservations.length}</b> من <b>{allReservations.length}</b> عنصر</div>
+            <div className="hint-text text-dark">
+              عرض{" "}
+              <b>
+                {allReservations.length > endpagination
+                  ? endpagination
+                  : allReservations.length}
+              </b>{" "}
+              من <b>{allReservations.length}</b> عنصر
+            </div>
             <ul className="pagination">
-              <li onClick={EditPagination} className="page-item disabled"><a href="#">السابق</a></li>
-              <li onClick={EditPagination} className={`page-item ${endpagination === 5 ? 'active' : ''}`}><a href="#" className="page-link">1</a></li>
-              <li onClick={EditPagination} className={`page-item ${endpagination === 10 ? 'active' : ''}`}><a href="#" className="page-link">2</a></li>
-              <li onClick={EditPagination} className={`page-item ${endpagination === 15 ? 'active' : ''}`}><a href="#" className="page-link">3</a></li>
-              <li onClick={EditPagination} className={`page-item ${endpagination === 20 ? 'active' : ''}`}><a href="#" className="page-link">4</a></li>
-              <li onClick={EditPagination} className={`page-item ${endpagination === 25 ? 'active' : ''}`}><a href="#" className="page-link">5</a></li>
-              <li onClick={EditPagination} className={`page-item ${endpagination === 30 ? 'active' : ''}`}><a href="#" className="page-link">التالي</a></li>
+              <li onClick={EditPagination} className="page-item disabled">
+                <a href="#">السابق</a>
+              </li>
+              <li
+                onClick={EditPagination}
+                className={`page-item ${endpagination === 5 ? "active" : ""}`}
+              >
+                <a href="#" className="page-link">
+                  1
+                </a>
+              </li>
+              <li
+                onClick={EditPagination}
+                className={`page-item ${endpagination === 10 ? "active" : ""}`}
+              >
+                <a href="#" className="page-link">
+                  2
+                </a>
+              </li>
+              <li
+                onClick={EditPagination}
+                className={`page-item ${endpagination === 15 ? "active" : ""}`}
+              >
+                <a href="#" className="page-link">
+                  3
+                </a>
+              </li>
+              <li
+                onClick={EditPagination}
+                className={`page-item ${endpagination === 20 ? "active" : ""}`}
+              >
+                <a href="#" className="page-link">
+                  4
+                </a>
+              </li>
+              <li
+                onClick={EditPagination}
+                className={`page-item ${endpagination === 25 ? "active" : ""}`}
+              >
+                <a href="#" className="page-link">
+                  5
+                </a>
+              </li>
+              <li
+                onClick={EditPagination}
+                className={`page-item ${endpagination === 30 ? "active" : ""}`}
+              >
+                <a href="#" className="page-link">
+                  التالي
+                </a>
+              </li>
             </ul>
           </div>
         </div>
       </div>
+      
       <div id="createreservationModal" className="modal fade">
         <div className="modal-dialog ">
           <div className="modal-content shadow-lg border-0 rounded ">
-            <form onSubmit={(e) => createReservations(e, tableInfo.id, tableInfo.tableNumber, userId, numberOfGuests, customerName, customerPhone, reservationDate, startTime, endTime, reservationNote, createdBy)}>
+            <form
+              onSubmit={(e) =>
+                createReservations(
+                  e,
+                  tableInfo.id,
+                  tableInfo.tableNumber,
+                  userId,
+                  numberOfGuests,
+                  customerName,
+                  customerPhone,
+                  reservationDate,
+                  startTime,
+                  endTime,
+                  reservationNote,
+                  createdBy
+                )
+              }
+            >
               <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                 <h4 className="modal-title">اضافه حجز طاولة</h4>
-                <button type="button" className="close m-0 p-1" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <button
+                  type="button"
+                  className="close m-0 p-1"
+                  data-dismiss="modal"
+                  aria-hidden="true"
+                >
+                  &times;
+                </button>
               </div>
               <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
                 <div className="container">
                   <div className="w-100 d-flex flex-wrap align-items-center justify-content-between">
                     <div className="col-12 col-md-8 mb-1">
-                      <label htmlFor="name" className="form-label text-wrap text-right fw-bolder p-0 m-0">الاسم</label>
-                      <input type="text" className="form-control border-primary m-0 p-2 h-auto" id="name" onChange={(e) => clientByName(allusers, e.target.value)} />
+                      <label
+                        htmlFor="name"
+                        className="form-label text-wrap text-right fw-bolder p-0 m-0"
+                      >
+                        الاسم
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control border-primary m-0 p-2 h-auto"
+                        id="name"
+                        onChange={(e) => clientByName(allusers, e.target.value)}
+                      />
                       <ul>
-                        {filteredClients && filteredClients.map((client, index) => (
-                          <li key={index}>{client.username}</li>
-                        ))}
+                        {filteredClients &&
+                          filteredClients.map((client, index) => (
+                            <li key={index}>{client.username}</li>
+                          ))}
                       </ul>
                     </div>
                     <div className="col-12 col-md-4 mb-1">
-                      <label htmlFor="mobile" className="form-label text-wrap text-right fw-bolder p-0 m-0">رقم الموبايل</label>
-                      <input type="tel" className="form-control border-primary m-0 p-2 h-auto" id="mobile" onChange={(e) => setCustomerPhone(e.target.value)} />
+                      <label
+                        htmlFor="mobile"
+                        className="form-label text-wrap text-right fw-bolder p-0 m-0"
+                      >
+                        رقم الموبايل
+                      </label>
+                      <input
+                        type="tel"
+                        className="form-control border-primary m-0 p-2 h-auto"
+                        id="mobile"
+                        onChange={(e) => setCustomerPhone(e.target.value)}
+                      />
                     </div>
                   </div>
 
                   <div className="w-100 d-flex flex-wrap align-items-center justify-content-between">
                     <div className="col-12 col-md-4 mb-1">
-                      <label htmlFor="date" className="form-label text-wrap text-right fw-bolder p-0 m-0">التاريخ</label>
+                      <label
+                        htmlFor="date"
+                        className="form-label text-wrap text-right fw-bolder p-0 m-0"
+                      >
+                        التاريخ
+                      </label>
                       <input
                         type="date"
                         className="form-control border-primary m-0 p-2 h-auto"
@@ -285,7 +656,12 @@ const ReservationTables = () => {
                       />
                     </div>
                     <div className="col-12 col-md-4 mb-1">
-                      <label htmlFor="arrivalTime" className="form-label text-wrap text-right fw-bolder p-0 m-0">وقت الحضور</label>
+                      <label
+                        htmlFor="arrivalTime"
+                        className="form-label text-wrap text-right fw-bolder p-0 m-0"
+                      >
+                        وقت الحضور
+                      </label>
                       <input
                         type="time"
                         className="form-control border-primary m-0 p-2 h-auto"
@@ -295,25 +671,38 @@ const ReservationTables = () => {
                           setStartTimeClicked(true);
                           if (reservationDate) {
                             const StartedDate = new Date(reservationDate);
-                            const timeParts = e.target.value.split(':');
-                            console.log({ timeParts })
+                            const timeParts = e.target.value.split(":");
+                            console.log({ timeParts });
                             if (StartedDate) {
                               StartedDate.setHours(parseInt(timeParts[0]));
                               StartedDate.setMinutes(parseInt(timeParts[1]));
-                              console.log({ StartedDate })
+                              console.log({ StartedDate });
                               setStartTime(StartedDate);
                             }
                           } else {
-                            e.target.value = ''
+                            e.target.value = "";
                           }
                         }}
                       />
                       {startTimeClicked && !reservationDate && (
-                        <div style={{ color: 'red', fontSize: "18px", marginTop: '0.5rem' }}>يرجى تحديد التاريخ أولاً</div>
+                        <div
+                          style={{
+                            color: "red",
+                            fontSize: "18px",
+                            marginTop: "0.5rem",
+                          }}
+                        >
+                          يرجى تحديد التاريخ أولاً
+                        </div>
                       )}
                     </div>
                     <div className="col-12 col-md-4 mb-1">
-                      <label htmlFor="departureTime" className="form-label text-wrap text-right fw-bolder p-0 m-0">وقت الانصراف</label>
+                      <label
+                        htmlFor="departureTime"
+                        className="form-label text-wrap text-right fw-bolder p-0 m-0"
+                      >
+                        وقت الانصراف
+                      </label>
                       <input
                         type="time"
                         className="form-control border-primary m-0 p-2 h-auto"
@@ -323,94 +712,209 @@ const ReservationTables = () => {
                           setEndTimeClicked(true);
                           if (reservationDate) {
                             const EndedDate = new Date(reservationDate);
-                            const timeParts = e.target.value.split(':');
-                            console.log({ timeParts })
+                            const timeParts = e.target.value.split(":");
+                            console.log({ timeParts });
                             if (EndedDate) {
                               EndedDate.setHours(parseInt(timeParts[0]));
                               EndedDate.setMinutes(parseInt(timeParts[1]));
-                              console.log({ EndedDate })
+                              console.log({ EndedDate });
                               setEndTime(EndedDate);
-                              getAvailableTables(reservationDate, startTime, EndedDate)
+                              getAvailableTables(
+                                reservationDate,
+                                startTime,
+                                EndedDate
+                              );
                             }
                           } else {
-                            e.target.value = ''
-                          };
-
+                            e.target.value = "";
+                          }
                         }}
                       />
                       {endTimeClicked && !reservationDate && (
-                        <div style={{ color: 'red', fontSize: "18px", marginTop: '0.5rem' }}>يرجى تحديد التاريخ أولاً</div>
+                        <div
+                          style={{
+                            color: "red",
+                            fontSize: "18px",
+                            marginTop: "0.5rem",
+                          }}
+                        >
+                          يرجى تحديد التاريخ أولاً
+                        </div>
                       )}
                     </div>
                   </div>
                   <div className="row mb-1">
                     <div className="col-12 col-md-7">
-                      <label htmlFor="tableNumber" className="form-label text-wrap text-right fw-bolder p-0 m-0">رقم الطاولة</label>
-                      <select className="form-select border-primary col-12" id="tableNumber" onChange={(e) => setTableInfo({ id: e.target.value, tableNumber: e.target.options[e.target.selectedIndex].text })}>
+                      <label
+                        htmlFor="tableNumber"
+                        className="form-label text-wrap text-right fw-bolder p-0 m-0"
+                      >
+                        رقم الطاولة
+                      </label>
+                      <select
+                        className="form-select border-primary col-12"
+                        id="tableNumber"
+                        onChange={(e) =>
+                          setTableInfo({
+                            id: e.target.value,
+                            tableNumber:
+                              e.target.options[e.target.selectedIndex].text,
+                          })
+                        }
+                      >
                         <option>الطاولات المتاحة في هذا الوقت</option>
-                        {allTable.map((table, i) => (
-                          availableTableIds.includes(table._id) && (
-                            <option key={i} value={table._id}>{table.tableNumber}</option>
-                          )
-                        ))}
+                        {allTable.map(
+                          (table, i) =>
+                            availableTableIds.includes(table._id) && (
+                              <option key={i} value={table._id}>
+                                {table.tableNumber}
+                              </option>
+                            )
+                        )}
                       </select>
                     </div>
 
                     <div className="col-12 col-md-5">
-                      <label htmlFor="numberOfGuests" className="form-label text-wrap text-right fw-bolder p-0 m-0">عدد الضيوف</label>
-                      <input type="number" className="form-control border-primary m-0 p-2 h-auto" id="numberOfGuests" onChange={(e) => setNumberOfGuests(e.target.value)} />
+                      <label
+                        htmlFor="numberOfGuests"
+                        className="form-label text-wrap text-right fw-bolder p-0 m-0"
+                      >
+                        عدد الضيوف
+                      </label>
+                      <input
+                        type="number"
+                        className="form-control border-primary m-0 p-2 h-auto"
+                        id="numberOfGuests"
+                        onChange={(e) => setNumberOfGuests(e.target.value)}
+                      />
                     </div>
                   </div>
                   <div className="col-12 mb-1">
-                    <label htmlFor="notes" className="form-label text-wrap text-right fw-bolder p-0 m-0">ملاحظات</label>
-                    <textarea className="form-control border-primary m-0 p-2 h-auto" id="notes" rows="2" onChange={(e) => setReservationNote(e.target.value)}></textarea>
+                    <label
+                      htmlFor="notes"
+                      className="form-label text-wrap text-right fw-bolder p-0 m-0"
+                    >
+                      ملاحظات
+                    </label>
+                    <textarea
+                      className="form-control border-primary m-0 p-2 h-auto"
+                      id="notes"
+                      rows="2"
+                      onChange={(e) => setReservationNote(e.target.value)}
+                    ></textarea>
                   </div>
                 </div>
               </div>
               <div className="modal-footer d-flex flex-nowrap align-items-center justify-content-between m-0 p-1">
-                <input type="submit" className="btn btn-success col-6 h-100 px-2 py-3 m-0" value="ضافه" />
-                <input type="button" className="btn btn-danger col-6 h-100 px-2 py-3 m-0" data-dismiss="modal" value="إغلاق" />
+                <input
+                  type="submit"
+                  className="btn btn-success col-6 h-100 px-2 py-3 m-0"
+                  value="ضافه"
+                />
+                <input
+                  type="button"
+                  className="btn btn-danger col-6 h-100 px-2 py-3 m-0"
+                  data-dismiss="modal"
+                  value="إغلاق"
+                />
               </div>
             </form>
           </div>
-        </div >
-      </div >
-
+        </div>
+      </div>
 
       <div id="updatereservationModal" className="modal fade">
         <div className="modal-dialog ">
           <div className="modal-content shadow-lg border-0 rounded ">
-            <form onSubmit={(e) => updateReservation(e, reservationId, tableInfo.id, tableInfo.tableNumber, userId, numberOfGuests, customerName, customerPhone, reservationDate, startTime, endTime, reservationNote, createdBy)}>
+            <form
+              onSubmit={(e) =>
+                updateReservation(
+                  e,
+                  reservationId,
+                  tableInfo.id,
+                  tableInfo.tableNumber,
+                  userId,
+                  numberOfGuests,
+                  customerName,
+                  customerPhone,
+                  reservationDate,
+                  startTime,
+                  endTime,
+                  reservationNote,
+                  createdBy
+                )
+              }
+            >
               <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                 <h4 className="modal-title">اضافه حجز طاولة</h4>
-                <button type="button" className="close m-0 p-1" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <button
+                  type="button"
+                  className="close m-0 p-1"
+                  data-dismiss="modal"
+                  aria-hidden="true"
+                >
+                  &times;
+                </button>
               </div>
               <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
                 <div className="container">
-                  <div className='row'>
+                  <div className="row">
                     <div className="col-12 col-md-7 mb-1">
-                      <label htmlFor="name" className="form-label text-wrap text-right fw-bolder p-0 m-0">الاسم</label>
-                      <input type="text" className="form-control border-primary m-0 p-2 h-auto" id="name" onChange={(e) => clientByName(allusers, e.target.value)} />
+                      <label
+                        htmlFor="name"
+                        className="form-label text-wrap text-right fw-bolder p-0 m-0"
+                      >
+                        الاسم
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control border-primary m-0 p-2 h-auto"
+                        id="name"
+                        onChange={(e) => clientByName(allusers, e.target.value)}
+                      />
                       <ul>
-                        {filteredClients && filteredClients.map((client, index) => (
-                          <li key={index}>{client.username}</li>
-                        ))}
+                        {filteredClients &&
+                          filteredClients.map((client, index) => (
+                            <li key={index}>{client.username}</li>
+                          ))}
                       </ul>
                     </div>
                     <div className="col-12 col-md-5 mb-1">
-                      <label htmlFor="mobile" className="form-label text-wrap text-right fw-bolder p-0 m-0">رقم الموبايل</label>
-                      <input type="tel" className="form-control border-primary m-0 p-2 h-auto" id="mobile" defaultValue={customerPhone} onChange={(e) => setCustomerPhone(e.target.value)} />
+                      <label
+                        htmlFor="mobile"
+                        className="form-label text-wrap text-right fw-bolder p-0 m-0"
+                      >
+                        رقم الموبايل
+                      </label>
+                      <input
+                        type="tel"
+                        className="form-control border-primary m-0 p-2 h-auto"
+                        id="mobile"
+                        defaultValue={customerPhone}
+                        onChange={(e) => setCustomerPhone(e.target.value)}
+                      />
                     </div>
                   </div>
 
                   <div className="row mb-1">
                     <div className="col-12 col-md-4 mb-1">
-                      <label htmlFor="date" className="form-label text-wrap text-right fw-bolder p-0 m-0">التاريخ</label>
+                      <label
+                        htmlFor="date"
+                        className="form-label text-wrap text-right fw-bolder p-0 m-0"
+                      >
+                        التاريخ
+                      </label>
                       <input
                         type="date"
                         className="form-control border-primary m-0 p-2 h-auto"
                         id="date"
-                        defaultValue={reservationDate ? new Date(reservationDate).toISOString().split('T')[0] : ''}
+                        defaultValue={
+                          reservationDate
+                            ? new Date(reservationDate)
+                                .toISOString()
+                                .split("T")[0]
+                            : ""
+                        }
                         onChange={(e) => {
                           const selectedDate = new Date(e.target.value);
                           setReservationDate(selectedDate);
@@ -418,100 +922,190 @@ const ReservationTables = () => {
                       />
                     </div>
                     <div className="col-12 col-md-4 mb-1">
-                      <label className="form-label text-wrap text-right fw-bolder p-0 m-0">وقت الحضور</label>
+                      <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                        وقت الحضور
+                      </label>
                       <input
                         type="time"
                         className="form-control border-primary m-0 p-2 h-auto"
                         required
-                        defaultValue={startTime ? new Date(startTime).toISOString().split('T')[1].slice(0, 5) : ''}
+                        defaultValue={
+                          startTime
+                            ? new Date(startTime)
+                                .toISOString()
+                                .split("T")[1]
+                                .slice(0, 5)
+                            : ""
+                        }
                         onChange={(e) => {
                           setStartTimeClicked(true);
                           if (reservationDate) {
                             const StartedDate = new Date(reservationDate);
-                            const timeParts = e.target.value.split(':');
-                            console.log({ timeParts })
+                            const timeParts = e.target.value.split(":");
+                            console.log({ timeParts });
                             if (StartedDate) {
                               StartedDate.setHours(parseInt(timeParts[0]));
                               StartedDate.setMinutes(parseInt(timeParts[1]));
-                              console.log({ StartedDate })
+                              console.log({ StartedDate });
                               setStartTime(StartedDate);
                             }
                           } else {
-                            e.target.value = ''
+                            e.target.value = "";
                           }
                         }}
                       />
                       {startTimeClicked && !reservationDate && (
-                        <div style={{ color: 'red', fontSize: "18px", marginTop: '0.5rem' }}>يرجى تحديد التاريخ أولاً</div>
+                        <div
+                          style={{
+                            color: "red",
+                            fontSize: "18px",
+                            marginTop: "0.5rem",
+                          }}
+                        >
+                          يرجى تحديد التاريخ أولاً
+                        </div>
                       )}
                     </div>
                     <div className="col-12 col-md-4 mb-1">
-                      <label htmlFor="departureTime" className="form-label text-wrap text-right fw-bolder p-0 m-0">وقت الانصراف</label>
+                      <label
+                        htmlFor="departureTime"
+                        className="form-label text-wrap text-right fw-bolder p-0 m-0"
+                      >
+                        وقت الانصراف
+                      </label>
                       <input
                         type="time"
                         className="form-control border-primary m-0 p-2 h-auto"
                         id="departureTime"
                         required
-                        defaultValue={endTime ? new Date(endTime).toISOString().split('T')[1].slice(0, 5) : ''}
+                        defaultValue={
+                          endTime
+                            ? new Date(endTime)
+                                .toISOString()
+                                .split("T")[1]
+                                .slice(0, 5)
+                            : ""
+                        }
                         onChange={(e) => {
                           setEndTimeClicked(true);
                           if (reservationDate) {
                             const EndedDate = new Date(reservationDate);
-                            const timeParts = e.target.value.split(':');
-                            console.log({ timeParts })
+                            const timeParts = e.target.value.split(":");
+                            console.log({ timeParts });
                             if (EndedDate) {
                               EndedDate.setHours(parseInt(timeParts[0]));
                               EndedDate.setMinutes(parseInt(timeParts[1]));
-                              console.log({ EndedDate })
+                              console.log({ EndedDate });
                               setEndTime(EndedDate);
-                              getAvailableTables(reservationDate, startTime, EndedDate)
+                              getAvailableTables(
+                                reservationDate,
+                                startTime,
+                                EndedDate
+                              );
                             }
                           } else {
-                            e.target.value = ''
+                            e.target.value = "";
                           }
                         }}
                       />
                       {endTimeClicked && !reservationDate && (
-                        <div style={{ color: 'red', fontSize: "18px", marginTop: '0.5rem' }}>يرجى تحديد التاريخ أولاً</div>
+                        <div
+                          style={{
+                            color: "red",
+                            fontSize: "18px",
+                            marginTop: "0.5rem",
+                          }}
+                        >
+                          يرجى تحديد التاريخ أولاً
+                        </div>
                       )}
                     </div>
                   </div>
 
                   <div className="row mb-1">
                     <div className="col-12 col-md-7">
-                      <label htmlFor="tableNumber" className="form-label text-wrap text-right fw-bolder p-0 m-0">رقم الطاولة</label>
-                      <select className="form-select border-primary col-12" id="tableNumber" defaultValue={tableInfo.tableNumber} onChange={(e) => setTableInfo({ id: e.target.value, tableNumber: e.target.options[e.target.selectedIndex].text })}>
+                      <label
+                        htmlFor="tableNumber"
+                        className="form-label text-wrap text-right fw-bolder p-0 m-0"
+                      >
+                        رقم الطاولة
+                      </label>
+                      <select
+                        className="form-select border-primary col-12"
+                        id="tableNumber"
+                        defaultValue={tableInfo.tableNumber}
+                        onChange={(e) =>
+                          setTableInfo({
+                            id: e.target.value,
+                            tableNumber:
+                              e.target.options[e.target.selectedIndex].text,
+                          })
+                        }
+                      >
                         <option>{tableInfo.tableNumber}</option>
                         <option>الطاولات المتاحة في هذا الوقت</option>
-                        {allTable.map((table, i) => (
-                          availableTableIds.includes(table._id) && (
-                            <option key={i} value={table._id}>{table.tableNumber}</option>
-                          )
-                        ))}
-
+                        {allTable.map(
+                          (table, i) =>
+                            availableTableIds.includes(table._id) && (
+                              <option key={i} value={table._id}>
+                                {table.tableNumber}
+                              </option>
+                            )
+                        )}
                       </select>
                     </div>
                     <div className="col-12 col-md-5">
-                      <label htmlFor="numberOfGuests" className="form-label text-wrap text-right fw-bolder p-0 m-0">عدد الضيوف</label>
-                      <input type="number" className="form-control border-primary m-0 p-2 h-auto" id="numberOfGuests" defaultValue={numberOfGuests} onChange={(e) => setNumberOfGuests(e.target.value)} />
+                      <label
+                        htmlFor="numberOfGuests"
+                        className="form-label text-wrap text-right fw-bolder p-0 m-0"
+                      >
+                        عدد الضيوف
+                      </label>
+                      <input
+                        type="number"
+                        className="form-control border-primary m-0 p-2 h-auto"
+                        id="numberOfGuests"
+                        defaultValue={numberOfGuests}
+                        onChange={(e) => setNumberOfGuests(e.target.value)}
+                      />
                     </div>
                   </div>
                   <div className="col-12 mb-1">
-                    <label htmlFor="notes" className="form-label text-wrap text-right fw-bolder p-0 m-0">ملاحظات</label>
-                    <textarea className="form-control border-primary m-0 p-2 h-auto" id="notes" rows="2" defaultValue={reservationNote} onChange={(e) => setReservationNote(e.target.value)}></textarea>
+                    <label
+                      htmlFor="notes"
+                      className="form-label text-wrap text-right fw-bolder p-0 m-0"
+                    >
+                      ملاحظات
+                    </label>
+                    <textarea
+                      className="form-control border-primary m-0 p-2 h-auto"
+                      id="notes"
+                      rows="2"
+                      defaultValue={reservationNote}
+                      onChange={(e) => setReservationNote(e.target.value)}
+                    ></textarea>
                   </div>
                 </div>
               </div>
               <div className="modal-footer d-flex flex-nowrap align-items-center justify-content-between m-0 p-1">
-                <input type="submit" className="btn btn-success col-6 h-100 px-2 py-3 m-0" value="ضافه" />
-                <input type="button" className="btn btn-danger col-6 h-100 px-2 py-3 m-0" data-dismiss="modal" value="إغلاق" />
+                <input
+                  type="submit"
+                  className="btn btn-success col-6 h-100 px-2 py-3 m-0"
+                  value="ضافه"
+                />
+                <input
+                  type="button"
+                  className="btn btn-danger col-6 h-100 px-2 py-3 m-0"
+                  data-dismiss="modal"
+                  value="إغلاق"
+                />
               </div>
             </form>
           </div>
-        </div >
-      </div >
-    </div >
-  )
-}
+        </div>
+      </div>
+    </div>
+  );
+};
 
-export default ReservationTables
+export default ReservationTables;

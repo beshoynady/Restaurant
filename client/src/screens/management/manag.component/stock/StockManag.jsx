@@ -960,8 +960,7 @@ const StockManag = () => {
                       type="text"
                       className="form-control border-primary m-0 p-2 h-auto"
                       readOnly
-                      required
-                      Value={costOfPart}
+                      defaultValue={costOfPart}
                     />
                   </div>
                 ) : ["Purchase", "ReturnPurchase"].includes(movement) ? (
