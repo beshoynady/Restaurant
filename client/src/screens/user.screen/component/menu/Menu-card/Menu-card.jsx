@@ -341,7 +341,7 @@ const MenuCard = () => {
                                       style={{ fontSize: "14px" }}
                                       onClick={() => {
                                         if (sizeQuantity > 0 &&
-                                          sizeId && product.sizes?.map(size =>size._id === sizeId) ) {
+                                          sizeId && product.sizes?.find(size =>size._id === sizeId) ) {
                                           addItemToCart(product._id, size._id);
                                         }else{
                                           toast.warn('اختر الحجم اولا')

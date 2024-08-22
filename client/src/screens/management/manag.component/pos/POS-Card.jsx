@@ -38,7 +38,7 @@ const POSCard = () => {
                             className="d-flex flex-column justify-content-between"
                             style={{ width: "100%", height: "50%" }}
                             onClick={() => {
-                              if (sizeId && product.sizes?.map(size =>size._id === sizeId) ) {
+                              if (sizeId && product.sizes?.find(size =>size._id === sizeId) ) {
                                 addItemToCart(product._id, sizeId);
                               }else{
                                 toast.warn('اختر الحجم اولا')
