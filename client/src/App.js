@@ -1511,7 +1511,7 @@ function App() {
           (order) => order.table && order.table._id === clientId
         );
       const lastTableOrder =
-        tableOrder.length > 0 ? tableOrder[tableOrder.length - 1] : null;
+        tableOrder.length > 0 ? tableOrder[0] : null;
       const lastTableOrderActive = lastTableOrder
         ? lastTableOrder.isActive
         : false;
@@ -1521,7 +1521,7 @@ function App() {
         allOrders &&
         allOrders.filter((order) => order.user && order.user._id === clientId);
       const lastUserOrder =
-        userOrder.length > 0 ? userOrder[userOrder.length - 1] : null;
+        userOrder.length > 0 ? userOrder[0] : null;
       const lastUserOrderActive = lastUserOrder
         ? lastUserOrder.isActive
         : false;

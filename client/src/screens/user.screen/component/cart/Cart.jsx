@@ -29,7 +29,7 @@ const Cart = (props) => {
     formatDateTime,
     clientInfo,
     userLoginInfo,
-    
+
     itemsInCart,
     costOrder,
     deleteItemFromCart,
@@ -153,7 +153,6 @@ const Cart = (props) => {
                 الفاتورة
               </label>
             )}
-            <div className="slider-tab"></div>
           </div>
           <div className="cart-inner">
             <div ref={orderside} className="order side">
