@@ -63,9 +63,8 @@ const ManagerDash = () => {
   const fetchOrdersData = async () => {
     try {
       if (!token) {
-        // Handle case where token is not available
         toast.error("رجاء تسجيل الدخول مره اخري");
-        return; // Exit the function if token is not available
+        return; 
       }
 
       // Fetch orders from API
@@ -706,7 +705,7 @@ const ManagerDash = () => {
   useEffect(() => {
     fetchOrdersData();
     fetchActiveEmployees();
-  }, [update]);
+  }, [update, isRefresh]);
 
   useEffect(() => {
     employeeLoginInfo && getCashRegistersByEmployee(employeeLoginInfo?.id);
