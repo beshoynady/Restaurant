@@ -181,7 +181,6 @@ const LoginRegistr = (props) => {
                   >
                     عضو جديد
                   </label>
-                  <div className="slider-tab"></div>
                 </div>
 
                 <div className="form-inner">
