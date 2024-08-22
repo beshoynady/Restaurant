@@ -4,9 +4,6 @@ import { toast } from "react-toastify";
 import { detacontext } from "../../../../App";
 import "../orders/Orders.css";
 
-
-
-
 const ReservationTables = () => {
   const apiUrl = process.env.REACT_APP_API_URL;
   const token = localStorage.getItem("token_e"); // Retrieve the token from localStorage
@@ -43,8 +40,8 @@ const ReservationTables = () => {
   const createdBy = employeeLoginInfo?.id;
   const [reservationId, setReservationId] = useState("");
   const [tableId, settableId] = useState("");
-  const [tableNumber,settableNumber] = useState("");
-  
+  const [tableNumber, settableNumber] = useState("");
+
   const [customerName, setCustomerName] = useState("");
   const [customerPhone, setCustomerPhone] = useState("");
   const [reservationNote, setReservationNote] = useState("");
@@ -71,9 +68,7 @@ const ReservationTables = () => {
     }
   };
 
-  const updateReservation = async (
-    e
-  ) => {
+  const updateReservation = async (e) => {
     e.preventDefault();
     console.log({
       reservationId,
@@ -84,8 +79,8 @@ const ReservationTables = () => {
       startTime,
       endTime,
       reservationNote,
-      updateBy:employeeLoginInfo?.id
-    })
+      updateBy: employeeLoginInfo?.id,
+    });
     try {
       if (!reservationId) {
         toast.error("رجاء اختيار الحجز بشكل صحيح");
@@ -100,35 +95,40 @@ const ReservationTables = () => {
       );
 
       const filterReservationsByTime = filterReservationsByTable.filter(
-        (reservation) => {
-          const reservationStartTime = new Date(reservation.startTime);
-          const reservationEndTime = new Date(reservation.endTime);
-          const newStartTime = new Date(startTime);
-          const newEndTime = new Date(endTime);
-      
-          return (
-            (reservationStartTime <= newStartTime && reservationEndTime >= newStartTime) ||
-            (reservationStartTime <= newEndTime && reservationEndTime >= newEndTime) ||
-            (newStartTime <= reservationStartTime && newEndTime >= reservationEndTime)
-          );
-        }
+        (reservation) =>
+          (new Date(reservation.startTime).getTime() <=
+            new Date(startTime).getTime() &&
+            new Date(reservation.endTime).getTime() >=
+              new Date(startTime).getTime()) ||
+          (new Date(reservation.startTime).getTime() <=
+            new Date(endTime).getTime() &&
+            new Date(reservation.endTime).getTime() >=
+              new Date(endTime).getTime()) ||
+          (new Date(startTime).getTime() <=
+            new Date(reservation.startTime).getTime() &&
+            new Date(endTime).getTime() >=
+              new Date(reservation.endTime).getTime())
       );
-      
-       console.log({filterReservationsByTable, filterReservationsByTime})
+
+      console.log({ filterReservationsByTable, filterReservationsByTime });
       if (
         filterReservationsByTime.length === 0 ||
-          (filterReservationsByTime.length === 1 && filterReservationsByTime[0]._id === reservationId)
+        (filterReservationsByTime.length === 1 &&
+          filterReservationsByTime[0]._id === reservationId)
       ) {
-        const response = await axios.put(`${apiUrl}/api/reservation/${reservationId}`, {
-          tableId,
-          tableNumber,
-          numberOfGuests,
-          reservationDate,
-          startTime,
-          endTime,
-          reservationNote,
-          updateBy:employeeLoginInfo?.id
-        });
+        const response = await axios.put(
+          `${apiUrl}/api/reservation/${reservationId}`,
+          {
+            tableId,
+            tableNumber,
+            numberOfGuests,
+            reservationDate,
+            startTime,
+            endTime,
+            reservationNote,
+            updateBy: employeeLoginInfo?.id,
+          }
+        );
         if (response.status === 200) {
           getAllReservations();
 
@@ -228,22 +228,26 @@ const ReservationTables = () => {
   };
 
   const filterByStatus = (status) => {
-    if(status ===''){
-      getAllReservations()
-      return
+    if (status === "") {
+      getAllReservations();
+      return;
     }
-    const filter = allReservations.filter(reservation => reservation.status === status)
-    setallReservations(filter)
-  }
+    const filter = allReservations.filter(
+      (reservation) => reservation.status === status
+    );
+    setallReservations(filter);
+  };
 
   const filterByPhone = (phone) => {
-    if(phone ===''){
-      getAllReservations()
-      return
+    if (phone === "") {
+      getAllReservations();
+      return;
     }
-    const filter = allReservations.filter(reservation => reservation.phone === phone)
-    setallReservations(filter)
-  }
+    const filter = allReservations.filter(
+      (reservation) => reservation.phone === phone
+    );
+    setallReservations(filter);
+  };
 
   // const [selectedIds, setSelectedIds] = useState([]);
   // const handleCheckboxChange = (e) => {
@@ -386,7 +390,6 @@ const ReservationTables = () => {
                 />
               </div>
 
-
               <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                   حسب الحاله
@@ -405,7 +408,6 @@ const ReservationTables = () => {
                   })}
                 </select>
               </div>
-
 
               <div className="col-12 d-flex align-items-center justify-content-between p-0 m-0 mt-3">
                 <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
@@ -517,12 +519,11 @@ const ReservationTables = () => {
                           }
                         >
                           <option>{translateStatus(reservation.status)}</option>
-                          {statusesEn.map((status, i)=>
-                            (
-                              <option value={status} key={i}>{statusesAr[i]}</option>
-                            )
-                          )}
-                          
+                          {statusesEn.map((status, i) => (
+                            <option value={status} key={i}>
+                              {statusesAr[i]}
+                            </option>
+                          ))}
                         </select>
                       </td>
                       <td>
@@ -531,7 +532,7 @@ const ReservationTables = () => {
                           className="edit"
                           data-toggle="modal"
                           onClick={(e) => {
-                            setCustomerName(reservation.customerName)
+                            setCustomerName(reservation.customerName);
                             setReservationId(reservation._id);
                             setCustomerName(reservation.customerName);
                             setCustomerPhone(reservation.customerPhone);
@@ -540,7 +541,7 @@ const ReservationTables = () => {
                             setStartTime(reservation.startTime);
                             setReservationDate(reservation.reservationDate);
                             setReservationNote(reservation.reservationNotes);
-                            settableId(reservation.tableId)
+                            settableId(reservation.tableId);
                             settableNumber(reservation.tableNumber);
                           }}
                         >
@@ -814,11 +815,12 @@ const ReservationTables = () => {
                       <select
                         className="form-control border-primary m-0 p-2 h-auto"
                         id="tableNumber"
-                        onChange={(e) =>{
-                          settableId(e.target.value);  
-                          settableNumber(e.target.options[e.target.selectedIndex].text)
-                        }
-                        }
+                        onChange={(e) => {
+                          settableId(e.target.value);
+                          settableNumber(
+                            e.target.options[e.target.selectedIndex].text
+                          );
+                        }}
                       >
                         <option>الطاولات المتاحة في هذا الوقت</option>
                         {allTable.map(
@@ -884,11 +886,7 @@ const ReservationTables = () => {
       <div id="updatereservationModal" className="modal fade">
         <div className="modal-dialog ">
           <div className="modal-content shadow-lg border-0 rounded ">
-            <form
-              onSubmit={(e) =>
-                updateReservation( e)
-              }
-            >
+            <form onSubmit={(e) => updateReservation(e)}>
               <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                 <h4 className="modal-title">اضافه حجز طاولة</h4>
                 <button
@@ -1079,11 +1077,12 @@ const ReservationTables = () => {
                         className="form-control border-primary m-0 p-2 h-auto"
                         id="tableNumber"
                         defaultValue={tableNumber}
-                        onChange={(e) =>{
-                          settableId(e.target.value);  
-                          settableNumber(e.target.options[e.target.selectedIndex].text)
-                        }
-                        }
+                        onChange={(e) => {
+                          settableId(e.target.value);
+                          settableNumber(
+                            e.target.options[e.target.selectedIndex].text
+                          );
+                        }}
                       >
                         <option>{tableNumber}</option>
                         <option>الطاولات المتاحة في هذا الوقت</option>
