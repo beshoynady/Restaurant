@@ -50,7 +50,7 @@ const PayRoll = () => {
   const [thismonth, setthismonth] = useState(new Date().getMonth() + 1);
 
   // State variables
-  const [expenseId, setexpenseId] = useState("66c4cade26763f97dcb5f7f0");
+  const [expenseId, setexpenseId] = useState("");
   const [rollId, setrollId] = useState("");
   const [cashMovementId, setcashMovementId] = useState("");
   const [dailyexpenseId, setdailyexpenseId] = useState("");
@@ -64,7 +64,6 @@ const PayRoll = () => {
   const [employeeName, setemployeeName] = useState("");
   const [month, setmonth] = useState("");
   const [notes, setnotes] = useState("");
-  const [allExpenses, setallExpenses] = useState([]);
   const [AllcashRegisters, setAllcashRegisters] = useState([]);
 
   // Fetch employees data from the API
@@ -146,6 +145,27 @@ const PayRoll = () => {
     }
   };
 
+
+  const getAllExpenses = async () => {
+    try{
+      if (!token) {
+        // Handle case where token is not available
+        toast.error('رجاء تسجيل الدخول مره اخري');
+        return
+      }
+      const response = await axios.get(apiUrl + '/api/expenses/', config);
+      const expenses = await response.data;
+      console.log(response.data);
+      expenses.map(expense=>{
+        if(expense.isSalary === true){
+          setexpenseId(expense._id)
+        }
+      })
+    } catch (error) {
+      console.log(error);
+      toast.error('حدث خطأ أثناء جلب المصاريف');
+    }
+  };
   // Fetch salary movement data from the API
   const [ListOfEmployeTransactions, setListOfEmployeTransactions] = useState(
     []
@@ -553,8 +573,7 @@ const PayRoll = () => {
 
   // Create daily expense based on selected cash register
   const createDailyExpense = async () => {
-    // console.log({ balance });
-    // console.log({ amount });
+
 
     const updatedBalance = balance - amount;
     console.log({ updatedBalance });
@@ -685,6 +704,7 @@ const PayRoll = () => {
     getPayRoll();
     getEmployeTransactions();
     getallAttendanceRecords();
+    getAllExpenses()
     // getAllCashRegisters();
   }, []);
 
@@ -710,7 +730,7 @@ const PayRoll = () => {
             </div>
           </div>
           <div className="table-filter print-hide">
-            <div className="col-12 text-dark d-flex flex-wrap align-items-center justify-content-evenly p-0 m-0">
+            <div className="col-12 text-dark d-flex flex-wrap align-items-center justify-content-start p-0 m-0">
               <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                   عرض

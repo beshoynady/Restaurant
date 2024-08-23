@@ -1,12 +1,13 @@
 const ExpenseModel = require('../models/Expense.model');
 
 const createExpense = async (req, res) => {
-  const { description, expenseType } = req.body;
+  const { description, expenseType , isSalary } = req.body;
 
   try {
     const expense = await ExpenseModel.create({
       description,
       expenseType,
+      isSalary
     });
 
     res.status(201).json(expense);
@@ -16,10 +17,10 @@ const createExpense = async (req, res) => {
 };
 
 const updateExpense = async (req, res) => {
-  const { description, expenseType } = req.body;
+  const { description, expenseType, isSalary } = req.body;
 
   try {
-    const updatedExpense = await ExpenseModel.findByIdAndUpdate(req.params.expenseId, { description, expenseType }, { new: true });
+    const updatedExpense = await ExpenseModel.findByIdAndUpdate(req.params.expenseId, { description, expenseType, isSalary }, { new: true });
     if (updatedExpense) {
       res.status(200).json(updatedExpense);
     } else {

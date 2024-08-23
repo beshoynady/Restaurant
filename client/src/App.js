@@ -1486,6 +1486,7 @@ function App() {
         setdeliverycost(0);
         setsalesTax(0);
         setserviceTax(0);
+        cashierSocket.emit("orderkitchen", "استلام اوردر ديليفري جديد");
       } else {
         throw new Error("هناك خطأ في إنشاء الطلب");
       }

@@ -531,7 +531,7 @@ const StockManag = () => {
             </div>
           </div>
           <div class="table-filter print-hide">
-            <div class="col-12 text-dark d-flex flex-wrap align-items-center justify-content-evenly p-0 m-0">
+            <div class="col-12 text-dark d-flex flex-wrap align-items-center justify-content-start p-0 m-0">
               <div class="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                   عرض
@@ -586,7 +586,7 @@ const StockManag = () => {
                 </select>
               </div>
 
-              <div className="col-12 d-flex align-items-center justify-content-between p-0 m-0 mt-3">
+              <div className="col-12 text-dark d-flex flex-wrap align-items-center justify-content-start p-0 m-0 mt-3">
                 <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                     فلتر حسب الوقت

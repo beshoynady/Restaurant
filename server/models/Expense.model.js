@@ -11,6 +11,11 @@ const expenseSchema = new mongoose.Schema({
     required: true,
     enum: ['Operating Expenses', 'Fixed Expenses', 'Marketing and Advertising', 'Administrative and Office Expenses', 'Investment and Development'],
   },
+  isSalary:{
+    type: Boolean,
+    required: true,
+    default: false
+  }
 }, { timestamps: true });
 
 const ExpenseModel = mongoose.model('Expense', expenseSchema);

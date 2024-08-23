@@ -502,7 +502,7 @@ const AttendanceManagement = () => {
 
                 </select>
               </div>
-              <div className='col-12 d-flex align-items-center justify-content-between p-0 m-0 mt-3'>
+              <div className='col-12 text-dark d-flex flex-wrap align-items-center justify-content-start p-0 m-0 mt-3'>
                 <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">فلتر حسب الوقت</label>
                   <select className="form-control border-primary m-0 p-2 h-auto"  onChange={(e) => setallAttendanceRecords(filterByTime(e.target.value, allAttendanceRecords))}>

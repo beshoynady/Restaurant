@@ -26,10 +26,12 @@ const ExpenseItem = () => {
 
 
 
+  const [allExpenses, setAllExpenses] = useState([]);
   const [expenseId, setexpenseId] = useState('');
+
   const [description, setDescription] = useState('');
   const [expenseType, setExpenseType] = useState('');
-  const [allExpenses, setAllExpenses] = useState([]);
+  const [isSalary, setisSalary] = useState(false);
 
 
   const createExpense = async (e) => {
@@ -45,7 +47,7 @@ const ExpenseItem = () => {
         return
       }
 
-      const response = await axios.post(apiUrl + '/api/expenses/', { description, expenseType }, config);
+      const response = await axios.post(apiUrl + '/api/expenses/', { description, expenseType, isSalary }, config);
       console.log(response.data);
       getAllExpenses();
       toast.success('تم إنشاء المصروف بنجاح');
@@ -72,7 +74,7 @@ const ExpenseItem = () => {
         toast.warn('لا يمكن تعديل بيانات المصروف بعد تسجيل المصروفات بالحساب');
         return
       }
-      const response = await axios.put(`${apiUrl}/api/expenses/${expenseId}`, { description, expenseType }, config);
+      const response = await axios.put(`${apiUrl}/api/expenses/${expenseId}`, { description, expenseType, isSalary }, config);
       console.log(response.data);
       if (response.status === 200) {
         getAllExpenses();
@@ -213,7 +215,7 @@ const ExpenseItem = () => {
             </div>
           </div>
           <div className="table-filter print-hide">
-            <div className="col-12 text-dark d-flex flex-wrap align-items-center justify-content-evenly p-0 m-0">
+            <div className="col-12 text-dark d-flex flex-wrap align-items-center justify-content-start p-0 m-0">
               <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">عرض</label>
                 <select className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => { setstartpagination(0); setendpagination(e.target.value) }}>
@@ -246,7 +248,7 @@ const ExpenseItem = () => {
                 </select>
               </div>
 
-              <div className='col-12 d-flex align-items-center justify-content-between p-0 m-0 mt-3'>
+              <div className='col-12 text-dark d-flex flex-wrap align-items-center justify-content-start p-0 m-0 mt-3'>
                 <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">فلتر حسب الوقت</label>
                   <select className="form-control border-primary m-0 p-2 h-auto"  onChange={(e) => setallDailyExpenses(filterByTime(e.target.value, allDailyExpenses))}>
@@ -308,7 +310,7 @@ const ExpenseItem = () => {
                         <td>{formatDateTime(expense.createdAt)}</td>
                         <td>
                           <a href="#editExpensesModal" className="edit" data-toggle="modal" onClick={() => {
-                            setexpenseId(expense._id); setExpenseType(expense.expenseType)
+                            setexpenseId(expense._id); setExpenseType(expense.expenseType); setisSalary(expense.isSalary)
                             setDescription(expense.description)
                           }}><i className="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
                           <a href="#deleteExpensesModal" className="delete" data-toggle="modal" onClick={() => setexpenseId(expense._id)}><i className="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
@@ -364,6 +366,17 @@ const ExpenseItem = () => {
                     ))}
                   </select>
                 </div>
+                <div className="form-group col-12 col-md-6">
+                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                    هل هذا حساب خصم مرتبات
+                  </label>
+                  <input
+                    type="checkbox"
+                    className="form-check-input border-primary mr-2"
+                    style={{ width: "21px", height: "21px" }}
+                    onChange={setisSalary(!isSalary)}
+                  />
+                </div>
               </div>
               <div className="modal-footer d-flex flex-nowrap align-items-center justify-content-between m-0 p-1">
                 <input type="submit" className="btn btn-success col-6 h-100 px-2 py-3 m-0" value="اضافه" />
@@ -399,6 +412,18 @@ const ExpenseItem = () => {
                       <option key={index} value={expenseType}>{expenseTypeAr[index]}</option>
                     ))}
                   </select>
+                </div>
+                <div className="form-group col-12 col-md-6">
+                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                    هل هذا حساب خصم مرتبات
+                  </label>
+                  <input
+                    type="checkbox"
+                    className="form-check-input border-primary mr-2"
+                    style={{ width: "21px", height: "21px" }}
+                    defaultChecked={isSalary}
+                    onChange={setisSalary(!isSalary)}
+                  />
                 </div>
               </div>
               <div className="modal-footer d-flex flex-nowrap align-items-center justify-content-between m-0 p-1">
