@@ -511,7 +511,7 @@ const ReservationTables = () => {
                       <td>{formatTime(reservation.endTime)}</td>
                       <td>
                         <select
-                          className="form-control border-primary m-0 p-2 h-auto"
+                          className="form-select border-primary m-0 p-2 h-auto"
                           name="status"
                           id="status"
                           onChange={(e) =>

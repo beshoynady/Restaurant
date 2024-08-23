@@ -1484,7 +1484,7 @@ const Purchase = () => {
                                 </select>
                               </div>
                               {cashRegister && (
-                                <div className="input-group mb-3 d-flex align-items-center justify-content-between flex-nowrap">
+                                <div className="input-group mb-3 d-flex align-items-center justify-content-between flex-wrap">
                                   <span
                                     className="input-group-text"
                                     htmlFor="netAmountInput"
@@ -1492,7 +1492,7 @@ const Purchase = () => {
                                     رصيد الخزينة
                                   </span>
                                   <input
-                                    type="button"
+                                    type="text"
                                     className="form-control text-end"
                                     id="netAmountInput"
                                     value={CashRegisterBalance}
@@ -1500,7 +1500,7 @@ const Purchase = () => {
                                   />
                                   <button
                                     type="button"
-                                    className="btn btn-success w-100 h-100 p-0"
+                                    className="btn btn-success w-100 h-100 p-2"
                                     id="netAmountInput"
                                     onClick={confirmPayment}
                                   >
@@ -1579,6 +1579,10 @@ const Purchase = () => {
           </div>
         </div>
       </div>
+
+
+
+
 
       <div id="viewPurchaseModal" className="modal fade">
         <div className="modal-dialog modal-lg">
