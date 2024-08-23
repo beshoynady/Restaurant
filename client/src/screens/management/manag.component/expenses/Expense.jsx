@@ -374,7 +374,7 @@ const ExpenseItem = () => {
                     type="checkbox"
                     className="form-check-input border-primary mr-2"
                     style={{ width: "21px", height: "21px" }}
-                    onChange={setisSalary(!isSalary)}
+                    onChange={() => setisSalary(!isSalary)}
                   />
                 </div>
               </div>
@@ -422,7 +422,7 @@ const ExpenseItem = () => {
                     className="form-check-input border-primary mr-2"
                     style={{ width: "21px", height: "21px" }}
                     defaultChecked={isSalary}
-                    onChange={setisSalary(!isSalary)}
+                    onChange={() => setisSalary(!isSalary)}
                   />
                 </div>
               </div>
