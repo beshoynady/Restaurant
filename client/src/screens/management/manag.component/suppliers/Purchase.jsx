@@ -36,7 +36,6 @@ const Purchase = () => {
   const purchasePermission = permissionsList?.filter(
     (permission) => permission.resource === "Purchases"
   )[0];
-  
 
   const [AllStockactions, setAllStockactions] = useState([]);
 
@@ -767,17 +766,17 @@ const Purchase = () => {
                 </h2>
               </div>
               <div className="col-12 col-md-6 p-0 m-0 d-flex flex-wrap aliegn-items-center justify-content-end print-hide">
-                {purchasePermission.create&&
-                <a
-                  href="#addPurchaseInvoiceModal"
-                  className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-success"
-                  data-toggle="modal"
-                >
-                  <span className=" text-wrap text-right fw-bolder p-0 m-0">
-                    اضافه فاتورة جديدة
-                  </span>
-                </a>
-                }
+                {purchasePermission.create && (
+                  <a
+                    href="#addPurchaseInvoiceModal"
+                    className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-success"
+                    data-toggle="modal"
+                  >
+                    <span className=" text-wrap text-right fw-bolder p-0 m-0">
+                      اضافه فاتورة جديدة
+                    </span>
+                  </a>
+                )}
 
                 {/* <a href="#deleteStockactionModal" className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-danger" data-toggle="modal"> <label className=" text-wrap text-right fw-bolder p-0 m-0">حذف</label></a> */}
               </div>
@@ -1014,23 +1013,23 @@ const Purchase = () => {
                         </td>
                         <td>{invoice.notes}</td>
                         <td>
-                          {purchasePermission.read&&
-                          <a
-                            href="#viewPurchaseModal"
-                            data-toggle="modal"
-                            onClick={() => {
-                              getInvoice(invoice._id);
-                            }}
-                          >
-                            <i
-                              className="material-icons text-primary fs-2"
-                              data-toggle="tooltip"
-                              title="مشاهدة المشتريات"
+                          {purchasePermission.read && (
+                            <a
+                              href="#viewPurchaseModal"
+                              data-toggle="modal"
+                              onClick={() => {
+                                getInvoice(invoice._id);
+                              }}
                             >
-                              &#xE417;
-                            </i>
-                          </a>
-                          }
+                              <i
+                                className="material-icons text-primary fs-2"
+                                data-toggle="tooltip"
+                                title="مشاهدة المشتريات"
+                              >
+                                &#xE417;
+                              </i>
+                            </a>
+                          )}
                         </td>
                       </tr>
                     );
@@ -1104,8 +1103,6 @@ const Purchase = () => {
           </div>
         </div>
       </div>
-
-
 
       <div id="addPurchaseInvoiceModal" className="modal fade">
         <div className="modal-dialog modal-lg">
@@ -1248,6 +1245,7 @@ const Purchase = () => {
                             <td>
                               <select
                                 className="form-control border-primary m-0 p-2 h-auto"
+                                style={{ minWidth: "auto !important" }}
                                 required
                                 onChange={(e) =>
                                   handleItemId(e.target.value, i)
@@ -1271,6 +1269,7 @@ const Purchase = () => {
                                 type="number"
                                 required
                                 className="form-control p-0 m-0"
+                                style={{ minWidth: "auto !important" }}
                                 name="qty"
                                 onChange={(e) =>
                                   handleQuantity(e.target.value, i)
@@ -1283,6 +1282,7 @@ const Purchase = () => {
                                 readOnly
                                 value={item.largeUnit}
                                 className="form-control p-0 m-0"
+                                style={{ minWidth: "auto !important" }}
                                 name="largeUnit"
                               />
                             </td>
@@ -1291,6 +1291,7 @@ const Purchase = () => {
                               <input
                                 type="number"
                                 className="form-control p-0 m-0"
+                                style={{ minWidth: "auto !important" }}
                                 name="price"
                                 required
                                 onChange={(e) => handlePrice(e.target.value, i)}
@@ -1301,6 +1302,7 @@ const Purchase = () => {
                               <input
                                 type="text"
                                 className="form-control p-0 m-0"
+                                style={{ minWidth: "auto !important" }}
                                 value={item.cost}
                                 name="amt"
                                 readOnly
@@ -1311,6 +1313,7 @@ const Purchase = () => {
                               <input
                                 type="date"
                                 className="form-control p-0 m-0"
+                                style={{ minWidth: "auto !important" }}
                                 name="Exp"
                                 onChange={(e) =>
                                   handleExpirationDate(e.target.value, i)
@@ -1716,6 +1719,7 @@ const Purchase = () => {
                               <input
                                 type="text"
                                 className="form-control p-0 m-0"
+                                style={{ minWidth: "auto !important" }}
                                 name="itemName"
                                 value={item.itemId.itemName}
                                 readOnly
@@ -1725,6 +1729,7 @@ const Purchase = () => {
                               <input
                                 type="text"
                                 className="form-control p-0 m-0"
+                                style={{ minWidth: "auto !important" }}
                                 name="qty"
                                 value={item.quantity}
                                 readOnly
@@ -1734,6 +1739,7 @@ const Purchase = () => {
                               <input
                                 type="text"
                                 className="form-control p-0 m-0"
+                                style={{ minWidth: "auto !important" }}
                                 name="largeUnit"
                                 value={item.largeUnit}
                                 readOnly
@@ -1743,6 +1749,7 @@ const Purchase = () => {
                               <input
                                 type="text"
                                 className="form-control p-0 m-0"
+                                style={{ minWidth: "auto !important" }}
                                 name="price"
                                 value={item.price}
                                 readOnly
@@ -1752,6 +1759,7 @@ const Purchase = () => {
                               <input
                                 type="text"
                                 className="form-control p-0 m-0"
+                                style={{ minWidth: "auto !important" }}
                                 name="cost"
                                 value={item.cost}
                                 readOnly
@@ -1761,6 +1769,7 @@ const Purchase = () => {
                               <input
                                 type="text"
                                 className="form-control p-0 m-0"
+                                style={{ minWidth: "auto !important" }}
                                 name="expirationDate"
                                 value={formatDate(item.expirationDate)}
                                 readOnly

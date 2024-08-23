@@ -58,19 +58,20 @@ const SupplierSchema = new Schema(
         financialInfo: [{
             paymentMethodName: {
                 type: String,
-                required: true,
+                trim: true,
+                maxlength:100
             },
             accountNumber: {
                 type: String,
                 trim: true,
-                maxlength: 500,
-                required: true,
+                maxlength: 100,
             },
         }],
 
         // Additional notes about the supplier
         notes: {
             type: String,
+            trim: true,
             maxlength: 500,
         },
         createdBy: {

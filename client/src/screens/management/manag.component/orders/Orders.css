@@ -122,6 +122,7 @@ table.table td {
 
 table.table td .form-control {
   min-width: max-content;
+  text-align: center;
 }
 
 table.table tr:nth-of-type(odd) {
