@@ -120,9 +120,9 @@ table.table td {
   text-wrap: nowrap;
 }
 
-/* table.table td .form-control {
-  width: max-content;
-} */
+table.table td .form-control {
+  min-width: max-content;
+}
 
 table.table tr:nth-of-type(odd) {
   background-color: #f9f9f9;
