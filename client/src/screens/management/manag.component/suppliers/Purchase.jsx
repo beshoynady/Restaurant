@@ -673,6 +673,11 @@ const Purchase = () => {
 
   const confirmPayment = async (e) => {
     e.preventDefault();
+    if (!token) {
+      // Handle case where token is not available
+      toast.error("رجاء تسجيل الدخول مره اخري");
+      return;
+    }
 
     // Check if required variables are defined and valid
     if (
@@ -684,14 +689,15 @@ const Purchase = () => {
       toast.error("برجاء التحقق من صحة المدخلات!");
       return;
     }
-
-    const updatedbalance = CashRegisterBalance - paidAmount; // Calculate the updated balance
-
-    if (!token) {
-      // Handle case where token is not available
-      toast.error("رجاء تسجيل الدخول مره اخري");
+    if(CashRegisterBalance< paidAmount){
+      
+      toast.error("رصيد الخزينه لا يكفي!");
       return;
     }
+
+    const updatedbalance = CashRegisterBalance - paidAmount; 
+
+
     try {
       // Perform the cash movement
       const cashMovementResponse = await axios.post(
