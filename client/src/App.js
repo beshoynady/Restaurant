@@ -114,6 +114,9 @@ const Customers = React.lazy(() =>
 const CustomerMessage = React.lazy(() =>
   import("./screens/management/manag.component/users/CustomerMessage")
 );
+const ProfitLoss = React.lazy(() =>
+  import("./screens/management/manag.component/reports/ProfitAndLoss.jsx")
+);
 
 // const socket = io(process.env.REACT_APP_API_URL, {
 //   reconnection: true,
@@ -2641,6 +2644,14 @@ function App() {
               element={
                 <Suspense fallback={<LoadingPage />}>
                   <CustomerMessage />
+                </Suspense>
+              }
+            />
+            <Route
+              path="profitloss"
+              element={
+                <Suspense fallback={<LoadingPage />}>
+                  <ProfitLoss />
                 </Suspense>
               }
             />
