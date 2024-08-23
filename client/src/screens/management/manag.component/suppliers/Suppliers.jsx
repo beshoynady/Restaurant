@@ -790,7 +790,7 @@ const Suppliers = () => {
                       </label>
                       <input
                         type="text"
-                        className="form-control border-primary col-3"
+                        className="form-control border-primary"
                         value={info.paymentMethodName}
                         placeholder="اسم وسيلة الدفع"
                         required
@@ -804,10 +804,9 @@ const Suppliers = () => {
                       />
                       <input
                         type="text"
-                        className="form-control border-primary col-4"
+                        className="form-control border-primary"
                         value={info.accountNumber}
                         placeholder="رقم الحساب"
-                        required
                         onChange={(e) =>
                           handleNewFinancialInfo(
                             index,
@@ -1013,7 +1012,7 @@ const Suppliers = () => {
                       </label>
                       <input
                         type="text"
-                        className="form-control border-primary col-3"
+                        className="form-control border-primary"
                         defaultValue={info.paymentMethodName}
                         placeholder="اسم وسيلة الدفع"
                         onChange={(e) =>
@@ -1026,7 +1025,7 @@ const Suppliers = () => {
                       />
                       <input
                         type="text"
-                        className="form-control border-primary col-4"
+                        className="form-control border-primary"
                         defaultValue={info.accountNumber}
                         placeholder="رقم الحساب"
                         onChange={(e) =>
