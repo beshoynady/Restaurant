@@ -2,6 +2,7 @@ import React from "react";
 
 const ProfitAndLoss = () => {
   return (
+    <div></div>
     // <div className="table-responsive">
     //   <div className="table-wrapper p-3 mw-100">
     //     <div className="table-title">
