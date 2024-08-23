@@ -1210,25 +1210,25 @@ const Purchase = () => {
                       <thead className="table-success">
                         <tr>
                           <th scope="col">#</th>
-                          <th scope="col" >
+                          <th scope="col" className="col-4">
                             الصنف
                           </th>
-                          <th scope="col">
+                          <th scope="col" className="col-2">
                             الكمية
                           </th>
-                          <th scope="col">
+                          <th scope="col" className="col-2">
                             الوحده
                           </th>
-                          <th scope="col">
+                          <th scope="col" className="col-2">
                             السعر
                           </th>
-                          <th scope="col">
+                          <th scope="col" className="col-2">
                             الثمن
                           </th>
-                          <th scope="col">
+                          <th scope="col" className="col-2">
                             انتهاء
                           </th>
-                          <th scope="col" className="NoPrint">
+                          <th scope="col" className="col-4 NoPrint">
                             <button
                               type="button"
                               className="h-100 btn btn-sm btn-success"
@@ -1247,7 +1247,7 @@ const Purchase = () => {
                             </th>
                             <td>
                               <select
-                                className="form-input border-primary m-0 p-2 h-auto"
+                                className="form-control border-primary m-0 p-2 h-auto"
                                 required
                                 onChange={(e) =>
                                   handleItemId(e.target.value, i)
@@ -1270,7 +1270,7 @@ const Purchase = () => {
                               <input
                                 type="number"
                                 required
-                                className="form-input border-primary m-0 p-2 h-auto"
+                                className="form-control p-0 m-0"
                                 name="qty"
                                 onChange={(e) =>
                                   handleQuantity(e.target.value, i)
@@ -1282,7 +1282,7 @@ const Purchase = () => {
                                 type="text"
                                 readOnly
                                 value={item.largeUnit}
-                                className="form-input border-primary m-0 p-2 h-auto"
+                                className="form-control p-0 m-0"
                                 name="largeUnit"
                               />
                             </td>
@@ -1290,7 +1290,7 @@ const Purchase = () => {
                             <td>
                               <input
                                 type="number"
-                                className="form-input border-primary m-0 p-2 h-auto"
+                                className="form-control p-0 m-0"
                                 name="price"
                                 required
                                 onChange={(e) => handlePrice(e.target.value, i)}
@@ -1300,7 +1300,7 @@ const Purchase = () => {
                             <td>
                               <input
                                 type="text"
-                                className="form-input border-primary m-0 p-2 h-auto"
+                                className="form-control p-0 m-0"
                                 value={item.cost}
                                 name="amt"
                                 readOnly
@@ -1310,7 +1310,7 @@ const Purchase = () => {
                             <td>
                               <input
                                 type="date"
-                                className="form-input border-primary m-0 p-2 h-auto"
+                                className="form-control p-0 m-0"
                                 name="Exp"
                                 onChange={(e) =>
                                   handleExpirationDate(e.target.value, i)
@@ -1682,25 +1682,25 @@ const Purchase = () => {
                   <table className="table table-bordered table-striped table-hover">
                     <thead className="table-success">
                       <tr>
-                        <th scope="col">
+                        <th scope="col" className="col-1">
                           #
                         </th>
-                        <th scope="col">
+                        <th scope="col" className="col-3">
                           الصنف
                         </th>
-                        <th scope="col">
+                        <th scope="col" className="col-1">
                           الكمية
                         </th>
-                        <th scope="col">
+                        <th scope="col" className="col-1">
                           الوحده
                         </th>
-                        <th scope="col">
+                        <th scope="col" className="col-1">
                           السعر
                         </th>
-                        <th scope="col">
+                        <th scope="col" className="col-1">
                           الثمن
                         </th>
-                        <th scope="col">
+                        <th scope="col" className="col-2">
                           انتهاء
                         </th>
                       </tr>
@@ -1715,7 +1715,7 @@ const Purchase = () => {
                             <td>
                               <input
                                 type="text"
-                                className="form-input border-primary m-0 p-2 h-auto"
+                                className="form-control p-0 m-0"
                                 name="itemName"
                                 value={item.itemId.itemName}
                                 readOnly
@@ -1724,7 +1724,7 @@ const Purchase = () => {
                             <td>
                               <input
                                 type="text"
-                                className="form-input border-primary m-0 p-2 h-auto"
+                                className="form-control p-0 m-0"
                                 name="qty"
                                 value={item.quantity}
                                 readOnly
@@ -1733,7 +1733,7 @@ const Purchase = () => {
                             <td>
                               <input
                                 type="text"
-                                className="form-input border-primary m-0 p-2 h-auto"
+                                className="form-control p-0 m-0"
                                 name="largeUnit"
                                 value={item.largeUnit}
                                 readOnly
@@ -1742,7 +1742,7 @@ const Purchase = () => {
                             <td>
                               <input
                                 type="text"
-                                className="form-input border-primary m-0 p-2 h-auto"
+                                className="form-control p-0 m-0"
                                 name="price"
                                 value={item.price}
                                 readOnly
@@ -1751,7 +1751,7 @@ const Purchase = () => {
                             <td>
                               <input
                                 type="text"
-                                className="form-input border-primary m-0 p-2 h-auto"
+                                className="form-control p-0 m-0"
                                 name="cost"
                                 value={item.cost}
                                 readOnly
@@ -1760,7 +1760,7 @@ const Purchase = () => {
                             <td>
                               <input
                                 type="text"
-                                className="form-input border-primary m-0 p-2 h-auto"
+                                className="form-control p-0 m-0"
                                 name="expirationDate"
                                 value={formatDate(item.expirationDate)}
                                 readOnly
