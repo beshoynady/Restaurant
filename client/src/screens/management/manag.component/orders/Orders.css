@@ -125,6 +125,11 @@ table.table td .form-control {
   text-align: center;
 }
 
+table.table td .form-input {
+  min-width: auto;
+  text-align: center;
+}
+
 table.table tr:nth-of-type(odd) {
   background-color: #f9f9f9;
 }
