@@ -107,15 +107,15 @@ const Home = () => {
           {userLoginInfo && userLoginInfo.userinfo && table ? (
             <p className="main-title">
               مرحبا {userLoginInfo.userinfo?.username} <br />
-              علي طاولة {table.tableNum} <br /> في
+              علي طاولة {table.tableNumber} <br /> في
             </p>
           ) : userLoginInfo && userLoginInfo.userinfo ? (
             <p className="main-title">
-              مرحبا {userLoginInfo.userinfo.username} <br /> في
+              مرحبا {userLoginInfo.userinfo?.username} <br /> في
             </p>
           ) : table ? (
             <p className="main-title">
-              مرحبا ضيوف طاولة {table.tableNum} <br /> في
+              مرحبا ضيوف طاولة {table.tableNumber} <br /> في
             </p>
           ) : (
             <p className="main-title">
@@ -126,7 +126,7 @@ const Home = () => {
             {" "}
             {restaurantData.name} <br /> {restaurantData.description}
           </p>
-          <ul className="main-btn">
+          <ul className="main-btn d-flex align-items-center justify-content-evenly">
             {table ? (
               <>
                 <li
