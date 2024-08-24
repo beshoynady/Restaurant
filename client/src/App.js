@@ -1159,7 +1159,7 @@ function App() {
     try {
       // Find orders for the specified table
       const tableOrders =
-        allOrders && allOrders.filter((order) => order.table._id === tableId);
+        allOrders && allOrders.filter((order) => order.table?._id === tableId);
       const lastTableOrder =
         tableOrders.length > 0 ? tableOrders[0] : {};
       const lastTableOrderActive = lastTableOrder && lastTableOrder.isActive;
