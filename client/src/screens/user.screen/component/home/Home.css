@@ -146,7 +146,6 @@
   .main-home .main-container .content .main-btn {
     align-items: center;
     display: flex;
-    flex-direction: column;
     list-style: none;
     padding: 0;
     width: 100%;
