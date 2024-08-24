@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { detacontext } from '../../../../App'
 import axios from 'axios'
 import { toast } from 'react-toastify';
@@ -14,6 +14,24 @@ const DeliveryMan = () => {
       'Authorization': `Bearer ${token}`,
     },
   };
+
+  const {
+    restaurantData,
+    permissionsList,
+    setStartDate,
+    setEndDate,
+    filterByDateRange,
+    filterByTime,
+    employeeLoginInfo,
+    formatDate,
+    formatDateTime,
+    setisLoading,
+    EditPagination,
+    startpagination,
+    endpagination,
+    setstartpagination,
+    setendpagination,
+  } = useContext(detacontext);
 
 
   // // State for pending orders and payments
@@ -70,7 +88,14 @@ const DeliveryMan = () => {
         return
       }
       const status = 'On the way';
-      await axios.put(`${apiUrl}/api/order/${id}`, { status });
+      const response = await axios.get(`${apiUrl}/api/order/${id}`, config);
+      const orderData= response.data
+
+      if(orderData.deliveryMan._id !== employeeLoginInfo.id){
+        toast.warn('لا يمكنك تغير حاله الاوردر ')
+        return
+      }
+      await axios.put(`${apiUrl}/api/order/${id}`, { status }, config);
       fetchDeliveryOrders();
       //  fetchPendingData();
       toast.success('Order is on the way!');
@@ -87,13 +112,18 @@ const DeliveryMan = () => {
         toast.error('رجاء تسجيل الدخول مره اخري');
         return
       }
-      const orderData = await axios.get(`${apiUrl}/api/order/${id}`);
-      const products = orderData.data.products.map((prod) => ({ ...prod, isDeleverd: true }));
+      const response = await axios.get(`${apiUrl}/api/order/${id}`, config);
+      const orderData= response.data
+      if(orderData.deliveryMan._id !== employeeLoginInfo.id){
+        toast.warn('لا يمكنك تغير حاله الاوردر ')
+        return
+      }
+      const products = orderData.products.map((prod) => ({ ...prod, isDeleverd: true }));
       const status = 'Delivered';
-      const updateOrder = await axios.put(`${apiUrl}/api/order/${id}`, { products, status });
+      const updateOrder = await axios.put(`${apiUrl}/api/order/${id}`, { products, status }, config);
       if (updateOrder) {
         fetchDeliveryOrders();
-        toast.success('Order has been delivered!');
+        toast.success('تم توصيل الاوردر!');
       }
       //  fetchPendingData();
     } catch (error) {
@@ -141,10 +171,6 @@ const DeliveryMan = () => {
     fetchDeliveryOrders();
   }, []);
 
-  return (
-    <detacontext.Consumer>
-      {
-        ({ restaurantData, formatDate, formatTime }) => {
           return (
             <div className='container-fluid d-flex flex-wrap align-content-start justify-content-around align-items-start h-100 overflow-auto bg-transparent py-5 px-3'>
               {deliveryOrders && deliveryOrders.map((order, i) => {
@@ -216,10 +242,6 @@ const DeliveryMan = () => {
 
             </div>
           )
-        }
-      }
-    </detacontext.Consumer>
-  )
 
 }
 

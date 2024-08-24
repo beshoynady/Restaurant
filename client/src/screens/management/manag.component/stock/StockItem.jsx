@@ -50,6 +50,8 @@ const StockItem = () => {
   const [oldCostOfPart, setoldCostOfPart] = useState("");
   const [minThreshold, setminThreshold] = useState();
 
+  const [expirationDate, setexpirationDate] = useState();
+
   // Function to create a stock item
   const createItem = async (e, userId) => {
     e.preventDefault();
@@ -87,7 +89,26 @@ const StockItem = () => {
       if (response.data.error === "Item name already exists") {
         toast.warn("هذا الاسم موجود من قبل ");
       }
-      getStockItems(); // Update the list of stock items after creating a new one
+      if (response){
+        const newItem = response.data
+        const response = await axios.put(
+          `${apiUrl}/api/stockmanag/${actionId}`,
+          {
+            itemId:newItem._id,
+            movement : 'OpeningBalance',
+            quantity : currentBalance,
+            cost,
+            unit :largeUnit,
+            newBalance : currentBalance,
+            oldBalance: 0,
+            price,
+            expirationDate,
+            actionBy,
+          },
+          config
+        );
+        getStockItems(); 
+      }
 
       // Notify on success
       toast.success("تم إنشاء عنصر المخزون بنجاح");

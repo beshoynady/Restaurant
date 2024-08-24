@@ -28,6 +28,7 @@ const StockManagSchema = new mongoose.Schema(
         "Wastage",
         "Damaged",
         "stockAdjustment",
+        "OpeningBalance",
       ],
       required: true,
     },

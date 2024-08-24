@@ -356,9 +356,8 @@ const StockManag = () => {
       console.log(error);
       // Toast notification for error
       toast.error("فشل في تحديث العنصر ! حاول مره اخري");
-    }finally{
+    } finally {
       setisLoading(false);
-
     }
   };
 
