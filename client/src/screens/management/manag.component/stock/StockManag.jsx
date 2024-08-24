@@ -163,14 +163,14 @@ const StockManag = () => {
       toast.error("رجاء تسجيل الدخول مره اخري");
       return;
     }
-    setisLoading(false);
     try {
       if (stockManagementPermission && !stockManagementPermission.create) {
         toast.warn("ليس لك صلاحية لاضافه حركه المخزن");
         return;
       }
-      const unit = movement === "Purchase" ? largeUnit : smallUnit;
+      setisLoading(true);
 
+      const unit = movement === "Purchase" ? largeUnit : smallUnit;
       // Update the stock item's movement
       const changeItem = await axios.put(
         `${apiUrl}/api/stockitem/movement/${itemId}`,
@@ -246,16 +246,16 @@ const StockManag = () => {
       // Update the stock actions list and stock items
       getallStockaction();
       getaStockItems();
-      setisLoading(!false);
+      setisLoading(false);
       // Toast notification for successful creation
       toast.success("تم تسجيل حركه المخزن بنجاح");
     } catch (error) {
-      setisLoading(!false);
+      setisLoading(false);
       console.log(error);
       // Toast notification for error
       toast.error("فشل تسجيل حركه المخزن ! حاول مره اخري");
     } finally {
-      setisLoading(!false);
+      setisLoading(false);
     }
   };
 
@@ -356,6 +356,9 @@ const StockManag = () => {
       console.log(error);
       // Toast notification for error
       toast.error("فشل في تحديث العنصر ! حاول مره اخري");
+    }finally{
+      setisLoading(false);
+
     }
   };
 
@@ -382,7 +385,7 @@ const StockManag = () => {
       toast.error("رجاء تسجيل الدخول مره اخري");
       return;
     }
-    setisLoading(true);
+    // setisLoading(true);
     try {
       if (stockManagementPermission && !stockManagementPermission.delete) {
         toast.warn("ليس لك صلاحية لحذف حركه المخزن");
@@ -398,17 +401,17 @@ const StockManag = () => {
       if (response) {
         // Update the stock actions list after successful deletion
         getallStockaction();
-        setisLoading(false);
+        // setisLoading(false);
         // Toast notification for successful deletion
         toast.success("تم حذف حركه المخزن بنجاح");
       }
     } catch (error) {
-      setisLoading(false);
+      // setisLoading(false);
       console.log(error);
       // Toast notification for error
       toast.error("فشل حذف حركه المخزن ! حاول مره اخري ");
     } finally {
-      setisLoading(false);
+      // setisLoading(false);
     }
   };
 

@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const { ObjectId } = mongoose.Schema;
 
 const StockManagSchema = new mongoose.Schema(
@@ -6,27 +6,35 @@ const StockManagSchema = new mongoose.Schema(
     // Item reference ID
     itemId: {
       type: ObjectId,
-      ref: 'StockItem',
+      ref: "StockItem",
       required: true,
     },
     supplier: {
       type: ObjectId,
-      ref: 'Supplier',
+      ref: "Supplier",
     },
     receiver: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Employee'
+      ref: "Employee",
     },
     // Type of movement: Purchase, Expense, Return, Wastage
     movement: {
       type: String,
-      enum: ['Purchase', 'ReturnPurchase', 'Issuance', 'ReturnIssuance', 'Wastage', 'Damaged', 'stockAdjustment'],
+      enum: [
+        "Purchase",
+        "ReturnPurchase",
+        "Issuance",
+        "ReturnIssuance",
+        "Wastage",
+        "Damaged",
+        "stockAdjustment",
+      ],
       required: true,
     },
     // Payment type for the transaction
     paymentType: {
       type: String,
-      enum: ['Cash', 'Credit'], // Add more options if needed
+      enum: ["Cash", "Credit"], // Add more options if needed
     },
     // Unit of measurement
     unit: {
@@ -65,7 +73,7 @@ const StockManagSchema = new mongoose.Schema(
     // Action performed by the user
     actionBy: {
       type: ObjectId,
-      ref: 'Employee',
+      ref: "Employee",
       required: true,
     },
   },
@@ -74,5 +82,5 @@ const StockManagSchema = new mongoose.Schema(
   }
 );
 
-const StockManagementModel = mongoose.model('stockmanag', StockManagSchema);
+const StockManagementModel = mongoose.model("stockmanag", StockManagSchema);
 module.exports = StockManagementModel;

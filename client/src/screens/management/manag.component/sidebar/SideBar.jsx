@@ -619,7 +619,9 @@ const SideBar = () => {
                   </li>
                 )}
 
-                <li
+                
+
+                {/* <li
                   ref={arrowRefs.arrowreports}
                   onClick={() => openSubMenu(arrowRefs.arrowreports)}
                 >
@@ -637,11 +639,11 @@ const SideBar = () => {
                       <a className="link_name" href="#">
                         الارباح و الخسائر
                       </a>
-                    </li>
+                    </li> */}
                     {/* {(isProgrammer || permissionsList?.filter(permission => permission.resource === 'stock Categories')[0]?.read) && ( */}
-                    <li>
-                      <Link to="profitloss">التصنيفات</Link>
-                    </li>
+                    {/* <li> */}
+                      {/* <Link to="profitloss">التصنيفات</Link>
+                    </li> */}
                     {/* )} */}
                     {/* {(isProgrammer || permissionsList?.filter(permission => permission.resource === 'stock Item')[0]?.read) && (
                           <li><Link to="stockitem">الأصناف</Link></li>
@@ -652,9 +654,9 @@ const SideBar = () => {
                         {(isProgrammer || permissionsList?.filter(permission => permission.resource === 'Kitchen Usage')[0]?.read) && (
                           <li><Link to="kitchenconsumption">استهلاك المطبخ</Link></li>
                         )} */}
-                  </ul>
+                  {/* </ul>
                 </li>
-
+ */}
                 {(isProgrammer ||
                   permissionsList?.filter(
                     (permission) =>
