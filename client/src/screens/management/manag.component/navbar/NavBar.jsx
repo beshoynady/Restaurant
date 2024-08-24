@@ -237,12 +237,14 @@ const NavBar = () => {
       employeeLoginInfo.role === "programer"
     ) {
       cashierSocket.on("neworder", handleNewOrderNotification);
+      cashierSocket.on("helprequest", handleNewOrderNotification);
       cashierSocket.on("orderready", handleNewOrderNotification);
     } else if (employeeLoginInfo.role === "chef") {
       kitchenSocket.on("orderkitchen", handleNewOrderNotification);
     } else if (employeeLoginInfo.role === "waiter") {
       waiterSocket.on("orderready", handleNewOrderNotification);
       waiterSocket.on("neworder", handleNewOrderNotification);
+      waiterSocket.on("helprequest", handleNewOrderNotification);
     }
 
     // Clean up the socket connection on component unmount
@@ -253,11 +255,13 @@ const NavBar = () => {
       ) {
         cashierSocket.off("neworder", handleNewOrderNotification);
         cashierSocket.off("orderready", handleNewOrderNotification);
+        cashierSocket.off("helprequest", handleNewOrderNotification);
       } else if (employeeLoginInfo.role === "chef") {
         kitchenSocket.off("orderkitchen", handleNewOrderNotification);
       } else if (employeeLoginInfo.role === "waiter") {
         waiterSocket.off("neworder", handleNewOrderNotification);
         waiterSocket.off("orderready", handleNewOrderNotification);
+        waiterSocket.off("helprequest", handleNewOrderNotification);
       }
     };
   }, []);

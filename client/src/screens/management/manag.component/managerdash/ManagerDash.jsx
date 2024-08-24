@@ -23,6 +23,14 @@ const cashierSocket = io(`${process.env.REACT_APP_API_URL}/cashier`, {
   reconnectionDelay: 1000,
 });
 
+const waiterSocket = io(`${process.env.REACT_APP_API_URL}/waiter`, {
+  reconnection: true,
+  reconnectionAttempts: Infinity,
+  reconnectionDelay: 1000,
+});
+
+
+
 const ManagerDash = () => {
   const apiUrl = process.env.REACT_APP_API_URL;
   const token = localStorage.getItem("token_e");

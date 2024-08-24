@@ -1,9 +1,18 @@
 import React, { useContext, useState, useEffect } from "react";
 import "./Home.css";
+import io from "socket.io-client";
+
 import { detacontext } from "../../../../App";
 import { useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import axios from "axios";
+
+
+const cashierSocket = io(`${process.env.REACT_APP_API_URL}/cashier`, {
+  reconnection: true,
+  reconnectionAttempts: Infinity,
+  reconnectionDelay: 1000,
+});
 
 const Home = () => {
   const apiUrl = process.env.REACT_APP_API_URL;
@@ -78,6 +87,7 @@ const Home = () => {
         const newOrder = await axios.post(`${apiUrl}/api/order/`, newOrderData);
         if (newOrder) {
           toast.info("تم طلب الويتر للمساعدة");
+          cashierSocket.emit('helprequest', `طاوله رقم ${table.tableNumber} يحتاج مساعده`)
         }
       } else {
         // Update the existing active order with the help request
@@ -91,6 +101,8 @@ const Home = () => {
         );
         if (updatedOrder) {
           toast.info("تم طلب الويتر للمساعدة");
+          cashierSocket.emit('helprequest', `طاوله رقم ${table.tableNumber} يحتاج مساعده`)
+
         }
       }
     } catch (error) {
