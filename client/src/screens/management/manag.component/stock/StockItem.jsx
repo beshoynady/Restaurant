@@ -90,9 +90,10 @@ const StockItem = () => {
         toast.warn("هذا الاسم موجود من قبل ");
       }
       if (response){
+        const cost = Number(price) / Number(currentBalance)
         const newItem = response.data
-        const response = await axios.put(
-          `${apiUrl}/api/stockmanag/${actionId}`,
+        const response = await axios.post(
+          `${apiUrl}/api/stockmanag`,
           {
             itemId:newItem._id,
             movement : 'OpeningBalance',
@@ -102,8 +103,7 @@ const StockItem = () => {
             newBalance : currentBalance,
             oldBalance: 0,
             price,
-            expirationDate,
-            actionBy,
+            actionBy: createdBy,
           },
           config
         );
