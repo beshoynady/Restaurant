@@ -716,7 +716,7 @@ const PurchaseReturn = () => {
               <div className="text-right">
                 <h2>ادارة <b>مرتجع المشتريات</b></h2>
               </div>
-              {purchaseReturnPermission.create&&
+              {purchaseReturnPermission&&purchaseReturnPermission.create&&
               <div className="col-12 col-md-6 p-0 m-0 d-flex flex-wrap aliegn-items-center justify-content-end print-hide">
                 <a href="#addPurchaseInvoiceModal" className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-success" data-toggle="modal"> <label className=" text-wrap text-right fw-bolder p-0 m-0">انشاء مرتجع مشتريات</label></a>
                 {/* <a href="#deleteStockactionModal" className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-danger" data-toggle="modal"> <label className=" text-wrap text-right fw-bolder p-0 m-0">حذف</label></a> */}
@@ -862,7 +862,7 @@ const PurchaseReturn = () => {
                       <td>{formatDateTime(returnInvoice.createdAt)}</td>
                       <td>{returnInvoice.notes}</td>
                       <td>
-                        {purchaseReturnPermission.read&&
+                        {purchaseReturnPermission&&purchaseReturnPermission.read&&
                         <a href="#viewPurchaseReturnModal" data-toggle="modal" onClick={() => { getReturnInvoice(returnInvoice._id) }}><i className="material-icons text-primary" data-toggle="tooltip" title="aye">&#xE417;</i></a>
                       }
                       {/* <a href="#deleteStockactionModal" className="delete" data-toggle="modal" onClick={() => }><i className="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a> */}

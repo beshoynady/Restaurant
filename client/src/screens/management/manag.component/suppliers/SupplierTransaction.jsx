@@ -240,7 +240,7 @@ const SupplierTransaction = () => {
                 
               </div>
               <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
-                <label htmlFor="supplierSelect">المورد</label>
+                <label className="form-label text-wrap text-right fw-bolder p-0 m-0" htmlFor="supplierSelect">المورد</label>
                 <select
                   className="form-control border-primary m-0 p-2 h-auto" 
                   id="supplierSelect"
@@ -253,7 +253,7 @@ const SupplierTransaction = () => {
                 </select>
               </div>
               <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
-                <label htmlFor="transactionTypeSelect">نوع العملية</label>
+                <label className="form-label text-wrap text-right fw-bolder p-0 m-0" htmlFor="transactionTypeSelect">نوع العملية</label>
                 <select
                   className="form-control border-primary m-0 p-2 h-auto" 
                   id="transactionTypeSelect"
@@ -266,7 +266,7 @@ const SupplierTransaction = () => {
                 </select>
               </div>
               <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
-                <label htmlFor="invoiceNumberSelect">رقم الفاتورة</label>
+                <label className="form-label text-wrap text-right fw-bolder p-0 m-0" htmlFor="invoiceNumberSelect">رقم الفاتورة</label>
                 <select
                   className="form-control border-primary m-0 p-2 h-auto" 
                   id="invoiceNumberSelect"
@@ -319,42 +319,42 @@ const SupplierTransaction = () => {
                 </div>
               </div>
 
-              <div className="col-12 row text-dark d-flex flex-wrap align-items-center justify-content-start p-0 m-0">
-                <div className="d-flex flex-nowrap align-items-center justify-content-evenly col-3">
-                  <label htmlFor="totalPurchasesInput" className="col-6">اجمالي المشتريات</label>
+              <div className="col-12 text-dark d-flex flex-wrap align-items-center justify-content-start p-0 m-0 mt-3">
+                <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
+                  <label htmlFor="totalPurchasesInput" className="form-label text-wrap text-right fw-bolder p-0 m-0">اجمالي المشتريات</label>
                   <input
                     type="text"
-                    className="form-control border-primary col-6"
+                    className="form-control border-primary m-0 p-2 h-auto"
                     id="totalPurchasesInput"
                     readOnly
                     value={totalPurchases}
                   />
                 </div>
-                <div className="d-flex flex-nowrap align-items-center justify-content-evenly col-3">
-                  <label htmlFor="totalPaymentInput" className="col-6">اجمالي المدفوع</label>
+                <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
+                  <label htmlFor="totalPaymentInput" className="form-label text-wrap text-right fw-bolder p-0 m-0">اجمالي المدفوع</label>
                   <input
                     type="text"
-                    className="form-control border-primary col-6"
+                    className="form-control border-primary m-0 p-2 h-auto"
                     id="totalPaymentInput"
                     readOnly
                     value={totalPayment}
                   />
                 </div>
-                <div className="d-flex flex-nowrap align-items-center justify-content-evenly col-3">
-                  <label htmlFor="totalBalanceDueInput" className="col-6">اجمالي المستحق</label>
+                <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
+                  <label htmlFor="totalBalanceDueInput" className="form-label text-wrap text-right fw-bolder p-0 m-0">اجمالي المستحق</label>
                   <input
                     type="text"
-                    className="form-control border-primary col-6"
+                    className="form-control border-primary m-0 p-2 h-auto"
                     id="totalBalanceDueInput"
                     readOnly
                     value={totalBalanceDue}
                   />
                 </div>
-                <div className="d-flex flex-nowrap align-items-center justify-content-evenly col-3">
-                  <label htmlFor="previousBalanceInput" className="col-6">الرصيد الكلي</label>
+                <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
+                  <label htmlFor="previousBalanceInput" className="form-label text-wrap text-right fw-bolder p-0 m-0">الرصيد الكلي</label>
                   <input
                     type="text"
-                    className="form-control border-primary col-6"
+                    className="form-control border-primary m-0 p-2 h-auto"
                     id="previousBalanceInput"
                     readOnly
                     value={previousBalance}

@@ -76,7 +76,7 @@ const Purchase = React.lazy(() =>
   import("./screens/management/manag.component/suppliers/Purchase")
 );
 const PurchaseReturn = React.lazy(() =>
-  import("./screens/management/manag.component/suppliers/PurchaseReturn")
+  import("./screens/management/manag.component/suppliers/PurchaseReturn.jsx")
 );
 const SupplierTransaction = React.lazy(() =>
   import("./screens/management/manag.component/suppliers/SupplierTransaction")
