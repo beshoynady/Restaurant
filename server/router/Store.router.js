@@ -6,7 +6,7 @@ const {
   getStoreById,
   updateStore,
   deleteStore,
-} = require("../controllers/storeController");
+} = require("../controllers/Store.controller");
 
 const authenticateToken = require("../utlits/authenticate");
 const checkSubscription = require("../utlits/checkSubscription");
