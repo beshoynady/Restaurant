@@ -389,7 +389,7 @@ const StockItem = () => {
                   {AllCategoryStock.map((category, i) => {
                     return (
                       <option value={category._id} key={i}>
-                        {category.name}
+                        {category.categoryName}
                       </option>
                     );
                   })}
@@ -629,7 +629,7 @@ const StockItem = () => {
                     {AllCategoryStock.map((category, i) => {
                       return (
                         <option value={category._id} key={i}>
-                          {category.name}
+                          {category.categoryName}
                         </option>
                       );
                     })}
@@ -828,7 +828,7 @@ const StockItem = () => {
                     {AllCategoryStock.map((category, i) => {
                       return (
                         <option value={category._id} key={i}>
-                          {category.name}
+                          {category.categoryName}
                         </option>
                       );
                     })}
