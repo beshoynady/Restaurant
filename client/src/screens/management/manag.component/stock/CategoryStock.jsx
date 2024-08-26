@@ -422,15 +422,19 @@ const CategoryStock = () => {
 
       <div id="addCategoryStockModal" className="modal fade" role="dialog">
         <div className="modal-dialog">
-          <div className="modal-content">
-            <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
-              <h4 className="modal-title">اضافه تصنيف</h4>
-              <button type="button" className="close" data-dismiss="modal">
-                &times;
-              </button>
-            </div>
-            <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
-              <form onSubmit={createCategoryStock}>
+          <div className="modal-content shadow-lg border-0 rounded">
+            <form onSubmit={createCategoryStock}>
+              <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
+                <h4 className="modal-title">اضافه تصنيف</h4>
+                <button
+                  type="button"
+                  className="close m-0 p-1"
+                  data-dismiss="modal"
+                >
+                  &times;
+                </button>
+              </div>
+              <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                     اسم التصنيف
@@ -480,23 +484,27 @@ const CategoryStock = () => {
                     إغلاق
                   </button>
                 </div>
-              </form>
-            </div>
+              </div>
+            </form>
           </div>
         </div>
       </div>
 
       <div id="editCategoryStockModal" className="modal fade" role="dialog">
         <div className="modal-dialog">
-          <div className="modal-content">
-            <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
-              <h4 className="modal-title">تعديل التصنيف</h4>
-              <button type="button" className="close" data-dismiss="modal">
-                &times;
-              </button>
-            </div>
-            <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
-              <form onSubmit={editCategoryStock}>
+          <div className="modal-content shadow-lg border-0 rounded">
+            <form onSubmit={editCategoryStock}>
+              <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
+                <h4 className="modal-title">تعديل التصنيف</h4>
+                <button
+                  type="button"
+                  className="close m-0 p-1"
+                  data-dismiss="modal"
+                >
+                  &times;
+                </button>
+              </div>
+              <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                     اسم التصنيف
@@ -546,8 +554,8 @@ const CategoryStock = () => {
                     إلغاء
                   </button>
                 </div>
-              </form>
-            </div>
+              </div>
+            </form>
           </div>
         </div>
       </div>

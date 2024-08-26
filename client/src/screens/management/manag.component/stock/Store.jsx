@@ -459,10 +459,10 @@ const Store = () => {
       {/* Add Store Modal */}
       <div id="addstoreModal" className="modal fade" role="dialog">
         <div className="modal-dialog modal-lg">
-          <div className="modal-content">
+          <div className="modal-content shadow-lg border-0 rounded">
             <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
               <h4 className="modal-title">إضافة مخزن</h4>
-              <button type="button" className="close" data-dismiss="modal">
+              <button type="button" className="close m-0 p-1" data-dismiss="modal">
                 &times;
               </button>
             </div>
@@ -580,7 +580,7 @@ const Store = () => {
           <div className="modal-content shadow-lg border-0 rounded">
             <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
               <h4 className="modal-title">تعديل المخزن</h4>
-              <button type="button" className="close" data-dismiss="modal">
+              <button type="button" className="close m-0 p-1" data-dismiss="modal">
                 &times;
               </button>
             </div>

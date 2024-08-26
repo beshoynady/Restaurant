@@ -37,7 +37,7 @@ const SideBar = () => {
   };
 
   const openSidebar = () => {
-    sidebarRef.current.classList.toggle("close");
+    sidebarRef.current.classList.toggle("close m-0 p-1");
   };
 
   useEffect(() => {
