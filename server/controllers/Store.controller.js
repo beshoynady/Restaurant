@@ -9,15 +9,14 @@ const createStore = async (req, res, next) => {
       description,
       address,
       storekeeper,
-      createdBy,
     } = req.body;
-
+    const createdBy = req.employee.is
     // Check if a store with the same name already exists
     const existingStore = await StoreModel.findOne({ storeName });
     if (existingStore) {
       return res.status(400).json({ error: "Store name already exists" });
     }
-    if (!storeName || !storeCode || !description || !address || !storekeeper || !createdBy) {
+    if (!storeName || !storeCode || !description || !address || !storekeeper) {
         return res.status(400).json({ error: 'جميع الحقول مطلوبة' });
       }
 
@@ -70,12 +69,12 @@ const getStoreById = async (req, res) => {
 const updateStore = async (req, res) => {
   const { id } = req.params;
 
-  const { storeName,storeCode, description, address, storekeeper, createdBy } = req.body;
+  const { storeName,storeCode, description, address, storekeeper } = req.body;
 
   try {
     const updatedStore = await StoreModel.findByIdAndUpdate(
       id,
-      { storeName, storeCode, description, address, storekeeper, createdBy },
+      { storeName, storeCode, description, address, storekeeper },
       { new: true, runValidators: true }
     )
       .populate("storekeeper")

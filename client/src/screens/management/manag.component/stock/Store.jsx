@@ -1,54 +1,69 @@
-import React, { useState, useEffect, useContext } from 'react';
-import axios from 'axios';
-import { detacontext } from '../../../../App';
-import { toast } from 'react-toastify';
-import '../orders/Orders.css';
+import React, { useState, useEffect, useContext } from "react";
+import axios from "axios";
+import { detacontext } from "../../../../App";
+import { toast } from "react-toastify";
+import "../orders/Orders.css";
 
 const Store = () => {
   const apiUrl = process.env.REACT_APP_API_URL;
-  const token = localStorage.getItem('token_e'); // Retrieve the token from localStorage
+  const token = localStorage.getItem("token_e"); // Retrieve the token from localStorage
   const config = {
     headers: {
-      'Authorization': `Bearer ${token}`,
+      Authorization: `Bearer ${token}`,
     },
   };
 
-  const { restaurantData, permissionsList, setStartDate, setEndDate, filterByDateRange, filterByTime,
-    employeeLoginInfo, formatDate, formatDateTime, setisLoading, EditPagination, startpagination,
-    endpagination, setstartpagination, setendpagination } = useContext(detacontext);
+  const {
+    restaurantData,
+    permissionsList,
+    setStartDate,
+    setEndDate,
+    filterByDateRange,
+    filterByTime,
+    employeeLoginInfo,
+    formatDate,
+    formatDateTime,
+    setisLoading,
+    EditPagination,
+    startpagination,
+    endpagination,
+    setstartpagination,
+    setendpagination,
+  } = useContext(detacontext);
 
-  const storePermissions = permissionsList?.find(permission => permission.resource === 'store');
+  const storePermissions = permissionsList?.find(
+    (permission) => permission.resource === "store"
+  );
 
-  const [storeName, setStoreName] = useState('');
-  const [storeCode, setStoreCode] = useState('');
-  const [description, setDescription] = useState('');
-  const [address, setAddress] = useState('');
-  const [storekeeper, setStorekeeper] = useState('');
-  const [storeId, setStoreId] = useState('');
+  const [storeName, setStoreName] = useState("");
+  const [storeCode, setStoreCode] = useState("");
+  const [description, setDescription] = useState("");
+  const [address, setAddress] = useState("");
+  const [storekeeper, setStorekeeper] = useState("");
+  const [storeId, setStoreId] = useState("");
 
   const [allStores, setAllStores] = useState([]);
   const [allStockItems, setAllStockItems] = useState([]);
 
   const getAllStores = async () => {
     if (!token) {
-      toast.error('رجاء تسجيل الدخول مره اخري');
+      toast.error("رجاء تسجيل الدخول مره اخري");
       return;
     }
 
     try {
       if (storePermissions && !storePermissions.read) {
-        toast.warn('ليس لك صلاحية لعرض مخزنات المخزن');
+        toast.warn("ليس لك صلاحية لعرض مخزنات المخزن");
         return;
       }
       const response = await axios.get(apiUrl + "/api/store/", config);
       setAllStores(response.data.reverse());
     } catch (error) {
-      console.error('Error fetching stores:', error);
-      toast.error('حدث خطأ اثناء جلب بيانات المخزنات! اعد تحميل الصفحة');
+      console.error("Error fetching stores:", error);
+      toast.error("حدث خطأ اثناء جلب بيانات المخزنات! اعد تحميل الصفحة");
     }
   };
 
-  
   const [listOfEmployees, setListOfEmployees] = useState([]);
 
   const getEmployees = async () => {
@@ -57,59 +72,68 @@ const Store = () => {
       toast.error("رجاء تسجيل الدخول مره اخري");
       return;
     }
-      try {
-        const response = await axios.get(`${apiUrl}/api/employee`, config);
-        const data = response.data;
-        if (data) {
-          setListOfEmployees(data);
-        } else {
-          toast.info("لا توجد بيانات لعرضها");
-        }
-        // console.log({ data });
-      } catch (error) {
-        console.log(error);
+    try {
+      const response = await axios.get(`${apiUrl}/api/employee`, config);
+      const data = response.data;
+      if (data) {
+        setListOfEmployees(data);
+      } else {
+        toast.info("لا توجد بيانات لعرضها");
       }
-    
+      // console.log({ data });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const getAllStockItems = async () => {
     try {
       if (!token) {
-        toast.error('رجاء تسجيل الدخول مره اخري');
+        toast.error("رجاء تسجيل الدخول مره اخري");
         return;
       }
-      const response = await axios.get(apiUrl + '/api/stockitem/', config);
+      const response = await axios.get(apiUrl + "/api/stockitem/", config);
       setAllStockItems(response.data.reverse());
     } catch (error) {
-      console.log('Error fetching stock items:', error);
+      console.log("Error fetching stock items:", error);
     }
   };
 
   const createStore = async (e) => {
     e.preventDefault();
     if (!token) {
-      toast.error('رجاء تسجيل الدخول مره اخري');
+      toast.error("رجاء تسجيل الدخول مره اخري");
       return;
     }
 
     try {
       if (storePermissions && !storePermissions.create) {
-        toast.warn('ليس لك صلاحية لاضافه مخزنات المخزن');
+        toast.warn("ليس لك صلاحية لاضافه مخزنات المخزن");
         return;
       }
 
-      if (!storeName.trim() || !storeCode.trim() || !description.trim() || !address.trim() || !storekeeper.trim()) {
+      if (
+        !storeName.trim() ||
+        !storeCode.trim() ||
+        !description.trim() ||
+        !address.trim() ||
+        !storekeeper.trim()
+      ) {
         toast.error("جميع الحقول مطلوبة");
         return;
       }
 
-      const response = await axios.post(apiUrl + "/api/store/", {
-        storeName,
-        storeCode,
-        description,
-        address,
-        storekeeper,
-      }, config);
+      const response = await axios.post(
+        apiUrl + "/api/store/",
+        {
+          storeName,
+          storeCode,
+          description,
+          address,
+          storekeeper,
+        },
+        config
+      );
 
       if (response.status === 201) {
         toast.success("تم إنشاء المتجر بنجاح");
@@ -119,36 +143,49 @@ const Store = () => {
       }
     } catch (error) {
       console.error("Error creating store:", error);
-      toast.error(error.response?.data?.error === 'Store name already exists' ? 'هذا المتجر موجود بالفعل' : "حدث خطأ غير متوقع. يرجى المحاولة مرة أخرى.");
+      toast.error(
+        error.response?.data?.error === "Store name already exists"
+          ? "هذا المتجر موجود بالفعل"
+          : "حدث خطأ غير متوقع. يرجى المحاولة مرة أخرى."
+      );
     }
   };
 
   const editStore = async (e) => {
     e.preventDefault();
     if (!token) {
-      toast.error('رجاء تسجيل الدخول مره اخري');
+      toast.error("رجاء تسجيل الدخول مره اخري");
       return;
     }
 
     try {
       if (storePermissions && !storePermissions.update) {
-        toast.warn('ليس لك صلاحية لتعديل مخزنات المخزن');
+        toast.warn("ليس لك صلاحية لتعديل مخزنات المخزن");
         return;
       }
 
-      if (!storeName.trim() || !storeCode.trim() || !description.trim() || !address.trim() || !storekeeper.trim()) {
+      if (
+        !storeName.trim() ||
+        !storeCode.trim() ||
+        !description.trim() ||
+        !address.trim() ||
+        !storekeeper.trim()
+      ) {
         toast.error("جميع الحقول مطلوبة");
         return;
       }
 
-      const response = await axios.put(apiUrl + "/api/store/" + storeId, {
-        storeName,
-        storeCode,
-        description,
-        address,
-        storekeeper,
-        
-      }, config);
+      const response = await axios.put(
+        apiUrl + "/api/store/" + storeId,
+        {
+          storeName,
+          storeCode,
+          description,
+          address,
+          storekeeper,
+        },
+        config
+      );
 
       if (response.status === 200) {
         toast.success("تم تعديل المتجر بنجاح");
@@ -167,17 +204,20 @@ const Store = () => {
     e.preventDefault();
 
     if (!token) {
-      toast.error('رجاء تسجيل الدخول مره اخري');
+      toast.error("رجاء تسجيل الدخول مره اخري");
       return;
     }
 
     try {
       if (storePermissions && !storePermissions.delete) {
-        toast.warn('ليس لك صلاحية لحذف مخزنات المخزن');
+        toast.warn("ليس لك صلاحية لحذف مخزنات المخزن");
         return;
       }
 
-      const response = await axios.delete(apiUrl + "/api/store/" + storeId, config);
+      const response = await axios.delete(
+        apiUrl + "/api/store/" + storeId,
+        config
+      );
 
       if (response.status === 200) {
         toast.success("تم حذف المتجر بنجاح");
@@ -195,14 +235,16 @@ const Store = () => {
       getAllStores();
       return;
     }
-    const filteredStores = allStores.filter(store => store.storeName.startsWith(name));
+    const filteredStores = allStores.filter((store) =>
+      store.storeName.startsWith(name)
+    );
     setAllStores(filteredStores);
   };
 
   useEffect(() => {
     getAllStockItems();
     getAllStores();
-    getEmployees()
+    getEmployees();
   }, []);
 
   return (
@@ -212,30 +254,54 @@ const Store = () => {
           <div className="table-title">
             <div className="w-100 d-flex flex-wrap align-items-center justify-content-between">
               <div className="text-right">
-                <h2>إدارة <b>المخازن</b></h2>
+                <h2>
+                  إدارة <b>المخازن</b>
+                </h2>
               </div>
-              {storePermissions?.create &&
+              {storePermissions?.create && (
                 <div className="col-12 col-md-6 p-0 m-0 d-flex flex-wrap align-items-center justify-content-end print-hide">
-                  <a href="#addstoreModal" className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-success" data-toggle="modal">
+                  <a
+                    href="#addstoreModal"
+                    className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-success"
+                    data-toggle="modal"
+                  >
                     <span>إضافة مخزن</span>
                   </a>
                 </div>
-              }
+              )}
             </div>
           </div>
           <div className="table-filter print-hide">
             <div className="col-12 text-dark d-flex flex-wrap align-items-center justify-content-start p-0 m-0">
               <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
-                <label className="form-label text-wrap text-right fw-bolder p-0 m-0">عرض</label>
-                <select className="form-control border-primary m-0 p-2 h-auto border-primary m-0 p-2 h-auto" onChange={(e) => { setstartpagination(0); setendpagination(e.target.value) }}>
-                  {Array.from({ length: 20 }, (_, i) => (i + 1) * 5).map(value => (
-                    <option key={value} value={value}>{value}</option>
-                  ))}
+                <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                  عرض
+                </label>
+                <select
+                  className="form-control border-primary m-0 p-2 h-auto border-primary m-0 p-2 h-auto"
+                  onChange={(e) => {
+                    setstartpagination(0);
+                    setendpagination(e.target.value);
+                  }}
+                >
+                  {Array.from({ length: 20 }, (_, i) => (i + 1) * 5).map(
+                    (value) => (
+                      <option key={value} value={value}>
+                        {value}
+                      </option>
+                    )
+                  )}
                 </select>
               </div>
               <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
-                <label className="form-label text-wrap text-right fw-bolder p-0 m-0">اسم المخزن</label>
-                <input type="text" className="form-control border-primary m-0 p-2 h-auto border-primary m-0 p-2 h-auto" onChange={(e) => searchByStore(e.target.value)} />
+                <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                  اسم المخزن
+                </label>
+                <input
+                  type="text"
+                  className="form-control border-primary m-0 p-2 h-auto border-primary m-0 p-2 h-auto"
+                  onChange={(e) => searchByStore(e.target.value)}
+                />
               </div>
             </div>
           </div>
@@ -263,30 +329,58 @@ const Store = () => {
                       <td>{i + 1}</td>
                       <td>{store.storeName}</td>
                       <td>{store.storekeeper?.fullname}</td>
-                      <td>{allStockItems.filter(item => item.storeId._id === store._id)?.length}</td>
+                      <td>
+                        {
+                          allStockItems.filter(
+                            (item) => item.storeId._id === store._id
+                          )?.length
+                        }
+                      </td>
                       <td>{store.address}</td>
                       <td>{store.description}</td>
                       <td>{store.storeCode}</td>
                       <td>{store.createdBy?.fullname}</td>
                       <td>{formatDateTime(store.createdAt)}</td>
                       <td>
-                        {storePermissions?.update &&
-                          <a href="#editstoreModal" className="edit" data-toggle="modal" onClick={() => {
-                            setStoreId(store._id);
-                            setStoreName(store.storeName);
-                            setStoreCode(store.storeCode);
-                            setDescription(store.description);
-                            setAddress(store.address);
-                            setStorekeeper(store.storekeeper);
-                          }}>
-                            <i className="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i>
+                        {storePermissions?.update && (
+                          <a
+                            href="#editstoreModal"
+                            className="edit"
+                            data-toggle="modal"
+                            onClick={() => {
+                              setStoreId(store._id);
+                              setStoreName(store.storeName);
+                              setStoreCode(store.storeCode);
+                              setDescription(store.description);
+                              setAddress(store.address);
+                              setStorekeeper(store.storekeeper);
+                            }}
+                          >
+                            <i
+                              className="material-icons"
+                              data-toggle="tooltip"
+                              title="Edit"
+                            >
+                              &#xE254;
+                            </i>
                           </a>
-                        }
-                        {storePermissions?.delete &&
-                          <a href="#deletestoreModal" className="delete" data-toggle="modal" onClick={() => setStoreId(store._id)}>
-                            <i className="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i>
+                        )}
+                        {storePermissions?.delete && (
+                          <a
+                            href="#deletestoreModal"
+                            className="delete"
+                            data-toggle="modal"
+                            onClick={() => setStoreId(store._id)}
+                          >
+                            <i
+                              className="material-icons"
+                              data-toggle="tooltip"
+                              title="Delete"
+                            >
+                              &#xE872;
+                            </i>
                           </a>
-                        }
+                        )}
                       </td>
                     </tr>
                   );
@@ -295,7 +389,7 @@ const Store = () => {
               })}
             </tbody>
           </table>
-              
+
           <div className="clearfix">
             <div className="hint-text text-dark">
               عرض{" "}
@@ -360,7 +454,6 @@ const Store = () => {
               </li>
             </ul>
           </div>
-
         </div>
       </div>
 
@@ -370,50 +463,112 @@ const Store = () => {
           <div className="modal-content">
             <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
               <h4 className="modal-title">إضافة مخزن</h4>
-              <button type="button" className="close" data-dismiss="modal">&times;</button>
+              <button type="button" className="close" data-dismiss="modal">
+                &times;
+              </button>
             </div>
             <form onSubmit={createStore}>
               <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
                 <div className="form-group col-12 col-md-6">
-                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0" htmlFor="storeName">اسم المخزن:</label>
-                  <input type="text" className="form-control border-primary m-0 p-2 h-auto" id="storeName" required onChange={(e) => setStoreName(e.target.value)} />
+                  <label
+                    className="form-label text-wrap text-right fw-bolder p-0 m-0"
+                    htmlFor="storeName"
+                  >
+                    اسم المخزن:
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control border-primary m-0 p-2 h-auto"
+                    id="storeName"
+                    required
+                    onChange={(e) => setStoreName(e.target.value)}
+                  />
                 </div>
                 <div className="form-group col-12 col-md-6">
-                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0" htmlFor="storeCode">رمز المخزن:</label>
-                  <input type="text" className="form-control border-primary m-0 p-2 h-auto" id="storeCode" required onChange={(e) => setStoreCode(e.target.value)} />
+                  <label
+                    className="form-label text-wrap text-right fw-bolder p-0 m-0"
+                    htmlFor="storeCode"
+                  >
+                    رمز المخزن:
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control border-primary m-0 p-2 h-auto"
+                    id="storeCode"
+                    required
+                    onChange={(e) => setStoreCode(e.target.value)}
+                  />
                 </div>
                 <div className="form-group col-12 col-md-6">
-                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0" htmlFor="description">الوصف:</label>
-                  <input type="text" className="form-control border-primary m-0 p-2 h-auto" id="description" required onChange={(e) => setDescription(e.target.value)} />
+                  <label
+                    className="form-label text-wrap text-right fw-bolder p-0 m-0"
+                    htmlFor="description"
+                  >
+                    الوصف:
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control border-primary m-0 p-2 h-auto"
+                    id="description"
+                    required
+                    onChange={(e) => setDescription(e.target.value)}
+                  />
                 </div>
                 <div className="form-group col-12 col-md-6">
-                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0" htmlFor="address">العنوان:</label>
-                  <input type="text" className="form-control border-primary m-0 p-2 h-auto" id="address" required onChange={(e) => setAddress(e.target.value)} />
+                  <label
+                    className="form-label text-wrap text-right fw-bolder p-0 m-0"
+                    htmlFor="address"
+                  >
+                    العنوان:
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control border-primary m-0 p-2 h-auto"
+                    id="address"
+                    required
+                    onChange={(e) => setAddress(e.target.value)}
+                  />
                 </div>
                 <div className="form-group col-12 col-md-6">
-                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0" htmlFor="storekeeper">مسؤول المخزن:</label>
+                  <label
+                    className="form-label text-wrap text-right fw-bolder p-0 m-0"
+                    htmlFor="storekeeper"
+                  >
+                    مسؤول المخزن:
+                  </label>
                   <select
-                      id="storekeeper"
-                      className="form-control border-primary m-0 p-2 h-auto border-primary m-0 p-2 h-auto"
-                      required
-                      onChange={(e) => setStorekeeper(e.target.value)}
-                    >
-                      <option value="">اختر</option>
-                      {listOfEmployees ? (
-                        listOfEmployees.map((employee, i) => (
-                          <option value={employee._id} key={i}>
-                            {employee.fullname}
-                          </option>
-                        ))
-                      ) : (
-                        <option>لا يوجد حسابات للموظفين</option>
-                      )}
-                    </select>
+                    id="storekeeper"
+                    className="form-control border-primary m-0 p-2 h-auto border-primary m-0 p-2 h-auto"
+                    required
+                    onChange={(e) => setStorekeeper(e.target.value)}
+                  >
+                    <option value="">اختر</option>
+                    {listOfEmployees ? (
+                      listOfEmployees.map((employee, i) => (
+                        <option value={employee._id} key={i}>
+                          {employee.fullname}
+                        </option>
+                      ))
+                    ) : (
+                      <option>لا يوجد حسابات للموظفين</option>
+                    )}
+                  </select>
                 </div>
               </div>
               <div className="modal-footer">
-                <button type="submit" className="btn btn-success col-6 h-100 px-2 py-3 m-0">حفظ</button>
-                <button type="button" className="btn btn-danger col-6 h-100 px-2 py-3 m-0" data-dismiss="modal">إغلاق</button>
+                <button
+                  type="submit"
+                  className="btn btn-success col-6 h-100 px-2 py-3 m-0"
+                >
+                  حفظ
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-danger col-6 h-100 px-2 py-3 m-0"
+                  data-dismiss="modal"
+                >
+                  إغلاق
+                </button>
               </div>
             </form>
           </div>
@@ -426,35 +581,107 @@ const Store = () => {
           <div className="modal-content shadow-lg border-0 rounded">
             <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
               <h4 className="modal-title">تعديل المخزن</h4>
-              <button type="button" className="close" data-dismiss="modal">&times;</button>
+              <button type="button" className="close" data-dismiss="modal">
+                &times;
+              </button>
             </div>
             <form onSubmit={editStore}>
               <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
                 <div className="form-group col-12 col-md-6">
-                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0" htmlFor="editStoreName">اسم المخزن:</label>
-                  <input type="text" className="form-control border-primary m-0 p-2 h-auto" id="editStoreName" required value={storeName} onChange={(e) => setStoreName(e.target.value)} />
+                  <label
+                    className="form-label text-wrap text-right fw-bolder p-0 m-0"
+                    htmlFor="editStoreName"
+                  >
+                    اسم المخزن:
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control border-primary m-0 p-2 h-auto"
+                    id="editStoreName"
+                    required
+                    value={storeName}
+                    onChange={(e) => setStoreName(e.target.value)}
+                  />
                 </div>
                 <div className="form-group col-12 col-md-6">
-                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0" htmlFor="editStoreCode">رمز المخزن:</label>
-                  <input type="text" className="form-control border-primary m-0 p-2 h-auto" id="editStoreCode" required value={storeCode} onChange={(e) => setStoreCode(e.target.value)} />
+                  <label
+                    className="form-label text-wrap text-right fw-bolder p-0 m-0"
+                    htmlFor="editStoreCode"
+                  >
+                    رمز المخزن:
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control border-primary m-0 p-2 h-auto"
+                    id="editStoreCode"
+                    required
+                    value={storeCode}
+                    onChange={(e) => setStoreCode(e.target.value)}
+                  />
                 </div>
                 <div className="form-group col-12 col-md-6">
-                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0" htmlFor="editDescription">الوصف:</label>
-                  <input type="text" className="form-control border-primary m-0 p-2 h-auto" id="editDescription" required value={description} onChange={(e) => setDescription(e.target.value)} />
+                  <label
+                    className="form-label text-wrap text-right fw-bolder p-0 m-0"
+                    htmlFor="editDescription"
+                  >
+                    الوصف:
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control border-primary m-0 p-2 h-auto"
+                    id="editDescription"
+                    required
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                  />
                 </div>
                 <div className="form-group col-12 col-md-6">
-                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0" htmlFor="editAddress">العنوان:</label>
-                  <input type="text" className="form-control border-primary m-0 p-2 h-auto" id="editAddress" required value={address} onChange={(e) => setAddress(e.target.value)} />
+                  <label
+                    className="form-label text-wrap text-right fw-bolder p-0 m-0"
+                    htmlFor="editAddress"
+                  >
+                    العنوان:
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control border-primary m-0 p-2 h-auto"
+                    id="editAddress"
+                    required
+                    value={address}
+                    onChange={(e) => setAddress(e.target.value)}
+                  />
                 </div>
                 <div className="form-group col-12 col-md-6">
-                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0" htmlFor="editStorekeeper">مسؤول المخزن:</label>
-                  <input type="text" className="form-control border-primary m-0 p-2 h-auto" id="editStorekeeper" required value={storekeeper} onChange={(e) => setStorekeeper(e.target.value)} />
+                  <label
+                    className="form-label text-wrap text-right fw-bolder p-0 m-0"
+                    htmlFor="editStorekeeper"
+                  >
+                    مسؤول المخزن:
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control border-primary m-0 p-2 h-auto"
+                    id="editStorekeeper"
+                    required
+                    value={storekeeper}
+                    onChange={(e) => setStorekeeper(e.target.value)}
+                  />
                 </div>
-               
               </div>
               <div className="modal-footer">
-                <button type="submit" className="btn btn-success col-6 h-100 px-2 py-3 m-0">تعديل</button>
-                <button type="button" className="btn btn-danger col-6 h-100 px-2 py-3 m-0" data-dismiss="modal">إغلاق</button>
+                <button
+                  type="submit"
+                  className="btn btn-success col-6 h-100 px-2 py-3 m-0"
+                >
+                  تعديل
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-danger col-6 h-100 px-2 py-3 m-0"
+                  data-dismiss="modal"
+                >
+                  إغلاق
+                </button>
               </div>
             </form>
           </div>
@@ -467,14 +694,28 @@ const Store = () => {
           <div className="modal-content">
             <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
               <h4 className="modal-title">حذف المخزن</h4>
-              <button type="button" className="close" data-dismiss="modal">&times;</button>
+              <button type="button" className="close" data-dismiss="modal">
+                &times;
+              </button>
             </div>
             <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
               <p>هل أنت متأكد أنك تريد حذف هذا المخزن؟</p>
             </div>
             <div className="modal-footer">
-              <button type="button" className="btn btn-danger col-6 h-100 px-2 py-3 m-0" onClick={deleteStore}>حذف</button>
-              <button type="button" className="btn btn-secondary col-6 h-100 px-2 py-3 m-0" data-dismiss="modal">إغلاق</button>
+              <button
+                type="button"
+                className="btn btn-danger col-6 h-100 px-2 py-3 m-0"
+                onClick={deleteStore}
+              >
+                حذف
+              </button>
+              <button
+                type="button"
+                className="btn btn-secondary col-6 h-100 px-2 py-3 m-0"
+                data-dismiss="modal"
+              >
+                إغلاق
+              </button>
             </div>
           </div>
         </div>
