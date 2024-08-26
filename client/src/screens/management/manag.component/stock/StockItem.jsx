@@ -74,7 +74,7 @@ const StockItem = () => {
       const storeCode = allStores.find(
         (store) => store._id === storeId
       )?.storeCode;
-      const categoryCode = allStores.find(
+      const categoryCode = AllCategoryStock.find(
         (category) => category._id === categoryId
       )?.categoryCode;
       const filterStockItemByStore = AllStockItems.filter(
@@ -141,6 +141,26 @@ const StockItem = () => {
     }
     setisLoading(true);
     try {
+      const storeCode = allStores.find(
+        (store) => store._id === storeId
+      )?.storeCode;
+      const categoryCode = AllCategoryStock.find(
+        (category) => category._id === categoryId
+      )?.categoryCode;
+      const filterStockItemByStore = AllStockItems.filter(
+        (item) => item.storeId === storeId
+      ).reverse();
+      const itemOrder = filterStockItemByStore.length + 1;
+
+      function generateItemCode(storeCode, categoryCode, itemOrder) {
+        return `${storeCode}-${categoryCode}-${String(itemOrder).padStart(
+          4,
+          "0"
+        )}`;
+      }
+
+      const itemCode = generateItemCode(storeCode, categoryCode, itemOrder);
+
       const response = await axios.put(
         `${apiUrl}/api/stockitem/${stockItemId}`,
         {
@@ -281,8 +301,9 @@ const StockItem = () => {
   };
 
   const [stockitem, setstockitem] = useState({});
-  const handelEditStockItemModal = (item) => {
-    setstockitem(JSON.parse(item));
+  const handelEditStockItemModal = (stockitem) => {
+    const item = JSON.parse(stockitem)
+    setstockitem(item);
     setStockItemId(item._id);
     setCategoryId(item.categoryId?._id);
     setItemName(item.itemName);
@@ -808,7 +829,7 @@ const StockItem = () => {
                   <input
                     type="text"
                     className="form-control border-primary m-0 p-2 h-auto"
-                    defaultValue={itemName}
+                    value={itemName}
                     onChange={(e) => setItemName(e.target.value)}
                   />
                 </div>
@@ -820,7 +841,7 @@ const StockItem = () => {
                     className="form-control border-primary m-0 p-2 h-auto"
                     onChange={(e) => setStoreId(e.target.value)}
                   >
-                    <option>اختر المخزن</option>
+                    <option>{stockitem.storeId?.storeName}</option>
                     {allStores.map((store, i) => {
                       return (
                         <option value={store._id} key={i}>
@@ -838,7 +859,7 @@ const StockItem = () => {
                     className="form-control border-primary m-0 p-2 h-auto"
                     onChange={(e) => setCategoryId(e.target.value)}
                   >
-                    <option>اختر التصنيف</option>
+                    <option>{stockitem.categoryId?.categoryName}</option>
                     {AllCategoryStock.map((category, i) => {
                       return (
                         <option value={category._id} key={i}>
@@ -855,7 +876,7 @@ const StockItem = () => {
                   <input
                     type="text"
                     className="form-control border-primary m-0 p-2 h-auto"
-                    defaultValue={largeUnit}
+                    value={largeUnit}
                     onChange={(e) => setLargeUnit(e.target.value)}
                   ></input>
                 </div>
@@ -866,7 +887,7 @@ const StockItem = () => {
                   <input
                     type="text"
                     className="form-control border-primary m-0 p-2 h-auto"
-                    defaultValue={smallUnit}
+                    value={smallUnit}
                     onChange={(e) => setSmallUnit(e.target.value)}
                   ></input>
                 </div>
@@ -906,7 +927,6 @@ const StockItem = () => {
                   </label>
                   <select
                     className="form-control border-primary m-0 p-2 h-auto"
-                    defaultValue={costMethod}
                     onChange={(e) => setCostMethod(e.target.value)}
                   >
                     <option value={costMethod}>{costMethod}</option>
