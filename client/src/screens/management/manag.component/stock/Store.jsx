@@ -331,8 +331,8 @@ const Store = () => {
                       <td>{store.storekeeper?.fullname}</td>
                       <td>
                         {
-                          allStockItems.filter(
-                            (item) => item.storeId._id === store._id
+                          allStockItems&&allStockItems.filter(
+                            (item) => item.storeId?._id === store._id
                           )?.length
                         }
                       </td>
