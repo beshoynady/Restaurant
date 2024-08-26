@@ -1,5 +1,5 @@
 const CategoryStockmodel = require("../models/CategoryStock.model");
-const { ObjectId } = require("mongoose").Types; // Ensure ObjectId is imported
+const { ObjectId } = require("mongoose").Types; 
 
 const CreateCategoryStock = async (req, res, next) => {
   try {
