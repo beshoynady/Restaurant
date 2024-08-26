@@ -949,7 +949,7 @@ const StockItem = () => {
                     defaultValue={isActive}
                     onChange={(e) => setisActive(e.target.value)}
                   >
-                    <option value={isActive}>{isActive}</option>
+                    <option value={isActive}>{isActive?'نشط':'غير نشط'}</option>
                     <option value={true}>نشط</option>
                     <option value={false}>غير نشط</option>
                   </select>
