@@ -693,7 +693,7 @@ const Store = () => {
           <div className="modal-content shadow-lg border-0 rounded ">
             <form className="text-right" onSubmit={(e) => deleteStore(e)}>
               <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
-                <h4 className="modal-title">حذف التصنيف</h4>
+                <h4 className="modal-title">حذف المخزن</h4>
                 <button
                   type="button"
                   className="close m-0 p-1"
