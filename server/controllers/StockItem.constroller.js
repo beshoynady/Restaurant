@@ -4,19 +4,20 @@ const StockItemsModel = require('../models/StockItems.model');
 const createStockItem = async (req, res) => {
   try {
     const {
-      code, itemName, categoryId, storeId, largeUnit, parts, smallUnit,
-      minThreshold, costMethod, suppliers, status, createdBy, notes
+      itemCode, itemName, categoryId, storeId, largeUnit, parts, smallUnit,
+      minThreshold, costMethod, suppliers, status, notes
     } = req.body;
+    const createdBy = req.employee.id
 
-    // Check for unique code
-    const existingItem = await StockItemsModel.findOne({ code });
+    // Check for unique itemCode
+    const existingItem = await StockItemsModel.findOne({ itemCode });
     if (existingItem) {
-      return res.status(400).json({ error: "Item code already exists" });
+      return res.status(400).json({ error: "Item itemCode already exists" });
     }
 
     // Create new stock item
     const newStockItem = await StockItemsModel.create({
-      code, itemName, categoryId, storeId, largeUnit, parts, smallUnit,
+      itemCode, itemName, categoryId, storeId, largeUnit, parts, smallUnit,
       minThreshold, costMethod, suppliers, status, createdBy, notes
     });
 

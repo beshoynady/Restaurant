@@ -3,7 +3,7 @@ const { ObjectId } = mongoose.Schema;
 
 const StockItemSchema = new mongoose.Schema(
   {
-    code: {
+    itemCode: {
       type: String,
       trim: true,
       required: true,
