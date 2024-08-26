@@ -1,76 +1,80 @@
-import React, { useState, useEffect, useContext } from 'react';
-import axios from 'axios';
-import { detacontext } from '../../../../App';
-import { toast } from 'react-toastify';
-import '../orders/Orders.css';
+import React, { useState, useEffect, useContext } from "react";
+import axios from "axios";
+import { detacontext } from "../../../../App";
+import { toast } from "react-toastify";
+import "../orders/Orders.css";
 
 const CategoryStock = () => {
   const apiUrl = process.env.REACT_APP_API_URL;
-  const token = localStorage.getItem('token_e'); // Retrieve the token from localStorage
+  const token = localStorage.getItem("token_e"); // Retrieve the token from localStorage
   const config = {
     headers: {
-      'Authorization': `Bearer ${token}`,
+      Authorization: `Bearer ${token}`,
     },
   };
 
-  const { 
-    restaurantData, 
-    permissionsList, 
-    setStartDate, 
-    setEndDate, 
-    filterByDateRange, 
+  const {
+    restaurantData,
+    permissionsList,
+    setStartDate,
+    setEndDate,
+    filterByDateRange,
     filterByTime,
-    employeeLoginInfo,  
-    formatDate, 
-    formatDateTime, 
-    setisLoading, 
-    EditPagination, 
-    startpagination, 
-    endpagination, 
-    setstartpagination, 
-    setendpagination 
+    employeeLoginInfo,
+    formatDate,
+    formatDateTime,
+    setisLoading,
+    EditPagination,
+    startpagination,
+    endpagination,
+    setstartpagination,
+    setendpagination,
   } = useContext(detacontext);
 
-  const stockCategoriesPermission = permissionsList && permissionsList.filter(permission => permission.resource === 'stock Categories')[0];
+  const stockCategoriesPermission =
+    permissionsList &&
+    permissionsList.filter(
+      (permission) => permission.resource === "stock Categories"
+    )[0];
 
-  const [categoryName, setCategoryName] = useState('');
-  const [categoryCode, setCategoryCode] = useState('');
-  const [notes, setNotes] = useState('');
-  const [categoryStockId, setCategoryStockId] = useState('');
+  const [categoryName, setCategoryName] = useState("");
+  const [categoryCode, setCategoryCode] = useState("");
+  const [notes, setNotes] = useState("");
+  const [categoryStockId, setCategoryStockId] = useState("");
   const [allCategoryStock, setAllCategoryStock] = useState([]);
   const [allStockItems, setAllStockItems] = useState([]);
 
   const getAllCategoryStock = async () => {
     if (!token) {
-      toast.error('رجاء تسجيل الدخول مره اخري');
+      toast.error("رجاء تسجيل الدخول مره اخري");
       return;
     }
 
     try {
       if (stockCategoriesPermission && !stockCategoriesPermission.read) {
-        toast.warn('ليس لك صلاحية لعرض تصنيفات المخزن');
+        toast.warn("ليس لك صلاحية لعرض تصنيفات المخزن");
         return;
       }
       const response = await axios.get(apiUrl + "/api/categoryStock/", config);
       setAllCategoryStock(response.data.reverse());
     } catch (error) {
-      console.error('Error fetching category stock:', error);
-      toast.error('حدث خطأ اثناء جلب بيانات التصنيفات ! اعد تحميل الصفحة');
+      console.error("Error fetching category stock:", error);
+      toast.error("حدث خطأ اثناء جلب بيانات التصنيفات ! اعد تحميل الصفحة");
     }
   };
 
   const getAllStockItem = async () => {
     try {
       if (!token) {
-        toast.error('رجاء تسجيل الدخول مره اخري');
+        toast.error("رجاء تسجيل الدخول مره اخري");
         return;
       }
-      const response = await axios.get(apiUrl + '/api/stockitem/', config);
+      const response = await axios.get(apiUrl + "/api/stockitem/", config);
       if (response) {
         const stockItems = response.data.reverse();
         setAllStockItems(stockItems);
       } else {
-        toast.warn('حدث خطا اثناء جلب بيانات اصناف المخزن ! اعد تحميل الصفحة');
+        toast.warn("حدث خطا اثناء جلب بيانات اصناف المخزن ! اعد تحميل الصفحة");
       }
     } catch (error) {
       console.log(error);
@@ -80,13 +84,13 @@ const CategoryStock = () => {
   const createCategoryStock = async (e) => {
     e.preventDefault();
     if (!token) {
-      toast.error('رجاء تسجيل الدخول مره اخري');
+      toast.error("رجاء تسجيل الدخول مره اخري");
       return;
     }
 
     try {
       if (stockCategoriesPermission && !stockCategoriesPermission.create) {
-        toast.warn('ليس لك صلاحية لاضافه تصنيفات المخزن');
+        toast.warn("ليس لك صلاحية لاضافه تصنيفات المخزن");
         return;
       }
       // Validate fields
@@ -95,8 +99,11 @@ const CategoryStock = () => {
         return;
       }
 
-      const response = await axios.post(apiUrl + "/api/categoryStock/", 
-        { name: categoryName, code: categoryCode, notes }, config);
+      const response = await axios.post(
+        apiUrl + "/api/categoryStock/",
+        { name: categoryName, code: categoryCode, notes },
+        config
+      );
 
       if (response.status === 201) {
         toast.success("تم إنشاء التصنيف بنجاح");
@@ -107,8 +114,11 @@ const CategoryStock = () => {
       getAllCategoryStock();
     } catch (error) {
       console.error("Error creating category stock:", error);
-      if (error.response && error.response.data.error === 'Category name already exists') {
-        toast.error('هذا التصنيف موجود بالفعل');
+      if (
+        error.response &&
+        error.response.data.error === "Category name already exists"
+      ) {
+        toast.error("هذا التصنيف موجود بالفعل");
       } else {
         toast.error("حدث خطأ غير متوقع. يرجى المحاولة مرة أخرى.");
       }
@@ -118,22 +128,25 @@ const CategoryStock = () => {
   const editCategoryStock = async (e) => {
     e.preventDefault();
     if (!token) {
-      toast.error('رجاء تسجيل الدخول مره اخري');
+      toast.error("رجاء تسجيل الدخول مره اخري");
       return;
     }
 
     try {
       if (stockCategoriesPermission && !stockCategoriesPermission.update) {
-        toast.warn('ليس لك صلاحية لتعديل تصنيفات المخزن');
+        toast.warn("ليس لك صلاحية لتعديل تصنيفات المخزن");
         return;
       }
-      const edit = await axios.put(apiUrl + "/api/categoryStock/" + categoryStockId, 
-        { name: categoryName, code: categoryCode, notes }, config);
+      const edit = await axios.put(
+        apiUrl + "/api/categoryStock/" + categoryStockId,
+        { name: categoryName, code: categoryCode, notes },
+        config
+      );
 
       if (edit.status === 200) {
         toast.success("تم تعديل التصنيف بنجاح");
-      } else if (edit.data.error === 'Category name already exists') {
-        toast.error('هذا التصنيف موجود بالفعل');
+      } else if (edit.data.error === "Category name already exists") {
+        toast.error("هذا التصنيف موجود بالفعل");
       }
       getAllCategoryStock(); // Fetch updated category stock data
       getAllStockItem(); // Fetch updated stock item data
@@ -147,16 +160,19 @@ const CategoryStock = () => {
     e.preventDefault();
 
     if (!token) {
-      toast.error('رجاء تسجيل الدخول مره اخري');
+      toast.error("رجاء تسجيل الدخول مره اخري");
       return;
     }
 
     try {
       if (stockCategoriesPermission && !stockCategoriesPermission.delete) {
-        toast.warn('ليس لك صلاحية لحذف تصنيفات المخزن');
+        toast.warn("ليس لك صلاحية لحذف تصنيفات المخزن");
         return;
       }
-      const deleted = await axios.delete(apiUrl + "/api/categoryStock/" + categoryStockId, config);
+      const deleted = await axios.delete(
+        apiUrl + "/api/categoryStock/" + categoryStockId,
+        config
+      );
 
       if (deleted) {
         getAllCategoryStock(); // Fetch updated category stock data
@@ -174,7 +190,9 @@ const CategoryStock = () => {
       getAllCategoryStock();
       return;
     }
-    const categories = allCategoryStock.filter((category) => category.name.startsWith(categoryStock) === true);
+    const categories = allCategoryStock.filter(
+      (category) => category.name.startsWith(categoryStock) === true
+    );
     setAllStockItems(categories);
   };
 
@@ -190,36 +208,58 @@ const CategoryStock = () => {
           <div className="table-title">
             <div className="w-100 d-flex flex-wrap align-items-center justify-content-between">
               <div className="text-right">
-                <h2>إدارة <b>اقسام المخزن</b></h2>
+                <h2>
+                  إدارة <b>اقسام المخزن</b>
+                </h2>
               </div>
-              {stockCategoriesPermission.create &&
+              {stockCategoriesPermission.create && (
                 <div className="col-12 col-md-6 p-0 m-0 d-flex flex-wrap align-items-center justify-content-end print-hide">
-                  <a href="#addCategoryStockModal" className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-success" data-toggle="modal">
+                  <a
+                    href="#addCategoryStockModal"
+                    className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-success"
+                    data-toggle="modal"
+                  >
                     <span>اضافه تصنيف</span>
                   </a>
                 </div>
-              }
+              )}
             </div>
           </div>
           <div className="table-filter print-hide">
             <div className="col-12 text-dark d-flex flex-wrap align-items-center justify-content-start p-0 m-0">
               <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
-                <label className="form-label text-wrap text-right fw-bolder p-0 m-0">عرض</label>
-                <select className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => { setstartpagination(0); setendpagination(e.target.value); }}>
-                  {
-                    (() => {
-                      const options = [];
-                      for (let i = 5; i < 100; i += 5) {
-                        options.push(<option key={i} value={i}>{i}</option>);
-                      }
-                      return options;
-                    })()
-                  }
+                <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                  عرض
+                </label>
+                <select
+                  className="form-control border-primary m-0 p-2 h-auto"
+                  onChange={(e) => {
+                    setstartpagination(0);
+                    setendpagination(e.target.value);
+                  }}
+                >
+                  {(() => {
+                    const options = [];
+                    for (let i = 5; i < 100; i += 5) {
+                      options.push(
+                        <option key={i} value={i}>
+                          {i}
+                        </option>
+                      );
+                    }
+                    return options;
+                  })()}
                 </select>
               </div>
               <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
-                <label className="form-label text-wrap text-right fw-bolder p-0 m-0">اسم التصنيف</label>
-                <input type="text" className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => searchByCategoryStock(e.target.value)} />
+                <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                  اسم التصنيف
+                </label>
+                <input
+                  type="text"
+                  className="form-control border-primary m-0 p-2 h-auto"
+                  onChange={(e) => searchByCategoryStock(e.target.value)}
+                />
               </div>
             </div>
           </div>
@@ -238,48 +278,81 @@ const CategoryStock = () => {
               </tr>
             </thead>
             <tbody>
-              {allCategoryStock && allCategoryStock.map((categoryStock, i) => {
-                if (i >= startpagination && i < endpagination) {
-                  return (
-                    <tr key={i}>
-                      <td>{i + 1}</td>
-                      <td>{categoryStock.name}</td>
-                      <td>{categoryStock.categoryCode}</td>
-                      <td>{allStockItems.filter(item => item.categoryId._id === categoryStock._id)?.length}</td>
-                      <td>{categoryStock.crearedBy?.fullname}</td>
-                      <td>{formatDate(categoryStock.createdAt)}</td>
-                      <td>{categoryStock.notes}</td>
-                      <td>
-                        {stockCategoriesPermission && (stockCategoriesPermission.update || stockCategoriesPermission.delete) &&
-                          <div className="d-flex flex-wrap align-items-center justify-content-around">
-                            {stockCategoriesPermission.update &&
-                              <a href="#editCategoryStockModal" onClick={() => {
-                                setCategoryName(categoryStock.name);
-                                setCategoryCode(categoryStock.code);
-                                setNotes(categoryStock.notes || '');
-                                setCategoryStockId(categoryStock._id);
-                              }} className="edit" data-toggle="modal">
-                                <i className="material-icons" data-toggle="tooltip" title="Edit"></i>
-                              </a>
-                            }
-                            {stockCategoriesPermission.delete &&
-                              <a href="#deleteCategoryStockModal" onClick={() => setCategoryStockId(categoryStock._id)} className="delete" data-toggle="modal">
-                                <i className="material-icons" data-toggle="tooltip" title="Delete"></i>
-                              </a>
-                            }
-                          </div>
-                        }
-                      </td>
-                    </tr>
-                  );
-                } else {
-                  return null;
-                }
-              })}
+              {allCategoryStock &&
+                allCategoryStock.map((categoryStock, i) => {
+                  if (i >= startpagination && i < endpagination) {
+                    return (
+                      <tr key={i}>
+                        <td>{i + 1}</td>
+                        <td>{categoryStock.name}</td>
+                        <td>{categoryStock.categoryCode}</td>
+                        <td>
+                          {
+                            allStockItems.filter(
+                              (item) =>
+                                item.categoryId._id === categoryStock._id
+                            )?.length
+                          }
+                        </td>
+                        <td>{categoryStock.crearedBy?.fullname}</td>
+                        <td>{formatDate(categoryStock.createdAt)}</td>
+                        <td>{categoryStock.notes}</td>
+                        <td>
+                          {stockCategoriesPermission &&
+                            (stockCategoriesPermission.update ||
+                              stockCategoriesPermission.delete) && (
+                              <div className="d-flex flex-wrap align-items-center justify-content-around">
+                                {stockCategoriesPermission.update && (
+                                  <a
+                                    href="#editCategoryStockModal"
+                                    onClick={() => {
+                                      setCategoryName(categoryStock.name);
+                                      setCategoryCode(categoryStock.code);
+                                      setNotes(categoryStock.notes || "");
+                                      setCategoryStockId(categoryStock._id);
+                                    }}
+                                    className="edit"
+                                    data-toggle="modal"
+                                  >
+                                    <i
+                                      className="material-icons"
+                                      data-toggle="tooltip"
+                                      title="Edit"
+                                    >
+                                      
+                                    </i>
+                                  </a>
+                                )}
+                                {stockCategoriesPermission.delete && (
+                                  <a
+                                    href="#deleteCategoryStockModal"
+                                    onClick={() =>
+                                      setCategoryStockId(categoryStock._id)
+                                    }
+                                    className="delete"
+                                    data-toggle="modal"
+                                  >
+                                    <i
+                                      className="material-icons"
+                                      data-toggle="tooltip"
+                                      title="Delete"
+                                    >
+                                      
+                                    </i>
+                                  </a>
+                                )}
+                              </div>
+                            )}
+                        </td>
+                      </tr>
+                    );
+                  } else {
+                    return null;
+                  }
+                })}
             </tbody>
           </table>
 
-          
           <div className="clearfix">
             <div className="hint-text text-dark">
               عرض{" "}
@@ -352,25 +425,60 @@ const CategoryStock = () => {
           <div className="modal-content">
             <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
               <h4 className="modal-title">اضافه تصنيف</h4>
-              <button type="button" className="close" data-dismiss="modal">&times;</button>
+              <button type="button" className="close" data-dismiss="modal">
+                &times;
+              </button>
             </div>
             <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
               <form onSubmit={createCategoryStock}>
                 <div className="form-group col-12 col-md-6">
-                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0" >اسم التصنيف</label>
-                  <input type="text" className="form-control border-primary m-0 p-2 h-auto" value={categoryName} onChange={(e) => setCategoryName(e.target.value)} required />
+                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                    اسم التصنيف
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control border-primary m-0 p-2 h-auto"
+                    value={categoryName}
+                    onChange={(e) => setCategoryName(e.target.value)}
+                    required
+                  />
                 </div>
                 <div className="form-group col-12 col-md-6">
-                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0" >رمز التصنيف</label>
-                  <input type="text" className="form-control border-primary m-0 p-2 h-auto" value={categoryCode} onChange={(e) => setCategoryCode(e.target.value)} required />
+                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                    رمز التصنيف
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control border-primary m-0 p-2 h-auto"
+                    value={categoryCode}
+                    onChange={(e) => setCategoryCode(e.target.value)}
+                    required
+                  />
                 </div>
                 <div className="form-group col-12 col-md-6">
-                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0" >ملاحظات</label>
-                  <textarea className="form-control border-primary m-0 p-2 h-auto" value={notes} onChange={(e) => setNotes(e.target.value)}></textarea>
+                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                    ملاحظات
+                  </label>
+                  <textarea
+                    className="form-control border-primary m-0 p-2 h-auto"
+                    value={notes}
+                    onChange={(e) => setNotes(e.target.value)}
+                  ></textarea>
                 </div>
                 <div className="form-group col-12 col-md-6 text-right">
-                <button type="submit" className="btn btn-success col-6 h-100 px-2 py-3 m-0">حفظ</button>
-                <button type="button" className="btn btn-danger col-6 h-100 px-2 py-3 m-0" data-dismiss="modal">إغلاق</button>
+                  <button
+                    type="submit"
+                    className="btn btn-success col-6 h-100 px-2 py-3 m-0"
+                  >
+                    حفظ
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-danger col-6 h-100 px-2 py-3 m-0"
+                    data-dismiss="modal"
+                  >
+                    إغلاق
+                  </button>
                 </div>
               </form>
             </div>
@@ -383,25 +491,60 @@ const CategoryStock = () => {
           <div className="modal-content">
             <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
               <h4 className="modal-title">تعديل التصنيف</h4>
-              <button type="button" className="close" data-dismiss="modal">&times;</button>
+              <button type="button" className="close" data-dismiss="modal">
+                &times;
+              </button>
             </div>
             <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
               <form onSubmit={editCategoryStock}>
                 <div className="form-group col-12 col-md-6">
-                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0" >اسم التصنيف</label>
-                  <input type="text" className="form-control border-primary m-0 p-2 h-auto" value={categoryName} onChange={(e) => setCategoryName(e.target.value)} required />
+                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                    اسم التصنيف
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control border-primary m-0 p-2 h-auto"
+                    value={categoryName}
+                    onChange={(e) => setCategoryName(e.target.value)}
+                    required
+                  />
                 </div>
                 <div className="form-group col-12 col-md-6">
-                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0" >رمز التصنيف</label>
-                  <input type="text" className="form-control border-primary m-0 p-2 h-auto" value={categoryCode} onChange={(e) => setCategoryCode(e.target.value)} required />
+                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                    رمز التصنيف
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control border-primary m-0 p-2 h-auto"
+                    value={categoryCode}
+                    onChange={(e) => setCategoryCode(e.target.value)}
+                    required
+                  />
                 </div>
                 <div className="form-group col-12 col-md-6">
-                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0" >ملاحظات</label>
-                  <textarea className="form-control border-primary m-0 p-2 h-auto" value={notes} onChange={(e) => setNotes(e.target.value)}></textarea>
+                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                    ملاحظات
+                  </label>
+                  <textarea
+                    className="form-control border-primary m-0 p-2 h-auto"
+                    value={notes}
+                    onChange={(e) => setNotes(e.target.value)}
+                  ></textarea>
                 </div>
                 <div className="form-group col-12 col-md-6 text-right">
-                  <button type="submit" className="btn btn-success col-6 h-100 px-2 py-3 m-0">تعديل</button>
-                  <button type="button" className="btn btn-danger col-6 h-100 px-2 py-3 m-0" data-dismiss="modal">إلغاء</button>
+                  <button
+                    type="submit"
+                    className="btn btn-success col-6 h-100 px-2 py-3 m-0"
+                  >
+                    تعديل
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-danger col-6 h-100 px-2 py-3 m-0"
+                    data-dismiss="modal"
+                  >
+                    إلغاء
+                  </button>
                 </div>
               </form>
             </div>
@@ -410,19 +553,42 @@ const CategoryStock = () => {
       </div>
 
       <div id="deleteCategoryStockModal" className="modal fade" role="dialog">
-        <div className="modal-dialog">
-          <div className="modal-content">
-            <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
-              <h4 className="modal-title">حذف التصنيف</h4>
-              <button type="button" className="close" data-dismiss="modal">&times;</button>
-            </div>
-            <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
-              <p>هل أنت متأكد أنك تريد حذف هذا التصنيف؟</p>
-            </div>
-            <div className="modal-footer">
-              <button type="button" className="btn btn-danger col-6 h-100 px-2 py-3 m-0" onClick={deleteCategoryStock} data-dismiss="modal">حذف</button>
-              <button type="button" className="btn btn-secondary col-6 h-100 px-2 py-3 m-0" data-dismiss="modal">إلغاء</button>
-            </div>
+        <div className="modal-dialog modal-lg">
+          <div className="modal-content shadow-lg border-0 rounded ">
+            <form
+              className="text-right"
+              onSubmit={(e) => deleteCategoryStock(e)}
+            >
+              <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
+                <h4 className="modal-title">حذف التصنيف</h4>
+                <button
+                  type="button"
+                  className="close m-0 p-1"
+                  data-dismiss="modal"
+                  aria-hidden="true"
+                >
+                  &times;
+                </button>
+              </div>
+              <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
+                <p>
+                  هل أنت متأكد من حذف الموظف <strong>{fullname}</strong>؟
+                </p>
+              </div>
+              <div className="modal-footer flex-nowrap d-flex flex-row align-items-center justify-content-between">
+                <input
+                  type="submit"
+                  className="btn btn-warning col-6 h-100 px-2 py-3 m-0"
+                  value="حذف"
+                />
+                <input
+                  type="button"
+                  className="col-md-6 col-12 h-100 p-0 m-0 btn btn-default"
+                  data-dismiss="modal"
+                  value="إلغاء"
+                />
+              </div>
+            </form>
           </div>
         </div>
       </div>

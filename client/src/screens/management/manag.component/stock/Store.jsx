@@ -330,11 +330,10 @@ const Store = () => {
                       <td>{store.storeName}</td>
                       <td>{store.storekeeper?.fullname}</td>
                       <td>
-                        {
-                          allStockItems&&allStockItems.filter(
+                        {allStockItems &&
+                          allStockItems.filter(
                             (item) => item.storeId?._id === store._id
-                          )?.length
-                        }
+                          )?.length}
                       </td>
                       <td>{store.address}</td>
                       <td>{store.description}</td>
@@ -690,33 +689,39 @@ const Store = () => {
 
       {/* Delete Store Modal */}
       <div id="deletestoreModal" className="modal fade" role="dialog">
-        <div className="modal-dialog">
-          <div className="modal-content">
-            <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
-              <h4 className="modal-title">حذف المخزن</h4>
-              <button type="button" className="close" data-dismiss="modal">
-                &times;
-              </button>
-            </div>
-            <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
-              <p>هل أنت متأكد أنك تريد حذف هذا المخزن؟</p>
-            </div>
-            <div className="modal-footer">
-              <button
-                type="button"
-                className="btn btn-danger col-6 h-100 px-2 py-3 m-0"
-                onClick={deleteStore}
-              >
-                حذف
-              </button>
-              <button
-                type="button"
-                className="btn btn-secondary col-6 h-100 px-2 py-3 m-0"
-                data-dismiss="modal"
-              >
-                إغلاق
-              </button>
-            </div>
+        <div className="modal-dialog modal-lg">
+          <div className="modal-content shadow-lg border-0 rounded ">
+            <form className="text-right" onSubmit={(e) => deleteStore(e)}>
+              <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
+                <h4 className="modal-title">حذف التصنيف</h4>
+                <button
+                  type="button"
+                  className="close m-0 p-1"
+                  data-dismiss="modal"
+                  aria-hidden="true"
+                >
+                  &times;
+                </button>
+              </div>
+              <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
+                <p>
+                  هل أنت متأكد من حذف الموظف <strong>{fullname}</strong>؟
+                </p>
+              </div>
+              <div className="modal-footer flex-nowrap d-flex flex-row align-items-center justify-content-between">
+                <input
+                  type="submit"
+                  className="btn btn-warning col-6 h-100 px-2 py-3 m-0"
+                  value="حذف"
+                />
+                <input
+                  type="button"
+                  className="col-md-6 col-12 h-100 p-0 m-0 btn btn-default"
+                  data-dismiss="modal"
+                  value="إلغاء"
+                />
+              </div>
+            </form>
           </div>
         </div>
       </div>
