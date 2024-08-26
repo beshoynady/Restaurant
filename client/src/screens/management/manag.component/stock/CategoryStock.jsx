@@ -278,20 +278,71 @@ const CategoryStock = () => {
               })}
             </tbody>
           </table>
-          <div className="d-flex flex-wrap align-items-center justify-content-between print-hide">
-            <div className="text-right">
-              <p className="text-dark">عرض من {startpagination + 1} إلى {endpagination} من {allCategoryStock.length} تصنيف</p>
+
+          
+          <div className="clearfix">
+            <div className="hint-text text-dark">
+              عرض{" "}
+              <b>
+                {allCategoryStock.length > endpagination
+                  ? endpagination
+                  : allCategoryStock.length}
+              </b>{" "}
+              من <b>{allCategoryStock.length}</b> عنصر
             </div>
-            <nav>
-              <ul className="pagination">
-                <li className="page-item">
-                  <button onClick={() => { if (startpagination > 0) { setstartpagination(startpagination - endpagination); setendpagination(startpagination); } }} className="page-link">السابق</button>
-                </li>
-                <li className="page-item">
-                  <button onClick={() => { if (endpagination < allCategoryStock.length) { setstartpagination(startpagination + endpagination); setendpagination(endpagination + endpagination); } }} className="page-link">التالي</button>
-                </li>
-              </ul>
-            </nav>
+            <ul className="pagination">
+              <li onClick={EditPagination} className="page-item disabled">
+                <a href="#">السابق</a>
+              </li>
+              <li
+                onClick={EditPagination}
+                className={`page-item ${endpagination === 5 ? "active" : ""}`}
+              >
+                <a href="#" className="page-link">
+                  1
+                </a>
+              </li>
+              <li
+                onClick={EditPagination}
+                className={`page-item ${endpagination === 10 ? "active" : ""}`}
+              >
+                <a href="#" className="page-link">
+                  2
+                </a>
+              </li>
+              <li
+                onClick={EditPagination}
+                className={`page-item ${endpagination === 15 ? "active" : ""}`}
+              >
+                <a href="#" className="page-link">
+                  3
+                </a>
+              </li>
+              <li
+                onClick={EditPagination}
+                className={`page-item ${endpagination === 20 ? "active" : ""}`}
+              >
+                <a href="#" className="page-link">
+                  4
+                </a>
+              </li>
+              <li
+                onClick={EditPagination}
+                className={`page-item ${endpagination === 25 ? "active" : ""}`}
+              >
+                <a href="#" className="page-link">
+                  5
+                </a>
+              </li>
+              <li
+                onClick={EditPagination}
+                className={`page-item ${endpagination === 30 ? "active" : ""}`}
+              >
+                <a href="#" className="page-link">
+                  التالي
+                </a>
+              </li>
+            </ul>
           </div>
         </div>
       </div>
@@ -299,11 +350,11 @@ const CategoryStock = () => {
       <div id="addCategoryStockModal" className="modal fade" role="dialog">
         <div className="modal-dialog">
           <div className="modal-content">
-            <div className="modal-header">
+            <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
               <h4 className="modal-title">اضافه تصنيف</h4>
               <button type="button" className="close" data-dismiss="modal">&times;</button>
             </div>
-            <div className="modal-body">
+            <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
               <form onSubmit={createCategoryStock}>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0" >اسم التصنيف</label>
@@ -330,11 +381,11 @@ const CategoryStock = () => {
       <div id="editCategoryStockModal" className="modal fade" role="dialog">
         <div className="modal-dialog">
           <div className="modal-content">
-            <div className="modal-header">
+            <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
               <h4 className="modal-title">تعديل التصنيف</h4>
               <button type="button" className="close" data-dismiss="modal">&times;</button>
             </div>
-            <div className="modal-body">
+            <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
               <form onSubmit={editCategoryStock}>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0" >اسم التصنيف</label>
@@ -361,11 +412,11 @@ const CategoryStock = () => {
       <div id="deleteCategoryStockModal" className="modal fade" role="dialog">
         <div className="modal-dialog">
           <div className="modal-content">
-            <div className="modal-header">
+            <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
               <h4 className="modal-title">حذف التصنيف</h4>
               <button type="button" className="close" data-dismiss="modal">&times;</button>
             </div>
-            <div className="modal-body">
+            <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
               <p>هل أنت متأكد أنك تريد حذف هذا التصنيف؟</p>
             </div>
             <div className="modal-footer">

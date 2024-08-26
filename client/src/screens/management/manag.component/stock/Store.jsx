@@ -37,14 +37,14 @@ const Store = () => {
 
     try {
       if (storePermissions && !storePermissions.read) {
-        toast.warn('ليس لك صلاحية لعرض تصنيفات المخزن');
+        toast.warn('ليس لك صلاحية لعرض مخزنات المخزن');
         return;
       }
       const response = await axios.get(apiUrl + "/api/store/", config);
       setAllStores(response.data.reverse());
     } catch (error) {
       console.error('Error fetching stores:', error);
-      toast.error('حدث خطأ اثناء جلب بيانات التصنيفات! اعد تحميل الصفحة');
+      toast.error('حدث خطأ اثناء جلب بيانات المخزنات! اعد تحميل الصفحة');
     }
   };
 
@@ -94,7 +94,7 @@ const Store = () => {
 
     try {
       if (storePermissions && !storePermissions.create) {
-        toast.warn('ليس لك صلاحية لاضافه تصنيفات المخزن');
+        toast.warn('ليس لك صلاحية لاضافه مخزنات المخزن');
         return;
       }
 
@@ -132,7 +132,7 @@ const Store = () => {
 
     try {
       if (storePermissions && !storePermissions.update) {
-        toast.warn('ليس لك صلاحية لتعديل تصنيفات المخزن');
+        toast.warn('ليس لك صلاحية لتعديل مخزنات المخزن');
         return;
       }
 
@@ -173,7 +173,7 @@ const Store = () => {
 
     try {
       if (storePermissions && !storePermissions.delete) {
-        toast.warn('ليس لك صلاحية لحذف تصنيفات المخزن');
+        toast.warn('ليس لك صلاحية لحذف مخزنات المخزن');
         return;
       }
 
@@ -212,12 +212,12 @@ const Store = () => {
           <div className="table-title">
             <div className="w-100 d-flex flex-wrap align-items-center justify-content-between">
               <div className="text-right">
-                <h2>إدارة <b>أقسام المخزن</b></h2>
+                <h2>إدارة <b>المخازن</b></h2>
               </div>
               {storePermissions?.create &&
                 <div className="col-12 col-md-6 p-0 m-0 d-flex flex-wrap align-items-center justify-content-end print-hide">
                   <a href="#addstoreModal" className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-success" data-toggle="modal">
-                    <span>إضافة تصنيف</span>
+                    <span>إضافة مخزن</span>
                   </a>
                 </div>
               }
@@ -234,7 +234,7 @@ const Store = () => {
                 </select>
               </div>
               <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
-                <label className="form-label text-wrap text-right fw-bolder p-0 m-0">اسم التصنيف</label>
+                <label className="form-label text-wrap text-right fw-bolder p-0 m-0">اسم المخزن</label>
                 <input type="text" className="form-control border-primary m-0 p-2 h-auto border-primary m-0 p-2 h-auto" onChange={(e) => searchByStore(e.target.value)} />
               </div>
             </div>
@@ -295,22 +295,72 @@ const Store = () => {
               })}
             </tbody>
           </table>
+              
           <div className="clearfix">
-            <div className="hint-text text-dark">عرض <b>{startpagination + 1}</b> إلى <b>{endpagination}</b> من <b>{allStores.length}</b> تصنيف</div>
+            <div className="hint-text text-dark">
+              عرض{" "}
+              <b>
+                {allStores.length > endpagination
+                  ? endpagination
+                  : allStores.length}
+              </b>{" "}
+              من <b>{allStores.length}</b> عنصر
+            </div>
             <ul className="pagination">
-              <li className={`page-item ${startpagination <= 0 ? 'disabled' : ''}`}>
-                <a href="#" className="page-link" onClick={() => setstartpagination(startpagination - endpagination)}>&laquo;</a>
+              <li onClick={EditPagination} className="page-item disabled">
+                <a href="#">السابق</a>
               </li>
-              {Array.from({ length: Math.ceil(allStores.length / endpagination) }).map((_, index) => (
-                <li key={index} className={`page-item ${startpagination === index * endpagination ? 'active' : ''}`}>
-                  <a href="#" className="page-link" onClick={() => setstartpagination(index * endpagination)}>{index + 1}</a>
-                </li>
-              ))}
-              <li className={`page-item ${endpagination >= allStores.length ? 'disabled' : ''}`}>
-                <a href="#" className="page-link" onClick={() => setstartpagination(startpagination + endpagination)}>&raquo;</a>
+              <li
+                onClick={EditPagination}
+                className={`page-item ${endpagination === 5 ? "active" : ""}`}
+              >
+                <a href="#" className="page-link">
+                  1
+                </a>
+              </li>
+              <li
+                onClick={EditPagination}
+                className={`page-item ${endpagination === 10 ? "active" : ""}`}
+              >
+                <a href="#" className="page-link">
+                  2
+                </a>
+              </li>
+              <li
+                onClick={EditPagination}
+                className={`page-item ${endpagination === 15 ? "active" : ""}`}
+              >
+                <a href="#" className="page-link">
+                  3
+                </a>
+              </li>
+              <li
+                onClick={EditPagination}
+                className={`page-item ${endpagination === 20 ? "active" : ""}`}
+              >
+                <a href="#" className="page-link">
+                  4
+                </a>
+              </li>
+              <li
+                onClick={EditPagination}
+                className={`page-item ${endpagination === 25 ? "active" : ""}`}
+              >
+                <a href="#" className="page-link">
+                  5
+                </a>
+              </li>
+              <li
+                onClick={EditPagination}
+                className={`page-item ${endpagination === 30 ? "active" : ""}`}
+              >
+                <a href="#" className="page-link">
+                  التالي
+                </a>
               </li>
             </ul>
           </div>
+
         </div>
       </div>
 
@@ -318,18 +368,18 @@ const Store = () => {
       <div id="addstoreModal" className="modal fade" role="dialog">
         <div className="modal-dialog modal-lg">
           <div className="modal-content">
-            <div className="modal-header">
-              <h4 className="modal-title">إضافة تصنيف</h4>
+            <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
+              <h4 className="modal-title">إضافة مخزن</h4>
               <button type="button" className="close" data-dismiss="modal">&times;</button>
             </div>
             <form onSubmit={createStore}>
-              <div className="modal-body">
+              <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
                 <div className="form-group col-12 col-md-6">
-                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0" htmlFor="storeName">اسم التصنيف:</label>
+                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0" htmlFor="storeName">اسم المخزن:</label>
                   <input type="text" className="form-control border-primary m-0 p-2 h-auto" id="storeName" required onChange={(e) => setStoreName(e.target.value)} />
                 </div>
                 <div className="form-group col-12 col-md-6">
-                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0" htmlFor="storeCode">رمز التصنيف:</label>
+                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0" htmlFor="storeCode">رمز المخزن:</label>
                   <input type="text" className="form-control border-primary m-0 p-2 h-auto" id="storeCode" required onChange={(e) => setStoreCode(e.target.value)} />
                 </div>
                 <div className="form-group col-12 col-md-6">
@@ -341,7 +391,7 @@ const Store = () => {
                   <input type="text" className="form-control border-primary m-0 p-2 h-auto" id="address" required onChange={(e) => setAddress(e.target.value)} />
                 </div>
                 <div className="form-group col-12 col-md-6">
-                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0" htmlFor="storekeeper">مسؤول التصنيف:</label>
+                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0" htmlFor="storekeeper">مسؤول المخزن:</label>
                   <select
                       id="storekeeper"
                       className="form-control border-primary m-0 p-2 h-auto border-primary m-0 p-2 h-auto"
@@ -374,18 +424,18 @@ const Store = () => {
       <div id="editstoreModal" className="modal fade" role="dialog">
         <div className="modal-dialog modal-lg">
           <div className="modal-content shadow-lg border-0 rounded">
-            <div className="modal-header">
-              <h4 className="modal-title">تعديل التصنيف</h4>
+            <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
+              <h4 className="modal-title">تعديل المخزن</h4>
               <button type="button" className="close" data-dismiss="modal">&times;</button>
             </div>
             <form onSubmit={editStore}>
               <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
                 <div className="form-group col-12 col-md-6">
-                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0" htmlFor="editStoreName">اسم التصنيف:</label>
+                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0" htmlFor="editStoreName">اسم المخزن:</label>
                   <input type="text" className="form-control border-primary m-0 p-2 h-auto" id="editStoreName" required value={storeName} onChange={(e) => setStoreName(e.target.value)} />
                 </div>
                 <div className="form-group col-12 col-md-6">
-                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0" htmlFor="editStoreCode">رمز التصنيف:</label>
+                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0" htmlFor="editStoreCode">رمز المخزن:</label>
                   <input type="text" className="form-control border-primary m-0 p-2 h-auto" id="editStoreCode" required value={storeCode} onChange={(e) => setStoreCode(e.target.value)} />
                 </div>
                 <div className="form-group col-12 col-md-6">
@@ -397,7 +447,7 @@ const Store = () => {
                   <input type="text" className="form-control border-primary m-0 p-2 h-auto" id="editAddress" required value={address} onChange={(e) => setAddress(e.target.value)} />
                 </div>
                 <div className="form-group col-12 col-md-6">
-                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0" htmlFor="editStorekeeper">مسؤول التصنيف:</label>
+                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0" htmlFor="editStorekeeper">مسؤول المخزن:</label>
                   <input type="text" className="form-control border-primary m-0 p-2 h-auto" id="editStorekeeper" required value={storekeeper} onChange={(e) => setStorekeeper(e.target.value)} />
                 </div>
                
@@ -415,12 +465,12 @@ const Store = () => {
       <div id="deletestoreModal" className="modal fade" role="dialog">
         <div className="modal-dialog">
           <div className="modal-content">
-            <div className="modal-header">
-              <h4 className="modal-title">حذف التصنيف</h4>
+            <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
+              <h4 className="modal-title">حذف المخزن</h4>
               <button type="button" className="close" data-dismiss="modal">&times;</button>
             </div>
-            <div className="modal-body">
-              <p>هل أنت متأكد أنك تريد حذف هذا التصنيف؟</p>
+            <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
+              <p>هل أنت متأكد أنك تريد حذف هذا المخزن؟</p>
             </div>
             <div className="modal-footer">
               <button type="button" className="btn btn-danger col-6 h-100 px-2 py-3 m-0" onClick={deleteStore}>حذف</button>
