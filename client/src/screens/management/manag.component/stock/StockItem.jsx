@@ -305,6 +305,7 @@ const StockItem = () => {
     const item = JSON.parse(stockitem)
     setstockitem(item);
     setStockItemId(item._id);
+    setStoreId(item.storeId?._id);
     setCategoryId(item.categoryId?._id);
     setItemName(item.itemName);
     setMinThreshold(item.minThreshold);
