@@ -705,7 +705,7 @@ const Store = () => {
               </div>
               <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
                 <p>
-                  هل أنت متأكد من حذف الموظف <strong>{fullname}</strong>؟
+                  هل أنت متأكد من حذف مخزن <strong>{storeName}</strong>؟
                 </p>
               </div>
               <div className="modal-footer flex-nowrap d-flex flex-row align-items-center justify-content-between">
