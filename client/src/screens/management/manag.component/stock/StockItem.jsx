@@ -50,11 +50,15 @@ const StockItem = () => {
   const [suppliers, setSuppliers] = useState([]); // For suppliers (if necessary)
   const [status, setStatus] = useState(""); // For status (if necessary)
   const [notes, setNotes] = useState(""); // For notes
-  
+
   const [stockItemId, setStockItemId] = useState(""); // For stock item ID
-  const costMethodEN = ['FIFO', 'LIFO', 'Weighted Average'];
-  const costMethodAR = ['الوارد اولا يصرف اولا', 'الوارد اخيرا يصرف اولا', 'متوسط السعر'];
-    
+  const costMethodEN = ["FIFO", "LIFO", "Weighted Average"];
+  const costMethodAR = [
+    "الوارد اولا يصرف اولا",
+    "الوارد اخيرا يصرف اولا",
+    "متوسط السعر",
+  ];
+
   const createItem = async (e) => {
     e.preventDefault();
     if (!token) {
@@ -67,13 +71,22 @@ const StockItem = () => {
     }
     setisLoading(true);
     try {
-      const storeCode = allStores.find(store=>store._id === storeId)?.storeCode
-      const categoryCode = allStores.find(category=>category._id === categoryId)?.categoryCode
-      const filterStockItemByStore = AllStockItems.filter(item=>item.storeId === storeId).reverse()
-      const itemOrder = filterStockItemByStore.length + 1
+      const storeCode = allStores.find(
+        (store) => store._id === storeId
+      )?.storeCode;
+      const categoryCode = allStores.find(
+        (category) => category._id === categoryId
+      )?.categoryCode;
+      const filterStockItemByStore = AllStockItems.filter(
+        (item) => item.storeId === storeId
+      ).reverse();
+      const itemOrder = filterStockItemByStore.length + 1;
 
       function generateItemCode(storeCode, categoryCode, itemOrder) {
-        return `${storeCode}-${categoryCode}-${itemOrder.padStart(4, "0")}`;
+        return `${storeCode}-${categoryCode}-${String(itemOrder).padStart(
+          4,
+          "0"
+        )}`;
       }
 
       const itemCode = generateItemCode(storeCode, categoryCode, itemOrder);
@@ -102,7 +115,6 @@ const StockItem = () => {
       }
 
       if (response) {
-       
         getStockItems();
       }
 
@@ -260,7 +272,6 @@ const StockItem = () => {
     }
 
     try {
-    
       const response = await axios.get(apiUrl + "/api/store/", config);
       setAllStores(response.data.reverse());
     } catch (error) {
@@ -269,9 +280,9 @@ const StockItem = () => {
     }
   };
 
-  const [stockitem, setstockitem] = useState({})
+  const [stockitem, setstockitem] = useState({});
   const handelEditStockItemModal = (item) => {
-    setstockitem(JSON.parse(item))
+    setstockitem(JSON.parse(item));
     setStockItemId(item._id);
     setCategoryId(item.categoryId?._id);
     setItemName(item.itemName);
@@ -323,20 +334,23 @@ const StockItem = () => {
                   ادارة <b>عناصر المخزن</b>
                 </h2>
               </div>
-              {stockItemPermission&&stockItemPermission&&stockItemPermission&&stockItemPermission.create && (
-                <div className="col-12 col-md-6 p-0 m-0 d-flex flex-wrap aliegn-items-center justify-content-end print-hide">
-                  <a
-                    href="#addStockItemModal"
-                    className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-success"
-                    data-toggle="modal"
-                  >
-                    {" "}
-                    <span>اضافه منتج جديد</span>
-                  </a>
+              {stockItemPermission &&
+                stockItemPermission &&
+                stockItemPermission &&
+                stockItemPermission.create && (
+                  <div className="col-12 col-md-6 p-0 m-0 d-flex flex-wrap aliegn-items-center justify-content-end print-hide">
+                    <a
+                      href="#addStockItemModal"
+                      className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-success"
+                      data-toggle="modal"
+                    >
+                      {" "}
+                      <span>اضافه منتج جديد</span>
+                    </a>
 
-                  {/* <a href="#deleteStockItemModal" className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-danger" data-toggle="modal"> <span>حذف</span></a> */}
-                </div>
-              )}
+                    {/* <a href="#deleteStockItemModal" className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-danger" data-toggle="modal"> <span>حذف</span></a> */}
+                  </div>
+                )}
             </div>
           </div>
           <div className="table-filter print-hide">
@@ -458,40 +472,46 @@ const StockItem = () => {
                         <td>{formatDateTime(item.createdAt)}</td>
                         <td>{item.notes}</td>
                         <td>
-                          {stockItemPermission&&stockItemPermission&&stockItemPermission&&stockItemPermission.update && (
-                            <a
-                              href="#editStockItemModal"
-                              className="edit"
-                              data-toggle="modal"
-                              onClick={() => {
-                                handelEditStockItemModal(JSON.stringify(item));
-                              }}
-                            >
-                              <i
-                                className="material-icons"
-                                data-toggle="tooltip"
-                                title="Edit"
+                          {stockItemPermission &&
+                            stockItemPermission &&
+                            stockItemPermission &&
+                            stockItemPermission.update && (
+                              <a
+                                href="#editStockItemModal"
+                                className="edit"
+                                data-toggle="modal"
+                                onClick={() => {
+                                  handelEditStockItemModal(
+                                    JSON.stringify(item)
+                                  );
+                                }}
                               >
-                                &#xE254;
-                              </i>
-                            </a>
-                          )}
-                          {stockItemPermission&&stockItemPermission.delete && (
-                            <a
-                              href="#deleteStockItemModal"
-                              className="delete"
-                              data-toggle="modal"
-                              onClick={() => setStockItemId(item._id)}
-                            >
-                              <i
-                                className="material-icons"
-                                data-toggle="tooltip"
-                                title="Delete"
+                                <i
+                                  className="material-icons"
+                                  data-toggle="tooltip"
+                                  title="Edit"
+                                >
+                                  &#xE254;
+                                </i>
+                              </a>
+                            )}
+                          {stockItemPermission &&
+                            stockItemPermission.delete && (
+                              <a
+                                href="#deleteStockItemModal"
+                                className="delete"
+                                data-toggle="modal"
+                                onClick={() => setStockItemId(item._id)}
                               >
-                                &#xE872;
-                              </i>
-                            </a>
-                          )}
+                                <i
+                                  className="material-icons"
+                                  data-toggle="tooltip"
+                                  title="Delete"
+                                >
+                                  &#xE872;
+                                </i>
+                              </a>
+                            )}
                         </td>
                       </tr>
                     );
@@ -671,7 +691,7 @@ const StockItem = () => {
                     }}
                   />
                 </div>
-                
+
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                     عدد الوحدات
@@ -722,10 +742,9 @@ const StockItem = () => {
                     <option>اختر الحاله</option>
                     <option value={true}>نشط</option>
                     <option value={false}>غير نشط</option>
-                   
                   </select>
                 </div>
-                
+
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                     التاريخ
@@ -737,19 +756,15 @@ const StockItem = () => {
                     required
                     readOnly
                   />
-
+                </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                     الملاحظات
                   </label>
-                  <input
-                    type="Number"
-                    min={0}
+                  <textarea
                     className="form-control border-primary m-0 p-2 h-auto"
-                    required
                     onChange={(e) => setNotes(e.target.value)}
                   />
-                </div>
                 </div>
               </div>
               <div className="modal-footer d-flex flex-nowrap align-items-center justify-content-between m-0 p-1">
@@ -803,7 +818,6 @@ const StockItem = () => {
                   </label>
                   <select
                     className="form-control border-primary m-0 p-2 h-auto"
-                    
                     onChange={(e) => setStoreId(e.target.value)}
                   >
                     <option>اختر المخزن</option>
@@ -870,7 +884,7 @@ const StockItem = () => {
                     }}
                   />
                 </div>
-                
+
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                     عدد الوحدات
@@ -917,10 +931,9 @@ const StockItem = () => {
                     <option value={status}>{status}</option>
                     <option value={true}>نشط</option>
                     <option value={false}>غير نشط</option>
-                   
                   </select>
                 </div>
-                
+
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                     التاريخ
@@ -929,24 +942,19 @@ const StockItem = () => {
                     type="text"
                     className="form-control border-primary m-0 p-2 h-auto"
                     Value={new Date().toLocaleDateString()}
-                    required
                     readOnly
                   />
                 </div>
+              <div className="form-group col-12 col-md-6">
+                <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                  الملاحظات
+                </label>
+                <textarea
+                  className="form-control border-primary m-0 p-2 h-auto"
+                  onChange={(e) => setNotes(e.target.value)}
+                />
               </div>
-
-                <div className="form-group col-12 col-md-6">
-                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
-                    الملاحظات
-                  </label>
-                  <input
-                    type="Number"
-                    min={0}
-                    className="form-control border-primary m-0 p-2 h-auto"
-                    required
-                    onChange={(e) => setNotes(e.target.value)}
-                  />
-                </div>
+              </div>
               <div className="modal-footer d-flex flex-nowrap align-items-center justify-content-between m-0 p-1">
                 <input
                   type="submit"
