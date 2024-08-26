@@ -260,10 +260,7 @@ const StockItem = () => {
     }
 
     try {
-      if (storePermissions && !storePermissions.read) {
-        toast.warn("ليس لك صلاحية لعرض مخزنات المخزن");
-        return;
-      }
+    
       const response = await axios.get(apiUrl + "/api/store/", config);
       setAllStores(response.data.reverse());
     } catch (error) {
@@ -304,7 +301,7 @@ const StockItem = () => {
       return;
     }
     const filter = AllStockItems.filter(
-      (item) => item.categoryId._id === category
+      (item) => item.categoryId?._id === category
     );
     setAllStockItems(filter);
   };
@@ -484,7 +481,7 @@ const StockItem = () => {
                               href="#deleteStockItemModal"
                               className="delete"
                               data-toggle="modal"
-                              onClick={() => setStockItemid(item._id)}
+                              onClick={() => setStockItemId(item._id)}
                             >
                               <i
                                 className="material-icons"
@@ -626,7 +623,7 @@ const StockItem = () => {
                     name="category"
                     id="category"
                     form="carform"
-                    onChange={(e) => setcategoryId(e.target.value)}
+                    onChange={(e) => setCategoryId(e.target.value)}
                   >
                     <option>اختر التصنيف</option>
                     {AllCategoryStock.map((category, i) => {
@@ -825,7 +822,7 @@ const StockItem = () => {
                   </label>
                   <select
                     className="form-control border-primary m-0 p-2 h-auto"
-                    onChange={(e) => setcategoryId(e.target.value)}
+                    onChange={(e) => setCategoryId(e.target.value)}
                   >
                     <option>اختر التصنيف</option>
                     {AllCategoryStock.map((category, i) => {
