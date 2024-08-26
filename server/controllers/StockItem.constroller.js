@@ -5,7 +5,7 @@ const createStockItem = async (req, res) => {
   try {
     const {
       itemCode, itemName, categoryId, storeId, largeUnit, parts, smallUnit,
-      minThreshold, costMethod, suppliers, status, notes
+      minThreshold, costMethod, suppliers, isActive, notes
     } = req.body;
     const createdBy = req.employee.id
 
@@ -18,7 +18,7 @@ const createStockItem = async (req, res) => {
     // Create new stock item
     const newStockItem = await StockItemsModel.create({
       itemCode, itemName, categoryId, storeId, largeUnit, parts, smallUnit,
-      minThreshold, costMethod, suppliers, status, createdBy, notes
+      minThreshold, costMethod, suppliers, isActive, createdBy, notes
     });
 
     res.status(201).json(newStockItem);

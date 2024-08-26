@@ -48,7 +48,7 @@ const StockItem = () => {
   const [minThreshold, setMinThreshold] = useState(""); // For minimum threshold
   const [costMethod, setCostMethod] = useState(""); // For cost method (if necessary)
   const [suppliers, setSuppliers] = useState([]); // For suppliers (if necessary)
-  const [status, setStatus] = useState(""); // For status (if necessary)
+  const [isActive, setisActive] = useState(true); // For isActive (if necessary)
   const [notes, setNotes] = useState(""); // For notes
 
   const [stockItemId, setStockItemId] = useState(""); // For stock item ID
@@ -103,7 +103,7 @@ const StockItem = () => {
           smallUnit,
           minThreshold,
           costMethod,
-          status,
+          isActive,
           notes,
         },
         config
@@ -153,7 +153,7 @@ const StockItem = () => {
           smallUnit,
           minThreshold,
           costMethod,
-          status,
+          isActive,
           notes,
         },
         config
@@ -191,7 +191,7 @@ const StockItem = () => {
         `${apiUrl}/api/stockitem/${stockItemId}`,
         config
       );
-      if (response.status === 200) {
+      if (response.isActive === 200) {
         console.log(response);
         getStockItems(); // Update the list of stock items after deletion
 
@@ -292,7 +292,7 @@ const StockItem = () => {
     setParts(item.parts);
     setCostMethod(item.costMethod);
     setNotes(item.notes);
-    setStatus(item.status);
+    setisActive(item.isActive);
   };
 
   const searchByitem = (name) => {
@@ -467,7 +467,7 @@ const StockItem = () => {
                               } `
                           )}
                         </td>
-                        <td>{item.status ? "نشط" : "غير نشط"}</td>
+                        <td>{item.isActive ? "نشط" : "غير نشط"}</td>
                         <td>{item.createdBy?.fullname}</td>
                         <td>{formatDateTime(item.createdAt)}</td>
                         <td>{item.notes}</td>
@@ -737,7 +737,7 @@ const StockItem = () => {
                     name="category"
                     id="category"
                     form="carform"
-                    onChange={(e) => setStatus(e.target.value)}
+                    onChange={(e) => setisActive(e.target.value)}
                   >
                     <option>اختر الحاله</option>
                     <option value={true}>نشط</option>
@@ -925,10 +925,10 @@ const StockItem = () => {
                   </label>
                   <select
                     className="form-control border-primary m-0 p-2 h-auto"
-                    defaultValue={status}
-                    onChange={(e) => setStatus(e.target.value)}
+                    defaultValue={isActive}
+                    onChange={(e) => setisActive(e.target.value)}
                   >
-                    <option value={status}>{status}</option>
+                    <option value={isActive}>{isActive}</option>
                     <option value={true}>نشط</option>
                     <option value={false}>غير نشط</option>
                   </select>

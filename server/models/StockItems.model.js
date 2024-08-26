@@ -52,10 +52,9 @@ const StockItemSchema = new mongoose.Schema(
         ref: 'Supplier',
       },
     ],
-    status: {
-      type: String,
-      enum: ['Active', 'Inactive'],
-      default: 'Active',
+    isActive: {
+      type: Boolean,
+      default: 'true',
       required: true,
     },
     createdBy: {
