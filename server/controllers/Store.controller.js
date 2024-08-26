@@ -1,4 +1,4 @@
-const StoreModel = require("../models/StoreModel"); // Adjust the path as needed
+const StoreModel = require("../models/Store.model"); // Adjust the path as needed
 
 // Create a new store
 const createStore = async (req, res, next) => {
