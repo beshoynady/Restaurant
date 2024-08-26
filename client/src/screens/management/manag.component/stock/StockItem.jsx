@@ -323,7 +323,7 @@ const StockItem = () => {
                   ادارة <b>عناصر المخزن</b>
                 </h2>
               </div>
-              {stockItemPermission.create && (
+              {stockItemPermission&&stockItemPermission&&stockItemPermission&&stockItemPermission.create && (
                 <div className="col-12 col-md-6 p-0 m-0 d-flex flex-wrap aliegn-items-center justify-content-end print-hide">
                   <a
                     href="#addStockItemModal"
@@ -458,7 +458,7 @@ const StockItem = () => {
                         <td>{formatDateTime(item.createdAt)}</td>
                         <td>{item.notes}</td>
                         <td>
-                          {stockItemPermission.update && (
+                          {stockItemPermission&&stockItemPermission&&stockItemPermission&&stockItemPermission.update && (
                             <a
                               href="#editStockItemModal"
                               className="edit"
@@ -476,7 +476,7 @@ const StockItem = () => {
                               </i>
                             </a>
                           )}
-                          {stockItemPermission.delete && (
+                          {stockItemPermission&&stockItemPermission.delete && (
                             <a
                               href="#deleteStockItemModal"
                               className="delete"
