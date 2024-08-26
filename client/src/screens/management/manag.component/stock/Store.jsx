@@ -554,7 +554,7 @@ const Store = () => {
                   </select>
                 </div>
               </div>
-              <div className="modal-footer">
+              <div className="modal-footer flex-nowrap d-flex flex-row align-items-center justify-content-between">
                 <button
                   type="submit"
                   className="btn btn-success col-6 h-100 px-2 py-3 m-0"
@@ -667,7 +667,7 @@ const Store = () => {
                   />
                 </div>
               </div>
-              <div className="modal-footer">
+              <div className="modal-footer flex-nowrap d-flex flex-row align-items-center justify-content-between">
                 <button
                   type="submit"
                   className="btn btn-success col-6 h-100 px-2 py-3 m-0"
@@ -708,7 +708,7 @@ const Store = () => {
                   هل أنت متأكد من حذف مخزن <strong>{storeName}</strong>؟
                 </p>
               </div>
-              <div className="modal-footer flex-nowrap d-flex flex-row align-items-center justify-content-between">
+              <div className="modal-footer flex-nowrap d-flex flex-row align-items-center justify-content-between flex-nowrap d-flex flex-row align-items-center justify-content-between">
                 <input
                   type="submit"
                   className="btn btn-warning col-6 h-100 px-2 py-3 m-0"

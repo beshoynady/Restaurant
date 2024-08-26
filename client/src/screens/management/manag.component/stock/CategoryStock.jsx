@@ -101,7 +101,7 @@ const CategoryStock = () => {
 
       const response = await axios.post(
         apiUrl + "/api/categoryStock/",
-        { name: categoryName, code: categoryCode, notes },
+        { categoryName, categoryCode, notes },
         config
       );
 
@@ -139,7 +139,7 @@ const CategoryStock = () => {
       }
       const edit = await axios.put(
         apiUrl + "/api/categoryStock/" + categoryStockId,
-        { name: categoryName, code: categoryCode, notes },
+        { categoryName, categoryCode, notes },
         config
       );
 
@@ -290,7 +290,7 @@ const CategoryStock = () => {
                           {
                             allStockItems.filter(
                               (item) =>
-                                item.categoryId._id === categoryStock._id
+                                item.categoryId?._id === categoryStock._id
                             )?.length
                           }
                         </td>
@@ -469,7 +469,7 @@ const CategoryStock = () => {
                     onChange={(e) => setNotes(e.target.value)}
                   ></textarea>
                 </div>
-                <div className="form-group col-12 col-md-6 text-right">
+                <div className="modal-footer flex-nowrap d-flex flex-row align-items-center justify-content-between">
                   <button
                     type="submit"
                     className="btn btn-success col-6 h-100 px-2 py-3 m-0"
@@ -539,7 +539,7 @@ const CategoryStock = () => {
                     onChange={(e) => setNotes(e.target.value)}
                   ></textarea>
                 </div>
-                <div className="form-group col-12 col-md-6 text-right">
+                <div className="modal-footer flex-nowrap d-flex flex-row align-items-center justify-content-between">
                   <button
                     type="submit"
                     className="btn btn-success col-6 h-100 px-2 py-3 m-0"
