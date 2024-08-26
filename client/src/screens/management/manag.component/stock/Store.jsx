@@ -400,10 +400,7 @@ const Store = () => {
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0" htmlFor="editStorekeeper">مسؤول التصنيف:</label>
                   <input type="text" className="form-control border-primary m-0 p-2 h-auto" id="editStorekeeper" required value={storekeeper} onChange={(e) => setStorekeeper(e.target.value)} />
                 </div>
-                <div className="form-group col-12 col-md-6">
-                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0" htmlFor="editCreatedBy">أنشأ بواسطة:</label>
-                  <input type="text" className="form-control border-primary m-0 p-2 h-auto" id="editCreatedBy" required value={createdBy} onChange={(e) => setCreatedBy(e.target.value)} />
-                </div>
+               
               </div>
               <div className="modal-footer">
                 <button type="submit" className="btn btn-success col-6 h-100 px-2 py-3 m-0">تعديل</button>
