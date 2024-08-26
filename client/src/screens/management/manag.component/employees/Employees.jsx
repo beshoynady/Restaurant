@@ -782,8 +782,6 @@ const Employees = () => {
       <div id="addEmployeeModal" className="modal fade">
         {permissionsForEmployee?.create && (
           <div className="modal-dialog modal-lg">
-            <div className="modal-content shadow-lg border-0 rounded">
-              <form className="text-right" onSubmit={(e) => createEmployee(e)}>
                 <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                   <h4 className="modal-title">إضافة موظف</h4>
                   <button
@@ -795,6 +793,8 @@ const Employees = () => {
                     &times;
                   </button>
                 </div>
+            <div className="modal-content shadow-lg border-0 rounded">
+              <form className="text-right" onSubmit={(e) => createEmployee(e)}>
                 <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
                   <div className="form-group col-12 col-md-6">
                     <label

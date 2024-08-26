@@ -24,7 +24,6 @@ const Store = () => {
   const [description, setDescription] = useState('');
   const [address, setAddress] = useState('');
   const [storekeeper, setStorekeeper] = useState('');
-  const [createdBy, setCreatedBy] = useState('');
   const [storeId, setStoreId] = useState('');
 
   const [allStores, setAllStores] = useState([]);
@@ -47,6 +46,30 @@ const Store = () => {
       console.error('Error fetching stores:', error);
       toast.error('حدث خطأ اثناء جلب بيانات التصنيفات! اعد تحميل الصفحة');
     }
+  };
+
+  
+  const [listOfEmployees, setListOfEmployees] = useState([]);
+
+  const getEmployees = async () => {
+    if (!token) {
+      // Handle case where token is not available
+      toast.error("رجاء تسجيل الدخول مره اخري");
+      return;
+    }
+      try {
+        const response = await axios.get(`${apiUrl}/api/employee`, config);
+        const data = response.data;
+        if (data) {
+          setListOfEmployees(data);
+        } else {
+          toast.info("لا توجد بيانات لعرضها");
+        }
+        // console.log({ data });
+      } catch (error) {
+        console.log(error);
+      }
+    
   };
 
   const getAllStockItems = async () => {
@@ -75,7 +98,7 @@ const Store = () => {
         return;
       }
 
-      if (!storeName.trim() || !storeCode.trim() || !description.trim() || !address.trim() || !storekeeper.trim() || !createdBy.trim()) {
+      if (!storeName.trim() || !storeCode.trim() || !description.trim() || !address.trim() || !storekeeper.trim()) {
         toast.error("جميع الحقول مطلوبة");
         return;
       }
@@ -86,7 +109,6 @@ const Store = () => {
         description,
         address,
         storekeeper,
-        createdBy
       }, config);
 
       if (response.status === 201) {
@@ -125,7 +147,7 @@ const Store = () => {
         description,
         address,
         storekeeper,
-        createdBy
+        
       }, config);
 
       if (response.status === 200) {
@@ -180,6 +202,7 @@ const Store = () => {
   useEffect(() => {
     getAllStockItems();
     getAllStores();
+    getEmployees()
   }, []);
 
   return (
@@ -204,7 +227,7 @@ const Store = () => {
             <div className="col-12 text-dark d-flex flex-wrap align-items-center justify-content-start p-0 m-0">
               <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">عرض</label>
-                <select className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => { setstartpagination(0); setendpagination(e.target.value) }}>
+                <select className="form-control border-primary m-0 p-2 h-auto border-primary m-0 p-2 h-auto" onChange={(e) => { setstartpagination(0); setendpagination(e.target.value) }}>
                   {Array.from({ length: 20 }, (_, i) => (i + 1) * 5).map(value => (
                     <option key={value} value={value}>{value}</option>
                   ))}
@@ -212,7 +235,7 @@ const Store = () => {
               </div>
               <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">اسم التصنيف</label>
-                <input type="text" className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => searchByStore(e.target.value)} />
+                <input type="text" className="form-control border-primary m-0 p-2 h-auto border-primary m-0 p-2 h-auto" onChange={(e) => searchByStore(e.target.value)} />
               </div>
             </div>
           </div>
@@ -222,7 +245,12 @@ const Store = () => {
               <tr>
                 <th>م</th>
                 <th>الاسم</th>
+                <th>امين المخزن</th>
                 <th>عدد المنتجات</th>
+                <th>المكان</th>
+                <th>الوصف</th>
+                <th>الاختصار</th>
+                <th>اضيف بواسطه</th>
                 <th>أضيف في</th>
                 <th>إجراءات</th>
               </tr>
@@ -234,7 +262,11 @@ const Store = () => {
                     <tr key={i}>
                       <td>{i + 1}</td>
                       <td>{store.storeName}</td>
-                      <td>{allStockItems.filter(item => item.categoryId._id === store._id).length}</td>
+                      <td>{store.storekeeper?.fullname}</td>
+                      <td>{allStockItems.filter(item => item.storeId._id === store._id)?.length}</td>
+                      <td>{store.address}</td>
+                      <td>{store.description}</td>
+                      <td>{store.storeCode}</td>
                       <td>{formatDateTime(store.createdAt)}</td>
                       <td>
                         {storePermissions?.update &&
@@ -284,7 +316,7 @@ const Store = () => {
 
       {/* Add Store Modal */}
       <div id="addstoreModal" className="modal fade" role="dialog">
-        <div className="modal-dialog">
+        <div className="modal-dialog modal-lg">
           <div className="modal-content">
             <div className="modal-header">
               <h4 className="modal-title">إضافة تصنيف</h4>
@@ -292,34 +324,46 @@ const Store = () => {
             </div>
             <form onSubmit={createStore}>
               <div className="modal-body">
-                <div className="form-group">
-                  <label htmlFor="storeName">اسم التصنيف:</label>
-                  <input type="text" className="form-control" id="storeName" required onChange={(e) => setStoreName(e.target.value)} />
+                <div className="form-group col-12 col-md-6">
+                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0" htmlFor="storeName">اسم التصنيف:</label>
+                  <input type="text" className="form-control border-primary m-0 p-2 h-auto" id="storeName" required onChange={(e) => setStoreName(e.target.value)} />
                 </div>
-                <div className="form-group">
-                  <label htmlFor="storeCode">رمز التصنيف:</label>
-                  <input type="text" className="form-control" id="storeCode" required onChange={(e) => setStoreCode(e.target.value)} />
+                <div className="form-group col-12 col-md-6">
+                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0" htmlFor="storeCode">رمز التصنيف:</label>
+                  <input type="text" className="form-control border-primary m-0 p-2 h-auto" id="storeCode" required onChange={(e) => setStoreCode(e.target.value)} />
                 </div>
-                <div className="form-group">
-                  <label htmlFor="description">الوصف:</label>
-                  <input type="text" className="form-control" id="description" required onChange={(e) => setDescription(e.target.value)} />
+                <div className="form-group col-12 col-md-6">
+                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0" htmlFor="description">الوصف:</label>
+                  <input type="text" className="form-control border-primary m-0 p-2 h-auto" id="description" required onChange={(e) => setDescription(e.target.value)} />
                 </div>
-                <div className="form-group">
-                  <label htmlFor="address">العنوان:</label>
-                  <input type="text" className="form-control" id="address" required onChange={(e) => setAddress(e.target.value)} />
+                <div className="form-group col-12 col-md-6">
+                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0" htmlFor="address">العنوان:</label>
+                  <input type="text" className="form-control border-primary m-0 p-2 h-auto" id="address" required onChange={(e) => setAddress(e.target.value)} />
                 </div>
-                <div className="form-group">
-                  <label htmlFor="storekeeper">مسؤول التصنيف:</label>
-                  <input type="text" className="form-control" id="storekeeper" required onChange={(e) => setStorekeeper(e.target.value)} />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="createdBy">أنشأ بواسطة:</label>
-                  <input type="text" className="form-control" id="createdBy" required onChange={(e) => setCreatedBy(e.target.value)} />
+                <div className="form-group col-12 col-md-6">
+                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0" htmlFor="storekeeper">مسؤول التصنيف:</label>
+                  <select
+                      id="storekeeper"
+                      className="form-control border-primary m-0 p-2 h-auto border-primary m-0 p-2 h-auto"
+                      required
+                      onChange={(e) => setStorekeeper(e.target.value)}
+                    >
+                      <option value="">اختر</option>
+                      {listOfEmployees ? (
+                        listOfEmployees.map((employee, i) => (
+                          <option value={employee._id} key={i}>
+                            {employee.fullname}
+                          </option>
+                        ))
+                      ) : (
+                        <option>لا يوجد حسابات للموظفين</option>
+                      )}
+                    </select>
                 </div>
               </div>
               <div className="modal-footer">
-                <button type="submit" className="btn btn-success">حفظ</button>
-                <button type="button" className="btn btn-danger" data-dismiss="modal">إغلاق</button>
+                <button type="submit" className="btn btn-success col-6 h-100 px-2 py-3 m-0">حفظ</button>
+                <button type="button" className="btn btn-danger col-6 h-100 px-2 py-3 m-0" data-dismiss="modal">إغلاق</button>
               </div>
             </form>
           </div>
@@ -328,42 +372,42 @@ const Store = () => {
 
       {/* Edit Store Modal */}
       <div id="editstoreModal" className="modal fade" role="dialog">
-        <div className="modal-dialog">
-          <div className="modal-content">
+        <div className="modal-dialog modal-lg">
+          <div className="modal-content shadow-lg border-0 rounded">
             <div className="modal-header">
               <h4 className="modal-title">تعديل التصنيف</h4>
               <button type="button" className="close" data-dismiss="modal">&times;</button>
             </div>
             <form onSubmit={editStore}>
-              <div className="modal-body">
-                <div className="form-group">
-                  <label htmlFor="editStoreName">اسم التصنيف:</label>
-                  <input type="text" className="form-control" id="editStoreName" required value={storeName} onChange={(e) => setStoreName(e.target.value)} />
+              <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
+                <div className="form-group col-12 col-md-6">
+                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0" htmlFor="editStoreName">اسم التصنيف:</label>
+                  <input type="text" className="form-control border-primary m-0 p-2 h-auto" id="editStoreName" required value={storeName} onChange={(e) => setStoreName(e.target.value)} />
                 </div>
-                <div className="form-group">
-                  <label htmlFor="editStoreCode">رمز التصنيف:</label>
-                  <input type="text" className="form-control" id="editStoreCode" required value={storeCode} onChange={(e) => setStoreCode(e.target.value)} />
+                <div className="form-group col-12 col-md-6">
+                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0" htmlFor="editStoreCode">رمز التصنيف:</label>
+                  <input type="text" className="form-control border-primary m-0 p-2 h-auto" id="editStoreCode" required value={storeCode} onChange={(e) => setStoreCode(e.target.value)} />
                 </div>
-                <div className="form-group">
-                  <label htmlFor="editDescription">الوصف:</label>
-                  <input type="text" className="form-control" id="editDescription" required value={description} onChange={(e) => setDescription(e.target.value)} />
+                <div className="form-group col-12 col-md-6">
+                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0" htmlFor="editDescription">الوصف:</label>
+                  <input type="text" className="form-control border-primary m-0 p-2 h-auto" id="editDescription" required value={description} onChange={(e) => setDescription(e.target.value)} />
                 </div>
-                <div className="form-group">
-                  <label htmlFor="editAddress">العنوان:</label>
-                  <input type="text" className="form-control" id="editAddress" required value={address} onChange={(e) => setAddress(e.target.value)} />
+                <div className="form-group col-12 col-md-6">
+                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0" htmlFor="editAddress">العنوان:</label>
+                  <input type="text" className="form-control border-primary m-0 p-2 h-auto" id="editAddress" required value={address} onChange={(e) => setAddress(e.target.value)} />
                 </div>
-                <div className="form-group">
-                  <label htmlFor="editStorekeeper">مسؤول التصنيف:</label>
-                  <input type="text" className="form-control" id="editStorekeeper" required value={storekeeper} onChange={(e) => setStorekeeper(e.target.value)} />
+                <div className="form-group col-12 col-md-6">
+                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0" htmlFor="editStorekeeper">مسؤول التصنيف:</label>
+                  <input type="text" className="form-control border-primary m-0 p-2 h-auto" id="editStorekeeper" required value={storekeeper} onChange={(e) => setStorekeeper(e.target.value)} />
                 </div>
-                <div className="form-group">
-                  <label htmlFor="editCreatedBy">أنشأ بواسطة:</label>
-                  <input type="text" className="form-control" id="editCreatedBy" required value={createdBy} onChange={(e) => setCreatedBy(e.target.value)} />
+                <div className="form-group col-12 col-md-6">
+                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0" htmlFor="editCreatedBy">أنشأ بواسطة:</label>
+                  <input type="text" className="form-control border-primary m-0 p-2 h-auto" id="editCreatedBy" required value={createdBy} onChange={(e) => setCreatedBy(e.target.value)} />
                 </div>
               </div>
               <div className="modal-footer">
-                <button type="submit" className="btn btn-success">تعديل</button>
-                <button type="button" className="btn btn-danger" data-dismiss="modal">إغلاق</button>
+                <button type="submit" className="btn btn-success col-6 h-100 px-2 py-3 m-0">تعديل</button>
+                <button type="button" className="btn btn-danger col-6 h-100 px-2 py-3 m-0" data-dismiss="modal">إغلاق</button>
               </div>
             </form>
           </div>
@@ -382,8 +426,8 @@ const Store = () => {
               <p>هل أنت متأكد أنك تريد حذف هذا التصنيف؟</p>
             </div>
             <div className="modal-footer">
-              <button type="button" className="btn btn-danger" onClick={deleteStore}>حذف</button>
-              <button type="button" className="btn btn-secondary" data-dismiss="modal">إغلاق</button>
+              <button type="button" className="btn btn-danger col-6 h-100 px-2 py-3 m-0" onClick={deleteStore}>حذف</button>
+              <button type="button" className="btn btn-secondary col-6 h-100 px-2 py-3 m-0" data-dismiss="modal">إغلاق</button>
             </div>
           </div>
         </div>

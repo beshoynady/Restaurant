@@ -229,8 +229,11 @@ const CategoryStock = () => {
               <tr>
                 <th>م</th>
                 <th>الاسم</th>
+                <th>الاختصار</th>
                 <th>عدد المنتجات</th>
+                <th>اضيف بواسطه</th>
                 <th>اضيف في</th>
+                <th>ملاحظات</th>
                 <th>اجراءات</th>
               </tr>
             </thead>
@@ -241,8 +244,11 @@ const CategoryStock = () => {
                     <tr key={i}>
                       <td>{i + 1}</td>
                       <td>{categoryStock.name}</td>
-                      <td>{categoryStock.items.length}</td>
+                      <td>{categoryStock.categoryCode}</td>
+                      <td>{allStockItems.filter(item => item.categoryId._id === categoryStock._id)?.length}</td>
+                      <td>{categoryStock.crearedBy?.fullname}</td>
                       <td>{formatDate(categoryStock.createdAt)}</td>
+                      <td>{categoryStock.notes}</td>
                       <td>
                         {stockCategoriesPermission && (stockCategoriesPermission.update || stockCategoriesPermission.delete) &&
                           <div className="d-flex flex-wrap align-items-center justify-content-around">
@@ -299,21 +305,21 @@ const CategoryStock = () => {
             </div>
             <div className="modal-body">
               <form onSubmit={createCategoryStock}>
-                <div className="form-group">
-                  <label>اسم التصنيف</label>
-                  <input type="text" className="form-control" value={categoryName} onChange={(e) => setCategoryName(e.target.value)} required />
+                <div className="form-group col-12 col-md-6">
+                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0" >اسم التصنيف</label>
+                  <input type="text" className="form-control border-primary m-0 p-2 h-auto" value={categoryName} onChange={(e) => setCategoryName(e.target.value)} required />
                 </div>
-                <div className="form-group">
-                  <label>رمز التصنيف</label>
-                  <input type="text" className="form-control" value={categoryCode} onChange={(e) => setCategoryCode(e.target.value)} required />
+                <div className="form-group col-12 col-md-6">
+                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0" >رمز التصنيف</label>
+                  <input type="text" className="form-control border-primary m-0 p-2 h-auto" value={categoryCode} onChange={(e) => setCategoryCode(e.target.value)} required />
                 </div>
-                <div className="form-group">
-                  <label>ملاحظات</label>
-                  <textarea className="form-control" value={notes} onChange={(e) => setNotes(e.target.value)}></textarea>
+                <div className="form-group col-12 col-md-6">
+                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0" >ملاحظات</label>
+                  <textarea className="form-control border-primary m-0 p-2 h-auto" value={notes} onChange={(e) => setNotes(e.target.value)}></textarea>
                 </div>
-                <div className="form-group text-right">
-                  <button type="submit" className="btn btn-success">حفظ</button>
-                  <button type="button" className="btn btn-danger" data-dismiss="modal">إلغاء</button>
+                <div className="form-group col-12 col-md-6 text-right">
+                <button type="submit" className="btn btn-success col-6 h-100 px-2 py-3 m-0">حفظ</button>
+                <button type="button" className="btn btn-danger col-6 h-100 px-2 py-3 m-0" data-dismiss="modal">إغلاق</button>
                 </div>
               </form>
             </div>
@@ -330,21 +336,21 @@ const CategoryStock = () => {
             </div>
             <div className="modal-body">
               <form onSubmit={editCategoryStock}>
-                <div className="form-group">
-                  <label>اسم التصنيف</label>
-                  <input type="text" className="form-control" value={categoryName} onChange={(e) => setCategoryName(e.target.value)} required />
+                <div className="form-group col-12 col-md-6">
+                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0" >اسم التصنيف</label>
+                  <input type="text" className="form-control border-primary m-0 p-2 h-auto" value={categoryName} onChange={(e) => setCategoryName(e.target.value)} required />
                 </div>
-                <div className="form-group">
-                  <label>رمز التصنيف</label>
-                  <input type="text" className="form-control" value={categoryCode} onChange={(e) => setCategoryCode(e.target.value)} required />
+                <div className="form-group col-12 col-md-6">
+                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0" >رمز التصنيف</label>
+                  <input type="text" className="form-control border-primary m-0 p-2 h-auto" value={categoryCode} onChange={(e) => setCategoryCode(e.target.value)} required />
                 </div>
-                <div className="form-group">
-                  <label>ملاحظات</label>
-                  <textarea className="form-control" value={notes} onChange={(e) => setNotes(e.target.value)}></textarea>
+                <div className="form-group col-12 col-md-6">
+                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0" >ملاحظات</label>
+                  <textarea className="form-control border-primary m-0 p-2 h-auto" value={notes} onChange={(e) => setNotes(e.target.value)}></textarea>
                 </div>
-                <div className="form-group text-right">
-                  <button type="submit" className="btn btn-success">تعديل</button>
-                  <button type="button" className="btn btn-danger" data-dismiss="modal">إلغاء</button>
+                <div className="form-group col-12 col-md-6 text-right">
+                  <button type="submit" className="btn btn-success col-6 h-100 px-2 py-3 m-0">تعديل</button>
+                  <button type="button" className="btn btn-danger col-6 h-100 px-2 py-3 m-0" data-dismiss="modal">إلغاء</button>
                 </div>
               </form>
             </div>
@@ -363,8 +369,8 @@ const CategoryStock = () => {
               <p>هل أنت متأكد أنك تريد حذف هذا التصنيف؟</p>
             </div>
             <div className="modal-footer">
-              <button type="button" className="btn btn-danger" onClick={deleteCategoryStock} data-dismiss="modal">حذف</button>
-              <button type="button" className="btn btn-secondary" data-dismiss="modal">إلغاء</button>
+              <button type="button" className="btn btn-danger col-6 h-100 px-2 py-3 m-0" onClick={deleteCategoryStock} data-dismiss="modal">حذف</button>
+              <button type="button" className="btn btn-secondary col-6 h-100 px-2 py-3 m-0" data-dismiss="modal">إلغاء</button>
             </div>
           </div>
         </div>
