@@ -1,5 +1,4 @@
 const CategoryStockmodel = require("../models/CategoryStock.model");
-const { ObjectId } = require("mongoose").Types; 
 
 const CreateCategoryStock = async (req, res, next) => {
   try {
@@ -20,7 +19,7 @@ const CreateCategoryStock = async (req, res, next) => {
     const newCategoryStock = await CategoryStockmodel.create({
       categoryName,
       categoryCode,
-      createdBy: ObjectId(createdBy),
+      createdBy,
       notes,
     });
 

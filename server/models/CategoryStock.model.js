@@ -1,4 +1,6 @@
 const mongoose= require('mongoose');
+const { ObjectId } = mongoose.Schema;
+
 
 const categoryStockSchema = new mongoose.Schema({
     categoryName :{
