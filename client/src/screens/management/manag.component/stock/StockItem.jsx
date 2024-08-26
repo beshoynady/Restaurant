@@ -42,7 +42,7 @@ const StockItem = () => {
   const [itemName, setItemName] = useState(""); // For item name
   const [categoryId, setCategoryId] = useState(""); // For category ID
   const [storeId, setStoreId] = useState(""); // For store ID (if necessary)
-  const [largeUnit, seLLargeUnit] = useState(""); // For large unit
+  const [largeUnit, setLargeUnit] = useState(""); // For large unit
   const [parts, setParts] = useState(""); // For parts
   const [smallUnit, setSmallUnit] = useState(""); // For small unit
   const [minThreshold, setMinThreshold] = useState(""); // For minimum threshold
@@ -67,8 +67,13 @@ const StockItem = () => {
     }
     setisLoading(true);
     try {
+      const storeCode = allStores.find(store=>store._id === storeId)?.storeCode
+      const categoryCode = allStores.find(category=>category._id === categoryId)?.categoryCode
+      const filterStockItemByStore = AllStockItems.filter(item=>item.storeId === storeId).reverse()
+      const itemOrder = filterStockItemByStore.length + 1
+
       function generateItemCode(storeCode, categoryCode, itemOrder) {
-        return `${storeCode}-${categoryCode}-${itemOrder.padStart(3, "0")}`;
+        return `${storeCode}-${categoryCode}-${itemOrder.padStart(4, "0")}`;
       }
 
       const itemCode = generateItemCode(storeCode, categoryCode, itemOrder);
@@ -97,22 +102,7 @@ const StockItem = () => {
       }
 
       if (response) {
-        const cost = Number(price) / Number(currentBalance);
-        const newItem = response.data;
-        const stockResponse = await axios.post(
-          `${apiUrl}/api/stockmanag`,
-          {
-            itemId: newItem._id,
-            movement: "OpeningBalance",
-            quantity: currentBalance,
-            cost,
-            unit: largeUnit,
-            newBalance: currentBalance,
-            oldBalance: 0,
-            price,
-          },
-          config
-        );
+       
         getStockItems();
       }
 
@@ -241,31 +231,7 @@ const StockItem = () => {
     }
   };
 
-  const [allrecipes, setallrecipes] = useState([]);
-
-  const getallrecipes = async () => {
-    if (!token) {
-      // Handle case where token is not available
-      toast.error("رجاء تسجيل الدخول مره اخري");
-      return;
-    }
-    setisLoading(true);
-    try {
-      const response = await axios.get(`${apiUrl}/api/recipe`, config);
-      console.log(response);
-      const allRecipe = await response.data;
-      setallrecipes(allRecipe);
-      console.log({ allRecipe });
-
-      setisLoading(false);
-    } catch (error) {
-      console.log(error);
-    }
-    setisLoading(false);
-  };
-
   const [AllCategoryStock, setAllCategoryStock] = useState([]);
-
   // Function to retrieve all category stock
   const getAllCategoryStock = async () => {
     if (!token) {
@@ -306,20 +272,19 @@ const StockItem = () => {
     }
   };
 
+  const [stockitem, setstockitem] = useState({})
   const handelEditStockItemModal = (item) => {
-    getallrecipes();
-    setStockItemid(item._id);
-    setcategoryId(item.categoryId._id);
-    setcategoryName(item.categoryId.name);
+    setstockitem(JSON.parse(item))
+    setStockItemId(item._id);
+    setCategoryId(item.categoryId?._id);
     setItemName(item.itemName);
-    setcurrentBalance(item.currentBalance);
-    setlarLeUnit(item.largeUnit);
-    setsmallUnit(item.smallUnit);
-    setprice(item.price);
+    setMinThreshold(item.minThreshold);
+    setLargeUnit(item.largeUnit);
+    setSmallUnit(item.smallUnit);
     setParts(item.parts);
-    setoldCostOfPart(item.costOfPart);
-    setcostOfPart(item.costOfPart);
-    setminThreshold(item.minThreshold);
+    setCostMethod(item.costMethod);
+    setNotes(item.notes);
+    setStatus(item.status);
   };
 
   const searchByitem = (name) => {
@@ -502,7 +467,7 @@ const StockItem = () => {
                               className="edit"
                               data-toggle="modal"
                               onClick={() => {
-                                handelEditStockItemModal(item);
+                                handelEditStockItemModal(JSON.stringify(item));
                               }}
                             >
                               <i
@@ -705,7 +670,7 @@ const StockItem = () => {
                     className="form-control border-primary m-0 p-2 h-auto"
                     required
                     onChange={(e) => {
-                      setminThreshold(e.target.value);
+                      setMinThreshold(e.target.value);
                     }}
                   />
                 </div>
@@ -904,7 +869,7 @@ const StockItem = () => {
                     className="form-control border-primary m-0 p-2 h-auto"
                     value={minThreshold}
                     onChange={(e) => {
-                      setminThreshold(e.target.value);
+                      setMinThreshold(e.target.value);
                     }}
                   />
                 </div>
