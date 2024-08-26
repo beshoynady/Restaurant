@@ -136,7 +136,7 @@ const Store = () => {
         return;
       }
 
-      if (!storeName.trim() || !storeCode.trim() || !description.trim() || !address.trim() || !storekeeper.trim() || !createdBy.trim()) {
+      if (!storeName.trim() || !storeCode.trim() || !description.trim() || !address.trim() || !storekeeper.trim()) {
         toast.error("جميع الحقول مطلوبة");
         return;
       }
@@ -267,6 +267,7 @@ const Store = () => {
                       <td>{store.address}</td>
                       <td>{store.description}</td>
                       <td>{store.storeCode}</td>
+                      <td>{store.createdBy?.fullname}</td>
                       <td>{formatDateTime(store.createdAt)}</td>
                       <td>
                         {storePermissions?.update &&
@@ -277,7 +278,6 @@ const Store = () => {
                             setDescription(store.description);
                             setAddress(store.address);
                             setStorekeeper(store.storekeeper);
-                            setCreatedBy(store.createdBy);
                           }}>
                             <i className="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i>
                           </a>
