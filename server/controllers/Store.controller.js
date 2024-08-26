@@ -9,8 +9,8 @@ const createStore = async (req, res, next) => {
       description,
       address,
       storekeeper,
-    } = req.body;
-    const createdBy = req.employee.is
+    } = await req.body;
+    const createdBy = await req.employee.id
     // Check if a store with the same name already exists
     const existingStore = await StoreModel.findOne({ storeName });
     if (existingStore) {
