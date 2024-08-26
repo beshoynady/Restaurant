@@ -258,7 +258,7 @@ const Store = () => {
                   إدارة <b>المخازن</b>
                 </h2>
               </div>
-              {storePermissions?.create && (
+              {storePermissions&&storePermissions?.create && (
                 <div className="col-12 col-md-6 p-0 m-0 d-flex flex-wrap align-items-center justify-content-end print-hide">
                   <a
                     href="#addstoreModal"
