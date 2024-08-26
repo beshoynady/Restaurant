@@ -258,7 +258,7 @@ const Store = () => {
                   إدارة <b>المخازن</b>
                 </h2>
               </div>
-              {storePermissions&&storePermissions?.create && (
+              {storePermissions && storePermissions?.create && (
                 <div className="col-12 col-md-6 p-0 m-0 d-flex flex-wrap align-items-center justify-content-end print-hide">
                   <a
                     href="#addstoreModal"
@@ -462,7 +462,11 @@ const Store = () => {
           <div className="modal-content shadow-lg border-0 rounded">
             <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
               <h4 className="modal-title">إضافة مخزن</h4>
-              <button type="button" className="close m-0 p-1" data-dismiss="modal">
+              <button
+                type="button"
+                className="close m-0 p-1"
+                data-dismiss="modal"
+              >
                 &times;
               </button>
             </div>
@@ -580,7 +584,11 @@ const Store = () => {
           <div className="modal-content shadow-lg border-0 rounded">
             <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
               <h4 className="modal-title">تعديل المخزن</h4>
-              <button type="button" className="close m-0 p-1" data-dismiss="modal">
+              <button
+                type="button"
+                className="close m-0 p-1"
+                data-dismiss="modal"
+              >
                 &times;
               </button>
             </div>

@@ -212,17 +212,18 @@ const CategoryStock = () => {
                   إدارة <b>اقسام المخزن</b>
                 </h2>
               </div>
-              {stockCategoriesPermission&&stockCategoriesPermission.create && (
-                <div className="col-12 col-md-6 p-0 m-0 d-flex flex-wrap align-items-center justify-content-end print-hide">
-                  <a
-                    href="#addCategoryStockModal"
-                    className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-success"
-                    data-toggle="modal"
-                  >
-                    <span>اضافه تصنيف</span>
-                  </a>
-                </div>
-              )}
+              {stockCategoriesPermission &&
+                stockCategoriesPermission.create && (
+                  <div className="col-12 col-md-6 p-0 m-0 d-flex flex-wrap align-items-center justify-content-end print-hide">
+                    <a
+                      href="#addCategoryStockModal"
+                      className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-success"
+                      data-toggle="modal"
+                    >
+                      <span>اضافه تصنيف</span>
+                    </a>
+                  </div>
+                )}
             </div>
           </div>
           <div className="table-filter print-hide">
@@ -284,7 +285,7 @@ const CategoryStock = () => {
                     return (
                       <tr key={i}>
                         <td>{i + 1}</td>
-                        <td>{categoryStock.name}</td>
+                        <td>{categoryStock.categoryName}</td>
                         <td>{categoryStock.categoryCode}</td>
                         <td>
                           {
@@ -294,7 +295,7 @@ const CategoryStock = () => {
                             )?.length
                           }
                         </td>
-                        <td>{categoryStock.crearedBy?.fullname}</td>
+                        <td>{categoryStock.createdBy?.fullname}</td>
                         <td>{formatDate(categoryStock.createdAt)}</td>
                         <td>{categoryStock.notes}</td>
                         <td>
@@ -469,21 +470,21 @@ const CategoryStock = () => {
                     onChange={(e) => setNotes(e.target.value)}
                   ></textarea>
                 </div>
-                <div className="modal-footer flex-nowrap d-flex flex-row align-items-center justify-content-between">
-                  <button
-                    type="submit"
-                    className="btn btn-success col-6 h-100 px-2 py-3 m-0"
-                  >
-                    حفظ
-                  </button>
-                  <button
-                    type="button"
-                    className="btn btn-danger col-6 h-100 px-2 py-3 m-0"
-                    data-dismiss="modal"
-                  >
-                    إغلاق
-                  </button>
-                </div>
+              </div>
+              <div className="modal-footer flex-nowrap d-flex flex-row align-items-center justify-content-between">
+                <button
+                  type="submit"
+                  className="btn btn-success col-6 h-100 px-2 py-3 m-0"
+                >
+                  حفظ
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-danger col-6 h-100 px-2 py-3 m-0"
+                  data-dismiss="modal"
+                >
+                  إغلاق
+                </button>
               </div>
             </form>
           </div>
@@ -539,21 +540,21 @@ const CategoryStock = () => {
                     onChange={(e) => setNotes(e.target.value)}
                   ></textarea>
                 </div>
-                <div className="modal-footer flex-nowrap d-flex flex-row align-items-center justify-content-between">
-                  <button
-                    type="submit"
-                    className="btn btn-success col-6 h-100 px-2 py-3 m-0"
-                  >
-                    تعديل
-                  </button>
-                  <button
-                    type="button"
-                    className="btn btn-danger col-6 h-100 px-2 py-3 m-0"
-                    data-dismiss="modal"
-                  >
-                    إلغاء
-                  </button>
-                </div>
+              </div>
+              <div className="modal-footer flex-nowrap d-flex flex-row align-items-center justify-content-between">
+                <button
+                  type="submit"
+                  className="btn btn-success col-6 h-100 px-2 py-3 m-0"
+                >
+                  تعديل
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-danger col-6 h-100 px-2 py-3 m-0"
+                  data-dismiss="modal"
+                >
+                  إلغاء
+                </button>
               </div>
             </form>
           </div>
