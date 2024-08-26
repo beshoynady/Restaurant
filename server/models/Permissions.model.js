@@ -14,7 +14,7 @@ const permissionsSchema = new Schema(
         resource: {
           type: String,
           enum:['Employees', 'Attendance', 'Employee Transactions', 'Payroll', 'Cash Register', 'Cash Movement',
-             'stock Item', 'stock Categories', 'stock Management', 'Orders', 'Tables', 'Table Reservations',
+             'stock Item', 'stock Categories', 'stock Management', 'store', 'Orders', 'Tables', 'Table Reservations',
               'Restaurant Settings','Permissions', 'Delivery Zones', 'Shifts', 'Expenses', 'Daily Expenses',
                'Menu Categories','Products', 'Recipes', 'Kitchen Usage', 'Purchases', 'Purchase Returns',
                 'Supplier Data', 'Supplier Transactions', 'Users', 'Messages'

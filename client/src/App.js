@@ -84,6 +84,9 @@ const SupplierTransaction = React.lazy(() =>
 const CategoryStock = React.lazy(() =>
   import("./screens/management/manag.component/stock/CategoryStock")
 );
+const Store = React.lazy(() =>
+  import("./screens/management/manag.component/stock/Store.jsx")
+);
 const StockItem = React.lazy(() =>
   import("./screens/management/manag.component/stock/StockItem")
 );
@@ -2565,6 +2568,14 @@ function App() {
               element={
                 <Suspense fallback={<LoadingPage />}>
                   <CategoryStock />
+                </Suspense>
+              }
+            />
+            <Route
+              path="store"
+              element={
+                <Suspense fallback={<LoadingPage />}>
+                  <Store />
                 </Suspense>
               }
             />

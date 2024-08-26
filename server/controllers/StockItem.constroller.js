@@ -4,19 +4,23 @@ const StockItemsModel = require('../models/StockItems.model');
 const createStockItem = async (req, res) => {
   try {
     const {
-      itemName, categoryId, largeUnit, smallUnit, currentBalance, price, totalCost, parts,
-      costOfPart, minThreshold, createdBy, createdAt,
+      code, itemName, categoryId, storeId, largeUnit, parts, smallUnit,
+      minThreshold, costMethod, suppliers, status, createdBy, notes
     } = req.body;
-    const existingItem = await StockItemsModel.findOne({ itemName });
+
+    // Check for unique code
+    const existingItem = await StockItemsModel.findOne({ code });
     if (existingItem) {
-      return res.status(400).json({ error: "Item name already exists" });
+      return res.status(400).json({ error: "Item code already exists" });
     }
+
+    // Create new stock item
     const newStockItem = await StockItemsModel.create({
-      itemName, categoryId, largeUnit, smallUnit, currentBalance, price, totalCost, parts,
-       costOfPart, minThreshold, createdBy, createdAt,
+      code, itemName, categoryId, storeId, largeUnit, parts, smallUnit,
+      minThreshold, costMethod, suppliers, status, createdBy, notes
     });
 
-    res.status(200).json(newStockItem);
+    res.status(201).json(newStockItem);
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
@@ -25,7 +29,11 @@ const createStockItem = async (req, res) => {
 // Get all stock items
 const getAllStockItems = async (req, res) => {
   try {
-    const allItems = await StockItemsModel.find({}).populate('createdBy').populate('categoryId');
+    const allItems = await StockItemsModel.find({})
+      .populate('categoryId')
+      .populate('storeId')
+      .populate('createdBy')
+      .populate('suppliers');
     res.status(200).json(allItems);
   } catch (err) {
     res.status(400).json({ error: err.message });
@@ -36,7 +44,11 @@ const getAllStockItems = async (req, res) => {
 const getOneItem = async (req, res) => {
   try {
     const itemId = req.params.itemId;
-    const oneItem = await StockItemsModel.findById(itemId);
+    const oneItem = await StockItemsModel.findById(itemId)
+      .populate('categoryId')
+      .populate('storeId')
+      .populate('createdBy')
+      .populate('suppliers');
     if (!oneItem) {
       return res.status(404).json({ error: 'Item not found' });
     }
@@ -53,7 +65,7 @@ const updateStockItem = async (req, res) => {
     const updatedData = req.body;
 
     const updatedStockItem = await StockItemsModel.findByIdAndUpdate(
-      { _id: itemId },
+      itemId,
       updatedData,
       { new: true }
     );
@@ -68,25 +80,7 @@ const updateStockItem = async (req, res) => {
   }
 };
 
-// Update stock movements by ID
-const movements = async (req, res) => {
-  try {
-    const itemId = req.params.itemId;
-    const { currentBalance, price, costOfPart } = req.body;
 
-    const movedStockItem = await StockItemsModel.findByIdAndUpdate(
-      { _id: itemId },
-      { currentBalance, price, costOfPart },
-      { new: true }
-    );
-    if (!movedStockItem) {
-      return res.status(404).json({ error: 'Item not found' });
-    }
-    res.status(200).json(movedStockItem);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
-};
 
 // Delete a stock item by ID
 const deleteItem = async (req, res) => {
@@ -109,6 +103,5 @@ module.exports = {
   getAllStockItems,
   getOneItem,
   updateStockItem,
-  movements,
   deleteItem,
 };

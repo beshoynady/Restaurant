@@ -1,9 +1,8 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { detacontext } from '../../../../App';
 import { toast } from 'react-toastify';
-import '../orders/Orders.css'
-
+import '../orders/Orders.css';
 
 const CategoryStock = () => {
   const apiUrl = process.env.REACT_APP_API_URL;
@@ -14,19 +13,34 @@ const CategoryStock = () => {
     },
   };
 
-  const { restaurantData, permissionsList, setStartDate, setEndDate, filterByDateRange, filterByTime,
-     employeeLoginInfo,  formatDate, formatDateTime, setisLoading, EditPagination, startpagination, 
-     endpagination, setstartpagination, setendpagination } = useContext(detacontext)
+  const { 
+    restaurantData, 
+    permissionsList, 
+    setStartDate, 
+    setEndDate, 
+    filterByDateRange, 
+    filterByTime,
+    employeeLoginInfo,  
+    formatDate, 
+    formatDateTime, 
+    setisLoading, 
+    EditPagination, 
+    startpagination, 
+    endpagination, 
+    setstartpagination, 
+    setendpagination 
+  } = useContext(detacontext);
 
-  const stockCategoriesPermission = permissionsList && permissionsList.filter(perission => perission.resource === 'stock Categories')[0]
+  const stockCategoriesPermission = permissionsList && permissionsList.filter(permission => permission.resource === 'stock Categories')[0];
 
+  const [categoryName, setCategoryName] = useState('');
+  const [categoryCode, setCategoryCode] = useState('');
+  const [notes, setNotes] = useState('');
+  const [categoryStockId, setCategoryStockId] = useState('');
+  const [allCategoryStock, setAllCategoryStock] = useState([]);
+  const [allStockItems, setAllStockItems] = useState([]);
 
-  const [categoryStockname, setcategoryStockname] = useState('')
-  const [categoryStockId, setcategoryStockId] = useState('')
-
-  const [allCategoryStock, setallCategoryStock] = useState([])
-
-  const getallCategoryStock = async () => {
+  const getAllCategoryStock = async () => {
     if (!token) {
       toast.error('رجاء تسجيل الدخول مره اخري');
       return;
@@ -38,40 +52,33 @@ const CategoryStock = () => {
         return;
       }
       const response = await axios.get(apiUrl + "/api/categoryStock/", config);
-      setallCategoryStock(response.data.reverse());
+      setAllCategoryStock(response.data.reverse());
     } catch (error) {
       console.error('Error fetching category stock:', error);
-      toast.error('حدث خطأ اثناء جلب بيانات التصنيفات ! اعد تحميل الصفحة')
+      toast.error('حدث خطأ اثناء جلب بيانات التصنيفات ! اعد تحميل الصفحة');
     }
-  }
+  };
 
-
-  const [AllStockItems, setAllStockItems] = useState([]);
-
-  const getallStockItem = async () => {
+  const getAllStockItem = async () => {
     try {
       if (!token) {
-        // Handle case where token is not available
         toast.error('رجاء تسجيل الدخول مره اخري');
-        return
+        return;
       }
       const response = await axios.get(apiUrl + '/api/stockitem/', config);
       if (response) {
-        const StockItems = await response.data.reverse();
-        setAllStockItems(StockItems)
+        const stockItems = response.data.reverse();
+        setAllStockItems(stockItems);
       } else {
-        toast.warn('حدث خطا اثناء جلب بيانات اصناف المخزن ! اعد تحميل الصفحة')
+        toast.warn('حدث خطا اثناء جلب بيانات اصناف المخزن ! اعد تحميل الصفحة');
       }
-
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-
-  }
-
+  };
 
   const createCategoryStock = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     if (!token) {
       toast.error('رجاء تسجيل الدخول مره اخري');
       return;
@@ -82,40 +89,34 @@ const CategoryStock = () => {
         toast.warn('ليس لك صلاحية لاضافه تصنيفات المخزن');
         return;
       }
-      // Validate category stock name
-      if (!categoryStockname.trim()) {
-        toast.error("اسم التصنيف مطلوب");
+      // Validate fields
+      if (!categoryName.trim() || !categoryCode.trim()) {
+        toast.error("اسم التصنيف ورمز التصنيف مطلوبان");
+        return;
       }
 
-      const response = await axios.post(apiUrl + "/api/categoryStock/", { name: categoryStockname }, config);
-      console.log({ error: response.data.error })
-
+      const response = await axios.post(apiUrl + "/api/categoryStock/", 
+        { name: categoryName, code: categoryCode, notes }, config);
 
       if (response.status === 201) {
-        // Display success toast message
         toast.success("تم إنشاء التصنيف بنجاح");
       } else {
         console.error({ error: response.data.message });
         toast.error("حدث خطأ أثناء إنشاء التصنيف. يرجى المحاولة مرة أخرى.");
       }
-      getallCategoryStock();
+      getAllCategoryStock();
     } catch (error) {
-      // Log the error
       console.error("Error creating category stock:", error);
-      if (error.response.data.error === 'Category name already exists') {
-        toast.error('هذا التصنيف موجود بالفعل ')
-        return
+      if (error.response && error.response.data.error === 'Category name already exists') {
+        toast.error('هذا التصنيف موجود بالفعل');
+      } else {
+        toast.error("حدث خطأ غير متوقع. يرجى المحاولة مرة أخرى.");
       }
-      // Display error toast message
-      toast.error("حدث خطأ غير متوقع. يرجى المحاولة مرة أخرى.");
     }
-  }
-
-
+  };
 
   const editCategoryStock = async (e) => {
     e.preventDefault();
-    // console.log(categoryStockId); // Log the category stock ID
     if (!token) {
       toast.error('رجاء تسجيل الدخول مره اخري');
       return;
@@ -126,25 +127,21 @@ const CategoryStock = () => {
         toast.warn('ليس لك صلاحية لتعديل تصنيفات المخزن');
         return;
       }
-      // Attempt to send a PUT request to update the category stock
-      const edit = await axios.put(apiUrl + "/api/categoryStock/" + categoryStockId, { name: categoryStockname }, config);
+      const edit = await axios.put(apiUrl + "/api/categoryStock/" + categoryStockId, 
+        { name: categoryName, code: categoryCode, notes }, config);
 
-      if (edit.error === 'Category name already exists') {
-        toast.error('هذا التصنيف موجود بالفعل ')
-      }
       if (edit.status === 200) {
         toast.success("تم تعديل التصنيف بنجاح");
+      } else if (edit.data.error === 'Category name already exists') {
+        toast.error('هذا التصنيف موجود بالفعل');
       }
-      getallCategoryStock(); // Fetch updated category stock data
-      getallStockItem(); // Fetch updated stock item data
-      // Display success toast message
+      getAllCategoryStock(); // Fetch updated category stock data
+      getAllStockItem(); // Fetch updated stock item data
     } catch (error) {
-      console.log(error); // Log any errors that occur
-      // Display error toast message
+      console.log(error);
       toast.error("حدث خطأ أثناء تعديل التصنيف. يرجى المحاولة مرة أخرى.");
     }
-  }
-
+  };
 
   const deleteCategoryStock = async (e) => {
     e.preventDefault();
@@ -159,42 +156,35 @@ const CategoryStock = () => {
         toast.warn('ليس لك صلاحية لحذف تصنيفات المخزن');
         return;
       }
-      // Attempt to send a DELETE request to delete the category stock
       const deleted = await axios.delete(apiUrl + "/api/categoryStock/" + categoryStockId, config);
-      // console.log(categoryStockId); // Log the category stock ID
-      // console.log(deleted); // Log the response from the server
 
       if (deleted) {
-        getallCategoryStock(); // Fetch updated category stock data
-        getallStockItem(); // Fetch updated stock item data
-        // Display success toast message
+        getAllCategoryStock(); // Fetch updated category stock data
+        getAllStockItem(); // Fetch updated stock item data
         toast.success("تم حذف التصنيف بنجاح");
       }
     } catch (error) {
-      console.log(error); // Log any errors that occur
-      // Display error toast message
+      console.log(error);
       toast.error("حدث خطأ أثناء حذف التصنيف. يرجى المحاولة مرة أخرى.");
     }
-  }
+  };
 
-
-  const searchByCategoryStock = (CategoryStock) => {
-    if (!CategoryStock) {
-      getallCategoryStock()
-      return
+  const searchByCategoryStock = (categoryStock) => {
+    if (!categoryStock) {
+      getAllCategoryStock();
+      return;
     }
-    const categories = allCategoryStock.filter((Category) => Category.name.startsWith(CategoryStock) === true)
-    setAllStockItems(categories)
-  }
-
+    const categories = allCategoryStock.filter((category) => category.name.startsWith(categoryStock) === true);
+    setAllStockItems(categories);
+  };
 
   useEffect(() => {
-    getallStockItem()
-    getallCategoryStock()
-  }, [])
+    getAllStockItem();
+    getAllCategoryStock();
+  }, []);
 
   return (
-    <div className="w-100 px-3 d-flex align-itmes-center justify-content-start">
+    <div className="w-100 px-3 d-flex align-items-center justify-content-start">
       <div className="table-responsive">
         <div className="table-wrapper p-3 mw-100">
           <div className="table-title">
@@ -202,11 +192,12 @@ const CategoryStock = () => {
               <div className="text-right">
                 <h2>إدارة <b>اقسام المخزن</b></h2>
               </div>
-              {stockCategoriesPermission.create&&
-              <div className="col-12 col-md-6 p-0 m-0 d-flex flex-wrap aliegn-items-center justify-content-end print-hide">
-                <a href="#addCategoryStockModal" className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-success" data-toggle="modal"> 
-                  <span>اضافه تصنيف</span></a>
-              </div>
+              {stockCategoriesPermission.create &&
+                <div className="col-12 col-md-6 p-0 m-0 d-flex flex-wrap align-items-center justify-content-end print-hide">
+                  <a href="#addCategoryStockModal" className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-success" data-toggle="modal">
+                    <span>اضافه تصنيف</span>
+                  </a>
+                </div>
               }
             </div>
           </div>
@@ -214,7 +205,7 @@ const CategoryStock = () => {
             <div className="col-12 text-dark d-flex flex-wrap align-items-center justify-content-start p-0 m-0">
               <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">عرض</label>
-                <select className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => { setstartpagination(0); setendpagination(e.target.value) }}>
+                <select className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => { setstartpagination(0); setendpagination(e.target.value); }}>
                   {
                     (() => {
                       const options = [];
@@ -225,10 +216,9 @@ const CategoryStock = () => {
                     })()
                   }
                 </select>
-                
               </div>
               <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
-                <label className="form-label text-wrap text-right fw-bolder p-0 m-0">اسم الصنف</label>
+                <label className="form-label text-wrap text-right fw-bolder p-0 m-0">اسم التصنيف</label>
                 <input type="text" className="form-control border-primary m-0 p-2 h-auto" onChange={(e) => searchByCategoryStock(e.target.value)} />
               </div>
             </div>
@@ -237,130 +227,150 @@ const CategoryStock = () => {
           <table className="table table-striped table-hover">
             <thead>
               <tr>
-                {/* <th>
-                          <span className="custom-checkbox">
-                            <input type="checkbox" className="form-check-input form-check-input-lg" id="selectAll" />
-                            <label htmlFor="selectAll"></label>
-                          </span>
-                        </th> */}
                 <th>م</th>
                 <th>الاسم</th>
                 <th>عدد المنتجات</th>
                 <th>اضيف في</th>
                 <th>اجراءات</th>
               </tr>
-
             </thead>
             <tbody>
-              {allCategoryStock&&allCategoryStock.map((categoryStock, i) => {
-                if (i >= startpagination & i < endpagination) {
+              {allCategoryStock && allCategoryStock.map((categoryStock, i) => {
+                if (i >= startpagination && i < endpagination) {
                   return (
                     <tr key={i}>
                       <td>{i + 1}</td>
                       <td>{categoryStock.name}</td>
-                      <td>{AllStockItems ? AllStockItems.filter((Item) => Item.categoryId._id === categoryStock._id).length : 0}</td>
-                      <td>{formatDateTime(categoryStock.createdAt)}</td>
+                      <td>{categoryStock.items.length}</td>
+                      <td>{formatDate(categoryStock.createdAt)}</td>
                       <td>
-                        {stockCategoriesPermission.update&&
-                        <a href="#editCategoryStockModal" className="edit" data-toggle="modal" onClick={() => setcategoryStockId(categoryStock._id)}><i className="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+                        {stockCategoriesPermission && (stockCategoriesPermission.update || stockCategoriesPermission.delete) &&
+                          <div className="d-flex flex-wrap align-items-center justify-content-around">
+                            {stockCategoriesPermission.update &&
+                              <a href="#editCategoryStockModal" onClick={() => {
+                                setCategoryName(categoryStock.name);
+                                setCategoryCode(categoryStock.code);
+                                setNotes(categoryStock.notes || '');
+                                setCategoryStockId(categoryStock._id);
+                              }} className="edit" data-toggle="modal">
+                                <i className="material-icons" data-toggle="tooltip" title="Edit"></i>
+                              </a>
+                            }
+                            {stockCategoriesPermission.delete &&
+                              <a href="#deleteCategoryStockModal" onClick={() => setCategoryStockId(categoryStock._id)} className="delete" data-toggle="modal">
+                                <i className="material-icons" data-toggle="tooltip" title="Delete"></i>
+                              </a>
+                            }
+                          </div>
                         }
-                        {stockCategoriesPermission.delete&&
-                        <a href="#deleteCategoryStockModal" className="delete" data-toggle="modal" onClick={() => setcategoryStockId(categoryStock._id)}><i className="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
-                        }
-                        </td>
+                      </td>
                     </tr>
-                  )
+                  );
+                } else {
+                  return null;
                 }
               })}
-
             </tbody>
           </table>
-          <div className="clearfix">
-            <div className="hint-text text-dark">عرض <b>{allCategoryStock.length > endpagination ? endpagination : allCategoryStock.length}</b> من <b>{allCategoryStock.length}</b> عنصر</div>
-            <ul className="pagination">
-              <li onClick={EditPagination} className="page-item disabled"><a href="#">السابق</a></li>
-              <li onClick={EditPagination} className={`page-item ${endpagination === 5 ? 'active' : ''}`}><a href="#" className="page-link">1</a></li>
-              <li onClick={EditPagination} className={`page-item ${endpagination === 10 ? 'active' : ''}`}><a href="#" className="page-link">2</a></li>
-              <li onClick={EditPagination} className={`page-item ${endpagination === 15 ? 'active' : ''}`}><a href="#" className="page-link">3</a></li>
-              <li onClick={EditPagination} className={`page-item ${endpagination === 20 ? 'active' : ''}`}><a href="#" className="page-link">4</a></li>
-              <li onClick={EditPagination} className={`page-item ${endpagination === 25 ? 'active' : ''}`}><a href="#" className="page-link">5</a></li>
-              <li onClick={EditPagination} className={`page-item ${endpagination === 30 ? 'active' : ''}`}><a href="#" className="page-link">التالي</a></li>
-
-            </ul>
+          <div className="d-flex flex-wrap align-items-center justify-content-between print-hide">
+            <div className="text-right">
+              <p className="text-dark">عرض من {startpagination + 1} إلى {endpagination} من {allCategoryStock.length} تصنيف</p>
+            </div>
+            <nav>
+              <ul className="pagination">
+                <li className="page-item">
+                  <button onClick={() => { if (startpagination > 0) { setstartpagination(startpagination - endpagination); setendpagination(startpagination); } }} className="page-link">السابق</button>
+                </li>
+                <li className="page-item">
+                  <button onClick={() => { if (endpagination < allCategoryStock.length) { setstartpagination(startpagination + endpagination); setendpagination(endpagination + endpagination); } }} className="page-link">التالي</button>
+                </li>
+              </ul>
+            </nav>
           </div>
         </div>
       </div>
 
-      <div id="addCategoryStockModal" className="modal fade">
-        <div className="modal-dialog modal-lg">
-          <div className="modal-content shadow-lg border-0 rounded ">
-            <form onSubmit={createCategoryStock}>
-              <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
-                <h4 className="modal-title">اضافه تصنيف</h4>
-                <button type="button" className="close m-0 p-1" data-dismiss="modal" aria-hidden="true">&times;</button>
-              </div>
-              <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
-                <div className="form-group col-12 ">
-                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الاسم</label>
-                  <input type="text" className="form-control border-primary m-0 p-2 h-auto" required onChange={(e) => setcategoryStockname(e.target.value)} />
+      <div id="addCategoryStockModal" className="modal fade" role="dialog">
+        <div className="modal-dialog">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h4 className="modal-title">اضافه تصنيف</h4>
+              <button type="button" className="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div className="modal-body">
+              <form onSubmit={createCategoryStock}>
+                <div className="form-group">
+                  <label>اسم التصنيف</label>
+                  <input type="text" className="form-control" value={categoryName} onChange={(e) => setCategoryName(e.target.value)} required />
                 </div>
-              </div>
-              <div className="modal-footer d-flex flex-nowrap align-items-center justify-content-between m-0 p-1">
-                <input type="submit" className="btn btn-success col-6 h-100 px-2 py-3 m-0" value="اضافه" />
-                <input type="button" className="btn btn-danger col-6 h-100 px-2 py-3 m-0" data-dismiss="modal" value="إغلاق" />
-
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-
-      <div id="editCategoryStockModal" className="modal fade">
-        <div className="modal-dialog modal-lg">
-          <div className="modal-content shadow-lg border-0 rounded ">
-            <form onSubmit={editCategoryStock}>
-              <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
-                <h4 className="modal-title">تعديل التصنيف</h4>
-                <button type="button" className="close m-0 p-1" data-dismiss="modal" aria-hidden="true">&times;</button>
-              </div>
-              <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
-                <div className="form-group col-12">
-                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0">الاسم</label>
-                  <input type="text" className="form-control border-primary m-0 p-2 h-auto" required onChange={(e) => setcategoryStockname(e.target.value)} />
+                <div className="form-group">
+                  <label>رمز التصنيف</label>
+                  <input type="text" className="form-control" value={categoryCode} onChange={(e) => setCategoryCode(e.target.value)} required />
                 </div>
-              </div>
-              <div className="modal-footer d-flex flex-nowrap align-items-center justify-content-between m-0 p-1">
-                <input type="submit" className="btn btn-success col-6 h-100 px-2 py-3 m-0" value="حفظ" />
-                <input type="button" className="btn btn-danger col-6 h-100 px-2 py-3 m-0" data-dismiss="modal" value="إغلاق" />
-              </div>
-            </form>
+                <div className="form-group">
+                  <label>ملاحظات</label>
+                  <textarea className="form-control" value={notes} onChange={(e) => setNotes(e.target.value)}></textarea>
+                </div>
+                <div className="form-group text-right">
+                  <button type="submit" className="btn btn-success">حفظ</button>
+                  <button type="button" className="btn btn-danger" data-dismiss="modal">إلغاء</button>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
       </div>
 
-      <div id="deleteCategoryStockModal" className="modal fade">
-        <div className="modal-dialog modal-lg">
-          <div className="modal-content shadow-lg border-0 rounded ">
-            <form onSubmit={deleteCategoryStock}>
-              <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
-                <h4 className="modal-title">حذف تصنيف</h4>
-                <button type="button" className="close m-0 p-1" data-dismiss="modal" aria-hidden="true">&times;</button>
-              </div>
-              <div className="modal-body text-center">
-          <p className="text-right text-dark fs-3 fw-800 mb-2">هل أنت متأكد من حذف هذا السجل؟</p>
-          <p className="text-warning text-center mt-3"><small>لا يمكن الرجوع في هذا الإجراء.</small></p>
+      <div id="editCategoryStockModal" className="modal fade" role="dialog">
+        <div className="modal-dialog">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h4 className="modal-title">تعديل التصنيف</h4>
+              <button type="button" className="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div className="modal-body">
+              <form onSubmit={editCategoryStock}>
+                <div className="form-group">
+                  <label>اسم التصنيف</label>
+                  <input type="text" className="form-control" value={categoryName} onChange={(e) => setCategoryName(e.target.value)} required />
+                </div>
+                <div className="form-group">
+                  <label>رمز التصنيف</label>
+                  <input type="text" className="form-control" value={categoryCode} onChange={(e) => setCategoryCode(e.target.value)} required />
+                </div>
+                <div className="form-group">
+                  <label>ملاحظات</label>
+                  <textarea className="form-control" value={notes} onChange={(e) => setNotes(e.target.value)}></textarea>
+                </div>
+                <div className="form-group text-right">
+                  <button type="submit" className="btn btn-success">تعديل</button>
+                  <button type="button" className="btn btn-danger" data-dismiss="modal">إلغاء</button>
+                </div>
+              </form>
+            </div>
+          </div>
         </div>
-              <div className="modal-footer d-flex flex-nowrap align-items-center justify-content-between m-0 p-1">
-                <input type="submit" className="btn btn-warning col-6 h-100 px-2 py-3 m-0" value="حذف" />
-                <input type="button" className="btn btn-danger col-6 h-100 px-2 py-3 m-0" data-dismiss="modal" value="إغلاق" />
-              </div>
-            </form>
+      </div>
+
+      <div id="deleteCategoryStockModal" className="modal fade" role="dialog">
+        <div className="modal-dialog">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h4 className="modal-title">حذف التصنيف</h4>
+              <button type="button" className="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div className="modal-body">
+              <p>هل أنت متأكد أنك تريد حذف هذا التصنيف؟</p>
+            </div>
+            <div className="modal-footer">
+              <button type="button" className="btn btn-danger" onClick={deleteCategoryStock} data-dismiss="modal">حذف</button>
+              <button type="button" className="btn btn-secondary" data-dismiss="modal">إلغاء</button>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  )
+  );
+};
 
-}
-
-export default CategoryStock
+export default CategoryStock;

@@ -1,34 +1,31 @@
-const mongoose = require('mongoose')
-const { ObjectId } = mongoose.Schema
+const mongoose = require('mongoose');
+const { ObjectId } = mongoose.Schema;
 
 const StockItemSchema = new mongoose.Schema(
   {
+    code: {
+      type: String,
+      trim: true,
+      required: true,
+      unique: true,
+    },
     itemName: {
       type: String,
-      trim : true,
+      trim: true,
       required: true,
-      unique: true
+      unique: true,
     },
     categoryId: {
       type: ObjectId,
       ref: 'CategoryStock',
       required: true,
     },
+    storeId: {
+      type: ObjectId,
+      ref: 'Store',
+      required: true,
+    },
     largeUnit: {
-      type: String,
-      required: true,
-    },
-    currentBalance: {
-      type: Number,
-      required: true,
-      default: 0,
-    },
-    price: {
-      type: Number,
-      required: true,
-      default: 0,
-    },
-    smallUnit:{
       type: String,
       required: true,
     },
@@ -36,25 +33,45 @@ const StockItemSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
-    costOfPart: { 
-      type : Number,
-      require: true
+    smallUnit: {
+      type: String,
+      required: true,
     },
-    // Minimum threshold allowed for the quantity
     minThreshold: {
       type: Number,
       default: 0,
     },
+    costMethod: {
+      type: String,
+      enum: ['FIFO', 'LIFO', 'Weighted Average'],
+      required: true,
+    },
+    suppliers: [
+      {
+        type: ObjectId,
+        ref: 'Supplier',
+      },
+    ],
+    status: {
+      type: String,
+      enum: ['Active', 'Inactive'],
+      default: 'Active',
+      required: true,
+    },
     createdBy: {
       type: ObjectId,
       ref: 'Employee',
-      required: true
+      required: true,
     },
-    
+    notes: {
+      type: String,
+      trim: true,
+    },
   },
   {
     timestamps: true,
   }
-)
-const StockItemModel = mongoose.model('StockItem', StockItemSchema)
-module.exports = StockItemModel
+);
+
+const StockItemModel = mongoose.model('StockItem', StockItemSchema);
+module.exports = StockItemModel;

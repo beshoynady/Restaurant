@@ -447,6 +447,15 @@ const SideBar = () => {
                       {(isProgrammer ||
                         permissionsList?.filter(
                           (permission) =>
+                            permission.resource === "store"
+                        )[0]?.read) && (
+                        <li>
+                          <Link to="store">المخازن</Link>
+                        </li>
+                      )}
+                      {(isProgrammer ||
+                        permissionsList?.filter(
+                          (permission) =>
                             permission.resource === "stock Categories"
                         )[0]?.read) && (
                         <li>

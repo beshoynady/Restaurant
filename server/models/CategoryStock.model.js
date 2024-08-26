@@ -1,7 +1,7 @@
 const mongoose= require('mongoose');
 
 const categoryStockSchema = new mongoose.Schema({
-    name :{
+    categoryName :{
         type : String,
         required : [true, 'required'],
         unique : [true, 'unique'],
@@ -9,6 +9,21 @@ const categoryStockSchema = new mongoose.Schema({
         maxlength : 50,
         minlength : 3,
     },
+    categoryCode: { 
+        type: String,
+        trim: true,
+        required: true,
+        unique: true,
+      },
+      createdBy: {
+        type: ObjectId,
+        ref: 'Employee',
+        required: true,
+      },
+      notes: {
+        type: String,
+        trim: true,
+      },
 },
 {timestamps : true}
 )
