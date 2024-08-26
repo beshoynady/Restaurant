@@ -83,7 +83,7 @@ const StockItem = () => {
       const itemOrder = filterStockItemByStore.length + 1;
 
       function generateItemCode(storeCode, categoryCode, itemOrder) {
-        return `${storeCode}-${categoryCode}-${String(itemOrder).padStart(
+        return `${storeCode}${categoryCode}${String(itemOrder).padStart(
           4,
           "0"
         )}`;
@@ -153,7 +153,7 @@ const StockItem = () => {
       const itemOrder = filterStockItemByStore.length + 1;
 
       function generateItemCode(storeCode, categoryCode, itemOrder) {
-        return `${storeCode}-${categoryCode}-${String(itemOrder).padStart(
+        return `${storeCode}${categoryCode}${String(itemOrder).padStart(
           4,
           "0"
         )}`;
