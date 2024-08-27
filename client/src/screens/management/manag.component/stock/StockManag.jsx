@@ -17,6 +17,7 @@ const StockManag = () => {
     permissionsList,
     employeeLoginInfo,
     formatDateTime,
+    formatDate,
     isLoading,
     setisLoading,
     EditPagination,
@@ -103,7 +104,7 @@ const StockManag = () => {
   const [notes, setNotes] = useState("");
 
   // Additional fields based on the provided variables
-  const [receiver, setReceiver] = useState("");
+  const [quantity, setquantity] = useState("");
   const [supplier, setSupplier] = useState("");
   const [itemName, setItemName] = useState("");
   const [largeUnit, setLargeUnit] = useState("");
@@ -767,7 +768,7 @@ const StockManag = () => {
                     onChange={(e) => setStoreId(e.target.value)}
                   >
                     <option value="">اختر المخزن</option>
-                    {Stores.map((store, i) => (
+                    {allStores.map((store, i) => (
                       <option key={i} value={store._id}>
                         {store.storeName}
                       </option>
@@ -1025,7 +1026,7 @@ const StockManag = () => {
                     onChange={(e) => setStoreId(e.target.value)}
                   >
                     <option value="">اختر المخزن</option>
-                    {Stores.map((store, i) => (
+                    {allStores.map((store, i) => (
                       <option key={i} value={store._id}>
                         {store.name}
                       </option>
