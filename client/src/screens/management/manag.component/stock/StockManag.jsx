@@ -104,7 +104,7 @@ const StockManag = () => {
   const [storeId, setStoreId] = useState("");
   const [categoryId, setCategoryId] = useState("");
   const [costMethod, setCostMethod] = useState("");
-  const [source, setSource] = useState("");
+  const [source, unit, setSource] = useState("");
   const [inbound, setInbound] = useState({
     quantity: 0,
     unitCost: 0,
@@ -138,14 +138,15 @@ const StockManag = () => {
     const selectedItem = StockItems.find((item) => item._id === e.target.value);
     console.log({ selectedItem });
     if (selectedItem) {
-      const { _id, largeUnit, itemName, smallUnit,parts, costMethod } = selectedItem;
+      const { _id, largeUnit, itemName, smallUnit, parts, costMethod } =
+        selectedItem;
       console.log({
         _id,
         largeUnit,
         itemName,
         smallUnit,
         costMethod,
-        parts
+        parts,
       });
       setItemId(_id);
       setLargeUnit(largeUnit);
@@ -153,6 +154,8 @@ const StockManag = () => {
       setSmallUnit(smallUnit);
       setcostOfPart(costOfPart);
       setprice(price);
+      setoldBalance(currentBalance);
+      setparts(parts);
     }
   };
 
@@ -173,110 +176,46 @@ const StockManag = () => {
   };
 
   const [actionId, setactionId] = useState("");
-  const actionAt = new Date().toLocaleString();
+
   const [AllStockactions, setAllStockactions] = useState([]);
 
-  const createStockAction = async (e) => {
-    // console.log({ itemId, movement, quantity, cost, balance: newBalance, oldBalance, price,})
-    e.preventDefault();
+  const createStockAction = async () => {
     if (!token) {
-      // Handle case where token is not available
       toast.error("رجاء تسجيل الدخول مره اخري");
       return;
     }
-    try {
-      if (stockManagementPermission && !stockManagementPermission.create) {
-        toast.warn("ليس لك صلاحية لاضافه حركه المخزن");
-        return;
-      }
-      setisLoading(true);
+    if (stockManagementPermission && !stockManagementPermission.create) {
+      toast.warn("ليس لك صلاحية لانشاء حركه المخزن");
+      return;
+    }
 
-      const unit = movement === "Purchase" ? largeUnit : smallUnit;
-      // Update the stock item's movement
-      const changeItem = await axios.put(
-        `${apiUrl}/api/stockitem/movement/${itemId}`,
-        { newBalance, price, newcost, costOfPart },
+    const unit = largeUnit;
+    const data = {
+      itemId,
+      storeId,
+      categoryId,
+      costMethod,
+      source,
+      unit,
+      inbound,
+      outbound,
+      balance,
+      remainingQuantity,
+      movementDate,
+      notes,
+    };
+
+    try {
+      const response = await axios.post(
+        `${apiUrl}/api/stockmanag`,
+        data,
         config
       );
-
-      console.log(changeItem);
-
-      if (changeItem.status === 200) {
-        // Create a new stock action
-        const response = await axios.post(
-          apiUrl + "/api/stockmanag/",
-          {
-            itemId,
-            movement,
-            quantity,
-            cost,
-            unit,
-            balance: newBalance,
-            oldBalance,
-            price,
-            ...(movement === "Purchase" && { expirationDate }),
-          },
-          config
-        );
-
-        // console.log(response.data);
-
-        if (movement === "Purchase") {
-          for (const recipe of allrecipes) {
-            const recipeid = recipe._id;
-            const productname = recipe.product.name;
-            const arrayingredients = recipe.ingredients;
-
-            const newIngredients = arrayingredients.map((ingredient) => {
-              if (ingredient.itemId === itemId) {
-                const costofitem = costOfPart;
-                const unit = ingredient.unit;
-                const amount = ingredient.amount;
-                const totalcostofitem = amount * costOfPart;
-                return {
-                  itemId,
-                  name: itemName,
-                  amount,
-                  costofitem,
-                  unit,
-                  totalcostofitem,
-                };
-              } else {
-                return ingredient;
-              }
-            });
-            console.log({ newIngredients });
-            const totalcost = newIngredients.reduce((acc, curr) => {
-              return acc + (curr.totalcostofitem || 0);
-            }, 0);
-            // Update the product with the modified recipe and total cost
-            const updateRecipe = await axios.put(
-              `${apiUrl}/api/recipe/${recipeid}`,
-              { ingredients: newIngredients, totalcost },
-              config
-            );
-
-            console.log({ updateRecipe });
-
-            // Toast for successful update based on recipe change
-            toast.success(`تم تحديث وصفة  ${productname}`);
-          }
-        }
-      }
-
-      // Update the stock actions list and stock items
-      getallStockaction();
-      getaStockItems();
-      setisLoading(false);
-      // Toast notification for successful creation
-      toast.success("تم تسجيل حركه المخزن بنجاح");
+      toast.success("تم تسجيل حركة المخزون بنجاح");
+      return response.data;
     } catch (error) {
-      setisLoading(false);
-      console.log(error);
-      // Toast notification for error
-      toast.error("فشل تسجيل حركه المخزن ! حاول مره اخري");
-    } finally {
-      setisLoading(false);
+      toast.error("فشل تسجيل حركة المخزون!");
+      console.error("Error creating stock movement:", error);
     }
   };
 
@@ -288,97 +227,39 @@ const StockManag = () => {
       toast.error("رجاء تسجيل الدخول مره اخري");
       return;
     }
-    setisLoading(true);
-    try {
-      if (stockManagementPermission && !stockManagementPermission.update) {
-        toast.warn("ليس لك صلاحية لتعديل حركه المخزن");
-        return;
-      }
-      const actionBy = employeeId;
-      const unit = movement === "Purchase" ? largeUnit : smallUnit;
+    if (stockManagementPermission && !stockManagementPermission.update) {
+      toast.warn("ليس لك صلاحية لتعديل حركه المخزن");
+      return;
+    }
 
-      // Update the stock item's movement
-      const changeItem = await axios.put(
-        `${apiUrl}/api/stockitem/movement/${itemId}`,
-        { newBalance, price, newcost, costOfPart },
+    setisLoading(true);
+    const unit = largeUnit;
+    const data = {
+      itemId,
+      storeId,
+      categoryId,
+      costMethod,
+      source,
+      unit,
+      inbound,
+      outbound,
+      balance,
+      remainingQuantity,
+      movementDate,
+      notes,
+    };
+
+    try {
+      const response = await axios.put(
+        `${apiUrl}/api/stockmanag/${actionId}`,
+        data,
         config
       );
-
-      if (changeItem.status === 200) {
-        // Update the existing stock action
-        const response = await axios.put(
-          `${apiUrl}/api/stockmanag/${actionId}`,
-          {
-            itemId,
-            movement,
-            quantity,
-            cost,
-            unit,
-            newBalance,
-            oldBalance,
-            price,
-            expirationDate,
-            actionBy,
-          },
-          config
-        );
-        console.log(response.data);
-
-        if (movement === "Purchase") {
-          for (const recipe of allrecipes) {
-            const recipeid = recipe._id;
-            const productname = recipe.product.name;
-            const arrayingredients = recipe.ingredients;
-
-            const newIngredients = arrayingredients.map((ingredient) => {
-              if (ingredient.itemId === itemId) {
-                const costofitem = costOfPart;
-                const unit = ingredient.unit;
-                const amount = ingredient.amount;
-                const totalcostofitem = amount * costOfPart;
-                return {
-                  itemId,
-                  name: itemName,
-                  amount,
-                  costofitem,
-                  unit,
-                  totalcostofitem,
-                };
-              } else {
-                return ingredient;
-              }
-            });
-            console.log({ newIngredients });
-            const totalcost = newIngredients.reduce((acc, curr) => {
-              return acc + (curr.totalcostofitem || 0);
-            }, 0);
-            // Update the product with the modified recipe and total cost
-            const updateRecipe = await axios.put(
-              `${apiUrl}/api/recipe/${recipeid}`,
-              { ingredients: newIngredients, totalcost },
-              config
-            );
-
-            console.log({ updateRecipe });
-
-            // Toast for successful update based on recipe change
-            toast.success(`تم تحديث وصفه ${productname}`);
-          }
-        }
-        // Update the stock actions list and stock items
-        getallStockaction();
-        getaStockItems();
-        setisLoading(false);
-        // Toast notification for successful update
-        toast.success("تم تحديث العنصر بنجاح");
-      }
+      toast.success("تم تحديث حركة المخزون بنجاح");
+      return response.data;
     } catch (error) {
-      setisLoading(false);
-      console.log(error);
-      // Toast notification for error
-      toast.error("فشل في تحديث العنصر ! حاول مره اخري");
-    } finally {
-      setisLoading(false);
+      toast.error("فشل تحديث حركة المخزون!");
+      console.error("Error updating stock movement:", error);
     }
   };
 
@@ -405,12 +286,12 @@ const StockManag = () => {
       toast.error("رجاء تسجيل الدخول مره اخري");
       return;
     }
+    if (stockManagementPermission && !stockManagementPermission.delete) {
+      toast.warn("ليس لك صلاحية لحذف حركه المخزن");
+      return;
+    }
     // setisLoading(true);
     try {
-      if (stockManagementPermission && !stockManagementPermission.delete) {
-        toast.warn("ليس لك صلاحية لحذف حركه المخزن");
-        return;
-      }
       // Delete the selected stock action
       const response = await axios.delete(
         `${apiUrl}/api/stockmanag/${actionId}`,
@@ -690,6 +571,7 @@ const StockManag = () => {
                 <th rowspan="2">التصنيف</th>
                 <th rowspan="2">طريقه حساب التكلفه</th>
                 <th rowspan="2">مصدر الحركة</th>
+                <th rowspan="2">الوحدة</th>
                 <th colspan="3">صادر</th>
                 <th colspan="3">وارد</th>
                 <th colspan="3">الرصيد</th>
@@ -721,6 +603,7 @@ const StockManag = () => {
                         <td>{action.categoryId?.categoryName}</td>
                         <td>{action.costMethod}</td>
                         <td>{action.source}</td>
+                        <td>{action.unit}</td>
                         <td>{action.outbound?.quantity || 0}</td>
                         <td>{action.outbound?.unitCost || 0}</td>
                         <td>{action.outbound?.totalCost || 0}</td>
@@ -846,10 +729,10 @@ const StockManag = () => {
 
       <div id="addStockactionModal" className="modal fade">
         <div className="modal-dialog modal-lg">
-          <div className="modal-content shadow-lg border-0 rounded ">
+          <div className="modal-content shadow-lg border-0 rounded">
             <form onSubmit={(e) => createStockAction(e, employeeLoginInfo.id)}>
               <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
-                <h4 className="modal-title">تسجيل حركه بالمخزن</h4>
+                <h4 className="modal-title">تسجيل حركة بالمخزن</h4>
                 <button
                   type="button"
                   className="close m-0 p-1"
@@ -860,49 +743,72 @@ const StockManag = () => {
                 </button>
               </div>
               <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
+                {/* اختيار المخزن */}
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
-                    نوع الحركه
+                    المخزن
                   </label>
                   <select
                     className="form-control border-primary m-0 p-2 h-auto"
-                    name=""
-                    id=""
-                    onChange={(e) => setmovement(e.target.value)}
+                    onChange={(e) => setStore(e.target.value)}
                   >
-                    <option value="">اختر الاجراء</option>
-                    {StockmovementEn.map((movement, i) => {
-                      return (
-                        <option key={i} value={movement}>
-                          {StockmovementAr[i]}
-                        </option>
-                      );
-                    })}
+                    <option value="">اختر المخزن</option>
+                    {Stores.map((store, i) => (
+                      <option key={i} value={store._id}>
+                        {store.name}
+                      </option>
+                    ))}
                   </select>
                 </div>
+
+                {/* اختيار التصنيف */}
+                <div className="form-group col-12 col-md-6">
+                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                    التصنيف
+                  </label>
+                  <select
+                    className="form-control border-primary m-0 p-2 h-auto"
+                    onChange={(e) => {
+                      setCategory(e.target.value);
+                      // تحديث الأصناف بناءً على التصنيف المحدد
+                      updateStockItems(e.target.value);
+                    }}
+                  >
+                    <option value="">اختر التصنيف</option>
+                    {Categories.map((category, i) => (
+                      <option key={i} value={category._id}>
+                        {category.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* اختيار الصنف */}
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                     الصنف
                   </label>
                   <select
                     className="form-control border-primary m-0 p-2 h-auto"
-                    name=""
-                    id=""
                     onChange={(e) => {
                       handleSelectedItem(e);
+                      const selectedItem = StockItems.find(
+                        (item) => item._id === e.target.value
+                      );
+                      setlargeUnit(selectedItem?.largeUnit || "");
+                      setsmallUnit(selectedItem?.smallUnit || "");
                     }}
                   >
                     <option value="">اختر الصنف</option>
-                    {StockItems.map((item, i) => {
-                      return (
-                        <option key={i} value={item._id}>
-                          {item.itemName}
-                        </option>
-                      );
-                    })}
+                    {StockItems.map((item, i) => (
+                      <option key={i} value={item._id}>
+                        {item.itemName}
+                      </option>
+                    ))}
                   </select>
                 </div>
 
+                {/* باقي الحقول */}
                 {["Issuance", "ReturnIssuance", "Wastage", "Damaged"].includes(
                   movement
                 ) ? (
@@ -911,7 +817,6 @@ const StockManag = () => {
                       الكمية
                     </label>
                     <div className="d-flex align-items-center">
-                      {/* Input for quantity */}
                       <input
                         type="number"
                         className="form-control border-primary flex-grow-1"
@@ -935,7 +840,6 @@ const StockManag = () => {
                       الكمية
                     </label>
                     <div className="d-flex align-items-center">
-                      {/* Input for quantity */}
                       <input
                         type="number"
                         className="form-control border-primary flex-grow-1"
@@ -944,7 +848,6 @@ const StockManag = () => {
                           setquantity(e.target.value);
                         }}
                       />
-                      {/* Display large unit */}
                       <input
                         type="text"
                         className="form-control border-primary ms-2"
@@ -953,27 +856,15 @@ const StockManag = () => {
                       />
                     </div>
                   </div>
-                ) : (
-                  ""
-                )}
+                ) : null}
 
-                {/* {movement === "Purchase" &&   
-                <>
-                            <div className="form-group col-12 col-md-6">
-                              <label className="form-label text-wrap text-right fw-bolder p-0 m-0">تاريخ الانتهاء</label>
-                              <input type="checkbox" className="form-check-input form-check-input-lg" checked={expirationDateEnabled} onChange={() => setExpirationDateEnabled(!expirationDateEnabled)} />
-                              {expirationDateEnabled &&
-                                <input type='date' className="form-control border-primary m-0 p-2 h-auto" required onChange={(e) => { setexpirationDate(e.target.value); }} />}
-                            </div>
-                          </>
-                        } */}
-
-                {movement === "Issuance" ||
-                movement === "ReturnIssuance" ||
-                movement === "Wastage" ||
-                movement === "Damaged" ? (
+                {["Issuance", "ReturnIssuance", "Wastage", "Damaged"].includes(
+                  movement
+                ) ? (
                   <div className="form-group col-12 col-md-6">
-                    <label className="form-label text-wrap text-right fw-bolder p-0 m-0">{`سعر ${smallUnit}`}</label>
+                    <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                      سعر {smallUnit}
+                    </label>
                     <input
                       type="text"
                       className="form-control border-primary m-0 p-2 h-auto"
@@ -983,8 +874,9 @@ const StockManag = () => {
                   </div>
                 ) : ["Purchase", "ReturnPurchase"].includes(movement) ? (
                   <div className="form-group col-12 col-md-6">
-                    <label className="form-label text-wrap text-right fw-bolder p-0 m-0">{`سعر ${smallUnit}`}</label>
-
+                    <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                      سعر {smallUnit}
+                    </label>
                     <input
                       type="Number"
                       className="form-control border-primary m-0 p-2 h-auto"
@@ -995,9 +887,7 @@ const StockManag = () => {
                       }}
                     />
                   </div>
-                ) : (
-                  ""
-                )}
+                ) : null}
 
                 {["Purchase", "ReturnPurchase"].includes(movement) ? (
                   <div className="form-group col-12 col-md-6">
@@ -1011,9 +901,7 @@ const StockManag = () => {
                       readOnly
                     />
                   </div>
-                ) : (
-                  ""
-                )}
+                ) : null}
 
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
@@ -1075,7 +963,7 @@ const StockManag = () => {
                 <input
                   type="submit"
                   className="btn btn-success col-6 h-100 px-2 py-3 m-0"
-                  value="اضافه"
+                  value="اضافة"
                 />
               </div>
             </form>
@@ -1085,10 +973,10 @@ const StockManag = () => {
 
       <div id="editStockactionModal" className="modal fade">
         <div className="modal-dialog modal-lg">
-          <div className="modal-content shadow-lg border-0 rounded ">
+          <div className="modal-content shadow-lg border-0 rounded">
             <form onSubmit={(e) => updateStockaction(e, employeeLoginInfo.id)}>
               <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
-                <h4 className="modal-title">تعديل حركه بالمخزن</h4>
+                <h4 className="modal-title">تعديل حركة بالمخزن</h4>
                 <button
                   type="button"
                   className="close m-0 p-1"
@@ -1099,69 +987,87 @@ const StockManag = () => {
                 </button>
               </div>
               <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
+                {/* اختيار المخزن */}
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
-                    نوع الحركه
+                    المخزن
                   </label>
                   <select
                     className="form-control border-primary m-0 p-2 h-auto"
-                    name=""
-                    id=""
-                    onChange={(e) => setmovement(e.target.value)}
+                    value={storeId}
+                    onChange={(e) => setStoreId(e.target.value)}
                   >
-                    <option value={movement}>{movement}</option>
-                    {StockmovementEn.map((movement, i) => {
-                      return (
-                        <option key={i} value={movement}>
-                          {StockmovementAr[i]}
-                        </option>
-                      );
-                    })}
+                    <option value="">اختر المخزن</option>
+                    {Stores.map((store, i) => (
+                      <option key={i} value={store._id}>
+                        {store.name}
+                      </option>
+                    ))}
                   </select>
                 </div>
+
+                {/* اختيار التصنيف */}
+                <div className="form-group col-12 col-md-6">
+                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                    التصنيف
+                  </label>
+                  <select
+                    className="form-control border-primary m-0 p-2 h-auto"
+                    value={categoryId}
+                    onChange={(e) => {
+                      setCategoryId(e.target.value);
+                      // تحديث الأصناف بناءً على التصنيف المحدد
+                      updateStockItems(e.target.value);
+                    }}
+                  >
+                    <option value="">اختر التصنيف</option>
+                    {Categories.map((category, i) => (
+                      <option key={i} value={category._id}>
+                        {category.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* اختيار الصنف */}
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                     الصنف
                   </label>
                   <select
                     className="form-control border-primary m-0 p-2 h-auto"
-                    name=""
-                    id=""
+                    value={itemId}
                     onChange={(e) => {
-                      setitemId(e.target.value);
-                      setlargeUnit(
-                        StockItems.filter((i) => i._id === e.target.value)[0]
-                          .largeUnit
+                      handleSelectedItem(e);
+                      const selectedItem = StockItems.find(
+                        (item) => item._id === e.target.value
                       );
-                      setsmallUnit(
-                        StockItems.filter((i) => i._id === e.target.value)[0]
-                          .smallUnit
-                      );
+                      setlargeUnit(selectedItem?.largeUnit || "");
+                      setsmallUnit(selectedItem?.smallUnit || "");
                     }}
                   >
                     <option value="">اختر الصنف</option>
-                    {StockItems.map((item, i) => {
-                      return (
-                        <option key={i} value={item._id}>
-                          {item.itemName}
-                        </option>
-                      );
-                    })}
+                    {StockItems.map((item, i) => (
+                      <option key={i} value={item._id}>
+                        {item.itemName}
+                      </option>
+                    ))}
                   </select>
                 </div>
-                <div className="form-group col-12 col-md-6">
-                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
-                    الكمية
-                  </label>
-                  {movement === "Issuance" ||
-                  movement === "ReturnIssuance" ||
-                  movement === "Wastage" ||
-                  movement === "Damaged" ? (
-                    <>
+
+                {/* باقي الحقول */}
+                {["Issuance", "ReturnIssuance", "Wastage", "Damaged"].includes(
+                  movement
+                ) ? (
+                  <div className="form-group col-12 col-md-6">
+                    <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                      الكمية
+                    </label>
+                    <div className="d-flex align-items-center">
                       <input
-                        type="Number"
-                        className="form-control border-primary m-0 p-2 h-auto"
-                        required
+                        type="number"
+                        className="form-control border-primary flex-grow-1"
+                        value={quantity}
                         onChange={(e) => {
                           setquantity(e.target.value);
                           setcost(Number(e.target.value) * costOfPart);
@@ -1169,72 +1075,81 @@ const StockManag = () => {
                       />
                       <input
                         type="text"
-                        className="form-control border-primary m-0 p-2 h-auto"
+                        className="form-control border-primary ms-2"
                         defaultValue={smallUnit}
                         readOnly
                       />
-                    </>
-                  ) : movement === "Purchase" ||
-                    movement === "ReturnPurchase" ? (
-                    <>
+                    </div>
+                  </div>
+                ) : ["Purchase", "ReturnPurchase"].includes(movement) ? (
+                  <div className="form-group col-12 col-md-6">
+                    <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                      الكمية
+                    </label>
+                    <div className="d-flex align-items-center">
                       <input
-                        type="Number"
-                        className="form-control border-primary m-0 p-2 h-auto"
-                        required
+                        type="number"
+                        className="form-control border-primary flex-grow-1"
+                        value={quantity}
                         onChange={(e) => {
                           setquantity(e.target.value);
                         }}
                       />
                       <input
                         type="text"
-                        className="form-control border-primary m-0 p-2 h-auto"
+                        className="form-control border-primary ms-2"
                         defaultValue={largeUnit}
                         readOnly
                       />
-                    </>
-                  ) : (
-                    ""
-                  )}
-                </div>
+                    </div>
+                  </div>
+                ) : null}
 
-                <div className="form-group col-12 col-md-6">
-                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
-                    السعر
-                  </label>
-                  {movement === "Issuance" ||
-                  movement === "ReturnIssuance" ||
-                  movement === "Wastage" ||
-                  movement === "Damaged" ? (
+                {["Issuance", "ReturnIssuance", "Wastage", "Damaged"].includes(
+                  movement
+                ) ? (
+                  <div className="form-group col-12 col-md-6">
+                    <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                      سعر {smallUnit}
+                    </label>
                     <input
-                      type="Number"
+                      type="text"
                       className="form-control border-primary m-0 p-2 h-auto"
                       readOnly
-                      required
-                      defaultValue={price}
+                      value={costOfPart}
                     />
-                  ) : (
+                  </div>
+                ) : ["Purchase", "ReturnPurchase"].includes(movement) ? (
+                  <div className="form-group col-12 col-md-6">
+                    <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                      سعر {smallUnit}
+                    </label>
                     <input
                       type="Number"
                       className="form-control border-primary m-0 p-2 h-auto"
-                      required
+                      value={price}
                       onChange={(e) => {
                         setprice(Number(e.target.value));
-                        setcost(e.target.value * quantity);
+                        setcost(Number(e.target.value) * quantity);
                       }}
                     />
-                  )}
-                </div>
-                <div className="form-group col-12 col-md-6">
-                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
-                    التكلفة
-                  </label>
-                  <input
-                    type="Number"
-                    className="form-control border-primary m-0 p-2 h-auto"
-                    Value={cost}
-                    readOnly
-                  />
-                </div>
+                  </div>
+                ) : null}
+
+                {["Purchase", "ReturnPurchase"].includes(movement) ? (
+                  <div className="form-group col-12 col-md-6">
+                    <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                      التكلفة
+                    </label>
+                    <input
+                      type="Number"
+                      className="form-control border-primary m-0 p-2 h-auto"
+                      value={cost}
+                      readOnly
+                    />
+                  </div>
+                ) : null}
+
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                     الرصيد
@@ -1243,7 +1158,7 @@ const StockManag = () => {
                     <input
                       type="text"
                       className="form-control border-primary flex-grow-1"
-                      Value={oldBalance}
+                      value={oldBalance}
                       readOnly
                     />
                     <input
@@ -1262,7 +1177,7 @@ const StockManag = () => {
                     <input
                       type="text"
                       className="form-control border-primary flex-grow-1"
-                      Value={newBalance}
+                      value={newBalance}
                       readOnly
                     />
                     <input
@@ -1280,22 +1195,22 @@ const StockManag = () => {
                   <input
                     type="text"
                     className="form-control border-primary m-0 p-2 h-auto"
-                    Value={actionAt}
+                    value={actionAt}
                     readOnly
                   />
                 </div>
               </div>
               <div className="modal-footer d-flex flex-nowrap align-items-center justify-content-between m-0 p-1">
                 <input
+                  type="submit"
+                  className="btn btn-success col-6 h-100 px-2 py-3 m-0"
+                  value="تحديث"
+                />
+                <input
                   type="button"
                   className="btn btn-danger col-6 h-100 px-2 py-3 m-0"
                   data-dismiss="modal"
                   value="إغلاق"
-                />
-                <input
-                  type="submit"
-                  className="btn btn-success col-6 h-100 px-2 py-3 m-0"
-                  value="اضافه"
                 />
               </div>
             </form>

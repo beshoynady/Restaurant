@@ -18,6 +18,10 @@ const StockMovementSchema = new mongoose.Schema(
       ref: 'CategoryStock',
       required: true,
     },
+    unit:{
+      type: String,
+      required: true,
+    },
     costMethod: {
       type: String,
       enum: ['FIFO', 'LIFO', 'Weighted Average'],
