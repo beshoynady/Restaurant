@@ -78,26 +78,62 @@ const StockManag = () => {
     }
   };
 
-  const StockmovementEn = ["Issuance", "ReturnIssuance", "Wastage", "Damaged"];
-  const StockmovementAr = ["صرف", "إرجاع منصرف", "هدر", "تالف"];
-  const [movement, setmovement] = useState("");
-  const [receiver, setreceiver] = useState("");
-  const [supplier, setsupplier] = useState("");
-  const [itemId, setitemId] = useState("");
-  const [itemName, setitemName] = useState("");
-  const [largeUnit, setlargeUnit] = useState("");
-  const [smallUnit, setsmallUnit] = useState("");
-  const [quantity, setquantity] = useState(0);
-  const [price, setprice] = useState(0);
-  const [cost, setcost] = useState(0);
-  const [setoldCost] = useState(0);
-  const [newcost, setnewcost] = useState(0);
-  const [oldBalance, setoldBalance] = useState(0);
-  const [newBalance, setnewBalance] = useState(0);
-  const [costOfPart, setcostOfPart] = useState(0);
-  const [parts, setparts] = useState();
-  const [expirationDate, setexpirationDate] = useState();
-  const [cashRegister, setcashRegister] = useState("");
+  const sourceEn = [
+    "Purchase",
+    "ReturnPurchase",
+    "Issuance",
+    "ReturnIssuance",
+    "Wastage",
+    "Damaged",
+    "stockAdjustment",
+    "OpeningBalance"
+  ];
+
+  const sourceAr = [
+    "شراء",
+    "إرجاع شراء",
+    "صرف",
+    "إرجاع صرف",
+    "هدر",
+    "تالف",
+    "تعديل المخزون",
+    "رصيد افتتاحي"
+  ];
+
+  
+  
+  const [itemId, setItemId] = useState("");
+  const [storeId, setStoreId] = useState("");
+  const [categoryId, setCategoryId] = useState("");
+  const [costMethod, setCostMethod] = useState("");
+  const [source, setSource] = useState(""); 
+  const [inbound, setInbound] = useState({
+    quantity: 0,
+    unitCost: 0,
+    totalCost: 0,
+  });
+  const [outbound, setOutbound] = useState({
+    quantity: 0,
+    unitCost: 0,
+    totalCost: 0,
+  });
+  const [balance, setBalance] = useState({
+    quantity: 0,
+    unitCost: 0,
+    totalCost: 0,
+  });
+  const [remainingQuantity, setRemainingQuantity] = useState(0);
+  const [movementDate, setMovementDate] = useState(new Date());
+  const [notes, setNotes] = useState("");
+
+  // Additional fields based on the provided variables
+  const [receiver, setReceiver] = useState("");
+  const [supplier, setSupplier] = useState("");
+  const [itemName, setItemName] = useState("");
+  const [largeUnit, setLargeUnit] = useState("");
+  const [smallUnit, setSmallUnit] = useState("");
+  const [parts, setParts] = useState();
+  const [expirationDate, setExpirationDate] = useState();
   const [expirationDateEnabled, setExpirationDateEnabled] = useState(false);
 
   const handleSelectedItem = (e) => {
@@ -691,20 +727,26 @@ const StockManag = () => {
             <tbody>
               {AllStockactions &&
                 AllStockactions.map((action, i) => {
-                  if ((i >= startpagination) & (i < endpagination)) {
+                  if (i >= startpagination && i < endpagination) {
                     return (
                       <tr key={i}>
                         <td>{i + 1}</td>
                         <td>{action.itemId?.itemName}</td>
-                        <td>{action.movement}</td>
-                        <td>{action.quantity}</td>
-                        <td>{action.unit}</td>
-                        <td>{action.price}</td>
-                        <td>{action.cost}</td>
-                        <td>{action.oldBalance}</td>
-                        <td>{action.balance}</td>
-                        <td>{formatDateTime(action.createdAt)}</td>
-                        <td>{action.actionBy?.fullname}</td>
+                        <td>{action.storeId?.storeName}</td>
+                        <td>{action.categoryId?.categoryName}</td>
+                        <td>{action.costMethod}</td>
+                        <td>{action.source}</td>
+                        <td>{action.outbound?.quantity || 0}</td>
+                        <td>{action.outbound?.unitCost || 0}</td>
+                        <td>{action.outbound?.totalCost || 0}</td>
+                        <td>{action.inbound?.quantity || 0}</td>
+                        <td>{action.inbound?.unitCost || 0}</td>
+                        <td>{action.inbound?.totalCost || 0}</td>
+                        <td>{action.balance?.quantity || 0}</td>
+                        <td>{action.balance?.unitCost || 0}</td>
+                        <td>{action.balance?.totalCost || 0}</td>
+                        <td>{formatDateTime(action.movementDate)}</td>
+                        <td>{action.createdBy?.fullname}</td>
                         <td>
                           {stockManagementPermission.update && (
                             <a
@@ -713,9 +755,9 @@ const StockManag = () => {
                               data-toggle="modal"
                               onClick={() => {
                                 setactionId(action._id);
-                                setitemName(action.itemName);
-                                setoldBalance(action.oldBalance);
-                                setprice(action.price);
+                                setitemName(action.itemId?.itemName);
+                                setoldBalance(action.balance?.quantity || 0);
+                                setprice(action.outbound?.unitCost || 0);
                               }}
                             >
                               <i

@@ -1,149 +1,196 @@
-const StockManagementModel = require('../models/StockManag.model');
+const StockMovementModel = require("../models/StockMovement.model");
 
+// Controller function to create a new stock movement action
 const createStockAction = async (req, res, next) => {
-    try {
-        const {
-            itemId,
-            unit,
-            movement,
-            supplier,
-            receiver,
-            quantity,
-            oldBalance,
-            balance,
-            price,
-            oldCost,
-            cost,
-            expirationDate,
-        } = req.body;
-        const actionBy = req.employee.id
-        // Create a new stock action using the provided data
-        const itemAdded = await StockManagementModel.create({
-            itemId,
-            unit,
-            movement,
-            supplier,
-            receiver,
-            quantity,
-            oldBalance,
-            balance,
-            price,
-            oldCost,
-            cost,
-            actionBy,
-            ...(movement === 'Purchase' && { expirationDate }),
-        });
+  try {
+    // Destructure the relevant fields from the request body
+    const {
+      itemId,
+      storeId,
+      categoryId,
+      costMethod,
+      source,
+      inbound = {},
+      outbound = {},
+      balance,
+      remainingQuantity = 0,
+      movementDate = new Date(),
+      notes = "",
+    } = req.body;
+    const createdBy = req.employee?.id;
 
-        // Respond with the created item
-        res.status(201).json(itemAdded);
-    } catch (error) {
-        // Handle any errors that occur during the process
-        res(error);
+    // Validate required fields
+    if (
+      !itemId ||
+      !storeId ||
+      !categoryId ||
+      !costMethod ||
+      !source ||
+      !balance
+    ) {
+      return res.status(400).json({ message: "Missing required fields" });
     }
+
+    // Validate cost method
+    const validCostMethods = ["FIFO", "LIFO", "Weighted Average"];
+    if (!validCostMethods.includes(costMethod)) {
+      return res.status(400).json({ message: "Invalid cost method" });
+    }
+
+    // Create a new stock movement action using the provided data
+    const newStockAction = await StockMovementModel.create({
+      itemId,
+      storeId,
+      categoryId,
+      costMethod,
+      source,
+      inbound,
+      outbound,
+      balance,
+      remainingQuantity,
+      movementDate,
+      createdBy,
+      notes,
+    });
+
+    // Respond with the created stock movement action
+    res.status(201).json(newStockAction);
+  } catch (error) {
+    // Log and handle any errors during the creation process
+    console.error("Error creating stock movement:", error);
+    next(error); // Pass the error to the next middleware (e.g., an error handler)
+  }
 };
 
+// Controller function to update an existing stock movement action
 const updateStockAction = async (req, res, next) => {
-    try {
-        const {
-            itemId,
-            unit,
-            movement,
-            supplier,
-            receiver,
-            quantity,
-            oldBalance,
-            balance,
-            price,
-            cost,
-            expirationDate,
-        } = req.body;
-        const actionBy = req.employee.id
+  try {
+    const {
+      itemId,
+      storeId,
+      categoryId,
+      costMethod,
+      source,
+      inbound,
+      outbound,
+      balance,
+      remainingQuantity,
+      movementDate,
+      notes,
+    } = req.body;
+    const updatedBy = req.employee.id;
+    const actionId = req.params.actionid;
 
-        const actionId = req.params.actionid;
-
-        // Find and update the existing stock action by ID
-        const updatedAction = await StockManagementModel.findByIdAndUpdate(actionId, {
-            itemId,
-            unit,
-            movement,
-            supplier,
-            receiver,
-            quantity,
-            oldBalance,
-            balance,
-            price,
-            cost,
-            actionBy,
-            expirationDate,
-        });
-
-        if (!updatedAction) {
-            // Handle the case where the action is not found
-            return res.status(404).json({ message: 'Action not found' });
-        }
-
-        // Respond with the updated action
-        res.status(200).json(updatedAction);
-    } catch (error) {
-        // Handle any errors that occur during the process
-        res.status(404).json(error);
+    // Validate required fields
+    if (
+      !itemId ||
+      !storeId ||
+      !categoryId ||
+      !costMethod ||
+      !source ||
+      !balance
+    ) {
+      return res.status(400).json({ message: "Missing required fields" });
     }
+    // Find and update the stock movement action by ID
+    const updatedAction = await StockMovementModel.findByIdAndUpdate(
+      actionId,
+      {
+        itemId,
+        storeId,
+        categoryId,
+        costMethod,
+        source,
+        inbound,
+        outbound,
+        balance,
+        remainingQuantity,
+        movementDate,
+        updatedBy,
+        notes,
+      },
+      { new: true } // Return the updated document
+    );
+
+    if (!updatedAction) {
+      return res.status(404).json({ message: "Action not found" });
+    }
+
+    // Respond with the updated stock movement action
+    res.status(200).json(updatedAction);
+  } catch (error) {
+    // Handle any errors during the update process
+    console.error("Error updating stock movement:", error);
+    next(error);
+  }
 };
 
-const getAllStockActions = async (req, res) => {
-    try {
-        const allActions = await StockManagementModel.find({})
-            .populate('itemId')
-            .populate('actionBy')
-            .populate('supplier')
-            .populate('receiver');
+// Controller function to get all stock movement actions
+const getAllStockActions = async (req, res, next) => {
+  try {
+    const allActions = await StockMovementModel.find({})
+      .populate("itemId")
+      .populate("storeId")
+      .populate("categoryId")
+      .populate("createdBy");
 
-        if (allActions.length > 0) {
-            res.status(200).json(allActions);
-        } else {
-            res.status(404).json({ message: 'No stock actions found' });
-        }
-    } catch (error) {
-        res.status(500).json(error);
+    if (allActions.length > 0) {
+      res.status(200).json(allActions);
+    } else {
+      res.status(404).json({ message: "No stock actions found" });
     }
+  } catch (error) {
+    // Handle any errors during the retrieval process
+    console.error("Error retrieving stock movements:", error);
+    next(error);
+  }
 };
 
-
+// Controller function to get a single stock movement action by ID
 const getOneStockAction = async (req, res, next) => {
-    try {
-        const actionId = req.params.actionid;
-        const action = await StockManagementModel.findById(actionId).populate('itemId').populate('actionBy').populate('supplier').populate('receiver')
-            .populate('itemId supplier actionBy');
+  try {
+    const actionId = req.params.actionid;
+    const action = await StockMovementModel.findById(actionId)
+      .populate("itemId")
+      .populate("storeId")
+      .populate("categoryId")
+      .populate("createdBy");
 
-        if (!action) {
-            return res.status(404).json({ message: 'Action not found' });
-        }
-
-        res.status(200).json(action);
-    } catch (error) {
-        res.status(400).json(error);
+    if (!action) {
+      return res.status(404).json({ message: "Action not found" });
     }
+
+    res.status(200).json(action);
+  } catch (error) {
+    // Handle any errors during the retrieval process
+    console.error("Error retrieving stock movement:", error);
+    next(error);
+  }
 };
 
+// Controller function to delete a stock movement action by ID
 const deleteStockAction = async (req, res, next) => {
-    try {
-        const actionId = req.params.actionid;
-        const deletedAction = await StockManagementModel.findByIdAndDelete(actionId);
+  try {
+    const actionId = req.params.actionid;
+    const deletedAction = await StockMovementModel.findByIdAndDelete(actionId);
 
-        if (!deletedAction) {
-            return res.status(404).json({ message: 'Action not found' });
-        }
-
-        res.status(200).json(deletedAction);
-    } catch (error) {
-        res.status(400).json(error);
+    if (!deletedAction) {
+      return res.status(404).json({ message: "Action not found" });
     }
+
+    // Respond with the deleted action
+    res.status(200).json(deletedAction);
+  } catch (error) {
+    // Handle any errors during the deletion process
+    console.error("Error deleting stock movement:", error);
+    next(error);
+  }
 };
 
 module.exports = {
-    createStockAction,
-    updateStockAction,
-    getOneStockAction,
-    getAllStockActions,
-    deleteStockAction,
+  createStockAction,
+  updateStockAction,
+  getOneStockAction,
+  getAllStockActions,
+  deleteStockAction,
 };

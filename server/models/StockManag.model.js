@@ -88,12 +88,24 @@ const StockMovementSchema = new mongoose.Schema(
         default: 0,
       },
     },
+    remainingQuantity: {
+        type: Number,
+        required: false,
+        default: 0,
+        min: 0,
+      },
+
     movementDate: {
       type: Date,
       default: Date.now,
       required: true,
     },
     createdBy: {
+      type: ObjectId,
+      ref: 'Employee',
+      required: true,
+    },
+    updatedBy: {
       type: ObjectId,
       ref: 'Employee',
       required: true,
