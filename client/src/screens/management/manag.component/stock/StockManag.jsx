@@ -36,47 +36,25 @@ const StockManag = () => {
       (perission) => perission.resource === "stock Management"
     )[0];
 
-  const [allrecipes, setallrecipes] = useState([]);
+  // const [allrecipes, setallrecipes] = useState([]);
 
-  const getallrecipes = async () => {
-    if (!token) {
-      // Handle case where token is not available
-      toast.error("رجاء تسجيل الدخول مره اخري");
-      return;
-    }
-    try {
-      const response = await axios.get(`${apiUrl}/api/recipe`, config);
-      if (response) {
-        console.log(response);
-        const allRecipe = await response.data;
-        setallrecipes(allRecipe);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const [StockItems, setStockItems] = useState([]);
-  const getaStockItems = async () => {
-    if (!token) {
-      // Handle case where token is not available
-      toast.error("رجاء تسجيل الدخول مره اخري");
-      return;
-    }
-    try {
-      if (stockManagementPermission && !stockManagementPermission.read) {
-        toast.warn("ليس لك صلاحية لعرض حركات المخزن");
-        return;
-      }
-      const response = await axios.get(apiUrl + "/api/stockitem/", config);
-      if (response) {
-        console.log(response.data);
-        setStockItems(response.data.reverse());
-      }
-    } catch (error) {
-      toast.error("فشل استيراد الاصناف بشكل صحيح !اعد تحميل الصفحة ");
-    }
-  };
+  // const getallrecipes = async () => {
+  //   if (!token) {
+  //     // Handle case where token is not available
+  //     toast.error("رجاء تسجيل الدخول مره اخري");
+  //     return;
+  //   }
+  //   try {
+  //     const response = await axios.get(`${apiUrl}/api/recipe`, config);
+  //     if (response) {
+  //       console.log(response);
+  //       const allRecipe = await response.data;
+  //       setallrecipes(allRecipe);
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   const sourceEn = [
     "Purchase",
@@ -121,7 +99,7 @@ const StockManag = () => {
     totalCost: 0,
   });
   const [remainingQuantity, setRemainingQuantity] = useState(0);
-  const [movementDate, setMovementDate] = useState(new Date());
+  const [sourceDate, setsourceDate] = useState(new Date());
   const [notes, setNotes] = useState("");
 
   // Additional fields based on the provided variables
@@ -138,24 +116,14 @@ const StockManag = () => {
     const selectedItem = StockItems.find((item) => item._id === e.target.value);
     console.log({ selectedItem });
     if (selectedItem) {
-      const { _id, largeUnit, itemName, smallUnit, parts, costMethod } =
+      const { _id, itemName, largeUnit, smallUnit, parts, costMethod } =
         selectedItem;
-      console.log({
-        _id,
-        largeUnit,
-        itemName,
-        smallUnit,
-        costMethod,
-        parts,
-      });
       setItemId(_id);
+      setItemName(itemName);
       setLargeUnit(largeUnit);
-      setitemName(itemName);
       setSmallUnit(smallUnit);
-      setcostOfPart(costOfPart);
-      setprice(price);
-      setoldBalance(currentBalance);
-      setparts(parts);
+      setParts(parts);
+      setCostMethod(costMethod);
     }
   };
 
@@ -201,7 +169,7 @@ const StockManag = () => {
       outbound,
       balance,
       remainingQuantity,
-      movementDate,
+      sourceDate,
       notes,
     };
 
@@ -215,7 +183,7 @@ const StockManag = () => {
       return response.data;
     } catch (error) {
       toast.error("فشل تسجيل حركة المخزون!");
-      console.error("Error creating stock movement:", error);
+      console.error("Error creating stock source:", error);
     }
   };
 
@@ -245,7 +213,7 @@ const StockManag = () => {
       outbound,
       balance,
       remainingQuantity,
-      movementDate,
+      sourceDate,
       notes,
     };
 
@@ -259,7 +227,7 @@ const StockManag = () => {
       return response.data;
     } catch (error) {
       toast.error("فشل تحديث حركة المخزون!");
-      console.error("Error updating stock movement:", error);
+      console.error("Error updating stock source:", error);
     }
   };
 
@@ -316,6 +284,58 @@ const StockManag = () => {
     }
   };
 
+  const [allStores, setAllStores] = useState([]);
+
+  const getAllStores = async () => {
+    if (!token) {
+      toast.error("رجاء تسجيل الدخول مره اخري");
+      return;
+    }
+
+    try {
+      const response = await axios.get(apiUrl + "/api/store/", config);
+      setAllStores(response.data.reverse());
+    } catch (error) {
+      console.error("Error fetching stores:", error);
+      toast.error("حدث خطأ اثناء جلب بيانات المخزنات! اعد تحميل الصفحة");
+    }
+  };
+
+  const [StockItems, setStockItems] = useState([]);
+  const getStockItems = async () => {
+    if (!token) {
+      // Handle case where token is not available
+      toast.error("رجاء تسجيل الدخول مره اخري");
+      return;
+    }
+    try {
+      const response = await axios.get(apiUrl + "/api/stockitem/", config);
+      if (response) {
+        console.log(response.data);
+        setStockItems(response.data.reverse());
+      }
+    } catch (error) {
+      toast.error("فشل استيراد الاصناف بشكل صحيح !اعد تحميل الصفحة ");
+    }
+  };
+
+  const [allCategoryStock, setAllCategoryStock] = useState([]);
+
+  const getAllCategoryStock = async () => {
+    if (!token) {
+      toast.error("رجاء تسجيل الدخول مره اخري");
+      return;
+    }
+
+    try {
+      const response = await axios.get(apiUrl + "/api/categoryStock/", config);
+      setAllCategoryStock(response.data.reverse());
+    } catch (error) {
+      console.error("Error fetching category stock:", error);
+      toast.error("حدث خطأ اثناء جلب بيانات التصنيفات ! اعد تحميل الصفحة");
+    }
+  };
+
   const searchByitem = (item) => {
     if (!item) {
       getallStockaction();
@@ -332,24 +352,26 @@ const StockManag = () => {
       return;
     }
     const items = AllStockactions.filter(
-      (Stockactions) => Stockactions.movement === action
+      (Stockactions) => Stockactions.source === action
     );
     setAllStockactions(items);
   };
 
   useEffect(() => {
     getallStockaction();
-    getaStockItems();
+    getStockItems();
+    getAllStores();
+    getAllCategoryStock();
     getAllCashRegisters();
     getallrecipes();
   }, []);
 
   // useEffect(() => {
-  //   if (movement === "Issuance" || movement === "Wastage") {
+  //   if (source === "Issuance" || source === "Wastage") {
   //     setnewBalance(Number(oldBalance) - Number(quantity / parts))
   //     setnewcost(Number(oldCost) - Number(cost))
   //     setcostOfPart(Number(price) / Number(parts))
-  //   } else if (movement === 'Purchase') {
+  //   } else if (source === 'Purchase') {
   //     const calcNewBalance = Number(oldBalance) + Number(quantity)
   //     const calcNewCost = Number(oldCost) + Number(cost)
   //     const calcCostOfPart = Math.round((price / calcNewBalance) * 10) / 10;
@@ -358,7 +380,7 @@ const StockManag = () => {
   //     setnewcost(calcNewCost)
   //     setcostOfPart(calcCostOfPart)
 
-  //   } else if (movement === "Return") {
+  //   } else if (source === "Return") {
   //     setnewBalance(Number(oldBalance) + Number(quantity / parts))
   //     setnewcost(Number(oldCost) + Number(cost))
   //     setcostOfPart(Number(price) / Number(parts))
@@ -367,32 +389,28 @@ const StockManag = () => {
   // }, [quantity, price])
 
   useEffect(() => {
-    if (
-      movement === "Issuance" ||
-      movement === "Wastage" ||
-      movement === "Damaged"
-    ) {
+    if (source === "Issuance" || source === "Wastage" || source === "Damaged") {
       const calcNewBalance =
         Number(oldBalance) - Number(quantity) / Number(parts);
       const countparts = calcNewBalance * Number(parts);
       const calcCostOfPart = Math.round((price / countparts) * 100) / 100;
       setnewBalance(calcNewBalance);
       setcostOfPart(calcCostOfPart);
-    } else if (movement === "ReturnIssuance") {
+    } else if (source === "ReturnIssuance") {
       const calcNewBalance =
         Number(oldBalance) + Number(quantity) / Number(parts);
       const countparts = calcNewBalance * Number(parts);
       const calcCostOfPart = Math.round((price / countparts) * 100) / 100;
       setnewBalance(calcNewBalance);
       setcostOfPart(calcCostOfPart);
-    } else if (movement === "Purchase") {
+    } else if (source === "Purchase") {
       const calcNewBalance = Number(oldBalance) + Number(quantity);
       const countparts = calcNewBalance * Number(parts);
       const calcCostOfPart = Math.round((price / countparts) * 100) / 100;
       console.log({ calcNewBalance, calcCostOfPart, countparts });
       setnewBalance(calcNewBalance);
       setcostOfPart(calcCostOfPart);
-    } else if (movement === "ReturnPurchase") {
+    } else if (source === "ReturnPurchase") {
       const calcNewBalance = Number(oldBalance) - Number(quantity);
       const countparts = calcNewBalance * Number(parts);
       const calcCostOfPart = Math.round((price / countparts) * 100) / 100;
@@ -480,10 +498,10 @@ const StockManag = () => {
                   onChange={(e) => searchByaction(e.target.value)}
                 >
                   <option value={""}>الكل</option>
-                  {StockmovementEn.map((movement, i) => {
+                  {StocksourceEn.map((source, i) => {
                     return (
-                      <option key={i} value={movement}>
-                        {StockmovementAr[i]}
+                      <option key={i} value={source}>
+                        {StocksourceAr[i]}
                       </option>
                     );
                   })}
@@ -613,7 +631,7 @@ const StockManag = () => {
                         <td>{action.balance?.quantity || 0}</td>
                         <td>{action.balance?.unitCost || 0}</td>
                         <td>{action.balance?.totalCost || 0}</td>
-                        <td>{formatDateTime(action.movementDate)}</td>
+                        <td>{formatDateTime(action.sourceDate)}</td>
                         <td>{action.createdBy?.fullname}</td>
                         <td>
                           {stockManagementPermission.update && (
@@ -730,7 +748,7 @@ const StockManag = () => {
       <div id="addStockactionModal" className="modal fade">
         <div className="modal-dialog modal-lg">
           <div className="modal-content shadow-lg border-0 rounded">
-            <form onSubmit={(e) => createStockAction(e, employeeLoginInfo.id)}>
+            <form onSubmit={createStockAction}>
               <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                 <h4 className="modal-title">تسجيل حركة بالمخزن</h4>
                 <button
@@ -743,7 +761,6 @@ const StockManag = () => {
                 </button>
               </div>
               <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
-                {/* اختيار المخزن */}
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                     المخزن
@@ -755,7 +772,7 @@ const StockManag = () => {
                     <option value="">اختر المخزن</option>
                     {Stores.map((store, i) => (
                       <option key={i} value={store._id}>
-                        {store.name}
+                        {store.storeName}
                       </option>
                     ))}
                   </select>
@@ -769,15 +786,13 @@ const StockManag = () => {
                   <select
                     className="form-control border-primary m-0 p-2 h-auto"
                     onChange={(e) => {
-                      setCategory(e.target.value);
-                      // تحديث الأصناف بناءً على التصنيف المحدد
-                      updateStockItems(e.target.value);
+                      setCategoryId(e.target.value);
                     }}
                   >
                     <option value="">اختر التصنيف</option>
-                    {Categories.map((category, i) => (
+                    {allCategoryStock.map((category, i) => (
                       <option key={i} value={category._id}>
-                        {category.name}
+                        {category.categoryName}
                       </option>
                     ))}
                   </select>
@@ -792,15 +807,14 @@ const StockManag = () => {
                     className="form-control border-primary m-0 p-2 h-auto"
                     onChange={(e) => {
                       handleSelectedItem(e);
-                      const selectedItem = StockItems.find(
-                        (item) => item._id === e.target.value
-                      );
-                      setlargeUnit(selectedItem?.largeUnit || "");
-                      setsmallUnit(selectedItem?.smallUnit || "");
                     }}
                   >
                     <option value="">اختر الصنف</option>
-                    {StockItems.map((item, i) => (
+                    {StockItems.filter(
+                      (item) =>
+                        item.storeId === storeId &&
+                        item.categoryId === categoryId
+                    )?.map((item, i) => (
                       <option key={i} value={item._id}>
                         {item.itemName}
                       </option>
@@ -808,9 +822,27 @@ const StockManag = () => {
                   </select>
                 </div>
 
-                {/* باقي الحقول */}
+                <div className="form-group col-12 col-md-6">
+                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                    نوع العملية
+                  </label>
+                  <select
+                    className="form-control border-primary m-0 p-2 h-auto"
+                    onChange={(e) => {
+                      handleSelectedItem(e);
+                    }}
+                  >
+                    <option value="">اختر العملية</option>
+                    {sourceEn.map((source, i) => (
+                      <option key={i} value={source}>
+                        {sourceAr[i]}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
                 {["Issuance", "ReturnIssuance", "Wastage", "Damaged"].includes(
-                  movement
+                  source
                 ) ? (
                   <div className="form-group col-12 col-md-6">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
@@ -823,7 +855,6 @@ const StockManag = () => {
                         required
                         onChange={(e) => {
                           setquantity(e.target.value);
-                          setcost(Number(e.target.value) * costOfPart);
                         }}
                       />
                       <input
@@ -834,7 +865,7 @@ const StockManag = () => {
                       />
                     </div>
                   </div>
-                ) : ["Purchase", "ReturnPurchase"].includes(movement) ? (
+                ) : ["Purchase", "ReturnPurchase"].includes(source) ? (
                   <div className="form-group col-12 col-md-6">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                       الكمية
@@ -858,8 +889,8 @@ const StockManag = () => {
                   </div>
                 ) : null}
 
-                {["Issuance", "ReturnIssuance", "Wastage", "Damaged"].includes(
-                  movement
+                {/* {["Issuance", "ReturnIssuance", "Wastage", "Damaged"].includes(
+                  source
                 ) ? (
                   <div className="form-group col-12 col-md-6">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
@@ -872,7 +903,7 @@ const StockManag = () => {
                       defaultValue={costOfPart}
                     />
                   </div>
-                ) : ["Purchase", "ReturnPurchase"].includes(movement) ? (
+                ) : ["Purchase", "ReturnPurchase"].includes(source) ? (
                   <div className="form-group col-12 col-md-6">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                       سعر {smallUnit}
@@ -889,7 +920,7 @@ const StockManag = () => {
                   </div>
                 ) : null}
 
-                {["Purchase", "ReturnPurchase"].includes(movement) ? (
+                {["Purchase", "ReturnPurchase"].includes(source) ? (
                   <div className="form-group col-12 col-md-6">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                       التكلفة
@@ -940,7 +971,7 @@ const StockManag = () => {
                       readOnly
                     />
                   </div>
-                </div>
+                </div> */}
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                     التاريخ
@@ -971,7 +1002,7 @@ const StockManag = () => {
         </div>
       </div>
 
-      <div id="editStockactionModal" className="modal fade">
+      {/* <div id="editStockactionModal" className="modal fade">
         <div className="modal-dialog modal-lg">
           <div className="modal-content shadow-lg border-0 rounded">
             <form onSubmit={(e) => updateStockaction(e, employeeLoginInfo.id)}>
@@ -987,7 +1018,6 @@ const StockManag = () => {
                 </button>
               </div>
               <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
-                {/* اختيار المخزن */}
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                     المخزن
@@ -1006,7 +1036,6 @@ const StockManag = () => {
                   </select>
                 </div>
 
-                {/* اختيار التصنيف */}
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                     التصنيف
@@ -1016,7 +1045,6 @@ const StockManag = () => {
                     value={categoryId}
                     onChange={(e) => {
                       setCategoryId(e.target.value);
-                      // تحديث الأصناف بناءً على التصنيف المحدد
                       updateStockItems(e.target.value);
                     }}
                   >
@@ -1029,7 +1057,6 @@ const StockManag = () => {
                   </select>
                 </div>
 
-                {/* اختيار الصنف */}
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                     الصنف
@@ -1055,9 +1082,8 @@ const StockManag = () => {
                   </select>
                 </div>
 
-                {/* باقي الحقول */}
                 {["Issuance", "ReturnIssuance", "Wastage", "Damaged"].includes(
-                  movement
+                  source
                 ) ? (
                   <div className="form-group col-12 col-md-6">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
@@ -1081,7 +1107,7 @@ const StockManag = () => {
                       />
                     </div>
                   </div>
-                ) : ["Purchase", "ReturnPurchase"].includes(movement) ? (
+                ) : ["Purchase", "ReturnPurchase"].includes(source) ? (
                   <div className="form-group col-12 col-md-6">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                       الكمية
@@ -1106,7 +1132,7 @@ const StockManag = () => {
                 ) : null}
 
                 {["Issuance", "ReturnIssuance", "Wastage", "Damaged"].includes(
-                  movement
+                  source
                 ) ? (
                   <div className="form-group col-12 col-md-6">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
@@ -1119,7 +1145,7 @@ const StockManag = () => {
                       value={costOfPart}
                     />
                   </div>
-                ) : ["Purchase", "ReturnPurchase"].includes(movement) ? (
+                ) : ["Purchase", "ReturnPurchase"].includes(source) ? (
                   <div className="form-group col-12 col-md-6">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                       سعر {smallUnit}
@@ -1136,7 +1162,7 @@ const StockManag = () => {
                   </div>
                 ) : null}
 
-                {["Purchase", "ReturnPurchase"].includes(movement) ? (
+                {["Purchase", "ReturnPurchase"].includes(source) ? (
                   <div className="form-group col-12 col-md-6">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                       التكلفة
@@ -1216,7 +1242,7 @@ const StockManag = () => {
             </form>
           </div>
         </div>
-      </div>
+      </div> */}
 
       <div id="deleteStockactionModal" className="modal fade">
         <div className="modal-dialog modal-lg">
