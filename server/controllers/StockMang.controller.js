@@ -1,4 +1,4 @@
-const StockMovementModel = require("../models/StockMovement.model");
+const StockMovementModel = require("../models/StockManag.model");
 
 // Controller function to create a new stock movement action
 const createStockAction = async (req, res, next) => {
