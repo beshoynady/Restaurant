@@ -663,28 +663,29 @@ const StockManag = () => {
           <table className="table table-striped table-hover">
             <thead>
               <tr>
-                <th>
-                  {/* <span className="custom-checkbox">
-                    <input
-                      type="checkbox"
-                      className="form-check-input form-check-input-lg"
-                      id="selectAll"
-                    />
-                    <label htmlFor="selectAll"></label>
-                  </span> */}
-                </th>
-                <th>م</th>
-                <th>اسم الصنف</th>
-                <th>الحركة</th>
+                <th rowspan="2">م</th>
+                <th rowspan="2">اسم الصنف</th>
+                <th rowspan="2">المخزن</th>
+                <th rowspan="2">التصنيف</th>
+                <th rowspan="2">طريقه حساب التكلفه</th>
+                <th rowspan="2">مصدر الحركة</th>
+                <th colspan="3">صادر</th>
+                <th colspan="3">وارد</th>
+                <th colspan="3">الرصيد</th>
+                <th rowspan="2">تاريخ الحركة</th>
+                <th rowspan="2">أضيف بواسطة</th>
+                <th rowspan="2">إجراءات</th>
+              </tr>
+              <tr>
                 <th>الكمية</th>
-                <th>الوحدة</th>
-                <th>السعر</th>
-                <th>الثمن</th>
-                <th>الرصيدالقديم</th>
-                <th>الرصيد الجديد</th>
-                <th>تاريخ الحركه</th>
-                <th>تم بواسطه</th>
-                <th>اجراءات</th>
+                <th>تكلفة الوحدة</th>
+                <th>الإجمالي</th>
+                <th>الكمية</th>
+                <th>تكلفة الوحدة</th>
+                <th>الإجمالي</th>
+                <th>الكمية</th>
+                <th>تكلفة الوحدة</th>
+                <th>الإجمالي</th>
               </tr>
             </thead>
             <tbody>
@@ -693,18 +694,6 @@ const StockManag = () => {
                   if ((i >= startpagination) & (i < endpagination)) {
                     return (
                       <tr key={i}>
-                        <td>
-                          <span className="custom-checkbox">
-                            <input
-                              type="checkbox"
-                              className="form-check-input form-check-input-lg"
-                              id="checkbox1"
-                              name="options[]"
-                              value="1"
-                            />
-                            <label htmlFor="checkbox1"></label>
-                          </span>
-                        </td>
                         <td>{i + 1}</td>
                         <td>{action.itemId?.itemName}</td>
                         <td>{action.movement}</td>
