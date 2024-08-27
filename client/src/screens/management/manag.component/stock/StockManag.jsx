@@ -86,7 +86,7 @@ const StockManag = () => {
     "Wastage",
     "Damaged",
     "stockAdjustment",
-    "OpeningBalance"
+    "OpeningBalance",
   ];
 
   const sourceAr = [
@@ -97,16 +97,14 @@ const StockManag = () => {
     "هدر",
     "تالف",
     "تعديل المخزون",
-    "رصيد افتتاحي"
+    "رصيد افتتاحي",
   ];
 
-  
-  
   const [itemId, setItemId] = useState("");
   const [storeId, setStoreId] = useState("");
   const [categoryId, setCategoryId] = useState("");
   const [costMethod, setCostMethod] = useState("");
-  const [source, setSource] = useState(""); 
+  const [source, setSource] = useState("");
   const [inbound, setInbound] = useState({
     quantity: 0,
     unitCost: 0,
@@ -140,34 +138,21 @@ const StockManag = () => {
     const selectedItem = StockItems.find((item) => item._id === e.target.value);
     console.log({ selectedItem });
     if (selectedItem) {
-      const {
-        _id,
-        largeUnit,
-        itemName,
-        smallUnit,
-        costOfPart,
-        price,
-        currentBalance,
-        parts,
-      } = selectedItem;
+      const { _id, largeUnit, itemName, smallUnit,parts, costMethod } = selectedItem;
       console.log({
         _id,
         largeUnit,
         itemName,
         smallUnit,
-        costOfPart,
-        price,
-        currentBalance,
-        parts,
+        costMethod,
+        parts
       });
-      setitemId(_id);
-      setlargeUnit(largeUnit);
+      setItemId(_id);
+      setLargeUnit(largeUnit);
       setitemName(itemName);
-      setsmallUnit(smallUnit);
+      setSmallUnit(smallUnit);
       setcostOfPart(costOfPart);
       setprice(price);
-      setoldBalance(currentBalance);
-      setparts(parts);
     }
   };
 
