@@ -363,7 +363,7 @@ const StockManag = () => {
     getAllStores();
     getAllCategoryStock();
     getAllCashRegisters();
-    getallrecipes();
+    // getallrecipes();
   }, []);
 
   // useEffect(() => {
@@ -388,36 +388,36 @@ const StockManag = () => {
   //   }
   // }, [quantity, price])
 
-  useEffect(() => {
-    if (source === "Issuance" || source === "Wastage" || source === "Damaged") {
-      const calcNewBalance =
-        Number(oldBalance) - Number(quantity) / Number(parts);
-      const countparts = calcNewBalance * Number(parts);
-      const calcCostOfPart = Math.round((price / countparts) * 100) / 100;
-      setnewBalance(calcNewBalance);
-      setcostOfPart(calcCostOfPart);
-    } else if (source === "ReturnIssuance") {
-      const calcNewBalance =
-        Number(oldBalance) + Number(quantity) / Number(parts);
-      const countparts = calcNewBalance * Number(parts);
-      const calcCostOfPart = Math.round((price / countparts) * 100) / 100;
-      setnewBalance(calcNewBalance);
-      setcostOfPart(calcCostOfPart);
-    } else if (source === "Purchase") {
-      const calcNewBalance = Number(oldBalance) + Number(quantity);
-      const countparts = calcNewBalance * Number(parts);
-      const calcCostOfPart = Math.round((price / countparts) * 100) / 100;
-      console.log({ calcNewBalance, calcCostOfPart, countparts });
-      setnewBalance(calcNewBalance);
-      setcostOfPart(calcCostOfPart);
-    } else if (source === "ReturnPurchase") {
-      const calcNewBalance = Number(oldBalance) - Number(quantity);
-      const countparts = calcNewBalance * Number(parts);
-      const calcCostOfPart = Math.round((price / countparts) * 100) / 100;
-      setnewBalance(calcNewBalance);
-      setcostOfPart(calcCostOfPart);
-    }
-  }, [quantity, price]);
+  // useEffect(() => {
+  //   if (source === "Issuance" || source === "Wastage" || source === "Damaged") {
+  //     const calcNewBalance =
+  //       Number(oldBalance) - Number(quantity) / Number(parts);
+  //     const countparts = calcNewBalance * Number(parts);
+  //     const calcCostOfPart = Math.round((price / countparts) * 100) / 100;
+  //     setnewBalance(calcNewBalance);
+  //     setcostOfPart(calcCostOfPart);
+  //   } else if (source === "ReturnIssuance") {
+  //     const calcNewBalance =
+  //       Number(oldBalance) + Number(quantity) / Number(parts);
+  //     const countparts = calcNewBalance * Number(parts);
+  //     const calcCostOfPart = Math.round((price / countparts) * 100) / 100;
+  //     setnewBalance(calcNewBalance);
+  //     setcostOfPart(calcCostOfPart);
+  //   } else if (source === "Purchase") {
+  //     const calcNewBalance = Number(oldBalance) + Number(quantity);
+  //     const countparts = calcNewBalance * Number(parts);
+  //     const calcCostOfPart = Math.round((price / countparts) * 100) / 100;
+  //     console.log({ calcNewBalance, calcCostOfPart, countparts });
+  //     setnewBalance(calcNewBalance);
+  //     setcostOfPart(calcCostOfPart);
+  //   } else if (source === "ReturnPurchase") {
+  //     const calcNewBalance = Number(oldBalance) - Number(quantity);
+  //     const countparts = calcNewBalance * Number(parts);
+  //     const calcCostOfPart = Math.round((price / countparts) * 100) / 100;
+  //     setnewBalance(calcNewBalance);
+  //     setcostOfPart(calcCostOfPart);
+  //   }
+  // }, [quantity, price]);
 
   return (
     <div className="w-100 px-3 d-flex align-itmes-center justify-content-start">
@@ -495,13 +495,13 @@ const StockManag = () => {
                 </label>
                 <select
                   class="form-control border-primary m-0 p-2 h-auto"
-                  onChange={(e) => searchByaction(e.target.value)}
+                  onChange={(e) => setSource(e.target.value)}
                 >
                   <option value={""}>الكل</option>
-                  {StocksourceEn.map((source, i) => {
+                  {sourceEn.map((source, i) => {
                     return (
                       <option key={i} value={source}>
-                        {StocksourceAr[i]}
+                        {sourceAr[i]}
                       </option>
                     );
                   })}
@@ -641,9 +641,6 @@ const StockManag = () => {
                               data-toggle="modal"
                               onClick={() => {
                                 setactionId(action._id);
-                                setitemName(action.itemId?.itemName);
-                                setoldBalance(action.balance?.quantity || 0);
-                                setprice(action.outbound?.unitCost || 0);
                               }}
                             >
                               <i
@@ -767,7 +764,7 @@ const StockManag = () => {
                   </label>
                   <select
                     className="form-control border-primary m-0 p-2 h-auto"
-                    onChange={(e) => setStore(e.target.value)}
+                    onChange={(e) => setStoreId(e.target.value)}
                   >
                     <option value="">اختر المخزن</option>
                     {Stores.map((store, i) => (
@@ -979,22 +976,22 @@ const StockManag = () => {
                   <input
                     type="text"
                     className="form-control border-primary m-0 p-2 h-auto"
-                    Value={actionAt}
+                    Value={formatDate(new Date())}
                     readOnly
                   />
                 </div>
               </div>
               <div className="modal-footer d-flex flex-nowrap align-items-center justify-content-between m-0 p-1">
                 <input
+                  type="submit"
+                  className="btn btn-success col-6 h-100 px-2 py-3 m-0"
+                  value="اضافة"
+                />
+                <input
                   type="button"
                   className="btn btn-danger col-6 h-100 px-2 py-3 m-0"
                   data-dismiss="modal"
                   value="إغلاق"
-                />
-                <input
-                  type="submit"
-                  className="btn btn-success col-6 h-100 px-2 py-3 m-0"
-                  value="اضافة"
                 />
               </div>
             </form>
