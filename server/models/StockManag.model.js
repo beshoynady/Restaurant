@@ -1,24 +1,29 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const { ObjectId } = mongoose.Schema;
 
-const StockManagSchema = new mongoose.Schema(
+const StockMovementSchema = new mongoose.Schema(
   {
-    // Item reference ID
     itemId: {
       type: ObjectId,
-      ref: "StockItem",
+      ref: 'StockItem',
       required: true,
     },
-    supplier: {
+    storeId: {
       type: ObjectId,
-      ref: "Supplier",
+      ref: 'Store',
+      required: true,
     },
-    receiver: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Employee",
+    categoryId: {
+      type: ObjectId,
+      ref: 'CategoryStock',
+      required: true,
     },
-    // Type of movement: Purchase, Expense, Return, Wastage
-    movement: {
+    costMethod: {
+      type: String,
+      enum: ['FIFO', 'LIFO', 'Weighted Average'],
+      required: true,
+    },
+    source: {
       type: String,
       enum: [
         "Purchase",
@@ -32,50 +37,70 @@ const StockManagSchema = new mongoose.Schema(
       ],
       required: true,
     },
-    // Payment type for the transaction
-    paymentType: {
-      type: String,
-      enum: ["Cash", "Credit"], // Add more options if needed
+    inbound: {
+      quantity: {
+        type: Number,
+        required: false,
+        default: 0,
+      },
+      unitCost: {
+        type: Number,
+        required: false,
+        default: 0,
+      },
+      totalCost: {
+        type: Number,
+        required: false,
+        default: 0,
+      },
     },
-    // Unit of measurement
-    unit: {
-      type: String,
-      required: true,
+    outbound: {
+      quantity: {
+        type: Number,
+        required: false,
+        default: 0,
+      },
+      unitCost: {
+        type: Number,
+        required: false,
+        default: 0,
+      },
+      totalCost: {
+        type: Number,
+        required: false,
+        default: 0,
+      },
     },
-    // Quantity of stock
-    quantity: {
-      type: Number,
-      required: true,
-    },
-    // Old balance of stock
-    oldBalance: {
-      type: Number,
-      required: true,
-    },
-    // Current balance of stock
     balance: {
-      type: Number,
-      required: true,
+      quantity: {
+        type: Number,
+        required: true,
+        default: 0,
+      },
+      unitCost: {
+        type: Number,
+        required: true,
+        default: 0,
+      },
+      totalCost: {
+        type: Number,
+        required: true,
+        default: 0,
+      },
     },
-    // Price of the stock item
-    price: {
-      type: Number,
-      required: true,
-    },
-    // Current cost of the stock
-    cost: {
-      type: Number,
-      required: true,
-    },
-    // Expiration date of the stock item
-    expirationDate: {
+    movementDate: {
       type: Date,
-    },
-    // Action performed by the user
-    actionBy: {
-      type: ObjectId,
-      ref: "Employee",
+      default: Date.now,
       required: true,
+    },
+    createdBy: {
+      type: ObjectId,
+      ref: 'Employee',
+      required: true,
+    },
+    notes: {
+      type: String,
+      trim: true,
     },
   },
   {
@@ -83,5 +108,5 @@ const StockManagSchema = new mongoose.Schema(
   }
 );
 
-const StockManagementModel = mongoose.model("stockmanag", StockManagSchema);
-module.exports = StockManagementModel;
+const StockMovementModel = mongoose.model('StockMovement', StockMovementSchema);
+module.exports = StockMovementModel;
