@@ -147,6 +147,8 @@ const StockManag = () => {
 
   const [AllStockactions, setAllStockactions] = useState([]);
 
+
+  
   const createStockAction = async () => {
     if (!token) {
       toast.error("رجاء تسجيل الدخول مره اخري");
@@ -155,6 +157,193 @@ const StockManag = () => {
     if (stockManagementPermission && !stockManagementPermission.create) {
       toast.warn("ليس لك صلاحية لانشاء حركه المخزن");
       return;
+    }
+
+
+    const lastStockAction = AllStockactions.filter(
+      (stockAction) => stockAction.itemId?._id === itemId
+    ).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0];
+
+    // تعيين القيم الابتدائية للرصيد بناءً على آخر حركة
+    balance.quantity = lastStockAction ? lastStockAction.balance?.quantity : 0;
+    balance.unitCost = lastStockAction ? lastStockAction.balance?.unitCost : 0;
+    balance.totalCost = balance.quantity * balance.unitCost;
+
+    if (source === "Issuance" || source === "Wastage" || source === "Damaged") {
+      if (costMethod === "FIFO") {
+        const batches = AllStockactions.filter(
+          (stockAction) =>
+            stockAction.itemId?._id === itemId &&
+            stockAction.inbound?.quantity > 0 &&
+            stockAction.remainingQuantity > 0
+        ).sort((a, b) => new Date(a.movementDate) - new Date(b.movementDate));
+
+        let totalQuantity = quantity;
+        let totalCost = 0;
+
+        for (const batch of batches) {
+          if (totalQuantity > 0) {
+            const availableQuantity = batch.remainingQuantity;
+            const quantityToUse = Math.min(totalQuantity, availableQuantity);
+            const costForThisBatch = quantityToUse * batch.inbound.unitCost;
+
+            totalQuantity -= quantityToUse;
+            totalCost += costForThisBatch;
+
+            // تحديث الرصيد المتبقي في الدُفعة
+            batch.remainingQuantity -= quantityToUse;
+
+            const updateBatch = await axios.put(`${apiUrl}/api/stockmanag/${batch._id}`,{
+              remainingQuantity: batch.remainingQuantity
+            },config)
+            console.log({updateBatch})
+
+            // تحديث حركة الصادر
+            outbound.quantity += quantityToUse;
+            outbound.unitCost = totalCost / (quantity - totalQuantity);
+            outbound.totalCost = totalCost;
+
+            // تحديث الرصيد بعد الصادر
+            balance.quantity -= quantityToUse;
+            balance.totalCost -= costForThisBatch;
+
+            if (totalQuantity <= 0) break;
+          }
+
+        }
+      } else if (costMethod === "LIFO") {
+        const batches = AllStockactions.filter(
+          (stockAction) =>
+            stockAction.itemId?._id === itemId &&
+            stockAction.inbound?.quantity > 0 &&
+            stockAction.remainingQuantity > 0
+        ).sort((a, b) => new Date(b.movementDate) - new Date(a.movementDate));
+
+        let totalQuantity = quantity;
+        let totalCost = 0;
+
+        for (const batch of batches) {
+          if (totalQuantity > 0) {
+            const availableQuantity = batch.remainingQuantity;
+            const quantityToUse = Math.min(totalQuantity, availableQuantity);
+            const costForThisBatch = quantityToUse * batch.inbound.unitCost;
+
+            totalQuantity -= quantityToUse;
+            totalCost += costForThisBatch;
+
+            // تحديث الرصيد المتبقي في الدُفعة
+            batch.remainingQuantity -= quantityToUse;
+            const updateBatch = await axios.put(`${apiUrl}/api/stockmanag/${batch._id}`,{
+              remainingQuantity: batch.remainingQuantity
+            },config)
+            console.log({updateBatch})
+            // تحديث حركة الصادر
+            outbound.quantity += quantityToUse;
+            outbound.unitCost = totalCost / (quantity - totalQuantity);
+            outbound.totalCost = totalCost;
+
+            // تحديث الرصيد بعد الصادر
+            balance.quantity -= quantityToUse;
+            balance.totalCost -= costForThisBatch;
+
+            if (totalQuantity <= 0) break;
+          }
+        }
+      } else if (costMethod === "Weighted Average") {
+        const batches = AllStockactions.filter(
+          (stockAction) =>
+            stockAction.itemId?._id === itemId &&
+            stockAction.inbound?.quantity > 0 &&
+            stockAction.remainingQuantity > 0
+        ).sort((a, b) => new Date(a.movementDate) - new Date(b.movementDate));
+
+        const totalQuantityInStock = batches.reduce(
+          (acc, curr) => acc + curr.remainingQuantity,
+          0
+        );
+        const totalCostInStock = batches.reduce(
+          (acc, curr) => acc + curr.remainingQuantity * curr.inbound.unitCost,
+          0
+        );
+
+        const weightedAverageCost = totalCostInStock / totalQuantityInStock;
+
+
+        // تحديث حركة الصادر
+        outbound.quantity = quantity;
+        outbound.unitCost = weightedAverageCost;
+        outbound.totalCost = outbound.quantity * outbound.unitCost;
+
+        // تحديث الرصيد بعد الصادر
+        balance.quantity -= quantity;
+        balance.totalCost -= outbound.totalCost;
+
+        let totalQuantity = quantity;
+        let totalCost = 0;
+
+        for (const batch of batches) {
+          if (totalQuantity > 0) {
+            const availableQuantity = batch.remainingQuantity;
+            const quantityToUse = Math.min(totalQuantity, availableQuantity);
+            const costForThisBatch = quantityToUse * batch.inbound.unitCost;
+
+            totalQuantity -= quantityToUse;
+            totalCost += costForThisBatch;
+
+            batch.remainingQuantity -= quantityToUse;
+
+            const updateBatch = await axios.put(`${apiUrl}/api/stockmanag/${batch._id}`,{
+              remainingQuantity: batch.remainingQuantity
+            },config)
+            console.log({updateBatch})
+            if (totalQuantity <= 0) break;
+          }
+
+        }
+
+        if (balance.quantity < 0) {
+          throw new Error(
+            "Insufficient stock to fulfill the issuance request."
+          );
+        }
+      }
+    } else if (source === "ReturnIssuance") {
+      inbound.quantity = quantity;
+      inbound.unitCost = lastStockAction ? lastStockAction.unitCost : 0;
+      inbound.totalCost = inbound.quantity * inbound.unitCost;
+
+      balance.quantity += quantity;
+      balance.totalCost += inbound.totalCost;
+    } else if (source === "Purchase") {
+      inbound.quantity = quantity;
+      inbound.unitCost = costUnit;
+      inbound.totalCost = quantity * inbound.unitCost;
+
+      balance.quantity += quantity;
+      balance.unitCost =
+        (balance.totalCost + inbound.totalCost) / balance.quantity;
+      balance.totalCost += inbound.totalCost;
+    } else if (source === "OpeningBalance") {
+      inbound.quantity = quantity;
+      inbound.unitCost = costUnit;
+      inbound.totalCost = quantity * inbound.unitCost;
+
+      balance.quantity = quantity;
+      balance.unitCost = costUnit;
+      balance.totalCost = inbound.totalCost;
+    } else if (source === "ReturnPurchase") {
+      outbound.quantity = quantity;
+      outbound.unitCost = costUnit;
+      outbound.totalCost = quantity * outbound.unitCost;
+
+      balance.quantity -= quantity;
+      balance.totalCost -= outbound.totalCost;
+
+      if (balance.quantity < 0) {
+        throw new Error(
+          "Invalid operation: Return quantity exceeds current balance."
+        );
+      }
     }
 
     const data = {
@@ -167,7 +356,7 @@ const StockManag = () => {
       inbound,
       outbound,
       balance,
-      remainingQuantity,
+      remainingQuantity: source==='Purchase'? inbound.quantity: 0,
       sourceDate,
       notes,
     };
@@ -186,6 +375,46 @@ const StockManag = () => {
     }
   };
 
+  // const createStockAction = async () => {
+  //   if (!token) {
+  //     toast.error("رجاء تسجيل الدخول مره اخري");
+  //     return;
+  //   }
+  //   if (stockManagementPermission && !stockManagementPermission.create) {
+  //     toast.warn("ليس لك صلاحية لانشاء حركه المخزن");
+  //     return;
+  //   }
+
+  //   const data = {
+  //     itemId,
+  //     storeId,
+  //     categoryId,
+  //     costMethod,
+  //     source,
+  //     unit,
+  //     inbound,
+  //     outbound,
+  //     balance,
+  //     remainingQuantity,
+  //     sourceDate,
+  //     notes,
+  //   };
+
+  //   try {
+  //     const response = await axios.post(
+  //       `${apiUrl}/api/stockmanag`,
+  //       data,
+  //       config
+  //     );
+  //     toast.success("تم تسجيل حركة المخزون بنجاح");
+  //     return response.data;
+  //   } catch (error) {
+  //     toast.error("فشل تسجيل حركة المخزون!");
+  //     console.error("Error creating stock source:", error);
+  //   }
+  // };
+
+  
   const updateStockaction = async (e, employeeId) => {
     e.preventDefault();
 
@@ -382,7 +611,7 @@ const StockManag = () => {
             stockAction.itemId?._id === itemId &&
             stockAction.inbound?.quantity > 0 &&
             stockAction.remainingQuantity > 0
-        ).sort((a, b) => new Date(a.movementDate) - new Date(b.movementDate)); // فرز الدفعات بالأقدمية
+        ).sort((a, b) => new Date(a.movementDate) - new Date(b.movementDate));
 
         let totalQuantity = quantity;
         let totalCost = 0;
