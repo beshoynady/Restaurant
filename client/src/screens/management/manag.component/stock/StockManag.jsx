@@ -941,28 +941,6 @@ const StockManag = () => {
                 {["Issuance", "ReturnIssuance", "Wastage", "Damaged"].includes(
                   source
                 ) ? (
-                  <div className="form-group col-12 col-md-6">
-                    <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
-                      الكمية
-                    </label>
-                    <div className="d-flex align-items-center">
-                      <input
-                        type="number"
-                        className="form-control border-primary flex-grow-1"
-                        required
-                        onChange={(e) => {
-                          setquantity(e.target.value);
-                        }}
-                      />
-                      <input
-                        type="text"
-                        className="form-control border-primary ms-2"
-                        defaultValue={unit}
-                        readOnly
-                      />
-                    </div>
-                  </div>
-                ) : ["Purchase", "ReturnPurchase"].includes(source) ? (
                   <>
                     <div className="form-group col-12 col-md-6">
                       <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
@@ -973,6 +951,7 @@ const StockManag = () => {
                           type="number"
                           className="form-control border-primary flex-grow-1"
                           required
+                          max={balance.quantity}
                           onChange={(e) => {
                             setquantity(e.target.value);
                           }}
@@ -999,6 +978,28 @@ const StockManag = () => {
                       </div>
                     </div>
                   </>
+                ) : ["Purchase", "ReturnPurchase"].includes(source) ? (
+                  <div className="form-group col-12 col-md-6">
+                    <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                      الكمية
+                    </label>
+                    <div className="d-flex align-items-center">
+                      <input
+                        type="number"
+                        className="form-control border-primary flex-grow-1"
+                        required
+                        onChange={(e) => {
+                          setquantity(e.target.value);
+                        }}
+                      />
+                      <input
+                        type="text"
+                        className="form-control border-primary ms-2"
+                        defaultValue={unit}
+                        readOnly
+                      />
+                    </div>
+                  </div>
                 ) : ["OpeningBalance"].includes(source) ? (
                   <>
                     <div className="form-group col-12 col-md-6">
