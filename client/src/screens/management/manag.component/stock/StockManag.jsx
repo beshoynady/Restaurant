@@ -116,6 +116,10 @@ const StockManag = () => {
   const [actionId, setactionId] = useState("");
   const [AllStockactions, setAllStockactions] = useState([]);
 
+
+
+
+
   const createStockAction = async (e) => {
     e.preventDefault();
     if (!token) {
@@ -127,19 +131,33 @@ const StockManag = () => {
       return;
     }
 
+    
     const lastStockAction = AllStockactions.filter(
       (stockAction) => stockAction.itemId?._id === itemId
     ).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0];
 
-    // تعيين القيم الابتدائية للرصيد بناءً على آخر حركة
-    balance.quantity = lastStockAction
-      ? Number(lastStockAction.balance?.quantity)
-      : 0;
-    balance.unitCost = lastStockAction
-      ? Number(lastStockAction.balance?.unitCost)
-      : 0;
-    balance.totalCost = balance.quantity * balance.unitCost;
-
+    setInbound({
+    quantity: 0,
+    unitCost: 0,
+    totalCost: 0,
+  })
+    setOutbound({
+    quantity: 0,
+    unitCost: 0,
+    totalCost: 0,
+  })
+    setBalance({
+    quantity: lastStockAction
+    ? Number(lastStockAction.balance?.quantity)
+    : 0,
+    unitCost: lastStockAction
+    ? Number(lastStockAction.balance?.unitCost)
+    : 0,
+    totalCost: lastStockAction
+    ? Number(lastStockAction.balance?.totalCost)
+    : 0,
+  })
+  console.log({inbound, outbound, balance})
     if (source === "Issuance" || source === "Wastage" || source === "Damaged") {
       if (costMethod === "FIFO") {
         const batches = AllStockactions.filter((stockAction) => {
@@ -182,7 +200,7 @@ const StockManag = () => {
               },
               config
             );
-            console.log({ updateBatch });
+            console.log({ updateBatch, quantityToUse });
 
             // تحديث حركة الصادر
             outbound.quantity += quantityToUse;
