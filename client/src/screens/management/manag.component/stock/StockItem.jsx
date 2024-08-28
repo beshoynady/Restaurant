@@ -111,7 +111,7 @@ const StockItem = () => {
           itemCode,
           itemName,
           categoryId,
-          storeId,
+          // storeId,
           largeUnit,
           parts,
           smallUnit,
@@ -164,7 +164,7 @@ const StockItem = () => {
           itemCode,
           itemName,
           categoryId,
-          storeId,
+          // storeId,
           largeUnit,
           parts,
           smallUnit,
@@ -282,27 +282,27 @@ const StockItem = () => {
 
   const [allStores, setAllStores] = useState([]);
 
-  const getAllStores = async () => {
-    if (!token) {
-      toast.error("رجاء تسجيل الدخول مره اخري");
-      return;
-    }
+  // const getAllStores = async () => {
+  //   if (!token) {
+  //     toast.error("رجاء تسجيل الدخول مره اخري");
+  //     return;
+  //   }
 
-    try {
-      const response = await axios.get(apiUrl + "/api/store/", config);
-      setAllStores(response.data.reverse());
-    } catch (error) {
-      console.error("Error fetching stores:", error);
-      toast.error("حدث خطأ اثناء جلب بيانات المخزنات! اعد تحميل الصفحة");
-    }
-  };
+  //   try {
+  //     const response = await axios.get(apiUrl + "/api/store/", config);
+  //     setAllStores(response.data.reverse());
+  //   } catch (error) {
+  //     console.error("Error fetching stores:", error);
+  //     toast.error("حدث خطأ اثناء جلب بيانات المخزنات! اعد تحميل الصفحة");
+  //   }
+  // };
 
   const [stockitem, setstockitem] = useState({});
   const handelEditStockItemModal = (stockitem) => {
     const item = JSON.parse(stockitem)
     setstockitem(item);
     setStockItemId(item._id);
-    setStoreId(item.storeId?._id);
+    // setStoreId(item.storeId?._id);
     setCategoryId(item.categoryId?._id);
     setItemName(item.itemName);
     setMinThreshold(item.minThreshold);
@@ -338,7 +338,7 @@ const StockItem = () => {
 
   useEffect(() => {
     getStockItems();
-    getAllStores();
+    // getAllStores();
     getAllCategoryStock();
   }, []);
 
