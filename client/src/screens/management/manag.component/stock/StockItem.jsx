@@ -437,7 +437,6 @@ const StockItem = () => {
                 <th>الكود</th>
                 <th>اسم الصنف</th>
                 <th>التصنيف</th>
-                <th>المخزن</th>
                 <th>الوحدة كبيرة</th>
                 <th>عدد الوحدات</th>
                 <th>الوحدة صغيرة</th>
@@ -472,7 +471,6 @@ const StockItem = () => {
                         <td>{item.itemCode}</td>
                         <td>{item.itemName}</td>
                         <td>{item.categoryId?.categoryName}</td>
-                        <td>{item.storeId?.storeName}</td>
                         <td>{item.largeUnit}</td>
                         <td>{item.parts}</td>
                         <td>{item.smallUnit}</td>
@@ -633,7 +631,7 @@ const StockItem = () => {
                   />
                 </div>
                 
-                <div className="form-group col-12 col-md-6">
+                {/* <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                     المخزن
                   </label>
@@ -653,7 +651,7 @@ const StockItem = () => {
                       );
                     })}
                   </select>
-                </div>
+                </div> */}
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                     التصنيف
@@ -850,7 +848,7 @@ const StockItem = () => {
                     onChange={(e) => setItemName(e.target.value)}
                   />
                 </div>
-                <div className="form-group col-12 col-md-6">
+                {/* <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                     المخزن
                   </label>
@@ -867,7 +865,7 @@ const StockItem = () => {
                       );
                     })}
                   </select>
-                </div>
+                </div> */}
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                     التصنيف
