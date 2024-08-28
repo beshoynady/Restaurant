@@ -625,160 +625,160 @@ const StockManag = () => {
     // getallrecipes();
   }, []);
 
-  // useEffect(() => {
-  //   // جلب آخر حركة مخزون للمادة المحددة
-  //   const lastStockAction = AllStockactions.filter(
-  //     (stockAction) => stockAction.itemId?._id === itemId
-  //   ).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0];
+  useEffect(() => {
+    // جلب آخر حركة مخزون للمادة المحددة
+    const lastStockAction = AllStockactions.filter(
+      (stockAction) => stockAction.itemId?._id === itemId
+    ).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0];
 
-  //   // تعيين القيم الابتدائية للرصيد بناءً على آخر حركة
-  //   balance.quantity = lastStockAction ? lastStockAction.balance?.quantity : 0;
-  //   balance.unitCost = lastStockAction ? lastStockAction.balance?.unitCost : 0;
-  //   balance.totalCost = balance.quantity * balance.unitCost;
+    // تعيين القيم الابتدائية للرصيد بناءً على آخر حركة
+    balance.quantity = lastStockAction ? lastStockAction.balance?.quantity : 0;
+    balance.unitCost = lastStockAction ? lastStockAction.balance?.unitCost : 0;
+    balance.totalCost = balance.quantity * balance.unitCost;
 
-  //   if (source === "Issuance" || source === "Wastage" || source === "Damaged") {
-  //     if (costMethod === "FIFO") {
-  //       const batches = AllStockactions.filter(
-  //         (stockAction) =>
-  //           stockAction.itemId?._id === itemId &&
-  //           stockAction.inbound?.quantity > 0 &&
-  //           stockAction.remainingQuantity > 0
-  //       ).sort((a, b) => new Date(a.movementDate) - new Date(b.movementDate));
+    if (source === "Issuance" || source === "Wastage" || source === "Damaged") {
+      if (costMethod === "FIFO") {
+        const batches = AllStockactions.filter(
+          (stockAction) =>
+            stockAction.itemId?._id === itemId &&
+            stockAction.inbound?.quantity > 0 &&
+            stockAction.remainingQuantity > 0
+        ).sort((a, b) => new Date(a.movementDate) - new Date(b.movementDate));
 
-  //       let totalQuantity = quantity;
-  //       let totalCost = 0;
+        let totalQuantity = quantity;
+        let totalCost = 0;
 
-  //       for (const batch of batches) {
-  //         if (totalQuantity > 0) {
-  //           const availableQuantity = batch.remainingQuantity;
-  //           const quantityToUse = Math.min(totalQuantity, availableQuantity);
-  //           const costForThisBatch = quantityToUse * batch.inbound.unitCost;
+        for (const batch of batches) {
+          if (totalQuantity > 0) {
+            const availableQuantity = batch.remainingQuantity;
+            const quantityToUse = Math.min(totalQuantity, availableQuantity);
+            const costForThisBatch = quantityToUse * batch.inbound.unitCost;
 
-  //           totalQuantity -= quantityToUse;
-  //           totalCost += costForThisBatch;
+            totalQuantity -= quantityToUse;
+            totalCost += costForThisBatch;
 
-  //           // تحديث الرصيد المتبقي في الدُفعة
-  //           batch.remainingQuantity -= quantityToUse;
+            // تحديث الرصيد المتبقي في الدُفعة
+            batch.remainingQuantity -= quantityToUse;
 
-  //           // تحديث حركة الصادر
-  //           outbound.quantity += quantityToUse;
-  //           outbound.unitCost = totalCost / (quantity - totalQuantity);
-  //           outbound.totalCost = totalCost;
+            // تحديث حركة الصادر
+            outbound.quantity += quantityToUse;
+            outbound.unitCost = totalCost / (quantity - totalQuantity);
+            outbound.totalCost = totalCost;
 
-  //           // تحديث الرصيد بعد الصادر
-  //           balance.quantity -= quantityToUse;
-  //           balance.totalCost -= costForThisBatch;
+            // تحديث الرصيد بعد الصادر
+            balance.quantity -= quantityToUse;
+            balance.totalCost -= costForThisBatch;
 
-  //           if (totalQuantity <= 0) break;
-  //         }
-  //       }
-  //     } else if (costMethod === "LIFO") {
-  //       const batches = AllStockactions.filter(
-  //         (stockAction) =>
-  //           stockAction.itemId?._id === itemId &&
-  //           stockAction.inbound?.quantity > 0 &&
-  //           stockAction.remainingQuantity > 0
-  //       ).sort((a, b) => new Date(b.movementDate) - new Date(a.movementDate)); // فرز الدفعات بالأحدث أولاً
+            if (totalQuantity <= 0) break;
+          }
+        }
+      } else if (costMethod === "LIFO") {
+        const batches = AllStockactions.filter(
+          (stockAction) =>
+            stockAction.itemId?._id === itemId &&
+            stockAction.inbound?.quantity > 0 &&
+            stockAction.remainingQuantity > 0
+        ).sort((a, b) => new Date(b.movementDate) - new Date(a.movementDate)); // فرز الدفعات بالأحدث أولاً
 
-  //       let totalQuantity = quantity;
-  //       let totalCost = 0;
+        let totalQuantity = quantity;
+        let totalCost = 0;
 
-  //       for (const batch of batches) {
-  //         if (totalQuantity > 0) {
-  //           const availableQuantity = batch.remainingQuantity;
-  //           const quantityToUse = Math.min(totalQuantity, availableQuantity);
-  //           const costForThisBatch = quantityToUse * batch.inbound.unitCost;
+        for (const batch of batches) {
+          if (totalQuantity > 0) {
+            const availableQuantity = batch.remainingQuantity;
+            const quantityToUse = Math.min(totalQuantity, availableQuantity);
+            const costForThisBatch = quantityToUse * batch.inbound.unitCost;
 
-  //           totalQuantity -= quantityToUse;
-  //           totalCost += costForThisBatch;
+            totalQuantity -= quantityToUse;
+            totalCost += costForThisBatch;
 
-  //           // تحديث الرصيد المتبقي في الدُفعة
-  //           batch.remainingQuantity -= quantityToUse;
+            // تحديث الرصيد المتبقي في الدُفعة
+            batch.remainingQuantity -= quantityToUse;
 
-  //           // تحديث حركة الصادر
-  //           outbound.quantity += quantityToUse;
-  //           outbound.unitCost = totalCost / (quantity - totalQuantity);
-  //           outbound.totalCost = totalCost;
+            // تحديث حركة الصادر
+            outbound.quantity += quantityToUse;
+            outbound.unitCost = totalCost / (quantity - totalQuantity);
+            outbound.totalCost = totalCost;
 
-  //           // تحديث الرصيد بعد الصادر
-  //           balance.quantity -= quantityToUse;
-  //           balance.totalCost -= costForThisBatch;
+            // تحديث الرصيد بعد الصادر
+            balance.quantity -= quantityToUse;
+            balance.totalCost -= costForThisBatch;
 
-  //           if (totalQuantity <= 0) break;
-  //         }
-  //       }
-  //     } else if (costMethod === "Weighted Average") {
-  //       const totalStock = AllStockactions.filter(
-  //         (stockAction) =>
-  //           stockAction.itemId?._id === itemId &&
-  //           stockAction.inbound?.quantity > 0
-  //       );
+            if (totalQuantity <= 0) break;
+          }
+        }
+      } else if (costMethod === "Weighted Average") {
+        const totalStock = AllStockactions.filter(
+          (stockAction) =>
+            stockAction.itemId?._id === itemId &&
+            stockAction.inbound?.quantity > 0
+        );
 
-  //       const totalQuantityInStock = totalStock.reduce(
-  //         (acc, curr) => acc + curr.remainingQuantity,
-  //         0
-  //       );
-  //       const totalCostInStock = totalStock.reduce(
-  //         (acc, curr) => acc + curr.remainingQuantity * curr.inbound.unitCost,
-  //         0
-  //       );
+        const totalQuantityInStock = totalStock.reduce(
+          (acc, curr) => acc + curr.remainingQuantity,
+          0
+        );
+        const totalCostInStock = totalStock.reduce(
+          (acc, curr) => acc + curr.remainingQuantity * curr.inbound.unitCost,
+          0
+        );
 
-  //       const weightedAverageCost = totalCostInStock / totalQuantityInStock;
+        const weightedAverageCost = totalCostInStock / totalQuantityInStock;
 
-  //       // تحديث حركة الصادر
-  //       outbound.quantity = quantity;
-  //       outbound.unitCost = weightedAverageCost;
-  //       outbound.totalCost = outbound.quantity * outbound.unitCost;
+        // تحديث حركة الصادر
+        outbound.quantity = quantity;
+        outbound.unitCost = weightedAverageCost;
+        outbound.totalCost = outbound.quantity * outbound.unitCost;
 
-  //       // تحديث الرصيد بعد الصادر
-  //       balance.quantity -= quantity;
-  //       balance.totalCost -= outbound.totalCost;
+        // تحديث الرصيد بعد الصادر
+        balance.quantity -= quantity;
+        balance.totalCost -= outbound.totalCost;
 
-  //       if (balance.quantity < 0) {
-  //         throw new Error(
-  //           "Insufficient stock to fulfill the issuance request."
-  //         );
-  //       }
-  //     }
-  //   } else if (source === "ReturnIssuance") {
-  //     inbound.quantity = quantity;
-  //     inbound.unitCost = lastStockAction ? lastStockAction.unitCost : 0;
-  //     inbound.totalCost = inbound.quantity * inbound.unitCost;
+        if (balance.quantity < 0) {
+          throw new Error(
+            "Insufficient stock to fulfill the issuance request."
+          );
+        }
+      }
+    } else if (source === "ReturnIssuance") {
+      inbound.quantity = quantity;
+      inbound.unitCost = lastStockAction ? lastStockAction.unitCost : 0;
+      inbound.totalCost = inbound.quantity * inbound.unitCost;
 
-  //     balance.quantity += quantity;
-  //     balance.totalCost += inbound.totalCost;
-  //   } else if (source === "Purchase") {
-  //     inbound.quantity = quantity;
-  //     inbound.unitCost = costUnit;
-  //     inbound.totalCost = quantity * inbound.unitCost;
+      balance.quantity += quantity;
+      balance.totalCost += inbound.totalCost;
+    } else if (source === "Purchase") {
+      inbound.quantity = quantity;
+      inbound.unitCost = costUnit;
+      inbound.totalCost = quantity * inbound.unitCost;
 
-  //     balance.quantity += quantity;
-  //     balance.unitCost =
-  //       (balance.totalCost + inbound.totalCost) / balance.quantity;
-  //     balance.totalCost += inbound.totalCost;
-  //   } else if (source === "OpeningBalance") {
-  //     inbound.quantity = quantity;
-  //     inbound.unitCost = costUnit;
-  //     inbound.totalCost = quantity * inbound.unitCost;
+      balance.quantity += quantity;
+      balance.unitCost =
+        (balance.totalCost + inbound.totalCost) / balance.quantity;
+      balance.totalCost += inbound.totalCost;
+    } else if (source === "OpeningBalance") {
+      inbound.quantity = quantity;
+      inbound.unitCost = costUnit;
+      inbound.totalCost = quantity * inbound.unitCost;
 
-  //     balance.quantity = quantity;
-  //     balance.unitCost = costUnit;
-  //     balance.totalCost = inbound.totalCost;
-  //   } else if (source === "ReturnPurchase") {
-  //     outbound.quantity = quantity;
-  //     outbound.unitCost = costUnit;
-  //     outbound.totalCost = quantity * outbound.unitCost;
+      balance.quantity = quantity;
+      balance.unitCost = costUnit;
+      balance.totalCost = inbound.totalCost;
+    } else if (source === "ReturnPurchase") {
+      outbound.quantity = quantity;
+      outbound.unitCost = costUnit;
+      outbound.totalCost = quantity * outbound.unitCost;
 
-  //     balance.quantity -= quantity;
-  //     balance.totalCost -= outbound.totalCost;
+      balance.quantity -= quantity;
+      balance.totalCost -= outbound.totalCost;
 
-  //     if (balance.quantity < 0) {
-  //       throw new Error(
-  //         "Invalid operation: Return quantity exceeds current balance."
-  //       );
-  //     }
-  //   }
-  // }, [quantity, source, itemId, AllStockactions, costUnit]);
+      if (balance.quantity < 0) {
+        throw new Error(
+          "Invalid operation: Return quantity exceeds current balance."
+        );
+      }
+    }
+  }, [quantity, source, itemId, AllStockactions, costUnit]);
 
   return (
     <div className="w-100 px-3 d-flex align-itmes-center justify-content-start">
@@ -1243,44 +1243,9 @@ const StockManag = () => {
                       </div>
                     </div>
                   </>
-                ) : ["Purchase", "ReturnPurchase"].includes(source) ? (
-                  <>
-                    <div className="form-group col-12 col-md-6">
-                      <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
-                        الكمية
-                      </label>
-                      <div className="d-flex align-items-center">
-                        <input
-                          type="number"
-                          className="form-control border-primary flex-grow-1"
-                          required
-                          onChange={(e) => {
-                            setquantity(e.target.value);
-                          }}
-                        />
-                        <input
-                          type="text"
-                          className="form-control border-primary ms-2"
-                          defaultValue={unit}
-                          readOnly
-                        />
-                      </div>
-                    </div>
-                    <div className="form-group col-12 col-md-6">
-                      <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
-                        طريقه حساب تكلفه الوجده
-                      </label>
-                      <div className="d-flex align-items-center">
-                        <input
-                          type="text"
-                          className="form-control border-primary flex-grow-1"
-                          readOnly
-                          value={costMethod}
-                        />
-                      </div>
-                    </div>
-                  </>
-                ) : ["OpeningBalance"].includes(source) ? (
+                ) : ["OpeningBalance", "Purchase", "ReturnPurchase"].includes(
+                    source
+                  ) ? (
                   <>
                     <div className="form-group col-12 col-md-6">
                       <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
