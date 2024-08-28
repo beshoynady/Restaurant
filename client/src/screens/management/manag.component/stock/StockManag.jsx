@@ -443,7 +443,7 @@ const StockManag = () => {
       const response = await axios.get(apiUrl + "/api/stockmanag/", config);
       console.log(response.data);
       const Stockactions = await response.data;
-      AllStockactions(Stockactions.reverse());
+      setAllStockactions(Stockactions.reverse());
     } catch (error) {
       console.log(error);
     }
