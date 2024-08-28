@@ -149,7 +149,8 @@ const StockManag = () => {
 
 
 
-  const createStockAction = async () => {
+  const createStockAction = async (e) => {
+    e.preventDefault()
     if (!token) {
       toast.error("رجاء تسجيل الدخول مره اخري");
       return;
