@@ -931,7 +931,7 @@ const StockManag = () => {
                   <select
                     className="form-control border-primary m-0 p-2 h-auto"
                     onChange={(e) => {
-                      handleSelectedItem(e);
+                      setSource(e.target.value);
                     }}
                   >
                     <option value="">اختر العملية</option>
@@ -989,91 +989,46 @@ const StockManag = () => {
                       />
                     </div>
                   </div>
-                ) : null}
-
-                {/* {["Issuance", "ReturnIssuance", "Wastage", "Damaged"].includes(
-                  source
-                ) ? (
+                ) : ["OpeningBalance"].includes(source) ? (
+                  <>
                   <div className="form-group col-12 col-md-6">
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
-                      سعر {smallUnit}
+                      الكمية
                     </label>
-                    <input
-                      type="text"
-                      className="form-control border-primary m-0 p-2 h-auto"
-                      readOnly
-                      defaultValue={costOfPart}
-                    />
+                    <div className="d-flex align-items-center">
+                      <input
+                        type="number"
+                        className="form-control border-primary flex-grow-1"
+                        required
+                        onChange={(e) => {
+                          setquantity(e.target.value);
+                        }}
+                      />
+                    </div>
                   </div>
-                ) : ["Purchase", "ReturnPurchase"].includes(source) ? (
-                  <div className="form-group col-12 col-md-6">
-                    <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
-                      سعر {smallUnit}
-                    </label>
-                    <input
-                      type="Number"
-                      className="form-control border-primary m-0 p-2 h-auto"
-                      required
-                      onChange={(e) => {
-                        setprice(Number(e.target.value));
-                        setcost(Number(e.target.value) * quantity);
-                      }}
-                    />
-                  </div>
-                ) : null}
-
-                {["Purchase", "ReturnPurchase"].includes(source) ? (
-                  <div className="form-group col-12 col-md-6">
-                    <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
-                      التكلفة
-                    </label>
-                    <input
-                      type="Number"
-                      className="form-control border-primary m-0 p-2 h-auto"
-                      Value={cost}
-                      readOnly
-                    />
-                  </div>
-                ) : null}
-
-                <div className="form-group col-12 col-md-6">
-                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
-                    الرصيد
-                  </label>
-                  <div className="d-flex align-items-center">
-                    <input
-                      type="text"
-                      className="form-control border-primary flex-grow-1"
-                      Value={oldBalance}
-                      readOnly
-                    />
-                    <input
-                      type="text"
-                      className="form-control border-primary ms-2"
-                      defaultValue={largeUnit}
-                      readOnly
-                    />
-                  </div>
-                </div>
-                <div className="form-group col-12 col-md-6">
-                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
-                    الرصيد الجديد
-                  </label>
-                  <div className="d-flex align-items-center">
-                    <input
-                      type="text"
-                      className="form-control border-primary flex-grow-1"
-                      Value={newBalance}
-                      readOnly
-                    />
-                    <input
-                      type="text"
-                      className="form-control border-primary ms-2"
-                      defaultValue={largeUnit}
-                      readOnly
-                    />
-                  </div>
-                </div> */}
+                   <div className="form-group col-12 col-md-6">
+                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                     تكلفه الوحده
+                   </label>
+                   <div className="d-flex align-items-center">
+                     <input
+                       type="number"
+                       className="form-control border-primary flex-grow-1"
+                       required
+                       onChange={(e) => {
+                         setcostUnit(e.target.value);
+                       }}
+                     />
+                     <input
+                       type="text"
+                       className="form-control border-primary ms-2"
+                       defaultValue={unit}
+                       readOnly
+                     />
+                   </div>
+                 </div>
+                  </>
+                ): null}
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                     التاريخ
