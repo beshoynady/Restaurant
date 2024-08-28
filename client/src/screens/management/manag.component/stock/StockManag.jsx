@@ -366,95 +366,85 @@ const StockManag = () => {
 
   useEffect(() => {
     // جلب آخر حركة مخزون للمادة المحددة
-    const lastStockAction = AllStockactions
-      .filter((stockAction) => stockAction.itemId?._id === itemId)
-      .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0];
-  
+    const lastStockAction = AllStockactions.filter(
+      (stockAction) => stockAction.itemId?._id === itemId
+    ).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0];
+
     // تعيين القيم الابتدائية للرصيد بناءً على آخر حركة
     balance.quantity = lastStockAction ? lastStockAction.balance?.quantity : 0;
     balance.unitCost = lastStockAction ? lastStockAction.balance?.unitCost : 0;
     balance.totalCost = balance.quantity * balance.unitCost;
-  
+
     if (source === "Issuance" || source === "Wastage" || source === "Damaged") {
       if (costMethod === "FIFO") {
-        const batches = AllStockactions
-          .filter((stockAction) =>
+        const batches = AllStockactions.filter(
+          (stockAction) =>
             stockAction.itemId?._id === itemId &&
             stockAction.inbound?.quantity > 0 &&
             stockAction.remainingQuantity > 0
-          )
-          .sort((a, b) => new Date(a.movementDate) - new Date(b.movementDate)); // فرز الدفعات بالأقدمية
-  
+        ).sort((a, b) => new Date(a.movementDate) - new Date(b.movementDate)); // فرز الدفعات بالأقدمية
+
         let totalQuantity = quantity;
         let totalCost = 0;
-  
+
         for (const batch of batches) {
           if (totalQuantity > 0) {
             const availableQuantity = batch.remainingQuantity;
             const quantityToUse = Math.min(totalQuantity, availableQuantity);
             const costForThisBatch = quantityToUse * batch.inbound.unitCost;
-  
+
             totalQuantity -= quantityToUse;
             totalCost += costForThisBatch;
-  
+
             // تحديث الرصيد المتبقي في الدُفعة
             batch.remainingQuantity -= quantityToUse;
-  
+
             // تحديث حركة الصادر
             outbound.quantity += quantityToUse;
             outbound.unitCost = totalCost / (quantity - totalQuantity);
             outbound.totalCost = totalCost;
-  
+
             // تحديث الرصيد بعد الصادر
             balance.quantity -= quantityToUse;
             balance.totalCost -= costForThisBatch;
-  
+
             if (totalQuantity <= 0) break;
           }
-        }
-  
-        if (totalQuantity > 0) {
-          throw new Error("Insufficient stock to fulfill the issuance request.");
         }
       } else if (costMethod === "LIFO") {
-        const batches = AllStockactions
-          .filter((stockAction) =>
+        const batches = AllStockactions.filter(
+          (stockAction) =>
             stockAction.itemId?._id === itemId &&
             stockAction.inbound?.quantity > 0 &&
             stockAction.remainingQuantity > 0
-          )
-          .sort((a, b) => new Date(b.movementDate) - new Date(a.movementDate)); // فرز الدفعات بالأحدث أولاً
-  
+        ).sort((a, b) => new Date(b.movementDate) - new Date(a.movementDate)); // فرز الدفعات بالأحدث أولاً
+
         let totalQuantity = quantity;
         let totalCost = 0;
-  
+
         for (const batch of batches) {
           if (totalQuantity > 0) {
             const availableQuantity = batch.remainingQuantity;
             const quantityToUse = Math.min(totalQuantity, availableQuantity);
             const costForThisBatch = quantityToUse * batch.inbound.unitCost;
-  
+
             totalQuantity -= quantityToUse;
             totalCost += costForThisBatch;
-  
+
             // تحديث الرصيد المتبقي في الدُفعة
             batch.remainingQuantity -= quantityToUse;
-  
+
             // تحديث حركة الصادر
             outbound.quantity += quantityToUse;
             outbound.unitCost = totalCost / (quantity - totalQuantity);
             outbound.totalCost = totalCost;
-  
+
             // تحديث الرصيد بعد الصادر
             balance.quantity -= quantityToUse;
             balance.totalCost -= costForThisBatch;
-  
+
             if (totalQuantity <= 0) break;
           }
-        }
-  
-        if (totalQuantity > 0) {
-          throw new Error("Insufficient stock to fulfill the issuance request.");
         }
       } else if (costMethod === "Weighted Average") {
         const totalStock = AllStockactions.filter(
@@ -462,7 +452,7 @@ const StockManag = () => {
             stockAction.itemId?._id === itemId &&
             stockAction.inbound?.quantity > 0
         );
-  
+
         const totalQuantityInStock = totalStock.reduce(
           (acc, curr) => acc + curr.remainingQuantity,
           0
@@ -471,42 +461,45 @@ const StockManag = () => {
           (acc, curr) => acc + curr.remainingQuantity * curr.inbound.unitCost,
           0
         );
-  
+
         const weightedAverageCost = totalCostInStock / totalQuantityInStock;
-  
+
         // تحديث حركة الصادر
         outbound.quantity = quantity;
         outbound.unitCost = weightedAverageCost;
         outbound.totalCost = outbound.quantity * outbound.unitCost;
-  
+
         // تحديث الرصيد بعد الصادر
         balance.quantity -= quantity;
         balance.totalCost -= outbound.totalCost;
-  
+
         if (balance.quantity < 0) {
-          throw new Error("Insufficient stock to fulfill the issuance request.");
+          throw new Error(
+            "Insufficient stock to fulfill the issuance request."
+          );
         }
       }
     } else if (source === "ReturnIssuance") {
       inbound.quantity = quantity;
       inbound.unitCost = lastStockAction ? lastStockAction.unitCost : 0;
       inbound.totalCost = inbound.quantity * inbound.unitCost;
-  
+
       balance.quantity += quantity;
       balance.totalCost += inbound.totalCost;
     } else if (source === "Purchase") {
       inbound.quantity = quantity;
       inbound.unitCost = costUnit;
       inbound.totalCost = quantity * inbound.unitCost;
-  
+
       balance.quantity += quantity;
-      balance.unitCost = (balance.totalCost + inbound.totalCost) / balance.quantity;
+      balance.unitCost =
+        (balance.totalCost + inbound.totalCost) / balance.quantity;
       balance.totalCost += inbound.totalCost;
     } else if (source === "OpeningBalance") {
       inbound.quantity = quantity;
       inbound.unitCost = costUnit;
       inbound.totalCost = quantity * inbound.unitCost;
-  
+
       balance.quantity = quantity;
       balance.unitCost = costUnit;
       balance.totalCost = inbound.totalCost;
@@ -514,16 +507,18 @@ const StockManag = () => {
       outbound.quantity = quantity;
       outbound.unitCost = costUnit;
       outbound.totalCost = quantity * outbound.unitCost;
-  
+
       balance.quantity -= quantity;
       balance.totalCost -= outbound.totalCost;
-  
+
       if (balance.quantity < 0) {
-        throw new Error("Invalid operation: Return quantity exceeds current balance.");
+        throw new Error(
+          "Invalid operation: Return quantity exceeds current balance."
+        );
       }
     }
   }, [quantity, source, itemId, AllStockactions, costUnit]);
-  
+
   return (
     <div className="w-100 px-3 d-flex align-itmes-center justify-content-start">
       <div className="table-responsive">
@@ -968,67 +963,82 @@ const StockManag = () => {
                     </div>
                   </div>
                 ) : ["Purchase", "ReturnPurchase"].includes(source) ? (
-                  <div className="form-group col-12 col-md-6">
-                    <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
-                      الكمية
-                    </label>
-                    <div className="d-flex align-items-center">
-                      <input
-                        type="number"
-                        className="form-control border-primary flex-grow-1"
-                        required
-                        onChange={(e) => {
-                          setquantity(e.target.value);
-                        }}
-                      />
-                      <input
-                        type="text"
-                        className="form-control border-primary ms-2"
-                        defaultValue={unit}
-                        readOnly
-                      />
+                  <>
+                    <div className="form-group col-12 col-md-6">
+                      <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                        الكمية
+                      </label>
+                      <div className="d-flex align-items-center">
+                        <input
+                          type="number"
+                          className="form-control border-primary flex-grow-1"
+                          required
+                          onChange={(e) => {
+                            setquantity(e.target.value);
+                          }}
+                        />
+                        <input
+                          type="text"
+                          className="form-control border-primary ms-2"
+                          defaultValue={unit}
+                          readOnly
+                        />
+                      </div>
                     </div>
-                  </div>
+                    <div className="form-group col-12 col-md-6">
+                      <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                        طريقه حساب تكلفه الوجده
+                      </label>
+                      <div className="d-flex align-items-center">
+                        <input
+                          type="text"
+                          className="form-control border-primary flex-grow-1"
+                          readOnly
+                          value={costMethod}
+                        />
+                      </div>
+                    </div>
+                  </>
                 ) : ["OpeningBalance"].includes(source) ? (
                   <>
-                  <div className="form-group col-12 col-md-6">
-                    <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
-                      الكمية
-                    </label>
-                    <div className="d-flex align-items-center">
-                      <input
-                        type="number"
-                        className="form-control border-primary flex-grow-1"
-                        required
-                        onChange={(e) => {
-                          setquantity(e.target.value);
-                        }}
-                      />
+                    <div className="form-group col-12 col-md-6">
+                      <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                        الكمية
+                      </label>
+                      <div className="d-flex align-items-center">
+                        <input
+                          type="number"
+                          className="form-control border-primary flex-grow-1"
+                          required
+                          onChange={(e) => {
+                            setquantity(e.target.value);
+                          }}
+                        />
+                      </div>
                     </div>
-                  </div>
-                   <div className="form-group col-12 col-md-6">
-                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
-                     تكلفه الوحده
-                   </label>
-                   <div className="d-flex align-items-center">
-                     <input
-                       type="number"
-                       className="form-control border-primary flex-grow-1"
-                       required
-                       onChange={(e) => {
-                         setcostUnit(e.target.value);
-                       }}
-                     />
-                     <input
-                       type="text"
-                       className="form-control border-primary ms-2"
-                       defaultValue={unit}
-                       readOnly
-                     />
-                   </div>
-                 </div>
+                    <div className="form-group col-12 col-md-6">
+                      <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                        تكلفه الوحده
+                      </label>
+                      <div className="d-flex align-items-center">
+                        <input
+                          type="number"
+                          className="form-control border-primary flex-grow-1"
+                          required
+                          onChange={(e) => {
+                            setcostUnit(e.target.value);
+                          }}
+                        />
+                        <input
+                          type="text"
+                          className="form-control border-primary ms-2"
+                          defaultValue={unit}
+                          readOnly
+                        />
+                      </div>
+                    </div>
                   </>
-                ): null}
+                ) : null}
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                     التاريخ
