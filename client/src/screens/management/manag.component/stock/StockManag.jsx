@@ -554,7 +554,7 @@ const StockManag = () => {
   const handleSelectedStore = (id) => {
     setStoreId(id);
     const selectedStockactions = AllStockactions.filter(
-      (Stockactions) => Stockactions.storeId === id
+      (Stockactions) => Stockactions.storeId?._id === id
     );
     if (selectedStockactions) {
       setAllStockactionsStore(selectedStockactions);
@@ -607,7 +607,7 @@ const StockManag = () => {
   }, []);
 
   useEffect(() => {
-    const lastStockAction = AllStockactions.filter(
+    const lastStockAction = AllStockactionsStore.filter(
       (stockAction) =>
         stockAction.itemId?._id === itemId &&
         stockAction.storeId?._id === storeId
@@ -631,155 +631,7 @@ const StockManag = () => {
         : 0,
     });
 
-    // if (source === "Issuance" || source === "Wastage" || source === "Damaged") {
-    //   if (costMethod === "FIFO") {
-    //     const batches = AllStockactions.filter((stockAction) => {
-    //       // التحقق من أن جميع الحقول المستخدمة موجودة وصحيحة
-    //       const isValidAction =
-    //         stockAction && stockAction.itemId && stockAction.itemId._id;
-    //       const isMatchingItem =
-    //         isValidAction && stockAction.itemId._id === itemId;
-    //       const isInboundPositive =
-    //         stockAction.inbound && stockAction.inbound.quantity > 0;
-    //       const hasRemainingQuantity = stockAction.remainingQuantity > 0;
 
-    //       // التحقق من جميع الشروط المطلوبة
-    //       return isMatchingItem && isInboundPositive && hasRemainingQuantity;
-    //     }).sort((a, b) => new Date(a.movementDate) - new Date(b.movementDate));
-
-    //     let totalQuantity = quantity;
-    //     let totalCost = 0;
-
-    //     for (const batch of batches) {
-    //       if (totalQuantity > 0) {
-    //         const availableQuantity = batch.remainingQuantity;
-    //         const quantityToUse = Math.min(totalQuantity, availableQuantity);
-    //         const costForThisBatch = quantityToUse * batch.inbound.unitCost;
-
-    //         totalQuantity -= quantityToUse;
-    //         totalCost += costForThisBatch;
-
-    //         // تحديث الرصيد المتبقي في الدُفعة
-    //         batch.remainingQuantity -= quantityToUse;
-
-    //         // تحديث حركة الصادر
-    //         outbound.quantity += quantityToUse;
-    //         outbound.unitCost = totalCost / (quantity - totalQuantity);
-    //         outbound.totalCost = totalCost;
-
-    //         // تحديث الرصيد بعد الصادر
-    //         balance.quantity -= quantityToUse;
-    //         balance.totalCost -= costForThisBatch;
-
-    //         if (totalQuantity <= 0) break;
-    //       }
-    //     }
-    //   } else if (costMethod === "LIFO") {
-    //     const batches = AllStockactions.filter(
-    //       (stockAction) =>
-    //         stockAction.itemId?._id === itemId &&
-    //         stockAction.inbound?.quantity > 0 &&
-    //         stockAction.remainingQuantity > 0
-    //     ).sort((a, b) => new Date(b.movementDate) - new Date(a.movementDate)); // فرز الدفعات بالأحدث أولاً
-
-    //     let totalQuantity = quantity;
-    //     let totalCost = 0;
-
-    //     for (const batch of batches) {
-    //       if (totalQuantity > 0) {
-    //         const availableQuantity = batch.remainingQuantity;
-    //         const quantityToUse = Math.min(totalQuantity, availableQuantity);
-    //         const costForThisBatch = quantityToUse * batch.inbound.unitCost;
-
-    //         totalQuantity -= quantityToUse;
-    //         totalCost += costForThisBatch;
-
-    //         // تحديث الرصيد المتبقي في الدُفعة
-    //         batch.remainingQuantity -= quantityToUse;
-
-    //         // تحديث حركة الصادر
-    //         outbound.quantity += quantityToUse;
-    //         outbound.unitCost = totalCost / (quantity - totalQuantity);
-    //         outbound.totalCost = totalCost;
-
-    //         // تحديث الرصيد بعد الصادر
-    //         balance.quantity -= quantityToUse;
-    //         balance.totalCost -= costForThisBatch;
-
-    //         if (totalQuantity <= 0) break;
-    //       }
-    //     }
-    //   } else if (costMethod === "Weighted Average") {
-    //     const totalStock = AllStockactions.filter(
-    //       (stockAction) =>
-    //         stockAction.itemId?._id === itemId &&
-    //         stockAction.inbound?.quantity > 0
-    //     );
-
-    //     const totalQuantityInStock = totalStock.reduce(
-    //       (acc, curr) => acc + curr.remainingQuantity,
-    //       0
-    //     );
-    //     const totalCostInStock = totalStock.reduce(
-    //       (acc, curr) => acc + curr.remainingQuantity * curr.inbound.unitCost,
-    //       0
-    //     );
-
-    //     const weightedAverageCost = totalCostInStock / totalQuantityInStock;
-
-    //     // تحديث حركة الصادر
-    //     outbound.quantity = quantity;
-    //     outbound.unitCost = weightedAverageCost;
-    //     outbound.totalCost = outbound.quantity * outbound.unitCost;
-
-    //     // تحديث الرصيد بعد الصادر
-    //     balance.quantity -= quantity;
-    //     balance.totalCost -= outbound.totalCost;
-
-    //     if (balance.quantity < 0) {
-    //       throw new Error(
-    //         "Insufficient stock to fulfill the issuance request."
-    //       );
-    //     }
-    //   }
-    // } else if (source === "ReturnIssuance") {
-    //   inbound.quantity = quantity;
-    //   inbound.unitCost = lastStockAction ? lastStockAction.unitCost : 0;
-    //   inbound.totalCost = inbound.quantity * inbound.unitCost;
-
-    //   balance.quantity += quantity;
-    //   balance.totalCost += inbound.totalCost;
-    // } else if (source === "Purchase") {
-    //   inbound.quantity = quantity;
-    //   inbound.unitCost = costUnit;
-    //   inbound.totalCost = quantity * inbound.unitCost;
-
-    //   balance.quantity += quantity;
-    //   balance.unitCost =
-    //     (balance.totalCost + inbound.totalCost) / balance.quantity;
-    //   balance.totalCost += inbound.totalCost;
-    // } else if (source === "OpeningBalance") {
-    //   inbound.quantity = quantity;
-    //   inbound.unitCost = costUnit;
-    //   inbound.totalCost = quantity * inbound.unitCost;
-
-    //   balance.quantity = quantity;
-    //   balance.unitCost = costUnit;
-    //   balance.totalCost = inbound.totalCost;
-    // } else if (source === "ReturnPurchase") {
-    //   outbound.quantity = quantity;
-    //   outbound.unitCost = costUnit;
-    //   outbound.totalCost = quantity * outbound.unitCost;
-
-    //   balance.quantity -= quantity;
-    //   balance.totalCost -= outbound.totalCost;
-
-    //   if (balance.quantity < 0) {
-    //     throw new Error(
-    //       "Invalid operation: Return quantity exceeds current balance."
-    //     );
-    //   }
-    // }
   }, [quantity, source, itemId, AllStockactions, costUnit]);
 
   return (
@@ -994,7 +846,7 @@ const StockManag = () => {
                         <td>{action.inbound?.unitCost || 0}</td>
                         <td>{action.inbound?.totalCost || 0}</td>
                         <td>{action.balance?.quantity || 0}</td>
-                        <td>{action.balance?.unitCost || 0}</td>
+                        <td>{action.balance?.unitCost?.toFixed(2) || '0.00'}</td>
                         <td>{action.balance?.totalCost || 0}</td>
                         <td>{formatDateTime(action.createdAt)}</td>
                         <td>{action.createdBy?.fullname}</td>
