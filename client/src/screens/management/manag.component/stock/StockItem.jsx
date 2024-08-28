@@ -96,12 +96,13 @@ const StockItem = () => {
     }
     try {
 
-      const findItem = AllStockItems.filter(item=>{
+      const isItemDuplicate = AllStockItems&&AllStockItems.some(item =>
         item.itemName === itemName || item.itemCode === itemCode
-      })
-      if(findItem){
-        toast.warn('هذا الاسم او الكود مكرر ! حاول مره اخري')
-        return
+      );
+      
+      if (isItemDuplicate) {
+        toast.warn('هذا الاسم او الكود مكرر ! حاول مره اخري');
+        return;
       }
       setisLoading(true);
 
