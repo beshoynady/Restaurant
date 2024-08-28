@@ -6,7 +6,7 @@ import "../orders/Orders.css";
 
 const StockManag = () => {
   const apiUrl = process.env.REACT_APP_API_URL;
-  const token = localStorage.getItem("token_e"); // Retrieve the token from localStorage
+  const token = localStorage.getItem("token_e");
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -712,7 +712,7 @@ const StockManag = () => {
                 </label>
                 <select
                   class="form-control border-primary m-0 p-2 h-auto"
-                  onChange={(e) => setSource(e.target.value)}
+                  onChange={(e) => searchByaction(e.target.value)}
                 >
                   <option value={""}>الكل</option>
                   {sourceEn.map((source, i) => {
