@@ -147,6 +147,11 @@ const StockManag = () => {
 
   const [AllStockactions, setAllStockactions] = useState([]);
 
+
+
+
+
+
   const createStockAction = async (e) => {
     e.preventDefault();
     if (!token) {
@@ -175,12 +180,14 @@ const StockManag = () => {
             stockAction.inbound?.quantity > 0 &&
             stockAction.remainingQuantity > 0
         ).sort((a, b) => new Date(a.movementDate) - new Date(b.movementDate));
+        
+        console.log({ batches });
 
         let totalQuantity = quantity;
         let totalCost = 0;
 
         for (const batch of batches) {
-          console.log({batch})
+          console.log({ batch });
           if (totalQuantity > 0) {
             const availableQuantity = batch.remainingQuantity;
             const quantityToUse = Math.min(totalQuantity, availableQuantity);
@@ -340,7 +347,6 @@ const StockManag = () => {
       balance.quantity = quantity;
       balance.unitCost = costUnit;
       balance.totalCost = inbound.totalCost;
-
       setRemainingQuantity(quantity);
     } else if (source === "ReturnPurchase") {
       outbound.quantity = quantity;
@@ -371,7 +377,7 @@ const StockManag = () => {
       sourceDate,
       notes,
     };
-    console.log({data})
+    console.log({ data });
 
     try {
       const response = await axios.post(
@@ -379,9 +385,20 @@ const StockManag = () => {
         data,
         config
       );
-      if(response){
+      if (response) {
         toast.success("تم تسجيل حركة المخزون بنجاح");
-        getallStockaction()
+        getallStockaction();
+        inbound.quantity = 0;
+        inbound.unitCost = 0;
+        inbound.totalCost = 0;
+
+        outbound.quantity = 0;
+        outbound.unitCost = 0;
+        outbound.totalCost = 0;
+
+        balance.quantity = 0;
+        balance.unitCost = 0;
+        balance.totalCost = 0;
       }
     } catch (error) {
       toast.error("فشل تسجيل حركة المخزون!");
