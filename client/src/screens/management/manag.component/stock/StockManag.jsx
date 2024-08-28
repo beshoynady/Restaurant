@@ -115,6 +115,7 @@ const StockManag = () => {
   const [expirationDateEnabled, setExpirationDateEnabled] = useState(false);
   const [actionId, setactionId] = useState("");
   const [AllStockactions, setAllStockactions] = useState([]);
+  const [AllStockactionsStore, setAllStockactionsStore] = useState([]);
 
   const createStockAction = async (e) => {
     e.preventDefault();
@@ -127,14 +128,16 @@ const StockManag = () => {
       return;
     }
 
-    const lastStockAction = AllStockactions.filter(
-      (stockAction) => stockAction.itemId?._id === itemId
+    const lastStockAction = AllStockactionsStore.filter(
+      (stockAction) =>
+        stockAction.itemId?._id === itemId &&
+        stockAction.storeId?._id === storeId
     ).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0];
 
     console.log({ inbound, outbound, balance });
     if (source === "Issuance" || source === "Wastage" || source === "Damaged") {
       if (costMethod === "FIFO") {
-        const batches = AllStockactions.filter((stockAction) => {
+        const batches = AllStockactionsStore.filter((stockAction) => {
           // التحقق من أن جميع الحقول المستخدمة موجودة وصحيحة
           const isValidAction =
             stockAction && stockAction.itemId && stockAction.itemId._id;
@@ -188,7 +191,7 @@ const StockManag = () => {
           }
         }
       } else if (costMethod === "LIFO") {
-        const batches = AllStockactions.filter(
+        const batches = AllStockactionsStore.filter(
           (stockAction) =>
             stockAction.itemId?._id === itemId &&
             stockAction.inbound?.quantity > 0 &&
@@ -230,7 +233,7 @@ const StockManag = () => {
           }
         }
       } else if (costMethod === "Weighted Average") {
-        const batches = AllStockactions.filter((stockAction) => {
+        const batches = AllStockactionsStore.filter((stockAction) => {
           // التحقق من أن جميع الحقول المستخدمة موجودة وصحيحة
           const isValidAction =
             stockAction && stockAction.itemId && stockAction.itemId._id;
@@ -387,45 +390,6 @@ const StockManag = () => {
     }
   };
 
-  // const createStockAction = async () => {
-  //   if (!token) {
-  //     toast.error("رجاء تسجيل الدخول مره اخري");
-  //     return;
-  //   }
-  //   if (stockManagementPermission && !stockManagementPermission.create) {
-  //     toast.warn("ليس لك صلاحية لانشاء حركه المخزن");
-  //     return;
-  //   }
-
-  //   const data = {
-  //     itemId,
-  //     storeId,
-  //     categoryId,
-  //     costMethod,
-  //     source,
-  //     unit,
-  //     inbound,
-  //     outbound,
-  //     balance,
-  //     remainingQuantity,
-  //     sourceDate,
-  //     notes,
-  //   };
-
-  //   try {
-  //     const response = await axios.post(
-  //       `${apiUrl}/api/stockmanag`,
-  //       data,
-  //       config
-  //     );
-  //     toast.success("تم تسجيل حركة المخزون بنجاح");
-  //     return response.data;
-  //   } catch (error) {
-  //     toast.error("فشل تسجيل حركة المخزون!");
-  //     console.error("Error creating stock source:", error);
-  //   }
-  // };
-
   const updateStockaction = async (e, employeeId) => {
     e.preventDefault();
 
@@ -479,7 +443,7 @@ const StockManag = () => {
       const response = await axios.get(apiUrl + "/api/stockmanag/", config);
       console.log(response.data);
       const Stockactions = await response.data;
-      setAllStockactions(Stockactions.reverse());
+      AllStockactions(Stockactions.reverse());
     } catch (error) {
       console.log(error);
     }
@@ -587,6 +551,15 @@ const StockManag = () => {
       setCostMethod(costMethod);
     }
   };
+  const handleSelectedStore = (id) => {
+    setStoreId(id);
+    const selectedStockactions = AllStockactions.filter(
+      (Stockactions) => Stockactions.storeId === id
+    );
+    if (selectedStockactions) {
+      setAllStockactionsStore(selectedStockactions);
+    }
+  };
 
   const [AllCashRegisters, setAllCashRegisters] = useState([]);
   const getAllCashRegisters = async () => {
@@ -635,7 +608,9 @@ const StockManag = () => {
 
   useEffect(() => {
     const lastStockAction = AllStockactions.filter(
-      (stockAction) => stockAction.itemId?._id === itemId
+      (stockAction) =>
+        stockAction.itemId?._id === itemId &&
+        stockAction.storeId?._id === storeId
     ).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0];
 
     setInbound({
@@ -1156,7 +1131,7 @@ const StockManag = () => {
                   </label>
                   <select
                     className="form-control border-primary m-0 p-2 h-auto"
-                    onChange={(e) => setStoreId(e.target.value)}
+                    onChange={(e) => handleSelectedStore(e.target.value)}
                   >
                     <option value="">اختر المخزن</option>
                     {allStores.map((store, i) => (
@@ -1201,7 +1176,7 @@ const StockManag = () => {
                     <option value="">اختر الصنف</option>
                     {StockItems.filter(
                       (item) =>
-                        item.storeId?._id === storeId &&
+                        // item.storeId?._id === storeId &&
                         item.categoryId?._id === categoryId
                     )?.map((item, i) => (
                       <option key={i} value={item._id}>
