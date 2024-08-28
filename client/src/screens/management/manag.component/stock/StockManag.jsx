@@ -148,7 +148,7 @@ const StockManag = () => {
   const [AllStockactions, setAllStockactions] = useState([]);
 
 
-  
+
   const createStockAction = async () => {
     if (!token) {
       toast.error("رجاء تسجيل الدخول مره اخري");
@@ -760,7 +760,7 @@ const StockManag = () => {
                 </h2>
               </div>
               <div className="col-12 col-md-6 p-0 m-0 d-flex flex-wrap aliegn-items-center justify-content-end print-hide">
-                {stockManagementPermission.create && (
+                {stockManagementPermission&&stockManagementPermission.create && (
                   <a
                     href="#addStockactionModal"
                     className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-success"
@@ -769,7 +769,7 @@ const StockManag = () => {
                     <span>انشاء حركه مخزن</span>
                   </a>
                 )}
-                {stockManagementPermission.delete && (
+                {stockManagementPermission&&stockManagementPermission.delete && (
                   <a
                     href="#deleteStockactionModal"
                     className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-danger"
@@ -963,7 +963,7 @@ const StockManag = () => {
                         <td>{formatDateTime(action.sourceDate)}</td>
                         <td>{action.createdBy?.fullname}</td>
                         <td>
-                          {stockManagementPermission.update && (
+                          {stockManagementPermission&&stockManagementPermission.update && (
                             <a
                               href="#editStockactionModal"
                               className="edit"
@@ -981,7 +981,7 @@ const StockManag = () => {
                               </i>
                             </a>
                           )}
-                          {stockManagementPermission.delete && (
+                          {stockManagementPermission&&stockManagementPermission.delete && (
                             <a
                               href="#deleteStockactionModal"
                               className="delete"
