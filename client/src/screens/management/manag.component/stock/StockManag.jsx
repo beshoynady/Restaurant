@@ -180,6 +180,7 @@ const StockManag = () => {
         let totalCost = 0;
 
         for (const batch of batches) {
+          console.log({batch})
           if (totalQuantity > 0) {
             const availableQuantity = batch.remainingQuantity;
             const quantityToUse = Math.min(totalQuantity, availableQuantity);
@@ -370,6 +371,7 @@ const StockManag = () => {
       sourceDate,
       notes,
     };
+    console.log({data})
 
     try {
       const response = await axios.post(
@@ -377,8 +379,10 @@ const StockManag = () => {
         data,
         config
       );
-      toast.success("تم تسجيل حركة المخزون بنجاح");
-      return response.data;
+      if(response){
+        toast.success("تم تسجيل حركة المخزون بنجاح");
+        getallStockaction()
+      }
     } catch (error) {
       toast.error("فشل تسجيل حركة المخزون!");
       console.error("Error creating stock source:", error);
@@ -971,7 +975,7 @@ const StockManag = () => {
                         <td>{action.balance?.quantity || 0}</td>
                         <td>{action.balance?.unitCost || 0}</td>
                         <td>{action.balance?.totalCost || 0}</td>
-                        <td>{formatDateTime(action.sourceDate)}</td>
+                        <td>{formatDateTime(action.createdAt)}</td>
                         <td>{action.createdBy?.fullname}</td>
                         <td>
                           {stockManagementPermission &&
