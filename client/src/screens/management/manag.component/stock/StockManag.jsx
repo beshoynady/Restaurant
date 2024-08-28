@@ -116,10 +116,6 @@ const StockManag = () => {
   const [actionId, setactionId] = useState("");
   const [AllStockactions, setAllStockactions] = useState([]);
 
-
-
-
-
   const createStockAction = async (e) => {
     e.preventDefault();
     if (!token) {
@@ -136,18 +132,29 @@ const StockManag = () => {
     ).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0];
 
     // تعيين القيم الابتدائية للرصيد بناءً على آخر حركة
-    balance.quantity = lastStockAction ? Number(lastStockAction.balance?.quantity) : 0;
-    balance.unitCost = lastStockAction ? Number(lastStockAction.balance?.unitCost) : 0;
+    balance.quantity = lastStockAction
+      ? Number(lastStockAction.balance?.quantity)
+      : 0;
+    balance.unitCost = lastStockAction
+      ? Number(lastStockAction.balance?.unitCost)
+      : 0;
     balance.totalCost = balance.quantity * balance.unitCost;
 
     if (source === "Issuance" || source === "Wastage" || source === "Damaged") {
       if (costMethod === "FIFO") {
-        const batches = AllStockactions.filter(
-          (stockAction) =>
-            stockAction.itemId?._id === itemId &&
-            stockAction.inbound?.quantity > 0 &&
-            stockAction.remainingQuantity > 0
-        ).sort((a, b) => new Date(a.movementDate) - new Date(b.movementDate));
+        const batches = AllStockactions.filter((stockAction) => {
+          // التحقق من أن جميع الحقول المستخدمة موجودة وصحيحة
+          const isValidAction =
+            stockAction && stockAction.itemId && stockAction.itemId._id;
+          const isMatchingItem =
+            isValidAction && stockAction.itemId._id === itemId;
+          const isInboundPositive =
+            stockAction.inbound && stockAction.inbound.quantity > 0;
+          const hasRemainingQuantity = stockAction.remainingQuantity > 0;
+
+          // التحقق من جميع الشروط المطلوبة
+          return isMatchingItem && isInboundPositive && hasRemainingQuantity;
+        }).sort((a, b) => new Date(a.movementDate) - new Date(b.movementDate));
 
         console.log({ batches });
 
@@ -166,7 +173,7 @@ const StockManag = () => {
 
             // تحديث الرصيد المتبقي في الدُفعة
             batch.remainingQuantity -= quantityToUse;
-            console.log({remainingQuantity: batch.remainingQuantity})
+            console.log({ remainingQuantity: batch.remainingQuantity });
             const updateBatch = await axios.put(
               `${apiUrl}/api/stockmanag/${batch._id}`,
               {
@@ -231,12 +238,19 @@ const StockManag = () => {
           }
         }
       } else if (costMethod === "Weighted Average") {
-        const batches = AllStockactions.filter(
-          (stockAction) =>
-            stockAction.itemId?._id === itemId &&
-            stockAction.inbound?.quantity > 0 &&
-            stockAction.remainingQuantity > 0
-        ).sort((a, b) => new Date(a.movementDate) - new Date(b.movementDate));
+        const batches = AllStockactions.filter((stockAction) => {
+          // التحقق من أن جميع الحقول المستخدمة موجودة وصحيحة
+          const isValidAction =
+            stockAction && stockAction.itemId && stockAction.itemId._id;
+          const isMatchingItem =
+            isValidAction && stockAction.itemId._id === itemId;
+          const isInboundPositive =
+            stockAction.inbound && stockAction.inbound.quantity > 0;
+          const hasRemainingQuantity = stockAction.remainingQuantity > 0;
+
+          // التحقق من جميع الشروط المطلوبة
+          return isMatchingItem && isInboundPositive && hasRemainingQuantity;
+        }).sort((a, b) => new Date(a.movementDate) - new Date(b.movementDate));
 
         const totalQuantityInStock = batches.reduce(
           (acc, curr) => acc + curr.remainingQuantity,
@@ -275,7 +289,7 @@ const StockManag = () => {
             const updateBatch = await axios.put(
               `${apiUrl}/api/stockmanag/${batch._id}`,
               {
-                remainingQuantity : batch.remainingQuantity,
+                remainingQuantity: batch.remainingQuantity,
               },
               config
             );
@@ -568,36 +582,34 @@ const StockManag = () => {
     }
   };
 
+  // Fetch all cash registers
+  const handleSelectedItem = (e) => {
+    const selectedItem = StockItems.find((item) => item._id === e.target.value);
+    console.log({ selectedItem });
+    if (selectedItem) {
+      const { _id, itemName, largeUnit, parts, costMethod } = selectedItem;
+      setItemId(_id);
+      setItemName(itemName);
+      setunit(largeUnit);
+      setParts(parts);
+      setCostMethod(costMethod);
+    }
+  };
 
-    // Fetch all cash registers
-    const handleSelectedItem = (e) => {
-      const selectedItem = StockItems.find((item) => item._id === e.target.value);
-      console.log({ selectedItem });
-      if (selectedItem) {
-        const { _id, itemName, largeUnit, parts, costMethod } = selectedItem;
-        setItemId(_id);
-        setItemName(itemName);
-        setunit(largeUnit);
-        setParts(parts);
-        setCostMethod(costMethod);
-      }
-    };
-  
-    const [AllCashRegisters, setAllCashRegisters] = useState([]);
-    const getAllCashRegisters = async () => {
-      if (!token) {
-        // Handle case where token is not available
-        toast.error("رجاء تسجيل الدخول مره اخري");
-        return;
-      }
-      try {
-        const response = await axios.get(apiUrl + "/api/cashregister", config);
-        setAllCashRegisters(response.data.reverse());
-      } catch (err) {
-        toast.error("Error fetching cash registers");
-      }
-    };
-
+  const [AllCashRegisters, setAllCashRegisters] = useState([]);
+  const getAllCashRegisters = async () => {
+    if (!token) {
+      // Handle case where token is not available
+      toast.error("رجاء تسجيل الدخول مره اخري");
+      return;
+    }
+    try {
+      const response = await axios.get(apiUrl + "/api/cashregister", config);
+      setAllCashRegisters(response.data.reverse());
+    } catch (err) {
+      toast.error("Error fetching cash registers");
+    }
+  };
 
   const searchByitem = (item) => {
     if (!item) {
@@ -619,8 +631,6 @@ const StockManag = () => {
     );
     setAllStockactions(items);
   };
-
-
 
   useEffect(() => {
     getallStockaction();
@@ -644,12 +654,19 @@ const StockManag = () => {
 
     if (source === "Issuance" || source === "Wastage" || source === "Damaged") {
       if (costMethod === "FIFO") {
-        const batches = AllStockactions.filter(
-          (stockAction) =>
-            stockAction.itemId?._id === itemId &&
-            stockAction.inbound?.quantity > 0 &&
-            stockAction.remainingQuantity > 0
-        ).sort((a, b) => new Date(a.movementDate) - new Date(b.movementDate));
+        const batches = AllStockactions.filter((stockAction) => {
+          // التحقق من أن جميع الحقول المستخدمة موجودة وصحيحة
+          const isValidAction =
+            stockAction && stockAction.itemId && stockAction.itemId._id;
+          const isMatchingItem =
+            isValidAction && stockAction.itemId._id === itemId;
+          const isInboundPositive =
+            stockAction.inbound && stockAction.inbound.quantity > 0;
+          const hasRemainingQuantity = stockAction.remainingQuantity > 0;
+
+          // التحقق من جميع الشروط المطلوبة
+          return isMatchingItem && isInboundPositive && hasRemainingQuantity;
+        }).sort((a, b) => new Date(a.movementDate) - new Date(b.movementDate));
 
         let totalQuantity = quantity;
         let totalCost = 0;
