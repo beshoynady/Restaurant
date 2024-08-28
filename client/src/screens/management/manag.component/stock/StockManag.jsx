@@ -157,7 +157,6 @@ const StockManag = () => {
       return;
     }
 
-    const unit = largeUnit;
     const data = {
       itemId,
       storeId,
@@ -201,7 +200,6 @@ const StockManag = () => {
     }
 
     setisLoading(true);
-    const unit = largeUnit;
     const data = {
       itemId,
       storeId,
