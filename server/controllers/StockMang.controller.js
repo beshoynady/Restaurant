@@ -95,6 +95,10 @@ const updateStockAction = async (req, res, next) => {
     ) {
       return res.status(400).json({ message: "Missing required fields" });
     }
+    const findAction = await StockMovementModel.findById(actionId)
+    if(!findAction){
+      return res.status(400).json({massage: 'dont find this action'})
+    }
     // Find and update the stock movement action by ID
     const updatedAction = await StockMovementModel.findByIdAndUpdate(
       actionId,

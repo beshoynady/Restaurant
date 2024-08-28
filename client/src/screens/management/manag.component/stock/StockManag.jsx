@@ -113,39 +113,12 @@ const StockManag = () => {
   const [parts, setParts] = useState();
   const [expirationDate, setExpirationDate] = useState();
   const [expirationDateEnabled, setExpirationDateEnabled] = useState(false);
-
-  const handleSelectedItem = (e) => {
-    const selectedItem = StockItems.find((item) => item._id === e.target.value);
-    console.log({ selectedItem });
-    if (selectedItem) {
-      const { _id, itemName, largeUnit, parts, costMethod } = selectedItem;
-      setItemId(_id);
-      setItemName(itemName);
-      setunit(largeUnit);
-      setParts(parts);
-      setCostMethod(costMethod);
-    }
-  };
-
-  const [AllCashRegisters, setAllCashRegisters] = useState([]);
-  // Fetch all cash registers
-  const getAllCashRegisters = async () => {
-    if (!token) {
-      // Handle case where token is not available
-      toast.error("رجاء تسجيل الدخول مره اخري");
-      return;
-    }
-    try {
-      const response = await axios.get(apiUrl + "/api/cashregister", config);
-      setAllCashRegisters(response.data.reverse());
-    } catch (err) {
-      toast.error("Error fetching cash registers");
-    }
-  };
-
   const [actionId, setactionId] = useState("");
-
   const [AllStockactions, setAllStockactions] = useState([]);
+
+
+
+
 
   const createStockAction = async (e) => {
     e.preventDefault();
@@ -163,8 +136,8 @@ const StockManag = () => {
     ).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0];
 
     // تعيين القيم الابتدائية للرصيد بناءً على آخر حركة
-    balance.quantity = lastStockAction ? lastStockAction.balance?.quantity : 0;
-    balance.unitCost = lastStockAction ? lastStockAction.balance?.unitCost : 0;
+    balance.quantity = lastStockAction ? Number(lastStockAction.balance?.quantity) : 0;
+    balance.unitCost = lastStockAction ? Number(lastStockAction.balance?.unitCost) : 0;
     balance.totalCost = balance.quantity * balance.unitCost;
 
     if (source === "Issuance" || source === "Wastage" || source === "Damaged") {
@@ -193,7 +166,7 @@ const StockManag = () => {
 
             // تحديث الرصيد المتبقي في الدُفعة
             batch.remainingQuantity -= quantityToUse;
-
+            console.log({remainingQuantity: batch.remainingQuantity})
             const updateBatch = await axios.put(
               `${apiUrl}/api/stockmanag/${batch._id}`,
               {
@@ -285,7 +258,7 @@ const StockManag = () => {
         balance.quantity -= quantity;
         balance.totalCost -= outbound.totalCost;
 
-        let totalQuantity = quantity;
+        let totalQuantity = Number(quantity);
         let totalCost = 0;
 
         for (const batch of batches) {
@@ -302,7 +275,7 @@ const StockManag = () => {
             const updateBatch = await axios.put(
               `${apiUrl}/api/stockmanag/${batch._id}`,
               {
-                remainingQuantity: batch.remainingQuantity,
+                remainingQuantity : batch.remainingQuantity,
               },
               config
             );
@@ -329,7 +302,7 @@ const StockManag = () => {
       inbound.unitCost = costUnit;
       inbound.totalCost = quantity * costUnit;
 
-      balance.quantity += quantity;
+      balance.quantity += Number(quantity);
       balance.unitCost =
         (balance.totalCost + inbound.totalCost) / balance.quantity;
       balance.totalCost += inbound.totalCost;
@@ -369,7 +342,7 @@ const StockManag = () => {
       inbound,
       outbound,
       balance,
-      remainingQuantity: inbound.quantity > 0 ? quantity : 0,
+      remainingQuantity: inbound.quantity > 0 ? Number(quantity) : 0,
       sourceDate,
       notes,
     };
@@ -595,6 +568,37 @@ const StockManag = () => {
     }
   };
 
+
+    // Fetch all cash registers
+    const handleSelectedItem = (e) => {
+      const selectedItem = StockItems.find((item) => item._id === e.target.value);
+      console.log({ selectedItem });
+      if (selectedItem) {
+        const { _id, itemName, largeUnit, parts, costMethod } = selectedItem;
+        setItemId(_id);
+        setItemName(itemName);
+        setunit(largeUnit);
+        setParts(parts);
+        setCostMethod(costMethod);
+      }
+    };
+  
+    const [AllCashRegisters, setAllCashRegisters] = useState([]);
+    const getAllCashRegisters = async () => {
+      if (!token) {
+        // Handle case where token is not available
+        toast.error("رجاء تسجيل الدخول مره اخري");
+        return;
+      }
+      try {
+        const response = await axios.get(apiUrl + "/api/cashregister", config);
+        setAllCashRegisters(response.data.reverse());
+      } catch (err) {
+        toast.error("Error fetching cash registers");
+      }
+    };
+
+
   const searchByitem = (item) => {
     if (!item) {
       getallStockaction();
@@ -615,6 +619,8 @@ const StockManag = () => {
     );
     setAllStockactions(items);
   };
+
+
 
   useEffect(() => {
     getallStockaction();
@@ -1218,7 +1224,7 @@ const StockManag = () => {
                           required
                           max={balance.quantity}
                           onChange={(e) => {
-                            setquantity(e.target.value);
+                            setquantity(Number(e.target.value));
                           }}
                         />
                         <input
@@ -1257,7 +1263,7 @@ const StockManag = () => {
                           className="form-control border-primary flex-grow-1"
                           required
                           onChange={(e) => {
-                            setquantity(e.target.value);
+                            setquantity(Number(e.target.value));
                           }}
                         />
                       </div>
