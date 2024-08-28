@@ -20,11 +20,7 @@ const StockItemSchema = new mongoose.Schema(
       ref: 'CategoryStock',
       required: true,
     },
-    storeId: {
-      type: ObjectId,
-      ref: 'Store',
-      required: true,
-    },
+   
     largeUnit: {
       type: String,
       required: true,

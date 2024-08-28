@@ -1,30 +1,30 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const { ObjectId } = mongoose.Schema;
 
 const StockMovementSchema = new mongoose.Schema(
   {
     itemId: {
       type: ObjectId,
-      ref: 'StockItem',
+      ref: "StockItem",
       required: true,
     },
     storeId: {
       type: ObjectId,
-      ref: 'Store',
+      ref: "Store",
       required: true,
     },
     categoryId: {
       type: ObjectId,
-      ref: 'CategoryStock',
+      ref: "CategoryStock",
       required: true,
     },
-    unit:{
+    unit: {
       type: String,
       required: true,
     },
     costMethod: {
       type: String,
-      enum: ['FIFO', 'LIFO', 'Weighted Average'],
+      enum: ["FIFO", "LIFO", "Weighted Average"],
       required: true,
     },
     source: {
@@ -93,29 +93,31 @@ const StockMovementSchema = new mongoose.Schema(
       },
     },
     remainingQuantity: {
-        type: Number,
-        required: false,
-        default: 0,
-        min: 0,
-      },
-
+      type: Number,
+      required: false,
+      default: 0,
+      min: 0,
+    },
     movementDate: {
       type: Date,
       default: Date.now,
       required: true,
     },
+    notes: {
+      type: String,
+      trim: true,
+    },
+    expirationDate: {
+      type: Date,
+    },
     createdBy: {
       type: ObjectId,
-      ref: 'Employee',
+      ref: "Employee",
       required: true,
     },
     updatedBy: {
       type: ObjectId,
-      ref: 'Employee',
-    },
-    notes: {
-      type: String,
-      trim: true,
+      ref: "Employee",
     },
   },
   {
@@ -123,5 +125,5 @@ const StockMovementSchema = new mongoose.Schema(
   }
 );
 
-const StockMovementModel = mongoose.model('StockMovement', StockMovementSchema);
+const StockMovementModel = mongoose.model("StockMovement", StockMovementSchema);
 module.exports = StockMovementModel;

@@ -59,6 +59,31 @@ const StockItem = () => {
     "متوسط السعر",
   ];
 
+
+  const generateItemCode =()=>{
+    if(!categoryId){
+      toast.warn('اختر اولا التصنيف ')
+      return
+    }
+    const categoryCode = AllCategoryStock.find(
+      (category) => category._id === categoryId
+    )?.categoryCode;
+    const filterStockItemByCategory = AllStockItems.filter(
+      (item) => item.category?._id === categoryId
+    ).reverse();
+    const itemOrder = filterStockItemByCategory.length + 1;
+
+    function generate(categoryCode, itemOrder) {
+      return `${categoryCode}-${String(itemOrder).padStart(
+        4,
+        "0"
+      )}`;
+    }
+
+    const itemCodeGenerated = generate(categoryCode, itemOrder);
+    setItemCode(itemCodeGenerated)
+  }
+
   const createItem = async (e) => {
     e.preventDefault();
     if (!token) {
@@ -69,27 +94,16 @@ const StockItem = () => {
       toast.warn("ليس لك صلاحية لانشاء عنصر جديد في المخزن");
       return;
     }
-    setisLoading(true);
     try {
-      const storeCode = allStores.find(
-        (store) => store._id === storeId
-      )?.storeCode;
-      const categoryCode = AllCategoryStock.find(
-        (category) => category._id === categoryId
-      )?.categoryCode;
-      const filterStockItemByStore = AllStockItems.filter(
-        (item) => item.storeId === storeId
-      ).reverse();
-      const itemOrder = filterStockItemByStore.length + 1;
 
-      function generateItemCode(storeCode, categoryCode, itemOrder) {
-        return `${storeCode}${categoryCode}${String(itemOrder).padStart(
-          4,
-          "0"
-        )}`;
+      const findItem = AllStockItems.filter(item=>{
+        item.itemName === itemName || item.itemCode === itemCode
+      })
+      if(findItem){
+        toast.warn('هذا الاسم او الكود مكرر ! حاول مره اخري')
+        return
       }
-
-      const itemCode = generateItemCode(storeCode, categoryCode, itemOrder);
+      setisLoading(true);
 
       const response = await axios.post(
         `${apiUrl}/api/stockitem/`,
@@ -139,27 +153,10 @@ const StockItem = () => {
       toast.warn("ليس لك صلاحية لتعديل عناصر المخزن");
       return;
     }
+    
     setisLoading(true);
     try {
-      const storeCode = allStores.find(
-        (store) => store._id === storeId
-      )?.storeCode;
-      const categoryCode = AllCategoryStock.find(
-        (category) => category._id === categoryId
-      )?.categoryCode;
-      const filterStockItemByStore = AllStockItems.filter(
-        (item) => item.storeId === storeId
-      ).reverse();
-      const itemOrder = filterStockItemByStore.length + 1;
-
-      function generateItemCode(storeCode, categoryCode, itemOrder) {
-        return `${storeCode}${categoryCode}${String(itemOrder).padStart(
-          4,
-          "0"
-        )}`;
-      }
-
-      const itemCode = generateItemCode(storeCode, categoryCode, itemOrder);
+      
 
       const response = await axios.put(
         `${apiUrl}/api/stockitem/${stockItemId}`,
@@ -635,6 +632,7 @@ const StockItem = () => {
                     onChange={(e) => setItemName(e.target.value)}
                   />
                 </div>
+                
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                     المخزن
@@ -676,6 +674,24 @@ const StockItem = () => {
                       );
                     })}
                   </select>
+                </div>
+                <div className="form-group col-12 col-md-6">
+                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                    االكود
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control border-primary m-0 p-2 h-auto"
+                    required
+                    value={itemCode}
+                    onChange={(e) => setItemCode(e.target.value)}
+                  />
+                  <input
+                    type="button"
+                    className="btn btn-primary m-0 p-2 h-auto"
+                    required
+                    onChange={() => generateItemCode()}
+                  />
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
@@ -869,6 +885,24 @@ const StockItem = () => {
                       );
                     })}
                   </select>
+                </div>
+                <div className="form-group col-12 col-md-6">
+                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                    االكود
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control border-primary m-0 p-2 h-auto"
+                    required
+                    value={itemCode}
+                    onChange={(e) => setItemCode(e.target.value)}
+                  />
+                  <input
+                    type="button"
+                    className="btn btn-primary m-0 p-2 h-auto"
+                    required
+                    onChange={() => generateItemCode()}
+                  />
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">

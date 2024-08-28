@@ -17,6 +17,7 @@ const createStockAction = async (req, res, next) => {
       remainingQuantity = 0,
       movementDate = new Date(),
       notes = "",
+      expirationDate
     } = req.body;
     const createdBy = req.employee?.id;
 
@@ -53,6 +54,7 @@ const createStockAction = async (req, res, next) => {
       movementDate,
       createdBy,
       notes,
+      expirationDate
     });
 
     // Respond with the created stock movement action
@@ -80,6 +82,7 @@ const updateStockAction = async (req, res, next) => {
       remainingQuantity,
       movementDate,
       notes,
+      expirationDate
     } = req.body;
     const updatedBy = req.employee.id;
     const actionId = req.params.actionid;
@@ -105,6 +108,7 @@ const updateStockAction = async (req, res, next) => {
         movementDate,
         updatedBy,
         notes,
+        expirationDate
       },
       { new: true } // Return the updated document
     );
