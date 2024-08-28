@@ -147,10 +147,8 @@ const StockManag = () => {
 
   const [AllStockactions, setAllStockactions] = useState([]);
 
-
-
   const createStockAction = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     if (!token) {
       toast.error("رجاء تسجيل الدخول مره اخري");
       return;
@@ -159,7 +157,6 @@ const StockManag = () => {
       toast.warn("ليس لك صلاحية لانشاء حركه المخزن");
       return;
     }
-
 
     const lastStockAction = AllStockactions.filter(
       (stockAction) => stockAction.itemId?._id === itemId
@@ -194,10 +191,14 @@ const StockManag = () => {
             // تحديث الرصيد المتبقي في الدُفعة
             batch.remainingQuantity -= quantityToUse;
 
-            const updateBatch = await axios.put(`${apiUrl}/api/stockmanag/${batch._id}`,{
-              remainingQuantity: batch.remainingQuantity
-            },config)
-            console.log({updateBatch})
+            const updateBatch = await axios.put(
+              `${apiUrl}/api/stockmanag/${batch._id}`,
+              {
+                remainingQuantity: batch.remainingQuantity,
+              },
+              config
+            );
+            console.log({ updateBatch });
 
             // تحديث حركة الصادر
             outbound.quantity += quantityToUse;
@@ -210,7 +211,6 @@ const StockManag = () => {
 
             if (totalQuantity <= 0) break;
           }
-
         }
       } else if (costMethod === "LIFO") {
         const batches = AllStockactions.filter(
@@ -234,10 +234,14 @@ const StockManag = () => {
 
             // تحديث الرصيد المتبقي في الدُفعة
             batch.remainingQuantity -= quantityToUse;
-            const updateBatch = await axios.put(`${apiUrl}/api/stockmanag/${batch._id}`,{
-              remainingQuantity: batch.remainingQuantity
-            },config)
-            console.log({updateBatch})
+            const updateBatch = await axios.put(
+              `${apiUrl}/api/stockmanag/${batch._id}`,
+              {
+                remainingQuantity: batch.remainingQuantity,
+              },
+              config
+            );
+            console.log({ updateBatch });
             // تحديث حركة الصادر
             outbound.quantity += quantityToUse;
             outbound.unitCost = totalCost / (quantity - totalQuantity);
@@ -269,7 +273,6 @@ const StockManag = () => {
 
         const weightedAverageCost = totalCostInStock / totalQuantityInStock;
 
-
         // تحديث حركة الصادر
         outbound.quantity = quantity;
         outbound.unitCost = weightedAverageCost;
@@ -293,13 +296,16 @@ const StockManag = () => {
 
             batch.remainingQuantity -= quantityToUse;
 
-            const updateBatch = await axios.put(`${apiUrl}/api/stockmanag/${batch._id}`,{
-              remainingQuantity: batch.remainingQuantity
-            },config)
-            console.log({updateBatch})
+            const updateBatch = await axios.put(
+              `${apiUrl}/api/stockmanag/${batch._id}`,
+              {
+                remainingQuantity: batch.remainingQuantity,
+              },
+              config
+            );
+            console.log({ updateBatch });
             if (totalQuantity <= 0) break;
           }
-
         }
 
         if (balance.quantity < 0) {
@@ -324,6 +330,7 @@ const StockManag = () => {
       balance.unitCost =
         (balance.totalCost + inbound.totalCost) / balance.quantity;
       balance.totalCost += inbound.totalCost;
+      setRemainingQuantity(quantity);
     } else if (source === "OpeningBalance") {
       inbound.quantity = quantity;
       inbound.unitCost = costUnit;
@@ -332,6 +339,8 @@ const StockManag = () => {
       balance.quantity = quantity;
       balance.unitCost = costUnit;
       balance.totalCost = inbound.totalCost;
+
+      setRemainingQuantity(quantity);
     } else if (source === "ReturnPurchase") {
       outbound.quantity = quantity;
       outbound.unitCost = costUnit;
@@ -357,7 +366,7 @@ const StockManag = () => {
       inbound,
       outbound,
       balance,
-      remainingQuantity: source==='Purchase'? inbound.quantity: 0,
+      remainingQuantity,
       sourceDate,
       notes,
     };
@@ -415,7 +424,6 @@ const StockManag = () => {
   //   }
   // };
 
-  
   const updateStockaction = async (e, employeeId) => {
     e.preventDefault();
 
@@ -761,24 +769,26 @@ const StockManag = () => {
                 </h2>
               </div>
               <div className="col-12 col-md-6 p-0 m-0 d-flex flex-wrap aliegn-items-center justify-content-end print-hide">
-                {stockManagementPermission&&stockManagementPermission.create && (
-                  <a
-                    href="#addStockactionModal"
-                    className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-success"
-                    data-toggle="modal"
-                  >
-                    <span>انشاء حركه مخزن</span>
-                  </a>
-                )}
-                {stockManagementPermission&&stockManagementPermission.delete && (
-                  <a
-                    href="#deleteStockactionModal"
-                    className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-danger"
-                    data-toggle="modal"
-                  >
-                    <span>حذف</span>
-                  </a>
-                )}
+                {stockManagementPermission &&
+                  stockManagementPermission.create && (
+                    <a
+                      href="#addStockactionModal"
+                      className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-success"
+                      data-toggle="modal"
+                    >
+                      <span>انشاء حركه مخزن</span>
+                    </a>
+                  )}
+                {stockManagementPermission &&
+                  stockManagementPermission.delete && (
+                    <a
+                      href="#deleteStockactionModal"
+                      className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-danger"
+                      data-toggle="modal"
+                    >
+                      <span>حذف</span>
+                    </a>
+                  )}
               </div>
             </div>
           </div>
@@ -964,40 +974,42 @@ const StockManag = () => {
                         <td>{formatDateTime(action.sourceDate)}</td>
                         <td>{action.createdBy?.fullname}</td>
                         <td>
-                          {stockManagementPermission&&stockManagementPermission.update && (
-                            <a
-                              href="#editStockactionModal"
-                              className="edit"
-                              data-toggle="modal"
-                              onClick={() => {
-                                setactionId(action._id);
-                              }}
-                            >
-                              <i
-                                className="material-icons"
-                                data-toggle="tooltip"
-                                title="Edit"
+                          {stockManagementPermission &&
+                            stockManagementPermission.update && (
+                              <a
+                                href="#editStockactionModal"
+                                className="edit"
+                                data-toggle="modal"
+                                onClick={() => {
+                                  setactionId(action._id);
+                                }}
                               >
-                                &#xE254;
-                              </i>
-                            </a>
-                          )}
-                          {stockManagementPermission&&stockManagementPermission.delete && (
-                            <a
-                              href="#deleteStockactionModal"
-                              className="delete"
-                              data-toggle="modal"
-                              onClick={() => setactionId(action._id)}
-                            >
-                              <i
-                                className="material-icons"
-                                data-toggle="tooltip"
-                                title="Delete"
+                                <i
+                                  className="material-icons"
+                                  data-toggle="tooltip"
+                                  title="Edit"
+                                >
+                                  &#xE254;
+                                </i>
+                              </a>
+                            )}
+                          {stockManagementPermission &&
+                            stockManagementPermission.delete && (
+                              <a
+                                href="#deleteStockactionModal"
+                                className="delete"
+                                data-toggle="modal"
+                                onClick={() => setactionId(action._id)}
                               >
-                                &#xE872;
-                              </i>
-                            </a>
-                          )}
+                                <i
+                                  className="material-icons"
+                                  data-toggle="tooltip"
+                                  title="Delete"
+                                >
+                                  &#xE872;
+                                </i>
+                              </a>
+                            )}
                         </td>
                       </tr>
                     );

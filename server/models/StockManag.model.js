@@ -112,7 +112,6 @@ const StockMovementSchema = new mongoose.Schema(
     updatedBy: {
       type: ObjectId,
       ref: 'Employee',
-      required: true,
     },
     notes: {
       type: String,
