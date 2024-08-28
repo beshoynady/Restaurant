@@ -69,10 +69,10 @@ const StockManag = () => {
   ];
 
   const sourceAr = [
-    "شراء",
-    "إرجاع شراء",
+    "مشتريات",
+    "إرجاع مشتريات",
     "صرف",
-    "إرجاع صرف",
+    "إرجاع منصرف",
     "هدر",
     "تالف",
     "تعديل المخزون",
@@ -83,7 +83,8 @@ const StockManag = () => {
   const [storeId, setStoreId] = useState("");
   const [categoryId, setCategoryId] = useState("");
   const [costMethod, setCostMethod] = useState("");
-  const [source, unit, setSource] = useState("");
+  const [source, setSource] = useState("");
+  const [unit, setunit] = useState("");
   const [inbound, setInbound] = useState({
     quantity: 0,
     unitCost: 0,
@@ -105,10 +106,10 @@ const StockManag = () => {
 
   // Additional fields based on the provided variables
   const [quantity, setquantity] = useState("");
+  const [costUnit, setcostUnit] = useState("");
+
   const [supplier, setSupplier] = useState("");
   const [itemName, setItemName] = useState("");
-  const [largeUnit, setLargeUnit] = useState("");
-  const [smallUnit, setSmallUnit] = useState("");
   const [parts, setParts] = useState();
   const [expirationDate, setExpirationDate] = useState();
   const [expirationDateEnabled, setExpirationDateEnabled] = useState(false);
@@ -117,12 +118,10 @@ const StockManag = () => {
     const selectedItem = StockItems.find((item) => item._id === e.target.value);
     console.log({ selectedItem });
     if (selectedItem) {
-      const { _id, itemName, largeUnit, smallUnit, parts, costMethod } =
-        selectedItem;
+      const { _id, itemName, largeUnit, parts, costMethod } = selectedItem;
       setItemId(_id);
       setItemName(itemName);
-      setLargeUnit(largeUnit);
-      setSmallUnit(smallUnit);
+      setunit(largeUnit);
       setParts(parts);
       setCostMethod(costMethod);
     }
@@ -367,59 +366,166 @@ const StockManag = () => {
     // getallrecipes();
   }, []);
 
-  // useEffect(() => {
-  //   if (source === "Issuance" || source === "Wastage") {
-  //     setnewBalance(Number(oldBalance) - Number(quantity / parts))
-  //     setnewcost(Number(oldCost) - Number(cost))
-  //     setcostOfPart(Number(price) / Number(parts))
-  //   } else if (source === 'Purchase') {
-  //     const calcNewBalance = Number(oldBalance) + Number(quantity)
-  //     const calcNewCost = Number(oldCost) + Number(cost)
-  //     const calcCostOfPart = Math.round((price / calcNewBalance) * 10) / 10;
-  //     console.log({calcCostOfPart})
-  //     setnewBalance(calcNewBalance)
-  //     setnewcost(calcNewCost)
-  //     setcostOfPart(calcCostOfPart)
-
-  //   } else if (source === "Return") {
-  //     setnewBalance(Number(oldBalance) + Number(quantity / parts))
-  //     setnewcost(Number(oldCost) + Number(cost))
-  //     setcostOfPart(Number(price) / Number(parts))
-
-  //   }
-  // }, [quantity, price])
-
-  // useEffect(() => {
-  //   if (source === "Issuance" || source === "Wastage" || source === "Damaged") {
-  //     const calcNewBalance =
-  //       Number(oldBalance) - Number(quantity) / Number(parts);
-  //     const countparts = calcNewBalance * Number(parts);
-  //     const calcCostOfPart = Math.round((price / countparts) * 100) / 100;
-  //     setnewBalance(calcNewBalance);
-  //     setcostOfPart(calcCostOfPart);
-  //   } else if (source === "ReturnIssuance") {
-  //     const calcNewBalance =
-  //       Number(oldBalance) + Number(quantity) / Number(parts);
-  //     const countparts = calcNewBalance * Number(parts);
-  //     const calcCostOfPart = Math.round((price / countparts) * 100) / 100;
-  //     setnewBalance(calcNewBalance);
-  //     setcostOfPart(calcCostOfPart);
-  //   } else if (source === "Purchase") {
-  //     const calcNewBalance = Number(oldBalance) + Number(quantity);
-  //     const countparts = calcNewBalance * Number(parts);
-  //     const calcCostOfPart = Math.round((price / countparts) * 100) / 100;
-  //     console.log({ calcNewBalance, calcCostOfPart, countparts });
-  //     setnewBalance(calcNewBalance);
-  //     setcostOfPart(calcCostOfPart);
-  //   } else if (source === "ReturnPurchase") {
-  //     const calcNewBalance = Number(oldBalance) - Number(quantity);
-  //     const countparts = calcNewBalance * Number(parts);
-  //     const calcCostOfPart = Math.round((price / countparts) * 100) / 100;
-  //     setnewBalance(calcNewBalance);
-  //     setcostOfPart(calcCostOfPart);
-  //   }
-  // }, [quantity, price]);
-
+  useEffect(() => {
+    // جلب آخر حركة مخزون للمادة المحددة
+    const lastStockAction = AllStockactions
+      .filter((stockAction) => stockAction.itemId?._id === itemId)
+      .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0];
+  
+    // تعيين القيم الابتدائية للرصيد بناءً على آخر حركة
+    balance.quantity = lastStockAction ? lastStockAction.balance?.quantity : 0;
+    balance.unitCost = lastStockAction ? lastStockAction.balance?.unitCost : 0;
+    balance.totalCost = balance.quantity * balance.unitCost;
+  
+    if (source === "Issuance" || source === "Wastage" || source === "Damaged") {
+      if (costMethod === "FIFO") {
+        const batches = AllStockactions
+          .filter((stockAction) =>
+            stockAction.itemId?._id === itemId &&
+            stockAction.inbound?.quantity > 0 &&
+            stockAction.remainingQuantity > 0
+          )
+          .sort((a, b) => new Date(a.movementDate) - new Date(b.movementDate)); // فرز الدفعات بالأقدمية
+  
+        let totalQuantity = quantity;
+        let totalCost = 0;
+  
+        for (const batch of batches) {
+          if (totalQuantity > 0) {
+            const availableQuantity = batch.remainingQuantity;
+            const quantityToUse = Math.min(totalQuantity, availableQuantity);
+            const costForThisBatch = quantityToUse * batch.inbound.unitCost;
+  
+            totalQuantity -= quantityToUse;
+            totalCost += costForThisBatch;
+  
+            // تحديث الرصيد المتبقي في الدُفعة
+            batch.remainingQuantity -= quantityToUse;
+  
+            // تحديث حركة الصادر
+            outbound.quantity += quantityToUse;
+            outbound.unitCost = totalCost / (quantity - totalQuantity);
+            outbound.totalCost = totalCost;
+  
+            // تحديث الرصيد بعد الصادر
+            balance.quantity -= quantityToUse;
+            balance.totalCost -= costForThisBatch;
+  
+            if (totalQuantity <= 0) break;
+          }
+        }
+  
+        if (totalQuantity > 0) {
+          throw new Error("Insufficient stock to fulfill the issuance request.");
+        }
+      } else if (costMethod === "LIFO") {
+        const batches = AllStockactions
+          .filter((stockAction) =>
+            stockAction.itemId?._id === itemId &&
+            stockAction.inbound?.quantity > 0 &&
+            stockAction.remainingQuantity > 0
+          )
+          .sort((a, b) => new Date(b.movementDate) - new Date(a.movementDate)); // فرز الدفعات بالأحدث أولاً
+  
+        let totalQuantity = quantity;
+        let totalCost = 0;
+  
+        for (const batch of batches) {
+          if (totalQuantity > 0) {
+            const availableQuantity = batch.remainingQuantity;
+            const quantityToUse = Math.min(totalQuantity, availableQuantity);
+            const costForThisBatch = quantityToUse * batch.inbound.unitCost;
+  
+            totalQuantity -= quantityToUse;
+            totalCost += costForThisBatch;
+  
+            // تحديث الرصيد المتبقي في الدُفعة
+            batch.remainingQuantity -= quantityToUse;
+  
+            // تحديث حركة الصادر
+            outbound.quantity += quantityToUse;
+            outbound.unitCost = totalCost / (quantity - totalQuantity);
+            outbound.totalCost = totalCost;
+  
+            // تحديث الرصيد بعد الصادر
+            balance.quantity -= quantityToUse;
+            balance.totalCost -= costForThisBatch;
+  
+            if (totalQuantity <= 0) break;
+          }
+        }
+  
+        if (totalQuantity > 0) {
+          throw new Error("Insufficient stock to fulfill the issuance request.");
+        }
+      } else if (costMethod === "Weighted Average") {
+        const totalStock = AllStockactions.filter(
+          (stockAction) =>
+            stockAction.itemId?._id === itemId &&
+            stockAction.inbound?.quantity > 0
+        );
+  
+        const totalQuantityInStock = totalStock.reduce(
+          (acc, curr) => acc + curr.remainingQuantity,
+          0
+        );
+        const totalCostInStock = totalStock.reduce(
+          (acc, curr) => acc + curr.remainingQuantity * curr.inbound.unitCost,
+          0
+        );
+  
+        const weightedAverageCost = totalCostInStock / totalQuantityInStock;
+  
+        // تحديث حركة الصادر
+        outbound.quantity = quantity;
+        outbound.unitCost = weightedAverageCost;
+        outbound.totalCost = outbound.quantity * outbound.unitCost;
+  
+        // تحديث الرصيد بعد الصادر
+        balance.quantity -= quantity;
+        balance.totalCost -= outbound.totalCost;
+  
+        if (balance.quantity < 0) {
+          throw new Error("Insufficient stock to fulfill the issuance request.");
+        }
+      }
+    } else if (source === "ReturnIssuance") {
+      inbound.quantity = quantity;
+      inbound.unitCost = lastStockAction ? lastStockAction.unitCost : 0;
+      inbound.totalCost = inbound.quantity * inbound.unitCost;
+  
+      balance.quantity += quantity;
+      balance.totalCost += inbound.totalCost;
+    } else if (source === "Purchase") {
+      inbound.quantity = quantity;
+      inbound.unitCost = costUnit;
+      inbound.totalCost = quantity * inbound.unitCost;
+  
+      balance.quantity += quantity;
+      balance.unitCost = (balance.totalCost + inbound.totalCost) / balance.quantity;
+      balance.totalCost += inbound.totalCost;
+    } else if (source === "OpeningBalance") {
+      inbound.quantity = quantity;
+      inbound.unitCost = costUnit;
+      inbound.totalCost = quantity * inbound.unitCost;
+  
+      balance.quantity = quantity;
+      balance.unitCost = costUnit;
+      balance.totalCost = inbound.totalCost;
+    } else if (source === "ReturnPurchase") {
+      outbound.quantity = quantity;
+      outbound.unitCost = costUnit;
+      outbound.totalCost = quantity * outbound.unitCost;
+  
+      balance.quantity -= quantity;
+      balance.totalCost -= outbound.totalCost;
+  
+      if (balance.quantity < 0) {
+        throw new Error("Invalid operation: Return quantity exceeds current balance.");
+      }
+    }
+  }, [quantity, source, itemId, AllStockactions, costUnit]);
+  
   return (
     <div className="w-100 px-3 d-flex align-itmes-center justify-content-start">
       <div className="table-responsive">
@@ -810,8 +916,8 @@ const StockManag = () => {
                     <option value="">اختر الصنف</option>
                     {StockItems.filter(
                       (item) =>
-                        item.storeId === storeId &&
-                        item.categoryId === categoryId
+                        item.storeId?._id === storeId &&
+                        item.categoryId?._id === categoryId
                     )?.map((item, i) => (
                       <option key={i} value={item._id}>
                         {item.itemName}
@@ -858,7 +964,7 @@ const StockManag = () => {
                       <input
                         type="text"
                         className="form-control border-primary ms-2"
-                        defaultValue={smallUnit}
+                        defaultValue={unit}
                         readOnly
                       />
                     </div>
@@ -880,7 +986,7 @@ const StockManag = () => {
                       <input
                         type="text"
                         className="form-control border-primary ms-2"
-                        defaultValue={largeUnit}
+                        defaultValue={unit}
                         readOnly
                       />
                     </div>
