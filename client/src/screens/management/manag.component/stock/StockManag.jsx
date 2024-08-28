@@ -158,11 +158,12 @@ const StockManag = () => {
 
         console.log({ batches });
 
-        let totalQuantity = quantity;
+        let totalQuantity = Number(quantity);
         let totalCost = 0;
+        console.log({ totalQuantity, totalCost});
 
         for (const batch of batches) {
-          console.log({ batch });
+          console.log({ batch , totalQuantity, totalCost});
           if (totalQuantity > 0) {
             const availableQuantity = batch.remainingQuantity;
             const quantityToUse = Math.min(totalQuantity, availableQuantity);

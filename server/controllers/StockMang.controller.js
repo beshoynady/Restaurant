@@ -84,17 +84,6 @@ const updateStockAction = async (req, res, next) => {
     const updatedBy = req.employee.id;
     const actionId = req.params.actionid;
 
-    // Validate required fields
-    if (
-      !itemId ||
-      !storeId ||
-      !categoryId ||
-      !costMethod ||
-      !source ||
-      !balance
-    ) {
-      return res.status(400).json({ message: "Missing required fields" });
-    }
     const findAction = await StockMovementModel.findById(actionId)
     if(!findAction){
       return res.status(400).json({massage: 'dont find this action'})
