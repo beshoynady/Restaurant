@@ -105,8 +105,8 @@ const StockManag = () => {
   const [notes, setNotes] = useState("");
 
   // Additional fields based on the provided variables
-  const [quantity, setquantity] = useState("");
-  const [costUnit, setcostUnit] = useState("");
+  const [quantity, setquantity] = useState(0);
+  const [costUnit, setcostUnit] = useState(0);
 
   const [supplier, setSupplier] = useState("");
   const [itemName, setItemName] = useState("");
@@ -147,11 +147,6 @@ const StockManag = () => {
 
   const [AllStockactions, setAllStockactions] = useState([]);
 
-
-
-
-
-
   const createStockAction = async (e) => {
     e.preventDefault();
     if (!token) {
@@ -180,7 +175,7 @@ const StockManag = () => {
             stockAction.inbound?.quantity > 0 &&
             stockAction.remainingQuantity > 0
         ).sort((a, b) => new Date(a.movementDate) - new Date(b.movementDate));
-        
+
         console.log({ batches });
 
         let totalQuantity = quantity;
@@ -332,7 +327,7 @@ const StockManag = () => {
     } else if (source === "Purchase") {
       inbound.quantity = quantity;
       inbound.unitCost = costUnit;
-      inbound.totalCost = quantity * inbound.unitCost;
+      inbound.totalCost = quantity * costUnit;
 
       balance.quantity += quantity;
       balance.unitCost =
@@ -374,7 +369,7 @@ const StockManag = () => {
       inbound,
       outbound,
       balance,
-      remainingQuantity: inbound.quantity>0 ? quantity : 0 ,
+      remainingQuantity: inbound.quantity > 0 ? quantity : 0,
       sourceDate,
       notes,
     };
@@ -389,6 +384,12 @@ const StockManag = () => {
       if (response) {
         toast.success("تم تسجيل حركة المخزون بنجاح");
         getallStockaction();
+        setquantity(0);
+        setcostUnit(0);
+        setSource(0);
+        setStoreId("");
+        setCategoryId("");
+        setCostMethod("");
         inbound.quantity = 0;
         inbound.unitCost = 0;
         inbound.totalCost = 0;
@@ -1243,27 +1244,42 @@ const StockManag = () => {
                     </div>
                   </>
                 ) : ["Purchase", "ReturnPurchase"].includes(source) ? (
-                  <div className="form-group col-12 col-md-6">
-                    <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
-                      الكمية
-                    </label>
-                    <div className="d-flex align-items-center">
-                      <input
-                        type="number"
-                        className="form-control border-primary flex-grow-1"
-                        required
-                        onChange={(e) => {
-                          setquantity(e.target.value);
-                        }}
-                      />
-                      <input
-                        type="text"
-                        className="form-control border-primary ms-2"
-                        defaultValue={unit}
-                        readOnly
-                      />
+                  <>
+                    <div className="form-group col-12 col-md-6">
+                      <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                        الكمية
+                      </label>
+                      <div className="d-flex align-items-center">
+                        <input
+                          type="number"
+                          className="form-control border-primary flex-grow-1"
+                          required
+                          onChange={(e) => {
+                            setquantity(e.target.value);
+                          }}
+                        />
+                        <input
+                          type="text"
+                          className="form-control border-primary ms-2"
+                          defaultValue={unit}
+                          readOnly
+                        />
+                      </div>
                     </div>
-                  </div>
+                    <div className="form-group col-12 col-md-6">
+                      <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                        طريقه حساب تكلفه الوجده
+                      </label>
+                      <div className="d-flex align-items-center">
+                        <input
+                          type="text"
+                          className="form-control border-primary flex-grow-1"
+                          readOnly
+                          value={costMethod}
+                        />
+                      </div>
+                    </div>
+                  </>
                 ) : ["OpeningBalance"].includes(source) ? (
                   <>
                     <div className="form-group col-12 col-md-6">
