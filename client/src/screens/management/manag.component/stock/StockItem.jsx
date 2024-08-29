@@ -674,7 +674,7 @@ const StockItem = () => {
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                     الكود
                   </label>
-                  <div className="form-group col-12 col-md-6 d-flex align-items-center">
+                  <div className="form-group col-12 d-flex align-items-center">
                     <input
                       type="text"
                       className="form-control border-primary m-0 p-2 h-auto"
@@ -887,7 +887,7 @@ const StockItem = () => {
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                     الكود
                   </label>
-                  <div className="form-group col-12 col-md-6 d-flex align-items-center">
+                  <div className="form-group col-12 d-flex align-items-center">
                     <input
                       type="text"
                       className="form-control border-primary m-0 p-2 h-auto"
