@@ -93,6 +93,7 @@ const CategoryStock = () => {
         toast.warn("ليس لك صلاحية لاضافه تصنيفات المخزن");
         return;
       }
+      
       // Validate fields
       if (!categoryName.trim() || !categoryCode.trim()) {
         toast.error("اسم التصنيف ورمز التصنيف مطلوبان");

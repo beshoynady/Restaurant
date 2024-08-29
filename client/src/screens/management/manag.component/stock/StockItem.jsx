@@ -59,11 +59,10 @@ const StockItem = () => {
     "متوسط السعر",
   ];
 
-
-  const generateItemCode =()=>{
-    if(!categoryId){
-      toast.warn('اختر اولا التصنيف ')
-      return
+  const generateItemCode = () => {
+    if (!categoryId) {
+      toast.warn("اختر اولا التصنيف ");
+      return;
     }
     const categoryCode = AllCategoryStock.find(
       (category) => category._id === categoryId
@@ -74,15 +73,13 @@ const StockItem = () => {
     const itemOrder = filterStockItemByCategory.length + 1;
 
     function generate(categoryCode, itemOrder) {
-      return `${categoryCode}-${String(itemOrder).padStart(
-        4,
-        "0"
-      )}`;
+      return `${categoryCode}-${String(itemOrder).padStart(4, "0")}`;
     }
 
     const itemCodeGenerated = generate(categoryCode, itemOrder);
-    setItemCode(itemCodeGenerated)
-  }
+    console.log({ itemCodeGenerated });
+    setItemCode(itemCodeGenerated);
+  };
 
   const createItem = async (e) => {
     e.preventDefault();
@@ -95,13 +92,14 @@ const StockItem = () => {
       return;
     }
     try {
+      const isItemDuplicate =
+        AllStockItems &&
+        AllStockItems.some(
+          (item) => item.itemName === itemName || item.itemCode === itemCode
+        );
 
-      const isItemDuplicate = AllStockItems&&AllStockItems.some(item =>
-        item.itemName === itemName || item.itemCode === itemCode
-      );
-      
       if (isItemDuplicate) {
-        toast.warn('هذا الاسم او الكود مكرر ! حاول مره اخري');
+        toast.warn("هذا الاسم او الكود مكرر ! حاول مره اخري");
         return;
       }
       setisLoading(true);
@@ -154,11 +152,9 @@ const StockItem = () => {
       toast.warn("ليس لك صلاحية لتعديل عناصر المخزن");
       return;
     }
-    
+
     setisLoading(true);
     try {
-      
-
       const response = await axios.put(
         `${apiUrl}/api/stockitem/${stockItemId}`,
         {
@@ -300,7 +296,7 @@ const StockItem = () => {
 
   const [stockitem, setstockitem] = useState({});
   const handelEditStockItemModal = (stockitem) => {
-    const item = JSON.parse(stockitem)
+    const item = JSON.parse(stockitem);
     setstockitem(item);
     setStockItemId(item._id);
     // setStoreId(item.storeId?._id);
@@ -631,7 +627,7 @@ const StockItem = () => {
                     onChange={(e) => setItemName(e.target.value)}
                   />
                 </div>
-                
+
                 {/* <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                     المخزن
@@ -676,22 +672,24 @@ const StockItem = () => {
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
-                    االكود
+                    الكود
                   </label>
-                  <input
-                    type="text"
-                    className="form-control border-primary m-0 p-2 h-auto"
-                    required
-                    value={itemCode}
-                    onChange={(e) => setItemCode(e.target.value)}
-                  />
-                  <input
-                    type="button"
-                    className="btn btn-primary m-0 p-2 h-auto"
-                    required
-                    onChange={() => generateItemCode()}
-                  />
+                  <div className="form-group col-12 col-md-6 d-flex align-items-center">
+                    <input
+                      type="text"
+                      className="form-control border-primary m-0 p-2 h-auto"
+                      value={itemCode}
+                      onChange={(e) => setItemCode(e.target.value)}
+                    />
+                    <input
+                      type="button"
+                      className="btn btn-primary ms-2 m-0 p-2 h-auto"
+                      value="انشاء كود"
+                      onClick={generateItemCode}
+                    />
+                  </div>
                 </div>
+
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                     الوحدة الكبيرة
@@ -887,21 +885,22 @@ const StockItem = () => {
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
-                    االكود
+                    الكود
                   </label>
-                  <input
-                    type="text"
-                    className="form-control border-primary m-0 p-2 h-auto"
-                    required
-                    value={itemCode}
-                    onChange={(e) => setItemCode(e.target.value)}
-                  />
-                  <input
-                    type="button"
-                    className="btn btn-primary m-0 p-2 h-auto"
-                    required
-                    onChange={() => generateItemCode()}
-                  />
+                  <div className="form-group col-12 col-md-6 d-flex align-items-center">
+                    <input
+                      type="text"
+                      className="form-control border-primary m-0 p-2 h-auto"
+                      value={itemCode}
+                      onChange={(e) => setItemCode(e.target.value)}
+                    />
+                    <input
+                      type="button"
+                      className="btn btn-primary ms-2 m-0 p-2 h-auto"
+                      value="انشاء كود"
+                      onClick={generateItemCode}
+                    />
+                  </div>
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
@@ -982,7 +981,9 @@ const StockItem = () => {
                     defaultValue={isActive}
                     onChange={(e) => setisActive(e.target.value)}
                   >
-                    <option value={isActive}>{isActive?'نشط':'غير نشط'}</option>
+                    <option value={isActive}>
+                      {isActive ? "نشط" : "غير نشط"}
+                    </option>
                     <option value={true}>نشط</option>
                     <option value={false}>غير نشط</option>
                   </select>
@@ -999,15 +1000,15 @@ const StockItem = () => {
                     readOnly
                   />
                 </div>
-              <div className="form-group col-12 col-md-6">
-                <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
-                  الملاحظات
-                </label>
-                <textarea
-                  className="form-control border-primary m-0 p-2 h-auto"
-                  onChange={(e) => setNotes(e.target.value)}
-                />
-              </div>
+                <div className="form-group col-12 col-md-6">
+                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                    الملاحظات
+                  </label>
+                  <textarea
+                    className="form-control border-primary m-0 p-2 h-auto"
+                    onChange={(e) => setNotes(e.target.value)}
+                  />
+                </div>
               </div>
               <div className="modal-footer d-flex flex-nowrap align-items-center justify-content-between m-0 p-1">
                 <input

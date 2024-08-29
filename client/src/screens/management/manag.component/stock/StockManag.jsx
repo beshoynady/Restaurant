@@ -127,6 +127,7 @@ const StockManag = () => {
       toast.warn("ليس لك صلاحية لانشاء حركه المخزن");
       return;
     }
+    
 
     const lastStockAction = AllStockactionsStore.filter(
       (stockAction) =>
