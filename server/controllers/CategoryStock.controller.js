@@ -6,14 +6,14 @@ const CreateCategoryStock = async (req, res, next) => {
     const createdBy = req.employee.id
 
     // Check if the categoryName or categoryCode already exists
-    const existingCategory = await CategoryStockmodel.findOne({
-      $or: [{ categoryName }, { categoryCode }],
-    });
-    if (existingCategory) {
-      return res
-        .status(400)
-        .json({ error: "Category name or code already exists" });
-    }
+    // const existingCategory = await CategoryStockmodel.findOne({
+    //   $or: [{ categoryName }, { categoryCode }],
+    // });
+    // if (existingCategory) {
+    //   return res
+    //     .status(400)
+    //     .json({ error: "Category name or code already exists" });
+    // }
 
     // Create a new category stock entry
     const newCategoryStock = await CategoryStockmodel.create({
