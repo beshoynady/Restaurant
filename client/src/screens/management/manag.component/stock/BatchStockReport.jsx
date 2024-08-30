@@ -187,26 +187,6 @@ const BatchStockReport = () => {
                 </h2>
               </div>
               <div className="col-12 col-md-6 p-0 m-0 d-flex flex-wrap aliegn-items-center justify-content-end print-hide">
-                {stockManagementPermission &&
-                  stockManagementPermission.create && (
-                    <a
-                      href="#addStockactionModal"
-                      className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-success"
-                      data-toggle="modal"
-                    >
-                      <span>انشاء حركه مخزن</span>
-                    </a>
-                  )}
-                {stockManagementPermission &&
-                  stockManagementPermission.delete && (
-                    <a
-                      href="#deleteStockactionModal"
-                      className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-danger"
-                      data-toggle="modal"
-                    >
-                      <span>حذف</span>
-                    </a>
-                  )}
               </div>
             </div>
           </div>
@@ -247,7 +227,7 @@ const BatchStockReport = () => {
                   onChange={(e) => searchByitem(e.target.value)}
                 />
               </div>
-              <div class="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
+              {/* <div class="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                   نوع الاوردر
                 </label>
@@ -264,7 +244,7 @@ const BatchStockReport = () => {
                     );
                   })}
                 </select>
-              </div>
+              </div> */}
 
               <div className="col-12 text-dark d-flex flex-wrap align-items-center justify-content-start p-0 m-0 mt-3">
                 <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
@@ -274,8 +254,8 @@ const BatchStockReport = () => {
                   <select
                     className="form-control border-primary m-0 p-2 h-auto"
                     onChange={(e) =>
-                      setAllStockactions(
-                        filterByTime(e.target.value, AllStockactions)
+                      setbatches(
+                        filterByTime(e.target.value, batches)
                       )
                     }
                   >
