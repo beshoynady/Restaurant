@@ -170,8 +170,6 @@ const BatchStockReport = () => {
     getStockItems();
     getAllStores();
     getAllCategoryStock();
-    getAllCashRegisters();
-    // getallrecipes();
   }, []);
 
 
