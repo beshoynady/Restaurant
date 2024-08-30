@@ -79,10 +79,9 @@ const BatchStockReport = () => {
       }
       const response = await axios.get(apiUrl + "/api/stockmanag/", config);
       console.log(response.data);
-      const Stockactions = await response.data;
-      const filterBatches = Stockactions.filter(action=>{
-        action.inbound?.balance > 0
-      });
+      const stockActions = await response.data;
+      const filterBatches = stockActions.filter(action => action.inbound?.balance > 0);
+
       setbatches(filterBatches)
     } catch (error) {
       console.log(error);
