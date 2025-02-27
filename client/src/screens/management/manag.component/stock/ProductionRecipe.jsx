@@ -180,7 +180,7 @@ const ProductionRecipe = () => {
         newIngredients = [{ itemId, name, quantity, unit, wastePercentage }];
         // newIngredients = [{ itemId, name, quantity, unit, wastePercentage }];
         console.log({
-          stockItem :stockItemId,
+          stockItem,
           stockItemName,
           batchSize,
           preparationTime,
@@ -190,7 +190,7 @@ const ProductionRecipe = () => {
         const addRecipeToStockProduction = await axios.post(
           `${apiUrl}/api/stockproductionrecipe`,
           {
-            stockItem : stockItemId,
+            stockItem,
             stockItemName,
             batchSize,
             preparationTime,
