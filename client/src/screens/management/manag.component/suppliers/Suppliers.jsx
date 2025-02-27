@@ -1,29 +1,23 @@
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
-import { detacontext } from "../../../../App";
+import { dataContext } from "../../../../App";
 import { toast } from "react-toastify";
 import "../orders/Orders.css";
 
 const Suppliers = () => {
-  const apiUrl = process.env.REACT_APP_API_URL;
-  const token = localStorage.getItem("token_e"); // Retrieve the token from localStorage
-  const config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  };
-
   const {
     permissionsList,
     employeeLoginInfo,
     formatDateTime,
-    setisLoading,
+    setIsLoading,
     EditPagination,
-    startpagination,
-    endpagination,
-    setstartpagination,
-    setendpagination,
-  } = useContext(detacontext);
+    startPagination,
+    endPagination,
+    setStartPagination,
+    setEndPagination,
+    apiUrl,
+    handleGetTokenAndConfig,
+  } = useContext(dataContext);
 
   const supplierDataPermission =
     permissionsList &&
@@ -33,8 +27,9 @@ const Suppliers = () => {
 
   const [supplierId, setsupplierId] = useState("");
   const [name, setName] = useState("");
+  const [responsiblePerson, setResponsiblePerson] = useState("");
 
-  const [phone, setphone] = useState([]);
+  const [phone, setphone] = useState(["رقم الموبايل"]);
 
   const handleAddPhone = () => {
     setphone([...phone, "رقم الموبايل"]);
@@ -52,11 +47,12 @@ const Suppliers = () => {
   };
 
   const [whatsapp, setwhatsapp] = useState("");
+
   const [email, setemail] = useState("");
 
   const [address, setAddress] = useState("");
 
-  const [itemsSupplied, setItemsSupplied] = useState([]);
+  const [itemsSupplied, setItemsSupplied] = useState(["اضف خامة"]);
 
   const handleAddItemsSupplied = () => {
     setItemsSupplied([...itemsSupplied, "اضف خامة"]);
@@ -77,8 +73,11 @@ const Suppliers = () => {
   const [notes, setnotes] = useState("");
 
   const [paymentType, setPaymentType] = useState("");
+
+  const currencyList = ["EGP", "USD", "EUR", "GBP", "SAR", "AED", "KWD"];
+
   const [financialInfo, setFinancialInfo] = useState([
-    { paymentMethodName: "", accountNumber: "" },
+    { paymentMethodName: "", accountNumber: "", currency: "EGP" },
   ]);
   const handleAddfinancialInfo = () => {
     setFinancialInfo([
@@ -97,67 +96,168 @@ const Suppliers = () => {
     setFinancialInfo(financialInfoList);
   };
 
+  const empityData = () => {
+    setName("");
+    setResponsiblePerson("");
+    setAddress("");
+    setphone(["رقم الموبايل"]);
+    setwhatsapp("");
+    setemail("");
+    setCurrentBalance(0);
+    setItemsSupplied(["اضف خامة"]);
+    setPaymentType("");
+    setFinancialInfo([
+      { paymentMethodName: "", accountNumber: "", currency: "" },
+    ]);
+    setnotes("");
+  };
+
   // Function to create a Supplier
   const createSupplier = async (e) => {
     e.preventDefault();
-    if (!token) {
-      // Handle case where token is not available
-      toast.error("رجاء تسجيل الدخول مره اخري");
+    setIsLoading(true);
+    const config = await handleGetTokenAndConfig();
+
+    // تحقق من الصلاحيات قبل المتابعة
+    if (supplierDataPermission && !supplierDataPermission.create) {
+      toast.warn("ليس لديك صلاحية لإنشاء حساب الموردين");
       return;
     }
-    try {
-      if (supplierDataPermission && !supplierDataPermission.create) {
-        toast.warn("ليس لك صلاحية لانشاء حساب الموردين");
-        return;
-      }
-      // console.log({ phone, whatsapp, email })
-      const supplierData = {
-        name,
-        contact: { phone, whatsapp, email },
-        address,
-        paymentType,
-        itemsSupplied,
-        currentBalance,
-        financialInfo,
-        notes,
-      };
 
+    if (whatsapp && !validatePhone(whatsapp, "الواتس اب")) return;
+    if (phone.some((number) => !validatePhone(number, "الموبايل"))) return;
+
+    const supplierData = {
+      name,
+      responsiblePerson,
+      phone,
+      whatsapp,
+      email,
+      address,
+      paymentType,
+      itemsSupplied,
+      currentBalance,
+      financialInfo,
+      notes,
+    };
+
+    try {
+      // إرسال طلب إنشاء المورد
       const response = await axios.post(
-        apiUrl + "/api/supplier/",
+        `${apiUrl}/api/supplier/`,
         supplierData,
         config
       );
-      console.log(response.data);
-      if (response) {
-        // Notify on success
+
+      if (response && response.status === 201) {
+        if (currentBalance > 0) {
+          await createOpeningBalanceTransaction(supplierId, currentBalance);
+        }
+
+        // إخطار بنجاح العملية
         toast.success("تم إنشاء المورد بنجاح");
         getAllSuppliers();
+        empityData();
+      } else {
+        throw new Error("فشل في إنشاء المورد");
       }
     } catch (error) {
-      console.log(error);
-
-      // Notify on error
+      setIsLoading(false);
+      console.error(error);
       toast.error("فشل في إنشاء المورد");
+    } finally {
+      setIsLoading(false);
     }
   };
+
+  const createOpeningBalanceTransaction = async (
+    supplierId,
+    currentBalance
+  ) => {
+    const config = await handleGetTokenAndConfig();
+
+    const transactionData = {
+      supplier: supplierId,
+      transactionDate: new Date(),
+      transactionType: "OpeningBalance",
+      amount: currentBalance,
+      previousBalance: 0,
+      currentBalance,
+      paymentMethod: "",
+      notes,
+    };
+
+    try {
+      const response = await axios.post(
+        `${apiUrl}/api/suppliertransaction`,
+        transactionData,
+        config
+      );
+
+      if (response && response.status === 201) {
+        toast.success("تم تسجيل معاملة الرصيد الافتتاحي بنجاح");
+      } else {
+        throw new Error("فشل في تسجيل معاملة الرصيد الافتتاحي");
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("حدث خطأ أثناء تسجيل معاملة الرصيد الافتتاحي");
+    }
+  };
+
+  // const addSupplierToStockItem = async (supplierId) => {
+  //   const config = await handleGetTokenAndConfig();
+
+  //   if (itemsSupplied) {
+  //     for (const item of itemsSupplied) {
+  //       const oldSupplier = AllStockItems.find(
+  //         (i) => i._id === item
+  //       )?.suppliers;
+  //       const suppliers = oldSupplier
+  //         ? [...oldSupplier, supplierId]
+  //         : [supplierId];
+  //       // console.log({ itemsSupplied, oldSupplier, suppliers });
+  //       try {
+  //         const response = await axios.put(
+  //           `${apiUrl}/api/stockitem/${item}`,
+  //           { suppliers },
+  //           config
+  //         );
+  //         console.log({ itemsSupplied, suppliers, response });
+  //         if (response) {
+  //           toast.success("تم تحديث عنصر المخزون بنجاح");
+  //         }
+  //         // Notify on success
+  //       } catch (error) {
+  //         // Notify on error
+  //         console.log({ error });
+  //         toast.error("فشل في تحديث عنصر المخزون");
+  //       }
+  //     }
+  //   }
+  // };
 
   //Function to edit a Supplier item
 
   const updateSupplier = async (e) => {
     e.preventDefault();
-    if (!token) {
-      // Handle case where token is not available
-      toast.error("رجاء تسجيل الدخول مره اخري");
-      return;
-    }
+    setIsLoading(true);
+    const config = await handleGetTokenAndConfig();
     try {
       if (supplierDataPermission && !supplierDataPermission.update) {
         toast.warn("ليس لك صلاحية لتعديل حساب الموردين");
         return;
       }
+
+      if (whatsapp && !validatePhone(whatsapp, "الواتس اب")) return;
+      if (phone.some((number) => !validatePhone(number, "الموبايل"))) return;
+
       const updatedSupplierData = {
         name,
-        contact: { phone, whatsapp, email },
+        responsiblePerson,
+        phone,
+        whatsapp,
+        email,
         address,
         paymentType,
         itemsSupplied,
@@ -175,23 +275,22 @@ const Suppliers = () => {
         // Notify on success
         toast.success("تم تحديث المورد بنجاح");
         getAllSuppliers();
+        empityData();
       }
     } catch (error) {
       console.log(error);
 
       // Notify on error
       toast.error("فشل في تحديث المورد");
+    } finally {
+      setIsLoading(false);
     }
   };
 
   // Function to delete a supplier
   const deleteSupplier = async (e) => {
     e.preventDefault();
-    if (!token) {
-      // Handle case where token is not available
-      toast.error("رجاء تسجيل الدخول مره اخري");
-      return;
-    }
+    const config = await handleGetTokenAndConfig();
     try {
       if (supplierDataPermission && !supplierDataPermission.delete) {
         toast.warn("ليس لك صلاحية لحذف حساب الموردين");
@@ -220,11 +319,7 @@ const Suppliers = () => {
   const [AllSuppliers, setAllSuppliers] = useState([]);
   // Function to retrieve all suppliers
   const getAllSuppliers = async () => {
-    if (!token) {
-      // Handle case where token is not available
-      toast.error("رجاء تسجيل الدخول مره اخري");
-      return;
-    }
+    const config = await handleGetTokenAndConfig();
     try {
       if (supplierDataPermission && !supplierDataPermission.read) {
         toast.warn("ليس لك صلاحية لعرض حسابات الموردين");
@@ -253,11 +348,7 @@ const Suppliers = () => {
   };
 
   const getOneSuppliers = async (id) => {
-    if (!token) {
-      // Handle case where token is not available
-      toast.error("رجاء تسجيل الدخول مره اخري");
-      return;
-    }
+    const config = await handleGetTokenAndConfig();
     try {
       if (supplierDataPermission && !supplierDataPermission.read) {
         toast.warn("ليس لك صلاحية لعرض حساب الموردين");
@@ -274,10 +365,11 @@ const Suppliers = () => {
       if (supplier) {
         setsupplierId(supplier._id);
         setName(supplier.name);
+        setResponsiblePerson(supplier.responsiblePerson);
         setAddress(supplier.address);
-        setphone(supplier.contact.phone);
-        setwhatsapp(supplier.contact.whatsapp);
-        setemail(supplier.contact.email);
+        setphone(supplier.phone);
+        setwhatsapp(supplier.whatsapp);
+        setemail(supplier.email);
         setCurrentBalance(supplier.currentBalance);
         setItemsSupplied(supplier.itemsSupplied);
         setPaymentType(supplier.paymentType);
@@ -299,11 +391,7 @@ const Suppliers = () => {
 
   // Function to retrieve all stock items
   const getStockItems = async () => {
-    if (!token) {
-      // Handle case where token is not available
-      toast.error("رجاء تسجيل الدخول مره اخري");
-      return;
-    }
+    const config = await handleGetTokenAndConfig();
     try {
       const response = await axios.get(apiUrl + "/api/stockitem/", config);
 
@@ -329,11 +417,7 @@ const Suppliers = () => {
 
   // Function to retrieve all category stock
   const getAllCategoryStock = async () => {
-    if (!token) {
-      // Handle case where token is not available
-      toast.error("رجاء تسجيل الدخول مره اخري");
-      return;
-    }
+    const config = await handleGetTokenAndConfig();
     try {
       const res = await axios.get(apiUrl + "/api/categoryStock/", config);
       setAllCategoryStock(res.data);
@@ -360,6 +444,27 @@ const Suppliers = () => {
     } else {
       setAllSuppliers([]); // Clear the list or show empty state
     }
+  };
+
+  // validate phone number
+  const validatePhone = (phone, type) => {
+    const phoneRegex = /^\+(?:[0-9] ?){6,14}[0-9]$/;
+
+    if (!phoneRegex.test(phone)) {
+      toast.error(`⚠️ يجب إدخال ${type} بهذا الشكل: +201000000000`, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        theme: "colored",
+      });
+      return false;
+     setIsLoading(false);
+    }
+
+    return true;
   };
 
   useEffect(() => {
@@ -401,8 +506,8 @@ const Suppliers = () => {
                 <select
                   className="form-control border-primary m-0 p-2 h-auto"
                   onChange={(e) => {
-                    setstartpagination(0);
-                    setendpagination(e.target.value);
+                    setStartPagination(0);
+                    setEndPagination(e.target.value);
                   }}
                 >
                   {(() => {
@@ -468,6 +573,7 @@ const Suppliers = () => {
               <tr>
                 <th>م</th>
                 <th>الاسم</th>
+                <th>المسؤل</th>
                 <th>الاصناف</th>
                 <th>الرصيد الحالي</th>
                 <th>العنوان</th>
@@ -485,37 +591,42 @@ const Suppliers = () => {
             <tbody>
               {AllSuppliers &&
                 AllSuppliers.map((supplier, i) => {
-                  if ((i >= startpagination) & (i < endpagination)) {
+                  if ((i >= startPagination) & (i < endPagination)) {
                     return (
                       <tr key={i}>
                         <td>{i + 1}</td>
                         <td>{supplier.name}</td>
+                        <td>{supplier.responsiblePerson}</td>
                         <td>
                           {supplier.itemsSupplied.length > 0
-                            ? supplier.itemsSupplied.map(
-                                (item) => `${item.itemName} - `
-                              )
+                            ? supplier.itemsSupplied
+                                .map((item) => `${item.itemName}`)
+                                .join(" - ")
                             : "لا يوجد"}
                         </td>
                         <td>{supplier.currentBalance}</td>
                         <td>{supplier.address}</td>
                         <td>
-                          {supplier.contact?.phone.length > 0
-                            ? supplier.contact.phone.map(
-                                (phone) => `${phone} - `
-                              )
+                          {supplier.phone.length > 0
+                            ? supplier.phone
+                                .map((phone) => `${phone}`)
+                                .join(" - ")
                             : "لا يوجد"}
                         </td>
-                        <td>{supplier.contact.whatsapp}</td>
-                        <td>{supplier.contact.email}</td>
+                        <td>
+                          {supplier.whatsapp ? supplier.whatsapp : "لا يوجد"}
+                        </td>
+                        <td>{supplier.email ? supplier.email : "لا يوجد"}</td>
                         <td>
                           {supplier.financialInfo
-                            ? supplier.financialInfo.map(
-                                (
-                                  financialInfo
-                                ) => `[${financialInfo.paymentMethodName}
-                                : ${financialInfo.accountNumber}]`
-                              )
+                            ? supplier.financialInfo
+                                .map(
+                                  (
+                                    financialInfo
+                                  ) => `[${financialInfo.paymentMethodName}
+                                : ${financialInfo.accountNumber} : ${financialInfo.currency}]`
+                                )
+                                .join(" - ")
                             : "لا يوجد"}
                         </td>
                         <td>{supplier.paymentType}</td>
@@ -523,41 +634,43 @@ const Suppliers = () => {
                         <td>{supplier.createdBy?.fullname}</td>
                         <td>{formatDateTime(supplier.createdAt)}</td>
                         <td>
-                          {supplierDataPermission.update&&
-                          <a
-                            href="#editSupplierModal"
-                            className="edit"
-                            data-toggle="modal"
-                            onClick={() => {
-                              getOneSuppliers(supplier._id);
-                            }}
-                          >
-                            <i
-                              className="material-icons"
-                              data-toggle="tooltip"
-                              title="Edit"
-                            >
-                              &#xE254;
-                            </i>
-                          </a>
-                          }
+                          {supplierDataPermission &&
+                            supplierDataPermission.update && (
+                              <button
+                                data-target="#editSupplierModal"
+                                className="btn btn-sm btn-primary ml-2 "
+                                data-toggle="modal"
+                                onClick={() => {
+                                  getOneSuppliers(supplier._id);
+                                }}
+                              >
+                                <i
+                                  className="material-icons"
+                                  data-toggle="tooltip"
+                                  title="Edit"
+                                >
+                                  &#xE254;
+                                </i>
+                              </button>
+                            )}
 
-                          {supplierDataPermission.delete&&
-                          <a
-                            href="#deleteSupplierModal"
-                            className="delete"
-                            data-toggle="modal"
-                            onClick={() => setsupplierId(supplier._id)}
-                          >
-                            <i
-                              className="material-icons"
-                              data-toggle="tooltip"
-                              title="Delete"
-                            >
-                              &#xE872;
-                            </i>
-                          </a>
-                          }
+                          {supplierDataPermission &&
+                            supplierDataPermission.delete && (
+                              <button
+                                data-target="#deleteSupplierModal"
+                                className="btn btn-sm btn-danger"
+                                data-toggle="modal"
+                                onClick={() => setsupplierId(supplier._id)}
+                              >
+                                <i
+                                  className="material-icons"
+                                  data-toggle="tooltip"
+                                  title="Delete"
+                                >
+                                  &#xE872;
+                                </i>
+                              </button>
+                            )}
                         </td>
                       </tr>
                     );
@@ -569,8 +682,8 @@ const Suppliers = () => {
             <div className="hint-text text-dark">
               عرض{" "}
               <b>
-                {AllSuppliers.length > endpagination
-                  ? endpagination
+                {AllSuppliers.length > endPagination
+                  ? endPagination
                   : AllSuppliers.length}
               </b>{" "}
               من <b>{AllSuppliers.length}</b> عنصر
@@ -581,7 +694,7 @@ const Suppliers = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 5 ? "active" : ""}`}
+                className={`page-item ${endPagination === 5 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   1
@@ -589,7 +702,7 @@ const Suppliers = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 10 ? "active" : ""}`}
+                className={`page-item ${endPagination === 10 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   2
@@ -597,7 +710,7 @@ const Suppliers = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 15 ? "active" : ""}`}
+                className={`page-item ${endPagination === 15 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   3
@@ -605,7 +718,7 @@ const Suppliers = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 20 ? "active" : ""}`}
+                className={`page-item ${endPagination === 20 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   4
@@ -613,7 +726,7 @@ const Suppliers = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 25 ? "active" : ""}`}
+                className={`page-item ${endPagination === 25 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   5
@@ -621,7 +734,7 @@ const Suppliers = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 30 ? "active" : ""}`}
+                className={`page-item ${endPagination === 30 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   التالي
@@ -657,6 +770,17 @@ const Suppliers = () => {
                     className="form-control border-primary m-0 p-2 h-auto"
                     required
                     onChange={(e) => setName(e.target.value)}
+                  />
+                </div>
+                <div className="form-group w-100 h-auto px-3 d-flex flex-wrap align-itmes-center justify-content-start col-12  col-md-6 ">
+                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                    اسم المسؤل
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control border-primary m-0 p-2 h-auto"
+                    required
+                    onChange={(e) => setResponsiblePerson(e.target.value)}
                   />
                 </div>
 
@@ -716,7 +840,7 @@ const Suppliers = () => {
                     ))}
                   <button
                     type="button"
-                    className="btn w-100 btn-success"
+                    className="mt-1 btn w-100 btn-success"
                     onClick={handleAddPhone}
                   >
                     إضافة موبايل
@@ -752,7 +876,7 @@ const Suppliers = () => {
                   ))}
                   <button
                     type="button"
-                    className="btn w-100 btn-success"
+                    className="mt-1 btn w-100 btn-success"
                     onClick={handleAddItemsSupplied}
                   >
                     إضافة صنف مورد
@@ -815,6 +939,24 @@ const Suppliers = () => {
                           )
                         }
                       />
+                      <select
+                        className="form-control border-primary"
+                        value={info.currency}
+                        onChange={(e) =>
+                          handleNewFinancialInfo(
+                            index,
+                            "currency",
+                            e.target.value
+                          )
+                        }
+                      >
+                        <option value="">اختر العملة</option>
+                        {currencyList.map((currency) => (
+                          <option key={currency} value={currency}>
+                            {currency}
+                          </option>
+                        ))}
+                      </select>
                       <button
                         type="button"
                         className="btn col-2 btn-danger h-100 btn btn-sm"
@@ -826,7 +968,7 @@ const Suppliers = () => {
                   ))}
                   <button
                     type="button"
-                    className="btn w-100 btn-success"
+                    className="mt-1 btn w-100 btn-success"
                     onClick={handleAddfinancialInfo}
                   >
                     إضافة معلومات مالية
@@ -886,6 +1028,18 @@ const Suppliers = () => {
                     defaultValue={name}
                     value={name}
                     onChange={(e) => setName(e.target.value)}
+                  />
+                </div>
+                <div className="form-group w-100 h-auto px-3 d-flex flex-wrap align-itmes-center justify-content-start col-12  col-md-6 ">
+                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                    اسم المسؤل
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control border-primary m-0 p-2 h-auto"
+                    defaultValue={responsiblePerson}
+                    value={responsiblePerson}
+                    onChange={(e) => setResponsiblePerson(e.target.value)}
                   />
                 </div>
 
@@ -962,7 +1116,7 @@ const Suppliers = () => {
                     ))}
                   <button
                     type="button"
-                    className="btn w-100 btn-success"
+                    className="mt-1 btn w-100 btn-success"
                     onClick={handleAddPhone}
                   >
                     إضافة موبايل
@@ -998,7 +1152,7 @@ const Suppliers = () => {
                   ))}
                   <button
                     type="button"
-                    className="btn w-100 btn-success"
+                    className="mt-1 btn w-100 btn-success"
                     onClick={handleAddItemsSupplied}
                   >
                     إضافة صنف مورد
@@ -1036,6 +1190,24 @@ const Suppliers = () => {
                           )
                         }
                       />
+                      <select
+                        className="form-control border-primary"
+                        defaultValue={info.currency}
+                        onChange={(e) =>
+                          handleNewFinancialInfo(
+                            index,
+                            "currency",
+                            e.target.value
+                          )
+                        }
+                      >
+                        <option value="">اختر العملة</option>
+                        {currencyList.map((currency) => (
+                          <option key={currency} value={currency}>
+                            {currency}
+                          </option>
+                        ))}
+                      </select>
                       <button
                         type="button"
                         className="btn col-2 btn-danger h-100 btn btn-sm"
@@ -1047,7 +1219,7 @@ const Suppliers = () => {
                   ))}
                   <button
                     type="button"
-                    className="btn w-100 btn-success"
+                    className="mt-1 btn w-100 btn-success"
                     onClick={handleAddfinancialInfo}
                   >
                     إضافة معلومات مالية

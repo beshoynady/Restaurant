@@ -3,11 +3,6 @@ const { ObjectId } = mongoose.Schema;
 
 const StockMovementSchema = new mongoose.Schema(
   {
-    itemId: {
-      type: ObjectId,
-      ref: "StockItem",
-      required: true,
-    },
     storeId: {
       type: ObjectId,
       ref: "Store",
@@ -18,8 +13,18 @@ const StockMovementSchema = new mongoose.Schema(
       ref: "CategoryStock",
       required: true,
     },
+    itemId: {
+      type: ObjectId,
+      ref: "StockItem",
+      required: true,
+    },
     unit: {
       type: String,
+      required: true,
+    },
+    movementDate: {
+      type: Date,
+      default: Date.now,
       required: true,
     },
     costMethod: {
@@ -30,16 +35,24 @@ const StockMovementSchema = new mongoose.Schema(
     source: {
       type: String,
       enum: [
+        "OpeningBalance",
         "Purchase",
         "ReturnPurchase",
         "Issuance",
         "ReturnIssuance",
         "Wastage",
         "Damaged",
+        "Transfer",
+        "ReturnTransfer",
         "stockAdjustment",
-        "OpeningBalance",
       ],
       required: true,
+    },
+    description: {
+      type: String,
+      trim: true,
+      required: true,
+      
     },
     inbound: {
       quantity: {
@@ -98,17 +111,22 @@ const StockMovementSchema = new mongoose.Schema(
       default: 0,
       min: 0,
     },
-    movementDate: {
-      type: Date,
-      default: Date.now,
-      required: true,
-    },
-    notes: {
-      type: String,
-      trim: true,
-    },
     expirationDate: {
       type: Date,
+    },
+    sender: {
+      type: ObjectId,
+      ref: function () {
+        return this.source === "Purchase"? "Supplier": "Employee";
+      },
+      required: true,
+    },
+    receiver: {
+      type: ObjectId,
+      ref: function () {
+        return  this.source === "ReturnIssuance" ? "Supplier" : "Employee";
+      },
+      required: true,
     },
     createdBy: {
       type: ObjectId,
@@ -119,6 +137,7 @@ const StockMovementSchema = new mongoose.Schema(
       type: ObjectId,
       ref: "Employee",
     },
+
   },
   {
     timestamps: true,

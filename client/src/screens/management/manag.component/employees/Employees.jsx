@@ -1,33 +1,28 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
 import axios from "axios";
-import { detacontext } from "../../../../App";
+import { dataContext } from "../../../../App";
 import { toast } from "react-toastify";
 import * as XLSX from "xlsx";
 import { useReactToPrint } from "react-to-print";
 import "../orders/Orders.css";
 
 const Employees = () => {
-  const apiUrl = process.env.REACT_APP_API_URL;
-  const token = localStorage.getItem("token_e");
-
-  const config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  };
   const [isExecuting, setIsExecuting] = useState(false);
 
   const {
     permissionsList,
     restaurantData,
     formatDateTime,
-    setisLoading,
+    setIsLoading,
+    allTable,
     EditPagination,
-    startpagination,
-    endpagination,
-    setstartpagination,
-    setendpagination,
-  } = useContext(detacontext);
+    startPagination,
+    endPagination,
+    setStartPagination,
+    setEndPagination,
+    apiUrl,
+    handleGetTokenAndConfig,
+  } = useContext(dataContext);
 
   const notify = (message, type) => {
     toast[type](message);
@@ -44,18 +39,25 @@ const Employees = () => {
     "waiter",
     "deliveryman",
     "chef",
+    "Grill Chef",
+    "Bartender",
   ];
 
-  const roleAr = ["مالك", "مدير", "كاشير", "ويتر", "ديليفري مان", "شيف"];
+  const roleAr = [
+    "مالك",
+    "مدير",
+    "كاشير",
+    "ويتر",
+    "ديليفري مان",
+    "شيف",
+    "شيف شوايه",
+    "البار مان",
+  ];
 
   const [listOfEmployees, setListOfEmployees] = useState([]);
 
   const getEmployees = async () => {
-    if (!token) {
-      // Handle case where token is not available
-      toast.error("رجاء تسجيل الدخول مره اخري");
-      return;
-    }
+    const config = await handleGetTokenAndConfig();
     if (permissionsForEmployee && permissionsForEmployee.read === false) {
       notify("ليس لك صلاحية لعرض بيانات الموظفين", "info");
       return;
@@ -82,11 +84,7 @@ const Employees = () => {
 
   const getShifts = async () => {
     try {
-      if (!token) {
-        // Handle case where token is not available
-        toast.error("رجاء تسجيل الدخول مره اخري");
-        return;
-      }
+      const config = await handleGetTokenAndConfig();
       const response = await axios.get(`${apiUrl}/api/shift`, config);
       if (response.status === 200 && response.data) {
         const { data } = response;
@@ -116,22 +114,10 @@ const Employees = () => {
   const [isActive, setisActive] = useState(true);
   const [isAdmin, setisAdmin] = useState(true);
   const [role, setrole] = useState("");
-  const [sectionNumber, setsectionNumber] = useState(0);
+  const [sectionNumber, setsectionNumber] = useState("");
 
   const createEmployee = async (e) => {
     e.preventDefault();
-    // console.log({
-    //   fullname,
-    //   username,
-    //   basicSalary,
-    //   workingDays,
-    //   numberID,
-    //   password,
-    //   address,
-    //   phone,
-    //   shift,
-    //   role,
-    // });
 
     if (isExecuting) {
       toast.warn("انتظر لانشاء حساب الموظف");
@@ -162,11 +148,7 @@ const Employees = () => {
     }
 
     try {
-      if (!token) {
-        // Handle case where token is not available
-        toast.error("رجاء تسجيل الدخول مره اخري");
-        return;
-      }
+      const config = await handleGetTokenAndConfig();
       setIsExecuting(true);
 
       const newEmployee = await axios.post(
@@ -206,11 +188,7 @@ const Employees = () => {
 
   const editEmployee = async (e) => {
     e.preventDefault();
-    if (!token) {
-      // Handle case where token is not available
-      toast.error("رجاء تسجيل الدخول مره اخري");
-      return;
-    }
+    const config = await handleGetTokenAndConfig();
     if (permissionsForEmployee && permissionsForEmployee.update === false) {
       notify("ليس لك صلاحية لتعديل حساب الموظف", "info");
       return;
@@ -297,7 +275,7 @@ const Employees = () => {
     setemployeeShift(employee.shift);
     settaxRate(employee.taxRate);
     setinsuranceRate(employee.insuranceRate);
-    setsectionNumber(employee.sectionNumber ? employee.sectionNumber : 0);
+    setsectionNumber(employee.sectionNumber ? employee.sectionNumber : "");
   };
 
   const getEmployeesByJob = (role) => {
@@ -316,6 +294,7 @@ const Employees = () => {
       }
     }
   };
+
   const getEmployeesByShift = (shift) => {
     if (shift === "all") {
       getEmployees();
@@ -323,7 +302,7 @@ const Employees = () => {
     }
     if (listOfEmployees.length > 0 && shift) {
       const FilterEmployees = listOfEmployees.filter(
-        (employee) => employee.shift._id === shift
+        (employee) => employee.shift?._id === shift
       );
       if (FilterEmployees) {
         setListOfEmployees(FilterEmployees);
@@ -366,11 +345,7 @@ const Employees = () => {
   const deleteEmployee = async (e) => {
     e.preventDefault();
     try {
-      if (!token) {
-        // Handle case where token is not available
-        toast.error("رجاء تسجيل الدخول مره اخري");
-        return;
-      }
+      const config = await handleGetTokenAndConfig();
       if (permissionsForEmployee && permissionsForEmployee.delete === true) {
         const deleted = await axios.delete(
           `${apiUrl}/api/employee/${employeeid}`,
@@ -404,11 +379,7 @@ const Employees = () => {
     e.preventDefault();
     console.log(selectedIds);
     try {
-      if (!token) {
-        // Handle case where token is not available
-        toast.error("رجاء تسجيل الدخول مره اخري");
-        return;
-      }
+      const config = await handleGetTokenAndConfig();
 
       for (const Id of selectedIds) {
         await axios.delete(`${apiUrl}/api/order/${Id}`, config);
@@ -468,6 +439,21 @@ const Employees = () => {
     getEmployees();
     getShifts();
   }, []);
+  const [listOfSectionNumber, setlistOfSectionNumber] = useState([]);
+  useEffect(() => {
+    const sectionNumbers = [];
+    allTable &&
+      allTable.forEach((table) => {
+        if (table.sectionNumber) {
+          if (sectionNumbers.includes(table.sectionNumber)) {
+            return;
+          }
+
+          sectionNumbers.push(table.sectionNumber);
+        }
+      });
+    setlistOfSectionNumber([...new Set(sectionNumbers)]);
+  }, [role]);
 
   return (
     <div className="w-100 px-3 d-flex align-itmes-center justify-content-start">
@@ -523,8 +509,8 @@ const Employees = () => {
                 <select
                   className="form-control border-primary m-0 p-2 h-auto"
                   onChange={(e) => {
-                    setstartpagination(0);
-                    setendpagination(e.target.value);
+                    setStartPagination(0);
+                    setEndPagination(e.target.value);
                   }}
                 >
                   {(() => {
@@ -632,7 +618,7 @@ const Employees = () => {
             <tbody>
               {listOfEmployees.length > 0
                 ? listOfEmployees.map((employee, i) => {
-                    if (i >= startpagination && i < endpagination) {
+                    if (i >= startPagination && i < endPagination) {
                       return (
                         <tr key={i}>
                           <td>{i + 1}</td>
@@ -665,9 +651,9 @@ const Employees = () => {
                           </td>
                           <td>
                             {permissionsForEmployee?.update ? (
-                              <a
-                                href="#editEmployeeModal"
-                                className="edit"
+                              <button
+                                data-target="#editEmployeeModal"
+                                className="btn btn-sm btn-primary ml-2 "
                                 data-toggle="modal"
                               >
                                 <i
@@ -680,14 +666,14 @@ const Employees = () => {
                                 >
                                   &#xE254;
                                 </i>
-                              </a>
+                              </button>
                             ) : (
                               ""
                             )}
                             {permissionsForEmployee?.delete ? (
-                              <a
-                                href="#deleteEmployeeModal"
-                                className="delete"
+                              <button
+                                data-target="#deleteEmployeeModal"
+                                className="btn btn-sm btn-danger"
                                 data-toggle="modal"
                               >
                                 <i
@@ -698,7 +684,7 @@ const Employees = () => {
                                 >
                                   &#xE872;
                                 </i>
-                              </a>
+                              </button>
                             ) : (
                               ""
                             )}
@@ -716,8 +702,8 @@ const Employees = () => {
             <div className="hint-text text-dark">
               عرض{" "}
               <b>
-                {listOfEmployees.length > endpagination
-                  ? endpagination
+                {listOfEmployees.length > endPagination
+                  ? endPagination
                   : listOfEmployees.length}
               </b>{" "}
               من <b>{listOfEmployees.length}</b> عنصر
@@ -728,7 +714,7 @@ const Employees = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 5 ? "active" : ""}`}
+                className={`page-item ${endPagination === 5 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   1
@@ -736,7 +722,7 @@ const Employees = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 10 ? "active" : ""}`}
+                className={`page-item ${endPagination === 10 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   2
@@ -744,7 +730,7 @@ const Employees = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 15 ? "active" : ""}`}
+                className={`page-item ${endPagination === 15 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   3
@@ -752,7 +738,7 @@ const Employees = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 20 ? "active" : ""}`}
+                className={`page-item ${endPagination === 20 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   4
@@ -760,7 +746,7 @@ const Employees = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 25 ? "active" : ""}`}
+                className={`page-item ${endPagination === 25 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   5
@@ -768,7 +754,7 @@ const Employees = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 30 ? "active" : ""}`}
+                className={`page-item ${endPagination === 30 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   التالي
@@ -782,17 +768,17 @@ const Employees = () => {
       <div id="addEmployeeModal" className="modal fade">
         {permissionsForEmployee?.create && (
           <div className="modal-dialog modal-lg">
-                <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
-                  <h4 className="modal-title">إضافة موظف</h4>
-                  <button
-                    type="button"
-                    className="close m-0 p-1"
-                    data-dismiss="modal"
-                    aria-hidden="true"
-                  >
-                    &times;
-                  </button>
-                </div>
+            <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
+              <h4 className="modal-title">إضافة موظف</h4>
+              <button
+                type="button"
+                className="close m-0 p-1"
+                data-dismiss="modal"
+                aria-hidden="true"
+              >
+                &times;
+              </button>
+            </div>
             <div className="modal-content shadow-lg border-0 rounded">
               <form className="text-right" onSubmit={(e) => createEmployee(e)}>
                 <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
@@ -1070,17 +1056,19 @@ const Employees = () => {
                         className="form-label text-wrap text-right fw-bolder p-0 m-0"
                         htmlFor="sectionNumber"
                       >
-                        رقم السكشن
+                        السكشن المسؤول عنه
                       </label>
-                      <input
-                        type="number"
-                        id="sectionNumber"
+                      <select
                         className="form-control border-primary m-0 p-2 h-auto"
                         required
-                        onChange={(e) =>
-                          setsectionNumber(Number(e.target.value))
-                        }
-                      />
+                        onChange={(e) => setsectionNumber(e.target.value)}
+                      >
+                        {listOfSectionNumber.map((sectionNumber, i) => (
+                          <option value={sectionNumber} key={i}>
+                            {sectionNumber}
+                          </option>
+                        ))}
+                      </select>
                     </div>
                   )}
                 </div>
@@ -1282,7 +1270,7 @@ const Employees = () => {
                       required
                       onChange={(e) => setshift(e.target.value)}
                     >
-                      <option value={shift}>{employeeShift.name}</option>
+                      <option value={shift}>{employeeShift.shiftType}</option>
                       {shifts ? (
                         shifts.map((shift, i) => (
                           <option value={shift._id} key={i}>
@@ -1407,17 +1395,18 @@ const Employees = () => {
                         className="form-label text-wrap text-right fw-bolder p-0 m-0"
                         htmlFor="sectionNumber"
                       >
-                        رقم السكشن
+                        السكشن المسؤول عنه
                       </label>
-                      <input
-                        type="number"
-                        id="sectionNumber"
+                       <select
                         className="form-control border-primary m-0 p-2 h-auto"
-                        value={sectionNumber}
-                        onChange={(e) =>
-                          setsectionNumber(Number(e.target.value))
-                        }
-                      />
+                        onChange={(e) => setsectionNumber(e.target.value)}
+                      >
+                        {listOfSectionNumber.map((sectionNumber, i) => (
+                          <option value={sectionNumber} key={i}>
+                            {sectionNumber}
+                          </option>
+                        ))}
+                      </select>
                     </div>
                   )}
                 </div>

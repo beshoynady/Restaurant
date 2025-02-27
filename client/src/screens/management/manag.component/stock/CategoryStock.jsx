@@ -1,18 +1,10 @@
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
-import { detacontext } from "../../../../App";
+import { dataContext } from "../../../../App";
 import { toast } from "react-toastify";
 import "../orders/Orders.css";
 
 const CategoryStock = () => {
-  const apiUrl = process.env.REACT_APP_API_URL;
-  const token = localStorage.getItem("token_e"); // Retrieve the token from localStorage
-  const config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  };
-
   const {
     restaurantData,
     permissionsList,
@@ -23,13 +15,15 @@ const CategoryStock = () => {
     employeeLoginInfo,
     formatDate,
     formatDateTime,
-    setisLoading,
+    setIsLoading,
     EditPagination,
-    startpagination,
-    endpagination,
-    setstartpagination,
-    setendpagination,
-  } = useContext(detacontext);
+    startPagination,
+    endPagination,
+    setStartPagination,
+    setEndPagination,
+    apiUrl,
+    handleGetTokenAndConfig,
+  } = useContext(dataContext);
 
   const stockCategoriesPermission =
     permissionsList &&
@@ -45,10 +39,7 @@ const CategoryStock = () => {
   const [allStockItems, setAllStockItems] = useState([]);
 
   const getAllCategoryStock = async () => {
-    if (!token) {
-      toast.error("رجاء تسجيل الدخول مره اخري");
-      return;
-    }
+    const config = await handleGetTokenAndConfig();
 
     try {
       if (stockCategoriesPermission && !stockCategoriesPermission.read) {
@@ -65,10 +56,7 @@ const CategoryStock = () => {
 
   const getAllStockItem = async () => {
     try {
-      if (!token) {
-        toast.error("رجاء تسجيل الدخول مره اخري");
-        return;
-      }
+      const config = await handleGetTokenAndConfig();
       const response = await axios.get(apiUrl + "/api/stockitem/", config);
       if (response) {
         const stockItems = response.data.reverse();
@@ -83,17 +71,14 @@ const CategoryStock = () => {
 
   const createCategoryStock = async (e) => {
     e.preventDefault();
-    if (!token) {
-      toast.error("رجاء تسجيل الدخول مره اخري");
-      return;
-    }
+    const config = await handleGetTokenAndConfig();
 
     try {
       if (stockCategoriesPermission && !stockCategoriesPermission.create) {
         toast.warn("ليس لك صلاحية لاضافه تصنيفات المخزن");
         return;
       }
-      
+
       // Validate fields
       if (!categoryName.trim() || !categoryCode.trim()) {
         toast.error("اسم التصنيف ورمز التصنيف مطلوبان");
@@ -128,10 +113,7 @@ const CategoryStock = () => {
 
   const editCategoryStock = async (e) => {
     e.preventDefault();
-    if (!token) {
-      toast.error("رجاء تسجيل الدخول مره اخري");
-      return;
-    }
+    const config = await handleGetTokenAndConfig();
 
     try {
       if (stockCategoriesPermission && !stockCategoriesPermission.update) {
@@ -160,10 +142,7 @@ const CategoryStock = () => {
   const deleteCategoryStock = async (e) => {
     e.preventDefault();
 
-    if (!token) {
-      toast.error("رجاء تسجيل الدخول مره اخري");
-      return;
-    }
+    const config = await handleGetTokenAndConfig();
 
     try {
       if (stockCategoriesPermission && !stockCategoriesPermission.delete) {
@@ -236,8 +215,8 @@ const CategoryStock = () => {
                 <select
                   className="form-control border-primary m-0 p-2 h-auto"
                   onChange={(e) => {
-                    setstartpagination(0);
-                    setendpagination(e.target.value);
+                    setStartPagination(0);
+                    setEndPagination(e.target.value);
                   }}
                 >
                   {(() => {
@@ -282,7 +261,7 @@ const CategoryStock = () => {
             <tbody>
               {allCategoryStock &&
                 allCategoryStock.map((categoryStock, i) => {
-                  if (i >= startpagination && i < endpagination) {
+                  if (i >= startPagination && i < endPagination) {
                     return (
                       <tr key={i}>
                         <td>{i + 1}</td>
@@ -305,15 +284,15 @@ const CategoryStock = () => {
                               stockCategoriesPermission.delete) && (
                               <div className="d-flex flex-wrap align-items-center justify-content-around">
                                 {stockCategoriesPermission.update && (
-                                  <a
-                                    href="#editCategoryStockModal"
+                                  <button
+                                    data-target="#editCategoryStockModal"
                                     onClick={() => {
                                       setCategoryName(categoryStock.name);
                                       setCategoryCode(categoryStock.code);
                                       setNotes(categoryStock.notes || "");
                                       setCategoryStockId(categoryStock._id);
                                     }}
-                                    className="edit"
+                                    className="btn btn-sm btn-primary ml-2 "
                                     data-toggle="modal"
                                   >
                                     <i
@@ -321,17 +300,17 @@ const CategoryStock = () => {
                                       data-toggle="tooltip"
                                       title="Edit"
                                     >
-                                      
+                                      &#xE254;
                                     </i>
-                                  </a>
+                                  </button>
                                 )}
                                 {stockCategoriesPermission.delete && (
-                                  <a
-                                    href="#deleteCategoryStockModal"
+                                  <button
+                                    data-target="#deleteCategoryStockModal"
                                     onClick={() =>
                                       setCategoryStockId(categoryStock._id)
                                     }
-                                    className="delete"
+                                    className="btn btn-sm btn-danger"
                                     data-toggle="modal"
                                   >
                                     <i
@@ -339,9 +318,9 @@ const CategoryStock = () => {
                                       data-toggle="tooltip"
                                       title="Delete"
                                     >
-                                      
+                                      &#xE872;
                                     </i>
-                                  </a>
+                                  </button>
                                 )}
                               </div>
                             )}
@@ -359,8 +338,8 @@ const CategoryStock = () => {
             <div className="hint-text text-dark">
               عرض{" "}
               <b>
-                {allCategoryStock.length > endpagination
-                  ? endpagination
+                {allCategoryStock.length > endPagination
+                  ? endPagination
                   : allCategoryStock.length}
               </b>{" "}
               من <b>{allCategoryStock.length}</b> عنصر
@@ -371,7 +350,7 @@ const CategoryStock = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 5 ? "active" : ""}`}
+                className={`page-item ${endPagination === 5 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   1
@@ -379,7 +358,7 @@ const CategoryStock = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 10 ? "active" : ""}`}
+                className={`page-item ${endPagination === 10 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   2
@@ -387,7 +366,7 @@ const CategoryStock = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 15 ? "active" : ""}`}
+                className={`page-item ${endPagination === 15 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   3
@@ -395,7 +374,7 @@ const CategoryStock = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 20 ? "active" : ""}`}
+                className={`page-item ${endPagination === 20 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   4
@@ -403,7 +382,7 @@ const CategoryStock = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 25 ? "active" : ""}`}
+                className={`page-item ${endPagination === 25 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   5
@@ -411,7 +390,7 @@ const CategoryStock = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 30 ? "active" : ""}`}
+                className={`page-item ${endPagination === 30 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   التالي

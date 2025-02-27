@@ -1,5 +1,5 @@
 const express = require("express");
-const authenticateToken = require("../utlits/authenticate");
+const { authenticateToken } = require("../utlits/authenticate");
 const checkSubscription = require("../utlits/checkSubscription");
 
 const {
@@ -18,7 +18,7 @@ router
   .post(authenticateToken, checkSubscription, createTable)
   .get(showAllTables);
 router
-  .route("/:tableid")
+  .route("/:tableId")
   .get(showOneTable)
   .delete(authenticateToken, checkSubscription, deleteTable)
   .put(authenticateToken, checkSubscription, updateTable);

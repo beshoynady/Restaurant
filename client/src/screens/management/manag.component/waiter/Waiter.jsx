@@ -1,115 +1,119 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
-import { detacontext } from "../../../../App";
+import { dataContext } from "../../../../App";
 // import './Waiter.css'
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 
 const Waiter = () => {
-  const { employeeLoginInfo , isRefresh, setisRefresh } = useContext(detacontext);
-
-  const apiUrl = process.env.REACT_APP_API_URL;
-  const token = localStorage.getItem("token_e");
-  const config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  };
+  const {
+    employeeLoginInfo,
+    isRefresh,
+    formatTime,
+    formatDate,
+    setIsRefresh,
+    cashierSocket,
+    kitchenSocket,
+    BarSocket,
+    GrillSocket,
+    waiterSocket,
+    apiUrl,
+    handleGetTokenAndConfig,
+  } = useContext(dataContext);
 
   // Refs for buttons
   const start = useRef();
   const ready = useRef();
 
   // State for pending orders and payments
-  const [pendingOrders, setPendingOrders] = useState([]);
+  const [ActivePreparationTickets, setActivePreparationTickets] = useState([]);
   const [pendingPayments, setPendingPayments] = useState([]);
 
   // Function to fetch pending orders and payments
-  const fetchPendingData = async () => {
+  const fetchActivePreparationTickets = async () => {
+    const config = await handleGetTokenAndConfig();
     try {
-      if (!token) {
-        // Handle case where token is not available
-        toast.error("رجاء تسجيل الدخول مره اخري");
-        return;
-      }
-      const res = await axios.get(apiUrl + "/api/order/limit/50", config);
-      const filterMyOrder = res.data?.filter(
-        (order) => order.waiter?._id === employeeLoginInfo.id
+      const res = await axios.get(
+        apiUrl + "/api/preparationticket/activepreparationtickets",
+        config
       );
-      if (filterMyOrder.length > 0) {
-        const recentStatus = filterMyOrder.filter(
-          (order) => order.status === "Pending"
-        );
-
-        const recentPaymentStatus = filterMyOrder.filter(
-          (order) => order.payment_status === "Pending"
-        );
-        setPendingOrders(recentStatus);
-        setPendingPayments(recentPaymentStatus);
-      }
+      const filterWaiterTickets = res.data.data?.filter(
+        (Ticket) =>
+          Ticket.waiter?._id === employeeLoginInfo.id &&
+          (Ticket.preparationStatus === "Prepared" ||
+            Ticket.preparationStatus === "On the way")
+      );
+      console.log({
+        activepreparationtickets: res.data.data,
+        filterWaiterTickets,
+      });
+      setActivePreparationTickets(filterWaiterTickets);
+      // setPendingPayments(recentPaymentStatus);
     } catch (error) {
       console.log(error);
     }
   };
 
   // State for internal orders
-  const [internalOrders, setInternalOrders] = useState([]);
+  // const [internalOrders, setInternalOrders] = useState([]);
 
-  // Function to fetch internal orders
-  const fetchInternalOrders = async () => {
-    try {
-      if (!token) {
-        // Handle case where token is not available
-        toast.error("رجاء تسجيل الدخول مره اخري");
-        return;
-      }
-      const res = await axios.get(apiUrl + "/api/order/limit/50", config);
+  // // Function to fetch internal orders
+  // const fetchInternalOrders = async () => {
+  //   try {
+  // const config = await handleGetTokenAndConfig();
 
-      const filterMyOrder = res.data?.filter(
-        (order) => order.waiter?._id === employeeLoginInfo.id
-      );
+  //     const res = await axios.get(apiUrl + "/api/preparationticket/limit/50", config);
 
-      const activeOrders = filterMyOrder.filter(
-        (order) => order.isActive === true
-      );
-      const internalOrdersData = activeOrders.filter(
-        (order) => order.orderType === "Internal"
-      );
+  //     const filterMyOrder = res.data?.filter(
+  //       (order) => order.waiter?._id === employeeLoginInfo.id
+  //     );
 
-      console.log({ internalOrdersData: internalOrdersData });
-      const products =
-        internalOrdersData.length > 0
-          ? internalOrdersData.flatMap((order) => order.products)
-          : [];
-      console.log({ products: products });
-      const productsFiltered =
-        products.length > 0
-          ? products.filter(
-              (product) =>
-                product.isDone === true && product.isDeleverd === false
-            )
-          : [];
+  //     const activeOrders = filterMyOrder.filter(
+  //       (order) => order.isActive === true
+  //     );
+  //     const internalOrdersData = activeOrders.filter(
+  //       (order) => order.orderType === "Internal"
+  //     );
 
-      console.log({ productsFiltered: productsFiltered });
+  //     console.log({ internalOrdersData: internalOrdersData });
+  //     const products =
+  //       internalOrdersData.length > 0
+  //         ? internalOrdersData.flatMap((order) => order.products)
+  //         : [];
+  //     console.log({ products: products });
+  //     const productsFiltered =
+  //       products.length > 0
+  //         ? products.filter(
+  //             (product) =>
+  //               product.isDone === true && product.isDeleverd === false
+  //           )
+  //         : [];
 
-      if (productsFiltered.length > 0) {
-        setInternalOrders(internalOrdersData);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  //     console.log({ productsFiltered: productsFiltered });
+
+  //     if (productsFiltered.length > 0) {
+  //       setInternalOrders(internalOrdersData);
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   const updateOrderOnWay = async (id) => {
     try {
-      if (!token) {
-        // Handle case where token is not available
-        toast.error("رجاء تسجيل الدخول مره اخري");
-        return;
+      const config = await handleGetTokenAndConfig();
+      const preparationStatus = "On the way";
+      try {
+        await axios.put(
+          `${apiUrl}/api/preparationticket/${id}`,
+          { preparationStatus },
+          config
+        );
+      } catch (error) {
+        console.error(`Error updating preparation status`, error);
       }
-      const status = "On the way";
-      await axios.put(`${apiUrl}/api/order/${id}`, { status }, config);
-      fetchInternalOrders();
-      fetchPendingData();
+
+      // fetchInternalOrders();
+      fetchActivePreparationTickets();
       toast.success("تم تاكيد استلام الاوردر!");
     } catch (error) {
       console.log(error);
@@ -117,25 +121,48 @@ const Waiter = () => {
     }
   };
 
-  const updateOrderDelivered = async (id) => {
+  const updateOrderDelivered = async (ticketId) => {
     try {
-      const orderData = await axios.get(`${apiUrl}/api/order/${id}`, config);
-      const products = orderData.data.products.map((prod) => ({
-        ...prod,
-        isDeleverd: true,
-      }));
-      const status = "Delivered";
+      const config = await handleGetTokenAndConfig();
+
+      const fetchPreparationTicketData = await axios.get(
+        `${apiUrl}/api/preparationticket/${ticketId}`,
+        config
+      );
+      const preparationticketData = fetchPreparationTicketData.data.data;
+      const { products: ticketProducts } = preparationticketData;
+      const orderType = preparationticketData.order?.orderType;
+      const orderId = await preparationticketData?.order._id;
+      const orderProducts = preparationticketData.order?.products;
+
+      const updatedOrderProducts = orderProducts.map((product) =>
+        ticketProducts.some(
+          (ticketProduct) =>
+            ticketProduct.productId?._id === product.productId?._id
+        )
+          ? { ...product, isDeleverd: true }
+          : product
+      );
       const updateOrder = await axios.put(
-        `${apiUrl}/api/order/${id}`,
+        `${apiUrl}/api/order/${orderId}`,
         {
-          status,
-          products,
+          products: updatedOrderProducts,
+        },
+        config
+      );
+      const preparationStatus = "Delivered";
+      const isDelivered = true;
+      const updateTicket = await axios.put(
+        `${apiUrl}/api/preparationticket/${ticketId}`,
+        {
+          preparationStatus,
+          isDelivered,
         },
         config
       );
       if (updateOrder.status === 200) {
-        fetchInternalOrders();
-        fetchPendingData();
+        // fetchInternalOrders();
+        fetchActivePreparationTickets();
         toast.success("تم تاكيد توصيل الاوردر!");
       }
     } catch (error) {
@@ -146,20 +173,16 @@ const Waiter = () => {
 
   const helpOnWay = async (id) => {
     try {
-      if (!token) {
-        // Handle case where token is not available
-        toast.error("رجاء تسجيل الدخول مره اخري");
-        return;
-      }
+      const config = await handleGetTokenAndConfig();
       const helpStatus = "On the way";
       const res = await axios.put(
-        `${apiUrl}/api/order/${id}`,
+        `${apiUrl}/api/preparationticket/${id}`,
         { helpStatus },
         config
       );
       if (res.status === 200) {
-        fetchInternalOrders();
-        fetchPendingData();
+        // fetchInternalOrders();
+        fetchActivePreparationTickets();
         toast.success("تم تاكيد الاتجاه لتقديم المساعده!");
       }
     } catch (error) {
@@ -170,15 +193,15 @@ const Waiter = () => {
 
   const helpDone = async (id) => {
     try {
-      if (!token) {
-        // Handle case where token is not available
-        toast.error("رجاء تسجيل الدخول مره اخري");
-        return;
-      }
+      const config = await handleGetTokenAndConfig();
       const helpStatus = "Assistance done";
-      await axios.put(`${apiUrl}/api/order/${id}`, { helpStatus }, config);
-      fetchPendingData();
-      fetchInternalOrders();
+      await axios.put(
+        `${apiUrl}/api/preparationticket/${id}`,
+        { helpStatus },
+        config
+      );
+      fetchActivePreparationTickets();
+      // fetchInternalOrders();
       toast.success("تم تاكيد تقديم المساعده!");
     } catch (error) {
       console.log(error);
@@ -186,14 +209,23 @@ const Waiter = () => {
     }
   };
 
+  const waitingTime = (t) => {
+    const t1 = new Date(t).getTime();
+    const t2 = new Date().getTime();
+    const elapsedTime = t2 - t1;
+
+    const minutesPassed = Math.floor(elapsedTime / (1000 * 60));
+    return minutesPassed;
+  };
+
   // Fetch initial data on component mount
   useEffect(() => {
-    fetchPendingData();
-    fetchInternalOrders();
+    fetchActivePreparationTickets();
+    // fetchInternalOrders();
   }, []);
   useEffect(() => {
-    fetchPendingData();
-    fetchInternalOrders();
+    fetchActivePreparationTickets();
+    // fetchInternalOrders();
   }, [isRefresh]);
 
   return (
@@ -284,17 +316,13 @@ const Waiter = () => {
             );
           })}
 
-      {internalOrders &&
-        internalOrders.map((order, i) => {
-          if (
-            order.products.filter(
-              (pr) => pr.isDone === true && pr.isDeleverd === false
-            ).length > 0
-          ) {
+      {ActivePreparationTickets &&
+        ActivePreparationTickets.map((Ticket, i) => {
+          {
             return (
               <div
-                className="card text-white bg-success"
-                style={{ width: "260px" }}
+                className="col-lg-3 col-md-4 col-sm-6 col-12 mb-4 ml-2 card text-white bg-success p-0 m-0"
+                key={i}
               >
                 <div
                   className="card-body text-right d-flex justify-content-between p-0 m-1"
@@ -302,135 +330,145 @@ const Waiter = () => {
                 >
                   <div className="col-6 p-0">
                     <p className="card-text">
-                      الطاولة: {order.table?.tableNumber}
+                      {" "}
+                      {Ticket.table != null
+                        ? `طاولة: ${Ticket.table?.tableNumber}`
+                        : Ticket.user
+                        ? `العميل: ${Ticket.user?.username}`
+                        : ""}
                     </p>
-                    <p className="card-text">رقم الفاتورة: {order.serial}</p>
-                    <p className="card-text">نوع الطلب: {order.orderType}</p>
+                    <p className="card-text">
+                      رقم الطلب:{" "}
+                      {Ticket.order?.TicketNum ? Ticket.order?.TicketNum : ""}
+                    </p>
+                    <p className="card-text">
+                      الفاتورة: {Ticket.order?.serial}
+                    </p>
+                    <p className="card-text">
+                      نوع الطلب: {Ticket.order?.orderType}
+                    </p>
+                    <p className="card-text">
+                      القسم: {Ticket.preparationSection?.name}
+                    </p>
                   </div>
+
                   <div className="col-6 p-0">
+                    {Ticket.waiter ? (
+                      <p className="card-text">
+                        الويتر: {Ticket.waiter && Ticket.waiter?.username}
+                      </p>
+                    ) : (
+                      ""
+                    )}
                     <p className="card-text">
-                      الويتر: {order.waiter?.username}
+                      الاستلام: {formatTime(Ticket.createdAt)}
                     </p>
                     <p className="card-text">
-                      التنفيذ:{" "}
-                      {new Date(order.updatedAt).toLocaleTimeString([], {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
-                    </p>
-                    <p className="card-text">
-                      الاستلام:{" "}
-                      {new Date(order.createdAt).toLocaleTimeString([], {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
+                      الانتظار:{" "}
+                      {setTimeout(() => waitingTime(Ticket.updateAt), 60000)}{" "}
+                      دقيقه
                     </p>
                   </div>
                 </div>
                 <ul className="list-group list-group-flush">
-                  {order.products
-                    .filter(
-                      (pr) => pr.isDone === true && pr.isDeleverd === false
-                    )
-                    .map((product, i) => {
-                      return (
-                        <>
-                          <li
-                            className="list-group-item d-flex flex-column justify-content-between align-items-center"
-                            key={i}
-                            style={
-                              product.isAdd
-                                ? {
-                                    backgroundColor: "red",
-                                    color: "white",
-                                  }
-                                : { color: "black" }
-                            }
-                          >
-                            <div className="d-flex justify-content-between align-items-center w-100">
-                              <p
-                                style={{
-                                  fontSize: "1.2em",
-                                  fontWeight: "bold",
-                                }}
-                              >
-                                {i + 1}- {product.name}
-                              </p>
-                              <span
-                                style={{
-                                  fontSize: "1.2em",
-                                  fontWeight: "bold",
-                                }}
-                              >
-                                {" "}
-                                × {product.quantity}
-                              </span>
-                            </div>
-                            <div
+                  {Ticket.products.map((product, i) => {
+                    return (
+                      <>
+                        <li
+                          className="list-group-item d-flex flex-column justify-content-between align-items-center p-1"
+                          key={i}
+                          style={
+                            product.isAdd
+                              ? {
+                                  backgroundColor: "red",
+                                  color: "white",
+                                }
+                              : { color: "black" }
+                          }
+                        >
+                          <div className="d-flex justify-content-between align-items-center w-100 p-1">
+                            <p
                               style={{
                                 fontSize: "1.2em",
                                 fontWeight: "bold",
                               }}
                             >
-                              {product.notes}
-                            </div>
-                          </li>
-                          {product.extras &&
-                            product.extras.length > 0 &&
-                            product.extras.map((extra, j) => {
-                              if (extra && extra.isDone === false) {
-                                return (
-                                  <li
-                                    className="list-group-item d-flex flex-column justify-content-between align-items-center"
-                                    key={`${i}-${j}`}
-                                    style={
-                                      product.isAdd
-                                        ? {
-                                            backgroundColor: "red",
-                                            color: "white",
-                                          }
-                                        : { color: "black" }
-                                    }
-                                  >
-                                    <div className="d-flex justify-content-between align-items-center w-100">
-                                      {extra.extraDetails.map((detail) => (
-                                        <p
-                                          className="badge badge-secondary m-1"
-                                          key={detail.extraid}
-                                        >
-                                          {`${detail.name}`}
-                                        </p>
-                                      ))}
-                                    </div>
-                                  </li>
-                                );
-                              } else {
-                                return null;
-                              }
-                            })}
-                        </>
-                      );
-                    })}
+                              {i + 1}- {product.name}{" "}
+                              {product.size ? product.size : ""}
+                            </p>
+                            <span
+                              style={{
+                                fontSize: "1.2em",
+                                fontWeight: "bold",
+                              }}
+                            >
+                              {" "}
+                              × {product.quantity}
+                            </span>
+                          </div>
+                          <div
+                            style={{
+                              fontSize: "1.2em",
+                              fontWeight: "bold",
+                            }}
+                          >
+                            {product.notes}
+                          </div>
+                        </li>
+                        {product.extras &&
+                          product.extras.length > 0 &&
+                          product.extras.map((extra, j) => {
+                            if (extra && extra.isDone === false) {
+                              return (
+                                <li
+                                  className="list-group-item d-flex flex-column justify-content-between align-items-center p-1"
+                                  key={`${i}-${j}`}
+                                  style={
+                                    product.isAdd
+                                      ? {
+                                          backgroundColor: "red",
+                                          color: "white",
+                                        }
+                                      : { color: "black" }
+                                  }
+                                >
+                                  <div className="d-flex justify-content-between align-items-center w-100 p-1">
+                                    {extra.extraDetails.map((detail) => (
+                                      <p
+                                        className="badge badge-secondary m-1"
+                                        key={detail.extraid}
+                                      >{`${detail.name}`}</p>
+                                    ))}
+                                  </div>
+                                </li>
+                              );
+                            } else {
+                              return null;
+                            }
+                          })}
+                      </>
+                    );
+                  })}
                 </ul>
-                <div className="card-footer text-center">
-                  {order.status === "Prepared" ? (
+                <div className="text-center w-100 d-flex flex-row">
+                  {Ticket.preparationStatus === "Prepared" ? (
                     <button
                       className="btn w-100 btn-warning h-100 btn btn-lg"
                       onClick={() => {
-                        updateOrderOnWay(order._id);
+                        updateOrderOnWay(Ticket._id);
                       }}
                     >
-                      استلام الطلب
+                      جاري الاستلام
+                    </button>
+                  ) : Ticket.preparationStatus === "On the way" ? (
+                    <button
+                      className="btn w-100 btn-primary h-100 btn btn-lg"
+                      onClick={() => updateOrderDelivered(Ticket._id)}
+                    >
+                      تم التوصيل
                     </button>
                   ) : (
-                    <button
-                      className="btn w-100 btn-success h-100 btn btn-lg"
-                      onClick={() => {
-                        updateOrderDelivered(order._id);
-                      }}
-                    >
-                      تم التسليم
-                    </button>
+                    ""
                   )}
                 </div>
               </div>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
-import { detacontext } from "../../../../App";
+import { dataContext } from "../../../../App";
 import axios from "axios";
 import io from "socket.io-client";
 import { toast } from "react-toastify";
@@ -17,42 +17,27 @@ import {
 
 import "bootstrap/dist/css/bootstrap.min.css";
 
-const cashierSocket = io(`${process.env.REACT_APP_API_URL}/cashier`, {
-  reconnection: true,
-  reconnectionAttempts: Infinity,
-  reconnectionDelay: 1000,
-});
-
-const waiterSocket = io(`${process.env.REACT_APP_API_URL}/waiter`, {
-  reconnection: true,
-  reconnectionAttempts: Infinity,
-  reconnectionDelay: 1000,
-});
-
-
-
 const ManagerDash = () => {
-  const apiUrl = process.env.REACT_APP_API_URL;
-  const token = localStorage.getItem("token_e");
-  const config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  };
-
   const {
     restaurantData,
     employeeLoginInfo,
     formatDate,
-    setisLoading,
+    setIsLoading,
     EditPagination,
-    startpagination,
-    endpagination,
-    setstartpagination,
-    setendpagination,
+    startPagination,
+    endPagination,
+    setStartPagination,
+    setEndPagination,
     isRefresh,
-    setisRefresh
-  } = useContext(detacontext);
+    setIsRefresh,
+    cashierSocket,
+    kitchenSocket,
+    BarSocket,
+    GrillSocket,
+    waiterSocket,
+    apiUrl,
+    handleGetTokenAndConfig,
+  } = useContext(dataContext);
 
   const [showModal, setShowModal] = useState(false);
 
@@ -70,10 +55,7 @@ const ManagerDash = () => {
 
   const fetchOrdersData = async () => {
     try {
-      if (!token) {
-        toast.error("رجاء تسجيل الدخول مره اخري");
-        return; 
-      }
+      const config = await handleGetTokenAndConfig();
 
       // Fetch orders from API
       const res = await axios.get(apiUrl + "/api/order", config);
@@ -119,21 +101,31 @@ const ManagerDash = () => {
       setCancelledOrders(cancelledOrders);
 
       const shiftId = employeeLoginInfo.shift;
-      const shiftData = await axios.get(
-        `${apiUrl}/api/shift/${shiftId}`,
-        config
-      );
-      const todayDate = new Date().toISOString().split('T')[0];
+      if (shiftId) {
+        const shiftData = await axios.get(
+          `${apiUrl}/api/shift/${shiftId}`,
+          config
+        );
+        const todayDate = new Date().toISOString().split("T")[0];
 
-      const startTime = new Date(`${todayDate}T${shiftData.data.startTime}:00Z`).getTime();
-      const endTime = new Date(`${todayDate}T${shiftData.data.endTime}:00Z`).getTime();
-      
-      const shiftOrders = dayOrders.filter((order) => {
-        const orderTime = new Date(order.createdAt).getTime();
-        return orderTime >= startTime && orderTime <= endTime;
-      });
-      setorderShift(shiftOrders);
-      console.log({ shiftData, startTime, endTime, shiftOrders });
+        const startTime = new Date(
+          `${todayDate}T${shiftData.data.startTime}:00Z`
+        ).getTime();
+        const endTime = new Date(
+          `${todayDate}T${shiftData.data.endTime}:00Z`
+        ).getTime();
+
+        const shiftOrders = dayOrders.filter((order) => {
+          const orderTime = new Date(order.createdAt).getTime();
+          return orderTime >= startTime && orderTime <= endTime;
+        });
+        setorderShift(shiftOrders);
+        console.log({ shiftData, startTime, endTime, shiftOrders });
+      } else {
+        toast.warn(
+          "لا يمكن تحديد اوردرات الشيف لان هذا المستخدم ليس له شيفت محدد"
+        );
+      }
     } catch (error) {
       // Handle and log error
       console.error("Error fetching orders data:", error.message);
@@ -141,12 +133,11 @@ const ManagerDash = () => {
   };
 
   useEffect(() => {
-    console.log({isRefresh})
-    fetchOrdersData()
-  }, [isRefresh])
-  
+    console.log({ isRefresh });
+    fetchOrdersData();
+  }, [isRefresh]);
 
-  const orderTypeEN = ['Internal', 'Delivery', 'Takeaway'];
+  const orderTypeEN = ["Internal", "Delivery", "Takeaway"];
   const orderTypeAR = ["داخلي", "ديليفري", "تيك اوي"];
 
   const statusEN = ["Pending", "Approved", "Cancelled"];
@@ -169,35 +160,309 @@ const ManagerDash = () => {
     "تم التسليم",
     "ملغي",
   ];
+  // const preparationSection = ["Kitchen", "Bar", "Grill"]
   const [update, setupdate] = useState(false);
 
-  const changeorderstauts = async (e, orderId, cashier) => {
+  const [allPreparationSections, setAllPreparationSections] = useState([]);
+
+  const getAllPreparationSections = async () => {
+    const config = await handleGetTokenAndConfig();
+
     try {
-      if (!token) {
-        // Handle case where token is not available
-        toast.error("رجاء تسجيل الدخول مره اخري");
-      }
-      const status = e.target.value;
-      const isActive = status === "Cancelled" ? false : true;
-
-      const response = await axios.put(
-        `${apiUrl}/api/order/${orderId}`,
-        { status, isActive, cashier },
-        config
-      );
-      if (response) {
-        fetchOrdersData();
-
-        toast.success("تم تغيير حالة الطلب بنجاح");
-
-        if (status === "Approved") {
-          setupdate(!update);
-          setisRefresh(!isRefresh)
-          cashierSocket.emit("orderkitchen", "استلام اوردر جديد");
-        }
+      const res = await axios.get(`${apiUrl}/api/preparationsection`, config);
+      if (res.status === 200) {
+        const PreparationSections = res.data.data;
+        console.log({ PreparationSections });
+        setAllPreparationSections(PreparationSections);
+      } else {
+        throw new Error("Failed to fetch data");
       }
     } catch (error) {
-      console.error("خطأ في تغيير حالة الطلب:", error);
+      console.error("حدث خطأ أثناء استلام البيانات:", error);
+      toast.error("حدث خطأ أثناء جلب البيانات، يرجى المحاولة مرة أخرى لاحقًا.");
+    }
+  };
+
+  // const changeOrderStatus = async (event, orderId, orderProducts) => {
+  //   const config = await handleGetTokenAndConfig();
+
+  //   const cashier = employeeLoginInfo.id; // Get cashier ID
+  //   const status = event.target.value; // New order status
+  //   const isActive = status !== "Cancelled"; // Set active state based on status
+
+  //   // Mark all products as sent
+  //   const updatedProducts = orderProducts.map((product) => ({
+  //     ...product,
+  //     isSend: true,
+  //   }));
+
+  //   console.log({ updatedProducts });
+
+  //   // Prepare the payload for updating the order
+  //   const payload = { status, isActive, cashier };
+  //   if (status !== "Cancelled") {
+  //     payload.products = updatedProducts;
+  //   }
+
+  //   try {
+  //     // Update the order status via API
+  //     const response = await axios.put(`${apiUrl}/api/order/${orderId}`, payload, config);
+
+  //     if (response) {
+  //       // Handle order cancellation scenario
+  //       if (status === "Cancelled") {
+  //         toast.success("تم تغيير حالة الطلب بنجاح");
+  //         return;
+  //       }
+
+  //       // Handle other statuses (e.g., Approved)
+  //       if (preparationSection?.length > 0) {
+  //         preparationSection.forEach((section) => {
+  //           const sectionProducts = orderProducts.filter(
+  //             (product) =>
+  //               product.productId?.preparationSection === section && !product.isSend
+  //           );
+
+  //           if (sectionProducts.length > 0) {
+  //             axios
+  //               .post(
+  //                 `${apiUrl}/api/preparationticket`,
+  //                 {
+  //                   order: orderId,
+  //                   preparationSection: section,
+  //                   products: sectionProducts.map((product) => ({
+  //                     ...product,
+  //                     orderproductId: product._id,
+  //                   })),
+  //                 },
+  //                 config
+  //               )
+  //               .then((response) => {
+  //                 console.log({
+  //                   sectionProducts,
+  //                   createTicket: response,
+  //                   createTicketData: response.data,
+  //                 });
+  //               })
+  //               .catch((error) => {
+  //                 console.error("Error creating ticket:", error);
+  //               });
+  //           }
+  //         });
+  //       }
+
+  //       // Refresh order data and notify the user
+  //       fetchOrdersData();
+  //       toast.success("تم تغيير حالة الطلب بنجاح");
+
+  //       // Notify the kitchen for new orders
+  //       if (status === "Approved") {
+  //         kitchenSocket.emit("orderkitchen", "استلام أوردر جديد");
+  //         setupdate(!update);
+  //         setIsRefresh(!isRefresh);
+  //       }
+  //     }
+  //   } catch (error) {
+  //     console.error("خطأ في تغيير حالة الطلب:", error);
+  //     toast.error("حدث خطأ أثناء تغيير حالة الطلب");
+  //   }
+  // };
+
+  // const changeOrderStatus = async (e, orderId)  => {
+  // const config = await handleGetTokenAndConfig();
+  //     const status = e.target.value;
+  //     const cashier= employeeLoginInfo.id
+  //     const isActive = status === "Cancelled" ? false : true;
+
+  //     if(status === "Cancelled"){
+  //       try {
+  //         const response = await axios.put(
+  //           `${apiUrl}/api/order/${orderId}`,
+  //           { status, isActive, cashier },
+  //           config
+  //         );
+  //       } catch (error) {
+  //           console.error("خطأ في تغيير حالة الطلب:", error);
+  //           toast.error("حدث خطأ أثناء تغيير حالة الطلب");
+  //         }
+  //       }else{
+
+  //         try {
+  //           const getOrder = await axios.get(
+  //             `${apiUrl}/api/order/${orderId}`,
+  //             config
+  //           );
+  //           const orderProducts =await getOrder.data.products
+  //           console.log({ orderProducts });
+  //         const newProducts = await orderProducts.filter(product=>product.isSend === false)
+
+  //         allPreparationSections &&
+  //         allPreparationSections.map((section) => {
+  //             const sectionProducts = [];
+  //             newProducts &&
+  //               newProducts.map((product) => {
+  //                 if (product.productId?.preparationSection === section._id && product.isSend === false) {
+  //                   sectionProducts.push({
+  //                     ...product,
+  //                     orderproductId:product._id
+  //                   });
+  //                 }
+  //               });
+  //             if (sectionProducts.length > 0) {
+  //               axios
+  //                 .post(
+  //                   `${apiUrl}/api/preparationticket`,
+  //                   {
+  //                     order: orderId,
+  //                     preparationSection: section,
+  //                     products: sectionProducts,
+  //                   },
+  //                   config
+  //                 )
+  //                 .then((response) => {
+  //                   console.log({
+  //                     sectionProducts,
+  //                     createTicket: response,
+  //                     createTicketdata: response.data,
+  //                   });
+  //                 })
+  //                 .catch((error) => {
+  //                   console.error("Error creating ticket:", error);
+  //                 });
+  //             }
+  //           });
+
+  //           const updateproduct =await newProducts.map(product=>{
+  //             return {...product, isSend:true}
+  //           })
+  //         const updateOrder = await axios.put(
+  //           `${apiUrl}/api/order/${orderId}`,
+  //           { status, isActive, cashier, products:updateproduct },
+  //           config
+  //         );
+  //         fetchOrdersData();
+
+  //         toast.success("تم تغيير حالة الطلب بنجاح");
+
+  //         if (status === "Approved") {
+  //           kitchenSocket.emit("orderkitchen", "استلام اوردر جديد");
+  //           setupdate(!update);
+  //           setIsRefresh(!isRefresh);
+  //         }
+  //     } catch (error) {
+  //       console.error("خطأ في تغيير حالة الطلب:", error);
+  //       toast.error("حدث خطأ أثناء تغيير حالة الطلب");
+  //     }
+  //     }
+  // };
+
+  const changeOrderStatus = async (e, orderId) => {
+    try {
+      // Check if the token is available
+      const config = await handleGetTokenAndConfig();
+
+      const status = e.target.value; // Get the new status from the event
+      const cashier = employeeLoginInfo.id; // Current cashier ID
+      const isActive = status !== "Cancelled"; // Determine if the order is active
+
+      // If the order is canceled
+      if (status === "Cancelled") {
+        try {
+          // Update the order status and set isActive to false
+          await axios.put(
+            `${apiUrl}/api/order/${orderId}`,
+            { status, isActive, cashier },
+            config
+          );
+          fetchOrdersData();
+          toast.success("تم إلغاء الطلب بنجاح");
+        } catch (error) {
+          console.error("Error updating order status:", error);
+          toast.error("حدث خطأ أثناء تغيير حالة الطلب");
+        }
+        return;
+      }
+
+      // For other statuses
+      // Fetch the order details
+      const getOrder = await axios.get(
+        `${apiUrl}/api/order/${orderId}`,
+        config
+      );
+      const orderProducts = getOrder.data.products; // Extract the products from the order
+      console.log({ orderProducts });
+
+      // Filter products that are not yet sent to preparation
+      const newProducts = orderProducts.filter((product) => !product.isSend);
+
+      // Iterate over all preparation sections
+      allPreparationSections &&
+        allPreparationSections.forEach((section) => {
+          const sectionProducts = [];
+
+          // Filter products that belong to the current preparation section
+          newProducts.forEach((product) => {
+            if (
+              product.productId?.preparationSection === section._id &&
+              !product.isSend
+            ) {
+              sectionProducts.push({
+                ...product,
+                orderproductId: product._id, // Add orderproductId to the product
+              });
+            }
+          });
+
+          // Create a preparation ticket for the section if there are products
+          if (sectionProducts.length > 0) {
+            axios
+              .post(
+                `${apiUrl}/api/preparationticket`,
+                {
+                  order: orderId,
+                  preparationSection: section,
+                  products: sectionProducts,
+                },
+                config
+              )
+              .then((response) => {
+                console.log({
+                  sectionProducts,
+                  createTicket: response,
+                  createTicketData: response.data,
+                });
+              })
+              .catch((error) => {
+                console.error("Error creating ticket:", error);
+              });
+          }
+        });
+
+      // Update the isSend status for all products
+      const updatedProducts = orderProducts.map((product) => ({
+        ...product,
+        isSend: true, // Mark the product as sent
+      }));
+
+      // Update the order with the new products and status
+      await axios.put(
+        `${apiUrl}/api/order/${orderId}`,
+        { status, isActive, cashier, products: updatedProducts },
+        config
+      );
+
+      fetchOrdersData();
+      toast.success("تم تغيير حالة الطلب بنجاح");
+
+      // Emit event to kitchen if status is "Approved"
+      if (status === "Approved") {
+        kitchenSocket.emit("orderkitchen", "استلام اوردر جديد");
+        setupdate(!update);
+        setIsRefresh(!isRefresh);
+      }
+    } catch (error) {
+      // Log and show error messages
+      console.error("Error updating order status:", error);
       toast.error("حدث خطأ أثناء تغيير حالة الطلب");
     }
   };
@@ -205,15 +470,12 @@ const ManagerDash = () => {
   const paymentstatus = ["Pending", "Paid"];
   const paymentstatusAr = ["انظار دفع", "دفع"];
 
-  const [AllWaiters, setAllWaiters] = useState([]);
+  const [allWaiters, setAllWaiters] = useState([]);
   const [deliverymen, setDeliverymen] = useState([]);
 
   const fetchActiveEmployees = async () => {
     try {
-      if (!token) {
-        // Handle case where token is not available
-        toast.error("رجاء تسجيل الدخول مره اخري");
-      }
+      const config = await handleGetTokenAndConfig();
       const allEmployees = await axios.get(apiUrl + "/api/employee", config);
       const activeEmployees = allEmployees.data.filter(
         (employee) => employee.isActive === true
@@ -249,12 +511,8 @@ const ManagerDash = () => {
 
   const specifiedWaiter = async (id) => {
     try {
-      if (!token) {
-        // Handle case where token is not available
-        toast.error("رجاء تسجيل الدخول مره اخري");
-        return;
-      }
-      if (!AllWaiters.length > 0) {
+      const config = await handleGetTokenAndConfig();
+      if (!allWaiters.length > 0) {
         toast.warn("لا يوجد ويتر نشط الان ");
         return "";
       }
@@ -272,7 +530,7 @@ const ManagerDash = () => {
       }
 
       // البحث عن النوادل في القسم المحدد
-      const sectionWaiters = AllWaiters.filter(
+      const sectionWaiters = allWaiters.filter(
         (waiter) => waiter.sectionNumber === tablesectionNumber
       );
       if (sectionWaiters.length === 0) {
@@ -315,10 +573,7 @@ const ManagerDash = () => {
 
   const sendWaiter = async (id) => {
     try {
-      if (!token) {
-        // Handle case where token is not available
-        toast.error("رجاء تسجيل الدخول مره اخري");
-      }
+      const config = await handleGetTokenAndConfig();
       const waiter = await specifiedWaiter(id);
       if (!waiter) {
         return;
@@ -337,10 +592,10 @@ const ManagerDash = () => {
       if (orderData) {
         setupdate(!update);
         if (orderData.help === "Requests assistance") {
-          setisRefresh(!isRefresh)
+          setIsRefresh(!isRefresh);
           cashierSocket.emit("helprequest", `عميل يطلب مساعده-${waiter}`);
         } else if (orderData.help === "Requests bill") {
-          setisRefresh(!isRefresh)
+          setIsRefresh(!isRefresh);
           cashierSocket.emit("helprequest", `عميل يطلب الحساب-${waiter}`);
         }
       }
@@ -352,10 +607,7 @@ const ManagerDash = () => {
 
   const putdeliveryman = async (id, orderid) => {
     try {
-      if (!token) {
-        // Handle case where token is not available
-        toast.error("رجاء تسجيل الدخول مره اخري");
-      }
+      const config = await handleGetTokenAndConfig();
       const deliveryMan = id;
       const order = await axios.put(
         apiUrl + "/api/order/" + orderid,
@@ -382,6 +634,7 @@ const ManagerDash = () => {
     }
 
     try {
+      const config = await handleGetTokenAndConfig();
       const response = await axios.get(
         `${apiUrl}/api/cashregister/employee/${id}`,
         config
@@ -413,10 +666,7 @@ const ManagerDash = () => {
 
   const RevenueRecording = async (total, revenue) => {
     try {
-      if (!token) {
-        // Handle case where token is not available
-        toast.error("رجاء تسجيل الدخول مره اخري");
-      }
+      const config = await handleGetTokenAndConfig();
       if (registerSelected) {
         // احسب الرصيد المحدث
         const oldBalance = registers.find(
@@ -482,10 +732,7 @@ const ManagerDash = () => {
   const changePaymentorderstauts = async (e) => {
     e.preventDefault();
     try {
-      if (!token) {
-        // Handle case where token is not available
-        toast.error("رجاء تسجيل الدخول مره اخري");
-      }
+      const config = await handleGetTokenAndConfig();
       if (!registerSelected) {
         toast.warn("لم يتم التعرف علي خزينه لتسجيل فيها اليرادات");
         return;
@@ -495,12 +742,16 @@ const ManagerDash = () => {
       const isActive = false;
       const cashier = employeeLoginInfo.id;
 
-      const changePaymentstauts = await axios.put(`${apiUrl}/api/order/${id}`, {
-        payment_status,
-        paymentMethod,
-        isActive,
-        cashier,
-      }, config);
+      const changePaymentstauts = await axios.put(
+        `${apiUrl}/api/order/${id}`,
+        {
+          payment_status,
+          paymentMethod,
+          isActive,
+          cashier,
+        },
+        config
+      );
       const changePaymentstautsData = changePaymentstauts.data;
       if (changePaymentstautsData) {
         await RevenueRecording(changePaymentstautsData.total, revenueAmount);
@@ -523,10 +774,7 @@ const ManagerDash = () => {
   // Fetch orders from API
   const getOrderDetalis = async (serial) => {
     try {
-      if (!token) {
-        // Handle case where token is not available
-        toast.error("رجاء تسجيل الدخول مره اخري");
-      }
+      const config = await handleGetTokenAndConfig();
       const res = await axios.get(apiUrl + "/api/order", config);
       const order = res.data.find((o) => o.serial === serial);
       if (order) {
@@ -606,10 +854,7 @@ const ManagerDash = () => {
   const aproveOrder = async (e, cashier) => {
     e.preventDefault();
     try {
-      if (!token) {
-        // Handle case where token is not available
-        toast.error("رجاء تسجيل الدخول مره اخري");
-      }
+      const config = await handleGetTokenAndConfig();
 
       // Fetch order data by ID
       const order = await axios.get(
@@ -619,76 +864,8 @@ const ManagerDash = () => {
       const products = await order.data.products;
       const aproveorder = "Approved";
 
-      // Loop through each product in the order
-      // for (const product of products) {
-      //   if (!product.isDone) {
-      //     // Fetch kitchen consumption data
-      //     // await getKitchenConsumption();
-      //     const getKitchenConsumption = await axios.get(apiUrl+'/api/kitchenconsumption');
-      //     const Allkitchenconsumption = await getKitchenConsumption.data.data
-      //     const quantity = product.quantity;
-      //     const productId = product.productid;
-      //     const name = product.name;
-      //     console.log({ productId, quantity, name });
-
-      //     // Find product details
-      //     const foundProduct = listofProducts.length>0?listofProducts.find((p) => p._id === productId):"";
-      //     const recipe = foundProduct ? foundProduct.Recipe : [];
-
-      //     // Calculate consumption for each ingredient in the recipe
-      //     for (const rec of recipe) {
-      //       const today = new Date().toISOString().split('T')[0]; // تاريخ اليوم بتنسيق YYYY-MM-DD
-      //       const kitconsumptionToday = Allkitchenconsumption.filter((kitItem) => {
-      //         const itemDate = new Date(kitItem.createdAt).toISOString().split('T')[0];
-      //         return itemDate === today;
-      //       });
-
-      //       let kitconsumption = null;
-      //       if (kitconsumptionToday.length > 0) {
-      //         kitconsumption = kitconsumptionToday.find((kitItem) => kitItem.stockItemId === rec.itemId);
-      //       }
-      //       if (kitconsumption) {
-      //         const productAmount = rec.amount * quantity;
-      //         console.log({ productAmount });
-
-      //         const consumptionQuantity = kitconsumption.consumptionQuantity + productAmount;
-      //         console.log({ consumptionQuantity });
-
-      //         const bookBalance = kitconsumption.quantityTransferredToKitchen - consumptionQuantity;
-
-      //         let foundProducedProduct = kitconsumption.productsProduced.find((produced) => produced.productId === productId);
-
-      //         if (!foundProducedProduct) {
-      //           foundProducedProduct = { productId: productId, productionCount: quantity, productName: name };
-      //           kitconsumption.productsProduced.push(foundProducedProduct);
-      //         } else {
-      //           foundProducedProduct.productionCount += quantity;
-      //         }
-      //         try{
-      // if (!token) {
-      // Handle case where token is not available
-      // toast.error('رجاء تسجيل الدخول مره اخري');
-      // }
-      //           // Update kitchen consumption data
-      //           const update = await axios.put(`${apiUrl}/api/kitchenconsumption/${kitconsumption._id}`, {
-      //             consumptionQuantity,
-      //             bookBalance,
-      //             productsProduced: kitconsumption.productsProduced
-      //           });
-      //           console.log({ update: update });
-      //         } catch (error) {
-      //           console.log({ error: error });
-      //         }
-      //       } else {
-
-      //       }
-      //     }
-      //   }
-      // }
-
       // Update order status or perform other tasks
 
-      const status = "Prepared";
       const updateproducts = products.map((prod) => ({
         ...prod,
         isDone: true,
@@ -716,6 +893,7 @@ const ManagerDash = () => {
   }, [update, isRefresh]);
 
   useEffect(() => {
+    getAllPreparationSections();
     employeeLoginInfo && getCashRegistersByEmployee(employeeLoginInfo?.id);
   }, []);
 
@@ -745,7 +923,7 @@ const ManagerDash = () => {
         </div>
       </div>
 
-      <div className="container h-auto mt-4">
+      <div className="container-lg h-auto mt-4">
         <div className="d-flex flex-wrap align-items-center justify-content-start">
           <div className="col-lg-3 col-md-6 mb-3">
             <div className="card text-white bg-primary h-100">
@@ -835,8 +1013,8 @@ const ManagerDash = () => {
                     <select
                       className="form-control border-primary m-0 p-2 h-auto"
                       onChange={(e) => {
-                        setstartpagination(0);
-                        setendpagination(parseInt(e.target.value));
+                        setStartPagination(0);
+                        setEndPagination(parseInt(e.target.value));
                       }}
                     >
                       <option value={5}>5</option>
@@ -872,6 +1050,7 @@ const ManagerDash = () => {
                     </select>
                   </div>
                 </div>
+
                 <div className="row align-items-center justify-content-between mb-3">
                   <div className="col p-0">
                     <button
@@ -934,6 +1113,7 @@ const ManagerDash = () => {
                     </button>
                   </div>
                 </div>
+
                 <div className="table-responsive">
                   <table className="table table-striped table-hover">
                     <thead>
@@ -954,7 +1134,7 @@ const ManagerDash = () => {
                     <tbody>
                       {listOrderShow.length > 0 ? (
                         listOrderShow
-                          .slice(startpagination, endpagination + 15)
+                          .slice(startPagination, endPagination + 15)
                           .map((recent, i) => (
                             <tr
                               key={i}
@@ -1018,11 +1198,7 @@ const ManagerDash = () => {
                                   className="form-control border-primary m-0 p-2 h-auto"
                                   name="status"
                                   onChange={(e) => {
-                                    changeorderstauts(
-                                      e,
-                                      recent._id,
-                                      employeeLoginInfo.id
-                                    );
+                                    changeOrderStatus(e, recent._id);
                                   }}
                                 >
                                   <option value={recent.status}>
@@ -1077,11 +1253,19 @@ const ManagerDash = () => {
                                   </select>
                                 )}
                               </td>
-                              <td>{orderTypeAR[orderTypeEN.findIndex(type=> type === recent.orderType)]}</td>
+                              <td>
+                                {
+                                  orderTypeAR[
+                                    orderTypeEN.findIndex(
+                                      (type) => type === recent.orderType
+                                    )
+                                  ]
+                                }
+                              </td>
                               <td>
                                 {recent.payment_status === "Pending" ? (
-                                  <a
-                                    href="#paymentModal"
+                                  <button
+                                    data-target="paymentModal"
                                     className="btn btn-primary text-light"
                                     data-toggle="modal"
                                     onClick={() => {
@@ -1089,7 +1273,7 @@ const ManagerDash = () => {
                                     }}
                                   >
                                     دفع
-                                  </a>
+                                  </button>
                                 ) : (
                                   "تم الدفع"
                                 )}
@@ -1104,12 +1288,14 @@ const ManagerDash = () => {
                     </tbody>
                   </table>
                 </div>
+
+                {/* pagination */}
                 <div className="clearfix">
                   <div className="hint-text text-dark">
                     عرض{" "}
                     <b>
-                      {listOrderShow.length > startpagination
-                        ? startpagination
+                      {listOrderShow.length > startPagination
+                        ? startPagination
                         : listOrderShow.length}
                     </b>{" "}
                     من <b>{listOrderShow.length}</b> عنصر
@@ -1121,7 +1307,7 @@ const ManagerDash = () => {
                     <li
                       onClick={EditPagination}
                       className={`page-item ${
-                        endpagination === 5 ? "active" : ""
+                        endPagination === 5 ? "active" : ""
                       }`}
                     >
                       <a href="#" className="page-link">
@@ -1131,7 +1317,7 @@ const ManagerDash = () => {
                     <li
                       onClick={EditPagination}
                       className={`page-item ${
-                        endpagination === 10 ? "active" : ""
+                        endPagination === 10 ? "active" : ""
                       }`}
                     >
                       <a href="#" className="page-link">
@@ -1141,7 +1327,7 @@ const ManagerDash = () => {
                     <li
                       onClick={EditPagination}
                       className={`page-item ${
-                        endpagination === 15 ? "active" : ""
+                        endPagination === 15 ? "active" : ""
                       }`}
                     >
                       <a href="#" className="page-link">
@@ -1151,7 +1337,7 @@ const ManagerDash = () => {
                     <li
                       onClick={EditPagination}
                       className={`page-item ${
-                        endpagination === 20 ? "active" : ""
+                        endPagination === 20 ? "active" : ""
                       }`}
                     >
                       <a href="#" className="page-link">
@@ -1161,7 +1347,7 @@ const ManagerDash = () => {
                     <li
                       onClick={EditPagination}
                       className={`page-item ${
-                        endpagination === 25 ? "active" : ""
+                        endPagination === 25 ? "active" : ""
                       }`}
                     >
                       <a href="#" className="page-link">
@@ -1171,7 +1357,7 @@ const ManagerDash = () => {
                     <li
                       onClick={EditPagination}
                       className={`page-item ${
-                        endpagination === 30 ? "active" : ""
+                        endPagination === 30 ? "active" : ""
                       }`}
                     >
                       <a href="#" className="page-link">
@@ -1282,7 +1468,10 @@ const ManagerDash = () => {
 
       {/* تاكيد الدفع */}
       <div id="paymentModal" className="modal fade">
-        <div className="modal-dialog modal-lg" style={{width:'350px', maxWidth:'95%'}}>
+        <div
+          className="modal-dialog modal-lg"
+          style={{ width: "350px", maxWidth: "95%" }}
+        >
           <div className="modal-content shadow-lg border-0 rounded ">
             <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
               <h4 className="modal-title">تاكيد دفع الفاتورة</h4>
@@ -1302,7 +1491,10 @@ const ManagerDash = () => {
             >
               <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
                 <div className="form-group w-100 d-flex align-items-center justify-content-between">
-                  <label htmlFor="totalOrder" className="form-label col-6 text-dark text-right">
+                  <label
+                    htmlFor="totalOrder"
+                    className="form-label col-6 text-dark text-right"
+                  >
                     اجمالي المطلوب:
                   </label>
                   <input
@@ -1314,7 +1506,10 @@ const ManagerDash = () => {
                   />
                 </div>
                 <div className="form-group w-100 d-flex align-items-center justify-content-between">
-                  <label htmlFor="paidAmount" className="form-label col-6 text-dark text-right">
+                  <label
+                    htmlFor="paidAmount"
+                    className="form-label col-6 text-dark text-right"
+                  >
                     المدفوع:
                   </label>
                   <input
@@ -1327,7 +1522,10 @@ const ManagerDash = () => {
                   />
                 </div>
                 <div className="form-group w-100 d-flex align-items-center justify-content-between">
-                  <label htmlFor="remainingAmount" className="form-label col-6 text-dark text-right">
+                  <label
+                    htmlFor="remainingAmount"
+                    className="form-label col-6 text-dark text-right"
+                  >
                     الباقي:
                   </label>
                   <input
@@ -1339,7 +1537,10 @@ const ManagerDash = () => {
                   />
                 </div>
                 <div className="form-group w-100 d-flex align-items-center justify-content-between">
-                  <label htmlFor="cashOutAmount" className="form-label col-6 text-dark text-right">
+                  <label
+                    htmlFor="cashOutAmount"
+                    className="form-label col-6 text-dark text-right"
+                  >
                     المبلغ الخارج من الخزينة:
                   </label>
                   <input
@@ -1351,7 +1552,10 @@ const ManagerDash = () => {
                   />
                 </div>
                 <div className="form-group d-flex flex-nowrap w-100">
-                  <label htmlFor="paymentMethod" className="form-label col-6 text-dark text-right">
+                  <label
+                    htmlFor="paymentMethod"
+                    className="form-label col-6 text-dark text-right"
+                  >
                     طريقه الدفع:
                   </label>
                   <select
@@ -1370,7 +1574,10 @@ const ManagerDash = () => {
                   </select>
                 </div>
                 <div className="form-group d-flex flex-nowrap w-100">
-                  <label htmlFor="registerSelected" className="form-label col-6 text-dark text-right">
+                  <label
+                    htmlFor="registerSelected"
+                    className="form-label col-6 text-dark text-right"
+                  >
                     الخزينة:
                   </label>
                   {registers.length > 0 ? (
@@ -1589,10 +1796,10 @@ const ManagerDash = () => {
                         {orderdata.subTotal - orderdata.subtotalSplitOrder}
                       </td>
                     </tr>
-                    {orderdata.deliveryCost > 0 && (
+                    {orderdata.deliveryFee > 0 && (
                       <tr>
                         <td colSpan="3">خدمة التوصيل</td>
-                        <td>{orderdata.deliveryCost}</td>
+                        <td>{orderdata.deliveryFee}</td>
                       </tr>
                     )}
                     {orderdata.addition > 0 ? (

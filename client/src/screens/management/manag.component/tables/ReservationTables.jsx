@@ -1,33 +1,27 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { detacontext } from "../../../../App";
+import { dataContext } from "../../../../App";
 import "../orders/Orders.css";
 
 const ReservationTables = () => {
-  const apiUrl = process.env.REACT_APP_API_URL;
-  const token = localStorage.getItem("token_e"); // Retrieve the token from localStorage
-  const config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  };
   const {
-    setisLoading,
+    setIsLoading,
     EditPagination,
-    startpagination,
-    endpagination,
-    setstartpagination,
-    setendpagination,
+    startPagination,
+    endPagination,
+    setStartPagination,
+    setEndPagination,
     createReservations,
     // confirmReservation, updateReservation, getReservationById, deleteReservation,
     getAllReservations,
     allReservations,
-    setallReservations,
+    setAllReservations,
     employeeLoginInfo,
     allusers,
     allTable,
     getAvailableTables,
+    setavailableTableIds,
     availableTableIds,
     setStartDate,
     setEndDate,
@@ -35,7 +29,9 @@ const ReservationTables = () => {
     formatTime,
     filterByDateRange,
     filterByTime,
-  } = useContext(detacontext);
+    apiUrl,
+    handleGetTokenAndConfig,
+  } = useContext(dataContext);
 
   const createdBy = employeeLoginInfo?.id;
   const [reservationId, setReservationId] = useState("");
@@ -86,7 +82,7 @@ const ReservationTables = () => {
         toast.error("رجاء اختيار الحجز بشكل صحيح");
         return;
       }
-      // setisLoading(true)
+      // setIsLoading(true)
 
       const filterReservationsByTable = allReservations.filter(
         (reservation) =>
@@ -144,17 +140,18 @@ const ReservationTables = () => {
     } catch (error) {
       toast.error("حدث خطأاثناء تعديل الحجز ! حاول مرة اخري");
     } finally {
-      setisLoading(false);
+      setIsLoading(false);
     }
   };
 
   const confirmReservation = async (id, status) => {
-    // setisLoading(true)
+    // setIsLoading(true)
     try {
       if (!id) {
         toast.error("رجاء اختيار الحجز بشكل صحيح");
         return;
       }
+      const config = await handleGetTokenAndConfig();
 
       const response = await axios.put(
         `${apiUrl}/api/reservation/${id}`,
@@ -173,12 +170,12 @@ const ReservationTables = () => {
     } catch (error) {
       toast.error("حدث خطأاثناء تاكيد الحجز ! حاول مرة اخري");
     } finally {
-      setisLoading(false);
+      setIsLoading(false);
     }
   };
 
   const deleteReservation = async (id) => {
-    // setisLoading(true)
+    // setIsLoading(true)
     try {
       if (!id) {
         toast.error("رجاء اختيار الحجز بشكل صحيح");
@@ -195,7 +192,7 @@ const ReservationTables = () => {
     } catch (error) {
       toast.error("حدث خطاء عملية الحذف !حاول مره اخري");
     } finally {
-      setisLoading(false);
+      setIsLoading(false);
     }
   };
 
@@ -204,15 +201,17 @@ const ReservationTables = () => {
 
   const clientByName = (allusers, name) => {
     setCustomerName(name);
-    const client = allusers.filter(
+    const client = allusers&&allusers.filter(
       (user) => user.username.startsWith(name) === true
     );
-    setFilteredClients(client);
-    const userId = client._id;
-    setUserId(userId);
-    console.log(client);
-    console.log(name);
-    console.log(userId);
+    if(client){
+      setFilteredClients(client);
+      const userId = client._id;
+      setUserId(userId);
+      console.log(client);
+      console.log(name);
+      console.log(userId);
+    }
   };
 
   const searchBytableNum = (num) => {
@@ -224,7 +223,7 @@ const ReservationTables = () => {
       (reservation) =>
         reservation.tableNumber.toString().startsWith(num) === true
     );
-    setallReservations(tables);
+    setAllReservations(tables);
   };
 
   const filterByStatus = (status) => {
@@ -235,7 +234,7 @@ const ReservationTables = () => {
     const filter = allReservations.filter(
       (reservation) => reservation.status === status
     );
-    setallReservations(filter);
+    setAllReservations(filter);
   };
 
   const filterByPhone = (phone) => {
@@ -246,7 +245,7 @@ const ReservationTables = () => {
     const filter = allReservations.filter(
       (reservation) => reservation.phone === phone
     );
-    setallReservations(filter);
+    setAllReservations(filter);
   };
 
   // const [selectedIds, setSelectedIds] = useState([]);
@@ -266,10 +265,7 @@ const ReservationTables = () => {
   //   e.preventDefault();
   //   console.log(selectedIds)
   //   try{
-  // if (!token) {
-  // Handle case where token is not available
-  //   toast.error('رجاء تسجيل الدخول مره اخري');
-  // }
+  // const config = await handleGetTokenAndConfig();
   //     for (const Id of selectedIds) {
   //       await axios.delete(`${apiUrl}/api/order/${Id}`);
   //     }
@@ -313,6 +309,14 @@ const ReservationTables = () => {
     "العميل حضر في الميعاد",
   ];
 
+
+  useEffect(() => {
+    if (reservationDate && startTime && endTime) {
+      setavailableTableIds(getAvailableTables(reservationDate, startTime, endTime));
+    }
+  }, [reservationDate, startTime, endTime]);
+
+
   return (
     <div className="w-100 px-3 d-flex align-itmes-center justify-content-start">
       <div className="table-responsive">
@@ -351,8 +355,8 @@ const ReservationTables = () => {
                 <select
                   className="form-control border-primary m-0 p-2 h-auto"
                   onChange={(e) => {
-                    setstartpagination(0);
-                    setendpagination(e.target.value);
+                    setStartPagination(0);
+                    setEndPagination(e.target.value);
                   }}
                 >
                   {(() => {
@@ -417,7 +421,7 @@ const ReservationTables = () => {
                   <select
                     className="form-control border-primary m-0 p-2 h-auto"
                     onChange={(e) =>
-                      setallReservations(
+                      setAllReservations(
                         filterByTime(e.target.value, allReservations)
                       )
                     }
@@ -464,7 +468,7 @@ const ReservationTables = () => {
                       type="button"
                       className="btn btn-primary h-100 p-2"
                       onClick={() =>
-                        setallReservations(filterByDateRange(allReservations))
+                        setAllReservations(filterByDateRange(allReservations))
                       }
                     >
                       <i className="fa fa-search"></i>
@@ -498,7 +502,7 @@ const ReservationTables = () => {
             </thead>
             <tbody>
               {allReservations.map((reservation, i) => {
-                if ((i >= startpagination) & (i < endpagination)) {
+                if ((i >= startPagination) & (i < endPagination)) {
                   return (
                     <tr key={i}>
                       <td>{i + 1}</td>
@@ -527,9 +531,9 @@ const ReservationTables = () => {
                         </select>
                       </td>
                       <td>
-                        <a
-                          href="#updatereservationModal"
-                          className="edit"
+                        <button
+                          data-target="#updatereservationModal"
+                          className="btn btn-sm btn-primary ml-2 "
                           data-toggle="modal"
                           onClick={(e) => {
                             setCustomerName(reservation.customerName);
@@ -552,7 +556,7 @@ const ReservationTables = () => {
                           >
                             &#xE254;
                           </i>
-                        </a>
+                        </button>
                       </td>
                     </tr>
                   );
@@ -564,8 +568,8 @@ const ReservationTables = () => {
             <div className="hint-text text-dark">
               عرض{" "}
               <b>
-                {allReservations.length > endpagination
-                  ? endpagination
+                {allReservations.length > endPagination
+                  ? endPagination
                   : allReservations.length}
               </b>{" "}
               من <b>{allReservations.length}</b> عنصر
@@ -576,7 +580,7 @@ const ReservationTables = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 5 ? "active" : ""}`}
+                className={`page-item ${endPagination === 5 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   1
@@ -584,7 +588,7 @@ const ReservationTables = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 10 ? "active" : ""}`}
+                className={`page-item ${endPagination === 10 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   2
@@ -592,7 +596,7 @@ const ReservationTables = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 15 ? "active" : ""}`}
+                className={`page-item ${endPagination === 15 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   3
@@ -600,7 +604,7 @@ const ReservationTables = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 20 ? "active" : ""}`}
+                className={`page-item ${endPagination === 20 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   4
@@ -608,7 +612,7 @@ const ReservationTables = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 25 ? "active" : ""}`}
+                className={`page-item ${endPagination === 25 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   5
@@ -616,7 +620,7 @@ const ReservationTables = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 30 ? "active" : ""}`}
+                className={`page-item ${endPagination === 30 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   التالي
@@ -671,6 +675,7 @@ const ReservationTables = () => {
                       </label>
                       <input
                         type="text"
+                        required
                         className="form-control border-primary m-0 p-2 h-auto"
                         id="name"
                         onChange={(e) => clientByName(allusers, e.target.value)}
@@ -693,6 +698,7 @@ const ReservationTables = () => {
                         type="tel"
                         className="form-control border-primary m-0 p-2 h-auto"
                         id="mobile"
+                        requierd
                         onChange={(e) => setCustomerPhone(e.target.value)}
                       />
                     </div>
@@ -710,6 +716,7 @@ const ReservationTables = () => {
                         type="date"
                         className="form-control border-primary m-0 p-2 h-auto"
                         id="date"
+                        required
                         onChange={(e) => {
                           const selectedDate = new Date(e.target.value);
                           setReservationDate(selectedDate);
@@ -780,18 +787,13 @@ const ReservationTables = () => {
                               EndedDate.setMinutes(parseInt(timeParts[1]));
                               console.log({ EndedDate });
                               setEndTime(EndedDate);
-                              getAvailableTables(
-                                reservationDate,
-                                startTime,
-                                EndedDate
-                              );
                             }
                           } else {
                             e.target.value = "";
                           }
                         }}
                       />
-                      {endTimeClicked && !reservationDate && (
+                      {startTimeClicked && !reservationDate && (
                         <div
                           style={{
                             color: "red",
@@ -799,7 +801,7 @@ const ReservationTables = () => {
                             marginTop: "0.5rem",
                           }}
                         >
-                          يرجى تحديد التاريخ أولاً
+                           يرجى تحديد التاريخ و وقت الحضور أولاً
                         </div>
                       )}
                     </div>
@@ -823,7 +825,7 @@ const ReservationTables = () => {
                         }}
                       >
                         <option>الطاولات المتاحة في هذا الوقت</option>
-                        {allTable.map(
+                        {availableTableIds&&allTable.map(
                           (table, i) =>
                             availableTableIds.includes(table._id) && (
                               <option key={i} value={table._id}>
@@ -833,7 +835,6 @@ const ReservationTables = () => {
                         )}
                       </select>
                     </div>
-
                     <div className="col-12 col-md-5">
                       <label
                         htmlFor="numberOfGuests"
@@ -845,6 +846,7 @@ const ReservationTables = () => {
                         type="number"
                         className="form-control border-primary m-0 p-2 h-auto"
                         id="numberOfGuests"
+                        required
                         onChange={(e) => setNumberOfGuests(e.target.value)}
                       />
                     </div>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
-import { detacontext } from "../../../../App";
+import { dataContext } from "../../../../App";
 import { useReactToPrint } from "react-to-print";
 import { toast } from "react-toastify";
 import axios from "axios";
@@ -9,14 +9,6 @@ import POSCard from "./POS-Card";
 import InvoiceComponent from "../invoice/invoice";
 
 const POS = () => {
-  const apiUrl = process.env.REACT_APP_API_URL;
-  const token = localStorage.getItem("token_e"); // Retrieve the token from localStorage
-  const config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  };
-
   const {
     restaurantData,
     setsalesTax,
@@ -33,8 +25,8 @@ const POS = () => {
     setclientaddress,
     deliveryAreaId,
     setdeliveryAreaId,
-    deliverycost,
-    setdeliverycost,
+    deliveryFee,
+    setdeliveryFee,
     allProducts,
     allMenuCategories,
     allTable,
@@ -56,7 +48,7 @@ const POS = () => {
     orderTotal,
     orderSubtotal,
     ordertax,
-    orderdeliveryCost,
+    orderdeliveryFee,
     setdiscount,
     setaddition,
     discount,
@@ -75,7 +67,9 @@ const POS = () => {
     handlePayExtras,
     splitInvoice,
     subtotalSplitOrder,
-  } = useContext(detacontext);
+    apiUrl,
+    handleGetTokenAndConfig,
+  } = useContext(dataContext);
 
   const [showModal, setShowModal] = useState(false);
 
@@ -86,7 +80,7 @@ const POS = () => {
   const [tableID, settableID] = useState("");
   // const [itemId, setitemId] = useState([])
   const [noteArea, setnoteArea] = useState(false);
-  const [productid, setproductid] = useState("");
+  const [productId, setproductId] = useState("");
   const [areas, setAreas] = useState([]);
   const [extraArea, setextraArea] = useState(false);
 
@@ -115,7 +109,7 @@ const POS = () => {
     // console.log({deliveryArea})
     setdeliveryAreaId(deliveryArea._id);
     setdeliveryAreaName(deliveryArea.name);
-    setdeliverycost(deliveryArea.delivery_fee);
+    setdeliveryFee(deliveryArea.delivery_fee);
   };
 
   const getAllDeliveryAreas = async () => {
@@ -136,9 +130,9 @@ const POS = () => {
   };
 
   const [product, setproduct] = useState();
-  const getProductDitalis = (allproducts, productID) => {
+  const getProductDitalis = (allproducts, productId) => {
     const filter = allproducts.filter(
-      (product) => product._id === productID
+      (product) => product._id === productId
     )[0];
     setproduct(filter);
   };
@@ -155,10 +149,12 @@ const POS = () => {
       return;
     }
     try {
+      const config = await handleGetTokenAndConfig();
       const response = await axios.get(
         `${apiUrl}/api/customer/phone/${phone}`,
         config
       );
+
       const customer = response.data;
 
       if (customer) {
@@ -167,7 +163,7 @@ const POS = () => {
         setclientname(customer.name);
         setclientaddress(customer.address);
         setclientphone(customer.phone);
-        setdeliverycost(customer.deliveryArea?.delivery_fee);
+        setdeliveryFee(customer.deliveryArea?.delivery_fee);
         setdeliveryAreaName(customer.deliveryArea?.name);
         setclientNotes(customer.notes);
         setisVarified(customer.isVarified);
@@ -194,7 +190,9 @@ const POS = () => {
 
   const createCustomer = async (e) => {
     e.preventDefault();
+
     try {
+      const config = await handleGetTokenAndConfig();
       if (!clientname && !clientphone && !deliveryAreaId && !clientaddress) {
         toast.warn("تاكد من الاسم و الموبايل و منطقه التوصل و العنوان ");
       }
@@ -222,6 +220,8 @@ const POS = () => {
   const updateCustomer = async (e) => {
     e.preventDefault();
     try {
+      const config = await handleGetTokenAndConfig();
+
       const response = await axios.put(
         `${apiUrl}/api/customer/${customerId}`,
         {
@@ -252,6 +252,8 @@ const POS = () => {
     }
 
     try {
+      const config = await handleGetTokenAndConfig();
+
       const response = await axios.get(
         `${apiUrl}/api/cashregister/employee/${id}`,
         config
@@ -290,10 +292,7 @@ const POS = () => {
 
   const RevenueRecording = async (total, revenue) => {
     try {
-      if (!token) {
-        // Handle case where token is not available
-        toast.error("رجاء تسجيل الدخول مره اخري");
-      }
+      const config = await handleGetTokenAndConfig();
       if (registerSelected) {
         // احسب الرصيد المحدث
         const oldBalance = registers.find(
@@ -347,10 +346,7 @@ const POS = () => {
   const changePaymentorderstauts = async (e) => {
     e.preventDefault();
     try {
-      if (!token) {
-        // Handle case where token is not available
-        toast.error("رجاء تسجيل الدخول مره اخري");
-      }
+      const config = await handleGetTokenAndConfig();
       if (!registerSelected) {
         toast.warn("لم يتم التعرف علي خزينه لتسجيل فيها اليرادات");
         return;
@@ -399,7 +395,7 @@ const POS = () => {
   useEffect(() => {
     settotalOrder(
       costOrder > 0
-        ? costOrder + salesTax + serviceTax + deliverycost + addition - discount
+        ? costOrder + salesTax + serviceTax + deliveryFee + addition - discount
         : 0
     );
   }, [
@@ -407,7 +403,7 @@ const POS = () => {
     ordertype,
     salesTax,
     serviceTax,
-    deliverycost,
+    deliveryFee,
     discount,
     addition,
   ]);
@@ -495,7 +491,7 @@ const POS = () => {
               ? itemsInCart.map((item, index) => (
                   <div className="card mb-3" key={index}>
                     {/* extraArea */}
-                    
+
                     {product &&
                     item.sizeId &&
                     sizeId === item.sizeId &&
@@ -569,8 +565,9 @@ const POS = () => {
                                         className="form-check form-check-flat mb-1 d-flex align-items-center"
                                         key={i}
                                         style={{
-                                          width: "47%",
+                                          width: "50%",
                                           paddingLeft: "5px",
+                                          scrollbarWidth: "thin",
                                         }}
                                       >
                                         <input
@@ -612,7 +609,7 @@ const POS = () => {
                                         <label
                                           className="form-check-label text-dark mr-4"
                                           style={{
-                                            fontSize: "14px",
+                                            fontSize: "12px",
                                             fontWeight: "900",
                                           }}
                                           onClick={(e) =>
@@ -651,7 +648,7 @@ const POS = () => {
                     ) : product &&
                       !item.sizeId &&
                       product._id &&
-                      product._id === item.productid &&
+                      product._id === item.productId &&
                       extraArea === true &&
                       product.quantity > 0 ? (
                       <div
@@ -716,9 +713,9 @@ const POS = () => {
                                           className="form-check form-check-flat mb-1 d-flex align-items-center"
                                           key={i}
                                           style={{
-                                            width: "47%",
-                                            height: "20px",
+                                            width: "50%",
                                             paddingLeft: "5px",
+                                            scrollbarWidth: "thin",
                                           }}
                                         >
                                           {console.log({ productExtras })}
@@ -751,7 +748,7 @@ const POS = () => {
                                           <label
                                             className="form-check-label text-dark mr-4"
                                             style={{
-                                              fontSize: "14px",
+                                              fontSize: "12px",
                                               fontWeight: "900",
                                             }}
                                             onClick={(e) =>
@@ -803,7 +800,7 @@ const POS = () => {
                         <form
                           className="card-body w-100 h-100 p-1 m-0"
                           onSubmit={(e) => {
-                            addNoteToProduct(e, item.productid, item.sizeId);
+                            addNoteToProduct(e, item.productId, item.sizeId);
                             setnoteArea(!noteArea);
                           }}
                         >
@@ -837,7 +834,7 @@ const POS = () => {
                     ) : product &&
                       !item.sizeId &&
                       product._id &&
-                      product._id === item.productid &&
+                      product._id === item.productId &&
                       noteArea ? (
                       <div
                         className="position-absolute w-100 h-100 top-0 start-0 bg-white rounded-3 d-flex flex-column align-items-center justify-content-center overflow-hidden"
@@ -846,7 +843,7 @@ const POS = () => {
                         <form
                           className="card-body w-100 h-100 p-1 m-0"
                           onSubmit={(e) => {
-                            addNoteToProduct(e, item.productid, item.sizeId);
+                            addNoteToProduct(e, item.productId, item.sizeId);
                             setnoteArea(!noteArea);
                           }}
                         >
@@ -894,11 +891,11 @@ const POS = () => {
                         <span
                           onClick={() => {
                             setnoteArea(!noteArea);
-                            setproductid(item.productid);
-                            getProductDitalis(allProducts, item.productid);
+                            setproductId(item.productId);
+                            getProductDitalis(allProducts, item.productId);
                             item.sizeId
                               ? setsizeId(item.sizeId)
-                              : setproductid(item.productid);
+                              : setproductId(item.productId);
                           }}
                           className="material-symbols-outlined"
                           style={{
@@ -922,10 +919,10 @@ const POS = () => {
                             onClick={() => {
                               setproductExtras(item.extras);
                               setextraArea(!extraArea);
-                              getProductDitalis(allProducts, item.productid);
+                              getProductDitalis(allProducts, item.productId);
                               item.sizeId
                                 ? setsizeId(item.sizeId)
-                                : setproductid(item.productid);
+                                : setproductId(item.productId);
                             }}
                           >
                             add_circle
@@ -934,7 +931,7 @@ const POS = () => {
 
                         <button
                           onClick={() =>
-                            deleteItemFromCart(item.productid, item.sizeId)
+                            deleteItemFromCart(item.productId, item.sizeId)
                           }
                           className="btn btn-danger col-3 h-100 p-0 m-0"
                         >
@@ -953,7 +950,7 @@ const POS = () => {
                           <button
                             onClick={() =>
                               decrementProductQuantity(
-                                item.productid,
+                                item.productId,
                                 item.sizeId
                               )
                             }
@@ -967,7 +964,7 @@ const POS = () => {
                           <button
                             onClick={() =>
                               incrementProductQuantity(
-                                item.productid,
+                                item.productId,
                                 item.sizeId
                               )
                             }
@@ -1028,7 +1025,7 @@ const POS = () => {
               : productOrderToUpdate.length > 0
               ? productOrderToUpdate.map((item, index) => (
                   <div className="card mb-3" key={index}>
-                    {item.productid === productid && noteArea ? (
+                    {item.productId === productId && noteArea ? (
                       <form className="card-body p-1 m-0">
                         <textarea
                           className="form-control h-75 p-1 m-0"
@@ -1067,7 +1064,7 @@ const POS = () => {
                           <span
                             onClick={() => {
                               setnoteArea(!noteArea);
-                              setproductid(item.productid);
+                              setproductId(item.productId);
                             }}
                             className="material-symbols-outlined"
                             style={{
@@ -1082,7 +1079,7 @@ const POS = () => {
 
                           <button
                             onClick={() =>
-                              deleteItemFromCart(item.productid, item.sizeId)
+                              deleteItemFromCart(item.productId, item.sizeId)
                             }
                             className="btn btn-danger col-3 h-100 p-0 m-0"
                           >
@@ -1107,7 +1104,7 @@ const POS = () => {
                             <button
                               onClick={() =>
                                 decrementProductQuantity(
-                                  item.productid,
+                                  item.productId,
                                   item.sizeId
                                 )
                               }
@@ -1121,7 +1118,7 @@ const POS = () => {
                             <button
                               onClick={() =>
                                 incrementProductQuantity(
-                                  item.productid,
+                                  item.productId,
                                   item.sizeId
                                 )
                               }
@@ -1160,9 +1157,9 @@ const POS = () => {
         </div>
 
         <div className="h-auto w-100">
-
           {/* order info */}
-          <div className="row d-flex align-items-start px-2 m-0"
+          <div
+            className="row d-flex align-items-start px-2 m-0"
             style={{ direction: "rtl" }}
           >
             <div className="col p-0 m-0">
@@ -1196,7 +1193,7 @@ const POS = () => {
                       خدمة التوصيل:
                     </span>
                     <span className="text-dark fw-bold fs-5 text-center">
-                      {deliverycost > 0 ? deliverycost : 0} ج
+                      {deliveryFee > 0 ? deliveryFee : 0} ج
                     </span>
                   </p>
                 ) : null}
@@ -1238,7 +1235,6 @@ const POS = () => {
             </div>
           </div>
 
-          
           {/* button */}
           <div className="d-flex flex-wrap g-2 align-items-center justify-content-between w-100 p-0 m-0">
             {ordertype === "Internal" ? (
@@ -1266,7 +1262,7 @@ const POS = () => {
                     clientphone,
                     clientaddress,
                     ordertype,
-                    deliverycost,
+                    deliveryFee,
                     discount,
                     addition
                   );
@@ -1288,7 +1284,7 @@ const POS = () => {
                     clientphone,
                     clientaddress,
                     ordertype,
-                    deliverycost,
+                    deliveryFee,
                     discount,
                     addition
                   );
@@ -1329,7 +1325,7 @@ const POS = () => {
               </a>
             )}
 
-            <a
+            <button
               type="button"
               style={{ height: "60px" }}
               className="col-3 d-flex align-items-center justify-content-center text-nowrap btn bg-success"
@@ -1341,7 +1337,7 @@ const POS = () => {
               }}
             >
               دفع
-            </a>
+            </button>
             <a
               type="button"
               style={{ height: "60px" }}
@@ -1351,7 +1347,7 @@ const POS = () => {
             >
               دفع جزء
             </a>
-            <a
+            <button
               type="button"
               style={{ height: "60px" }}
               className="col-3 d-flex align-items-center justify-content-center text-nowrap btn btn-success"
@@ -1363,7 +1359,7 @@ const POS = () => {
               }}
             >
               طباعة
-            </a>
+            </button>
             <button
               type="button"
               style={{ height: "60px" }}
@@ -1394,9 +1390,6 @@ const POS = () => {
           </div>
         </div>
       </div>
-
-
-
 
       {/* الفاتوره */}
 
@@ -1692,7 +1685,7 @@ const POS = () => {
                                 defaultValue={0}
                                 onChange={(e) => {
                                   putNumOfPaid(
-                                    item.productid._id,
+                                    item.productId._id,
                                     item.sizeId,
                                     Number(e.target.value)
                                   );

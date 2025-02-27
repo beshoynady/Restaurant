@@ -18,6 +18,26 @@ const productSchema = new mongoose.Schema(
       minlength: [3, "Description must have at least 3 characters"],
       default: "",
     },
+
+    category: {
+      type: ObjectId,
+      ref: "menuCategory",
+      required: [true, "Category is required"],
+    },
+
+    preparationSection: {
+      type: ObjectId,
+      ref: 'PreparationSection',
+      required: [true, "Preparation section is required"],
+      description: "Defines the section responsible for preparing the product",
+    },
+
+    quantity: {
+      type: Number,
+      default: 0,
+      required: [true, "Quantity is required"],
+    },
+
     hasSizes: {
       type: Boolean,
       required: true,
@@ -80,12 +100,20 @@ const productSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+
     comboItems: [
       {
-        type: ObjectId,
-        ref: "Product",
+        product: {
+          type: ObjectId,
+          ref: "Product",
+        },
+        quantity: {
+          type: Number,
+          default: 1,
+        },
       },
     ],
+
     productRecipe: {
       type: ObjectId,
       ref: "Recipe",
@@ -114,19 +142,10 @@ const productSchema = new mongoose.Schema(
       min: [0, "Price after discount cannot be negative"],
       default: 0,
     },
-    quantity: {
-      type: Number,
-      default: 0,
-      required: [true, "Quantity is required"],
-    },
+
     numberofcomments: {
       type: Number,
       default: 0,
-    },
-    category: {
-      type: ObjectId,
-      ref: "MenuCategory",
-      required: [true, "Category is required"],
     },
     ratingsAverage: {
       type: Number,

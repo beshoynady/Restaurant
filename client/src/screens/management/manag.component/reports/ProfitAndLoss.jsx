@@ -27,8 +27,8 @@ const ProfitAndLoss = () => {
     //           <select
     //             className="form-control border-primary m-0 p-2 h-auto"
     //             onChange={(e) => {
-    //               setstartpagination(0);
-    //               setendpagination(e.target.value);
+    //               setStartPagination(0);
+    //               setEndPagination(e.target.value);
     //             }}
     //           >
     //             {(() => {
@@ -178,7 +178,7 @@ const ProfitAndLoss = () => {
     //       <tbody>
     //         {listOfOrders &&
     //           listOfOrders.map((order, i) => {
-    //             if ((i >= startpagination) & (i < endpagination)) {
+    //             if ((i >= startPagination) & (i < endPagination)) {
     //               return (
     //                 <tr key={i}>
     //                   <td>{i + 1}</td>
@@ -214,10 +214,10 @@ const ProfitAndLoss = () => {
     //                   <td>{formatDateTime(order.payment_date)}</td>
 
     //                   <td>
-    //                     {/* <a href="#editOrderModal" className="edit" data-toggle="modal"><i className="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a> */}
+    //                     {/* <a href="#editOrderModal" className="btn btn-sm btn-primary ml-2 " data-toggle="modal"><i className="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a> */}
     //                     <a
     //                       href="#deleteOrderModal"
-    //                       className="delete"
+    //                       className="btn btn-sm btn-danger"
     //                       data-toggle="modal"
     //                       onClick={() => setOrderId(order._id)}
     //                     >

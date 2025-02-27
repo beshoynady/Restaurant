@@ -1,77 +1,93 @@
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
-import { detacontext } from "../../../../App";
+import { dataContext } from "../../../../App";
 import { toast } from "react-toastify";
 import "../orders/Orders.css";
 
 const Store = () => {
-  const apiUrl = process.env.REACT_APP_API_URL;
-  const token = localStorage.getItem("token_e"); // Retrieve the token from localStorage
-  const config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  };
-
   const {
-    restaurantData,
-    permissionsList,
-    setStartDate,
-    setEndDate,
-    filterByDateRange,
-    filterByTime,
     employeeLoginInfo,
     formatDate,
     formatDateTime,
-    setisLoading,
+    permissionsList,
+    setIsLoading,
     EditPagination,
-    startpagination,
-    endpagination,
-    setstartpagination,
-    setendpagination,
-  } = useContext(detacontext);
+    startPagination,
+    endPagination,
+    setStartPagination,
+    setEndPagination,
+    apiUrl,
+    handleGetTokenAndConfig,
+  } = useContext(dataContext);
 
   const storePermissions = permissionsList?.find(
     (permission) => permission.resource === "store"
   );
 
+  // State variables
   const [storeName, setStoreName] = useState("");
   const [storeCode, setStoreCode] = useState("");
   const [description, setDescription] = useState("");
   const [address, setAddress] = useState("");
-  const [storekeeper, setStorekeeper] = useState("");
+  const [storekeeper, setStorekeeper] = useState([]); // Storekeeper as an array of IDs
+  const [status, setStatus] = useState("active"); // Default status is active
   const [storeId, setStoreId] = useState("");
-
   const [allStores, setAllStores] = useState([]);
+  const [listOfEmployees, setListOfEmployees] = useState([]);
   const [allStockItems, setAllStockItems] = useState([]);
 
-  const getAllStores = async () => {
-    if (!token) {
-      toast.error("رجاء تسجيل الدخول مره اخري");
-      return;
+  // Helper function: Validate required fields
+  const validateFields = () => {
+    if (
+      !storeName.trim() ||
+      !storeCode.trim() ||
+      !description.trim() ||
+      !address.trim() ||
+      storekeeper.length === 0
+    ) {
+      toast.error("جميع الحقول مطلوبة");
+      return false;
     }
+    return true;
+  };
+
+  // Helper function: Check permissions
+  const hasPermission = (action) => {
+    if (storePermissions && !storePermissions[action]) {
+      toast.warn(
+        `ليس لديك صلاحية ${
+          action === "create"
+            ? "لإضافة"
+            : action === "update"
+            ? "لتعديل"
+            : action === "read"
+            ? "لعرض"
+            : "لحذف"
+        } مخزن`
+      );
+      return false;
+    }
+    return true;
+  };
+
+  // Fetch all stores
+  const getAllStores = async () => {
+    const config = await handleGetTokenAndConfig();
 
     try {
-      if (storePermissions && !storePermissions.read) {
-        toast.warn("ليس لك صلاحية لعرض مخزنات المخزن");
-        return;
-      }
-      const response = await axios.get(apiUrl + "/api/store/", config);
+      if (!hasPermission("read")) return;
+      const response = await axios.get(`${apiUrl}/api/store/`, config);
       setAllStores(response.data.reverse());
     } catch (error) {
       console.error("Error fetching stores:", error);
-      toast.error("حدث خطأ اثناء جلب بيانات المخزنات! اعد تحميل الصفحة");
+      toast.error("حدث خطأ أثناء جلب بيانات المخزنات! اعد تحميل الصفحة");
     }
   };
 
-  const [listOfEmployees, setListOfEmployees] = useState([]);
-
+  // Fetch all employees
   const getEmployees = async () => {
-    if (!token) {
-      // Handle case where token is not available
-      toast.error("رجاء تسجيل الدخول مره اخري");
-      return;
-    }
+    const config = await handleGetTokenAndConfig();
+
     try {
       const response = await axios.get(`${apiUrl}/api/employee`, config);
       const data = response.data;
@@ -80,58 +96,51 @@ const Store = () => {
       } else {
         toast.info("لا توجد بيانات لعرضها");
       }
-      // console.log({ data });
     } catch (error) {
-      console.log(error);
+      console.log("Error fetching employees:", error);
+      toast.error("حدث خطأ أثناء جلب بيانات الموظفين");
     }
   };
 
+  // Fetch all stock items
   const getAllStockItems = async () => {
+    const config = await handleGetTokenAndConfig();
+
     try {
-      if (!token) {
-        toast.error("رجاء تسجيل الدخول مره اخري");
-        return;
-      }
-      const response = await axios.get(apiUrl + "/api/stockitem/", config);
+      const response = await axios.get(`${apiUrl}/api/stockitem/`, config);
       setAllStockItems(response.data.reverse());
     } catch (error) {
       console.log("Error fetching stock items:", error);
+      toast.error("حدث خطأ أثناء جلب بيانات الأصناف");
     }
   };
 
+  const addStorekeeper = () => {
+    setStorekeeper([...storekeeper, ""]);
+  };
+
+  const removeStorekeeper = (index) => {
+    const newStorekeepers = storekeeper.filter((_, i) => i !== index);
+    setStorekeeper(newStorekeepers);
+  };
+
+  const handleStorekeeperChange = (e, index) => {
+    const newStorekeepers = [...storekeeper];
+    newStorekeepers[index] = e.target.value;
+    setStorekeeper(newStorekeepers);
+  };
+
+  // Create store
   const createStore = async (e) => {
     e.preventDefault();
-    if (!token) {
-      toast.error("رجاء تسجيل الدخول مره اخري");
-      return;
-    }
+    const config = await handleGetTokenAndConfig();
+
+    if (!hasPermission("create") || !validateFields()) return;
 
     try {
-      if (storePermissions && !storePermissions.create) {
-        toast.warn("ليس لك صلاحية لاضافه مخزنات المخزن");
-        return;
-      }
-
-      if (
-        !storeName.trim() ||
-        !storeCode.trim() ||
-        !description.trim() ||
-        !address.trim() ||
-        !storekeeper.trim()
-      ) {
-        toast.error("جميع الحقول مطلوبة");
-        return;
-      }
-
       const response = await axios.post(
-        apiUrl + "/api/store/",
-        {
-          storeName,
-          storeCode,
-          description,
-          address,
-          storekeeper,
-        },
+        `${apiUrl}/api/store/`,
+        { storeName, storeCode, description, address, storekeeper, status },
         config
       );
 
@@ -143,47 +152,21 @@ const Store = () => {
       }
     } catch (error) {
       console.error("Error creating store:", error);
-      toast.error(
-        error.response?.data?.error === "Store name already exists"
-          ? "هذا المتجر موجود بالفعل"
-          : "حدث خطأ غير متوقع. يرجى المحاولة مرة أخرى."
-      );
+      toast.error("حدث خطأ غير متوقع. يرجى المحاولة مرة أخرى.");
     }
   };
 
+  // Edit store
   const editStore = async (e) => {
     e.preventDefault();
-    if (!token) {
-      toast.error("رجاء تسجيل الدخول مره اخري");
-      return;
-    }
+    const config = await handleGetTokenAndConfig();
+
+    if (!hasPermission("update")) return;
 
     try {
-      if (storePermissions && !storePermissions.update) {
-        toast.warn("ليس لك صلاحية لتعديل مخزنات المخزن");
-        return;
-      }
-
-      if (
-        !storeName.trim() ||
-        !storeCode.trim() ||
-        !description.trim() ||
-        !address.trim() ||
-        !storekeeper.trim()
-      ) {
-        toast.error("جميع الحقول مطلوبة");
-        return;
-      }
-
       const response = await axios.put(
-        apiUrl + "/api/store/" + storeId,
-        {
-          storeName,
-          storeCode,
-          description,
-          address,
-          storekeeper,
-        },
+        `${apiUrl}/api/store/${storeId}`,
+        { storeName, storeCode, description, address, storekeeper, status },
         config
       );
 
@@ -200,22 +183,17 @@ const Store = () => {
     }
   };
 
+  // Delete store
   const deleteStore = async (e) => {
     e.preventDefault();
 
-    if (!token) {
-      toast.error("رجاء تسجيل الدخول مره اخري");
-      return;
-    }
+    const config = await handleGetTokenAndConfig();
+
+    if (!hasPermission("delete")) return;
 
     try {
-      if (storePermissions && !storePermissions.delete) {
-        toast.warn("ليس لك صلاحية لحذف مخزنات المخزن");
-        return;
-      }
-
       const response = await axios.delete(
-        apiUrl + "/api/store/" + storeId,
+        `${apiUrl}/api/store/${storeId}`,
         config
       );
 
@@ -223,6 +201,8 @@ const Store = () => {
         toast.success("تم حذف المتجر بنجاح");
         getAllStores();
         getAllStockItems();
+      } else {
+        toast.error("حدث خطأ أثناء حذف المتجر. يرجى المحاولة مرة أخرى.");
       }
     } catch (error) {
       console.log("Error deleting store:", error);
@@ -230,6 +210,7 @@ const Store = () => {
     }
   };
 
+  // Search stores by name
   const searchByStore = (name) => {
     if (!name) {
       getAllStores();
@@ -261,7 +242,7 @@ const Store = () => {
               {storePermissions && storePermissions?.create && (
                 <div className="col-12 col-md-6 p-0 m-0 d-flex flex-wrap align-items-center justify-content-end print-hide">
                   <a
-                    href="#addstoreModal"
+                    href="#addStoreModal"
                     className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-success"
                     data-toggle="modal"
                   >
@@ -280,8 +261,8 @@ const Store = () => {
                 <select
                   className="form-control border-primary m-0 p-2 h-auto border-primary m-0 p-2 h-auto"
                   onChange={(e) => {
-                    setstartpagination(0);
-                    setendpagination(e.target.value);
+                    setStartPagination(0);
+                    setEndPagination(e.target.value);
                   }}
                 >
                   {Array.from({ length: 20 }, (_, i) => (i + 1) * 5).map(
@@ -316,6 +297,7 @@ const Store = () => {
                 <th>المكان</th>
                 <th>الوصف</th>
                 <th>الاختصار</th>
+                <th>الحالة</th>
                 <th>اضيف بواسطه</th>
                 <th>أضيف في</th>
                 <th>إجراءات</th>
@@ -323,28 +305,37 @@ const Store = () => {
             </thead>
             <tbody>
               {allStores.map((store, i) => {
-                if (i >= startpagination && i < endpagination) {
+                if (i >= startPagination && i < endPagination) {
                   return (
                     <tr key={i}>
                       <td>{i + 1}</td>
                       <td>{store.storeName}</td>
-                      <td>{store.storekeeper?.fullname}</td>
+                      <td>
+                        {store.storekeeper && store.storekeeper.length > 0
+                          ? store.storekeeper
+                              .map((keeper) => keeper.fullname)
+                              .join(", ")
+                          : "لا يوجد أمين مخزن"}
+                      </td>
                       <td>
                         {allStockItems &&
-                          allStockItems.filter(
-                            (item) => item.storeId?._id === store._id
-                          )?.length}
+                          allStockItems.filter((item) =>
+                            item.stores?.some(
+                              (s) => s.storeId?._id === store._id
+                            )
+                          ).length}
                       </td>
                       <td>{store.address}</td>
                       <td>{store.description}</td>
                       <td>{store.storeCode}</td>
+                      <td>{store.status || "غير محدد"}</td>
                       <td>{store.createdBy?.fullname}</td>
                       <td>{formatDateTime(store.createdAt)}</td>
                       <td>
-                        {storePermissions?.update && (
-                          <a
-                            href="#editstoreModal"
-                            className="edit"
+                        {storePermissions && storePermissions?.update && (
+                          <button
+                            data-target="#editStoreModal"
+                            className="btn btn-sm btn-primary ml-2 "
                             data-toggle="modal"
                             onClick={() => {
                               setStoreId(store._id);
@@ -352,7 +343,12 @@ const Store = () => {
                               setStoreCode(store.storeCode);
                               setDescription(store.description);
                               setAddress(store.address);
-                              setStorekeeper(store.storekeeper);
+                              {
+                                store.storekeeper?.map((keeper) =>
+                                  setStorekeeper([...storekeeper, keeper._id])
+                                );
+                              }
+                              setStatus(store.status);
                             }}
                           >
                             <i
@@ -362,12 +358,12 @@ const Store = () => {
                             >
                               &#xE254;
                             </i>
-                          </a>
+                          </button>
                         )}
-                        {storePermissions?.delete && (
-                          <a
-                            href="#deletestoreModal"
-                            className="delete"
+                        {storePermissions && storePermissions?.delete && (
+                          <button
+                            data-target="#deleteStoreModal"
+                            className="btn btn-sm btn-danger"
                             data-toggle="modal"
                             onClick={() => setStoreId(store._id)}
                           >
@@ -378,7 +374,7 @@ const Store = () => {
                             >
                               &#xE872;
                             </i>
-                          </a>
+                          </button>
                         )}
                       </td>
                     </tr>
@@ -393,8 +389,8 @@ const Store = () => {
             <div className="hint-text text-dark">
               عرض{" "}
               <b>
-                {allStores.length > endpagination
-                  ? endpagination
+                {allStores.length > endPagination
+                  ? endPagination
                   : allStores.length}
               </b>{" "}
               من <b>{allStores.length}</b> عنصر
@@ -405,7 +401,7 @@ const Store = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 5 ? "active" : ""}`}
+                className={`page-item ${endPagination === 5 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   1
@@ -413,7 +409,7 @@ const Store = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 10 ? "active" : ""}`}
+                className={`page-item ${endPagination === 10 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   2
@@ -421,7 +417,7 @@ const Store = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 15 ? "active" : ""}`}
+                className={`page-item ${endPagination === 15 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   3
@@ -429,7 +425,7 @@ const Store = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 20 ? "active" : ""}`}
+                className={`page-item ${endPagination === 20 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   4
@@ -437,7 +433,7 @@ const Store = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 25 ? "active" : ""}`}
+                className={`page-item ${endPagination === 25 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   5
@@ -445,7 +441,7 @@ const Store = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 30 ? "active" : ""}`}
+                className={`page-item ${endPagination === 30 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   التالي
@@ -457,7 +453,7 @@ const Store = () => {
       </div>
 
       {/* Add Store Modal */}
-      <div id="addstoreModal" className="modal fade" role="dialog">
+      <div id="addStoreModal" className="modal fade" role="dialog">
         <div className="modal-dialog modal-lg">
           <div className="modal-content shadow-lg border-0 rounded">
             <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
@@ -472,6 +468,7 @@ const Store = () => {
             </div>
             <form onSubmit={createStore}>
               <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
+                {/* اسم المخزن */}
                 <div className="form-group col-12 col-md-6">
                   <label
                     className="form-label text-wrap text-right fw-bolder p-0 m-0"
@@ -487,6 +484,8 @@ const Store = () => {
                     onChange={(e) => setStoreName(e.target.value)}
                   />
                 </div>
+
+                {/* رمز المخزن */}
                 <div className="form-group col-12 col-md-6">
                   <label
                     className="form-label text-wrap text-right fw-bolder p-0 m-0"
@@ -502,6 +501,8 @@ const Store = () => {
                     onChange={(e) => setStoreCode(e.target.value)}
                   />
                 </div>
+
+                {/* الوصف */}
                 <div className="form-group col-12 col-md-6">
                   <label
                     className="form-label text-wrap text-right fw-bolder p-0 m-0"
@@ -517,6 +518,8 @@ const Store = () => {
                     onChange={(e) => setDescription(e.target.value)}
                   />
                 </div>
+
+                {/* العنوان */}
                 <div className="form-group col-12 col-md-6">
                   <label
                     className="form-label text-wrap text-right fw-bolder p-0 m-0"
@@ -532,6 +535,8 @@ const Store = () => {
                     onChange={(e) => setAddress(e.target.value)}
                   />
                 </div>
+
+                {/* مسؤول المخزن */}
                 <div className="form-group col-12 col-md-6">
                   <label
                     className="form-label text-wrap text-right fw-bolder p-0 m-0"
@@ -539,22 +544,63 @@ const Store = () => {
                   >
                     مسؤول المخزن:
                   </label>
-                  <select
-                    id="storekeeper"
-                    className="form-control border-primary m-0 p-2 h-auto border-primary m-0 p-2 h-auto"
-                    required
-                    onChange={(e) => setStorekeeper(e.target.value)}
-                  >
-                    <option value="">اختر</option>
-                    {listOfEmployees ? (
-                      listOfEmployees.map((employee, i) => (
-                        <option value={employee._id} key={i}>
-                          {employee.fullname}
-                        </option>
+                  <div id="storekeeper-list">
+                    {storekeeper.length > 0 ? (
+                      storekeeper.map((keeper, index) => (
+                        <div
+                          key={index}
+                          className="d-flex justify-content-between align-items-center"
+                        >
+                          <select
+                            className="form-control border-primary m-0 p-2 h-auto"
+                            value={keeper}
+                            onChange={(e) => handleStorekeeperChange(e, index)}
+                          >
+                            <option value="">اختر</option>
+                            {listOfEmployees.map((employee, i) => (
+                              <option value={employee._id} key={i}>
+                                {employee.fullname}
+                              </option>
+                            ))}
+                          </select>
+                          <button
+                            type="button"
+                            className="btn btn-danger"
+                            onClick={() => removeStorekeeper(index)}
+                          >
+                            حذف
+                          </button>
+                        </div>
                       ))
                     ) : (
-                      <option>لا يوجد حسابات للموظفين</option>
+                      <p>لا يوجد مسؤولين للمخزن</p>
                     )}
+                    <button
+                      type="button"
+                      className="btn btn-info mt-2"
+                      onClick={addStorekeeper}
+                    >
+                      إضافة مسؤول آخر
+                    </button>
+                  </div>
+                </div>
+
+                {/* الحالة */}
+                <div className="form-group col-12 col-md-6">
+                  <label
+                    className="form-label text-wrap text-right fw-bolder p-0 m-0"
+                    htmlFor="status"
+                  >
+                    الحالة:
+                  </label>
+                  <select
+                    id="status"
+                    className="form-control border-primary m-0 p-2 h-auto"
+                    onChange={(e) => setStatus(e.target.value)}
+                  >
+                    <option value="active">نشط</option>
+                    <option value="inactive">غير نشط</option>
+                    <option value="closed">مغلق</option>
                   </select>
                 </div>
               </div>
@@ -579,7 +625,7 @@ const Store = () => {
       </div>
 
       {/* Edit Store Modal */}
-      <div id="editstoreModal" className="modal fade" role="dialog">
+      <div id="editStoreModal" className="modal fade" role="dialog">
         <div className="modal-dialog modal-lg">
           <div className="modal-content shadow-lg border-0 rounded">
             <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
@@ -596,14 +642,14 @@ const Store = () => {
               <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
                 <div className="form-group col-12 col-md-6">
                   <label
-                    className="form-label text-wrap text-right fw-bolder p-0 m-0"
+                    className="form-label fw-bolder"
                     htmlFor="editStoreName"
                   >
                     اسم المخزن:
                   </label>
                   <input
                     type="text"
-                    className="form-control border-primary m-0 p-2 h-auto"
+                    className="form-control border-primary"
                     id="editStoreName"
                     required
                     value={storeName}
@@ -612,14 +658,14 @@ const Store = () => {
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label
-                    className="form-label text-wrap text-right fw-bolder p-0 m-0"
+                    className="form-label fw-bolder"
                     htmlFor="editStoreCode"
                   >
                     رمز المخزن:
                   </label>
                   <input
                     type="text"
-                    className="form-control border-primary m-0 p-2 h-auto"
+                    className="form-control border-primary"
                     id="editStoreCode"
                     required
                     value={storeCode}
@@ -628,14 +674,14 @@ const Store = () => {
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label
-                    className="form-label text-wrap text-right fw-bolder p-0 m-0"
+                    className="form-label fw-bolder"
                     htmlFor="editDescription"
                   >
                     الوصف:
                   </label>
                   <input
                     type="text"
-                    className="form-control border-primary m-0 p-2 h-auto"
+                    className="form-control border-primary"
                     id="editDescription"
                     required
                     value={description}
@@ -643,15 +689,12 @@ const Store = () => {
                   />
                 </div>
                 <div className="form-group col-12 col-md-6">
-                  <label
-                    className="form-label text-wrap text-right fw-bolder p-0 m-0"
-                    htmlFor="editAddress"
-                  >
+                  <label className="form-label fw-bolder" htmlFor="editAddress">
                     العنوان:
                   </label>
                   <input
                     type="text"
-                    className="form-control border-primary m-0 p-2 h-auto"
+                    className="form-control border-primary"
                     id="editAddress"
                     required
                     value={address}
@@ -660,22 +703,83 @@ const Store = () => {
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label
-                    className="form-label text-wrap text-right fw-bolder p-0 m-0"
+                    className="form-label fw-bolder"
                     htmlFor="editStorekeeper"
                   >
                     مسؤول المخزن:
                   </label>
-                  <input
-                    type="text"
-                    className="form-control border-primary m-0 p-2 h-auto"
-                    id="editStorekeeper"
-                    required
-                    value={storekeeper}
-                    onChange={(e) => setStorekeeper(e.target.value)}
-                  />
+                  <div id="storekeeper-list">
+                    {storekeeper.length > 0 ? (
+                      storekeeper.map((keeper, index) => (
+                        <div
+                          key={index}
+                          className="d-flex justify-content-between align-items-center"
+                        >
+                          <select
+                            className="form-control border-primary"
+                            value={keeper}
+                            onChange={(e) => handleStorekeeperChange(e, index)}
+                          >
+                            <option value="">اختر</option>
+                            {keeper ? (
+                              <option value={keeper} key={index}>
+                                {
+                                  listOfEmployees.find(
+                                    (employee) => employee._id === keeper
+                                  )?.fullname
+                                }
+                              </option>
+                            ) : (
+                              listOfEmployees
+                                .filter(
+                                  (employee) =>
+                                    !storekeeper.includes(employee._id)
+                                )
+                                .map((employee, i) => (
+                                  <option value={employee._id} key={i}>
+                                    {employee.fullname}
+                                  </option>
+                                ))
+                            )}
+                          </select>
+                          <button
+                            type="button"
+                            className="btn btn-danger"
+                            onClick={() => removeStorekeeper(index)}
+                          >
+                            حذف
+                          </button>
+                        </div>
+                      ))
+                    ) : (
+                      <p>لا يوجد مسؤولين للمخزن</p>
+                    )}
+                    <button
+                      type="button"
+                      className="btn btn-info mt-2"
+                      onClick={addStorekeeper}
+                    >
+                      إضافة مسؤول آخر
+                    </button>
+                  </div>
+                </div>
+                <div className="form-group col-12 col-md-6">
+                  <label className="form-label fw-bolder" htmlFor="editStatus">
+                    الحالة:
+                  </label>
+                  <select
+                    id="editStatus"
+                    className="form-control border-primary"
+                    value={status}
+                    onChange={(e) => setStatus(e.target.value)}
+                  >
+                    <option value="active">نشط</option>
+                    <option value="inactive">غير نشط</option>
+                    <option value="closed">مغلق</option>
+                  </select>
                 </div>
               </div>
-              <div className="modal-footer flex-nowrap d-flex flex-row align-items-center justify-content-between">
+              <div className="modal-footer d-flex flex-nowrap align-items-center justify-content-between m-0 p-1">
                 <button
                   type="submit"
                   className="btn btn-success col-6 h-100 px-2 py-3 m-0"
@@ -696,7 +800,7 @@ const Store = () => {
       </div>
 
       {/* Delete Store Modal */}
-      <div id="deletestoreModal" className="modal fade" role="dialog">
+      <div id="deleteStoreModal" className="modal fade" role="dialog">
         <div className="modal-dialog modal-lg">
           <div className="modal-content shadow-lg border-0 rounded ">
             <form className="text-right" onSubmit={(e) => deleteStore(e)}>
@@ -711,12 +815,12 @@ const Store = () => {
                   &times;
                 </button>
               </div>
-              <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
+              <div className="modal-body d-flex flex-wrap align-items-center p-3 text-dark text-right">
                 <p>
                   هل أنت متأكد من حذف مخزن <strong>{storeName}</strong>؟
                 </p>
               </div>
-              <div className="modal-footer flex-nowrap d-flex flex-row align-items-center justify-content-between flex-nowrap d-flex flex-row align-items-center justify-content-between">
+              <div className="modal-footer d-flex flex-nowrap align-items-center justify-content-between m-0 p-1">
                 <input
                   type="submit"
                   className="btn btn-warning col-6 h-100 px-2 py-3 m-0"
@@ -724,9 +828,9 @@ const Store = () => {
                 />
                 <input
                   type="button"
-                  className="col-md-6 col-12 h-100 p-0 m-0 btn btn-default"
+                  className="btn btn-danger col-6 h-100 px-2 py-3 m-0"
                   data-dismiss="modal"
-                  value="إلغاء"
+                  value="إغلاق"
                 />
               </div>
             </form>

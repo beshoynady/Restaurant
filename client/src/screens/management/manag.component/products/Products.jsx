@@ -1,18 +1,10 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { detacontext } from "../../../../App";
+import { dataContext } from "../../../../App";
 import "../orders/Orders.css";
 
 const Products = () => {
-  const apiUrl = process.env.REACT_APP_API_URL;
-  const token = localStorage.getItem("token_e");
-  const config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  };
-
   const {
     restaurantData,
     permissionsList,
@@ -23,13 +15,15 @@ const Products = () => {
     employeeLoginInfo,
     formatDate,
     formatDateTime,
-    setisLoading,
+    setIsLoading,
     EditPagination,
-    startpagination,
-    endpagination,
-    setstartpagination,
-    setendpagination,
-  } = useContext(detacontext);
+    startPagination,
+    endPagination,
+    setStartPagination,
+    setEndPagination,
+    apiUrl,
+    handleGetTokenAndConfig,
+  } = useContext(dataContext);
 
   const productPermission =
     permissionsList &&
@@ -77,6 +71,44 @@ const Products = () => {
     setsizes([...newsizes]);
   };
 
+  const [isCombo, setIsCombo] = useState(false);
+  const [comboItems, setComboItems] = useState([
+    {
+      product: "",
+      quantity: 0,
+    },
+  ]);
+
+  const handleIsComboCheckboxChange = () => {
+    setIsCombo(!isCombo);
+  };
+
+  const addComboItem = () => {
+    setComboItems([
+      ...comboItems,
+      {
+        product: "",
+        quantity: 0,
+      },
+    ]);
+  };
+
+  const removeComboItem = (index) => {
+    setComboItems(comboItems.filter((_, i) => i !== index));
+  };
+
+  const handleProductChange = (e, index) => {
+    const newComboItems = [...comboItems];
+    newComboItems[index].product = e.target.value;
+    setComboItems(newComboItems);
+  };
+
+  const handleQuantityChange = (e, index) => {
+    const newComboItems = [...comboItems];
+    newComboItems[index].quantity = Number(e.target.value);
+    setComboItems(newComboItems);
+  };
+
   const [hasExtras, setHasExtras] = useState(false);
   const [isAddon, setIsAddon] = useState(false);
   const [extras, setExtras] = useState([]);
@@ -90,27 +122,46 @@ const Products = () => {
     }
   };
 
+  const [preparationSection, setpreparationSection] = useState("");
+  // const preparationSectionList = ["Kitchen", "Bar", "Grill"]
+
+  const [allPreparationSections, setAllPreparationSections] = useState([]);
+
+  const getAllPreparationSections = async () => {
+    const config = await handleGetTokenAndConfig();
+
+    try {
+      const res = await axios.get(`${apiUrl}/api/preparationsection`, config);
+      if (res.status === 200) {
+        const PreparationSections = res.data.data;
+        console.log({ PreparationSections });
+        setAllPreparationSections(PreparationSections);
+      } else {
+        throw new Error("Failed to fetch data");
+      }
+    } catch (error) {
+      console.error("حدث خطأ أثناء استلام البيانات:", error);
+      toast.error("حدث خطأ أثناء جلب البيانات، يرجى المحاولة مرة أخرى لاحقًا.");
+    }
+  };
+
   const createProduct = async (e) => {
     e.preventDefault();
 
-    if (!token) {
-      toast.error("رجاء تسجيل الدخول مره اخري");
-      return;
-    }
+    const config = await handleGetTokenAndConfig();
 
     try {
       if (productPermission && !productPermission.create) {
         toast.warn("ليس لك صلاحية لاضافه الاصناف");
         return;
       }
-
-      // إعداد جسم الطلب باستخدام FormData
       const formData = new FormData();
       formData.append("productname", productname);
       formData.append("productdescription", productdescription);
       formData.append("productcategoryid", productcategoryid);
       formData.append("available", available);
       formData.append("isAddon", isAddon);
+      formData.append("preparationSection", preparationSection);
 
       if (hasSizes) {
         formData.append("hasSizes", hasSizes);
@@ -139,13 +190,20 @@ const Products = () => {
         // });
       }
 
+      if (isCombo) {
+        formData.append("isCombo", isCombo);
+        formData.append("comboItems", JSON.stringify(comboItems));
+        // extras.forEach((extra, index) => {
+        //   formData.append(`extras[${index}]`, extra);
+        // });
+      }
+
       if (productimg) {
         formData.append("image", productimg);
       } else {
         toast.error("يجب إضافة صورة للمنتج");
         return;
       }
-
 
       const response = await axios.post(apiUrl + "/api/product/", formData, {
         headers: {
@@ -206,13 +264,14 @@ const Products = () => {
   const [productInfo, setproductInfo] = useState({});
   const handelEditProductModal = (product) => {
     setproductInfo(product);
-    setproductid(product._id);
+    setproductId(product._id);
     setproductname(product.name);
     setproductdescription(product.description);
     setproductprice(product.price);
     setproductdiscount(product.discount);
     setproductcategoryid(product.category._id);
     setavailable(product.available);
+    setpreparationSection(product.preparationSection?._id);
     setsizes(
       product.sizes
         ? product.sizes
@@ -237,14 +296,10 @@ const Products = () => {
     }
   };
 
-  const [productid, setproductid] = useState("");
+  const [productId, setproductId] = useState("");
   const editProduct = async (e) => {
     e.preventDefault();
-    if (!token) {
-      // Handle case where token is not available
-      toast.error("رجاء تسجيل الدخول مره اخري");
-      return;
-    }
+    const config = await handleGetTokenAndConfig();
     try {
       if (productPermission && !productPermission.update) {
         toast.warn("ليس لك صلاحية لتعديل الاصناف");
@@ -255,6 +310,7 @@ const Products = () => {
         productname: productname,
         productdescription: productdescription,
         productcategoryid: productcategoryid,
+        preparationSection: preparationSection,
         available: available,
         isAddon: isAddon,
       };
@@ -275,6 +331,10 @@ const Products = () => {
         requestBody.hasExtras = hasExtras;
         requestBody.extras = extras;
       }
+      if (isCombo) {
+        requestBody.isCombo = isCombo;
+        requestBody.comboItems = comboItems;
+      }
 
       if (productimg) {
         requestBody.image = productimg;
@@ -283,18 +343,16 @@ const Products = () => {
       console.log({ requestBody });
 
       // Perform the API request to update the product
-      const response = requestBody.image
-        ? await axios.put(`${apiUrl}/api/product/${productid}`, requestBody, {
-            headers: {
-              "Content-Type": "multipart/form-data",
-              ...config.headers,
-            },
-          })
-        : await axios.put(
-            `${apiUrl}/api/product/withoutimage/${productid}`,
-            requestBody,
-            config
-          );
+      const response = await axios.put(
+        `${apiUrl}/api/product/${productId}`,
+        requestBody,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            ...config.headers,
+          },
+        }
+      );
 
       // Handle successful response
       console.log(response.data);
@@ -319,11 +377,7 @@ const Products = () => {
   const [listofProductsAddon, setlistofProductsAddon] = useState([]);
 
   const getallproducts = async () => {
-    if (!token) {
-      // Handle case where token is not available
-      toast.error("رجاء تسجيل الدخول مره اخري");
-      return;
-    }
+    const config = await handleGetTokenAndConfig();
     try {
       const response = await axios.get(apiUrl + "/api/product/");
       if (response) {
@@ -342,20 +396,16 @@ const Products = () => {
     }
   };
 
-  const [allOrders, setallOrders] = useState([]);
+  const [allOrders, setAllOrders] = useState([]);
   const getAllOrders = async () => {
-    if (!token) {
-      // Handle case where token is not available
-      toast.error("رجاء تسجيل الدخول مره اخري");
-      return;
-    }
+    const config = await handleGetTokenAndConfig();
     try {
       const response = await axios.get(apiUrl + "/api/order", config);
 
       if (response.status === 200) {
         const allOrders = response.data;
         console.log({ allOrders });
-        setallOrders(allOrders);
+        setAllOrders(allOrders);
       } else {
         console.error("Failed to fetch orders");
       }
@@ -369,7 +419,7 @@ const Products = () => {
     allOrders.forEach((order) => {
       order.products.forEach((product) => {
         updatedListofProducts.map((pro) => {
-          if (product.productid._id === pro._id) {
+          if (product.productId._id === pro._id) {
             pro.sales += product.quantity;
           }
         });
@@ -383,6 +433,7 @@ const Products = () => {
     if (!category) {
       getallproducts();
     }
+    getallproducts();
     const products = listofProducts.filter(
       (product) => product.category._id === category
     );
@@ -393,6 +444,7 @@ const Products = () => {
     if (!name) {
       getallproducts();
     }
+    getallproducts();
     const products = listofProducts.filter(
       (pro) => pro.name.startsWith(name) === true
     );
@@ -401,18 +453,14 @@ const Products = () => {
 
   const deleteProduct = async (e) => {
     e.preventDefault();
-    if (!token) {
-      // Handle case where token is not available
-      toast.error("رجاء تسجيل الدخول مره اخري");
-      return;
-    }
+    const config = await handleGetTokenAndConfig();
     try {
       if (productPermission && !productPermission.delete) {
         toast.warn("ليس لك صلاحية لحذف الاصناف");
         return;
       }
       const response = await axios.delete(
-        `${apiUrl}/api/product/${productid}`,
+        `${apiUrl}/api/product/${productId}`,
         config
       );
       if (response) {
@@ -426,11 +474,7 @@ const Products = () => {
 
   const [listofcategories, setlistofcategories] = useState([]);
   const getallCategories = async () => {
-    if (!token) {
-      // Handle case where token is not available
-      toast.error("رجاء تسجيل الدخول مره اخري");
-      return;
-    }
+    const config = await handleGetTokenAndConfig();
     try {
       const response = await axios.get(apiUrl + "/api/menucategory/", config);
       const categories = await response.data;
@@ -442,11 +486,23 @@ const Products = () => {
     }
   };
 
+  const calculateTotalCost = (ingredients) => {
+    let total = 0;
+
+    ingredients &&
+      ingredients.map((ingredient) => {
+        const costPart = ingredient.itemId?.costPerPart;
+        const costOfIngerdient = Number(ingredient.amount) * Number(costPart);
+        total += costOfIngerdient;
+      });
+    return total;
+  };
+
   useEffect(() => {
     getallproducts();
     getallCategories();
     getAllOrders();
-    // getallStockItem()
+    getAllPreparationSections();
   }, []);
 
   return (
@@ -482,8 +538,8 @@ const Products = () => {
                 <select
                   className="form-control border-primary m-0 p-2 h-auto"
                   onChange={(e) => {
-                    setstartpagination(0);
-                    setendpagination(e.target.value);
+                    setStartPagination(0);
+                    setEndPagination(e.target.value);
                   }}
                 >
                   {(() => {
@@ -536,7 +592,7 @@ const Products = () => {
                   <select
                     className="form-control border-primary m-0 p-2 h-auto"
                     onChange={(e) =>
-                      setallOrders(filterByTime(e.target.value, allOrders))
+                      setAllOrders(filterByTime(e.target.value, allOrders))
                     }
                   >
                     <option value="">اختر</option>
@@ -580,7 +636,7 @@ const Products = () => {
                     <button
                       type="button"
                       className="btn btn-primary h-100 p-2 "
-                      onClick={() => setallOrders(filterByDateRange(allOrders))}
+                      onClick={() => setAllOrders(filterByDateRange(allOrders))}
                     >
                       <i className="fa fa-search"></i>
                     </button>
@@ -611,6 +667,8 @@ const Products = () => {
                 <th>الاسم</th>
                 <th>الوصف</th>
                 <th>التصنيف</th>
+                <th>قسم الاعداد</th>
+                <th>كومبو</th>
                 <th>الاحجام</th>
                 <th>الاضافات</th>
                 <th>التكلفة</th>
@@ -625,16 +683,10 @@ const Products = () => {
             <tbody>
               {listofProducts &&
                 listofProducts.map((product, i) => {
-                  if (i >= startpagination && i < endpagination) {
+                  if (i >= startPagination && i < endPagination) {
                     return (
                       <React.Fragment key={i}>
                         <tr>
-                          {/* <td>
-            <span className="custom-checkbox">
-              <input type="checkbox" className="form-check-input border-primary mr form-check-input border-primary mr-lg" id={`checkbox${i}`} name="options[]" value="1" />
-              <label htmlFor={`checkbox${i}`}></label>
-            </span>
-          </td> */}
                           <td>{i + 1}</td>
                           <td>
                             <img
@@ -650,11 +702,24 @@ const Products = () => {
                             {product.description}
                           </td>
                           <td>{product.category.name}</td>
+                          <td>{product.preparationSection?.name}</td>
+                          <td>
+                            {product.comboItems
+                              ?.map(
+                                (item, i) =>
+                                  `${item.product?.name}${
+                                    i < product.comboItems.length - 1 ? "-" : ""
+                                  }`
+                              )
+                              .join("")}
+                          </td>
                           <td>{product.sizes.length}</td>
                           <td>{product.extras.length}</td>
                           <td>
                             {product.productRecipe
-                              ? product.productRecipe.totalcost
+                              ? calculateTotalCost(
+                                  product.productRecipe?.ingredients
+                                ) / product.productRecipe?.numberOfMeals
                               : "اضف تكلفه"}
                           </td>
                           <td>{product.price}</td>
@@ -663,10 +728,10 @@ const Products = () => {
                           <td>{product.sales ? product.sales : 0}</td>
                           <td>{product.available ? "متاح" : "غير متاح"}</td>
                           <td>
-                            {productPermission.update && (
-                              <a
-                                href="#editProductModal"
-                                className="edit"
+                            {productPermission && productPermission.update && (
+                              <button
+                                data-target="#editProductModal"
+                                className="btn btn-sm btn-primary ml-2 "
                                 data-toggle="modal"
                                 onClick={() => {
                                   handelEditProductModal(product);
@@ -679,14 +744,14 @@ const Products = () => {
                                 >
                                   &#xE254;
                                 </i>
-                              </a>
+                              </button>
                             )}
-                            {productPermission.delete && (
-                              <a
-                                href="#deleteProductModal"
-                                className="delete"
+                            {productPermission && productPermission.delete && (
+                              <button
+                                data-target="#deleteProductModal"
+                                className="btn btn-sm btn-danger"
                                 data-toggle="modal"
-                                onClick={() => setproductid(product._id)}
+                                onClick={() => setproductId(product._id)}
                               >
                                 <i
                                   className="material-icons"
@@ -695,19 +760,13 @@ const Products = () => {
                                 >
                                   &#xE872;
                                 </i>
-                              </a>
+                              </button>
                             )}
                           </td>
                         </tr>
                         {product.sizes.length > 0 &&
                           product.sizes.map((size, j) => (
                             <tr key={j + i}>
-                              {/* <td>
-              <span className="custom-checkbox">
-                <input type="checkbox" className="form-check-input border-primary mr form-check-input border-primary mr-lg" id={`checkbox${j + i}`} name="options[]" value="1" />
-                <label htmlFor={`checkbox${j + i}`}></label>
-              </span>
-            </td> */}
                               <td>{i + 1}</td>
                               <td></td>
                               <td>{size.sizeName}</td>
@@ -715,9 +774,12 @@ const Products = () => {
                               <td></td>
                               <td></td>
                               <td></td>
+                              <td></td>
                               <td>
                                 {size.sizeRecipe
-                                  ? size.sizeRecipe.totalcost
+                                  ? calculateTotalCost(
+                                      size.sizeRecipe?.ingredients
+                                    ) / Number(size.sizeRecipe?.numberOfMeals)
                                   : "اضف تكلفه"}
                               </td>
                               <td>{size.sizePrice}</td>
@@ -738,8 +800,8 @@ const Products = () => {
             <div className="hint-text text-dark">
               عرض{" "}
               <b>
-                {listofProducts.length > endpagination
-                  ? endpagination
+                {listofProducts.length > endPagination
+                  ? endPagination
                   : listofProducts.length}
               </b>{" "}
               من <b>{listofProducts.length}</b>عنصر
@@ -750,7 +812,7 @@ const Products = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 5 ? "active" : ""}`}
+                className={`page-item ${endPagination === 5 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   1
@@ -758,7 +820,7 @@ const Products = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 10 ? "active" : ""}`}
+                className={`page-item ${endPagination === 10 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   2
@@ -766,7 +828,7 @@ const Products = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 15 ? "active" : ""}`}
+                className={`page-item ${endPagination === 15 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   3
@@ -774,7 +836,7 @@ const Products = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 20 ? "active" : ""}`}
+                className={`page-item ${endPagination === 20 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   4
@@ -782,7 +844,7 @@ const Products = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 25 ? "active" : ""}`}
+                className={`page-item ${endPagination === 25 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   5
@@ -790,7 +852,7 @@ const Products = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 30 ? "active" : ""}`}
+                className={`page-item ${endPagination === 30 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   التالي
@@ -860,6 +922,105 @@ const Products = () => {
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                    قسم الاعداد
+                  </label>
+                  <select
+                    className="form-control border-primary m-0 p-2 h-auto"
+                    name="preparationSection"
+                    id="preparationSection"
+                    form="carform"
+                    onChange={(e) => setpreparationSection(e.target.value)}
+                  >
+                    <option value="">اختر القسم</option>
+                    {/* {preparationSectionList.map((section, i) => {
+                      return (
+                        <option value={section} key={i}>
+                          {section}
+                        </option>
+                      );
+                    })} */}
+                    {allPreparationSections.map((section, i) => {
+                      return (
+                        <option value={section._id} key={i}>
+                          {section.name}
+                        </option>
+                      );
+                    })}
+                  </select>
+                </div>
+                <div className="form-group col-12 col-md-6">
+                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                    هل هو وجبه كومبو
+                  </label>
+                  <input
+                    type="checkbox"
+                    className="form-check-input border-primary mr-2"
+                    style={{ width: "21px", height: "21px" }}
+                    onChange={handleIsComboCheckboxChange}
+                  />
+                </div>
+                {isCombo && (
+                  <div className="container flex-column w-100 p-0 m-0">
+                    {comboItems.map((item, index) => (
+                      <div
+                        key={index}
+                        className="row d-flex align-items-center justify-content-between col-12 mb-1"
+                      >
+                        <div className="form-group col-12 col-md-6 m-0">
+                          <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                            اسم الصنف
+                          </label>
+                          <select
+                            className="form-control border-primary m-0 p-2 h-auto"
+                            value={item.product}
+                            onChange={(e) => handleProductChange(e, index)}
+                          >
+                            <option value="">اختر الصنف</option>
+                            {listofProducts.map((product) => (
+                              <option key={product._id} value={product._id}>
+                                {product.name}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                        <div className="form-group col-12 col-md-6 m-0">
+                          <label className="form-label w-100 text-wrap text-right fw-bolder p-0 m-0">
+                            الكمية
+                          </label>
+                          <input
+                            type="number"
+                            min={0}
+                            className="form-control border-primary m-0 p-2 h-auto"
+                            value={item.quantity}
+                            onChange={(e) => handleQuantityChange(e, index)}
+                          />
+                        </div>
+                        <div className="col-12 mt-1 d-flex justify-content-between">
+                          {index + 1 === comboItems.length ? (
+                            <button
+                              type="button"
+                              className="col-6 btn btn-primary"
+                              onClick={addComboItem}
+                            >
+                              إضافة صنف جديد
+                            </button>
+                          ) : (
+                            ""
+                          )}
+                          <button
+                            type="button"
+                            className="col-6 btn btn-danger"
+                            onClick={() => removeComboItem(index)}
+                          >
+                            حذف صنف
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                <div className="form-group col-12 col-md-6">
+                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                     أحجام المنتج
                   </label>
                   <input
@@ -897,47 +1058,47 @@ const Products = () => {
                           <label className="form-label w-100 text-wrap text-right fw-bolder p-0 m-0">
                             السعر
                           </label>
-                            <input
-                              type="number"
-                              min={0}
-                              className="form-control border-primary m-0 p-2 h-auto"
-                              value={size.sizePrice}
-                              onChange={(e) =>
-                                setsizes((prevState) => {
-                                  const newSizes = [...prevState];
-                                  newSizes[index].sizePrice = parseFloat(
-                                    e.target.value
-                                  );
-                                  return newSizes;
-                                })
-                              }
-                            />
+                          <input
+                            type="number"
+                            min={0}
+                            className="form-control border-primary m-0 p-2 h-auto"
+                            value={size.sizePrice}
+                            onChange={(e) =>
+                              setsizes((prevState) => {
+                                const newSizes = [...prevState];
+                                newSizes[index].sizePrice = parseFloat(
+                                  e.target.value
+                                );
+                                return newSizes;
+                              })
+                            }
+                          />
                         </div>
                         <div className="form-group col-12 col-md-3">
                           <label className="form-label w-100 text-wrap text-right fw-bolder p-0 m-0">
                             التخفيض
                           </label>
-                            <input
-                              type="number"
-                              min={0}
-                              max={size.sizePrice}
-                              className="form-control border-primary m-0 p-2 h-auto"
-                              // value={size.sizeDiscount}
-                              onChange={(e) =>
-                                setsizes((prevState) => {
-                                  const newSizes = [...prevState];
-                                  newSizes[index].sizeDiscount = parseFloat(
-                                    e.target.value
-                                  );
-                                  newSizes[index].sizePriceAfterDiscount =
-                                    newSizes[index].sizePrice -
-                                    parseFloat(e.target.value);
-                                  return newSizes;
-                                })
-                              }
-                            />
+                          <input
+                            type="number"
+                            min={0}
+                            max={size.sizePrice}
+                            className="form-control border-primary m-0 p-2 h-auto"
+                            // value={size.sizeDiscount}
+                            onChange={(e) =>
+                              setsizes((prevState) => {
+                                const newSizes = [...prevState];
+                                newSizes[index].sizeDiscount = parseFloat(
+                                  e.target.value
+                                );
+                                newSizes[index].sizePriceAfterDiscount =
+                                  newSizes[index].sizePrice -
+                                  parseFloat(e.target.value);
+                                return newSizes;
+                              })
+                            }
+                          />
                         </div>
-                        <div className="col-12">
+                        <div className="col-12 mt-1 d-flex justify-content-between">
                           {sizes.length === index + 1 || sizes.length === 0 ? (
                             <button
                               type="button"
@@ -951,7 +1112,7 @@ const Products = () => {
                           )}
                           <button
                             type="button"
-                            className="col-6 h-100 px-2 py-3 m-0 btn btn-danger col-12 col-md-6"
+                            className="col-6 h-100 px-2 py-3 m-0 btn btn-danger"
                             onClick={() => removeSize(index)}
                           >
                             حذف الحجم
@@ -1016,7 +1177,7 @@ const Products = () => {
                 </div>
                 {hasExtras && (
                   <div
-                    className="form-group "
+                    className="form-group w-100 "
                     style={{ fontSize: "16px", fontWeight: "900" }}
                   >
                     <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
@@ -1113,19 +1274,18 @@ const Products = () => {
       <div id="editProductModal" className="modal fade">
         <div className="modal-dialog modal-lg">
           <div className="modal-content shadow-lg border-0 rounded">
-              <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
-                <h4 className="modal-title">تعديل منتج</h4>
-                <button
-                  type="button"
-                  className="close m-0 p-1"
-                  data-dismiss="modal"
-                  aria-hidden="true"
-                >
-                  &times;
-                </button>
-              </div>
-              <form onSubmit={editProduct}>
-
+            <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
+              <h4 className="modal-title">تعديل منتج</h4>
+              <button
+                type="button"
+                className="close m-0 p-1"
+                data-dismiss="modal"
+                aria-hidden="true"
+              >
+                &times;
+              </button>
+            </div>
+            <form onSubmit={editProduct}>
               <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
@@ -1175,6 +1335,124 @@ const Products = () => {
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                    قسم الاعداد
+                  </label>
+                  <select
+                    className="form-control border-primary m-0 p-2 h-auto"
+                    name="preparationSection"
+                    id="preparationSection"
+                    form="carform"
+                    onChange={(e) => setpreparationSection(e.target.value)}
+                  >
+                    {preparationSection ? (
+                      <option value={preparationSection}>
+                        {preparationSection}
+                      </option>
+                    ) : (
+                      "لم يتم تحديد قسم"
+                    )}
+
+                    {/* {preparationSectionList.map((section, i) => {
+                      return (
+                        <option value={section} key={i}>
+                          {section}
+                        </option>
+                      );
+                    })} */}
+
+                    {preparationSection ? (
+                      <option value={preparationSection._id}>
+                        {
+                          allPreparationSections.find(
+                            (section) => section._id === preparationSection
+                          )?.name
+                        }
+                      </option>
+                    ) : (
+                      "لم يتم تحديد قسم"
+                    )}
+                    {allPreparationSections.map((section, i) => {
+                      return (
+                        <option value={section._id} key={i}>
+                          {section.name}
+                        </option>
+                      );
+                    })}
+                  </select>
+                </div>
+                <div className="form-group col-12 col-md-6">
+                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                    هل هو وجبه كومبو
+                  </label>
+                  <input
+                    type="checkbox"
+                    className="form-check-input border-primary mr-2"
+                    style={{ width: "21px", height: "21px" }}
+                    onChange={handleIsComboCheckboxChange}
+                  />
+                </div>
+                {isCombo && (
+                  <div className="container flex-column w-100 p-0 m-0">
+                    {comboItems.map((item, index) => (
+                      <div
+                        key={index}
+                        className="row d-flex align-items-center justify-content-between col-12 mb-1"
+                      >
+                        <div className="form-group col-12 col-md-6 m-0">
+                          <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                            اسم الصنف
+                          </label>
+                          <select
+                            className="form-control border-primary m-0 p-2 h-auto"
+                            value={item.product}
+                            onChange={(e) => handleProductChange(e, index)}
+                          >
+                            <option value="">اختر الصنف</option>
+                            {listofProducts.map((product) => (
+                              <option key={product._id} value={product._id}>
+                                {product.name}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                        <div className="form-group col-12 col-md-6 m-0">
+                          <label className="form-label w-100 text-wrap text-right fw-bolder p-0 m-0">
+                            الكمية
+                          </label>
+                          <input
+                            type="number"
+                            min={0}
+                            className="form-control border-primary m-0 p-2 h-auto"
+                            value={item.quantity}
+                            onChange={(e) => handleQuantityChange(e, index)}
+                          />
+                        </div>
+                        <div className="col-12 mt-1 d-flex justify-content-between">
+                          {index + 1 === comboItems.length ? (
+                            <button
+                              type="button"
+                              className="col-6 btn btn-primary"
+                              onClick={addComboItem}
+                            >
+                              إضافة صنف جديد
+                            </button>
+                          ) : (
+                            ""
+                          )}
+                          <button
+                            type="button"
+                            className="col-6 btn btn-danger"
+                            onClick={() => removeComboItem(index)}
+                          >
+                            حذف صنف
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                <div className="form-group col-12 col-md-6">
+                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                     أحجام المنتج
                   </label>
                   <input
@@ -1213,48 +1491,46 @@ const Products = () => {
                           <label className="form-label w-100 text-wrap text-right fw-bolder p-0 m-0">
                             السعر
                           </label>
-                            <input
-                              type="number"
-                              className="form-control border-primary m-0 p-2 h-auto"
-                              value={size.sizePrice}
-                              onChange={(e) =>
-                                setsizes((prevState) => {
-                                  const newSizes = [...prevState];
-                                  newSizes[index].sizePrice = parseFloat(
-                                    e.target.value
-                                  );
-                                  return newSizes;
-                                })
-                              }
-                            />
-                            
+                          <input
+                            type="number"
+                            className="form-control border-primary m-0 p-2 h-auto"
+                            value={size.sizePrice}
+                            onChange={(e) =>
+                              setsizes((prevState) => {
+                                const newSizes = [...prevState];
+                                newSizes[index].sizePrice = parseFloat(
+                                  e.target.value
+                                );
+                                return newSizes;
+                              })
+                            }
+                          />
                         </div>
 
                         <div className="form-group col-12 col-md-3">
                           <label className="form-label w-100 text-wrap text-right fw-bolder p-0 m-0">
                             التخفيض
                           </label>
-                            <input
-                              type="number"
-                              className="form-control border-primary m-0 p-2 h-auto"
-                              value={size.sizeDiscount}
-                              min={0}
-                              max={size.sizePrice}
-                              onChange={(e) =>
-                                setsizes((prevState) => {
-                                  const newSizes = [...prevState];
-                                  newSizes[index].sizeDiscount = parseFloat(
-                                    e.target.value
-                                  );
-                                  newSizes[index].sizePriceAfterDiscount =
-                                    newSizes[index].sizePrice -
-                                    parseFloat(e.target.value);
-                                  return newSizes;
-                                })
-                              }
-                            />
-                            
-                          </div>
+                          <input
+                            type="number"
+                            className="form-control border-primary m-0 p-2 h-auto"
+                            value={size.sizeDiscount}
+                            min={0}
+                            max={size.sizePrice}
+                            onChange={(e) =>
+                              setsizes((prevState) => {
+                                const newSizes = [...prevState];
+                                newSizes[index].sizeDiscount = parseFloat(
+                                  e.target.value
+                                );
+                                newSizes[index].sizePriceAfterDiscount =
+                                  newSizes[index].sizePrice -
+                                  parseFloat(e.target.value);
+                                return newSizes;
+                              })
+                            }
+                          />
+                        </div>
 
                         <div className="col-12">
                           {sizes.length === index + 1 || sizes.length === 0 ? (
@@ -1415,6 +1691,7 @@ const Products = () => {
                   />
                 </div>
               </div>
+
               <div className="modal-footer flex-nowrap d-flex flex-row align-items-center justify-content-between">
                 <button
                   type="submit"

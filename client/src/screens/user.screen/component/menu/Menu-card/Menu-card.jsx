@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { detacontext } from "../../../../../App";
+import React, { useState, useEffect, useContext } from "react"; 
+import { dataContext } from "../../../../../App";
 import {toast } from 'react-toastify';
 
 const MenuCard = () => {
@@ -7,7 +7,7 @@ const MenuCard = () => {
 
   const [noteArea, setnoteArea] = useState(false);
   const [extraArea, setextraArea] = useState(false);
-  const [productid, setproductid] = useState("");
+  const [productId, setproductId] = useState("");
   const [size, setsize] = useState("");
   const [sizeId, setsizeId] = useState("");
   const [sizeQuantity, setsizeQuantity] = useState(0);
@@ -30,10 +30,10 @@ const MenuCard = () => {
   const [selectedButtonIndex, setSelectedButtonIndex] = useState(1);
 
   return (
-    <detacontext.Consumer>
+    <dataContext.Consumer>
       {({
         allProducts,
-        MenuCategoryId,
+        menuCategoryId,
         addItemToCart,
         deleteItemFromCart,
         incrementProductQuantity,
@@ -50,7 +50,7 @@ const MenuCard = () => {
           <div className="d-flex flex-wrap flex-md-row">
             {allProducts.length > 0
               ? allProducts
-                  .filter((pro) => pro.category._id === MenuCategoryId)
+                  .filter((pro) => pro.category._id === menuCategoryId)
                   .map((product, index) => {
                     if (product.hasSizes) {
                       return (
@@ -67,7 +67,7 @@ const MenuCard = () => {
                           }}
                         >
                           {/* nots */}
-                          {product._id === productid && noteArea === true ? (
+                          {product._id === productId && noteArea === true ? (
                             <form
                               onSubmit={(e) => {
                                 addNoteToProduct(e, product._id, sizeId);
@@ -109,7 +109,7 @@ const MenuCard = () => {
                           )}
                           {/* extraArea */}
 
-                          {product._id === productid && extraArea === true && product.sizes.find(
+                          {product._id === productId && extraArea === true && product.sizes.find(
                               (size) => size._id === sizeId
                             )? (
                             sizeId &&
@@ -129,7 +129,7 @@ const MenuCard = () => {
                                         sizeId
                                       );
                                     }
-                                    setproductid('')
+                                    setproductId('')
                                     setSelectedButtonIndex(1);
                                     setextraArea(!extraArea);
                                   }}
@@ -234,10 +234,10 @@ const MenuCard = () => {
                                                   }
                                                 />
                                                 <label
-                                                  className="form-check-label mr-4"
+                                                  className="form-check-label mr-3"
                                                   style={{
-                                                    fontSize: "14px",
-                                                    fontWeight: "900",
+                                                    fontSize: "13px",
+                                                    fontWeight: "800",
                                                   }}
                                                   onClick={(e) =>
                                                     handleAddProductExtras(
@@ -266,7 +266,7 @@ const MenuCard = () => {
                                     </button>
                                     <button
                                       type="button"
-                                      onClick={() => {setextraArea(!extraArea); setproductid('')}}
+                                      onClick={() => {setextraArea(!extraArea); setproductId('')}}
                                       className="h-100 btn btn-danger rounded-2"
                                       style={{ width: "50%" }}
                                     >
@@ -364,7 +364,7 @@ const MenuCard = () => {
                             </div>
                             <div className="col-7 d-flex flex-column justify-content-between align-items-stretch p-1">
                               <div className="d-flex justify-content-between align-items-center m-0 pb-2">
-                                <h5 className="card-title m-0">
+                                <h5 className="card-title text-center m-0">
                                   {product.name}
                                 </h5>
                                 <span
@@ -376,7 +376,7 @@ const MenuCard = () => {
                                   }}
                                   onClick={() => {
                                     setnoteArea(!noteArea);
-                                    setproductid(product._id);
+                                    setproductId(product._id);
                                   }}
                                 >
                                   note_alt
@@ -387,7 +387,7 @@ const MenuCard = () => {
                                   className="card-text text-center p-0 m-0"
                                   style={{
                                     fontSize: "12px",
-                                    fontWeight: "700",
+                                    fontWeight: "900",
                                   }}
                                 >
                                   {product.description}
@@ -406,7 +406,7 @@ const MenuCard = () => {
                                         return;
                                       }
                                       
-                                      setproductid(product._id);
+                                      setproductId(product._id);
                                       setextraArea(!extraArea);
                                       setproductExtras(
                                         product.sizes.find((size) => size._id === sizeId)?.extrasSelected || []
@@ -474,7 +474,7 @@ const MenuCard = () => {
                                                 </sup>
                                                 <span
                                                   className="text-danger fw-bold"
-                                                  style={{ fontWeight: "700" }}
+                                                  style={{ fontWeight: "900" }}
                                                 >
                                                   {size.sizePriceAfterDescount}ج
                                                 </span>
@@ -482,7 +482,7 @@ const MenuCard = () => {
                                             ) : (
                                               <span
                                                 className="text-danger fw-bold"
-                                                style={{ fontWeight: "700" }}
+                                                style={{ fontWeight: "900" }}
                                               >
                                                 {size.sizePrice}ج
                                               </span>
@@ -572,7 +572,7 @@ const MenuCard = () => {
                             boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
                           }}
                         >
-                          {product._id === productid && noteArea === true ? (
+                          {product._id === productId && noteArea === true ? (
                             <form
                               onSubmit={(e) => {
                                 addNoteToProduct(e, product._id, sizeId);
@@ -611,7 +611,7 @@ const MenuCard = () => {
                             ""
                           )}
 
-                          {product._id === productid && !product.hasSizes && extraArea === true ? (
+                          {product._id === productId && !product.hasSizes && extraArea === true ? (
                             product.quantity > 0 ? (
                               <div
                                 className="position-absolute w-100 h-100 top-0 start-0 bg-white rounded-3 d-flex flex-column align-items-center 
@@ -627,7 +627,7 @@ const MenuCard = () => {
                                         sizeId
                                       );
                                     }
-                                    setproductid('')
+                                    setproductId('')
                                     setSelectedButtonIndex(1);
                                     setextraArea(!extraArea);
                                   }}
@@ -682,7 +682,7 @@ const MenuCard = () => {
                                                   style={{
                                                     width: "47%",
                                                     height: "20px",
-                                                    paddingLeft: "5px",
+                                                    paddingLeft: "2px",
                                                   }}
                                                 >
                                                   <input
@@ -719,10 +719,10 @@ const MenuCard = () => {
                                                     }
                                                   />
                                                   <label
-                                                    className="form-check-label mr-4"
+                                                    className="form-check-label mr-3"
                                                     style={{
-                                                      fontSize: "14px",
-                                                      fontWeight: "900",
+                                                      fontSize: "13px",
+                                                      fontWeight: "800",
                                                     }}
                                                     onClick={(e) =>
                                                       handleAddProductExtras(
@@ -841,7 +841,7 @@ const MenuCard = () => {
 
                             <div className="col-7 d-flex flex-column justify-content-between align-items-stretch p-1">
                               <div className="d-flex justify-content-between align-items-center m-0 pb-2">
-                                <h5 className="card-title m-0">
+                                <h5 className="card-title text-center m-0">
                                   {product.name}
                                 </h5>
                                 <span
@@ -853,7 +853,7 @@ const MenuCard = () => {
                                   }}
                                   onClick={() => {
                                     setnoteArea(!noteArea);
-                                    setproductid(product._id);
+                                    setproductId(product._id);
                                   }}
                                 >
                                   note_alt
@@ -864,7 +864,7 @@ const MenuCard = () => {
                                   className="card-text text-center mb-1 p-0"
                                   style={{
                                     fontSize: "12px",
-                                    fontWeight: "700",
+                                    fontWeight: "900",
                                   }}
                                 >
                                   {product.description}
@@ -884,7 +884,7 @@ const MenuCard = () => {
                                           : []
                                       );
                                       setextraArea(!extraArea);
-                                      setproductid(product._id);
+                                      setproductId(product._id);
                                     }}
                                   >
                                     add_circle
@@ -899,14 +899,14 @@ const MenuCard = () => {
                                       <sup>
                                         <small
                                           className="text-muted"
-                                          style={{ fontWeight: "700" }}
+                                          style={{ fontWeight: "900" }}
                                         >
                                           <s>{product.price}ج</s>
                                         </small>
                                       </sup>
                                       <span
                                         className="text-danger fw-700"
-                                        style={{ fontWeight: "700" }}
+                                        style={{ fontWeight: "900" }}
                                       >
                                         {product.priceAfterDiscount}ج
                                       </span>
@@ -914,7 +914,7 @@ const MenuCard = () => {
                                   ) : (
                                     <span
                                       className="text-danger fw-700"
-                                      style={{ fontWeight: "700" }}
+                                      style={{ fontWeight: "900" }}
                                     >
                                       {product.price}ج
                                     </span>
@@ -963,7 +963,7 @@ const MenuCard = () => {
           </div>
         );
       }}
-    </detacontext.Consumer>
+    </dataContext.Consumer>
   );
 };
 

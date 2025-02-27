@@ -1,18 +1,10 @@
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
-import { detacontext } from "../../../../App";
+import { dataContext } from "../../../../App";
 import { toast } from "react-toastify";
 import "../orders/Orders.css";
 
 const StockItem = () => {
-  const apiUrl = process.env.REACT_APP_API_URL;
-  const token = localStorage.getItem("token_e"); // Retrieve the token from localStorage
-  const config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  };
-
   const {
     restaurantData,
     permissionsList,
@@ -23,13 +15,15 @@ const StockItem = () => {
     employeeLoginInfo,
     formatDate,
     formatDateTime,
-    setisLoading,
+    setIsLoading,
     EditPagination,
-    startpagination,
-    endpagination,
-    setstartpagination,
-    setendpagination,
-  } = useContext(detacontext);
+    startPagination,
+    endPagination,
+    setStartPagination,
+    setEndPagination,
+    handleGetTokenAndConfig,
+    apiUrl,
+  } = useContext(dataContext);
 
   const stockItemPermission =
     permissionsList &&
@@ -38,20 +32,24 @@ const StockItem = () => {
     )[0];
 
   // State variables for creating or editing a stock item
-  const [itemCode, setItemCode] = useState(""); // For item code
+  const [SKU, setSKU] = useState(""); // For item code
   const [itemName, setItemName] = useState(""); // For item name
   const [categoryId, setCategoryId] = useState(""); // For category ID
-  const [storeId, setStoreId] = useState(""); // For store ID (if necessary)
-  const [largeUnit, setLargeUnit] = useState(""); // For large unit
-  const [parts, setParts] = useState(""); // For parts
-  const [smallUnit, setSmallUnit] = useState(""); // For small unit
-  const [minThreshold, setMinThreshold] = useState(""); // For minimum threshold
-  const [costMethod, setCostMethod] = useState(""); // For cost method (if necessary)
-  const [suppliers, setSuppliers] = useState([]); // For suppliers (if necessary)
-  const [isActive, setisActive] = useState(true); // For isActive (if necessary)
-  const [notes, setNotes] = useState(""); // For notes
+  const [stores, setStores] = useState([]); // For list of stores
+  const [storageUnit, setStorageUnit] = useState(""); // For storage unit (e.g., Kg, Litre, etc.)
+  const [parts, setParts] = useState(0); // For number of parts
+  const [ingredientUnit, setIngredientUnit] = useState(""); // For ingredient unit
+  const [costPerPart, setCostPerPart] = useState(0); // For cost per part
+  const [minThreshold, setMinThreshold] = useState(0); // For minimum threshold
+  const [maxThreshold, setMaxThreshold] = useState(0); // For maximum threshold
+  const [reorderQuantity, setReorderQuantity] = useState(0); // For reorder quantity
+  const [costMethod, setCostMethod] = useState(""); // For cost method (e.g., FIFO, LIFO)
+  const [suppliers, setSuppliers] = useState([]); // For suppliers
+  const [isActive, setIsActive] = useState(true); // For active status
+  const [notes, setNotes] = useState(""); // For notes or remarks
 
-  const [stockItemId, setStockItemId] = useState(""); // For stock item ID
+  const [stockItemId, setStockItemId] = useState(""); // For stock item ID (used when editing)
+
   const costMethodEN = ["FIFO", "LIFO", "Weighted Average"];
   const costMethodAR = [
     "الوارد اولا يصرف اولا",
@@ -59,150 +57,199 @@ const StockItem = () => {
     "متوسط السعر",
   ];
 
-  const generateItemCode = () => {
+  const handleStoreSelection = (e) => {
+    const selectedStoreId = e.target.value;
+    const isChecked = e.target.checked;
+
+    if (isChecked) {
+      setStores((prevStores) => [...prevStores, selectedStoreId]);
+    } else {
+      const removeStoreId = stores.filter((store) => store !== selectedStoreId);
+      setStores(removeStoreId);
+    }
+  };
+
+  const generateSKU = () => {
     if (!categoryId) {
       toast.warn("اختر اولا التصنيف ");
       return;
     }
-    const categoryCode = AllCategoryStock.find(
+    const category = AllCategoryStock.find(
       (category) => category._id === categoryId
-    )?.categoryCode;
+    );
+    if (!category) {
+      toast.error("التصنيف غير موجود");
+      return;
+    }
+
+    const categoryCode = category.categoryCode;
+
     const filterStockItemByCategory = AllStockItems.filter(
-      (item) => item.category?._id === categoryId
+      (item) => item.categoryId?._id === categoryId
     ).reverse();
     const itemOrder = filterStockItemByCategory.length + 1;
-
     function generate(categoryCode, itemOrder) {
       return `${categoryCode}-${String(itemOrder).padStart(4, "0")}`;
     }
 
-    const itemCodeGenerated = generate(categoryCode, itemOrder);
-    console.log({ itemCodeGenerated });
-    setItemCode(itemCodeGenerated);
+    const SKUGenerated = generate(categoryCode, itemOrder);
+    setSKU(SKUGenerated);
   };
 
-  const createItem = async (e) => {
+  const createStockItem = async (e) => {
     e.preventDefault();
-    if (!token) {
-      toast.error("رجاء تسجيل الدخول مره اخري");
-      return;
-    }
-    if (stockItemPermission && !stockItemPermission.create) {
-      toast.warn("ليس لك صلاحية لانشاء عنصر جديد في المخزن");
-      return;
-    }
-    try {
-      const isItemDuplicate =
-        AllStockItems &&
-        AllStockItems.some(
-          (item) => item.itemName === itemName || item.itemCode === itemCode
-        );
 
-      if (isItemDuplicate) {
-        toast.warn("هذا الاسم او الكود مكرر ! حاول مره اخري");
-        return;
-      }
-      setisLoading(true);
+    const config = await handleGetTokenAndConfig();
+
+    if (stockItemPermission && !stockItemPermission.create) {
+      toast.warn("ليس لك صلاحية لإنشاء عنصر جديد في المخزن");
+      return;
+    }
+
+    const isItemDuplicate =
+      AllStockItems &&
+      AllStockItems.some(
+        (item) => item.itemName === itemName || item.SKU === SKU
+      );
+
+    if (isItemDuplicate) {
+      toast.warn("هذا الاسم أو الكود مكرر! حاول مرة أخرى");
+      return;
+    }
+
+    if (!SKU || !itemName || !categoryId || !stores.length) {
+      toast.warn("يرجى ملء جميع الحقول المطلوبة");
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      console.log({ stores });
 
       const response = await axios.post(
-        `${apiUrl}/api/stockitem/`,
+        `${apiUrl}/api/stockItem/`,
         {
-          itemCode,
+          SKU,
           itemName,
           categoryId,
-          // storeId,
-          largeUnit,
+          stores,
+          storageUnit,
           parts,
-          smallUnit,
+          ingredientUnit,
           minThreshold,
+          maxThreshold,
+          reorderQuantity,
           costMethod,
+          costPerPart,
           isActive,
           notes,
         },
         config
       );
-      console.log(response.data);
 
-      if (response.data.error === "Item itemCode already exists") {
-        toast.warn("هذا الكود موجود من قبل");
+      if (response.data.error) {
+        if (response.data.error === "Item SKU already exists") {
+          toast.warn("هذا الكود موجود من قبل");
+        } else {
+          toast.error("فشل في إنشاء عنصر المخزون: " + response.data.error);
+        }
+        setIsLoading(false);
+        return;
       }
 
-      if (response) {
-        getStockItems();
-      }
+      getStockItems();
 
       toast.success("تم إنشاء عنصر المخزون بنجاح");
-      setisLoading(false);
+
     } catch (error) {
       console.log(error);
-      setisLoading(false);
+      setIsLoading(false);
       toast.error("فشل في إنشاء عنصر المخزون");
     }
+  };
+
+  const resetFields = () => {
+    setStockItem({});
+    setSKU("");
+    setStockItemId("");
+    setStores([]);
+    setCategoryId("");
+    setItemName("");
+    setMinThreshold(0);
+    setMaxThreshold(0);
+    setReorderQuantity(0);
+    setStorageUnit("");
+    setIngredientUnit("");
+    setParts(0);
+    setCostMethod("");
+    setNotes("");
+    setIsActive(true);
   };
 
   // Function to edit a stock item
   const editStockItem = async (e) => {
     e.preventDefault();
-    if (!token) {
-      // Handle case where token is not available
-      toast.error("رجاء تسجيل الدخول مره اخري");
-      return;
-    }
+
+    const config = await handleGetTokenAndConfig();
     if (stockItemPermission && !stockItemPermission.update) {
       toast.warn("ليس لك صلاحية لتعديل عناصر المخزن");
       return;
     }
 
-    setisLoading(true);
+    if (!SKU || !itemName || !categoryId || !stores.length) {
+      toast.warn("يرجى ملء جميع الحقول المطلوبة");
+      return;
+    }
+
+    setIsLoading(true);
     try {
       const response = await axios.put(
-        `${apiUrl}/api/stockitem/${stockItemId}`,
+        `${apiUrl}/api/stockItem/${stockItemId}`,
         {
-          itemCode,
+          SKU,
           itemName,
           categoryId,
-          // storeId,
-          largeUnit,
+          stores,
+          storageUnit,
           parts,
-          smallUnit,
+          ingredientUnit,
           minThreshold,
+          maxThreshold,
+          reorderQuantity,
           costMethod,
+          costPerPart,
           isActive,
           notes,
         },
         config
       );
+
       if (response) {
-        getStockItems(); // Update the list of stock items after editing
+        getStockItems();
       }
 
-      // Notify on success
       toast.success("تم تحديث عنصر المخزون بنجاح");
-      setisLoading(false);
     } catch (error) {
       console.log(error);
-      setisLoading(false);
-      // Notify on error
       toast.error("فشل في تحديث عنصر المخزون");
+    } finally {
+      resetFields();
+      setIsLoading(false);
     }
   };
 
   // Function to delete a stock item
   const deleteStockItem = async (e) => {
     e.preventDefault();
-    if (!token) {
-      // Handle case where token is not available
-      toast.error("رجاء تسجيل الدخول مره اخري");
-      return;
-    }
+    const config = await handleGetTokenAndConfig();
     if (stockItemPermission && !stockItemPermission.delete) {
       toast.warn("ليس لك صلاحية لحذف عنصر من المخزن");
       return;
     }
-    setisLoading(true);
+    setIsLoading(true);
     try {
       const response = await axios.delete(
-        `${apiUrl}/api/stockitem/${stockItemId}`,
+        `${apiUrl}/api/stockItem/${stockItemId}`,
         config
       );
       if (response.isActive === 200) {
@@ -212,10 +259,10 @@ const StockItem = () => {
         // Notify on success
         toast.success("تم حذف عنصر المخزون بنجاح");
       }
-      setisLoading(false);
+      setIsLoading(false);
     } catch (error) {
       console.log(error);
-      setisLoading(false);
+      setIsLoading(false);
       // Notify on error
       toast.error("فشل في حذف عنصر المخزون");
     }
@@ -225,18 +272,14 @@ const StockItem = () => {
 
   // Function to retrieve all stock items
   const getStockItems = async () => {
-    if (!token) {
-      // Handle case where token is not available
-      toast.error("رجاء تسجيل الدخول مره اخري");
-      return;
-    }
+    const config = await handleGetTokenAndConfig();
     if (stockItemPermission && !stockItemPermission.read) {
       toast.warn("ليس لك صلاحية لعرض عناصر المخزن");
       return;
     }
-    setisLoading(true);
+    setIsLoading(true);
     try {
-      const response = await axios.get(apiUrl + "/api/stockitem/", config);
+      const response = await axios.get(apiUrl + "/api/stockItem/", config);
 
       if (!response || !response.data) {
         // Handle unexpected response or empty data
@@ -245,13 +288,13 @@ const StockItem = () => {
 
       const stockItems = response.data.reverse();
       setAllStockItems(stockItems);
-
+      console.log({ stockItems });
       // Notify on success
       toast.success("تم استرداد عناصر المخزون بنجاح");
-      setisLoading(false);
+      setIsLoading(false);
     } catch (error) {
       console.error(error);
-      setisLoading(false);
+      setIsLoading(false);
       // Notify on error
       toast.error("فشل في استرداد عناصر المخزون");
     }
@@ -260,55 +303,53 @@ const StockItem = () => {
   const [AllCategoryStock, setAllCategoryStock] = useState([]);
   // Function to retrieve all category stock
   const getAllCategoryStock = async () => {
-    if (!token) {
-      // Handle case where token is not available
-      toast.error("رجاء تسجيل الدخول مره اخري");
-      return;
-    }
-    setisLoading(true);
+    const config = await handleGetTokenAndConfig();
+    setIsLoading(true);
     try {
       const response = await axios.get(apiUrl + "/api/categoryStock/", config);
       setAllCategoryStock(response.data.reverse());
-      setisLoading(false);
+      setIsLoading(false);
     } catch (error) {
       console.error("Error fetching category stock:", error);
       toast.error("حدث خطأ اثناء جلب بيانات التصنيفات ! اعد تحميل الصفحة");
-      setisLoading(false);
+      setIsLoading(false);
     }
   };
 
   const [allStores, setAllStores] = useState([]);
 
-  // const getAllStores = async () => {
-  //   if (!token) {
-  //     toast.error("رجاء تسجيل الدخول مره اخري");
-  //     return;
-  //   }
+  const getAllStores = async () => {
+    const config = await handleGetTokenAndConfig();
 
-  //   try {
-  //     const response = await axios.get(apiUrl + "/api/store/", config);
-  //     setAllStores(response.data.reverse());
-  //   } catch (error) {
-  //     console.error("Error fetching stores:", error);
-  //     toast.error("حدث خطأ اثناء جلب بيانات المخزنات! اعد تحميل الصفحة");
-  //   }
-  // };
+    try {
+      const response = await axios.get(apiUrl + "/api/store/", config);
+      setAllStores(response.data.reverse());
+    } catch (error) {
+      console.error("Error fetching stores:", error);
+      toast.error("حدث خطأ اثناء جلب بيانات المخزنات! اعد تحميل الصفحة");
+    }
+  };
 
-  const [stockitem, setstockitem] = useState({});
-  const handelEditStockItemModal = (stockitem) => {
-    const item = JSON.parse(stockitem);
-    setstockitem(item);
+  const [stockItem, setStockItem] = useState({});
+  const handelEditStockItemModal = (stockItem) => {
+    const item = JSON.parse(stockItem);
+    setStockItem(item);
+    setSKU(item.SKU);
     setStockItemId(item._id);
-    // setStoreId(item.storeId?._id);
     setCategoryId(item.categoryId?._id);
     setItemName(item.itemName);
     setMinThreshold(item.minThreshold);
-    setLargeUnit(item.largeUnit);
-    setSmallUnit(item.smallUnit);
+    setMaxThreshold(item.maxThreshold);
+    setReorderQuantity(item.reorderQuantity);
+    setStorageUnit(item.storageUnit);
+    setIngredientUnit(item.ingredientUnit);
     setParts(item.parts);
     setCostMethod(item.costMethod);
     setNotes(item.notes);
-    setisActive(item.isActive);
+    setIsActive(item.isActive);
+    setStores(item.stores);
+    setCostPerPart(item.costPerPart);
+    console.log({ stores: item.stores });
   };
 
   const searchByitem = (name) => {
@@ -333,9 +374,37 @@ const StockItem = () => {
     setAllStockItems(filter);
   };
 
+  const [AllSuppliers, setAllSuppliers] = useState([]);
+  // Function to retrieve all suppliers
+  const getAllSuppliers = async () => {
+    try {
+      const config = await handleGetTokenAndConfig();
+      const response = await axios.get(apiUrl + "/api/supplier/", config);
+
+      if (!response || !response.data) {
+        // Handle unexpected response or empty data
+        throw new Error("استجابة غير متوقعة أو بيانات فارغة");
+      }
+
+      const suppliers = response.data.reverse();
+      if (suppliers.length > 0) {
+        setAllSuppliers(suppliers);
+        toast.success("تم استرداد جميع الموردين بنجاح");
+      }
+
+      // Notify on success
+    } catch (error) {
+      console.error(error);
+
+      // Notify on error
+      toast.error("فشل في استرداد الموردين");
+    }
+  };
+
   useEffect(() => {
     getStockItems();
-    // getAllStores();
+    getAllStores();
+    getAllSuppliers();
     getAllCategoryStock();
   }, []);
 
@@ -378,8 +447,8 @@ const StockItem = () => {
                 <select
                   className="form-control border-primary m-0 p-2 h-auto"
                   onChange={(e) => {
-                    setstartpagination(0);
-                    setendpagination(e.target.value);
+                    setStartPagination(0);
+                    setEndPagination(e.target.value);
                   }}
                 >
                   {(() => {
@@ -433,16 +502,22 @@ const StockItem = () => {
                 <th>م</th>
                 <th>الكود</th>
                 <th>اسم الصنف</th>
+                <th>المخازن</th>
                 <th>التصنيف</th>
                 <th>الوحدة كبيرة</th>
                 <th>عدد الوحدات</th>
                 <th>الوحدة صغيرة</th>
-                <th>الحد الادني</th>
+                <th>الحد الأدني</th>
+                <th>الحد الأقصى</th>
+                <th>الكمية لإعادة الطلب</th>
                 <th>طريقة التكلفة</th>
+                <th>تكلفة الوحدة</th>
                 <th>الموردون</th>
                 <th>الحالة</th>
-                <th>اضيف بواسطه</th>
-                <th>تاريخ الاضافه</th>
+                <th>اضيف بواسطة</th>
+                <th>تاريخ الإضافة</th>
+                <th>عدل بواسطة</th>
+                <th>تاريخ التعديل</th>
                 <th>ملاحظات</th>
                 <th>اجراءات</th>
               </tr>
@@ -450,7 +525,7 @@ const StockItem = () => {
             <tbody>
               {AllStockItems &&
                 AllStockItems.map((item, i) => {
-                  if ((i >= startpagination) & (i < endpagination)) {
+                  if (i >= startPagination && i < endPagination) {
                     return (
                       <tr
                         key={i}
@@ -465,67 +540,72 @@ const StockItem = () => {
                         }`}
                       >
                         <td>{i + 1}</td>
-                        <td>{item.itemCode}</td>
+                        <td>{item.SKU}</td>
                         <td>{item.itemName}</td>
-                        <td>{item.categoryId?.categoryName}</td>
-                        <td>{item.largeUnit}</td>
-                        <td>{item.parts}</td>
-                        <td>{item.smallUnit}</td>
-                        <td>{item.minThreshold}</td>
-                        <td>{item.costMethod}</td>
                         <td>
-                          {item.suppliers.map(
-                            (supplier, i) =>
-                              `${supplier.fullname}${
-                                i < suppliers.length ? "-" : ""
-                              } `
-                          )}
+                          {item.stores
+                            ?.map((store) => store.storeName)
+                            .join(" - ")}
+                        </td>
+                        <td>{item.categoryId?.categoryName}</td>
+                        <td>{item.storageUnit}</td>
+                        <td>{item.parts}</td>
+                        <td>{item.ingredientUnit}</td>
+                        <td>{item.minThreshold}</td>
+                        <td>{item.maxThreshold}</td>
+                        <td>{item.reorderQuantity}</td>
+                        <td>{item.costMethod}</td>
+                        <td>{item.costPerPart}</td>
+                        <td>
+                          {AllSuppliers.filter((supplier) =>
+                            supplier.itemsSupplied?.some(
+                              (itemSupplied) => itemSupplied._id === item._id
+                            )
+                          )
+                            .map((supplier) => supplier.name)
+                            .join("-")}
                         </td>
                         <td>{item.isActive ? "نشط" : "غير نشط"}</td>
                         <td>{item.createdBy?.fullname}</td>
                         <td>{formatDateTime(item.createdAt)}</td>
+                        <td>{item.updatedBy?.fullname}</td>
+                        <td>{formatDateTime(item.updatedAt)}</td>
                         <td>{item.notes}</td>
                         <td>
-                          {stockItemPermission &&
-                            stockItemPermission &&
-                            stockItemPermission &&
-                            stockItemPermission.update && (
-                              <a
-                                href="#editStockItemModal"
-                                className="edit"
-                                data-toggle="modal"
-                                onClick={() => {
-                                  handelEditStockItemModal(
-                                    JSON.stringify(item)
-                                  );
-                                }}
+                          {stockItemPermission?.update && (
+                            <button
+                              data-target="#editStockItemModal"
+                              className="btn btn-sm btn-primary ml-2 "
+                              data-toggle="modal"
+                              onClick={() => {
+                                handelEditStockItemModal(JSON.stringify(item));
+                              }}
+                            >
+                              <i
+                                className="material-icons"
+                                data-toggle="tooltip"
+                                title="Edit"
                               >
-                                <i
-                                  className="material-icons"
-                                  data-toggle="tooltip"
-                                  title="Edit"
-                                >
-                                  &#xE254;
-                                </i>
-                              </a>
-                            )}
-                          {stockItemPermission &&
-                            stockItemPermission.delete && (
-                              <a
-                                href="#deleteStockItemModal"
-                                className="delete"
-                                data-toggle="modal"
-                                onClick={() => setStockItemId(item._id)}
+                                &#xE254;
+                              </i>
+                            </button>
+                          )}
+                          {stockItemPermission?.delete && (
+                            <button
+                              data-target="#deleteStockItemModal"
+                              className="btn btn-sm btn-danger"
+                              data-toggle="modal"
+                              onClick={() => setStockItemId(item._id)}
+                            >
+                              <i
+                                className="material-icons"
+                                data-toggle="tooltip"
+                                title="Delete"
                               >
-                                <i
-                                  className="material-icons"
-                                  data-toggle="tooltip"
-                                  title="Delete"
-                                >
-                                  &#xE872;
-                                </i>
-                              </a>
-                            )}
+                                &#xE872;
+                              </i>
+                            </button>
+                          )}
                         </td>
                       </tr>
                     );
@@ -533,12 +613,13 @@ const StockItem = () => {
                 })}
             </tbody>
           </table>
+
           <div className="clearfix">
             <div className="hint-text text-dark">
               عرض{" "}
               <b>
-                {AllStockItems.length > endpagination
-                  ? endpagination
+                {AllStockItems.length > endPagination
+                  ? endPagination
                   : AllStockItems.length}
               </b>{" "}
               من <b>{AllStockItems.length}</b> عنصر
@@ -549,7 +630,7 @@ const StockItem = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 5 ? "active" : ""}`}
+                className={`page-item ${endPagination === 5 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   1
@@ -557,7 +638,7 @@ const StockItem = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 10 ? "active" : ""}`}
+                className={`page-item ${endPagination === 10 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   2
@@ -565,7 +646,7 @@ const StockItem = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 15 ? "active" : ""}`}
+                className={`page-item ${endPagination === 15 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   3
@@ -573,7 +654,7 @@ const StockItem = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 20 ? "active" : ""}`}
+                className={`page-item ${endPagination === 20 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   4
@@ -581,7 +662,7 @@ const StockItem = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 25 ? "active" : ""}`}
+                className={`page-item ${endPagination === 25 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   5
@@ -589,7 +670,7 @@ const StockItem = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 30 ? "active" : ""}`}
+                className={`page-item ${endPagination === 30 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   التالي
@@ -602,8 +683,8 @@ const StockItem = () => {
 
       <div id="addStockItemModal" className="modal fade">
         <div className="modal-dialog modal-lg">
-          <div className="modal-content shadow-lg border-0 rounded ">
-            <form onSubmit={createItem}>
+          <div className="modal-content shadow-lg border-0 rounded">
+            <form onSubmit={createStockItem}>
               <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                 <h4 className="modal-title">اضافه صنف بالمخزن</h4>
                 <button
@@ -628,27 +709,32 @@ const StockItem = () => {
                   />
                 </div>
 
-                {/* <div className="form-group col-12 col-md-6">
+                <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                     المخزن
                   </label>
-                  <select
-                    className="form-control border-primary m-0 p-2 h-auto"
-                    name="category"
-                    id="category"
-                    form="carform"
-                    onChange={(e) => setStoreId(e.target.value)}
-                  >
-                    <option>اختر المخزن</option>
-                    {allStores.map((store, i) => {
-                      return (
-                        <option value={store._id} key={i}>
+                  <div className="checkbox-group border-primary col-6 p-2">
+                    {allStores.map((store, i) => (
+                      <div key={i} className="form-check p-0 pl-0">
+                        <input
+                          type="checkbox"
+                          id={`store-${store._id}`}
+                          name="stores"
+                          value={store._id}
+                          className="form-check-input"
+                          onChange={handleStoreSelection}
+                        />
+                        <label
+                          htmlFor={`store-${store._id}`}
+                          className="form-check-label mr-4"
+                        >
                           {store.storeName}
-                        </option>
-                      );
-                    })}
-                  </select>
-                </div> */}
+                        </label>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                     التصنيف
@@ -657,19 +743,17 @@ const StockItem = () => {
                     className="form-control border-primary m-0 p-2 h-auto"
                     name="category"
                     id="category"
-                    form="carform"
                     onChange={(e) => setCategoryId(e.target.value)}
                   >
                     <option>اختر التصنيف</option>
-                    {AllCategoryStock.map((category, i) => {
-                      return (
-                        <option value={category._id} key={i}>
-                          {category.categoryName}
-                        </option>
-                      );
-                    })}
+                    {AllCategoryStock.map((category, i) => (
+                      <option value={category._id} key={i}>
+                        {category.categoryName}
+                      </option>
+                    ))}
                   </select>
                 </div>
+
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                     الكود
@@ -678,14 +762,14 @@ const StockItem = () => {
                     <input
                       type="text"
                       className="form-control border-primary m-0 p-2 h-auto"
-                      value={itemCode}
-                      onChange={(e) => setItemCode(e.target.value)}
+                      value={SKU}
+                      onChange={(e) => setSKU(e.target.value)}
                     />
                     <input
                       type="button"
                       className="btn btn-primary ms-2 m-0 p-2 h-auto"
                       value="انشاء كود"
-                      onClick={generateItemCode}
+                      onClick={generateSKU}
                     />
                   </div>
                 </div>
@@ -698,100 +782,104 @@ const StockItem = () => {
                     type="text"
                     className="form-control border-primary m-0 p-2 h-auto"
                     required
-                    onChange={(e) => setLargeUnit(e.target.value)}
-                  ></input>
+                    onChange={(e) => setStorageUnit(e.target.value)}
+                  />
                 </div>
+
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
-                    الوحدة الصغيره
+                    الوحدة الصغيرة
                   </label>
                   <input
                     type="text"
                     className="form-control border-primary m-0 p-2 h-auto"
                     required
-                    onChange={(e) => setSmallUnit(e.target.value)}
-                  ></input>
+                    onChange={(e) => setIngredientUnit(e.target.value)}
+                  />
                 </div>
+
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
-                    الحد الادني
+                    عدد الاجزاء
                   </label>
                   <input
                     type="number"
                     min={0}
                     className="form-control border-primary m-0 p-2 h-auto"
                     required
-                    onChange={(e) => {
-                      setMinThreshold(e.target.value);
-                    }}
+                    onChange={(e) => setParts(e.target.value)}
                   />
                 </div>
-
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
-                    عدد الوحدات
+                    الحد الأدني
                   </label>
                   <input
-                    type="Number"
+                    type="number"
                     min={0}
                     className="form-control border-primary m-0 p-2 h-auto"
                     required
-                    onChange={(e) => {
-                      setParts(e.target.value);
-                    }}
+                    onChange={(e) => setMinThreshold(e.target.value)}
                   />
                 </div>
 
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
-                    طريقه حساب التكلفه
+                    الحد الأقصى
                   </label>
-                  <select
+                  <input
+                    type="number"
+                    min={0}
                     className="form-control border-primary m-0 p-2 h-auto"
-                    name="category"
-                    id="category"
-                    form="carform"
-                    onChange={(e) => setCostMethod(e.target.value)}
-                  >
-                    <option>اخترالطريقه'</option>
-                    {costMethodEN.map((method, i) => {
-                      return (
-                        <option value={method} key={i}>
-                          {costMethodAR[i]}
-                        </option>
-                      );
-                    })}
-                  </select>
+                    required
+                    onChange={(e) => setMaxThreshold(e.target.value)}
+                  />
                 </div>
+
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
-                    الحاله
+                    الكمية لإعادة الطلب
+                  </label>
+                  <input
+                    type="number"
+                    min={0}
+                    className="form-control border-primary m-0 p-2 h-auto"
+                    required
+                    onChange={(e) => setReorderQuantity(e.target.value)}
+                  />
+                </div>
+
+                <div className="form-group col-12 col-md-6">
+                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                    طريقة حساب التكلفة
                   </label>
                   <select
                     className="form-control border-primary m-0 p-2 h-auto"
-                    name="category"
-                    id="category"
-                    form="carform"
-                    onChange={(e) => setisActive(e.target.value)}
+                    onChange={(e) => setCostMethod(e.target.value)}
                   >
-                    <option>اختر الحاله</option>
+                    <option>اختر الطريقة</option>
+                    {costMethodEN.map((method, i) => (
+                      <option value={method} key={i}>
+                        {costMethodAR[i]}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="form-group col-12 col-md-6">
+                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                    الحالة
+                  </label>
+                  <select
+                    className="form-control border-primary m-0 p-2 h-auto"
+                    onChange={(e) => setIsActive(e.target.value)}
+                  >
+                    <option>اختر الحالة</option>
                     <option value={true}>نشط</option>
                     <option value={false}>غير نشط</option>
                   </select>
                 </div>
 
-                <div className="form-group col-12 col-md-6">
-                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
-                    التاريخ
-                  </label>
-                  <input
-                    type="text"
-                    className="form-control border-primary m-0 p-2 h-auto"
-                    Value={new Date().toLocaleDateString()}
-                    required
-                    readOnly
-                  />
-                </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                     الملاحظات
@@ -813,6 +901,7 @@ const StockItem = () => {
                   className="btn btn-danger col-6 h-100 px-2 py-3 m-0"
                   data-dismiss="modal"
                   value="إغلاق"
+                  onClick={resetFields}
                 />
               </div>
             </form>
@@ -822,8 +911,8 @@ const StockItem = () => {
 
       <div id="editStockItemModal" className="modal fade">
         <div className="modal-dialog modal-lg">
-          <div className="modal-content shadow-lg border-0 rounded ">
-            <form onSubmit={(e) => editStockItem(e, employeeLoginInfo.id)}>
+          <div className="modal-content shadow-lg border-0 rounded">
+            <form onSubmit={editStockItem}>
               <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                 <h4 className="modal-title">تعديل صنف بالمخزن</h4>
                 <button
@@ -843,44 +932,56 @@ const StockItem = () => {
                   <input
                     type="text"
                     className="form-control border-primary m-0 p-2 h-auto"
-                    value={itemName}
+                    defaultValue={itemName}
                     onChange={(e) => setItemName(e.target.value)}
                   />
                 </div>
-                {/* <div className="form-group col-12 col-md-6">
+                <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                     المخزن
                   </label>
-                  <select
-                    className="form-control border-primary m-0 p-2 h-auto"
-                    onChange={(e) => setStoreId(e.target.value)}
-                  >
-                    <option>{stockitem.storeId?.storeName}</option>
-                    {allStores.map((store, i) => {
-                      return (
-                        <option value={store._id} key={i}>
+                  <div className="checkbox-group border-primary col-6 p-2">
+                    {allStores.map((store, i) => (
+                      <div key={i} className="form-check p-0 pl-0">
+                        <input
+                          type="checkbox"
+                          id={`store-${store._id}`}
+                          name="stores"
+                          value={store._id}
+                          className="form-check-input"
+                          checked={
+                            stores.find((s) => s.storeId === store._id) !==
+                            undefined
+                          }
+                          onChange={handleStoreSelection}
+                        />
+                        <label
+                          htmlFor={`store-${store._id}`}
+                          className="form-check-label mr-4"
+                        >
                           {store.storeName}
-                        </option>
-                      );
-                    })}
-                  </select>
-                </div> */}
+                        </label>
+                      </div>
+                    ))}
+                  </div>
+                </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                     التصنيف
                   </label>
                   <select
                     className="form-control border-primary m-0 p-2 h-auto"
+                    value={categoryId}
                     onChange={(e) => setCategoryId(e.target.value)}
                   >
-                    <option>{stockitem.categoryId?.categoryName}</option>
-                    {AllCategoryStock.map((category, i) => {
-                      return (
-                        <option value={category._id} key={i}>
-                          {category.categoryName}
-                        </option>
-                      );
-                    })}
+                    <option value={stockItem.categoryId?._id}>
+                      {stockItem.categoryId?.categoryName}
+                    </option>
+                    {AllCategoryStock.map((category, i) => (
+                      <option value={category._id} key={i}>
+                        {category.categoryName}
+                      </option>
+                    ))}
                   </select>
                 </div>
                 <div className="form-group col-12 col-md-6">
@@ -891,14 +992,14 @@ const StockItem = () => {
                     <input
                       type="text"
                       className="form-control border-primary m-0 p-2 h-auto"
-                      value={itemCode}
-                      onChange={(e) => setItemCode(e.target.value)}
+                      value={SKU}
+                      onChange={(e) => setSKU(e.target.value)}
                     />
                     <input
                       type="button"
                       className="btn btn-primary ms-2 m-0 p-2 h-auto"
                       value="انشاء كود"
-                      onClick={generateItemCode}
+                      onClick={generateSKU}
                     />
                   </div>
                 </div>
@@ -909,77 +1010,94 @@ const StockItem = () => {
                   <input
                     type="text"
                     className="form-control border-primary m-0 p-2 h-auto"
-                    value={largeUnit}
-                    onChange={(e) => setLargeUnit(e.target.value)}
-                  ></input>
+                    value={storageUnit}
+                    onChange={(e) => setStorageUnit(e.target.value)}
+                  />
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
-                    الوحدة الصغيره
+                    الوحدة الصغيرة
                   </label>
                   <input
                     type="text"
                     className="form-control border-primary m-0 p-2 h-auto"
-                    value={smallUnit}
-                    onChange={(e) => setSmallUnit(e.target.value)}
-                  ></input>
+                    value={ingredientUnit}
+                    onChange={(e) => setIngredientUnit(e.target.value)}
+                  />
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
-                    الحد الادني
+                    عدد الاجزاء
+                  </label>
+                  <input
+                    type="number"
+                    min={0}
+                    className="form-control border-primary m-0 p-2 h-auto"
+                    value={parts}
+                    onChange={(e) => setParts(e.target.value)}
+                  />
+                </div>
+                <div className="form-group col-12 col-md-6">
+                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                    الحد الأدني
                   </label>
                   <input
                     type="number"
                     min={0}
                     className="form-control border-primary m-0 p-2 h-auto"
                     value={minThreshold}
-                    onChange={(e) => {
-                      setMinThreshold(e.target.value);
-                    }}
+                    onChange={(e) => setMinThreshold(e.target.value)}
                   />
                 </div>
-
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
-                    عدد الوحدات
+                    الحد الأقصى
                   </label>
                   <input
-                    type="Number"
+                    type="number"
                     min={0}
                     className="form-control border-primary m-0 p-2 h-auto"
-                    value={parts}
-                    onChange={(e) => {
-                      setParts(e.target.value);
-                    }}
+                    value={maxThreshold}
+                    onChange={(e) => setMaxThreshold(e.target.value)}
                   />
                 </div>
-
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
-                    طريقه حساب التكلفه
+                    كمية إعادة الطلب
+                  </label>
+                  <input
+                    type="number"
+                    min={0}
+                    className="form-control border-primary m-0 p-2 h-auto"
+                    value={reorderQuantity}
+                    onChange={(e) => setReorderQuantity(e.target.value)}
+                  />
+                </div>
+                <div className="form-group col-12 col-md-6">
+                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                    طريقة حساب التكلفة
                   </label>
                   <select
                     className="form-control border-primary m-0 p-2 h-auto"
+                    value={costMethod}
                     onChange={(e) => setCostMethod(e.target.value)}
                   >
                     <option value={costMethod}>{costMethod}</option>
-                    {costMethodEN.map((method, i) => {
-                      return (
-                        <option value={method} key={i}>
-                          {costMethodAR[i]}
-                        </option>
-                      );
-                    })}
+                    {costMethodEN.map((method, i) => (
+                      <option value={method} key={i}>
+                        {costMethodAR[i]}
+                      </option>
+                    ))}
                   </select>
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
-                    الحاله
+                    الحالة
                   </label>
                   <select
                     className="form-control border-primary m-0 p-2 h-auto"
-                    defaultValue={isActive}
-                    onChange={(e) => setisActive(e.target.value)}
+                    value={isActive}
+                    onChange={(e) => setIsActive(e.target.value)}
                   >
                     <option value={isActive}>
                       {isActive ? "نشط" : "غير نشط"}
@@ -988,7 +1106,6 @@ const StockItem = () => {
                     <option value={false}>غير نشط</option>
                   </select>
                 </div>
-
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                     التاريخ
@@ -996,7 +1113,7 @@ const StockItem = () => {
                   <input
                     type="text"
                     className="form-control border-primary m-0 p-2 h-auto"
-                    Value={new Date().toLocaleDateString()}
+                    value={new Date().toLocaleDateString()}
                     readOnly
                   />
                 </div>
@@ -1006,6 +1123,7 @@ const StockItem = () => {
                   </label>
                   <textarea
                     className="form-control border-primary m-0 p-2 h-auto"
+                    value={notes}
                     onChange={(e) => setNotes(e.target.value)}
                   />
                 </div>

@@ -1,29 +1,30 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
-import { detacontext } from "../../../../App";
+import { dataContext } from "../../../../App";
 import { toast } from "react-toastify";
 import "../orders/Orders.css";
 
 const PermissionsComponent = () => {
-  const apiUrl = process.env.REACT_APP_API_URL;
-  const token = localStorage.getItem("token_e");
-
-  const config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  };
+  const {
+    employeeLoginInfo,
+    formatDateTime,
+    setIsLoading,
+    EditPagination,
+    startPagination,
+    endPagination,
+    setStartPagination,
+    setEndPagination,
+    apiUrl,
+    handleGetTokenAndConfig,
+  } = useContext(dataContext);
 
   const [listOfEmployees, setListOfEmployees] = useState([]);
 
   const getEmployees = async () => {
     try {
-      if (!token) {
-        // Handle case where token is not available
-        toast.error("رجاء تسجيل الدخول مره اخري");
-        return;
-      }
+      const config = await handleGetTokenAndConfig();
       const response = await axios.get(`${apiUrl}/api/employee`, config);
+      console.log({ employee: response });
       if (response.status === 200) {
         const data = response.data;
         setListOfEmployees(data);
@@ -40,11 +41,7 @@ const PermissionsComponent = () => {
 
   const getPermissions = async () => {
     try {
-      if (!token) {
-        // Handle case where token is not available
-        toast.error("رجاء تسجيل الدخول مره اخري");
-        return;
-      }
+      const config = await handleGetTokenAndConfig();
       const response = await axios.get(`${apiUrl}/api/permission`, config);
 
       if (response.status === 200) {
@@ -73,12 +70,11 @@ const PermissionsComponent = () => {
     "Cash Movement",
     "stock Item",
     "stock Categories",
-    "stock Management",
+    "stock Movement",
     "store",
     "Orders",
     "Tables",
     "Table Reservations",
-    "Restaurant Settings",
     "Permissions",
     "Delivery Zones",
     "Shifts",
@@ -87,13 +83,16 @@ const PermissionsComponent = () => {
     "Menu Categories",
     "Products",
     "Recipes",
-    "Kitchen Usage",
+    "Production",
+    "Stock Production Recipes",
+    "Section Consumption",
     "Purchases",
     "Purchase Returns",
     "Supplier Data",
     "Supplier Transactions",
     "Users",
     "Messages",
+    "Restaurant Settings",
   ]);
 
   const [permissionsListAr, setpermissionsListAr] = useState([
@@ -110,7 +109,6 @@ const PermissionsComponent = () => {
     "الطلبات",
     "الطاولة",
     "حجز الطاولات",
-    "اعدادات المطعم",
     "الصلاحيات",
     "مناطق التوصيل",
     "الوردية",
@@ -119,13 +117,16 @@ const PermissionsComponent = () => {
     "تصنيفات المنيو",
     "المنتجات",
     "الوصفات",
-    "استهلاك المطبخ",
+    "التصنيع",
+    "وصفات تصنيع",
+    "استهلاك القسم",
     "المشتريات",
     "مرتجع المشتريات",
     "بيانات الموردين",
     "تعاملات مع الموردين",
     "المستخدمين",
     "الرسائل",
+    "اعدادات المطعم",
   ]);
 
   const [employeeid, setemployeeid] = useState("");
@@ -203,16 +204,47 @@ const PermissionsComponent = () => {
     setPermissions([...updatePermissions]);
   };
 
+  const addAllPermissions = (action) => {
+    let updatePermissions = [...Permissions];
+
+    permissionsListEn.map((permission) => {
+      const findPermission = updatePermissions.find(
+        (pe) => pe.resource === permission
+      );
+      if (findPermission) {
+        if (action === "create") {
+          findPermission.create = findPermission.create ? false : true;
+          findPermission.read = true;
+        }
+        if (action === "read") {
+          findPermission.read = findPermission.read ? false : true;
+        }
+        if (action === "update") {
+          findPermission.update = findPermission.update ? false : true;
+          findPermission.read = true;
+        }
+        if (action === "delete") {
+          findPermission.delete = findPermission.delete ? false : true;
+          findPermission.read = true;
+        }
+      } else {
+        let newPermission = {};
+        newPermission.resource = permission;
+        newPermission[action] = true;
+        newPermission.read = true;
+        updatePermissions.push(newPermission);
+      }
+    });
+
+    setPermissions([...updatePermissions]);
+  };
+
   const addPermissions = async (e) => {
     e.preventDefault();
     // console.log({ permissionEmployee });
 
     try {
-      if (!token) {
-        // Handle case where token is not available
-        toast.error("رجاء تسجيل الدخول مره اخري");
-        return;
-      }
+      const config = await handleGetTokenAndConfig();
       if (!employeeid || !Permissions || Permissions.length === 0) {
         toast.error(
           "اختار الموظف و الصلاحيات بشكل صحيح! اعد تحميل الصفحة ثم اعد المحاوله مره اخري."
@@ -302,11 +334,6 @@ const PermissionsComponent = () => {
 
   const getEmployeesById = (id) => {
     try {
-      if (!token) {
-        // Handle case where token is not available
-        toast.error("رجاء تسجيل الدخول مره اخري");
-        return;
-      }
       if (!id) {
         setselectedEmployee(null);
         setemployeeid("");
@@ -363,15 +390,15 @@ const PermissionsComponent = () => {
   }, []);
 
   return (
-    <detacontext.Consumer>
+    <dataContext.Consumer>
       {({
         restaurantData,
-        setisLoading,
+        setIsLoading,
         EditPagination,
-        startpagination,
-        endpagination,
-        setstartpagination,
-        setendpagination,
+        startPagination,
+        endPagination,
+        setStartPagination,
+        setEndPagination,
       }) => {
         return (
           <div className="col-md-8 co;-12 px-3 d-flex align-itmes-center justify-content-start">
@@ -469,7 +496,10 @@ const PermissionsComponent = () => {
                       <th scope="col" style={{ width: "30%" }}>
                         اسم
                       </th>
-                      <th scope="col">
+                      <th
+                        scope="col"
+                        onClick={() => addAllPermissions("create")}
+                      >
                         إنشاء{" "}
                         <i
                           className="fas fa-plus-circle"
@@ -478,7 +508,10 @@ const PermissionsComponent = () => {
                           title="Permission to create"
                         ></i>
                       </th>
-                      <th scope="col">
+                      <th
+                        scope="col"
+                        onClick={() => addAllPermissions("update")}
+                      >
                         تعديل{" "}
                         <i
                           className="fas fa-edit"
@@ -487,7 +520,7 @@ const PermissionsComponent = () => {
                           title="Permission to edit"
                         ></i>
                       </th>
-                      <th scope="col">
+                      <th scope="col" onClick={() => addAllPermissions("read")}>
                         عرض{" "}
                         <i
                           className="fas fa-eye"
@@ -496,7 +529,10 @@ const PermissionsComponent = () => {
                           title="Permission to view"
                         ></i>
                       </th>
-                      <th scope="col">
+                      <th
+                        scope="col"
+                        onClick={() => addAllPermissions("delete")}
+                      >
                         حذف{" "}
                         <i
                           className="fas fa-trash-alt"
@@ -588,7 +624,7 @@ const PermissionsComponent = () => {
           </div>
         );
       }}
-    </detacontext.Consumer>
+    </dataContext.Consumer>
   );
 };
 

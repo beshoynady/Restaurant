@@ -1,19 +1,10 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
 import axios from "axios";
-import { detacontext } from "../../../../App";
-import jwt_decode from "jwt-decode";
+import { dataContext } from "../../../../App";
 import { toast } from "react-toastify";
 import "../orders/Orders.css";
 
 const CashMovement = () => {
-  const apiUrl = process.env.REACT_APP_API_URL;
-  const token = localStorage.getItem("token_e");
-  const config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  };
-
   const {
     permissionsList,
     setStartDate,
@@ -23,13 +14,15 @@ const CashMovement = () => {
     filterByTime,
     employeeLoginInfo,
     formatDate,
-    setisLoading,
+    setIsLoading,
     EditPagination,
-    startpagination,
-    endpagination,
-    setstartpagination,
-    setendpagination,
-  } = useContext(detacontext);
+    startPagination,
+    endPagination,
+    setStartPagination,
+    setEndPagination,
+    handleGetTokenAndConfig,
+    apiUrl,
+  } = useContext(dataContext);
 
   const cashMovementPermissions = permissionsList?.filter(
     (permission) => permission.resource === "Cash Movement"
@@ -38,8 +31,6 @@ const CashMovement = () => {
   const cashRegisterPermissions = permissionsList?.filter(
     (permission) => permission.resource === "Cash Register"
   )[0];
-
-
 
   const [cashRegister, setcashRegister] = useState("");
   const [employeeCashRegisters, setemployeeCashRegisters] = useState([]);
@@ -50,11 +41,7 @@ const CashMovement = () => {
   // Fetch all cash registers
 
   const getAllCashRegisters = async () => {
-    if (!token) {
-      // Handle case where token is not available
-      toast.error("رجاء تسجيل الدخول مره اخري");
-      return;
-    }
+    const config = await handleGetTokenAndConfig();
     if (cashRegisterPermissions && cashRegisterPermissions.read === false) {
       toast.warn("ليس لك صلاحية لعرض حسابات الخزينه");
       return;
@@ -65,7 +52,7 @@ const CashMovement = () => {
 
       const response = await axios.get(apiUrl + "/api/cashregister", config);
       const cashRegisterData = response.data.reverse();
-      setlistOfCashRegisters(cashRegisterData)
+      setlistOfCashRegisters(cashRegisterData);
 
       if (cashRegisterData.length > 0) {
         if (
@@ -91,11 +78,7 @@ const CashMovement = () => {
   };
 
   const handlecashRegister = async (id) => {
-    if (!token) {
-      // Handle case where token is not available
-      toast.error("رجاء تسجيل الدخول مره اخري");
-      return;
-    }
+    const config = await handleGetTokenAndConfig();
     if (cashRegisterPermissions && cashRegisterPermissions.read === false) {
       toast.warn("ليس لك صلاحية لعرض حسابات الخزينه");
       return;
@@ -121,11 +104,7 @@ const CashMovement = () => {
 
   const [AllCashMovement, setAllCashMovement] = useState([]);
   const getCashMovement = async () => {
-    if (!token) {
-      // Handle case where token is not available
-      toast.error("رجاء تسجيل الدخول مره اخري");
-      return;
-    }
+    const config = await handleGetTokenAndConfig();
 
     if (cashMovementPermissions && cashMovementPermissions.read === false) {
       toast.warn("ليس لك صلاحية لعرض حسابات الخزينه");
@@ -177,8 +156,8 @@ const CashMovement = () => {
     "دفع مشتريات",
     "استرداد",
   ];
-  const operationStatusEN = ['Pending', 'Completed', 'Rejected'];
-  const operationStatusAr = ['انتظار', 'مكتمل', 'مرفوض'];
+  const operationStatusEN = ["Pending", "Completed", "Rejected"];
+  const operationStatusAr = ["انتظار", "مكتمل", "مرفوض"];
   const [createdBy, setcreatedBy] = useState("");
   const [amount, setAmount] = useState();
   const [type, setType] = useState("");
@@ -186,11 +165,7 @@ const CashMovement = () => {
 
   // Function to add cash movement and update balance
   const addCashMovementAndUpdateBalance = async () => {
-    if (!token) {
-      // Handle case where token is not available
-      toast.error("رجاء تسجيل الدخول مره اخري");
-      return;
-    }
+    const config = await handleGetTokenAndConfig();
     if (cashMovementPermissions && cashMovementPermissions.create === false) {
       toast.warn("ليس لك صلاحية لانشاء حركه في حسابات الخزينه");
       return;
@@ -276,10 +251,7 @@ const CashMovement = () => {
     e.preventDefault();
 
     try {
-      if (!token) {
-        toast.error("رجاء تسجيل الدخول مرة أخرى");
-        return;
-      }
+      const config = await handleGetTokenAndConfig();
       if (cashMovementPermissions && cashMovementPermissions.create === false) {
         toast.warn("ليس لك صلاحية لانشاء حركه في حسابات الخزينه");
         return;
@@ -344,10 +316,7 @@ const CashMovement = () => {
 
   const accepteTransferCash = async (id, statusTransfer) => {
     try {
-      if (!token) {
-        toast.error("رجاء تسجيل الدخول مرة أخرى");
-        return;
-      }
+      const config = await handleGetTokenAndConfig();
 
       // Fetch details of the cash movement
       const receivcashMovementResponse = await axios.get(
@@ -528,8 +497,8 @@ const CashMovement = () => {
                 <select
                   className="form-control border-primary m-0 p-2 h-auto"
                   onChange={(e) => {
-                    setstartpagination(0);
-                    setendpagination(e.target.value);
+                    setStartPagination(0);
+                    setEndPagination(e.target.value);
                   }}
                 >
                   {(() => {
@@ -675,7 +644,7 @@ const CashMovement = () => {
             <tbody>
               {AllCashMovement.length > 0
                 ? AllCashMovement.map((movement, i) => {
-                    if ((i >= startpagination) & (i < endpagination)) {
+                    if ((i >= startPagination) & (i < endPagination)) {
                       return (
                         <tr key={i}>
                           <td>{i + 1}</td>
@@ -685,7 +654,15 @@ const CashMovement = () => {
                               : "No register found"}
                           </td>
                           {/* <td>{movement.registerId?.employee?.fullname}</td> */}
-                          <td>{operationTypesAR[operationTypesEN.findIndex(type => type === movement.type)]}</td>
+                          <td>
+                            {
+                              operationTypesAR[
+                                operationTypesEN.findIndex(
+                                  (type) => type === movement.type
+                                )
+                              ]
+                            }
+                          </td>
                           <td>{movement.createdBy?.fullname}</td>
                           <td>{movement.amount}</td>
                           <td>{movement.description}</td>
@@ -717,14 +694,21 @@ const CashMovement = () => {
                                 </button>
                               </>
                             ) : (
-                              <td>{operationStatusAr[operationStatusEN.findIndex(status => status === movement.status)]}</td>
-                              
+                              <td>
+                                {
+                                  operationStatusAr[
+                                    operationStatusEN.findIndex(
+                                      (status) => status === movement.status
+                                    )
+                                  ]
+                                }
+                              </td>
                             )}
                           </td>
                           <td>{formatDateTime(movement.createdAt)}</td>
                           {/* <td>
-                                  <a href="#editStockactionModal" className="edit" data-toggle="modal" onClick={() => { setactionId(action._id); setoldBalance(action.oldBalance); setoldCost(action.oldCost); setprice(action.price) }}><i className="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-                                  <a href="#deleteStockactionModal" className="delete" data-toggle="modal" onClick={() => setactionId(action._id)}><i className="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+                                  <a href="#editStockactionModal" className="btn btn-sm btn-primary ml-2 " data-toggle="modal" onClick={() => { setactionId(action._id); setoldBalance(action.oldBalance); setoldCost(action.oldCost); setprice(action.price) }}><i className="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+                                  <a href="#deleteStockactionModal" className="btn btn-sm btn-danger" data-toggle="modal" onClick={() => setactionId(action._id)}><i className="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
                                 </td> */}
                         </tr>
                       );
@@ -737,8 +721,8 @@ const CashMovement = () => {
             <div className="hint-text text-dark">
               عرض{" "}
               <b>
-                {AllCashMovement.length > endpagination
-                  ? endpagination
+                {AllCashMovement.length > endPagination
+                  ? endPagination
                   : AllCashMovement.length}
               </b>{" "}
               من <b>{AllCashMovement.length}</b> عنصر
@@ -749,7 +733,7 @@ const CashMovement = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 5 ? "active" : ""}`}
+                className={`page-item ${endPagination === 5 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   1
@@ -757,7 +741,7 @@ const CashMovement = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 10 ? "active" : ""}`}
+                className={`page-item ${endPagination === 10 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   2
@@ -765,7 +749,7 @@ const CashMovement = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 15 ? "active" : ""}`}
+                className={`page-item ${endPagination === 15 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   3
@@ -773,7 +757,7 @@ const CashMovement = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 20 ? "active" : ""}`}
+                className={`page-item ${endPagination === 20 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   4
@@ -781,7 +765,7 @@ const CashMovement = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 25 ? "active" : ""}`}
+                className={`page-item ${endPagination === 25 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   5
@@ -789,7 +773,7 @@ const CashMovement = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 30 ? "active" : ""}`}
+                className={`page-item ${endPagination === 30 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   التالي
@@ -799,7 +783,6 @@ const CashMovement = () => {
           </div>
         </div>
       </div>
-
 
       <div id="DepositModal" className="modal fade">
         <div className="modal-dialog modal-lg">
@@ -1115,7 +1098,6 @@ const CashMovement = () => {
         </div>
       </div>
 
-      
       {/* <div id="deleteStockactionModal" className="modal fade">
                 <div className="modal-dialog modal-lg">
                   <div className="modal-content shadow-lg border-0 rounded ">

@@ -1,18 +1,11 @@
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
-import { detacontext } from "../../../../App";
+import { dataContext } from "../../../../App";
 import { toast } from "react-toastify";
 import "../orders/Orders.css";
 
 const Users = () => {
-  const apiUrl = process.env.REACT_APP_API_URL;
-  const token = localStorage.getItem("token_e");
-
-  const config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  };
+ 
 
   const {
     setStartDate,
@@ -22,15 +15,17 @@ const Users = () => {
     restaurantData,
     formatDateTime,
     permissionsList,
-    setisLoading,
+    setIsLoading,
     formatDate,
     formatTime,
     EditPagination,
-    startpagination,
-    endpagination,
-    setstartpagination,
-    setendpagination,
-  } = useContext(detacontext);
+    startPagination,
+    endPagination,
+    setStartPagination,
+    setEndPagination,
+  apiUrl,
+handleGetTokenAndConfig,
+} = useContext(dataContext);
 
   const permissionUser = permissionsList?.filter(
     (permission) => permission.resource === "Users"
@@ -40,11 +35,7 @@ const Users = () => {
 
   const getAllUsers = async () => {
     try {
-      if (!token) {
-        // Handle case where token is not available
-        toast.error("رجاء تسجيل الدخول مره اخري");
-        return;
-      }
+      const config = await handleGetTokenAndConfig();
       if (permissionUser && !permissionUser.read) {
         toast.warn("ليس لك صلاحية لعرض بيانات المستخدمين");
         return;
@@ -62,11 +53,7 @@ const Users = () => {
       return;
     }
     try {
-      if (!token) {
-        // Handle case where token is not available
-        toast.error("رجاء تسجيل الدخول مره اخري");
-        return;
-      }
+      const config = await handleGetTokenAndConfig();
 
       // Get the value from the event
       const isVarified = e.target.value;
@@ -98,11 +85,7 @@ const Users = () => {
       return;
     }
     try {
-      if (!token) {
-        // Handle case where token is not available
-        toast.error("رجاء تسجيل الدخول مره اخري");
-        return;
-      }
+      const config = await handleGetTokenAndConfig();
 
       // put the value from the event
       const isActive = e.target.value;
@@ -143,11 +126,7 @@ const Users = () => {
       return;
     }
     try {
-      if (!token) {
-        // Handle case where token is not available
-        toast.error("رجاء تسجيل الدخول مره اخري");
-        return;
-      }
+      const config = await handleGetTokenAndConfig();
 
       const response = await axios.put(`${apiUrl}/api/user/${userid}`, {
         username,
@@ -191,11 +170,7 @@ const Users = () => {
   const [Areas, setAreas] = useState([]);
   const getAllDeliveryAreas = async () => {
     try {
-      if (!token) {
-        // Handle case where token is not available
-        toast.error("رجاء تسجيل الدخول مره اخري");
-        return;
-      }
+      const config = await handleGetTokenAndConfig();
       const response = await axios.get(`${apiUrl}/api/deliveryarea`);
       const data = await response.data;
       // console.log({ data })
@@ -242,8 +217,8 @@ const Users = () => {
                 <select
                   className="form-control border-primary m-0 p-2 h-auto"
                   onChange={(e) => {
-                    setstartpagination(0);
-                    setendpagination(e.target.value);
+                    setStartPagination(0);
+                    setEndPagination(e.target.value);
                   }}
                 >
                   {(() => {
@@ -355,7 +330,7 @@ const Users = () => {
             <tbody>
               {AllUsers.length > 0 &&
                 AllUsers.map((user, i) => {
-                  if ((i >= startpagination) & (i < endpagination)) {
+                  if ((i >= startPagination) & (i < endPagination)) {
                     return (
                       <tr key={i}>
                         <td>{i + 1}</td>
@@ -410,9 +385,9 @@ const Users = () => {
                         </td>
                         <td>{formatDateTime(user.createdAt)}</td>
                         <td>
-                          <a
-                            href="#edituserModal"
-                            className="edit"
+                           <button
+data-target="#edituserModal"
+                            className="btn btn-sm btn-primary ml-2 "
                             data-toggle="modal"
                           >
                             <i
@@ -424,11 +399,11 @@ const Users = () => {
                               }}
                             >
                               &#xE254;
-                            </i>
-                          </a>
-                          <a
-                            href="#deleteuserModal"
-                            className="delete"
+                                </i>
+                              </button>
+                           <button
+data-target="#deleteuserModal"
+                            className="btn btn-sm btn-danger"
                             data-toggle="modal"
                           >
                             <i
@@ -438,8 +413,8 @@ const Users = () => {
                               //    onClick={() => setuserloyeeid(user._id)}
                             >
                               &#xE872;
-                            </i>
-                          </a>
+                                </i>
+                              </button>
                         </td>
                       </tr>
                     );
@@ -451,8 +426,8 @@ const Users = () => {
             <div className="hint-text text-dark">
               عرض{" "}
               <b>
-                {AllUsers.length > endpagination
-                  ? endpagination
+                {AllUsers.length > endPagination
+                  ? endPagination
                   : AllUsers.length}
               </b>{" "}
               من <b>{AllUsers.length}</b> عنصر
@@ -463,7 +438,7 @@ const Users = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 5 ? "active" : ""}`}
+                className={`page-item ${endPagination === 5 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   1
@@ -471,7 +446,7 @@ const Users = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 10 ? "active" : ""}`}
+                className={`page-item ${endPagination === 10 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   2
@@ -479,7 +454,7 @@ const Users = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 15 ? "active" : ""}`}
+                className={`page-item ${endPagination === 15 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   3
@@ -487,7 +462,7 @@ const Users = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 20 ? "active" : ""}`}
+                className={`page-item ${endPagination === 20 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   4
@@ -495,7 +470,7 @@ const Users = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 25 ? "active" : ""}`}
+                className={`page-item ${endPagination === 25 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   5
@@ -503,7 +478,7 @@ const Users = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 30 ? "active" : ""}`}
+                className={`page-item ${endPagination === 30 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   التالي

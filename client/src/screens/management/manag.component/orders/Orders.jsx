@@ -1,20 +1,12 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
 import axios from "axios";
-import { detacontext } from "../../../../App";
+import { dataContext } from "../../../../App";
 import { useReactToPrint } from "react-to-print";
 import { toast } from "react-toastify";
 import "./Orders.css";
 import InvoiceComponent from "../invoice/invoice";
 
 const Orders = () => {
-  const apiUrl = process.env.REACT_APP_API_URL;
-  const token = localStorage.getItem("token_e"); // Retrieve the token from localStorage
-  const config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  };
-
   const {
     restaurantData,
     permissionsList,
@@ -25,45 +17,66 @@ const Orders = () => {
     employeeLoginInfo,
     formatDate,
     formatDateTime,
-    setisLoading,
+    setIsLoading,
     EditPagination,
-    startpagination,
-    endpagination,
-    setstartpagination,
-    setendpagination,
-  } = useContext(detacontext);
+    startPagination,
+    endPagination,
+    setStartPagination,
+    setEndPagination,
+    handleGetTokenAndConfig,
+    apiUrl,
+  } = useContext(dataContext);
 
   const [showModal, setShowModal] = useState(false);
 
-  const [listOfOrders, setlistOfOrders] = useState([]);
+  const [listOfOrders, setListOfOrders] = useState([]);
+
   // Fetch orders from API
   const getOrders = async () => {
-    if (!token) {
-      // Handle case where token is not available
-      toast.error("رجاء تسجيل الدخول مره اخري");
-      return;
-    }
+    // Check if the user is authenticated
+    const config = await handleGetTokenAndConfig();
+
     try {
-      const res = await axios.get(apiUrl + "/api/order", config);
-      const ordersData = res.data.reverse();
-      setlistOfOrders(ordersData);
-      console.log({ ordersData });
+      const response = await axios.get(`${apiUrl}/api/order`, config); // Construct API URL
+
+      // Check if there are orders in the response
+      const ordersData = response.data;
+      if (ordersData && ordersData.length > 0) {
+        setListOfOrders(ordersData.reverse()); // Update state with fetched orders
+        console.log("Fetched orders:", ordersData);
+      } else {
+        setListOfOrders([]); // Clear the list if no orders are found
+        toast.info("لا توجد طلبات متاحة حالياً."); // Inform the user
+      }
     } catch (error) {
-      console.log(error);
-      // Display toast or handle error
+      // Log the error for debugging purposes
+      console.error("Error fetching orders:", error);
+      setListOfOrders([]);
+      // Handle specific error scenarios
+      if (error.response) {
+        const { status, data } = error.response;
+        if (status === 401) {
+          toast.error("غير مصرح. يرجى تسجيل الدخول مرة أخرى.");
+        } else {
+          toast.error(data?.message || "حدث خطأ أثناء تحميل الطلبات.");
+        }
+      } else if (error.request) {
+        console.error("No response received:", error.request);
+        toast.error("فشل الاتصال بالخادم. يرجى التحقق من الشبكة.");
+      } else {
+        console.error("Request setup error:", error.message);
+        toast.error("حدث خطأ غير متوقع. يرجى المحاولة مرة أخرى.");
+      }
     }
   };
+
   const [listProductsOrder, setlistProductsOrder] = useState([]);
   const [orderData, setorderData] = useState("");
   const [ivocedate, setivocedate] = useState(new Date());
 
   // Fetch orders from API
   const getOrderDataBySerial = async (serial) => {
-    if (!token) {
-      // Handle case where token is not available
-      toast.error("رجاء تسجيل الدخول مره اخري");
-      return;
-    }
+    const config = await handleGetTokenAndConfig();
     try {
       const res = await axios.get(apiUrl + "/api/order", config);
       const order = res.data.find((order) => order.serial === serial);
@@ -94,21 +107,51 @@ const Orders = () => {
   const [orderId, setOrderId] = useState("");
 
   // Delete order
-  const deleteOrder = async (e) => {
-    e.preventDefault();
-    if (!token) {
-      // Handle case where token is not available
-      toast.error("رجاء تسجيل الدخول مره اخري");
-      return;
-    }
+  const handleDeleteOrder = async (event) => {
+    event.preventDefault();
+
+    // Check if the user is authenticated
+    const config = await handleGetTokenAndConfig();
+
     try {
-      const id = orderId;
-      await axios.delete(`${apiUrl}/api/order/${id}`, config);
-      getOrders();
-      toast.success("Order deleted successfully");
+      const orderIdToDelete = orderId; // Use a clear and descriptive variable name
+      const deleteUrl = `${apiUrl}/api/order/${orderIdToDelete}`; // Construct the API URL
+
+      // Send a DELETE request to the server
+      await axios.delete(deleteUrl, config);
+
+      // Refresh the orders list after deletion
+      await getOrders();
+
+      // Show a success message
+      toast.success("تم حذف الطلب بنجاح.");
     } catch (error) {
-      console.log(error);
-      toast.error("Failed to delete order");
+      // Handle specific error scenarios based on status code
+      if (error.response) {
+        // Server responded with a status code outside the 2xx range
+        const { status, data } = error.response;
+        if (status === 401) {
+          toast.error("غير مصرح. يرجى تسجيل الدخول مرة أخرى.");
+        } else if (status === 404) {
+          await getOrders();
+          toast.error("الطلب غير موجود. قد يكون تم حذفه مسبقًا.");
+        } else {
+          await getOrders();
+          toast.error(data?.message || "حدث خطأ غير متوقع.");
+        }
+      } else if (error.request) {
+        await getOrders();
+        // Request was made but no response was received
+        console.error("No response received:", error.request);
+        toast.error("فشل الاتصال بالخادم. يرجى التحقق من الشبكة.");
+      } else {
+        await getOrders();
+        // Something else went wrong during the request setup
+        console.error("Request setup error:", error.message);
+        toast.error("حدث خطأ غير متوقع. يرجى المحاولة مرة أخرى.");
+      }
+    } finally {
+      await getOrders();
     }
   };
 
@@ -128,11 +171,7 @@ const Orders = () => {
   const deleteSelectedIds = async (e) => {
     e.preventDefault();
     console.log(selectedIds);
-    if (!token) {
-      // Handle case where token is not available
-      toast.error("رجاء تسجيل الدخول مره اخري");
-      return;
-    }
+    const config = await handleGetTokenAndConfig();
     try {
       for (const Id of selectedIds) {
         await axios.delete(`${apiUrl}/api/order/${Id}`, config);
@@ -152,7 +191,7 @@ const Orders = () => {
       const orders = listOfOrders.filter((order) =>
         order.serial.toString().startsWith(serial)
       );
-      setlistOfOrders(orders);
+      setListOfOrders(orders);
     } else {
       getOrders();
     }
@@ -164,7 +203,7 @@ const Orders = () => {
       getOrders();
     } else {
       const orders = listOfOrders.filter((order) => order.orderType === type);
-      setlistOfOrders(orders.reverse());
+      setListOfOrders(orders.reverse());
     }
   };
 
@@ -199,8 +238,8 @@ const Orders = () => {
                 <select
                   className="form-control border-primary m-0 p-2 h-auto"
                   onChange={(e) => {
-                    setstartpagination(0);
-                    setendpagination(e.target.value);
+                    setStartPagination(0);
+                    setEndPagination(e.target.value);
                   }}
                 >
                   {(() => {
@@ -262,7 +301,7 @@ const Orders = () => {
                   <select
                     className="form-control border-primary m-0 p-2 h-auto"
                     onChange={(e) =>
-                      setlistOfOrders(
+                      setListOfOrders(
                         filterByTime(e.target.value, listOfOrders)
                       )
                     }
@@ -309,14 +348,15 @@ const Orders = () => {
                       type="button"
                       className="btn btn-primary h-100 p-2 "
                       onClick={() =>
-                        setlistOfOrders(filterByDateRange(listOfOrders))
+                        setListOfOrders(filterByDateRange(listOfOrders))
                       }
                     >
                       <i className="fa fa-search"></i>
                     </button>
                     <button
                       type="button"
-                      className="btn btn-warning h-100 p-2" onClick={getOrders}
+                      className="btn btn-warning h-100 p-2"
+                      onClick={getOrders}
                     >
                       استعادة
                     </button>
@@ -351,7 +391,7 @@ const Orders = () => {
             <tbody>
               {listOfOrders &&
                 listOfOrders.map((order, i) => {
-                  if ((i >= startpagination) & (i < endpagination)) {
+                  if ((i >= startPagination) & (i < endPagination)) {
                     return (
                       <tr key={i}>
                         <td>{i + 1}</td>
@@ -384,15 +424,13 @@ const Orders = () => {
                         <td>{order.status}</td>
                         <td>{order.cashier && order.cashier.fullname}</td>
                         <td>{order.payment_status}</td>
-                        <td>
-                          {formatDateTime(order.payment_date)}
-                        </td>
+                        <td>{formatDateTime(order.payment_date)}</td>
 
                         <td>
-                          {/* <a href="#editOrderModal" className="edit" data-toggle="modal"><i className="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a> */}
-                          <a
-                            href="#deleteOrderModal"
-                            className="delete"
+                          {/* <a href="#editOrderModal" className="btn btn-sm btn-primary ml-2 " data-toggle="modal"><i className="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a> */}
+                          <button
+                            data-target="#deleteOrderModal"
+                            className="btn btn-sm btn-danger"
                             data-toggle="modal"
                             onClick={() => setOrderId(order._id)}
                           >
@@ -403,7 +441,7 @@ const Orders = () => {
                             >
                               &#xE872;
                             </i>
-                          </a>
+                          </button>
                         </td>
                       </tr>
                     );
@@ -415,8 +453,8 @@ const Orders = () => {
             <div className="hint-text text-dark">
               عرض{" "}
               <b>
-                {listOfOrders.length > endpagination
-                  ? endpagination
+                {listOfOrders.length > endPagination
+                  ? endPagination
                   : listOfOrders.length}
               </b>{" "}
               من <b>{listOfOrders.length}</b> عنصر
@@ -427,7 +465,7 @@ const Orders = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 5 ? "active" : ""}`}
+                className={`page-item ${endPagination === 5 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   1
@@ -435,7 +473,7 @@ const Orders = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 10 ? "active" : ""}`}
+                className={`page-item ${endPagination === 10 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   2
@@ -443,7 +481,7 @@ const Orders = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 15 ? "active" : ""}`}
+                className={`page-item ${endPagination === 15 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   3
@@ -451,7 +489,7 @@ const Orders = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 20 ? "active" : ""}`}
+                className={`page-item ${endPagination === 20 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   4
@@ -459,7 +497,7 @@ const Orders = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 25 ? "active" : ""}`}
+                className={`page-item ${endPagination === 25 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   5
@@ -467,7 +505,7 @@ const Orders = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 30 ? "active" : ""}`}
+                className={`page-item ${endPagination === 30 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   التالي
@@ -488,7 +526,7 @@ const Orders = () => {
       <div id="deleteOrderModal" className="modal fade">
         <div className="modal-dialog modal-lg">
           <div className="modal-content shadow-lg border-0 rounded ">
-            <form onSubmit={deleteOrder}>
+            <form onSubmit={handleDeleteOrder}>
               <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                 <h4 className="modal-title">Delete Order</h4>
                 <button

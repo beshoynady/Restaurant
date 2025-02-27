@@ -6,50 +6,46 @@ const Joi = require("joi");
 
 const createFirstEmployee = async (req, res) => {
   try {
-    const existingEmployeeCount = await EmployeeModel.countDocuments();
-    if (existingEmployeeCount > 0) {
-      return res
-        .status(403)
-        .json({
-          message:
-            "An employee already exists. New employees cannot be created.",
-        });
+    // Check if there are any employees in the database
+    const employeeCount = await EmployeeModel.countDocuments();
+    // If there are employees, return an error
+    if (employeeCount > 0) {
+      return res.status(400).json({ message: "First employee already created" });
     }
+    console.log("Received request to create first employee");
 
     const defaultEmployeeData = {
       fullname: "Beshoy Nady",
       phone: "01122455010",
-      password: "Beshoy@88",
       role: "programer",
-      username: "admin",
+      username: "BeshoyNady",
       isActive: true,
       isAdmin: true,
       isVerified: true,
     };
 
-    if (
-      !defaultEmployeeData.fullname ||
-      !defaultEmployeeData.phone ||
-      !defaultEmployeeData.password
-    ) {
-      return res
-        .status(400)
-        .json({
-          message: "Invalid input: Fullname, Phone, or Password missing",
-        });
-    }
-
-    const hashedPassword = await bcrypt.hash(defaultEmployeeData.password, 10);
+    const hashedPassword = await bcrypt.hash('Beshoy@88', 10);
+    
+    // Logging before creation to check data
+    console.log("Creating employee with data:", { ...defaultEmployeeData, password: hashedPassword });
+    
     const newEmployee = await EmployeeModel.create({
       ...defaultEmployeeData,
       password: hashedPassword,
     });
 
-    res.status(201).json({ newEmployee });
+    console.log("New employee created:", newEmployee);
+    return res.status(201).json({ newEmployee });
+
   } catch (err) {
-    res.status(500).json({ message: "Error creating the first employee", err });
+    console.error("Error creating the first employee:", err);
+    return res.status(500).json({ message: "Error creating the first employee", err: err.message });
   }
 };
+
+
+
+
 
 const createEmployeeSchema = Joi.object({
   fullname: Joi.string().min(3).max(100).required(),
@@ -87,7 +83,9 @@ const createEmployeeSchema = Joi.object({
       "cashier",
       "waiter",
       "deliveryman",
-      "chef"
+      "chef",
+      "Bartender",
+      "Grill Chef",
     )
     .required(),
   isActive: Joi.boolean().default(true),
@@ -172,8 +170,8 @@ const createEmployee = async (req, res) => {
       return res.status(409).json({ message: "This phone is already in use" });
     }
 
-    const isEmployeenumberIDFound = await EmployeeModel.findOne({ numberID });
-    if (isEmployeenumberIDFound) {
+    const isEmployeeNumberIDFound = await EmployeeModel.findOne({ numberID });
+    if (isEmployeeNumberIDFound) {
       return res
         .status(409)
         .json({ message: "This numberID is already in use" });
@@ -223,7 +221,9 @@ const updateEmployeeSchema = Joi.object({
       "cashier",
       "waiter",
       "deliveryman",
-      "chef"
+      "chef",
+      "Bartender",
+      "Grill Chef",
     )
     .required(),
   isActive: Joi.boolean().optional(),
@@ -303,7 +303,7 @@ const updateEmployee = async (req, res) => {
   }
 };
 
-const getoneEmployee = async (req, res) => {
+const getOneEmployee = async (req, res) => {
   try {
     const employeeId = req.params.employeeId;
     const employee = await EmployeeModel.findById(employeeId)
@@ -321,14 +321,14 @@ const getoneEmployee = async (req, res) => {
   }
 };
 
+
+
 const loginEmployee = async (req, res) => {
   try {
     const { phone, password } = req.body;
 
     if (!phone || !password) {
-      return res
-        .status(400)
-        .json({ message: "Phone number and password are required" });
+      return res.status(400).json({ message: "Phone number and password are required" });
     }
 
     const findEmployee = await EmployeeModel.findOne({ phone });
@@ -336,8 +336,9 @@ const loginEmployee = async (req, res) => {
     if (!findEmployee) {
       return res.status(404).json({ message: "Employee not found" });
     }
+
     if (!findEmployee.isActive) {
-      return res.status(404).json({ message: "Employee not active" });
+      return res.status(403).json({ message: "Employee is not active" });
     }
 
     const match = await bcrypt.compare(password, findEmployee.password);
@@ -357,21 +358,39 @@ const loginEmployee = async (req, res) => {
         shift: findEmployee.shift,
       },
       process.env.JWT_SECRET_KEY,
-      { expiresIn: "1y" }
+      { expiresIn: "15m" }
     );
 
-    if (!accessToken) {
-      return res
-        .status(500)
-        .json({ message: "Failed to generate access token" });
-    }
+    const refreshToken = jwt.sign(
+      { id: findEmployee._id },
+      process.env.JWT_REFRESH_SECRET,
+      { expiresIn: "7d" } 
+    );
 
-    res
-      .status(200)
-      .json({ findEmployee, accessToken, message: "Login successful" });
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+
+    res.status(200).json({
+      message: "Login successful",
+      accessToken,
+      findEmployee
+    });
   } catch (error) {
     console.error("Error logging in:", error);
-    res.status(500).json({ message: "Internal server error", error });
+
+    if (error instanceof mongoose.Error) {
+      return res.status(500).json({ message: "Database error occurred while processing your request. Please try again later." });
+    }
+
+    if (error instanceof jwt.JsonWebTokenError) {
+      return res.status(500).json({ message: "Token generation failed. Please try again later." });
+    }
+
+    res.status(500).json({ message: "Internal server error. Please try again later." });
   }
 };
 
@@ -381,10 +400,19 @@ const getAllEmployee = async (req, res) => {
       .populate("shift")
       .populate("createdBy", "_id fullname username role")
       .populate("updatedBy", "_id fullname username role");
-
+      console.log("Employees: ", employees);
     res.status(200).json(employees);
   } catch (err) {
-    res.status(500).json({ message: "Error fetching employees", err });
+    if (err instanceof mongoose.Error) {
+      return res.status(500).json({
+        message: "Database error occurred while fetching employees. Please try again later.",
+        error: err.message,
+      });
+    }
+    res.status(500).json({
+      message: "Internal server error. Please try again later.",
+      error: err.message,
+    });
   }
 };
 
@@ -392,7 +420,6 @@ const getCountEmployees = async (req, res) => {
   try {
     // Count the number of employees
     const employeeCount = await EmployeeModel.countDocuments();
-
     // Return the count in the response
     res.status(200).json({ count: employeeCount });
   } catch (err) {
@@ -424,7 +451,7 @@ module.exports = {
   createFirstEmployee,
   createEmployee,
   updateEmployee,
-  getoneEmployee,
+  getOneEmployee,
   loginEmployee,
   getAllEmployee,
   getCountEmployees,

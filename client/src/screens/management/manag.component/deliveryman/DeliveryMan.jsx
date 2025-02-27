@@ -1,18 +1,12 @@
 import React, { useState, useEffect, useContext } from "react";
-import { detacontext } from "../../../../App";
+import { dataContext } from "../../../../App";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useReactToPrint } from "react-to-print";
 import InvoiceComponent from "../invoice/invoice";
 
 const DeliveryMan = () => {
-  const apiUrl = process.env.REACT_APP_API_URL;
-  const token = localStorage.getItem("token_e");
-  const config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  };
+  
 
   const {
     restaurantData,
@@ -24,13 +18,15 @@ const DeliveryMan = () => {
     employeeLoginInfo,
     formatDate,
     formatDateTime,
-    setisLoading,
+    setIsLoading,
     EditPagination,
-    startpagination,
-    endpagination,
-    setstartpagination,
-    setendpagination,
-  } = useContext(detacontext);
+    startPagination,
+    endPagination,
+    setStartPagination,
+    setEndPagination,
+  apiUrl,
+handleGetTokenAndConfig,
+} = useContext(dataContext);
 
   // // State for pending orders and payments
   // const [pendingOrders, setPendingOrders] = useState([]);
@@ -39,11 +35,7 @@ const DeliveryMan = () => {
   // // Function to fetch pending orders and payments
   // const fetchPendingData = async () => {
   //   try{
-  // if (!token) {
-  // Handle case where token is not available
-  //   toast.error('رجاء تسجيل الدخول مره اخري');
-  //   return
-  // }
+// const config = await handleGetTokenAndConfig();
   //     const res = await axios.get(apiUrl+'/api/order');
   //     const recentStatus = res.data.filter((order) => order.status === 'Pending');
   //     const recentPaymentStatus = res.data.filter((order) => order.payment_status === 'Pending');
@@ -61,11 +53,7 @@ const DeliveryMan = () => {
 
   const fetchDeliveryOrders = async () => {
     try {
-      if (!token) {
-        // Handle case where token is not available
-        toast.error("رجاء تسجيل الدخول مره اخري");
-        return;
-      }
+      const config = await handleGetTokenAndConfig();
       const orders = await axios.get(apiUrl + "/api/order", config);
       const activeOrders = orders.data.filter(
         (order) => order.isActive === true && order.orderType === "Delivery"
@@ -82,11 +70,7 @@ const DeliveryMan = () => {
 
   const updateOrderOnWay = async (e, id) => {
     e.preventDefault();
-    if (!token) {
-      // Handle case where token is not available
-      toast.error("رجاء تسجيل الدخول مره اخري");
-      return;
-    }
+    const config = await handleGetTokenAndConfig();
     try {
       const status = "On the way";
       const response = await axios.get(`${apiUrl}/api/order/${id}`, config);
@@ -116,11 +100,7 @@ const DeliveryMan = () => {
   const updateOrderDelivered = async (e, id) => {
     e.preventDefault();
     try {
-      if (!token) {
-        // Handle case where token is not available
-        toast.error("رجاء تسجيل الدخول مره اخري");
-        return;
-      }
+      const config = await handleGetTokenAndConfig();
       const response = await axios.get(`${apiUrl}/api/order/${id}`, config);
       const orderData = response.data;
       if (orderData.deliveryMan._id !== employeeLoginInfo.id) {
@@ -155,11 +135,7 @@ const DeliveryMan = () => {
   // Fetch orders from API
   const getOrderDetalis = async (id) => {
     try {
-      if (!token) {
-        // Handle case where token is not available
-        toast.error("رجاء تسجيل الدخول مره اخري");
-        return;
-      }
+      const config = await handleGetTokenAndConfig();
       const res = await axios.get(apiUrl + "/api/order/" + id, config);
       const order = res.data;
       if (order) {

@@ -1,28 +1,21 @@
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
-import { detacontext } from "../../../../App";
+import { dataContext } from "../../../../App";
 import { toast } from "react-toastify";
 import "../orders/Orders.css";
 
 const PayRoll = () => {
-  const apiUrl = process.env.REACT_APP_API_URL;
-  const token = localStorage.getItem("token_e");
-
-  const config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  };
-
   const {
     permissionsList,
-    setisLoading,
+    setIsLoading,
     EditPagination,
     employeeLoginInfo,
-    endpagination,
-    setstartpagination,
-    setendpagination,
-  } = useContext(detacontext);
+    endPagination,
+    setStartPagination,
+    setEndPagination,
+    handleGetTokenAndConfig,
+    apiUrl,
+  } = useContext(dataContext);
 
   const payrollPermissions = permissionsList?.filter(
     (permission) => permission.resource === "Payroll"
@@ -58,7 +51,7 @@ const PayRoll = () => {
   const [amount, setamount] = useState();
   const [balance, setbalance] = useState();
   const [myCashRegister, setmyCashRegister] = useState([]);
-  const [cashRegister, setcashRegister] = useState('');
+  const [cashRegister, setcashRegister] = useState("");
   const [paidBy, setpaidBy] = useState("");
   const [employeeId, setemployeeId] = useState("");
   const [employeeName, setemployeeName] = useState("");
@@ -69,11 +62,7 @@ const PayRoll = () => {
   // Fetch employees data from the API
   const [ListOfEmployee, setListOfEmployee] = useState([]);
   const getEmployees = async () => {
-    if (!token) {
-      // Handle case where token is not available
-      toast.error("رجاء تسجيل الدخول مره اخري");
-      return;
-    }
+    const config = await handleGetTokenAndConfig();
     try {
       const response = await axios.get(apiUrl + "/api/employee", config);
       const responseData = response.data;
@@ -89,11 +78,7 @@ const PayRoll = () => {
   const [shifts, setshifts] = useState([]);
 
   const getShifts = async () => {
-    if (!token) {
-      // Handle case where token is not available
-      toast.error("رجاء تسجيل الدخول مره اخري");
-      return;
-    }
+    const config = await handleGetTokenAndConfig();
     try {
       const response = await axios.get(`${apiUrl}/api/shift`, config);
       if (response.status === 200 && response.data) {
@@ -108,21 +93,17 @@ const PayRoll = () => {
     }
   };
 
-  const [allPayRoll, setallPayRoll] = useState([]);
+  const [allPayRoll, setAllPayRoll] = useState([]);
   const [currentPayRoll, setcurrentPayRoll] = useState([]);
 
   const getPayRoll = async () => {
-    if (!token) {
-      // Handle case where token is not available
-      toast.error("رجاء تسجيل الدخول مره اخري");
-      return;
-    }
+    const config = await handleGetTokenAndConfig();
     try {
       const response = await axios.get(apiUrl + "/api/payroll", config);
       console.log({ response });
       if (response.status === 200) {
         // Set all payroll data
-        setallPayRoll(response.data);
+        setAllPayRoll(response.data);
 
         // Get current date
         const currentDate = new Date();
@@ -145,25 +126,20 @@ const PayRoll = () => {
     }
   };
 
-
   const getAllExpenses = async () => {
-    try{
-      if (!token) {
-        // Handle case where token is not available
-        toast.error('رجاء تسجيل الدخول مره اخري');
-        return
-      }
-      const response = await axios.get(apiUrl + '/api/expenses/', config);
+    try {
+      const config = await handleGetTokenAndConfig();
+      const response = await axios.get(apiUrl + "/api/expenses/", config);
       const expenses = await response.data;
       console.log(response.data);
-      expenses.map(expense=>{
-        if(expense.isSalary === true){
-          setexpenseId(expense._id)
+      expenses.map((expense) => {
+        if (expense.isSalary === true) {
+          setexpenseId(expense._id);
         }
-      })
+      });
     } catch (error) {
       console.log(error);
-      toast.error('حدث خطأ أثناء جلب المصاريف');
+      toast.error("حدث خطأ أثناء جلب المصاريف");
     }
   };
   // Fetch salary movement data from the API
@@ -172,11 +148,7 @@ const PayRoll = () => {
   );
 
   const getEmployeTransactions = async () => {
-    if (!token) {
-      // Handle case where token is not available
-      toast.error("رجاء تسجيل الدخول مره اخري");
-      return;
-    }
+    const config = await handleGetTokenAndConfig();
     try {
       const response = await axios.get(
         apiUrl + "/api/employeetransactions",
@@ -199,17 +171,13 @@ const PayRoll = () => {
     }
   };
 
-  const [allAttendanceRecords, setallAttendanceRecords] = useState([]);
+  const [allAttendanceRecords, setAllAttendanceRecords] = useState([]);
   const getallAttendanceRecords = async () => {
     // if (permissionsForAttendance && permissionsForAttendance.read === false) {
     //   toast.info('ليس لك صلاحية لعرض السجلات')
     //   return
     // }
-    if (!token) {
-      // Handle case where token is not available
-      toast.error("رجاء تسجيل الدخول مره اخري");
-      return;
-    }
+    const config = await handleGetTokenAndConfig();
     try {
       const response = await axios.get(`${apiUrl}/api/attendance`, config);
       console.log({ response });
@@ -223,7 +191,7 @@ const PayRoll = () => {
             createdAt.getFullYear() === currentYear
           );
         });
-        setallAttendanceRecords(response.data);
+        setAllAttendanceRecords(response.data);
       }
     } catch (error) {
       toast.error(
@@ -238,11 +206,7 @@ const PayRoll = () => {
       return;
     }
 
-    if (!token) {
-      // Handle case where token is not available
-      toast.error("رجاء تسجيل الدخول مره اخري");
-      return;
-    }
+    const config = await handleGetTokenAndConfig();
     try {
       setIsExecuting(true);
       toast.warn("انتظر قليلا .. لا تقم باعادة التحميل و غلق الصفحة");
@@ -352,7 +316,9 @@ const PayRoll = () => {
           Math.max(0, Number(attendanceDays) + Number(leaveDays))
         ).toFixed(2);
         Insurance =
-          Number(InsuranceRate) > 0 && Number(basicSalary) > 0 && Number(attendanceDays) > 0
+          Number(InsuranceRate) > 0 &&
+          Number(basicSalary) > 0 &&
+          Number(attendanceDays) > 0
             ? (Number(InsuranceRate) * Number(basicSalary)).toFixed(2)
             : 0;
 
@@ -412,11 +378,7 @@ const PayRoll = () => {
 
         if (isSalary && !isSalaryPaid) {
           try {
-            if (!token) {
-              // Handle case where token is not available
-              toast.error("رجاء تسجيل الدخول مره اخري");
-              return;
-            }
+            const config = await handleGetTokenAndConfig();
             const result = await axios.put(
               `${apiUrl}/api/payroll/employee/${employeeId}`,
               {
@@ -459,11 +421,7 @@ const PayRoll = () => {
           getEmployees();
         } else if (!isSalary && !isSalaryPaid) {
           try {
-            if (!token) {
-              // Handle case where token is not available
-              toast.error("رجاء تسجيل الدخول مره اخري");
-              return;
-            }
+            const config = await handleGetTokenAndConfig();
             const result = await axios.post(
               `${apiUrl}/api/payroll`,
               {
@@ -523,11 +481,7 @@ const PayRoll = () => {
     name,
     paidMonth
   ) => {
-    if (!token) {
-      // Handle case where token is not available
-      toast.error("رجاء تسجيل الدخول مره اخري");
-      return;
-    }
+    const config = await handleGetTokenAndConfig();
     try {
       // Fetch all cash registers
       const response = await axios.get(apiUrl + "/api/cashRegister", config);
@@ -537,8 +491,8 @@ const PayRoll = () => {
       // // Find the appropriate cash register
       const cashRegister = allCashRegisters
         ? allCashRegisters.filter(
-          (CashRegister) => CashRegister.employee?._id === manager
-        )
+            (CashRegister) => CashRegister.employee?._id === manager
+          )
         : [];
       // console.log(cashRegister);
       // // Update selected cash register data
@@ -566,23 +520,17 @@ const PayRoll = () => {
   };
 
   const selectCashRegister = (cashRegister) => {
-    const cashRegisterSelected = JSON.parse(cashRegister)
+    const cashRegisterSelected = JSON.parse(cashRegister);
     setcashRegister(cashRegisterSelected._id);
     setbalance(cashRegisterSelected.balance);
   };
 
   // Create daily expense based on selected cash register
   const createDailyExpense = async () => {
-
-
     const updatedBalance = balance - amount;
     console.log({ updatedBalance });
 
-    if (!token) {
-      // Handle case where token is not available
-      toast.error("رجاء تسجيل الدخول مره اخري");
-      return;
-    }
+    const config = await handleGetTokenAndConfig();
     try {
       const cashMovement = await axios.post(
         apiUrl + "/api/cashMovement/",
@@ -633,14 +581,10 @@ const PayRoll = () => {
   // Function to process and pay employee salary
   const paidSalary = async (e, id) => {
     e.preventDefault();
-    if (!token) {
-      // Handle case where token is not available
-      toast.error("رجاء تسجيل الدخول مره اخري");
+    const config = await handleGetTokenAndConfig();
+    if (amount > balance) {
+      toast.error("رصيد الخزينه لا يكفي لدفع هذا الراتب");
       return;
-    }
-    if(amount> balance){
-      toast.error('رصيد الخزينه لا يكفي لدفع هذا الراتب')
-      return
     }
     try {
       // Prepare payload for updating payroll status
@@ -704,7 +648,7 @@ const PayRoll = () => {
     getPayRoll();
     getEmployeTransactions();
     getallAttendanceRecords();
-    getAllExpenses()
+    getAllExpenses();
     // getAllCashRegisters();
   }, []);
 
@@ -738,8 +682,8 @@ const PayRoll = () => {
                 <select
                   className="form-control border-primary m-0 p-2 h-auto"
                   onChange={(e) => {
-                    setstartpagination(0);
-                    setendpagination(e.target.value);
+                    setStartPagination(0);
+                    setEndPagination(e.target.value);
                   }}
                 >
                   <option value={5}>5</option>
@@ -886,8 +830,8 @@ const PayRoll = () => {
                               <td>{Roll.paidBy?.username}</td>
                               {Roll.isPaid === false ? (
                                 <td>
-                                  <a
-                                    href="#paidModal"
+                                  <button
+                                    data-target="paidModal"
                                     type="button"
                                     data-toggle="modal"
                                     className="btn btn-primary text-light h-100 px-2 py-3 m-0"
@@ -903,7 +847,7 @@ const PayRoll = () => {
                                     }
                                   >
                                     دفع
-                                  </a>
+                                  </button>
                                 </td>
                               ) : (
                                 <td>تم الدفع</td>
@@ -921,8 +865,8 @@ const PayRoll = () => {
             <div className="hint-text text-dark">
               عرض{" "}
               <b>
-                {ListOfEmployee.length > endpagination
-                  ? endpagination
+                {ListOfEmployee.length > endPagination
+                  ? endPagination
                   : ListOfEmployee.length}
               </b>{" "}
               out of <b>{ListOfEmployee.length}</b> entries
@@ -933,7 +877,7 @@ const PayRoll = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 5 ? "active" : ""}`}
+                className={`page-item ${endPagination === 5 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   1
@@ -941,7 +885,7 @@ const PayRoll = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 10 ? "active" : ""}`}
+                className={`page-item ${endPagination === 10 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   2
@@ -949,7 +893,7 @@ const PayRoll = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 15 ? "active" : ""}`}
+                className={`page-item ${endPagination === 15 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   3
@@ -957,7 +901,7 @@ const PayRoll = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 20 ? "active" : ""}`}
+                className={`page-item ${endPagination === 20 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   4
@@ -965,7 +909,7 @@ const PayRoll = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 25 ? "active" : ""}`}
+                className={`page-item ${endPagination === 25 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   5
@@ -973,7 +917,7 @@ const PayRoll = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 30 ? "active" : ""}`}
+                className={`page-item ${endPagination === 30 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   التالي
@@ -1000,7 +944,7 @@ const PayRoll = () => {
                 </button>
               </div>
               <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
-              <div className="form-group col-12 col-md-6">
+                <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                     الخزينه{" "}
                   </label>

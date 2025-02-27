@@ -3,7 +3,7 @@ import io from "socket.io-client";
 import { Link } from "react-router-dom";
 
 import axios from "axios";
-import { detacontext } from "../../../../App";
+import { dataContext } from "../../../../App";
 import { toast } from "react-toastify";
 
 import notificationSound from "../../../../audio/sound.mp3";
@@ -12,35 +12,48 @@ import notificationSound from "../../../../audio/sound.mp3";
 //   reconnection: true,
 // });
 
-const cashierSocket = io(`${process.env.REACT_APP_API_URL}/cashier`, {
-  reconnection: true,
-  reconnectionAttempts: Infinity,
-  reconnectionDelay: 1000,
-});
+// const cashierSocket = io(`${process.env.REACT_APP_API_URL}/cashier`, {
+//   reconnection: true,
+//   reconnectionAttempts: Infinity,
+//   reconnectionDelay: 1000,
+// });
 
-const kitchenSocket = io(`${process.env.REACT_APP_API_URL}/kitchen`, {
-  reconnection: true,
-  reconnectionAttempts: Infinity,
-  reconnectionDelay: 1000,
-});
+// const kitchenSocket = io(`${process.env.REACT_APP_API_URL}/kitchen`, {
+//   reconnection: true,
+//   reconnectionAttempts: Infinity,
+//   reconnectionDelay: 1000,
+// });
+// const BarSocket = io(`${process.env.REACT_APP_API_URL}/bar`, {
+//   reconnection: true,
+//   reconnectionAttempts: Infinity,
+//   reconnectionDelay: 1000,
+// });
+// const GrillSocket = io(`${process.env.REACT_APP_API_URL}/grill`, {
+//   reconnection: true,
+//   reconnectionAttempts: Infinity,
+//   reconnectionDelay: 1000,
+// });
 
-const waiterSocket = io(`${process.env.REACT_APP_API_URL}/waiter`, {
-  reconnection: true,
-  reconnectionAttempts: Infinity,
-  reconnectionDelay: 1000,
-});
+// const waiterSocket = io(`${process.env.REACT_APP_API_URL}/waiter`, {
+//   reconnection: true,
+//   reconnectionAttempts: Infinity,
+//   reconnectionDelay: 1000,
+// });
 
 const NavBar = () => {
-  const { permissionsList, employeeLoginInfo, isRefresh, setisRefresh } = useContext(detacontext);
-
-  const apiUrl = process.env.REACT_APP_API_URL;
-  const token = localStorage.getItem("token_e");
-
-  const config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  };
+  const {
+    permissionsList,
+    employeeLoginInfo,
+    isRefresh,
+    setIsRefresh,
+    cashierSocket,
+    kitchenSocket,
+    BarSocket,
+    GrillSocket,
+    waiterSocket,
+    apiUrl,
+    handleGetTokenAndConfig,
+  } = useContext(dataContext);
 
   const permissionUserMassage = permissionsList?.filter(
     (permission) => permission.resource === "Messages"
@@ -60,11 +73,7 @@ const NavBar = () => {
       return;
     }
     try {
-      if (!token) {
-        // Handle case where token is not available
-        toast.error("رجاء تسجيل الدخول مره اخري");
-        return;
-      }
+      const config = await handleGetTokenAndConfig();
       const response = await axios.get(`${apiUrl}/api/message`, config);
       const data = await response.data.reverse();
       const messageNotSeen = data.filter((mas) => mas.isSeen === false);
@@ -80,11 +89,7 @@ const NavBar = () => {
       return;
     }
     try {
-      if (!token) {
-        // Handle case where token is not available
-        toast.error("رجاء تسجيل الدخول مره اخري");
-        return;
-      }
+      const config = await handleGetTokenAndConfig();
       const response = await axios.put(
         `${apiUrl}/api/message/${id}`,
         { isSeen: true },
@@ -128,8 +133,6 @@ const NavBar = () => {
   const handleMessageClick = (index) => {
     setMessages((prevMessages) => prevMessages.filter((_, i) => i !== index));
   };
-
-
 
   const employeeLogout = () => {
     try {
@@ -175,9 +178,6 @@ const NavBar = () => {
     }
   };
 
-
-
-
   useEffect(() => {
     // Load notifications from localStorage on component mount
     const savedNotifications =
@@ -187,36 +187,40 @@ const NavBar = () => {
     // Define the event handler
     const handleNewOrderNotification = (notification) => {
       const parts = notification.split("-");
-      // console.log({notification, parts})
-      
-      if (parts.length === 2) {
-        const notificationText = parts[0];
-        const waiterId = parts[1];
-        const currentWaiterId = employeeLoginInfo.id;
-        // Check if the waiter id matches the current user's waiter id
-        if (waiterId === currentWaiterId) {
-          // Assuming currentWaiterId is the ID of the current waiter
-          setNotifications((prevNotifications) => {
-            const updatedNotifications = [...prevNotifications, notificationText];
-            setisRefresh(updatedNotifications.length)
+      const waiterId = parts[1] || null;
+      const currentWaiterId = employeeLoginInfo.id;
+      console.log({
+        employeeLoginInfo,
+        notification,
+        parts,
+        waiterId,
+        currentWaiterId,
+      });
 
-            // Save notifications to localStorage
-            localStorage.setItem(
-              "notifications",
-              JSON.stringify(updatedNotifications)
-            );
-            const audio = new Audio(notificationSound);
-            audio.play().catch((error) => {
-              console.error("Error playing sound:", error);
-            });
-            return updatedNotifications;
+      const notificationText = parts[0];
+      // Check if the waiter id matches the current user's waiter id
+      if (waiterId === currentWaiterId) {
+        // Assuming currentWaiterId is the ID of the current waiter
+        setNotifications((prevNotifications) => {
+          const updatedNotifications = [...prevNotifications, notificationText];
+          setIsRefresh(updatedNotifications.length);
+
+          // Save notifications to localStorage
+          localStorage.setItem(
+            "notifications",
+            JSON.stringify(updatedNotifications)
+          );
+          const audio = new Audio(notificationSound);
+          audio.play().catch((error) => {
+            console.error("Error playing sound:", error);
           });
-        }
+          return updatedNotifications;
+        });
       } else {
         setNotifications((prevNotifications) => {
           const updatedNotifications = [...prevNotifications, notification];
           // Save notifications to localStorage
-          setisRefresh(updatedNotifications.length)
+          setIsRefresh(updatedNotifications.length);
 
           localStorage.setItem(
             "notifications",
@@ -238,11 +242,15 @@ const NavBar = () => {
     ) {
       cashierSocket.on("neworder", handleNewOrderNotification);
       cashierSocket.on("helprequest", handleNewOrderNotification);
-      cashierSocket.on("orderready", handleNewOrderNotification);
+      cashierSocket.on("orderReady", handleNewOrderNotification);
     } else if (employeeLoginInfo.role === "chef") {
       kitchenSocket.on("orderkitchen", handleNewOrderNotification);
+    } else if (employeeLoginInfo.role === "Bartender") {
+      BarSocket.on("orderBar", handleNewOrderNotification);
+    } else if (employeeLoginInfo.role === "Grill Chef") {
+      GrillSocket.on("orderGrill", handleNewOrderNotification);
     } else if (employeeLoginInfo.role === "waiter") {
-      waiterSocket.on("orderready", handleNewOrderNotification);
+      waiterSocket.on("orderReady", handleNewOrderNotification);
       waiterSocket.on("neworder", handleNewOrderNotification);
       waiterSocket.on("helprequest", handleNewOrderNotification);
     }
@@ -254,18 +262,21 @@ const NavBar = () => {
         employeeLoginInfo.role === "programer"
       ) {
         cashierSocket.off("neworder", handleNewOrderNotification);
-        cashierSocket.off("orderready", handleNewOrderNotification);
+        cashierSocket.off("orderReady", handleNewOrderNotification);
         cashierSocket.off("helprequest", handleNewOrderNotification);
       } else if (employeeLoginInfo.role === "chef") {
         kitchenSocket.off("orderkitchen", handleNewOrderNotification);
+      } else if (employeeLoginInfo.role === "Bartender") {
+        BarSocket.off("orderkitchen", handleNewOrderNotification);
+      } else if (employeeLoginInfo.role === "Grill Chef") {
+        GrillSocket.off("orderkitchen", handleNewOrderNotification);
       } else if (employeeLoginInfo.role === "waiter") {
         waiterSocket.off("neworder", handleNewOrderNotification);
-        waiterSocket.off("orderready", handleNewOrderNotification);
+        waiterSocket.off("orderReady", handleNewOrderNotification);
         waiterSocket.off("helprequest", handleNewOrderNotification);
       }
     };
   }, []);
-
 
   useEffect(() => {
     getAllCustomerMessage();

@@ -1,25 +1,31 @@
 import { useState, useEffect, useRef, useContext } from "react";
 import axios from "axios";
-import { detacontext } from "../../../../App";
+import { dataContext } from "../../../../App";
 import { toast } from "react-toastify";
 import io from "socket.io-client";
 
-const kitchenSocket = io(`${process.env.REACT_APP_API_URL}/kitchen`, {
+const BarSocket = io(`${process.env.REACT_APP_API_URL}/bar`, {
   reconnection: true,
   reconnectionAttempts: Infinity,
   reconnectionDelay: 1000,
 });
 
-const Kitchen = () => {
-  const apiUrl = process.env.REACT_APP_API_URL;
-  const token = localStorage.getItem("token_e");
-  const config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  };
+const Bar = () => {
+  
 
-  const { formatDate, formatTime , isRefresh, setisRefresh  } = useContext(detacontext);
+  const {
+    formatDate,
+    formatTime,
+    isRefresh,
+    setIsRefresh,
+    cashierSocket,
+    kitchenSocket,
+    BarSocket,
+    GrillSocket,
+    waiterSocket,
+  apiUrl,
+handleGetTokenAndConfig,
+} = useContext(dataContext);
 
   const start = useRef();
   const ready = useRef();
@@ -28,19 +34,15 @@ const Kitchen = () => {
   const [consumptionOrderActive, setConsumptionOrderActive] = useState([]); // State for active orders
   const [allOrders, setAllOrders] = useState([]); // State for all orders
 
-  const [allRecipe, setallRecipe] = useState([]); // State for all orders
+  const [allRecipe, setAllRecipe] = useState([]); // State for all orders
 
   const getAllRecipe = async () => {
     try {
-      if (!token) {
-        // Handle case where token is not available
-        toast.error("رجاء تسجيل الدخول مره اخري");
-        return;
-      }
+      const config = await handleGetTokenAndConfig();
 
       const getAllRecipe = await axios.get(`${apiUrl}/api/recipe`, config);
       const allRecipeData = getAllRecipe.data;
-      setallRecipe(allRecipeData);
+      setAllRecipe(allRecipeData);
       console.log({ getAllRecipe });
     } catch (error) {
       console.error("Error fetching product recipe:", error.message);
@@ -49,26 +51,23 @@ const Kitchen = () => {
 
   const getAllOrders = async () => {
     try {
-      if (!token) {
-        // Handle case where token is not available
-        toast.error("رجاء تسجيل الدخول مره اخري");
-        return;
-      }
+      const config = await handleGetTokenAndConfig();
 
       // Fetch orders from the API
       const ordersResponse = await axios.get(`${apiUrl}/api/order/limit/50`);
-      const kitchenOrders = ordersResponse.data;
-      // console.log({ kitchenOrders })
+      const BarOrders = ordersResponse.data;
+      // console.log({ BarOrders })
       // Set all orders state
-      setAllOrders(kitchenOrders);
+      setAllOrders(BarOrders);
 
       // Filter active orders based on certain conditions
-      const activeOrders = kitchenOrders.filter(
+      const activeOrders = BarOrders.filter(
         (order) =>
           order.isActive &&
-          (order.status === "Approved" ||
-            order.status === "Preparing" ||
-            order.status === "Prepared")
+          order.status === "Approved" &&
+          (order.preparationStatus.Bar === "Pending" ||
+            order.preparationStatus.Bar === "Preparing" ||
+            order.preparationStatus.Bar === "ء")
       );
 
       // Set active orders state
@@ -89,37 +88,38 @@ const Kitchen = () => {
               const productIngredients = product.sizeId
                 ? allRecipe.find(
                     (recipe) =>
-                      recipe.productId._id === product.productid?._id &&
+                      recipe.productId._id === product.productId?._id &&
                       recipe.sizeId === product.sizeId
                   )?.ingredients
                 : allRecipe.find(
-                    (recipe) => recipe.productId._id === product.productid?._id
+                    (recipe) => recipe.productId._id === product.productId?._id
                   )?.ingredients || [];
 
               // console.log({ productIngredients })
 
               // Update consumptionOrderActive
-              productIngredients&&productIngredients.forEach((item) => {
-                const existingItemIndex =
-                  updatedConsumptionOrderActive.findIndex(
-                    (con) => con.itemId?._id === item.itemId?._id
-                  );
-                const amount = item.amount * product.quantity;
+              productIngredients &&
+                productIngredients.forEach((item) => {
+                  const existingItemIndex =
+                    updatedConsumptionOrderActive.findIndex(
+                      (con) => con.itemId?._id === item.itemId?._id
+                    );
+                  const amount = item.amount * product.quantity;
 
-                if (existingItemIndex !== -1) {
-                  // If the item already exists, update the amount
-                  updatedConsumptionOrderActive[existingItemIndex].amount +=
-                    amount;
-                } else {
-                  // If the item does not exist, add it to the array
-                  updatedConsumptionOrderActive.push({
-                    itemId: item.itemId,
-                    name: item.name,
-                    unit: item.unit,
-                    amount,
-                  });
-                }
-              });
+                  if (existingItemIndex !== -1) {
+                    // If the item already exists, update the amount
+                    updatedConsumptionOrderActive[existingItemIndex].amount +=
+                      amount;
+                  } else {
+                    // If the item does not exist, add it to the array
+                    updatedConsumptionOrderActive.push({
+                      itemId: item.itemId,
+                      name: item.name,
+                      unit: item.unit,
+                      amount,
+                    });
+                  }
+                });
 
               product.extras &&
                 product.extras.map((productextra) => {
@@ -170,51 +170,38 @@ const Kitchen = () => {
     }
   };
 
-
-
-
-
   const today = formatDate(new Date());
   const [date, setDate] = useState(today);
-  const [allKitchenConsumption, setAllKitchenConsumption] = useState([]);
-  const [filteredKitchenConsumptionToday, setFilteredKitchenConsumptionToday] =
+  const [allBarConsumption, setAllBarConsumption] = useState([]);
+  const [filteredBarConsumptionToday, setFilteredBarConsumptionToday] =
     useState([]);
 
-  const getKitchenConsumption = async () => {
+  const getBarConsumption = async () => {
     try {
-      if (!token) {
-        // Handle case where token is not available
-        toast.error("رجاء تسجيل الدخول مرة أخرى");
-        return;
-      }
+      const config = await handleGetTokenAndConfig();
 
-      setFilteredKitchenConsumptionToday([]);
-      console.log("Fetching kitchen consumption...");
+      setFilteredBarConsumptionToday([]);
+      console.log("Fetching Bar consumption...");
 
-      const response = await axios.get(
-        `${apiUrl}/api/kitchenconsumption`,
-        config
-      );
+      const response = await axios.get(`${apiUrl}/api/consumption`, config);
 
       if (response && response.data) {
-        const kitchenConsumptions = response.data.data || [];
-        setAllKitchenConsumption(kitchenConsumptions);
+        const BarConsumptions = response.data.data || [];
+        setAllBarConsumption(BarConsumptions);
 
-        const kitchenConsumptionsToday = kitchenConsumptions.filter(
-          (kitItem) => {
-            const itemDate = formatDate(kitItem.createdAt);
-            return itemDate === date;
-          }
-        );
+        const BarConsumptionsToday = BarConsumptions.filter((kitItem) => {
+          const itemDate = formatDate(kitItem.createdAt);
+          return itemDate === date;
+        });
 
-        console.log({ kitchenConsumptionsToday, kitchenConsumptions });
-        setFilteredKitchenConsumptionToday(kitchenConsumptionsToday);
+        console.log({ BarConsumptionsToday, BarConsumptions });
+        setFilteredBarConsumptionToday(BarConsumptionsToday);
       } else {
         console.error("Unexpected response or empty data");
       }
     } catch (error) {
-      console.error("Error fetching kitchen consumption:", error);
-      toast.error("حدث خطأ أثناء جلب استهلاك المطبخ");
+      console.error("Error fetching Bar consumption:", error);
+      toast.error("حدث خطأ أثناء جلب استهلاك البار");
     }
   };
 
@@ -222,16 +209,11 @@ const Kitchen = () => {
 
   const orderInProgress = async (id) => {
     try {
-      if (!token) {
-        // Handle case where token is not available
-        toast.error("رجاء تسجيل الدخول مره اخري");
-        return;
-      }
-      const status = "Preparing";
-      const orderData = { status };
+      const config = await handleGetTokenAndConfig();
+      const preparationStatus = { "preparationStatus.Bar": "Preparing" };
       const response = await axios.put(
         `${apiUrl}/api/order/${id}`,
-        orderData,
+        preparationStatus,
         config
       );
       if (response.status === 200) {
@@ -248,248 +230,187 @@ const Kitchen = () => {
   };
 
   const updateOrderDone = async (id, type) => {
-    if (!token) {
-      // Handle case where token is not available
-      toast.error("رجاء تسجيل الدخول مره اخري");
-      return;
-    }
-    try {
-      // Fetch order data by ID
-      const orderData = await axios.get(`${apiUrl}/api/order/${id}`);
-      const products = await orderData.data.products;
+    const config = await handleGetTokenAndConfig();
 
-      const fetchKitchenConsumption = await axios.get(
-        apiUrl + "/api/kitchenconsumption",
+    try {
+      // 1. Fetch order and product data
+      const { data: orderData } = await axios.get(
+        `${apiUrl}/api/order/${id}`,
         config
       );
-      const Allkitchenconsumption = await fetchKitchenConsumption.data.data;
-
-      const kitchenConsumptionsToday = await Allkitchenconsumption.filter(
-        (kitItem) => {
-          const itemDate = formatDate(kitItem.createdAt);
-          return itemDate === date;
-        }
+      const { products: orderProducts } = orderData;
+      const BarProducts = orderProducts.filter(
+        (product) => product.productId?.preparationSection === "Bar"
       );
 
-      let totalConsumptionOrder = [];
-      // Loop through each product in the order
-      products &&
-        products.forEach((product) => {
-          if (!product.isDone) {
-            console.log({ product });
-            const productIngredients = product.sizeId
-              ? allRecipe.find(
-                  (recipe) =>
-                    recipe.productId._id === product.productid?._id &&
-                    recipe.sizeId === product.sizeId
-                )?.ingredients
-              : allRecipe.find(
-                  (recipe) => recipe.productId._id === product.productid?._id
-                )?.ingredients || [];
+      if (!BarProducts.length) {
+        toast.warn("لا توجد منتجات بحاجة إلى تجهيز في البار");
+        return;
+      }
 
-            console.log({ productIngredients });
-            // Update consumptionOrderActive
-            productIngredients &&
-              productIngredients.forEach((item) => {
-                console.log({ item });
-                let kitconsumption = kitchenConsumptionsToday.find(
-                  (kitItem) => kitItem.stockItemId._id === item.itemId?._id
-                );
-                console.log({ kitconsumption });
+      // 2. Fetch today's Bar consumption data
+      const { data: consumptionData } = await axios.get(
+        `${apiUrl}/api/consumption`,
+        config
+      );
+      const allBarConsumption = consumptionData.data;
+      const BarConsumptionsToday = allBarConsumption.filter((item) => {
+        const itemDate = formatDate(item.createdAt);
+        return itemDate === date;
+      });
 
-                const existingItemIndex = totalConsumptionOrder.findIndex(
-                  (con) => con.itemId?._id === item.itemId?._id
-                );
-                console.log({ existingItemIndex });
+      // 3. Prepare total consumption order
+      const totalConsumptionOrder = [];
 
-                const amount = item.amount * product.quantity;
+      for (const product of BarProducts) {
+        if (product.isDone) continue;
 
-                if (existingItemIndex !== -1) {
-                  // If the item already exists, update the amount
-                  totalConsumptionOrder[existingItemIndex].amount += amount;
-                } else {
-                  // If the item does not exist, add it to the array
-                  totalConsumptionOrder.push({
-                    itemId: item.itemId,
-                    amount,
-                    productsProduced: kitconsumption
-                      ? [...kitconsumption.productsProduced]
-                      : [],
-                  });
-                }
+        // Fetch product ingredients from recipes
+        const productIngredients = product.sizeId
+          ? allRecipe.find(
+              (recipe) =>
+                recipe.productId._id === product.productId?._id &&
+                recipe.sizeId === product.sizeId
+            )?.ingredients
+          : allRecipe.find(
+              (recipe) => recipe.productId._id === product.productId?._id
+            )?.ingredients || [];
 
-                console.log({ totalConsumptionOrder });
+        // Process ingredients
+        for (const ingredient of productIngredients || []) {
+          const existingItemIndex = totalConsumptionOrder.findIndex(
+            (item) => item.itemId?._id === ingredient.itemId?._id
+          );
 
-                const existingItem = totalConsumptionOrder.find(
-                  (con) => con.itemId?._id === item.itemId?._id
-                );
+          const amount = ingredient.amount * product.quantity;
 
-                let foundProducedProduct = product.sizeId
-                  ? existingItem?.productsProduced?.find(
-                      (produced) =>
-                        produced.productId === product.productid?._id &&
-                        produced.sizeId === product.sizeId
-                    )
-                  : existingItem?.productsProduced?.find(
-                      (produced) =>
-                        produced.productId === product.productid?._id
-                    );
+          if (existingItemIndex !== -1) {
+            totalConsumptionOrder[existingItemIndex].amount += amount;
+          } else {
+            const BarConsumption = BarConsumptionsToday.find(
+              (kitItem) => kitItem.stockItemId._id === ingredient.itemId?._id
+            );
 
-                console.log({ foundProducedProduct });
-
-                if (!foundProducedProduct) {
-                  const newProducedProduct = product.sizeId
-                    ? {
-                        productId: product.productid?._id,
-                        sizeId: product.sizeId,
-                        sizeName: product.size,
-                        productionCount: product.quantity,
-                        productName: product.name,
-                      }
-                    : {
-                        productId: product.productid?._id,
-                        productionCount: product.quantity,
-                        productName: product.name,
-                      };
-                  console.log({ newProducedProduct });
-                  existingItem?.productsProduced.push(newProducedProduct);
-                } else {
-                  foundProducedProduct.productionCount += product.quantity;
-                }
-              });
-            // console.log({ totalConsumptionOrder })
-
-            product.extras &&
-              product.extras.forEach((productextra) => {
-                productextra.extraDetails.forEach((extra) => {
-                  const extraIngredients =
-                    allRecipe.find(
-                      (recipe) => recipe.productId._id === extra.extraId._id
-                    )?.ingredients || [];
-
-                  // Update consumptionOrderActive
-                  extraIngredients.forEach((item) => {
-                    const existingItemIndex = totalConsumptionOrder.findIndex(
-                      (con) => con.itemId?._id === item.itemId?._id
-                    );
-                    const amount = item.amount;
-
-                    if (existingItemIndex !== -1) {
-                      // If the item already exists, update the amount
-                      totalConsumptionOrder[existingItemIndex].amount += amount;
-                    } else {
-                      // If the item does not exist, add it to the array
-                      totalConsumptionOrder.push({
-                        itemId: item.itemId,
-                        amount,
-                      });
-                    }
-
-                    let foundProducedProduct = totalConsumptionOrder[
-                      existingItemIndex
-                    ]?.productsProduced?.find(
-                      (produced) => produced.productId === extra.extraId?._id
-                    );
-
-                    if (!foundProducedProduct) {
-                      const newProducedProduct = {
-                        productId: extra.extraId?._id,
-                        productionCount: 1,
-                        productName: extra.name,
-                      };
-
-                      totalConsumptionOrder[
-                        existingItemIndex
-                      ]?.productsProduced.push(newProducedProduct);
-                    } else {
-                      foundProducedProduct.productionCount += 1;
-                    }
-                  });
-                });
-              });
+            totalConsumptionOrder.push({
+              itemId: ingredient.itemId,
+              amount,
+              productsProduced: BarConsumption
+                ? [...BarConsumption.productsProduced]
+                : [],
+            });
           }
-        });
+        }
 
-      // console.log({ totalConsumptionOrder })
-      totalConsumptionOrder&&totalConsumptionOrder.map(async (item) => {
-        let kitconsumption = await kitchenConsumptionsToday.find(
+        // Process extras
+        for (const extraGroup of product.extras || []) {
+          for (const extra of extraGroup.extraDetails) {
+            const extraIngredients =
+              allRecipe.find(
+                (recipe) => recipe.productId._id === extra.extraId._id
+              )?.ingredients || [];
+
+            for (const ingredient of extraIngredients) {
+              const existingItemIndex = totalConsumptionOrder.findIndex(
+                (item) => item.itemId?._id === ingredient.itemId?._id
+              );
+              const amount = ingredient.amount;
+
+              if (existingItemIndex !== -1) {
+                totalConsumptionOrder[existingItemIndex].amount += amount;
+              } else {
+                totalConsumptionOrder.push({
+                  itemId: ingredient.itemId,
+                  amount,
+                });
+              }
+            }
+          }
+        }
+      }
+
+      // 4. Update consumption data in the Bar
+      for (const item of totalConsumptionOrder) {
+        const BarConsumption = BarConsumptionsToday.find(
           (kitItem) => kitItem.stockItemId._id === item.itemId?._id
         );
-        try {
-          const consumptionQuantity =
-            kitconsumption.consumptionQuantity + item.amount;
-          const bookBalance = kitconsumption.bookBalance - item.amount;
-          console.log({ productsProduced: item.productsProduced });
-          // Update kitchen consumption data
-          const update = await axios.put(
-            `${apiUrl}/api/kitchenconsumption/${kitconsumption._id}`,
+
+        if (BarConsumption) {
+          const quantityConsumed =
+            BarConsumption.quantityConsumed + item.amount;
+          const bookBalance = BarConsumption.bookBalance - item.amount;
+
+          await axios.put(
+            `${apiUrl}/api/consumption/${BarConsumption._id}`,
             {
-              consumptionQuantity,
+              quantityConsumed,
               bookBalance,
               productsProduced: item.productsProduced,
             },
             config
           );
-          // console.log({ update: update });
-        } catch (error) {
-          console.log({ error: error });
+        }
+      }
+
+      // 5. Update order status
+      const updatedProducts = orderProducts.map((product) => {
+        if (
+          BarProducts.some(
+            (BarProduct) =>
+              BarProduct.productId?._id === product.productId._id
+          )
+        ) {
+          return { ...product, isDone: true };
+        } else {
+          return product;
         }
       });
 
-      // Perform other operations if needed after the loop completes
-      // Update order status or perform other tasks
-
-      const status = "Prepared";
-      const updateproducts = products&&products.map((prod) => ({
-        ...prod,
-        isDone: true,
-      }));
-
-
+      // const preparationStatus = { "preparationStatus.Bar": "Prepared" };
 
       if (type === "Internal") {
         const waiter = await specifiedWaiter(id);
-        await axios.put(
+        if (!waiter) {
+          toast.warn("لا يوجد نادل متاح لتسليم الطلب. يرجى مراجعة الإدارة!");
+          return;
+        }
+        const response = await axios.put(
           `${apiUrl}/api/order/${id}`,
-          { products: updateproducts, status, waiter },
+          {
+            "preparationStatus.Bar": "Prepared",
+            products: updatedProducts,
+            waiter,
+          },
           config
         );
-        kitchenSocket.emit("orderready", `اورد جاهز -${waiter}`);
-        
+        if (response) {
+          BarSocket.emit("orderReady", `أورد جاهز في البار - ${waiter}`);
+        }
       } else {
         await axios.put(
           `${apiUrl}/api/order/${id}`,
-          { products: updateproducts, status },
+          { products: updatedProducts, "preparationStatus.Bar": "Prepared" },
           config
         );
-        kitchenSocket.emit("orderready", `اورد جاهز`);
+        BarSocket.emit("orderReady", "أورد جاهز في البار");
       }
 
-
-      // Set all orders state
+      // 6. Refresh state
       getAllOrders();
-      getKitchenConsumption();
-      toast.success("تم تجهيز الاوردر !");
-
+      getBarConsumption();
+      toast.success("تم تجهيز الطلب بنجاح!");
     } catch (error) {
-      console.log(error);
-      toast.error(
-        "حدث خطأ اثناء تعديل حاله الاودر !اعد تحميل الصفحة و حاول مره اخري "
-      );
+      console.error("Error in updating order:", error);
+      toast.error("حدث خطأ أثناء تعديل حالة الطلب. يرجى إعادة المحاولة.");
     }
   };
 
   // Fetches all active waiters from the API
 
-  const [AllWaiters, setAllWaiters] = useState([]); // State for active waiters
+  const [allWaiters, setAllWaiters] = useState([]); // State for active waiters
 
   const getAllWaiters = async () => {
     try {
-      if (!token) {
-        // Handle case where token is not available
-        toast.error("رجاء تسجيل الدخول مره اخري");
-        return;
-      }
+      const config = await handleGetTokenAndConfig();
 
       const allEmployees = await axios.get(apiUrl + "/api/employee", config);
 
@@ -510,9 +431,13 @@ const Kitchen = () => {
   // Determines the next available waiter to take an order
   const specifiedWaiter = async (id) => {
     try {
-      if (!token) {
+      const config = await handleGetTokenAndConfig();
+
+      if (allWaiters.length === 0) {
         // Handle case where token is not available
-        toast.error("رجاء تسجيل الدخول مره اخري");
+        toast.warn(
+          "قائمه الندلاء فارغه ! رجاء اعاده تحميل الصفحة و اذا ظلت المشكله ابلغ الاداره"
+        );
         return;
       }
       // البحث عن الطلب بالمعرف المحدد
@@ -529,7 +454,7 @@ const Kitchen = () => {
       }
 
       // البحث عن النوادل في القسم المحدد
-      const sectionWaiters = AllWaiters.filter(
+      const sectionWaiters = allWaiters.filter(
         (waiter) => waiter.sectionNumber === tablesectionNumber
       );
       if (sectionWaiters.length === 0) {
@@ -580,23 +505,20 @@ const Kitchen = () => {
     return minutesPassed;
   };
 
-
-
   // Fetches orders and active waiters on initial render
   useEffect(() => {
     getAllRecipe();
     getAllWaiters();
     getAllOrders();
-    getKitchenConsumption();
+    getBarConsumption();
   }, []);
 
   useEffect(() => {
     getAllRecipe();
     getAllWaiters();
     getAllOrders();
-    getKitchenConsumption();
+    getBarConsumption();
   }, [isRefresh]);
-
 
   return (
     <div
@@ -608,7 +530,8 @@ const Kitchen = () => {
         style={{ borderBottom: "1px solid red" }}
       >
         {orderactive &&
-          consumptionOrderActive&&consumptionOrderActive.map((item, index) => (
+          consumptionOrderActive &&
+          consumptionOrderActive.map((item, index) => (
             <div
               className="card bg-primary text-white"
               style={{ height: "100px", width: "130px" }}
@@ -629,10 +552,10 @@ const Kitchen = () => {
                   style={{ fontSize: "14px", fontWeight: "500" }}
                 >
                   الرصيد:{" "}
-                  {filteredKitchenConsumptionToday.find(
+                  {filteredBarConsumptionToday.find(
                     (cons) => cons.stockItemId._id === item.itemId?._id
                   )
-                    ? filteredKitchenConsumptionToday.find(
+                    ? filteredBarConsumptionToday.find(
                         (cons) => cons.stockItemId._id === item.itemId?._id
                       ).bookBalance
                     : "0"}{" "}
@@ -649,22 +572,26 @@ const Kitchen = () => {
           ))}
       </div>
 
-
-
-
-
       <div className="col-12 d-flex flex-wrap justify-content-around align-items-start">
         {orderactive &&
           orderactive.map((order, i) => {
-            if (order.products.filter((pr) => pr.isDone === false).length > 0) {
+            if (
+              order.products.filter(
+                (product) =>
+                  product.isDone === false &&
+                  product.productId?.preparationSection === "Bar"
+              ).length > 0
+            ) {
               return (
                 <div className="col-lg-3 col-md-4 col-sm-6 col-12 mb-4" key={i}>
                   <div
                     className="card text-white bg-success"
                     style={{ width: "260px" }}
                   >
-                    <div className="card-body text-right d-flex justify-content-between p-0 m-1"
-                    style={{fontSize:'14px', fontWeight:'500'}}>
+                    <div
+                      className="card-body text-right d-flex justify-content-between p-0 m-1"
+                      style={{ fontSize: "14px", fontWeight: "500" }}
+                    >
                       <div className="col-6 p-0">
                         <p className="card-text">
                           {" "}
@@ -703,7 +630,11 @@ const Kitchen = () => {
                     </div>
                     <ul className="list-group list-group-flush">
                       {order.products
-                        .filter((pr) => pr.isDone === false)
+                        .filter(
+                          (product) =>
+                            product.isDone === false &&
+                            product.productId?.preparationSection === "Bar"
+                        )
                         .map((product, i) => {
                           return (
                             <>
@@ -781,7 +712,7 @@ const Kitchen = () => {
                         })}
                     </ul>
                     <div className="card-footer text-center w-100 d-flex flex-row">
-                      {order.status === "Preparing" ? (
+                      {order.preparationStatus.Bar === "Preparing" ? (
                         <button
                           className="btn w-100 btn-warning h-100 btn btn-lg"
                           onClick={() => {
@@ -804,13 +735,8 @@ const Kitchen = () => {
                   </div>
                 </div>
               );
-
-
-
-
-
             } else if (
-              order.status === "Prepared" &&
+              order.preparationStatus.Bar === "Prepared" &&
               order.products.filter(
                 (pr) => pr.isDone === true && pr.isDeleverd === false
               ).length > 0
@@ -821,8 +747,10 @@ const Kitchen = () => {
                     className="card text-white bg-success"
                     style={{ width: "260px" }}
                   >
-                    <div className="card-body text-right d-flex justify-content-between p-0 m-1"
-                    style={{fontSize:'14px', fontWeight:'500'}}>
+                    <div
+                      className="card-body text-right d-flex justify-content-between p-0 m-1"
+                      style={{ fontSize: "14px", fontWeight: "500" }}
+                    >
                       <div className="col-6 p-0">
                         <p className="card-text">
                           {" "}
@@ -955,4 +883,4 @@ const Kitchen = () => {
   );
 };
 
-export default Kitchen;
+export default Bar;

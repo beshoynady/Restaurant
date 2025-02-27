@@ -1,22 +1,11 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
 import axios from "axios";
 import { useReactToPrint } from "react-to-print";
-import { detacontext } from "../../../../App";
+import { dataContext } from "../../../../App";
 import { toast } from "react-toastify";
 import "../orders/Orders.css";
 
-
-
 const Purchase = () => {
-  const apiUrl = process.env.REACT_APP_API_URL;
-
-  const token = localStorage.getItem("token_e");
-  const config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  };
-
   const {
     restaurantData,
     permissionsList,
@@ -27,45 +16,25 @@ const Purchase = () => {
     employeeLoginInfo,
     formatDate,
     formatDateTime,
-    setisLoading,
+    setIsLoading,
     EditPagination,
-    startpagination,
-    endpagination,
-    setstartpagination,
-    setendpagination,
-  } = useContext(detacontext);
+    startPagination,
+    endPagination,
+    setStartPagination,
+    setEndPagination,
+    handleGetTokenAndConfig,
+    apiUrl,
+  } = useContext(dataContext);
 
   const purchasePermission = permissionsList?.filter(
     (permission) => permission.resource === "Purchases"
   )[0];
-  
 
-  const [AllStockactions, setAllStockactions] = useState([]);
-
-  const getallStockaction = async () => {
-    if (!token) {
-      // Handle case where token is not available
-      toast.error("رجاء تسجيل الدخول مره اخري");
-      return;
-    }
-    try {
-      const response = await axios.get(apiUrl + "/api/stockmanag/", config);
-      console.log(response.data);
-      const Stockactions = await response.data;
-      setAllStockactions(Stockactions.reverse());
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
+  console.log({ employeeLoginInfo });
   const [AllSuppliers, setAllSuppliers] = useState([]);
   // Function to retrieve all suppliers
   const getAllSuppliers = async () => {
-    if (!token) {
-      // Handle case where token is not available
-      toast.error("رجاء تسجيل الدخول مره اخري");
-      return;
-    }
+    const config = await handleGetTokenAndConfig();
     try {
       const response = await axios.get(apiUrl + "/api/supplier/", config);
 
@@ -92,11 +61,7 @@ const Purchase = () => {
   const [AllCashRegisters, setAllCashRegisters] = useState([]);
   // Fetch all cash registers
   const getAllCashRegisters = async () => {
-    if (!token) {
-      // Handle case where token is not available
-      toast.error("رجاء تسجيل الدخول مره اخري");
-      return;
-    }
+    const config = await handleGetTokenAndConfig();
     try {
       const response = await axios.get(apiUrl + "/api/cashregister", config);
       setAllCashRegisters(response.data.reverse());
@@ -105,32 +70,9 @@ const Purchase = () => {
     }
   };
 
-  const [allrecipes, setallrecipes] = useState([]);
-
-  const getallrecipes = async () => {
-    if (!token) {
-      // Handle case where token is not available
-      toast.error("رجاء تسجيل الدخول مره اخري");
-      return;
-    }
-    try {
-      const response = await axios.get(`${apiUrl}/api/recipe`, config);
-      console.log(response);
-      const allRecipe = await response.data;
-      setallrecipes(allRecipe);
-      console.log(allRecipe);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   const [StockItems, setStockItems] = useState([]);
-  const getaStockItems = async () => {
-    if (!token) {
-      // Handle case where token is not available
-      toast.error("رجاء تسجيل الدخول مره اخري");
-      return;
-    }
+  const getAllStockItems = async () => {
+    const config = await handleGetTokenAndConfig();
     try {
       const response = await axios.get(apiUrl + "/api/stockitem/", config);
       if (response) {
@@ -142,124 +84,93 @@ const Purchase = () => {
     }
   };
 
-  const Stockmovement = ["Purchase", "ReturnPurchase"];
+  const [storeId, setstoreId] = useState(0);
 
-  const createStockAction = async (item, receiverid) => {
-    if (!token) {
-      // Handle case where token is not available
-      toast.error("رجاء تسجيل الدخول مره اخري");
-      return;
-    }
+  const createStockAction = async (item) => {
     try {
-      const itemId = item.itemId;
-      const quantity = item.quantity;
-      const price = Number(item.price);
-      const cost = item.cost;
-      const expirationDate = item.expirationDate;
-      const movement = "Purchase";
-      const receiver = receiverid;
-      const stockItem = StockItems.filter((item) => item._id === itemId)[0];
+      const config = await handleGetTokenAndConfig();
+      const { itemId, quantity, expirationDate } = item;
 
-      const itemName = stockItem.itemName;
-      const oldBalance = stockItem.currentBalance;
-      const parts = stockItem.parts;
-      const currentBalance = Number(quantity) + Number(oldBalance);
-      const unit = stockItem.largeUnit;
-      const costOfPart =
-        Math.round((Number(price) / Number(parts)) * 100) / 100;
-      // Update the stock item's movement
-      const changeItem = await axios.put(
-        `${apiUrl}/api/stockitem/movement/${itemId}`,
-        { currentBalance, price, costOfPart },
-        config
-      );
-      console.log(changeItem);
-
-      if (changeItem.status === 200) {
-        // Create a new stock action
-        const response = await axios.post(
-          apiUrl + "/api/stockmanag/",
-          {
-            itemId,
-            movement,
-            quantity,
-            cost,
-            unit,
-            balance: currentBalance,
-            oldBalance,
-            price,
-            supplier,
-            receiver,
-            expirationDate,
-          },
-          config
-        );
-
-        // console.log(response);
-
-        for (const recipe of allrecipes) {
-          const recipeid = recipe._id;
-          const productname = recipe.productId?.name;
-          const arrayingredients = recipe.ingredients;
-
-          const newIngredients = arrayingredients.map((ingredient) => {
-            // console.log({ingredient, costOfPart, amount : ingredient.amount})
-            if (ingredient.itemId === itemId) {
-              const costofitem = costOfPart;
-              const unit = ingredient.unit;
-              const amount = ingredient.amount;
-              const totalcostofitem = amount * costOfPart;
-              return {
-                itemId,
-                name: itemName,
-                amount,
-                costofitem,
-                unit,
-                totalcostofitem,
-              };
-            } else {
-              return ingredient;
-            }
-          });
-          console.log({ newIngredients });
-          const totalcost = newIngredients.reduce((acc, curr) => {
-            return acc + (curr.totalcostofitem || 0);
-          }, 0);
-          // Update the product with the modified recipe and total cost
-          const updateRecipe = await axios.put(
-            `${apiUrl}/api/recipe/${recipeid}`,
-            { ingredients: newIngredients, totalcost },
-            config
-          );
-
-          console.log({ updateRecipe });
-
-          // Toast for successful update based on recipe change
-          toast.success(`تم تحديث وصفة  ${productname}`);
-        }
+      if (!storeId || !itemId || !quantity) {
+        toast.error("برجاء اختيار المخزن والصنف وتحديد الكمية");
+        return;
       }
 
-      // Update the stock actions list and stock items
-      getallStockaction();
-      getaStockItems();
+      const salesTaxDiscount = Number(salesTax) - Number(discount);
+      const addcost = (item.cost / totalAmount) * salesTaxDiscount;
+      const totalCost = item.cost + addcost;
+      const unitCost = Number(item.price) + addcost / quantity;
 
-      // Toast notification for successful creation
-      toast.success("تم تسجيل حركه المخزن بنجاح");
+      const stockItem = StockItems.find((i) => i._id === itemId);
+      if (!stockItem) {
+        toast.error("الصنف غير موجود في المخزون");
+        return;
+      }
+
+      const { storageUnit: unit, categoryId, costMethod } = stockItem;
+
+      const { data: allStockMovementsByStore = [] } = await axios.get(
+        `${apiUrl}/api/stockmovement/allmovementstore/${storeId}`,
+        config
+      );
+
+      const lastStockMovementByItem = allStockMovementsByStore
+        .filter((movement) => movement.itemId?._id === itemId)
+        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0] || {
+        balance: { quantity: 0, totalCost: 0, unitCost: 0 },
+      };
+
+      const inbound = {
+        quantity: Number(quantity),
+        unitCost: Number(unitCost),
+        totalCost: Number(totalCost),
+      };
+
+      const balance = {
+        quantity: lastStockMovementByItem.balance.quantity + Number(quantity),
+        totalCost:
+          lastStockMovementByItem.balance.totalCost + Number(totalCost),
+        unitCost:
+          (lastStockMovementByItem.balance.totalCost + Number(totalCost)) /
+          (lastStockMovementByItem.balance.quantity + Number(quantity)),
+      };
+
+      // إنشاء حركة المخزون الجديدة
+      const response = await axios.post(
+        `${apiUrl}/api/stockmovement/`,
+        {
+          itemId,
+          storeId,
+          categoryId,
+          costMethod,
+          source: "Purchase",
+          unit,
+          inbound,
+          balance,
+          remainingQuantity: quantity,
+          sourceDate: invoiceDate,
+          description: notes, // Changed notes to description
+          expirationDate,
+          sender: supplierId, // Added sender
+          receiver: employeeLoginInfo.id, // Added receiver
+        },
+        config
+      );
+
+      console.log("Stock movement created:", response.data);
+
+      getAllStockItems();
+      toast.success("تم تسجيل حركة المخزن بنجاح");
     } catch (error) {
-      console.log(error);
-      // Toast notification for error
-      toast.error("فشل تسجيل حركه المخزن ! حاول مره اخري");
+      console.error("خطأ في تسجيل حركة المخزن:", error);
+      toast.error("فشل تسجيل حركة المخزن! حاول مرة أخرى");
     }
   };
 
   const [previousBalance, setPreviousBalance] = useState(0);
 
   const handleAddSupplierTransactionPurchase = async (invoiceNumber) => {
-    if (!token) {
-      // Handle case where token is not available
-      toast.error("رجاء تسجيل الدخول مره اخري");
-      return;
-    }
+    const config = await handleGetTokenAndConfig();
     try {
       let newCurrentBalance = 0;
       const transactionType = "Purchase";
@@ -268,13 +179,14 @@ const Purchase = () => {
       const currentBalance = previousBalance + amount;
       const requestData = {
         invoiceNumber,
-        supplier,
         transactionDate,
         transactionType,
         amount,
         previousBalance,
         currentBalance,
         paymentMethod,
+        sender: supplierId,
+        receiver: employeeLoginInfo.id,
         notes,
       };
 
@@ -288,7 +200,7 @@ const Purchase = () => {
       console.log({ response });
       if (response.status === 201) {
         const supplierresponse = await axios.put(
-          `${apiUrl}/api/supplier/${supplier}`,
+          `${apiUrl}/api/supplier/${supplierId}`,
           { currentBalance },
           config
         );
@@ -311,7 +223,7 @@ const Purchase = () => {
         const currentBalance = previousBalance - paidAmount;
         const requestData = {
           invoiceNumber,
-          supplier,
+          supplier: supplierId,
           transactionDate,
           transactionType,
           amount,
@@ -331,7 +243,7 @@ const Purchase = () => {
         console.log({ response });
         if (response.status === 201) {
           const supplierresponse = await axios.put(
-            `${apiUrl}/api/supplier/${supplier}`,
+            `${apiUrl}/api/supplier/${supplierId}`,
             { currentBalance },
             config
           );
@@ -350,7 +262,7 @@ const Purchase = () => {
     {
       itemId: "",
       quantity: 0,
-      largeUnit: "",
+      storageUnit: "",
       price: 0,
       cost: 0,
       expirationDate: "",
@@ -364,7 +276,7 @@ const Purchase = () => {
         itemId: "",
         quantity: 0,
         price: 0,
-        largeUnit: "",
+        storageUnit: "",
         cost: 0,
         expirationDate: "",
       },
@@ -377,14 +289,16 @@ const Purchase = () => {
     setItems(updatedItems);
     clacTotalAmount();
   };
+
   const handleItemId = (id, index) => {
     const stockitem = StockItems.filter((item) => item._id === id)[0];
     const updatedItems = [...items];
     updatedItems[index].itemId = stockitem._id;
-    updatedItems[index].largeUnit = stockitem.largeUnit;
+    updatedItems[index].storageUnit = stockitem.storageUnit;
     console.log({ updatedItems });
     setItems(updatedItems);
   };
+
   const handleQuantity = (quantity, index) => {
     const updatedItems = [...items];
     updatedItems[index].quantity = Number(quantity);
@@ -394,6 +308,7 @@ const Purchase = () => {
     setItems(updatedItems);
     clacTotalAmount();
   };
+
   const handlePrice = (price, index) => {
     const updatedItems = [...items];
     updatedItems[index].price = Number(price);
@@ -403,6 +318,7 @@ const Purchase = () => {
     setItems(updatedItems);
     clacTotalAmount();
   };
+
   const handleExpirationDate = (date, index) => {
     const updatedItems = [...items];
     updatedItems[index].expirationDate = new Date(date);
@@ -424,7 +340,6 @@ const Purchase = () => {
   const [netAmount, setNetAmount] = useState(0);
 
   const calcNetAmount = () => {
-    // let total = Number(totalAmount) + Number(additionalCost) + Number(salesTax) - Number(discount)
     let total = Number(totalAmount) + Number(salesTax) - Number(discount);
     setNetAmount(total);
     setBalanceDue(total);
@@ -434,20 +349,20 @@ const Purchase = () => {
     calcNetAmount();
   }, [items, additionalCost, discount, salesTax]);
 
-  const [supplier, setSupplier] = useState("");
+  const [supplierId, setSupplierId] = useState("");
   const [financialInfo, setFinancialInfo] = useState("");
-  const [supplierInfo, setsupplierInfo] = useState("");
-  const [itemsSupplied, setitemsSupplied] = useState([]);
+  const [supplierInfo, setSupplierInfo] = useState("");
+  const [itemsSupplied, setItemsSupplied] = useState([]);
 
   const handleSupplier = (id) => {
-    setSupplier(id);
+    setSupplierId(id);
     const findSupplier = AllSuppliers.filter(
       (supplier) => supplier._id === id
     )[0];
-    setsupplierInfo(findSupplier);
+    setSupplierInfo(findSupplier);
     setFinancialInfo(findSupplier.financialInfo);
     setPreviousBalance(findSupplier.currentBalance);
-    setitemsSupplied(findSupplier.itemsSupplied);
+    setItemsSupplied(findSupplier.itemsSupplied);
   };
 
   const [invoiceNumber, setInvoiceNumber] = useState("");
@@ -456,7 +371,7 @@ const Purchase = () => {
   const [paidAmount, setPaidAmount] = useState(0);
   const [balanceDue, setBalanceDue] = useState(0);
   const [paymentStatus, setPaymentStatus] = useState("unpaid");
-  const [paymentType, setpaymentType] = useState("");
+  const [paymentType, setpaymentType] = useState("credit");
 
   const handlePaidAmount = (amount) => {
     setPaidAmount(amount);
@@ -477,13 +392,14 @@ const Purchase = () => {
   const [cashRegister, setCashRegister] = useState();
   const [CashRegisterBalance, setCashRegisterBalance] = useState(0);
   const handleCashRegister = (id) => {
-    console.log({ id });
+    // console.log({ id });
     const filterCashRegister = AllCashRegisters.filter(
       (CashRegister) => CashRegister.employee._id === id
     );
-    console.log({ id, filterCashRegister });
+    // console.log({ id, filterCashRegister });
     setlistCashRegister(filterCashRegister);
   };
+
   const selectCashRegister = (id) => {
     const cashRegisterSelected = listCashRegister.find(
       (register) => register._id === id
@@ -494,7 +410,7 @@ const Purchase = () => {
 
   const [paymentMethod, setPaymentMethod] = useState("");
   const handlePaymentMethod = (Method, employeeId) => {
-    console.log({ Method, employeeId });
+    // console.log({ Method, employeeId });
     setPaymentMethod(Method);
     handleCashRegister(employeeId);
   };
@@ -504,12 +420,13 @@ const Purchase = () => {
 
   const createPurchaseInvoice = async (e, receiverId) => {
     e.preventDefault();
-    if (!token) {
-      // Handle case where token is not available
-      toast.error("رجاء تسجيل الدخول مره اخري");
-      return;
-    }
-    if (purchasePermission && !purchasePermission.create) {
+    const config = await handleGetTokenAndConfig();
+    if (
+      purchasePermission &&
+      purchasePermission &&
+      !purchasePermission &&
+      purchasePermission.create
+    ) {
       toast.warn("ليس لك صلاحية لانشاء فاتورة مشتريات");
       return;
     }
@@ -520,10 +437,22 @@ const Purchase = () => {
         );
         return;
       }
+      if (
+        !invoiceNumber ||
+        !invoiceDate ||
+        !supplierId ||
+        !items ||
+        !totalAmount ||
+        !netAmount ||
+        !paymentStatus
+      ) {
+        toast.warn("بعض البيانات لم يتم ادخالها");
+        return;
+      }
       const newInvoice = {
         invoiceNumber,
         invoiceDate,
-        supplier,
+        supplier: supplierId,
         items,
         totalAmount,
         discount,
@@ -546,18 +475,20 @@ const Purchase = () => {
         config
       );
       console.log({ response });
-      if (response.status === 201) {
+      if (response.status === 201 && storeId) {
         items.forEach((item) => {
-          createStockAction(item, receiverId);
+          createStockAction(item);
         });
-
-        await handleAddSupplierTransactionPurchase(response.data._id);
+        if(paidAmount>0){
+        await handleAddSupplierTransactionPurchase(invoiceNumber);
+        }
         getAllPurchases();
         toast.success("تم اضافه المشتريات بنجاح");
       } else {
         toast.error("فشل اضافه المشتريات ! حاول مره اخري");
       }
     } catch (error) {
+      console.log({ error });
       toast.error("حدث خطأ اثناء اضافه المشتريات ! حاول مره اخري");
     }
   };
@@ -565,15 +496,16 @@ const Purchase = () => {
   const [invoice, setinvoice] = useState({});
 
   const getInvoice = async (id) => {
-    if (purchasePermission && !purchasePermission.read) {
+    if (
+      purchasePermission &&
+      purchasePermission &&
+      !purchasePermission &&
+      purchasePermission.read
+    ) {
       toast.warn("ليس لك صلاحية لعرض فاتورة مشتريات");
       return;
     }
-    if (!token) {
-      // Handle case where token is not available
-      toast.error("رجاء تسجيل الدخول مره اخري");
-      return;
-    }
+    const config = await handleGetTokenAndConfig();
     try {
       const resInvoice = await axios.get(
         `${apiUrl}/api/purchaseinvoice/${id}`,
@@ -590,22 +522,23 @@ const Purchase = () => {
     }
   };
 
-  const [allPurchaseInvoice, setallPurchaseInvoice] = useState([]);
+  const [allPurchaseInvoice, setAllPurchaseInvoice] = useState([]);
   const getAllPurchases = async () => {
-    if (purchasePermission && !purchasePermission.read) {
+    if (
+      purchasePermission &&
+      purchasePermission &&
+      !purchasePermission &&
+      purchasePermission.read
+    ) {
       toast.warn("ليس لك صلاحية لعرض فاتورة مشتريات");
       return;
     }
-    if (!token) {
-      // Handle case where token is not available
-      toast.error("رجاء تسجيل الدخول مره اخري");
-      return;
-    }
+    const config = await handleGetTokenAndConfig();
     try {
       const response = await axios.get(apiUrl + "/api/purchaseinvoice", config);
       console.log({ response });
       if (response.status === 200) {
-        setallPurchaseInvoice(response.data.reverse());
+        setAllPurchaseInvoice(response.data.reverse());
       } else {
         toast.error("فشل جلب جميع فواتير المشتريات ! اعد تحميل الصفحة");
       }
@@ -622,7 +555,7 @@ const Purchase = () => {
     const invoices = allPurchaseInvoice.filter(
       (invoice) => invoice.invoiceNumber.startsWith(invoiceNumber) === true
     );
-    setallPurchaseInvoice(invoices);
+    setAllPurchaseInvoice(invoices);
   };
 
   const searchByPaymentType = (type) => {
@@ -633,7 +566,7 @@ const Purchase = () => {
     const invoices = allPurchaseInvoice.filter(
       (invoice) => invoice.paymentType === type
     );
-    setallPurchaseInvoice(invoices);
+    setAllPurchaseInvoice(invoices);
   };
 
   const searchBySupplier = (supplier) => {
@@ -644,7 +577,7 @@ const Purchase = () => {
     const invoices = allPurchaseInvoice.filter(
       (invoice) => invoice.supplier._id === supplier
     );
-    setallPurchaseInvoice(invoices);
+    setAllPurchaseInvoice(invoices);
   };
 
   const searchBypaymentStatus = (status) => {
@@ -655,7 +588,7 @@ const Purchase = () => {
     const invoices = allPurchaseInvoice.filter(
       (invoice) => invoice.paymentStatus === status
     );
-    setallPurchaseInvoice(invoices);
+    setAllPurchaseInvoice(invoices);
   };
 
   const searchByCashRegister = (cashRegister) => {
@@ -666,18 +599,14 @@ const Purchase = () => {
     const invoices = allPurchaseInvoice.filter(
       (invoice) => invoice.cashRegister_id === cashRegister
     );
-    setallPurchaseInvoice(invoices);
+    setAllPurchaseInvoice(invoices);
   };
 
   const [isConfirmedaPaiment, setisConfirmedaPaiment] = useState(false);
 
   const confirmPayment = async (e) => {
     e.preventDefault();
-    if (!token) {
-      // Handle case where token is not available
-      toast.error("رجاء تسجيل الدخول مره اخري");
-      return;
-    }
+    const config = await handleGetTokenAndConfig();
 
     // Check if required variables are defined and valid
     if (
@@ -689,14 +618,12 @@ const Purchase = () => {
       toast.error("برجاء التحقق من صحة المدخلات!");
       return;
     }
-    if(CashRegisterBalance< paidAmount){
-      
+    if (CashRegisterBalance < paidAmount) {
       toast.error("رصيد الخزينه لا يكفي!");
       return;
     }
 
-    const updatedbalance = CashRegisterBalance - paidAmount; 
-
+    const updatedbalance = CashRegisterBalance - paidAmount;
 
     try {
       // Perform the cash movement
@@ -754,13 +681,38 @@ const Purchase = () => {
     bodyClass: "printpage",
   });
 
+  const [allStores, setAllStores] = useState([]);
+
+  const getAllStores = async () => {
+    const config = await handleGetTokenAndConfig();
+
+    try {
+      const response = await axios.get(`${apiUrl}/api/store/`, config);
+      // get all stores
+      const stores = response.data;
+      // get stores by storekeeper
+      const storesByStoreKeeper = [];
+      stores.map((store) => {
+        store.storekeeper.map((storekeeper) => {
+        if (storekeeper._id === employeeLoginInfo.id) {
+          storesByStoreKeeper.push(store);
+        }})
+      });
+      setAllStores(storesByStoreKeeper);
+
+      console.log({ allStores: storesByStoreKeeper });
+    } catch (error) {
+      console.error("Error fetching stores:", error);
+      toast.error("حدث خطأ اثناء جلب بيانات المخزنات! اعد تحميل الصفحة");
+    }
+  };
+
   useEffect(() => {
     getAllPurchases();
-    getallStockaction();
-    getaStockItems();
+    getAllStockItems();
     getAllCashRegisters();
-    getallrecipes();
     getAllSuppliers();
+    getAllStores();
   }, []);
 
   return (
@@ -775,19 +727,19 @@ const Purchase = () => {
                 </h2>
               </div>
               <div className="col-12 col-md-6 p-0 m-0 d-flex flex-wrap aliegn-items-center justify-content-end print-hide">
-                {purchasePermission.create&&
-                <a
-                  href="#addPurchaseInvoiceModal"
-                  className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-success"
-                  data-toggle="modal"
-                >
-                  <span className=" text-wrap text-right fw-bolder p-0 m-0">
-                    اضافه فاتورة جديدة
-                  </span>
-                </a>
-                }
+                {purchasePermission && purchasePermission.create && (
+                  <a
+                    href="#addPurchaseInvoiceModal"
+                    className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-success"
+                    data-toggle="modal"
+                  >
+                    <span className=" text-wrap text-right fw-bolder p-0 m-0">
+                      اضافه فاتورة جديدة
+                    </span>
+                  </a>
+                )}
 
-                {/* <a href="#deleteStockactionModal" className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-danger" data-toggle="modal"> <label className=" text-wrap text-right fw-bolder p-0 m-0">حذف</label></a> */}
+                {/* <a href="#deleteStockActionModal" className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-danger" data-toggle="modal"> <label className=" text-wrap text-right fw-bolder p-0 m-0">حذف</label></a> */}
               </div>
             </div>
           </div>
@@ -800,8 +752,8 @@ const Purchase = () => {
                 <select
                   className="form-control border-primary m-0 p-2 h-auto"
                   onChange={(e) => {
-                    setstartpagination(0);
-                    setendpagination(e.target.value);
+                    setStartPagination(0);
+                    setEndPagination(e.target.value);
                   }}
                 >
                   {(() => {
@@ -896,7 +848,7 @@ const Purchase = () => {
                   <select
                     className="form-control border-primary m-0 p-2 h-auto"
                     onChange={(e) =>
-                      setallPurchaseInvoice(
+                      setAllPurchaseInvoice(
                         filterByTime(e.target.value, allPurchaseInvoice)
                       )
                     }
@@ -943,7 +895,7 @@ const Purchase = () => {
                       type="button"
                       className="btn btn-primary h-100 p-2 "
                       onClick={() =>
-                        setallPurchaseInvoice(
+                        setAllPurchaseInvoice(
                           filterByDateRange(allPurchaseInvoice)
                         )
                       }
@@ -990,7 +942,7 @@ const Purchase = () => {
             <tbody>
               {allPurchaseInvoice.length > 0 &&
                 allPurchaseInvoice.map((invoice, i) => {
-                  if ((i >= startpagination) & (i < endpagination)) {
+                  if ((i >= startPagination) & (i < endPagination)) {
                     return (
                       <tr key={i}>
                         <td>{i + 1}</td>
@@ -1022,23 +974,24 @@ const Purchase = () => {
                         </td>
                         <td>{invoice.notes}</td>
                         <td>
-                          {purchasePermission.read&&
-                          <a
-                            href="#viewPurchaseModal"
-                            data-toggle="modal"
-                            onClick={() => {
-                              getInvoice(invoice._id);
-                            }}
-                          >
-                            <i
-                              className="material-icons text-primary fs-2"
-                              data-toggle="tooltip"
-                              title="مشاهدة المشتريات"
+                          {purchasePermission && purchasePermission.read && (
+                            <button
+                              data-target="viewPurchaseModal"
+                              className="btn btn-sm btn-primary"
+                              data-toggle="modal"
+                              onClick={() => {
+                                getInvoice(invoice._id);
+                              }}
                             >
-                              &#xE417;
-                            </i>
-                          </a>
-                          }
+                              <i
+                                className="material-icons text-succes fs-2"
+                                data-toggle="tooltip"
+                                title="مشاهدة المشتريات"
+                              >
+                                &#xE417;
+                              </i>
+                            </button>
+                          )}
                         </td>
                       </tr>
                     );
@@ -1050,8 +1003,8 @@ const Purchase = () => {
             <div className="hint-text text-dark">
               عرض{" "}
               <b>
-                {allPurchaseInvoice.length > endpagination
-                  ? endpagination
+                {allPurchaseInvoice.length > endPagination
+                  ? endPagination
                   : allPurchaseInvoice.length}
               </b>{" "}
               من <b>{allPurchaseInvoice.length}</b> عنصر
@@ -1062,7 +1015,7 @@ const Purchase = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 5 ? "active" : ""}`}
+                className={`page-item ${endPagination === 5 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   1
@@ -1070,7 +1023,7 @@ const Purchase = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 10 ? "active" : ""}`}
+                className={`page-item ${endPagination === 10 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   2
@@ -1078,7 +1031,7 @@ const Purchase = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 15 ? "active" : ""}`}
+                className={`page-item ${endPagination === 15 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   3
@@ -1086,7 +1039,7 @@ const Purchase = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 20 ? "active" : ""}`}
+                className={`page-item ${endPagination === 20 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   4
@@ -1094,7 +1047,7 @@ const Purchase = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 25 ? "active" : ""}`}
+                className={`page-item ${endPagination === 25 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   5
@@ -1102,7 +1055,7 @@ const Purchase = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 30 ? "active" : ""}`}
+                className={`page-item ${endPagination === 30 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   التالي
@@ -1112,8 +1065,6 @@ const Purchase = () => {
           </div>
         </div>
       </div>
-
-
 
       <div id="addPurchaseInvoiceModal" className="modal fade">
         <div className="modal-dialog modal-lg">
@@ -1289,9 +1240,9 @@ const Purchase = () => {
                               <input
                                 type="text"
                                 readOnly
-                                value={item.largeUnit}
+                                value={item.storageUnit}
                                 className="form-control p-0 m-0"
-                                name="largeUnit"
+                                name="storageUnit"
                               />
                             </td>
 
@@ -1394,6 +1345,27 @@ const Purchase = () => {
                           />
                         </div>
                         <div className="input-group mb-3 d-flex align-items-center justify-content-between flex-nowrap">
+                          <span className="input-group-text" htmlFor="gstInput">
+                            المخزن
+                          </span>
+                          <select
+                            className="form-control border-primary m-0 p-2 h-auto"
+                            name="paymentMethod"
+                            id="paymentMethod"
+                            onChange={(e) => setstoreId(e.target.value)}
+                          >
+                            <option>اختر المخزن </option>
+                            {allStores &&
+                              allStores.map((store, i) => {
+                                  return (
+                                    <option value={store._id}>
+                                      {store.storeName}
+                                    </option>
+                                  );
+                                })}
+                          </select>
+                        </div>
+                        <div className="input-group mb-3 d-flex align-items-center justify-content-between flex-nowrap">
                           <span
                             className="input-group-text"
                             htmlFor="notesInput"
@@ -1406,17 +1378,6 @@ const Purchase = () => {
                             placeholder="الملاحظات"
                             onChange={(e) => setNotes(e.target.value)}
                             style={{ height: "auto" }}
-                          />
-                        </div>
-                        <div className="input-group mb-3 d-flex align-items-center justify-content-between flex-nowrap">
-                          <span className="input-group-text" htmlFor="gstInput">
-                            تكلفه اضافية
-                          </span>
-                          <input
-                            type="number"
-                            className="form-control text-end"
-                            id="gstInput"
-                            onChange={(e) => setAdditionalCost(e.target.value)}
                           />
                         </div>
                       </div>
@@ -1436,41 +1397,47 @@ const Purchase = () => {
                             onChange={(e) => handlePaidAmount(e.target.value)}
                           />
                         </div>
-                        <div className="input-group mb-3 d-flex align-items-center justify-content-between flex-nowrap">
-                          <span className="input-group-text" htmlFor="gstInput">
-                            طريقه الدفع
-                          </span>
-                          <select
-                            className="form-control border-primary m-0 p-2 h-auto"
-                            name="paymentMethod"
-                            id="paymentMethod"
-                            onChange={(e) =>
-                              handlePaymentMethod(
-                                e.target.value,
-                                employeeLoginInfo.id
-                              )
-                            }
-                          >
-                            <option>اختر طريقه الدفع</option>
-                            {financialInfo &&
-                              financialInfo.map((financialInfo, i) => {
-                                return (
-                                  <option
-                                    value={financialInfo.paymentMethodName}
-                                  >{`${financialInfo.paymentMethodName} ${financialInfo.accountNumber}`}</option>
-                                );
-                              })}
-                          </select>
-                        </div>
+
                         {paidAmount > 0 ? (
                           listCashRegister ? (
                             <>
                               <div className="input-group mb-3 d-flex align-items-center justify-content-between flex-nowrap">
                                 <span
                                   className="input-group-text"
+                                  htmlFor="gstInput"
+                                >
+                                  طريقه الدفع
+                                </span>
+                                <select
+                                  className="form-control border-primary m-0 p-2 h-auto"
+                                  name="paymentMethod"
+                                  id="paymentMethod"
+                                  onChange={(e) =>
+                                    handlePaymentMethod(
+                                      e.target.value,
+                                      employeeLoginInfo.id
+                                    )
+                                  }
+                                >
+                                  <option>اختر طريقه الدفع</option>
+                                  {financialInfo &&
+                                    financialInfo.map((financialInfo, i) => {
+                                      return (
+                                        <option
+                                          value={
+                                            financialInfo.paymentMethodName
+                                          }
+                                        >{`${financialInfo.paymentMethodName} ${financialInfo.accountNumber}`}</option>
+                                      );
+                                    })}
+                                </select>
+                              </div>
+                              <div className="input-group mb-3 d-flex align-items-center justify-content-between flex-nowrap">
+                                <span
+                                  className="input-group-text"
                                   htmlFor="CashRegister"
                                 >
-                                  اختر حساب الاستلام
+                                  اختر حساب الدفع
                                 </span>
                                 <select
                                   className="form-select border-primary col"
@@ -1587,10 +1554,6 @@ const Purchase = () => {
           </div>
         </div>
       </div>
-
-
-
-
 
       <div id="viewPurchaseModal" className="modal fade">
         <div className="modal-dialog modal-lg">
@@ -1746,8 +1709,8 @@ const Purchase = () => {
                               <input
                                 type="text"
                                 className="form-control p-0 m-0"
-                                name="largeUnit"
-                                value={item.largeUnit}
+                                name="storageUnit"
+                                value={item.storageUnit}
                                 readOnly
                               />
                             </td>
@@ -1935,10 +1898,10 @@ const Purchase = () => {
         </div>
       </div>
 
-      {/* <div id="deleteStockactionModal" className="modal fade">
+      {/* <div id="deleteStockActionModal" className="modal fade">
                 <div className="modal-dialog modal-lg">
                   <div className="modal-content shadow-lg border-0 rounded ">
-                    <form onSubmit={deleteStockaction}>
+                    <form onSubmit={deleteStockAction}>
                       <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                         <h4 className="modal-title">حذف منتج</h4>
                         <button type="button" className="close m-0 p-1" data-dismiss="modal" aria-hidden="true">&times;</button>

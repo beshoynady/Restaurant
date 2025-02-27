@@ -1,21 +1,12 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
 import axios from "axios";
-import { detacontext } from "../../../../App";
+import { dataContext } from "../../../../App";
 import { toast } from "react-toastify";
 import * as XLSX from "xlsx";
 import { useReactToPrint } from "react-to-print";
 import "../orders/Orders.css";
 
 const EmployeeTransactions = () => {
-  const apiUrl = process.env.REACT_APP_API_URL;
-  const token = localStorage.getItem("token_e");
-
-  const config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  };
-
   const {
     permissionsList,
     setStartDate,
@@ -25,13 +16,12 @@ const EmployeeTransactions = () => {
     employeeLoginInfo,
     formatDateTime,
     allEmployees,
-    setisLoading,
+    setIsLoading,
     EditPagination,
-    startpagination,
-    endpagination,
-    setstartpagination,
-    setendpagination,
-  } = useContext(detacontext);
+    startPagination,
+    endPagination,
+    setStartPagination,
+    setEndPagination, handleGetTokenAndConfig, apiUrl } = useContext(dataContext)
 
   const employeeTransactionsPermission =
     permissionsList &&
@@ -53,12 +43,8 @@ const EmployeeTransactions = () => {
 
   const addEmployeeTransactions = async (e) => {
     e.preventDefault();
-    if (!token) {
-      // Handle case where token is not available
-      toast.error("رجاء تسجيل الدخول مره اخري");
-      return;
-    }
-    setisLoading(true);
+    const config = await handleGetTokenAndConfig();
+    setIsLoading(true);
     try {
       if (
         employeeTransactionsPermission &&
@@ -88,18 +74,14 @@ const EmployeeTransactions = () => {
       console.log(error);
       toast.error("حدث خطاء اثناء اضافه معامله للموظف");
     } finally {
-      setisLoading(false);
+      setIsLoading(false);
     }
   };
 
   const updateEmployeeTransactions = async (e) => {
     e.preventDefault();
-    if (!token) {
-      // Handle case where token is not available
-      toast.error("رجاء تسجيل الدخول مره اخري");
-      return;
-    }
-    setisLoading(true);
+    const config = await handleGetTokenAndConfig();
+    setIsLoading(true);
     try {
       if (
         employeeTransactionsPermission &&
@@ -128,18 +110,14 @@ const EmployeeTransactions = () => {
       console.log(error);
       toast.error("An error occurred while updating the transaction");
     } finally {
-      setisLoading(false);
+      setIsLoading(false);
     }
   };
 
   const deleteEmployeeTransactions = async (e) => {
     e.preventDefault();
-    if (!token) {
-      // Handle case where token is not available
-      toast.error("رجاء تسجيل الدخول مره اخري");
-      return;
-    }
-    setisLoading(true);
+    const config = await handleGetTokenAndConfig();
+    setIsLoading(true);
     try {
       if (
         employeeTransactionsPermission &&
@@ -160,17 +138,13 @@ const EmployeeTransactions = () => {
       console.log(error);
       toast.error("An error occurred while deleting the transaction");
     } finally {
-      setisLoading(false);
+      setIsLoading(false);
     }
   };
 
   const getEmployeeTransactions = async () => {
-    if (!token) {
-      // Handle case where token is not available
-      toast.error("رجاء تسجيل الدخول مره اخري");
-      return;
-    }
-    setisLoading(true);
+    const config = await handleGetTokenAndConfig();
+    setIsLoading(true);
     try {
       if (
         employeeTransactionsPermission &&
@@ -189,16 +163,12 @@ const EmployeeTransactions = () => {
     } catch (error) {
       console.log(error);
     } finally {
-      setisLoading(false);
+      setIsLoading(false);
     }
   };
 
   const filterCurrentEmployeeTransactions = async (transaction) => {
-    if (!token) {
-      // Handle case where token is not available
-      toast.error("رجاء تسجيل الدخول مره اخري");
-      return;
-    }
+    const config = await handleGetTokenAndConfig();
     try {
       const now = new Date();
       const currentMonth = now.getMonth();
@@ -335,8 +305,8 @@ const EmployeeTransactions = () => {
                 <select
                   className="form-control border-primary m-0 p-2 h-auto"
                   onChange={(e) => {
-                    setstartpagination(0);
-                    setendpagination(e.target.value);
+                    setStartPagination(0);
+                    setEndPagination(e.target.value);
                   }}
                 >
                   {(() => {
@@ -484,7 +454,7 @@ const EmployeeTransactions = () => {
             </thead>
             <tbody>
               {listofEmployeeTransactions.map((transaction, i) => {
-                if (i >= startpagination && i < endpagination) {
+                if (i >= startPagination && i < endPagination) {
                   return (
                     <tr key={i}>
                       <td>{i + 1}</td>
@@ -500,9 +470,9 @@ const EmployeeTransactions = () => {
                       </td>
                       <td>
                         {employeeTransactionsPermission.update && (
-                          <a
-                            href="#editEmployeeTransactionsModal"
-                            className="edit"
+                           <button
+data-target="#editEmployeeTransactionsModal"
+                            className="btn btn-sm btn-primary ml-2 "
                             data-toggle="modal"
                           >
                             <i
@@ -519,13 +489,13 @@ const EmployeeTransactions = () => {
                               }}
                             >
                               &#xE254;
-                            </i>
-                          </a>
+                                </i>
+                              </button>
                         )}
                         {employeeTransactionsPermission.delete && (
-                          <a
-                            href="#deleteEmployeeTransactionsModal"
-                            className="delete"
+                           <button
+data-target="#deleteEmployeeTransactionsModal"
+                            className="btn btn-sm btn-danger"
                             data-toggle="modal"
                           >
                             <i
@@ -537,8 +507,8 @@ const EmployeeTransactions = () => {
                               }
                             >
                               &#xE872;
-                            </i>
-                          </a>
+                                </i>
+                              </button>
                         )}
                       </td>
                     </tr>
@@ -552,8 +522,8 @@ const EmployeeTransactions = () => {
             <div className="hint-text text-dark">
               عرض{" "}
               <b>
-                {listofEmployeeTransactions.length > endpagination
-                  ? endpagination
+                {listofEmployeeTransactions.length > endPagination
+                  ? endPagination
                   : listofEmployeeTransactions.length}
               </b>{" "}
               من <b>{listofEmployeeTransactions.length}</b> عنصر
@@ -564,7 +534,7 @@ const EmployeeTransactions = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 5 ? "active" : ""}`}
+                className={`page-item ${endPagination === 5 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   1
@@ -572,7 +542,7 @@ const EmployeeTransactions = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 10 ? "active" : ""}`}
+                className={`page-item ${endPagination === 10 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   2
@@ -580,7 +550,7 @@ const EmployeeTransactions = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 15 ? "active" : ""}`}
+                className={`page-item ${endPagination === 15 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   3
@@ -588,7 +558,7 @@ const EmployeeTransactions = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 20 ? "active" : ""}`}
+                className={`page-item ${endPagination === 20 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   4
@@ -596,7 +566,7 @@ const EmployeeTransactions = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 25 ? "active" : ""}`}
+                className={`page-item ${endPagination === 25 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   5
@@ -604,7 +574,7 @@ const EmployeeTransactions = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 30 ? "active" : ""}`}
+                className={`page-item ${endPagination === 30 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   التالي

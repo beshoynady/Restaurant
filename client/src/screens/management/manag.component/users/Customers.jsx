@@ -1,18 +1,10 @@
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { detacontext } from "../../../../App";
+import { dataContext } from "../../../../App";
 import "../orders/Orders.css";
 
 const Customers = () => {
-  const apiUrl = process.env.REACT_APP_API_URL;
-  const token = localStorage.getItem("token_e"); // Retrieve the token from localStorage
-  const config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  };
-
   const {
     setStartDate,
     setEndDate,
@@ -21,21 +13,23 @@ const Customers = () => {
     restaurantData,
     formatDateTime,
     permissionsList,
-    setisLoading,
+    setIsLoading,
     formatDate,
     formatTime,
     EditPagination,
-    startpagination,
-    endpagination,
-    setstartpagination,
-    setendpagination,
-  } = useContext(detacontext);
+    startPagination,
+    endPagination,
+    setStartPagination,
+    setEndPagination,
+    apiUrl,
+    handleGetTokenAndConfig,
+  } = useContext(dataContext);
 
   const permissionCustomer = permissionsList?.filter(
     (permission) => permission.resource === "Customers"
   )[0];
 
-  const [allCustomers, setallCustomers] = useState([]);
+  const [allCustomers, setAllCustomers] = useState([]);
   const [customerId, setcustomerId] = useState("");
   const [customerData, setCustomerData] = useState({
     name: "",
@@ -52,17 +46,19 @@ const Customers = () => {
   }, []);
 
   const getAllCustomers = async () => {
-    // setisLoading(true);
+    // setIsLoading(true);
     try {
+      const config = await handleGetTokenAndConfig();
+
       const response = await axios.get(`${apiUrl}/api/customer`, config);
       console.log({ AllCustomers: response });
       const data = await response.data;
-      setallCustomers(data);
+      setAllCustomers(data);
     } catch (error) {
       console.error("Error fetching customers:", error);
       toast.error("حدث خطأ أثناء جلب العملاء.");
     } finally {
-      // setisLoading(false);
+      // setIsLoading(false);
     }
   };
 
@@ -74,6 +70,8 @@ const Customers = () => {
   const createCustomer = async (e) => {
     e.preventDefault();
     try {
+      const config = await handleGetTokenAndConfig();
+
       if (
         !customerData.name &&
         !customerData.phone &&
@@ -111,6 +109,8 @@ const Customers = () => {
   const updateCustomer = async (e) => {
     e.preventDefault();
     try {
+      const config = await handleGetTokenAndConfig();
+
       const response = await axios.put(
         `${apiUrl}/api/customer/${customerId}`,
         customerData,
@@ -126,6 +126,8 @@ const Customers = () => {
 
   const deleteCustomer = async (id) => {
     try {
+      const config = await handleGetTokenAndConfig();
+
       await axios.delete(`${apiUrl}/api/customer/${customerId}`, config);
       getAllCustomers();
       toast.success("تم حذف العميل بنجاح.");
@@ -145,6 +147,8 @@ const Customers = () => {
     }
 
     try {
+      const config = await handleGetTokenAndConfig();
+
       const response = await axios.get(
         `${apiUrl}/api/customer/phone/${phone}`,
         config
@@ -177,11 +181,7 @@ const Customers = () => {
 
   const [Areas, setAreas] = useState([]);
   const getAllDeliveryAreas = async () => {
-    if (!token) {
-      // Handle case where token is not available
-      toast.error("رجاء تسجيل الدخول مره اخري");
-      return;
-    }
+    const config = await handleGetTokenAndConfig();
     try {
       const response = await axios.get(`${apiUrl}/api/deliveryarea`);
       const data = await response.data;
@@ -236,8 +236,8 @@ const Customers = () => {
                 <select
                   className="form-control border-primary m-0 p-2 h-auto"
                   onChange={(e) => {
-                    setstartpagination(0);
-                    setendpagination(e.target.value);
+                    setStartPagination(0);
+                    setEndPagination(e.target.value);
                   }}
                 >
                   {(() => {
@@ -271,7 +271,7 @@ const Customers = () => {
                   <select
                     className="form-control border-primary m-0 p-2 h-auto"
                     onChange={(e) =>
-                      setallCustomers(
+                      setAllCustomers(
                         filterByTime(e.target.value, allCustomers)
                       )
                     }
@@ -318,7 +318,7 @@ const Customers = () => {
                       type="button"
                       className="btn btn-primary h-100 p-2 "
                       onClick={() =>
-                        setallCustomers(filterByDateRange(allCustomers))
+                        setAllCustomers(filterByDateRange(allCustomers))
                       }
                     >
                       <i className="fa fa-search"></i>
@@ -353,7 +353,7 @@ const Customers = () => {
             <tbody>
               {allCustomers &&
                 allCustomers.map((customer, i) => {
-                  if ((i >= startpagination) & (i < endpagination)) {
+                  if ((i >= startPagination) & (i < endPagination)) {
                     return (
                       <tr key={i}>
                         <td>{i + 1}</td>
@@ -366,9 +366,9 @@ const Customers = () => {
                         <td>{customer.notes}</td>
                         <td>{formatDateTime(customer.createdAt)}</td>
                         <td>
-                          <a
-                            href="#editcustomerModal"
-                            className="edit"
+                          <button
+                            data-target="#editcustomerModal"
+                            className="btn btn-sm btn-primary ml-2 "
                             data-toggle="modal"
                           >
                             <i
@@ -382,10 +382,10 @@ const Customers = () => {
                             >
                               &#xE254;
                             </i>
-                          </a>
-                          <a
-                            href="#deletecustomerModal"
-                            className="delete"
+                          </button>
+                          <button
+                            data-target="#deletecustomerModal"
+                            className="btn btn-sm btn-danger"
                             data-toggle="modal"
                           >
                             <i
@@ -398,7 +398,7 @@ const Customers = () => {
                             >
                               &#xE872;
                             </i>
-                          </a>
+                          </button>
                         </td>
                       </tr>
                     );
@@ -410,8 +410,8 @@ const Customers = () => {
             <div className="hint-text text-dark">
               عرض{" "}
               <b>
-                {allCustomers.length > endpagination
-                  ? endpagination
+                {allCustomers.length > endPagination
+                  ? endPagination
                   : allCustomers.length}
               </b>{" "}
               من <b>{allCustomers.length}</b> عنصر
@@ -422,7 +422,7 @@ const Customers = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 5 ? "active" : ""}`}
+                className={`page-item ${endPagination === 5 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   1
@@ -430,7 +430,7 @@ const Customers = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 10 ? "active" : ""}`}
+                className={`page-item ${endPagination === 10 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   2
@@ -438,7 +438,7 @@ const Customers = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 15 ? "active" : ""}`}
+                className={`page-item ${endPagination === 15 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   3
@@ -446,7 +446,7 @@ const Customers = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 20 ? "active" : ""}`}
+                className={`page-item ${endPagination === 20 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   4
@@ -454,7 +454,7 @@ const Customers = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 25 ? "active" : ""}`}
+                className={`page-item ${endPagination === 25 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   5
@@ -462,7 +462,7 @@ const Customers = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 30 ? "active" : ""}`}
+                className={`page-item ${endPagination === 30 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   التالي

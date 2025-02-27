@@ -2,13 +2,13 @@ import React, { createContext, useState, useEffect, Suspense } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import axios from "axios";
 import jwt_decode from "jwt-decode";
-
 import io from "socket.io-client";
 
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import LoadingPage from "./screens/management/manag.component/LoadingPage/LoadingPage";
+import NoInternetPage from "./screens/management/manag.component/LoadingPage/NoInternetPage";
 import Userscreen from "./screens/user.screen/Userscreen";
 import Login from "./screens/management/manag.component/login/Login";
 
@@ -18,14 +18,25 @@ const ManagLayout = React.lazy(() =>
 const ManagerDash = React.lazy(() =>
   import("./screens/management/manag.component/managerdash/ManagerDash")
 );
+const ManagerDashBoard = React.lazy(() =>
+  import(
+    "./screens/management/manag.component/managerdash/ManagerDashBoard.jsx"
+  )
+);
 const Info = React.lazy(() =>
   import("./screens/management/manag.component/setting/info")
 );
 const Orders = React.lazy(() =>
   import("./screens/management/manag.component/orders/Orders")
 );
+const PreparationTicket = React.lazy(() =>
+  import("./screens/management/manag.component/orders/PreparationTicket.jsx")
+);
 const Products = React.lazy(() =>
   import("./screens/management/manag.component/products/Products")
+);
+const PreparationSection = React.lazy(() =>
+  import("./screens/management/manag.component/products/PreparationSection.jsx")
 );
 const ProductRecipe = React.lazy(() =>
   import("./screens/management/manag.component/products/ProductRecipe")
@@ -57,9 +68,10 @@ const AttendanceManagement = React.lazy(() =>
 const MenuCategory = React.lazy(() =>
   import("./screens/management/manag.component/products/MenuCategory")
 );
-const Kitchen = React.lazy(() =>
-  import("./screens/management/manag.component/kitchen/Kitchen")
+const PreparationScreen = React.lazy(() =>
+  import("./screens/management/manag.component/kitchen/PreparationScreen.jsx")
 );
+
 const Waiter = React.lazy(() =>
   import("./screens/management/manag.component/waiter/Waiter")
 );
@@ -90,15 +102,19 @@ const Store = React.lazy(() =>
 const StockItem = React.lazy(() =>
   import("./screens/management/manag.component/stock/StockItem")
 );
-const StockManag = React.lazy(() =>
-  import("./screens/management/manag.component/stock/StockManag")
+const ProductionRecipe = React.lazy(() =>
+  import("./screens/management/manag.component/stock/ProductionRecipe.jsx")
+);
+const StockMovement = React.lazy(() =>
+  import("./screens/management/manag.component/stock/StockMovement")
 );
 const BatchStockReport = React.lazy(() =>
   import("./screens/management/manag.component/stock/BatchStockReport.jsx")
 );
-const KitchenConsumption = React.lazy(() =>
-  import("./screens/management/manag.component/stock/KitchenConsumption")
+const SectionConsumption = React.lazy(() =>
+  import("./screens/management/manag.component/stock/SectionConsumption.jsx")
 );
+
 const ExpenseItem = React.lazy(() =>
   import("./screens/management/manag.component/expenses/Expense")
 );
@@ -124,12 +140,6 @@ const ProfitLoss = React.lazy(() =>
   import("./screens/management/manag.component/reports/ProfitAndLoss.jsx")
 );
 
-// const socket = io(process.env.REACT_APP_API_URL, {
-//   reconnection: true,
-//   reconnectionAttempts: Infinity,
-//   reconnectionDelay: 1000,
-// });
-
 const cashierSocket = io(`${process.env.REACT_APP_API_URL}/cashier`, {
   reconnection: true,
   reconnectionAttempts: Infinity,
@@ -141,6 +151,16 @@ const kitchenSocket = io(`${process.env.REACT_APP_API_URL}/kitchen`, {
   reconnectionAttempts: Infinity,
   reconnectionDelay: 1000,
 });
+const GrillSocket = io(`${process.env.REACT_APP_API_URL}/grill`, {
+  reconnection: true,
+  reconnectionAttempts: Infinity,
+  reconnectionDelay: 1000,
+});
+const BarSocket = io(`${process.env.REACT_APP_API_URL}/bar`, {
+  reconnection: true,
+  reconnectionAttempts: Infinity,
+  reconnectionDelay: 1000,
+});
 
 const waiterSocket = io(`${process.env.REACT_APP_API_URL}/waiter`, {
   reconnection: true,
@@ -148,21 +168,30 @@ const waiterSocket = io(`${process.env.REACT_APP_API_URL}/waiter`, {
   reconnectionDelay: 1000,
 });
 
-export const detacontext = createContext({});
+export const dataContext = createContext({});
 
 function App() {
   axios.defaults.withCredentials = true;
 
   const apiUrl = process.env.REACT_APP_API_URL;
-  const token = localStorage.getItem("token_e");
-  const config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
+
+  const handleGetTokenAndConfig = async () => {
+    await verifyToken();
+    const token = localStorage.getItem("token_e");
+    if (!token) {
+      toast.error("!رجاء تسجيل الدخول مره اخري");
+      return null;
+    }
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    return config;
   };
 
-  const [isRefresh, setisRefresh] = useState(false);
-  const [isLoading, setisLoading] = useState(false);
+  const [isRefresh, setIsRefresh] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [isDarkMode, setIsDarkMode] = useState(false);
 
   useEffect(() => {
@@ -183,6 +212,7 @@ function App() {
   const [restaurantData, setrestaurantData] = useState({});
   const getRestaurant = async () => {
     try {
+      const config = await handleGetTokenAndConfig(); // Get the token and config
       const response = await axios.get(`${apiUrl}/api/restaurant/`, config);
       if (response.status === 200 && response.data.length > 0) {
         const restaurantData = response.data[0];
@@ -215,25 +245,25 @@ function App() {
 
   //++++++++++++++++++++ pagination ++++++++++
 
-  const [startpagination, setstartpagination] = useState(0);
-  const [endpagination, setendpagination] = useState(5);
+  const [startPagination, setStartPagination] = useState(0);
+  const [endPagination, setEndPagination] = useState(5);
 
   // const [pagination, setpagination] = useState(5)
   const EditPagination = (e) => {
     if (e.target.innerHTML === "التالي") {
-      setstartpagination(startpagination + 5);
-      setendpagination(endpagination + 5);
+      setStartPagination(startPagination + 5);
+      setEndPagination(endPagination + 5);
     } else if (e.target.innerHTML === "السابق") {
-      if (endpagination <= 5) {
-        setstartpagination(0);
-        setendpagination(5);
+      if (endPagination <= 5) {
+        setStartPagination(0);
+        setEndPagination(5);
       } else {
-        setstartpagination(startpagination - 5);
-        setendpagination(endpagination - 5);
+        setStartPagination(startPagination - 5);
+        setEndPagination(endPagination - 5);
       }
     } else {
-      setstartpagination(e.target.innerHTML * 5 - 5);
-      setendpagination(e.target.innerHTML * 5);
+      setStartPagination(e.target.innerHTML * 5 - 5);
+      setEndPagination(e.target.innerHTML * 5);
     }
   };
 
@@ -361,7 +391,6 @@ function App() {
     try {
       // Fetch products from the API
       const response = await axios.get(apiUrl + "/api/product");
-      console.log({ employees: response });
 
       // Check if response is successful
       if (response.status !== 200) {
@@ -399,10 +428,11 @@ function App() {
     }
   };
 
-  //+++++++ menucategory +++++++++++
-  const [allMenuCategories, setallMenuCategories] = useState([]);
+  //+++++++ menu category +++++++++++
+  const [allMenuCategories, setAllMenuCategories] = useState([]);
   const getAllMenuCategories = async () => {
     try {
+      const config = await handleGetTokenAndConfig();
       // Fetch all categories from the API
       const response = await axios.get(apiUrl + "/api/menucategory", config);
 
@@ -414,17 +444,17 @@ function App() {
       const activeMenuCategories =
         allMenuCategories &&
         allMenuCategories.filter(
-          (menucategory) => menucategory.status === true
+          (menuCategory) => menuCategory.status === true
         );
       // Set fetched categories in the state
       console.log({ activeMenuCategories });
 
-      setallMenuCategories(activeMenuCategories);
+      setAllMenuCategories(activeMenuCategories);
 
       const mainCategory =
         activeMenuCategories &&
         activeMenuCategories.filter(
-          (menucategory) => menucategory.isMain === true
+          (menuCategory) => menuCategory.isMain === true
         )[0];
       if (mainCategory) {
         setMenuCategoryId(mainCategory._id);
@@ -436,11 +466,11 @@ function App() {
     }
   };
 
-
   // ++++++++++ order ++++++++++++
-  const [allOrders, setallOrders] = useState([]);
+  const [allOrders, setAllOrders] = useState([]);
   const getAllOrders = async () => {
     try {
+      const config = await handleGetTokenAndConfig();
       // Fetch all orders from the API
       const response = await axios.get(apiUrl + "/api/order", config);
       console.log({ order: response });
@@ -450,7 +480,7 @@ function App() {
       }
 
       // Set fetched orders in the state
-      setallOrders(response.data.reverse());
+      setAllOrders(response.data.reverse());
     } catch (error) {
       // Handle errors
       console.error("Error fetching orders:", error.message);
@@ -459,35 +489,44 @@ function App() {
   };
 
   //+++++++++++ table ++++++++++++++
-  const [allTable, setallTable] = useState([]);
+  const [allTable, setAllTable] = useState([]);
 
   const getAllTable = async () => {
     try {
-      const response = await axios.get(apiUrl + "/api/table", {
-        timeout: 5000,
-      });
-      if (response.status === 200 && response.data) {
-        setallTable(response.data);
+      const response = await axios.get(apiUrl + "/api/table");
+
+      if (response.status === 200) {
+        const tables = response.data.allTables || [];
+
+        if (tables.length === 0) {
+          console.warn(
+            "No tables found. The restaurant may be new or data is missing."
+          );
+          toast.warn(
+            "No tables found. The restaurant may be new or data is missing."
+          );
+        }
+
+        setAllTable(tables);
+        console.log("Tables retrieved successfully:", tables);
       } else {
-        console.error("Failed to receive valid table data");
+        console.error("Unexpected response status:", response.status);
       }
     } catch (error) {
-      // إعادة المحاولة عند حدوث خطأ
-      if (error.code === "ECONNABORTED") {
-        setTimeout(getAllTable, 3000);
-      } else {
-        console.error("Error fetching table data:", error);
-      }
+      console.error(
+        "Error getting all tables:",
+        error?.response?.data?.message || error.message
+      );
     }
   };
 
   // +++++++++++++++ user +++++++++++++
-  const [allUsers, setallUsers] = useState([]);
+  const [allUsers, setAllUsers] = useState([]);
   const getAllUsers = async () => {
     try {
       const response = await axios.get(`${apiUrl}/api/user`);
       if (response.status === 200) {
-        setallUsers(response.data);
+        setAllUsers(response.data);
       } else {
         console.error(
           "Failed to fetch users data: Unexpected response status",
@@ -499,17 +538,14 @@ function App() {
     }
   };
 
-  const [allEmployees, setallEmployees] = useState([]);
+  const [allEmployees, setAllEmployees] = useState([]);
   const getAllEmployees = async () => {
     try {
-      if (!token) {
-        // Handle case where token is not available
-        throw new Error("توكن غير متاح");
-      }
+      const config = await handleGetTokenAndConfig();
       const response = await axios.get(`${apiUrl}/api/employee`, config);
 
       if (response.status === 200) {
-        setallEmployees(response.data);
+        setAllEmployees(response.data);
         console.log("Employees data fetched successfully:", response.data);
       } else {
         console.error(
@@ -525,19 +561,19 @@ function App() {
   };
 
   // ++++++++ client screen +++++++++++++
-  const [MenuCategoryId, setMenuCategoryId] = useState("");
+  const [menuCategoryId, setMenuCategoryId] = useState("");
 
   const filterByMenuCategoryId = (e) => {
     // console.log(e.target.value)
     setMenuCategoryId(e.target.value);
   };
 
-  const [count, setcount] = useState(0);
+  const [count, setCount] = useState(0);
 
   const incrementProductQuantity = (productId, sizeId) => {
     try {
       // incrementProductQuantity the count state
-      setcount(count + 1);
+      setCount(count + 1);
       console.log({ productOrderToUpdate, productId, sizeId });
       // Find the product either in the order or in all products
       const findProduct =
@@ -557,7 +593,7 @@ function App() {
           }
         });
         itemsInCart.map((item) => {
-          if (item.productid === productId && item.sizeId === sizeId) {
+          if (item.productId === productId && item.sizeId === sizeId) {
             item.quantity += 1;
           }
         });
@@ -565,7 +601,7 @@ function App() {
         // incrementProductQuantity the quantity of the found product
         findProduct.quantity += 1;
         itemsInCart.map((item) => {
-          if (item.productid === productId) {
+          if (item.productId === productId) {
             item.quantity += 1;
           }
         });
@@ -582,7 +618,7 @@ function App() {
   const decrementProductQuantity = (productId, sizeId) => {
     try {
       // Decrement the count state
-      setcount(count - 1);
+      setCount(count - 1);
 
       // Find the product either in the order or in all products
       const findProduct =
@@ -609,7 +645,7 @@ function App() {
           }
         });
         itemsInCart.map((item) => {
-          if (item.productid === productId && item.sizeId === sizeId) {
+          if (item.productId === productId && item.sizeId === sizeId) {
             // incrementProductQuantity the quantity of the found product
             if (item.quantity < 2) {
               item.quantity = 0;
@@ -629,7 +665,7 @@ function App() {
         } else {
           findProduct.quantity -= 1;
           itemsInCart.map((item) => {
-            if (item.productid === productId) {
+            if (item.productId === productId) {
               item.quantity -= 1;
             }
           });
@@ -664,7 +700,7 @@ function App() {
           }
         });
         itemsInCart.map((item) => {
-          if (item.productid === productId && item.sizeId === sizeId) {
+          if (item.productId === productId && item.sizeId === sizeId) {
             item.notes = productNote;
           }
         });
@@ -672,7 +708,7 @@ function App() {
         // incrementProductQuantity the quantity of the found product
         findProduct.notes = productNote;
         itemsInCart.map((item) => {
-          if (item.productid === productId) {
+          if (item.productId === productId) {
             item.notes = productNote;
           }
         });
@@ -769,7 +805,7 @@ function App() {
           }
         });
         itemsInCart.map((item) => {
-          if (item.productid === productId && item.sizeId === sizeId) {
+          if (item.productId === productId && item.sizeId === sizeId) {
             item.extras = productExtras;
           }
         });
@@ -777,7 +813,7 @@ function App() {
         // Update the extras for the found product
         findProduct.extrasSelected = productExtras;
         itemsInCart.map((item) => {
-          if (item.productid === productId) {
+          if (item.productId === productId) {
             item.extras = productExtras;
             // item.extrasSelected = productExtras;
           }
@@ -799,15 +835,15 @@ function App() {
 
   const addItemToCart = (productId, sizeId) => {
     try {
-      // setisLoading(true)
+      // setIsLoading(true)
       // Find the product to add to the cart
       const cartItem = allProducts.find((item) => item._id === productId);
 
       if (cartItem) {
         let newItem = {
-          productid: cartItem._id,
+          productId: cartItem._id,
           name: cartItem.name,
-          quantity: 0, // Default to adding one item
+          quantity: 0,
           notes: "",
           price: 0,
           priceAfterDiscount: 0,
@@ -841,7 +877,7 @@ function App() {
         if (itemsInCart.length > 0) {
           if (sizeId) {
             const repeatedItem = itemsInCart.find(
-              (item) => item.productid === productId && item.sizeId === sizeId
+              (item) => item.productId === productId && item.sizeId === sizeId
             );
             if (!repeatedItem) {
               setitemsInCart([...itemsInCart, newItem]);
@@ -849,7 +885,7 @@ function App() {
             }
           } else {
             const repeatedItem = itemsInCart.find(
-              (item) => item.productid === productId
+              (item) => item.productId === productId
             );
             if (!repeatedItem) {
               setitemsInCart([...itemsInCart, newItem]);
@@ -865,7 +901,7 @@ function App() {
     } catch (error) {
       console.error("Error adding item to cart:", error.message);
     } finally {
-      setisLoading(false);
+      setIsLoading(false);
     }
   };
 
@@ -944,8 +980,8 @@ function App() {
         // Determine which list to operate on based on the presence of items in productOrderToUpdate
         const updatedList =
           productOrderToUpdate.length > 0
-            ? productOrderToUpdate.filter((product) => product.productid !== id)
-            : itemsInCart.filter((item) => item.productid !== id);
+            ? productOrderToUpdate.filter((product) => product.productId !== id)
+            : itemsInCart.filter((item) => item.productId !== id);
 
         console.log({ updatedList });
         // Update the list of item IDs
@@ -1012,16 +1048,13 @@ function App() {
     }
   };
 
-
-  const createSerial = ()=>{
+  const createSerial = () => {
     const serial =
-          allOrders && allOrders.length > 0
-            ? String(
-                Number(allOrders[0].serial) + 1
-              ).padStart(6, "0")
-            : "000001";
-    return serial        
-  }
+      allOrders && allOrders.length > 0
+        ? String(Number(allOrders[0].serial) + 1).padStart(6, "0")
+        : "000001";
+    return serial;
+  };
 
   const createDeliveryOrderByClient = async (
     userId,
@@ -1029,15 +1062,14 @@ function App() {
     delivery_fee
   ) => {
     try {
-      setisLoading(true);
-
+      setIsLoading(true);
+      const config = await handleGetTokenAndConfig();
       // console.log({ itemsInCart })
       // Find the user's orders
       const userOrders =
         allOrders &&
         allOrders.filter((order) => order.user && order.user?._id === userId);
-      const lastUserOrder =
-        userOrders.length > 0 ? userOrders[0] : null;
+      const lastUserOrder = userOrders.length > 0 ? userOrders[0] : null;
 
       // Check if the last user order is active
       if (lastUserOrder && lastUserOrder.isActive) {
@@ -1046,8 +1078,8 @@ function App() {
         const oldSubTotal = lastUserOrder.subTotal;
         const newsalesTaxt = lastUserOrder.salesTax + salesTax;
         const subTotal = costOrder + oldSubTotal;
-        const deliveryCost = delivery_fee;
-        const total = subTotal + salesTax + deliveryCost;
+        const deliveryFee = delivery_fee;
+        const total = subTotal + salesTax + deliveryFee;
 
         // Update order if it's in 'Preparing' status
         if (lastUserOrder.status === "Preparing") {
@@ -1064,7 +1096,7 @@ function App() {
             {
               products,
               subTotal,
-              deliveryCost,
+              deliveryFee,
               salesTaxt: newsalesTaxt,
               total,
               status,
@@ -1092,7 +1124,7 @@ function App() {
             {
               products,
               subTotal,
-              deliveryCost,
+              deliveryFee,
               salesTaxt: newsalesTaxt,
               total,
               status,
@@ -1107,7 +1139,7 @@ function App() {
           toast.success("تم تعديل الاوردر بنجاح!");
         }
 
-        setisLoading(false);
+        setIsLoading(false);
       } else {
         // Create a new order
         const serial = createSerial();
@@ -1115,12 +1147,12 @@ function App() {
         const user = findUser ? userId : null;
         const products = [...itemsInCart];
         const subTotal = costOrder;
-        const deliveryCost = delivery_fee;
+        const deliveryFee = delivery_fee;
         const name = findUser ? findUser.username : "";
         const phone = findUser ? findUser.phone : "";
         const address = currentAddress;
         const orderType = "Delivery";
-        const total = subTotal + deliveryCost + salesTax;
+        const total = subTotal + deliveryFee + salesTax;
 
         await axios.post(
           `${apiUrl}/api/order`,
@@ -1129,7 +1161,7 @@ function App() {
             products,
             subTotal,
             salesTax,
-            deliveryCost,
+            deliveryFee,
             total,
             user,
             name,
@@ -1145,29 +1177,28 @@ function App() {
         getAllProducts();
         toast.success("تم عمل اوردر جديد بنجاح!");
         cashierSocket.emit("neworder", "اوردر ديليفري جديد");
-        setisLoading(false);
+        setIsLoading(false);
       }
 
       setitemsInCart([]);
       setitemId([]);
-      setisLoading(false);
+      setIsLoading(false);
     } catch (error) {
       console.error("An error occurred while processing the order:", error);
       toast.error("حدث خطأ اثناء عمل الاوردر رجاء المحاوله مره اخري");
-      setisLoading(false);
+      setIsLoading(false);
     } finally {
-      setisLoading(false);
+      setIsLoading(false);
     }
   };
 
   const createOrderForTableByClient = async (tableId) => {
-    setisLoading(true);
+    setIsLoading(true);
     try {
       // Find orders for the specified table
       const tableOrders =
         allOrders && allOrders.filter((order) => order.table?._id === tableId);
-      const lastTableOrder =
-        tableOrders.length > 0 ? tableOrders[0] : {};
+      const lastTableOrder = tableOrders.length > 0 ? tableOrders[0] : {};
       const lastTableOrderActive = lastTableOrder && lastTableOrder.isActive;
 
       if (lastTableOrderActive) {
@@ -1272,7 +1303,7 @@ function App() {
       // Toast for error
       toast.error("حدث خطأ أثناء إنشاء/تحديث الطلب");
     } finally {
-      setisLoading(false);
+      setIsLoading(false);
     }
   };
 
@@ -1283,7 +1314,7 @@ function App() {
   const [tablenum, settablenum] = useState();
   const [orderTotal, setorderTotal] = useState();
   const [orderSubtotal, setorderSubtotal] = useState();
-  const [orderDeliveryCost, setorderDeliveryCost] = useState();
+  const [orderdeliveryFee, setorderdeliveryFee] = useState();
   const [orderdiscount, setorderdiscount] = useState(0);
   const [orderaddition, setorderaddition] = useState(0);
   const [discount, setdiscount] = useState(0);
@@ -1294,20 +1325,20 @@ function App() {
   const [clientphone, setclientphone] = useState("");
   const [clientaddress, setclientaddress] = useState("");
   const [deliveryAreaId, setdeliveryAreaId] = useState(0);
-  const [deliverycost, setdeliverycost] = useState(0);
+  const [deliveryFee, setdeliveryFee] = useState(0);
 
   const [salesTax, setsalesTax] = useState(0);
   const [serviceTax, setserviceTax] = useState(0);
 
   const createWaiterOrderForTable = async (tableId, waiterId) => {
-    // setisLoading(true)
+    setIsLoading(true);
     try {
+      const config = await handleGetTokenAndConfig();
       // Check for active orders for the table
       const tableOrder =
         allOrders &&
         allOrders.filter((order) => order.table && order.table._id === tableId);
-      const lastTableOrder =
-        tableOrder.length > 0 ? tableOrder[0] : null;
+      const lastTableOrder = tableOrder.length > 0 ? tableOrder[0] : null;
       const lastTableOrderActive = lastTableOrder
         ? lastTableOrder.isActive
         : false;
@@ -1357,7 +1388,7 @@ function App() {
         setclientphone("");
         setclientaddress("");
         setdeliveryAreaId(0);
-        setdeliverycost(0);
+        setdeliveryFee(0);
         setsalesTax(0);
         setserviceTax(0);
       } else {
@@ -1397,7 +1428,7 @@ function App() {
         setclientphone("");
         setclientaddress("");
         setdeliveryAreaId(0);
-        setdeliverycost(0);
+        setdeliveryFee(0);
         setsalesTax(0);
         setserviceTax(0);
       }
@@ -1405,7 +1436,7 @@ function App() {
       console.error(error);
       toast.error("حدث خطأ. يرجى المحاولة مرة أخرى.");
     } finally {
-      setisLoading(false);
+      setIsLoading(false);
     }
   };
 
@@ -1415,12 +1446,14 @@ function App() {
     clientPhone,
     clientAddress,
     orderType,
-    deliveryCost,
+    deliveryFee,
     discount,
     addition
   ) => {
-    // setisLoading(true)
+    // setIsLoading(true)
     try {
+      const config = await handleGetTokenAndConfig();
+
       const dayOrders =
         allOrders &&
         allOrders.filter(
@@ -1445,7 +1478,7 @@ function App() {
       const subTotal = costOrder;
 
       const total =
-        subTotal + salesTax + serviceTax + deliveryCost + addition - discount;
+        subTotal + salesTax + serviceTax + deliveryFee + addition - discount;
 
       const name = clientName;
       const phone = clientPhone;
@@ -1461,7 +1494,7 @@ function App() {
           orderNum,
           products,
           subTotal,
-          deliveryCost,
+          deliveryFee,
           salesTax,
           serviceTax,
           discount,
@@ -1489,7 +1522,7 @@ function App() {
         setclientphone("");
         setclientaddress("");
         setdeliveryAreaId(0);
-        setdeliverycost(0);
+        setdeliveryFee(0);
         setsalesTax(0);
         setserviceTax(0);
         cashierSocket.emit("orderkitchen", "استلام اوردر ديليفري جديد");
@@ -1500,7 +1533,7 @@ function App() {
       console.error(error);
       toast.error("حدث خطأ. يرجى المحاولة مرة أخرى");
     } finally {
-      setisLoading(false);
+      setIsLoading(false);
     }
   };
 
@@ -1520,8 +1553,7 @@ function App() {
         allOrders.filter(
           (order) => order.table && order.table._id === clientId
         );
-      const lastTableOrder =
-        tableOrder.length > 0 ? tableOrder[0] : null;
+      const lastTableOrder = tableOrder.length > 0 ? tableOrder[0] : null;
       const lastTableOrderActive = lastTableOrder
         ? lastTableOrder.isActive
         : false;
@@ -1530,8 +1562,7 @@ function App() {
       const userOrder =
         allOrders &&
         allOrders.filter((order) => order.user && order.user._id === clientId);
-      const lastUserOrder =
-        userOrder.length > 0 ? userOrder[0] : null;
+      const lastUserOrder = userOrder.length > 0 ? userOrder[0] : null;
       const lastUserOrderActive = lastUserOrder
         ? lastUserOrder.isActive
         : false;
@@ -1563,7 +1594,7 @@ function App() {
         setorderUpdateDate(data.updatedAt);
         setorderTotal(data.total);
         setorderSubtotal(data.subTotal);
-        setorderDeliveryCost(data.deliveryCost);
+        setorderdeliveryFee(data.deliveryFee);
         setitemsInCart([]);
       } else {
         toast.info("لا توجد طلبات نشطة لهذا العميل");
@@ -1607,12 +1638,9 @@ function App() {
   const [newlistofproductorder, setnewlistofproductorder] = useState([]);
   const getOrderProductForTable = async (e, tableId) => {
     e.preventDefault();
-    if (!token) {
-      toast.error("رجاء تسجيل الدخول مره اخري");
-      return;
-    }
+    const config = await handleGetTokenAndConfig();
 
-    // setisLoading(true)
+    // setIsLoading(true)
     try {
       const tableorder =
         allOrders &&
@@ -1645,30 +1673,25 @@ function App() {
       console.error(error);
       toast.error("حدث خطأ أثناء جلب بيانات الطلب. يرجى المحاولة مرة أخرى.");
     } finally {
-      setisLoading(false);
+      setIsLoading(false);
     }
   };
 
   const putNumOfPaid = (id, sizeid, numOfPaid) => {
-    if (!token) {
-      // Handle case where token is not available
-      toast.error("رجاء تسجيل الدخول مره اخري");
-      return;
-    }
     try {
       console.log({ listProductsOrder, newlistofproductorder });
 
       const updatedProducts = newlistofproductorder.map((product) => {
         if (
           (sizeid &&
-            product.productid._id === id &&
+            product.productId._id === id &&
             product.sizeId === sizeid) ||
-          (!sizeid && product.productid._id === id && !product.sizeId)
+          (!sizeid && product.productId._id === id && !product.sizeId)
         ) {
           const originalProduct = listProductsOrder.find(
             (pro) =>
-              (sizeid && pro.productid._id === id && pro.sizeId === sizeid) ||
-              (!sizeid && pro.productid._id === id && !pro.sizeId)
+              (sizeid && pro.productId._id === id && pro.sizeId === sizeid) ||
+              (!sizeid && pro.productId._id === id && !pro.sizeId)
           );
 
           if (originalProduct) {
@@ -1696,11 +1719,6 @@ function App() {
   const [subtotalSplitOrder, setsubtotalSplitOrder] = useState(0);
 
   const calcSubtotalSplitOrder = (products = newlistofproductorder) => {
-    if (!token) {
-      // Handle case where token is not available
-      toast.error("رجاء تسجيل الدخول مره اخري");
-      return;
-    }
     try {
       let total = 0;
 
@@ -1710,12 +1728,12 @@ function App() {
         if (product.sizeId) {
           originalProduct = listProductsOrder.find(
             (pro) =>
-              pro.productid._id === product.productid._id &&
+              pro.productId._id === product.productId._id &&
               pro.sizeId === product.sizeId
           );
         } else {
           originalProduct = listProductsOrder.find(
-            (pro) => pro.productid._id === product.productid._id
+            (pro) => pro.productId._id === product.productId._id
           );
         }
 
@@ -1775,8 +1793,6 @@ function App() {
     // calculateExtrasSubtotal(updatedProducts);
   };
 
-
-
   // Function to split the invoice and pay a portion of it
   const splitInvoice = async (e) => {
     try {
@@ -1835,7 +1851,7 @@ function App() {
           setorderaddition(orderData.addition);
           setorderdiscount(orderData.discount);
           setorderSubtotal(orderData.subTotal);
-          setorderDeliveryCost(orderData.deliveryCost);
+          setorderdeliveryFee(orderData.deliveryFee);
           setitemsInCart([]);
         }
       } else {
@@ -1861,17 +1877,51 @@ function App() {
   const [employeeLoginInfo, setEmployeeLoginInfo] = useState(null);
   const [clientInfo, setClientInfo] = useState({});
 
+  const [isTokenValid, setIsTokenValid] = useState(true);
+
+  const refreshToken = async () => {
+    try {
+      const response = await axios.post(
+        `${apiUrl}/api/employee/refresh-token`,
+        {},
+        { withCredentials: true }
+      );
+
+      if (response && response.data.accessToken) {
+        localStorage.setItem("token_e", response.data.accessToken);
+        return response.data.accessToken;
+      }
+    } catch (error) {
+      console.error("Error refreshing token:", error);
+      toast.error("انتهت صلاحية الجلسة. الرجاء تسجيل الدخول مرة أخرى.");
+      return <Navigate to="/login" />;
+    }
+  };
+
+  const verifyToken = async () => {
+    const employeeToken = localStorage.getItem("token_e");
+    if (!employeeToken) {
+      await refreshToken();
+    } else {
+      const decodedToken = jwt_decode(employeeToken);
+      const currentTime = Date.now() / 1000;
+      if (decodedToken.exp < currentTime) {
+        await refreshToken();
+      }
+    }
+  };
+
   const getUserInfoFromToken = async () => {
-    if (!token) {
-      // Handle case where token is not available
-      toast.error("رجاء تسجيل الدخول مره اخري");
+    const userToken = localStorage.getItem("token_u");
+    const employeeToken = localStorage.getItem("token_e");
+
+    if (!userToken && !employeeToken) {
+      toast.error("رجاء تسجيل الدخول مره أخرى");
+      setIsTokenValid(false);
       return;
     }
-    // setisLoading(true)
-    try {
-      const userToken = localStorage.getItem("token_u");
-      const employeeToken = localStorage.getItem("token_e");
 
+    try {
       let decodedToken = null;
 
       if (employeeToken) {
@@ -1883,6 +1933,7 @@ function App() {
       if (userToken) {
         decodedToken = jwt_decode(userToken);
         setUserLoginInfo(decodedToken);
+
         if (decodedToken) {
           const userId = decodedToken.userinfo.id;
           if (userId) {
@@ -1894,21 +1945,18 @@ function App() {
         }
       }
 
-      if (!employeeToken && !userToken) {
-        setUserLoginInfo(null);
-        setEmployeeLoginInfo(null);
-      }
+      setIsTokenValid(true);
     } catch (error) {
-      console.error("Error fetching user info from token:", error);
-    } finally {
-      setisLoading(false);
+      console.error("Error verifying token:", error);
+      toast.error("خطأ أثناء التحقق من التوكن. يرجى تسجيل الدخول مرة أخرى.");
+      setIsTokenValid(false);
     }
   };
 
   const getPermissions = async (decodedToken) => {
     try {
       const id = decodedToken.id;
-
+      const config = await handleGetTokenAndConfig();
       if (id) {
         const response = await axios.get(
           `${apiUrl}/api/permission/employee/${id}`,
@@ -1935,24 +1983,53 @@ function App() {
 
   const getOrderDetailsBySerial = async (e, serial) => {
     e.preventDefault();
+
+    if (!serial) {
+      toast.error("يرجى إدخال رقم مسلسل صالح.");
+      return;
+    }
+
     try {
-      const res = await axios.get(apiUrl + "/api/order");
-      const data = res.data;
-      const order = data.find((o) => o.serial === serial);
+      const res = await axios.get(`${apiUrl}/api/order`);
+      const orders = res.data;
+
+      if (!orders || orders.length === 0) {
+        toast.warn("لم يتم العثور على أي طلبات.");
+        return;
+      }
+
+      const order = orders.find((o) => o.serial === serial);
+
+      if (!order) {
+        toast.warn(`لم يتم العثور على طلب بهذا الرقم: ${serial}`);
+        return;
+      }
+
       setorderDetalisBySerial(order);
-      setproductOrderToUpdate(order.products);
-      setaddition(order.addition);
-      setdiscount(order.discount);
+      setproductOrderToUpdate(order.products || []);
+      setaddition(order.addition || 0);
+      setdiscount(order.discount || 0);
+
+      toast.success("تم جلب تفاصيل الطلب بنجاح.");
     } catch (error) {
-      console.error("Error fetching order details:", error);
-      toast("حدث خطأ أثناء جلب تفاصيل الطلب. يرجى المحاولة مرة أخرى.");
+      console.error("حدث خطأ أثناء جلب تفاصيل الطلب:", error);
+
+      if (error.response) {
+        toast.error(
+          `خطأ: ${error.response.data.message || "فشل في جلب تفاصيل الطلب."}`
+        );
+      } else if (error.request) {
+        toast.error("خطأ في الشبكة: تعذر الوصول إلى السيرفر.");
+      } else {
+        toast.error("حدث خطأ غير متوقع. يرجى المحاولة مرة أخرى.");
+      }
     }
   };
 
   const updateOrder = async (e) => {
     e.preventDefault();
     const id = orderDetalisBySerial._id;
-    setisLoading(true);
+    setIsLoading(true);
 
     try {
       const subTotal = costOrder;
@@ -1983,18 +2060,20 @@ function App() {
       console.error("Error updating order:", error);
       toast.error("حدث خطأ أثناء تعديل الأوردر.");
     } finally {
-      setisLoading(false);
+      setIsLoading(false);
     }
   };
 
   // ----------- reservation table------------//
   //============================================
-  const [allReservations, setallReservations] = useState([]);
+  const [allReservations, setAllReservations] = useState([]);
   const getAllReservations = async () => {
     try {
-      const response = await axios.get(`${apiUrl}/api/reservation`,config);
+      const config = await handleGetTokenAndConfig();
+
+      const response = await axios.get(`${apiUrl}/api/reservation`, config);
       if (response.data) {
-        setallReservations(response.data);
+        setAllReservations(response.data);
       } else {
         console.log("No data returned from the server");
       }
@@ -2006,17 +2085,27 @@ function App() {
   const [availableTableIds, setavailableTableIds] = useState([]);
 
   const getAvailableTables = (reservationDate, startTime, endTime) => {
-    try {
-      // Filter reservations by selected date and time range
-      const filterReservationsByTime = allReservations.filter((reservation) => {
+    console.log({ allReservations, reservationDate, startTime, endTime });
+
+    // Filter reservations that match the selected date
+    const filterReservationsByDate = allReservations?.filter((reservation) => {
+
         const reservationDateObj = new Date(reservation.reservationDate);
         const selectedDateObj = new Date(reservationDate);
 
-        // Check if the reservation date matches the selected date
+        return (
+          reservationDateObj.getFullYear() === selectedDateObj.getFullYear() &&
+          reservationDateObj.getMonth() === selectedDateObj.getMonth() &&
+          reservationDateObj.getDate() === selectedDateObj.getDate()
+        );
+    });
+
+    // Filter reservations that overlap with the selected time range
+    const filterReservationsByTime = filterReservationsByDate?.filter(
+      (reservation) => {
         if (
-          reservationDateObj.getFullYear() !== selectedDateObj.getFullYear() ||
-          reservationDateObj.getMonth() !== selectedDateObj.getMonth() ||
-          reservationDateObj.getDate() !== selectedDateObj.getDate()
+          reservation.status === "canceled" ||
+          reservation.status === "Missed reservation time"
         ) {
           return false;
         }
@@ -2026,7 +2115,7 @@ function App() {
         const startSelectedTime = new Date(startTime).getTime();
         const endSelectedTime = new Date(endTime).getTime();
 
-        // Check for overlapping time ranges
+        // Check if there is a time overlap
         return (
           (startReservationTime <= startSelectedTime &&
             endReservationTime >= startSelectedTime) ||
@@ -2035,30 +2124,31 @@ function App() {
           (startSelectedTime <= startReservationTime &&
             endSelectedTime >= endReservationTime)
         );
-      });
-      console.log({ filterReservationsByTime });
-      // Create a list of all tableIds
-      const allTableIds = allTable.map((table) => table._id);
-      console.log({ allTableIds });
-
-      // Create a list of reserved tableIds in the selected time range
-      const reservedTableIds = filterReservationsByTime.map(
-        (reservation) => reservation.tableId
-      );
-      console.log({ reservedTableIds });
-
-      // Find the difference between allTableIds and reservedTableIds to get available tableIds
-      const availableTableIds = allTableIds.filter(
-        (tableId) => !reservedTableIds.includes(tableId)
-      );
-      console.log({ availableTableIds });
-      setavailableTableIds(availableTableIds);
-      return availableTableIds;
-    } catch (error) {
-      // Handle errors
-      console.error("Error getting available tables by date and time:", error);
-      return [];
     }
+    );
+
+    console.log({ filterReservationsByDate, filterReservationsByTime });
+
+    // Retrieve all table IDs
+    const allTableIds = allTable?.map((table) => table._id) || [];
+    console.log({ allTableIds });
+
+    // Retrieve reserved table IDs based on the filtered reservations
+    const reservedTableIds = [];
+    filterReservationsByTime &&
+      filterReservationsByTime?.map((reservation) =>
+        reservedTableIds.push(reservation.tableId?._id)
+      );
+
+    // Find available tables by excluding reserved ones
+    const availableTableIds = allTableIds.filter(
+      (tableId) => !reservedTableIds.includes(tableId)
+    );
+    console.log({ availableTableIds });
+
+    // Update state with available table IDs
+    setavailableTableIds(availableTableIds);
+    return availableTableIds;
   };
 
   const createReservations = async (
@@ -2077,7 +2167,7 @@ function App() {
   ) => {
     try {
       e.preventDefault();
-      // setisLoading(true)
+      // setIsLoading(true)
 
       // Logging input data for debugging purposes
       // console.log({ tableId, tableNumber, userId, numberOfGuests, customerName, customerPhone, reservationDate, startTime, endTime, reservationNote, createdBy });
@@ -2164,19 +2254,15 @@ function App() {
       console.error(error);
       toast.error("فشل عملية الحجز! الرجاء المحاولة مرة أخرى");
     } finally {
-      setisLoading(false);
+      setIsLoading(false);
     }
   };
 
-
   const fetchData = async () => {
-    setisLoading(true);
     try {
-      await getUserInfoFromToken();
-      await getRestaurant();
-
-      // Fetch all data in parallel
+      setIsLoading(true);
       await Promise.all([
+        getRestaurant(),
         getAllEmployees(),
         getAllProducts(),
         getAllMenuCategories(),
@@ -2187,51 +2273,85 @@ function App() {
       ]);
     } catch (error) {
       console.error("Error fetching data:", error);
-      toast.error("Error fetching data");
+      toast.error("خطأ أثناء جلب البيانات");
     } finally {
-      setisLoading(false);
+      setIsLoading(false);
     }
   };
 
+  // عند التحقق من التوكن
   useEffect(() => {
-    getAllOrders()
-  }, [isRefresh])
-  
-
-  useEffect(() => {
-    fetchData();
-
-    const handleConnectError = (error) => {
-      console.error("Socket connection error:", error);
-      toast.error("هناك مشكلة في نظام الإشعارات");
+    const initializeSession = async () => {
+      setIsLoading(true);
+      await verifyToken();
+      await getUserInfoFromToken();
+      setIsLoading(false);
     };
 
-    cashierSocket.on("connect_error", handleConnectError);
-    kitchenSocket.on("connect_error", handleConnectError);
-    waiterSocket.on("connect_error", handleConnectError);
+    initializeSession();
+  }, []);
+
+  // جلب البيانات عند التأكد من صلاحية التوكن
+  useEffect(() => {
+    if (isTokenValid) {
+      fetchData();
+    }
+  }, [isTokenValid]);
+
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
+
+  useEffect(() => {
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
+
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
 
     return () => {
-      cashierSocket.off("connect_error", handleConnectError);
-      kitchenSocket.off("connect_error", handleConnectError);
-      waiterSocket.off("connect_error", handleConnectError);
-
-      cashierSocket.disconnect();
-      kitchenSocket.disconnect();
-      waiterSocket.disconnect();
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
     };
   }, []);
 
-  // useEffect(() => {
-  //   Payment_pending_orders()
-  // }, [allOrders])
-
   useEffect(() => {
-    calculateOrderCost();
-    getAllOrders();
+    if (isOnline) {
+      const handleConnectError = (error) => {
+        console.error("Socket connection error:", error);
+        toast.error("هناك مشكلة في نظام الإشعارات");
+      };
+
+      cashierSocket.on("connect_error", handleConnectError);
+      kitchenSocket.on("connect_error", handleConnectError);
+      GrillSocket.on("connect_error", handleConnectError);
+      BarSocket.on("connect_error", handleConnectError);
+      waiterSocket.on("connect_error", handleConnectError);
+
+      return () => {
+        cashierSocket.off("connect_error", handleConnectError);
+        kitchenSocket.off("connect_error", handleConnectError);
+        GrillSocket.off("connect_error", handleConnectError);
+        BarSocket.off("connect_error", handleConnectError);
+        waiterSocket.off("connect_error", handleConnectError);
+
+        cashierSocket.disconnect();
+        kitchenSocket.disconnect();
+        GrillSocket.disconnect();
+        BarSocket.disconnect();
+        waiterSocket.disconnect();
+      };
+    }
+  }, []);
+
+  // تحديث التكلفة عند تغير الحالة
+  useEffect(() => {
+    if (isTokenValid) {
+      calculateOrderCost();
+      getAllOrders();
+    }
   }, [count, itemsInCart, productOrderToUpdate, isLogin]);
 
   return (
-    <detacontext.Provider
+    <dataContext.Provider
       value={{
         // المعلومات الأساسية
         restaurantData,
@@ -2239,6 +2359,8 @@ function App() {
         apiUrl,
 
         // الدوال المتعلقة بالمصادقة
+        apiUrl,
+        handleGetTokenAndConfig,
         userLoginInfo,
         employeeLoginInfo,
         permissionsList,
@@ -2272,7 +2394,7 @@ function App() {
         listProductsOrder,
         orderUpdateDate,
         myOrder,
-        MenuCategoryId,
+        menuCategoryId,
         itemsInCart,
         costOrder,
         addItemToCart,
@@ -2304,16 +2426,16 @@ function App() {
         setclientaddress,
         deliveryAreaId,
         setdeliveryAreaId,
-        deliverycost,
-        setdeliverycost,
+        deliveryFee,
+        setdeliveryFee,
 
         // الدوال المتعلقة بالتقسيم
-        setisLoading,
+        setIsLoading,
         EditPagination,
-        startpagination,
-        endpagination,
-        setstartpagination,
-        setendpagination,
+        startPagination,
+        endPagination,
+        setStartPagination,
+        setEndPagination,
 
         // دوال أخرى أو متغيرات حالة
         itemId,
@@ -2327,9 +2449,8 @@ function App() {
         salesTax,
         setserviceTax,
         serviceTax,
-        orderDeliveryCost,
-        setorderDeliveryCost,
-
+        orderdeliveryFee,
+        setorderdeliveryFee,
         // الدوال المتعلقة بتفاصيل الطلبات
         orderDetalisBySerial,
         setorderDetalisBySerial,
@@ -2343,12 +2464,14 @@ function App() {
         subtotalSplitOrder,
 
         // الدوال المتعلقة بالحجوزات
+        getAllTable,
         getAvailableTables,
+        setavailableTableIds,
         availableTableIds,
         createReservations,
         getAllReservations,
         allReservations,
-        setallReservations,
+        setAllReservations,
         // confirmReservation,
         // updateReservation,
         // getReservationById,
@@ -2356,16 +2479,23 @@ function App() {
 
         // حالة التحميل وأدوات أخرى
         isLoading,
-        setisLoading,
+        setIsLoading,
         setStartDate,
         setEndDate,
         filterByDateRange,
         filterByTime,
         isRefresh,
-       setisRefresh
+        setIsRefresh,
+
+        cashierSocket,
+        kitchenSocket,
+        BarSocket,
+        GrillSocket,
+        waiterSocket,
       }}
     >
       {isLoading && <LoadingPage />}
+      {!isOnline && <NoInternetPage />}
 
       <BrowserRouter>
         <Routes>
@@ -2386,7 +2516,7 @@ function App() {
               element={
                 <Suspense fallback={<LoadingPage />}>
                   {employeeLoginInfo?.role === "chef" ? (
-                    <Kitchen />
+                    <PreparationScreen />
                   ) : employeeLoginInfo?.role === "waiter" ? (
                     <Waiter />
                   ) : employeeLoginInfo?.role === "deliveryMan" ? (
@@ -2398,6 +2528,14 @@ function App() {
               }
             />
             {/* <Route index element={<Suspense fallback={<LoadingPage />}><ManagerDash /></Suspense>} /> */}
+            <Route
+              path="managerdashboard"
+              element={
+                <Suspense fallback={<LoadingPage />}>
+                  <ManagerDashBoard />
+                </Suspense>
+              }
+            />
             <Route
               path="info"
               element={
@@ -2415,10 +2553,26 @@ function App() {
               }
             />
             <Route
+              path="preparationticket"
+              element={
+                <Suspense fallback={<LoadingPage />}>
+                  <PreparationTicket />
+                </Suspense>
+              }
+            />
+            <Route
               path="products"
               element={
                 <Suspense fallback={<LoadingPage />}>
                   <Products />
+                </Suspense>
+              }
+            />
+            <Route
+              path="preparationsection"
+              element={
+                <Suspense fallback={<LoadingPage />}>
+                  <PreparationSection />
                 </Suspense>
               }
             />
@@ -2503,13 +2657,14 @@ function App() {
               }
             />
             <Route
-              path="kitchen"
+              path="preparationscreen"
               element={
                 <Suspense fallback={<LoadingPage />}>
-                  <Kitchen />
+                  <PreparationScreen />
                 </Suspense>
               }
             />
+
             <Route
               path="waiter"
               element={
@@ -2591,10 +2746,18 @@ function App() {
               }
             />
             <Route
-              path="stockmanag"
+              path="stockproductionrecipe"
               element={
                 <Suspense fallback={<LoadingPage />}>
-                  <StockManag />
+                  <ProductionRecipe />
+                </Suspense>
+              }
+            />
+            <Route
+              path="StockMovement"
+              element={
+                <Suspense fallback={<LoadingPage />}>
+                  <StockMovement />
                 </Suspense>
               }
             />
@@ -2607,13 +2770,14 @@ function App() {
               }
             />
             <Route
-              path="kitchenconsumption"
+              path="sectionconsumption"
               element={
                 <Suspense fallback={<LoadingPage />}>
-                  <KitchenConsumption />
+                  <SectionConsumption />
                 </Suspense>
               }
             />
+
             <Route
               path="expense"
               element={
@@ -2683,7 +2847,7 @@ function App() {
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </BrowserRouter>
-    </detacontext.Provider>
+    </dataContext.Provider>
   );
 }
 

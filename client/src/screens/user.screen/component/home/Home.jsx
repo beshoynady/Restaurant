@@ -2,11 +2,10 @@ import React, { useContext, useState, useEffect } from "react";
 import "./Home.css";
 import io from "socket.io-client";
 
-import { detacontext } from "../../../../App";
+import { dataContext } from "../../../../App";
 import { useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import axios from "axios";
-
 
 const cashierSocket = io(`${process.env.REACT_APP_API_URL}/cashier`, {
   reconnection: true,
@@ -15,24 +14,20 @@ const cashierSocket = io(`${process.env.REACT_APP_API_URL}/cashier`, {
 });
 
 const Home = () => {
-  const apiUrl = process.env.REACT_APP_API_URL;
-  const token = localStorage.getItem("token_e");
-  const config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  };
-
-  const { restaurantData, userLoginInfo } = useContext(detacontext);
+  const { restaurantData, userLoginInfo, apiUrl, handleGetTokenAndConfig } =
+    useContext(dataContext);
   const { id } = useParams();
   const navigate = useNavigate(); // Use useNavigate hook
   const [table, setTable] = useState(null);
 
   const tableInfo = async () => {
     try {
-      const response = await axios.get(`${apiUrl}/api/table/${id}`, config);
+      const config = await handleGetTokenAndConfig();
+      const response = await axios.get(`${apiUrl}/api/table`, config);
       if (response.data) {
-        setTable(response.data);
+        const allTable = response.data;
+        const table = allTable.find((tab) => tab.tableCode === id);
+        setTable(table);
       } else {
         // If table data is not found, navigate to home
         navigate("/");
@@ -53,6 +48,7 @@ const Home = () => {
 
   const askingForHelp = async (tableId) => {
     try {
+      const config = await handleGetTokenAndConfig();
       // Fetch the last 30 orders
       const response = await axios.get(`${apiUrl}/api/order/limit/30`, config);
       const allOrders = response.data;
@@ -87,7 +83,10 @@ const Home = () => {
         const newOrder = await axios.post(`${apiUrl}/api/order/`, newOrderData);
         if (newOrder) {
           toast.info("تم طلب الويتر للمساعدة");
-          cashierSocket.emit('helprequest', `طاوله رقم ${table.tableNumber} يحتاج مساعده`)
+          cashierSocket.emit(
+            "helprequest",
+            `طاوله رقم ${table.tableNumber} يحتاج مساعده`
+          );
         }
       } else {
         // Update the existing active order with the help request
@@ -101,8 +100,10 @@ const Home = () => {
         );
         if (updatedOrder) {
           toast.info("تم طلب الويتر للمساعدة");
-          cashierSocket.emit('helprequest', `طاوله رقم ${table.tableNumber} يحتاج مساعده`)
-
+          cashierSocket.emit(
+            "helprequest",
+            `طاوله رقم ${table.tableNumber} يحتاج مساعده`
+          );
         }
       }
     } catch (error) {

@@ -1,5 +1,5 @@
 import React, { useState, useContext, useRef, useEffect } from "react";
-import { detacontext } from "../../../../App";
+import { dataContext } from "../../../../App";
 import { useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Navigate } from "react-router-dom";
@@ -12,14 +12,6 @@ import "./Cart.css";
 import html2pdf from "html2pdf.js";
 
 const Cart = (props) => {
-  const apiUrl = process.env.REACT_APP_API_URL;
-  const token = localStorage.getItem("token_e");
-  const config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  };
-
   const {
     restaurantData,
     setsalesTax,
@@ -29,7 +21,6 @@ const Cart = (props) => {
     formatDateTime,
     clientInfo,
     userLoginInfo,
-
     itemsInCart,
     costOrder,
     deleteItemFromCart,
@@ -39,11 +30,13 @@ const Cart = (props) => {
     orderTotal,
     orderSubtotal,
     ordertax,
-    orderdeliveryCost,
+    orderdeliveryFee,
     createDeliveryOrderByClient,
     createOrderForTableByClient,
     checkout,
-  } = useContext(detacontext);
+    apiUrl,
+    handleGetTokenAndConfig,
+  } = useContext(dataContext);
 
   const open_cart = props.opencart;
   const ordersText = useRef();
@@ -73,9 +66,12 @@ const Cart = (props) => {
 
   const tableInfo = async () => {
     try {
-      const response = await axios.get(`${apiUrl}/api/table/${id}`, config);
+      const config = await handleGetTokenAndConfig();
+      const response = await axios.get(`${apiUrl}/api/table`, config);
       if (response.data) {
-        setTable(response.data);
+        const allTable = response.data;
+        const table = allTable.find((tab) => tab.tableCode === id);
+        setTable(table);
       } else {
         // If table data is not found, navigate to home
         navigate("/");
@@ -193,7 +189,7 @@ const Cart = (props) => {
                                     className="h-100 btn btn-danger btn-sm"
                                     onClick={() =>
                                       deleteItemFromCart(
-                                        item.productid,
+                                        item.productId,
                                         item.sizeId
                                       )
                                     }
@@ -458,10 +454,10 @@ const Cart = (props) => {
                       <td>{orderSubtotal > 0 ? orderSubtotal : 0} ج</td>
                     </tr>
                     {myOrder.orderType === "Delivery" &&
-                      myOrder.deliveryCost > 0 && (
+                      myOrder.deliveryFee > 0 && (
                         <tr>
                           <td colSpan="3">خدمة التوصيل</td>
-                          <td>{myOrder.deliveryCost} ج</td>
+                          <td>{myOrder.deliveryFee} ج</td>
                         </tr>
                       )}
 

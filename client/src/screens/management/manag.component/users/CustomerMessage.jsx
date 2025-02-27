@@ -1,19 +1,10 @@
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
-import { detacontext } from "../../../../App";
+import { dataContext } from "../../../../App";
 import { toast } from "react-toastify";
 import "../orders/Orders.css";
 
 const CustomerMessage = () => {
-  const apiUrl = process.env.REACT_APP_API_URL;
-  const token = localStorage.getItem("token_e");
-
-  const config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  };
-
   const {
     setStartDate,
     setEndDate,
@@ -22,15 +13,17 @@ const CustomerMessage = () => {
     restaurantData,
     formatDateTime,
     permissionsList,
-    setisLoading,
+    setIsLoading,
     formatDate,
     formatTime,
     EditPagination,
-    startpagination,
-    endpagination,
-    setstartpagination,
-    setendpagination,
-  } = useContext(detacontext);
+    startPagination,
+    endPagination,
+    setStartPagination,
+    setEndPagination,
+    apiUrl,
+    handleGetTokenAndConfig,
+  } = useContext(dataContext);
 
   const permissionUserMassage = permissionsList?.filter(
     (permission) => permission.resource === "Messages"
@@ -41,7 +34,7 @@ const CustomerMessage = () => {
   const [phone, setPhone] = useState("");
   const [message, setMessage] = useState("");
   const [messageId, setmessageId] = useState("");
-  const [allCustomerMessage, setallCustomerMessage] = useState([]);
+  const [allCustomerMessage, setAllCustomerMessage] = useState([]);
 
   const getAllCustomerMessage = async () => {
     if (permissionUserMassage && !permissionUserMassage.read) {
@@ -49,30 +42,22 @@ const CustomerMessage = () => {
       return;
     }
     try {
-      if (!token) {
-        // Handle case where token is not available
-        toast.error("رجاء تسجيل الدخول مره اخري");
-        return;
-      }
+      const config = await handleGetTokenAndConfig();
       const response = await axios.get(`${apiUrl}/api/message`, config);
-      setallCustomerMessage(response.data);
+      setAllCustomerMessage(response.data);
     } catch (error) {
       console.log(error);
     }
   };
 
   const updateisSeenMessage = async (e, mes) => {
-    e.preventDefault()
-    if (!token) {
-      // Handle case where token is not available
-      toast.error("رجاء تسجيل الدخول مره اخري");
-      return;
-    }
+    e.preventDefault();
+    const config = await handleGetTokenAndConfig();
     if (permissionUserMassage && !permissionUserMassage.show) {
       toast.warn("ليس لك صلاحية لتعديل رسائل المستخدمين");
       return;
     }
-    const message = JSON.parse(mes)
+    const message = JSON.parse(mes);
     setName(message.name);
     setPhone(message.phone);
     setMessage(message.message);
@@ -92,11 +77,7 @@ const CustomerMessage = () => {
 
   const deleteCustomerMessage = async (e) => {
     e.preventDefault();
-    if (!token) {
-      // Handle case where token is not available
-      toast.error("رجاء تسجيل الدخول مره اخري");
-      return;
-    }
+    const config = await handleGetTokenAndConfig();
     if (permissionUserMassage && !permissionUserMassage.delete) {
       toast.warn("ليس لك صلاحية لحذف رسائل المستخدمين");
       return;
@@ -123,7 +104,7 @@ const CustomerMessage = () => {
     const message = allCustomerMessage.filter((message) =>
       message.phone.startsWith(phone)
     );
-    setallCustomerMessage(message);
+    setAllCustomerMessage(message);
   };
 
   const [selectedIds, setSelectedIds] = useState([]);
@@ -147,11 +128,7 @@ const CustomerMessage = () => {
     }
     console.log(selectedIds);
     try {
-      if (!token) {
-        // Handle case where token is not available
-        toast.error("رجاء تسجيل الدخول مره اخري");
-        return;
-      }
+      const config = await handleGetTokenAndConfig();
 
       for (const Id of selectedIds) {
         await axios.delete(`${apiUrl}/api/message/${Id}`, config);
@@ -202,8 +179,8 @@ const CustomerMessage = () => {
                 <select
                   className="form-control border-primary m-0 p-2 h-auto"
                   onChange={(e) => {
-                    setstartpagination(0);
-                    setendpagination(e.target.value);
+                    setStartPagination(0);
+                    setEndPagination(e.target.value);
                   }}
                 >
                   {(() => {
@@ -237,7 +214,7 @@ const CustomerMessage = () => {
                   <select
                     className="form-control border-primary m-0 p-2 h-auto"
                     onChange={(e) =>
-                      setallCustomerMessage(
+                      setAllCustomerMessage(
                         filterByTime(e.target.value, allCustomerMessage)
                       )
                     }
@@ -284,7 +261,7 @@ const CustomerMessage = () => {
                       type="button"
                       className="btn btn-primary h-100 p-2 "
                       onClick={() =>
-                        setallCustomerMessage(
+                        setAllCustomerMessage(
                           filterByDateRange(allCustomerMessage)
                         )
                       }
@@ -293,7 +270,8 @@ const CustomerMessage = () => {
                     </button>
                     <button
                       type="button"
-                      className="btn btn-warning h-100 p-2" onClick={getAllCustomerMessage}
+                      className="btn btn-warning h-100 p-2"
+                      onClick={getAllCustomerMessage}
                     >
                       استعادة
                     </button>
@@ -327,7 +305,7 @@ const CustomerMessage = () => {
             </thead>
             <tbody>
               {allCustomerMessage.map((message, i) => {
-                if ((i >= startpagination) & (i < endpagination)) {
+                if ((i >= startPagination) & (i < endPagination)) {
                   return (
                     <tr key={i}>
                       <td>
@@ -351,9 +329,9 @@ const CustomerMessage = () => {
                       <td>{message.isSeen ? "تم المشاهده" : "لم تشاهد"}</td>
                       <td>{formatDateTime(message.createdAt)}</td>
                       <td>
-                        <a
-                          href="#showMessageModal"
-                          className="edit"
+                        <button
+                          data-target="#showMessageModal"
+                          className="btn btn-sm btn-primary ml-2 "
                           data-toggle="modal"
                           onClick={(e) => {
                             updateisSeenMessage(e, JSON.stringify(message));
@@ -366,10 +344,10 @@ const CustomerMessage = () => {
                           >
                             visibility
                           </i>
-                        </a>
-                        <a
-                          href="#deletemessageModal"
-                          className="delete"
+                        </button>
+                        <button
+                          data-target="#deletemessageModal"
+                          className="btn btn-sm btn-danger"
                           data-toggle="modal"
                           onClick={() => setmessageId(message._id)}
                         >
@@ -380,7 +358,7 @@ const CustomerMessage = () => {
                           >
                             &#xE872;
                           </i>
-                        </a>
+                        </button>
                       </td>
                     </tr>
                   );
@@ -392,8 +370,8 @@ const CustomerMessage = () => {
             <div className="hint-text text-dark">
               عرض{" "}
               <b>
-                {allCustomerMessage.length > endpagination
-                  ? endpagination
+                {allCustomerMessage.length > endPagination
+                  ? endPagination
                   : allCustomerMessage.length}
               </b>{" "}
               من <b>{allCustomerMessage.length}</b> عنصر
@@ -404,7 +382,7 @@ const CustomerMessage = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 5 ? "active" : ""}`}
+                className={`page-item ${endPagination === 5 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   1
@@ -412,7 +390,7 @@ const CustomerMessage = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 10 ? "active" : ""}`}
+                className={`page-item ${endPagination === 10 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   2
@@ -420,7 +398,7 @@ const CustomerMessage = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 15 ? "active" : ""}`}
+                className={`page-item ${endPagination === 15 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   3
@@ -428,7 +406,7 @@ const CustomerMessage = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 20 ? "active" : ""}`}
+                className={`page-item ${endPagination === 20 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   4
@@ -436,7 +414,7 @@ const CustomerMessage = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 25 ? "active" : ""}`}
+                className={`page-item ${endPagination === 25 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   5
@@ -444,7 +422,7 @@ const CustomerMessage = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 30 ? "active" : ""}`}
+                className={`page-item ${endPagination === 30 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   التالي

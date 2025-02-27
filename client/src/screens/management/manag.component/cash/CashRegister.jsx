@@ -1,84 +1,78 @@
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
-import { detacontext } from "../../../../App";
+import { dataContext } from "../../../../App";
 import { toast } from "react-toastify";
 import "../orders/Orders.css";
 
 const CashRegister = () => {
-  const apiUrl = process.env.REACT_APP_API_URL;
-  const token = localStorage.getItem("token_e"); // Retrieve the token from localStorage
-  const config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  };
-
   const {
     permissionsList,
-    setisLoading,
+    setIsLoading,
     EditPagination,
-    startpagination,
-    endpagination,
-    setstartpagination,
-    setendpagination,
-  } = useContext(detacontext);
+    startPagination,
+    endPagination,
+    setStartPagination,
+    setEndPagination,
+    apiUrl,
+    handleGetTokenAndConfig,
+  } = useContext(dataContext);
 
   const cashRegisterPermissions = permissionsList?.filter(
     (permission) => permission.resource === "Cash Register"
   )[0];
 
   const [cashRegisters, setCashRegisters] = useState([]);
-  const [allEmployee, setallEmployee] = useState([]);
+  const [allEmployee, setAllEmployee] = useState([]);
   const [name, setname] = useState("");
   const [balance, setbalance] = useState("");
   const [employee, setemployee] = useState("");
   const [employeeName, setemployeeName] = useState("");
   const [cashID, setcashID] = useState("");
 
-
   // Handle Axios error
   const handleAxiosError = (error, errorMessage) => {
     if (error.response) {
-      console.error('Server responded with status code:', error.response.status);
-      console.error('Error message:', error.response.data);
+      console.error(
+        "Server responded with status code:",
+        error.response.status
+      );
+      console.error("Error message:", error.response.data);
       toast.error(errorMessage);
     } else if (error.request) {
-      console.error('No response received from server.');
-      toast.error('لم يتم استقبال رد من الخادم. الرجاء التحقق من اتصالك بالإنترنت.');
+      console.error("No response received from server.");
+      toast.error(
+        "لم يتم استقبال رد من الخادم. الرجاء التحقق من اتصالك بالإنترنت."
+      );
     } else {
-      console.error('An unexpected error occurred:', error.message);
-      toast.error('حدث خطأ غير متوقع. رجاء المحاولة لاحقاً.');
+      console.error("An unexpected error occurred:", error.message);
+      toast.error("حدث خطأ غير متوقع. رجاء المحاولة لاحقاً.");
     }
   };
 
   // Fetch employees
   const getEmployees = async () => {
-    if (!token) {
-      // Handle case where token is not available
-      toast.error("رجاء تسجيل الدخول مره اخري");
-      return;
-    }
+    const config = await handleGetTokenAndConfig();
 
     try {
       const response = await axios.get(`${apiUrl}/api/employee`, config);
       const data = response.data;
       if (data) {
-        setallEmployee(data);
+        setAllEmployee(data);
       } else {
         toast.info("لا توجد بيانات لعرضها");
       }
       // console.log({ data });
     } catch (error) {
-      handleAxiosError(error, 'حدث خطأ أثناء استرجاع الموظفين. رجاء المحاولة لاحقاً.');
+      handleAxiosError(
+        error,
+        "حدث خطأ أثناء استرجاع الموظفين. رجاء المحاولة لاحقاً."
+      );
     }
   };
 
   // Fetch all cash registers
   const getAllCashRegisters = async () => {
-    if (!token) {
-      toast.error("رجاء تسجيل الدخول مره أخرى");
-      return;
-    }
+    const config = await handleGetTokenAndConfig();
     if (cashRegisterPermissions && cashRegisterPermissions.read === false) {
       toast.warn("ليس لك صلاحية لعرض حسابات الخزينه");
       return;
@@ -96,10 +90,7 @@ const CashRegister = () => {
 
   // Fetch a cash register by ID
   const getCashRegisterById = async () => {
-    if (!token) {
-      toast.error("رجاء تسجيل الدخول مره أخرى");
-      return;
-    }
+    const config = await handleGetTokenAndConfig();
     if (cashRegisterPermissions && cashRegisterPermissions.read === false) {
       toast.warn("ليس لك صلاحية لعرض حساب الخزينه");
       return;
@@ -119,10 +110,7 @@ const CashRegister = () => {
   const createCashRegister = async (e) => {
     e.preventDefault();
     const newCashRegister = { name, balance, employee };
-    if (!token) {
-      toast.error("رجاء تسجيل الدخول مره أخرى");
-      return;
-    }
+    const config = await handleGetTokenAndConfig();
     if (cashRegisterPermissions && cashRegisterPermissions.create === false) {
       toast.warn("ليس لك صلاحية لإنشاء حسابات الخزينه");
       return;
@@ -140,10 +128,7 @@ const CashRegister = () => {
   const updateCashRegister = async (e) => {
     e.preventDefault();
     const updatedCashRegister = { name, balance, employee };
-    if (!token) {
-      toast.error("رجاء تسجيل الدخول مره أخرى");
-      return;
-    }
+    const config = await handleGetTokenAndConfig();
     if (cashRegisterPermissions && cashRegisterPermissions.update === false) {
       toast.warn("ليس لك صلاحية لتحديث حسابات الخزينه");
       return;
@@ -164,27 +149,27 @@ const CashRegister = () => {
   // Delete a cash register
   const deleteCashRegister = async (e) => {
     e.preventDefault();
-    if (!token) {
-      toast.error("رجاء تسجيل الدخول مره أخرى");
-      return;
-    }
+    const config = await handleGetTokenAndConfig();
     if (cashRegisterPermissions && cashRegisterPermissions.delete === false) {
       toast.warn("ليس لك صلاحية لحذف حسابات الخزينه");
       return;
     }
-    
+
     try {
-      const getCashRegister =  await axios.get(
+      const getCashRegister = await axios.get(
         `${apiUrl}/api/cashregister/${cashID}`,
         config
       );
-      const cashRegisterData = getCashRegister.data
-      const balance = cashRegisterData.balance
-      if(balance > 0){
-        toast.warn('لا يمكن حذف الخزينه لان بها رصيد')
-        return
+      const cashRegisterData = getCashRegister.data;
+      const balance = cashRegisterData.balance;
+      if (balance > 0) {
+        toast.warn("لا يمكن حذف الخزينه لان بها رصيد");
+        return;
       }
-      const response = await axios.delete(`${apiUrl}/api/cashregister/${cashID}`, config);
+      const response = await axios.delete(
+        `${apiUrl}/api/cashregister/${cashID}`,
+        config
+      );
       toast.success("تم حذف حساب الخزينه بنجاح");
       getAllCashRegisters();
     } catch (err) {
@@ -195,26 +180,23 @@ const CashRegister = () => {
   // Delete selected cash registers
   const deleteSelectedIds = async (e) => {
     e.preventDefault();
-    if (!token) {
-      toast.error("رجاء تسجيل الدخول مره أخرى");
-      return;
-    }
+    const config = await handleGetTokenAndConfig();
     if (cashRegisterPermissions && cashRegisterPermissions.delete === false) {
       toast.warn("ليس لك صلاحية لحذف حسابات الخزينه");
       return;
     }
     try {
       for (const Id of selectedIds) {
-        const getCashRegister =  await axios.get(
+        const getCashRegister = await axios.get(
           `${apiUrl}/api/cashregister/${Id}`,
           config
         );
-        const cashRegisterData = getCashRegister.data
-        const balance = cashRegisterData.balance
-        if(balance>0){
-          toast.warn(`لا يمكن حذف خزينه ${cashRegisterData.name} لان بها رصيد`)
+        const cashRegisterData = getCashRegister.data;
+        const balance = cashRegisterData.balance;
+        if (balance > 0) {
+          toast.warn(`لا يمكن حذف خزينه ${cashRegisterData.name} لان بها رصيد`);
           getAllCashRegisters();
-          return
+          return;
         }
 
         await axios.delete(`${apiUrl}/api/order/${Id}`, config);
@@ -283,26 +265,26 @@ const CashRegister = () => {
                 </h2>
               </div>
               <div className="col-12 col-md-6 p-0 m-0 d-flex flex-wrap aliegn-items-center justify-content-end print-hide">
-                {cashRegisterPermissions?.create &&
-                <a
-                  href="#addCashRegisterModal"
-                  className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-success"
-                  data-toggle="modal"
-                >
-                  {" "}
-                  <span>اضافه خزنه</span>
-                </a>
-                }
-                {cashRegisterPermissions?.delete &&
-                <a
-                  href="#deleteListCashRegisterModal"
-                  className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-danger"
-                  data-toggle="modal"
-                >
-                  {" "}
-                  <span>حذف</span>
-                </a>
-                }
+                {cashRegisterPermissions?.create && (
+                  <a
+                    href="#addCashRegisterModal"
+                    className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-success"
+                    data-toggle="modal"
+                  >
+                    {" "}
+                    <span>اضافه خزنه</span>
+                  </a>
+                )}
+                {cashRegisterPermissions?.delete && (
+                  <a
+                    href="#deleteListCashRegisterModal"
+                    className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-danger"
+                    data-toggle="modal"
+                  >
+                    {" "}
+                    <span>حذف</span>
+                  </a>
+                )}
               </div>
             </div>
           </div>
@@ -315,8 +297,8 @@ const CashRegister = () => {
                 <select
                   className="form-control border-primary m-0 p-2 h-auto"
                   onChange={(e) => {
-                    setstartpagination(0);
-                    setendpagination(e.target.value);
+                    setStartPagination(0);
+                    setEndPagination(e.target.value);
                   }}
                 >
                   <option value={5}>5</option>
@@ -384,7 +366,7 @@ const CashRegister = () => {
             <tbody>
               {cashRegisters.length > 0
                 ? cashRegisters.map((cashRegister, i) => {
-                    if ((i >= startpagination) & (i < endpagination)) {
+                    if ((i >= startPagination) & (i < endPagination)) {
                       return (
                         <tr key={i}>
                           <td>
@@ -404,46 +386,46 @@ const CashRegister = () => {
                           <td>{cashRegister.employee?.fullname}</td>
                           <td>{cashRegister.balance}</td>
                           <td>
-                            {cashRegisterPermissions?.update &&
-                            <a
-                              href="#editCashRegisterModal"
-                              className="edit"
-                              data-toggle="modal"
-                              onClick={() => {
-                                setcashID(cashRegister._id);
-                                setname(cashRegister.name);
-                                setemployee(cashRegister.employee._id);
-                                setemployeeName(
-                                  cashRegister.employee?.fullname
-                                );
-                                setbalance(cashRegister.balance);
-                              }}
-                            >
-                              <i
-                                className="material-icons"
-                                data-toggle="tooltip"
-                                title="Edit"
+                            {cashRegisterPermissions?.update && (
+                              <button
+                                data-target="#editCashRegisterModal"
+                                className="btn btn-sm btn-primary ml-2 "
+                                data-toggle="modal"
+                                onClick={() => {
+                                  setcashID(cashRegister._id);
+                                  setname(cashRegister.name);
+                                  setemployee(cashRegister.employee._id);
+                                  setemployeeName(
+                                    cashRegister.employee?.fullname
+                                  );
+                                  setbalance(cashRegister.balance);
+                                }}
                               >
-                                &#xE254;
-                              </i>
-                            </a>
-                            }
-                            {cashRegisterPermissions?.delete &&
-                            <a
-                              href="#deleteCashRegisterModal"
-                              className="delete"
-                              data-toggle="modal"
-                              onClick={() => setcashID(cashRegister._id)}
-                            >
-                              <i
-                                className="material-icons"
-                                data-toggle="tooltip"
-                                title="Delete"
+                                <i
+                                  className="material-icons"
+                                  data-toggle="tooltip"
+                                  title="Edit"
+                                >
+                                  &#xE254;
+                                </i>
+                              </button>
+                            )}
+                            {cashRegisterPermissions?.delete && (
+                              <button
+                                data-target="#deleteCashRegisterModal"
+                                className="btn btn-sm btn-danger"
+                                data-toggle="modal"
+                                onClick={() => setcashID(cashRegister._id)}
                               >
-                                &#xE872;
-                              </i>
-                            </a>
-                            }
+                                <i
+                                  className="material-icons"
+                                  data-toggle="tooltip"
+                                  title="Delete"
+                                >
+                                  &#xE872;
+                                </i>
+                              </button>
+                            )}
                           </td>
                         </tr>
                       );
@@ -456,8 +438,8 @@ const CashRegister = () => {
             <div className="hint-text text-dark">
               عرض{" "}
               <b>
-                {cashRegisters.length > endpagination
-                  ? endpagination
+                {cashRegisters.length > endPagination
+                  ? endPagination
                   : cashRegisters.length}
               </b>{" "}
               من <b>{cashRegisters.length}</b> عنصر
@@ -500,7 +482,6 @@ const CashRegister = () => {
           </div>
         </div>
       </div>
-
 
       <div id="addCashRegisterModal" className="modal fade">
         <div className="modal-dialog modal-lg">
@@ -569,8 +550,6 @@ const CashRegister = () => {
           </div>
         </div>
       </div>
-
-
 
       <div id="editCashRegisterModal" className="modal fade">
         <div className="modal-dialog modal-lg">
@@ -642,8 +621,6 @@ const CashRegister = () => {
           </div>
         </div>
       </div>
-
-
 
       <div id="deleteCashRegisterModal" className="modal fade">
         <div className="modal-dialog modal-lg">

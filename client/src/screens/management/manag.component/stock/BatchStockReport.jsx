@@ -1,17 +1,11 @@
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
-import { detacontext } from "../../../../App";
+import { dataContext } from "../../../../App";
 import { toast } from "react-toastify";
 import "../orders/Orders.css";
 
 const BatchStockReport = () => {
-  const apiUrl = process.env.REACT_APP_API_URL;
-  const token = localStorage.getItem("token_e");
-  const config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  };
+  
 
   const {
     permissionsList,
@@ -19,22 +13,24 @@ const BatchStockReport = () => {
     formatDateTime,
     formatDate,
     isLoading,
-    setisLoading,
+    setIsLoading,
     EditPagination,
-    startpagination,
-    endpagination,
-    setstartpagination,
-    setendpagination,
+    startPagination,
+    endPagination,
+    setStartPagination,
+    setEndPagination,
     filterByTime,
     filterByDateRange,
     setStartDate,
     setEndDate,
-  } = useContext(detacontext);
+  apiUrl,
+handleGetTokenAndConfig,
+} = useContext(dataContext);
 
-  const stockManagementPermission =
+  const stockMovementPermission =
     permissionsList &&
     permissionsList.filter(
-      (perission) => perission.resource === "stock Management"
+      (perission) => perission.resource === "stock Movement"
     )[0];
 
   const sourceEn = [
@@ -72,15 +68,11 @@ const BatchStockReport = () => {
 
   const getallStockaction = async () => {
     try {
-      if (!token) {
-        // Handle case where token is not available
-        toast.error("رجاء تسجيل الدخول مره اخري");
-        return;
-      }
-      const response = await axios.get(apiUrl + "/api/stockmanag/", config);
+      const config = await handleGetTokenAndConfig();
+      const response = await axios.get(apiUrl + "/api/stockmovement/", config);
       console.log(response.data);
       const stockActions = await response.data;
-      const filterBatches = stockActions.filter(action => action.inbound?.balance > 0);
+      const filterBatches = stockActions.filter(action => action.inbound?.quantity > 0);
 
       setbatches(filterBatches)
     } catch (error) {
@@ -93,10 +85,7 @@ const BatchStockReport = () => {
   const [allStores, setAllStores] = useState([]);
 
   const getAllStores = async () => {
-    if (!token) {
-      toast.error("رجاء تسجيل الدخول مره اخري");
-      return;
-    }
+    const config = await handleGetTokenAndConfig();
 
     try {
       const response = await axios.get(apiUrl + "/api/store/", config);
@@ -108,12 +97,9 @@ const BatchStockReport = () => {
   };
 
   const [StockItems, setStockItems] = useState([]);
+  
   const getStockItems = async () => {
-    if (!token) {
-      // Handle case where token is not available
-      toast.error("رجاء تسجيل الدخول مره اخري");
-      return;
-    }
+    const config = await handleGetTokenAndConfig();
     try {
       const response = await axios.get(apiUrl + "/api/stockitem/", config);
       if (response) {
@@ -128,10 +114,7 @@ const BatchStockReport = () => {
   const [allCategoryStock, setAllCategoryStock] = useState([]);
 
   const getAllCategoryStock = async () => {
-    if (!token) {
-      toast.error("رجاء تسجيل الدخول مره اخري");
-      return;
-    }
+    const config = await handleGetTokenAndConfig();
 
     try {
       const response = await axios.get(apiUrl + "/api/categoryStock/", config);
@@ -140,6 +123,31 @@ const BatchStockReport = () => {
       console.error("Error fetching category stock:", error);
       toast.error("حدث خطأ اثناء جلب بيانات التصنيفات ! اعد تحميل الصفحة");
     }
+  };
+
+
+
+
+  const searchByStore = (store) => {
+    if (!store) {
+      getallStockaction();
+      return;
+    }
+    const items = batches.filter(
+        (batch) => batch.storeId?._id === store
+      );
+      setbatches(items);
+  };
+
+  const searchByCategory = (category) => {
+    if (!category) {
+      getallStockaction();
+      return;
+    }
+    const items = batches.filter(
+        (batch) => batch.categoryId?._id === category
+      );
+      setbatches(items);
   };
 
 
@@ -153,16 +161,7 @@ const BatchStockReport = () => {
     );
     setbatches(items);
   };
-//   const searchByaction = (action) => {
-//     if (!action) {
-//       getallStockaction();
-//       return;
-//     }
-//     const items = AllStockactions.filter(
-//       (Stockactions) => Stockactions.source === action
-//     );
-//     setAllStockactions(items);
-//   };
+
 
   useEffect(() => {
     getallStockaction();
@@ -196,8 +195,8 @@ const BatchStockReport = () => {
                 <select
                   className="form-control border-primary m-0 p-2 h-auto"
                   onChange={(e) => {
-                    setstartpagination(0);
-                    setendpagination(e.target.value);
+                    setStartPagination(0);
+                    setEndPagination(e.target.value);
                   }}
                 >
                   {(() => {
@@ -213,6 +212,42 @@ const BatchStockReport = () => {
                   })()}
                 </select>
               </div>
+              <div class="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
+                <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                  المخزن
+                </label>
+                <select
+                  class="form-control border-primary m-0 p-2 h-auto"
+                  onChange={(e) => searchByStore(e.target.value)}
+                >
+                  <option value={""}>الكل</option>
+                  {allStores.map((store, i) => {
+                    return (
+                      <option key={i} value={store._id}>
+                        {store.storeName}
+                      </option>
+                    );
+                  })}
+                </select>
+              </div>
+              <div class="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
+                <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                  التصنيف
+                </label>
+                <select
+                  class="form-control border-primary m-0 p-2 h-auto"
+                  onChange={(e) => searchByCategory(e.target.value)}
+                >
+                  <option value={""}>الكل</option>
+                  {allCategoryStock.map((category, i) => {
+                    return (
+                      <option key={i} value={category._id}>
+                        {category.categoryName}
+                      </option>
+                    );
+                  })}
+                </select>
+              </div>
 
               <div class="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
@@ -224,24 +259,7 @@ const BatchStockReport = () => {
                   onChange={(e) => searchByitem(e.target.value)}
                 />
               </div>
-              {/* <div class="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
-                <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
-                  نوع الاوردر
-                </label>
-                <select
-                  class="form-control border-primary m-0 p-2 h-auto"
-                  onChange={(e) => searchByaction(e.target.value)}
-                >
-                  <option value={""}>الكل</option>
-                  {sourceEn.map((source, i) => {
-                    return (
-                      <option key={i} value={source}>
-                        {sourceAr[i]}
-                      </option>
-                    );
-                  })}
-                </select>
-              </div> */}
+
 
               <div className="col-12 text-dark d-flex flex-wrap align-items-center justify-content-start p-0 m-0 mt-3">
                 <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
@@ -334,7 +352,7 @@ const BatchStockReport = () => {
             <tbody>
               {batches &&
                 batches.map((batch, i) => {
-                  if (i >= startpagination && i < endpagination) {
+                  if (i >= startPagination && i < endPagination) {
                     return (
                       <tr key={i}>
                         <td>{i + 1}</td>
@@ -342,11 +360,11 @@ const BatchStockReport = () => {
                         <td>{batch.storeId?.storeName}</td>
                         <td>{batch.itemId?.itemName}</td>
                         <td>{batch.categoryId?.categoryName}</td>
-                        <td>{sourceAr(sourceEn.findIndex(source=> source === batch.source))}</td>
+                        <td>{sourceAr[sourceEn.findIndex(source=> source === batch.source)]}</td>
                         <td>{batch.unit}</td>
                         <td>{batch.inbound?.quantity || 0}</td>
                         <td>{batch.remainingQuantity}</td>
-                        <td>{formatDate(batch.expirationDate)}</td>
+                        <td>{batch.expirationDate&&formatDate(batch.expirationDate)}</td>
                         <td>{batch.createdBy?.fullname}</td>
                       </tr>
                     );
@@ -358,8 +376,8 @@ const BatchStockReport = () => {
             <div className="hint-text text-dark">
               عرض{" "}
               <b>
-                {batches.length > endpagination
-                  ? endpagination
+                {batches.length > endPagination
+                  ? endPagination
                   : batches.length}
               </b>{" "}
               من <b>{batches.length}</b> عنصر
@@ -370,7 +388,7 @@ const BatchStockReport = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 5 ? "active" : ""}`}
+                className={`page-item ${endPagination === 5 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   1
@@ -378,7 +396,7 @@ const BatchStockReport = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 10 ? "active" : ""}`}
+                className={`page-item ${endPagination === 10 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   2
@@ -386,7 +404,7 @@ const BatchStockReport = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 15 ? "active" : ""}`}
+                className={`page-item ${endPagination === 15 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   3
@@ -394,7 +412,7 @@ const BatchStockReport = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 20 ? "active" : ""}`}
+                className={`page-item ${endPagination === 20 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   4
@@ -402,7 +420,7 @@ const BatchStockReport = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 25 ? "active" : ""}`}
+                className={`page-item ${endPagination === 25 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   5
@@ -410,7 +428,7 @@ const BatchStockReport = () => {
               </li>
               <li
                 onClick={EditPagination}
-                className={`page-item ${endpagination === 30 ? "active" : ""}`}
+                className={`page-item ${endPagination === 30 ? "active" : ""}`}
               >
                 <a href="#" className="page-link">
                   التالي

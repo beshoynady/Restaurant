@@ -81,12 +81,16 @@ const employeeSchema = new mongoose.Schema(
         "waiter",
         "deliveryman",
         "chef",
+        "Bartender",
+        "Grill Chef",
       ],
       required: [true, "Role is required"],
     },
     sectionNumber: {
-      type: Number,
-      default: 0,
+      type: String,
+      trim: true,
+      maxlength: 100,
+      default: "",
     },
     basicSalary: {
       type: Number,
