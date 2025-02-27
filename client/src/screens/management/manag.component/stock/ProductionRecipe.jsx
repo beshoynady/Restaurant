@@ -396,7 +396,6 @@ const ProductionRecipe = () => {
   };
 
   const getRecipeOfStockItem = async (itemId) => {
-    setStockItemId(itemId);
     const config = await handleGetTokenAndConfig();
     try {
       if (productionRecipePermission && !productionRecipePermission.read) {
@@ -406,6 +405,12 @@ const ProductionRecipe = () => {
       if (!itemId) {
         toast.error("اختر الصنف اولا.");
       }
+      
+      setStockItemId(itemId);
+      const getStockItem = stockItemFiltered.find(item => item._id === itemId);
+      setStockItem(getStockItem);
+      setStockItemName(getStockItem.itemName);
+  
 
       const getStockItemRecipe = await axios.get(
         `${apiUrl}/api/stockproductionrecipe/stockitem/${itemId}`,
@@ -413,9 +418,8 @@ const ProductionRecipe = () => {
       );
 
       const recipeOfStockItem = getStockItemRecipe.data;
-
-      console.log({ stockItem, recipeOfStockItem });
-
+    
+      console.log({recipeOfStockItem });
       if (recipeOfStockItem && recipeOfStockItem.ingredients?.length > 0) {
         setrecipeOfStockItem(recipeOfStockItem);
 
