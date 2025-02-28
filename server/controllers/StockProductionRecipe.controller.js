@@ -195,7 +195,7 @@ const getOneStockProductionRecipe = async (req, res) => {
 const getStockProductionRecipeByStockItem = async (req, res) => {
   try {
     const { id } = req.params;
-    const stockProductionRecipe = await StockProductionRecipe.findOne({
+    const findStockProductionRecipe = await StockProductionRecipe.findOne({
       stockItem: id,
     })
       .populate("stockItem", "_id itemName")
@@ -213,13 +213,13 @@ const getStockProductionRecipeByStockItem = async (req, res) => {
         "_id itemName costPerPart minThreshold"
       );
 
-    if (!stockProductionRecipe) {
+    if (!findStockProductionRecipe) {
       return res
         .status(404)
         .json({ message: "StockProductionRecipe not found" });
     }
 
-    res.status(200).json(stockProductionRecipe);
+    res.status(200).json(findStockProductionRecipe);
   } catch (error) {
     res.status(400).json({ message: error.message, error });
   }
