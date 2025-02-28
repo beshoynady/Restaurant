@@ -182,6 +182,8 @@ const getOneStockProductionRecipe = async (req, res) => {
     res.status(400).json({ message: error.message, error });
   }
 };
+
+
 const getStockProductionRecipeByStockItem = async (req, res) => {
   try {
     const { id } = req.params;

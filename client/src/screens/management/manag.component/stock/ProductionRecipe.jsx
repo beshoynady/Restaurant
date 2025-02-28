@@ -116,6 +116,7 @@ const ProductionRecipe = () => {
   const [productTotalCost, setStockItemTotalCost] = useState(0);
   const [serviceDetails, setserviceDetails] = useState([]);
   const [batchSize, setBatchSize] = useState(0);
+  const [preparationTime, setpreparationTime] = useState(0);
   const [orderType, setorderType] = useState("");
   const [quantity, setquantity] = useState(0);
   const [orderTypeList, setorderTypeList] = useState([
@@ -127,7 +128,6 @@ const ProductionRecipe = () => {
   const [name, setname] = useState("");
   const [unit, setunit] = useState("");
   const [wastePercentage, setwastePercentage] = useState(0);
-  const [preparationTime, setpreparationTime] = useState(0);
   const [costofitem, setcostofitem] = useState(0);
   const [totalcostofitem, settotalcostofitem] = useState(0);
 
@@ -180,7 +180,7 @@ const ProductionRecipe = () => {
         newIngredients = [{ itemId, name, quantity, unit, wastePercentage }];
         // newIngredients = [{ itemId, name, quantity, unit, wastePercentage }];
         console.log({
-          stockItem :stockItemId,
+          stockItem: stockItemId,
           stockItemName,
           batchSize,
           preparationTime,
@@ -190,7 +190,7 @@ const ProductionRecipe = () => {
         const addRecipeToStockProduction = await axios.post(
           `${apiUrl}/api/stockproductionrecipe`,
           {
-            stockItem : stockItemId,
+            stockItem: stockItemId,
             stockItemName,
             batchSize,
             preparationTime,
@@ -198,7 +198,6 @@ const ProductionRecipe = () => {
           },
           config
         );
-
 
         if (addRecipeToStockProduction.status === 201) {
           const recipeData = await addRecipeToStockProduction.data;
@@ -405,12 +404,13 @@ const ProductionRecipe = () => {
       if (!itemId) {
         toast.error("اختر الصنف اولا.");
       }
-      
+
       setStockItemId(itemId);
-      const getStockItem = stockItemFiltered.find(item => item._id === itemId);
+      const getStockItem = stockItemFiltered.find(
+        (item) => item._id === itemId
+      );
       setStockItem(getStockItem);
       setStockItemName(getStockItem.itemName);
-  
 
       const getStockItemRecipe = await axios.get(
         `${apiUrl}/api/stockproductionrecipe/stockitem/${itemId}`,
@@ -418,10 +418,12 @@ const ProductionRecipe = () => {
       );
 
       const recipeOfStockItem = getStockItemRecipe.data;
-    
-      console.log({recipeOfStockItem });
+
+      console.log({ recipeOfStockItem });
       if (recipeOfStockItem && recipeOfStockItem.ingredients?.length > 0) {
         setrecipeOfStockItem(recipeOfStockItem);
+        setwastePercentage(recipeOfStockItem.wastePercentage);
+        setBatchSize(recipeOfStockItem.batchSize);
 
         const ingredients = recipeOfStockItem.ingredients;
         const serviceDetails = recipeOfStockItem.serviceDetails;
@@ -655,7 +657,7 @@ const ProductionRecipe = () => {
                   type="Number"
                   className="form-control border-primary m-0 p-2 h-auto"
                   readOnly
-                  defaultValue={stockItem.productionRecipe?.preparationTime}
+                  defaultValue={preparationTime}
                 />
               </div>
               <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
@@ -666,7 +668,7 @@ const ProductionRecipe = () => {
                   type="Number"
                   className="form-control border-primary m-0 p-2 h-auto"
                   readOnly
-                  defaultValue={stockItem.productionRecipe?.batchSize}
+                  defaultValue={batchSize}
                 />
               </div>
               <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
@@ -1104,8 +1106,8 @@ const ProductionRecipe = () => {
                   <input
                     type="number"
                     className="form-control border-primary m-0 p-2 h-auto"
-                    value={stockItem.productionRecipe?.batchSize}
-                    readOnly={stockItem.batchSize > 0 ? true : false}
+                    value={batchSize}
+                    readOnly={batchSize > 0 ? true : false}
                     onChange={(e) => setBatchSize(e.target.value)}
                     required
                     min="1"
@@ -1120,12 +1122,8 @@ const ProductionRecipe = () => {
                   <input
                     type="number"
                     className="form-control border-primary m-0 p-2 h-auto"
-                    value={stockItem.productionRecipe?.preparationTime}
-                    readOnly={
-                      stockItem.productionRecipe?.preparationTime > 0
-                        ? true
-                        : false
-                    }
+                    value={preparationTime}
+                    readOnly={preparationTime > 0 ? true : false}
                     onChange={(e) => setpreparationTime(e.target.value)}
                     required
                     min="0"
