@@ -39,7 +39,7 @@ const createStockProductionRecipe = async (req, res) => {
       if (
         !item.itemId ||
         !item.name ||
-        !item.amount ||
+        !item.quantity||
         !item.unit ||
         !item.wastePercentage
       ) {
@@ -59,7 +59,7 @@ const createStockProductionRecipe = async (req, res) => {
             if (
               !item.itemId ||
               !item.name ||
-              !item.amount ||
+              !item.quantity||
               !item.unit ||
               typeof item.wastePercentage !== "number"
             ) {
@@ -130,7 +130,7 @@ const updateStockProductionRecipe = async (req, res) => {
         if (
           item.itemId ||
           item.name ||
-          item.amount ||
+          item.quantity||
           item.unit ||
           item.wastePercentage
         ) {
