@@ -422,7 +422,7 @@ const ProductionRecipe = () => {
       console.log({ recipeOfStockItem });
       if (recipeOfStockItem && recipeOfStockItem.ingredients?.length > 0) {
         setrecipeOfStockItem(recipeOfStockItem);
-        setwastePercentage(recipeOfStockItem.wastePercentage);
+        setpreparationTime(recipeOfStockItem.preparationTime);
         setBatchSize(recipeOfStockItem.batchSize);
 
         const ingredients = recipeOfStockItem.ingredients;
@@ -657,7 +657,7 @@ const ProductionRecipe = () => {
                   type="Number"
                   className="form-control border-primary m-0 p-2 h-auto"
                   readOnly
-                  defaultValue={preparationTime}
+                  value={preparationTime}
                 />
               </div>
               <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
@@ -668,7 +668,7 @@ const ProductionRecipe = () => {
                   type="Number"
                   className="form-control border-primary m-0 p-2 h-auto"
                   readOnly
-                  defaultValue={batchSize}
+                  value={batchSize}
                 />
               </div>
               <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
