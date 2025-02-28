@@ -147,12 +147,10 @@ const updateStockProductionRecipe = async (req, res) => {
         .json({ error: "StockProductionRecipe not found for updating." });
     }
 
-    res
-      .status(200)
-      .json({
-        message: "StockProductionRecipe updated successfully.",
-        StockProductionRecipe: updatedStockProductionRecipe,
-      });
+    res.status(200).json({
+      message: "StockProductionRecipe updated successfully.",
+      StockProductionRecipe: updatedStockProductionRecipe,
+    });
   } catch (error) {
     res.status(500).json({
       error: "An error occurred while updating the StockProductionRecipe.",
@@ -169,15 +167,7 @@ const getOneStockProductionRecipe = async (req, res) => {
       .populate("stockItem", "_id itemName")
       .populate("ingredients.itemId", "_id itemName costPerPart minThreshold")
       .populate(
-        "serviceDetails.dineIn.itemId",
-        "_id itemName costPerPart minThreshold"
-      )
-      .populate(
-        "serviceDetails.takeaway.itemId",
-        "_id itemName costPerPart minThreshold"
-      )
-      .populate(
-        "serviceDetails.delivery.itemId",
+        "serviceDetails.items.itemId",
         "_id itemName costPerPart minThreshold"
       );
 
@@ -201,15 +191,7 @@ const getStockProductionRecipeByStockItem = async (req, res) => {
       .populate("stockItem", "_id itemName")
       .populate("ingredients.itemId", "_id itemName costPerPart minThreshold")
       .populate(
-        "serviceDetails.dineIn.itemId",
-        "_id itemName costPerPart minThreshold"
-      )
-      .populate(
-        "serviceDetails.takeaway.itemId",
-        "_id itemName costPerPart minThreshold"
-      )
-      .populate(
-        "serviceDetails.delivery.itemId",
+        "serviceDetails.items.itemId",
         "_id itemName costPerPart minThreshold"
       );
 
@@ -232,15 +214,7 @@ const getAllStockProductionRecipe = async (req, res) => {
       .populate("stockItem", "_id itemName")
       .populate("ingredients.itemId", "_id itemName costPerPart minThreshold")
       .populate(
-        "serviceDetails.dineIn.itemId",
-        "_id itemName costPerPart minThreshold"
-      )
-      .populate(
-        "serviceDetails.takeaway.itemId",
-        "_id itemName costPerPart minThreshold"
-      )
-      .populate(
-        "serviceDetails.delivery.itemId",
+        "serviceDetails.items.itemId",
         "_id itemName costPerPart minThreshold"
       );
 
