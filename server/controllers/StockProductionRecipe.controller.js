@@ -1,7 +1,5 @@
 const StockProductionRecipe = require("../models/StockProductionRecipe.model");
 
-
-
 // Create a new StockProductionRecipe
 const createStockProductionRecipe = async (req, res) => {
   try {
@@ -15,15 +13,9 @@ const createStockProductionRecipe = async (req, res) => {
     } = req.body;
 
     // Validate required fields
-    if (
-      !stockItem ||
-      !stockItemName ||
-      !batchSize ||
-      !ingredients 
-    ) {
+    if (!stockItem || !stockItemName || !batchSize || !ingredients) {
       return res.status(400).json({
-        error:
-          "All required fields must be provided.",
+        error: "All required fields must be provided.",
       });
     }
 
@@ -39,7 +31,7 @@ const createStockProductionRecipe = async (req, res) => {
       if (
         !item.itemId ||
         !item.name ||
-        !item.quantity||
+        !item.quantity ||
         !item.unit ||
         !item.wastePercentage
       ) {
@@ -59,7 +51,7 @@ const createStockProductionRecipe = async (req, res) => {
             if (
               !item.itemId ||
               !item.name ||
-              !item.quantity||
+              !item.quantity ||
               !item.unit ||
               typeof item.wastePercentage !== "number"
             ) {
@@ -109,7 +101,9 @@ const updateStockProductionRecipe = async (req, res) => {
     } = req.body;
 
     if (!id) {
-      return res.status(400).json({ message: "StockProductionRecipe ID is required" });
+      return res
+        .status(400)
+        .json({ message: "StockProductionRecipe ID is required" });
     }
 
     // Initialize the update object
@@ -130,7 +124,7 @@ const updateStockProductionRecipe = async (req, res) => {
         if (
           item.itemId ||
           item.name ||
-          item.quantity||
+          item.quantity ||
           item.unit ||
           item.wastePercentage
         ) {
@@ -139,23 +133,26 @@ const updateStockProductionRecipe = async (req, res) => {
       }
     }
 
-
     updateFields.serviceDetails = serviceDetails;
 
     // Update the StockProductionRecipe by ID
-    const updatedStockProductionRecipe = await StockProductionRecipe.findByIdAndUpdate(
-      id,
-      updateFields,
-      { new: true }
-    );
+    const updatedStockProductionRecipe =
+      await StockProductionRecipe.findByIdAndUpdate(id, updateFields, {
+        new: true,
+      });
 
     if (!updatedStockProductionRecipe) {
-      return res.status(404).json({ error: "StockProductionRecipe not found for updating." });
+      return res
+        .status(404)
+        .json({ error: "StockProductionRecipe not found for updating." });
     }
 
     res
       .status(200)
-      .json({ message: "StockProductionRecipe updated successfully.", StockProductionRecipe: updatedStockProductionRecipe });
+      .json({
+        message: "StockProductionRecipe updated successfully.",
+        StockProductionRecipe: updatedStockProductionRecipe,
+      });
   } catch (error) {
     res.status(500).json({
       error: "An error occurred while updating the StockProductionRecipe.",
@@ -185,7 +182,9 @@ const getOneStockProductionRecipe = async (req, res) => {
       );
 
     if (!StockProductionRecipe) {
-      return res.status(404).json({ message: "StockProductionRecipe not found" });
+      return res
+        .status(404)
+        .json({ message: "StockProductionRecipe not found" });
     }
 
     res.status(200).json(StockProductionRecipe);
@@ -196,7 +195,9 @@ const getOneStockProductionRecipe = async (req, res) => {
 const getStockProductionRecipeByStockItem = async (req, res) => {
   try {
     const { id } = req.params;
-    const StockProductionRecipe = await StockProductionRecipe.findById({stockItem: id})
+    const stockProductionRecipe = await StockProductionRecipe.findOne({
+      stockItem: id,
+    })
       .populate("stockItem", "_id itemName")
       .populate("ingredients.itemId", "_id itemName costPerPart minThreshold")
       .populate(
@@ -212,11 +213,13 @@ const getStockProductionRecipeByStockItem = async (req, res) => {
         "_id itemName costPerPart minThreshold"
       );
 
-    if (!StockProductionRecipe) {
-      return res.status(404).json({ message: "StockProductionRecipe not found" });
+    if (!stockProductionRecipe) {
+      return res
+        .status(404)
+        .json({ message: "StockProductionRecipe not found" });
     }
 
-    res.status(200).json(StockProductionRecipe);
+    res.status(200).json(stockProductionRecipe);
   } catch (error) {
     res.status(400).json({ message: error.message, error });
   }
@@ -254,10 +257,14 @@ const deleteStockProductionRecipe = async (req, res) => {
     const deletedRecipe = await StockProductionRecipe.findByIdAndDelete(id);
 
     if (!deletedRecipe) {
-      return res.status(404).json({ message: "StockProductionRecipe not found" });
+      return res
+        .status(404)
+        .json({ message: "StockProductionRecipe not found" });
     }
 
-    res.status(200).json({ message: "StockProductionRecipe deleted successfully" });
+    res
+      .status(200)
+      .json({ message: "StockProductionRecipe deleted successfully" });
   } catch (error) {
     res.status(400).json({ message: error.message, error });
   }
