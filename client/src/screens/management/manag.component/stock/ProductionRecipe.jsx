@@ -309,7 +309,7 @@ const ProductionRecipe = () => {
 
       if (editRecipeToProduct) {
         console.log({ editRecipeToProduct });
-        getRecipeOfStockItem(editRecipeToProduct.stockItem?._id);
+        getRecipeOfStockItem(editRecipeToProduct.stockItem);
         toast.success("تم تعديل المكون بنجاح");
       } else {
         toast.error("حدث خطأ اثناء تعديل المكون ! حاول مره اخري");
@@ -397,7 +397,7 @@ const ProductionRecipe = () => {
       if (!itemId) {
         toast.error("اختر الصنف اولا.");
       }
-
+      
       setStockItemId(itemId);
       const getStockItem = stockItemFiltered.find(
         (item) => item._id === itemId
