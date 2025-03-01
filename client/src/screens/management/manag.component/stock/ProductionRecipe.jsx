@@ -309,14 +309,7 @@ const ProductionRecipe = () => {
 
       if (editRecipeToProduct) {
         console.log({ editRecipeToProduct });
-        setitemId("");
-        setStockItemName("");
-        setquantity("");
-        setunit("");
-        setingredients([]);
-        setserviceDetails([]);
-        setpreparationTime(0);
-        setBatchSize(1);
+        getRecipeOfStockItem(editRecipeToProduct.stockItem?._id);
         toast.success("تم تعديل المكون بنجاح");
       } else {
         toast.error("حدث خطأ اثناء تعديل المكون ! حاول مره اخري");
