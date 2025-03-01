@@ -306,10 +306,10 @@ const ProductionRecipe = () => {
         { ingredients: newIngredients, totalcost },
         config
       );
-
-      if (editRecipeToProduct) {
-        console.log({ editRecipeToProduct });
-        getRecipeOfStockItem(editRecipeToProduct.stockItem);
+      const editRecipeToProductData = await editRecipeToProduct.data.StockProductionRecipe;  
+      if (editRecipeToProductData) {
+        console.log({ editRecipeToProductData });
+        getRecipeOfStockItem(editRecipeToProductData.stockItem);
         toast.success("تم تعديل المكون بنجاح");
       } else {
         toast.error("حدث خطأ اثناء تعديل المكون ! حاول مره اخري");
