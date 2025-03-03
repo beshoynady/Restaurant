@@ -105,6 +105,9 @@ const StockItem = React.lazy(() =>
 const ProductionRecipe = React.lazy(() =>
   import("./screens/management/manag.component/stock/ProductionRecipe.jsx")
 );
+const ProductionOrder = React.lazy(() =>
+  import("./screens/management/manag.component/stock/ProductionOrder.jsx")
+);
 const StockMovement = React.lazy(() =>
   import("./screens/management/manag.component/stock/StockMovement")
 );
@@ -2750,6 +2753,14 @@ function App() {
               element={
                 <Suspense fallback={<LoadingPage />}>
                   <ProductionRecipe />
+                </Suspense>
+              }
+            />
+            <Route
+              path="productionorder"
+              element={
+                <Suspense fallback={<LoadingPage />}>
+                  <ProductionOrder />
                 </Suspense>
               }
             />

@@ -522,6 +522,24 @@ const SideBar = () => {
                           <Link to="stockproductionrecipe">ريسبي التصنيع</Link>
                         </li>
                       )}
+                      {(isProgrammer ||
+                        permissionsList?.filter(
+                          (permission) =>
+                            permission.resource === "Production Order"
+                        )[0]?.read) && (
+                        <li className="list">
+                          <Link to="productionorder">طلبات التصنيع</Link>
+                        </li>
+                      )}
+                      {(isProgrammer ||
+                        permissionsList?.filter(
+                          (permission) =>
+                            permission.resource === "Production Record"
+                        )[0]?.read) && (
+                        <li className="list">
+                          <Link to="productionorder">سجلات التصنيع</Link>
+                        </li>
+                      )}
                     </ul>
                   </li>
                 )}

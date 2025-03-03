@@ -38,6 +38,8 @@ const permissionsSchema = new Schema(
             "Recipes",
             "Production",
             "Stock Production Recipes",
+            "Production Order",
+            "Production Record",
             "Section Consumption",
             "Purchases",
             "Purchase Returns",
