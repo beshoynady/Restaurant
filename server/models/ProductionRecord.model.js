@@ -26,7 +26,7 @@ const productionRecordSchema = new mongoose.Schema(
       enum: ["Pending", "Completed", "Canceled", "Rejected"],
       default: "Pending",
     },
-    productionSection: {
+    preparationSection: {
       type: ObjectId,
       ref: "PreparationSection",
       required: [true, "Production section is required"],
