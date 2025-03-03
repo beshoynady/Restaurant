@@ -43,6 +43,8 @@ const routeExpense = require('./router/Expense.router.js');
 const routeDailyExpense = require('./router/DailyExpense.router.js');
 const routeCashRegister = require('./router/CashRegister.router.js');
 const routeCashMovement = require('./router/CashMovement.router.js');
+const routeProductionOrder = require('./router/ProductionOrder.router.js');
+const routeProductionRecord = require('./router/ProductionRecord.router.js');
 
 // Load environment variables from .env file
 dotenv.config();
@@ -122,6 +124,8 @@ app.use('/api/dailyexpense', routeDailyExpense);
 app.use('/api/cashregister', routeCashRegister);
 app.use('/api/cashMovement', routeCashMovement);
 app.use('/api/reservation', routeReservation);
+app.use('/api/productionorder', routeProductionOrder);
+app.use('/api/productionrecord', routeProductionRecord);
 
 const server = http.createServer(app);
 

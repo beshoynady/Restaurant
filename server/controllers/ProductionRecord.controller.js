@@ -86,15 +86,20 @@ const findAllProductionRecords = async (req, res) => {
   try {
     const productionRecords = await productionRecordModel
       .find()
-      .populate("stockItem")
+      .populate(
+        "stockItem",
+        "_id, itemName, SKU, storageUnit , parts, ingredientUnit, minThreshold, maxThreshold, costPerPart"
+      )
       .populate("recipe")
-      .populate("productionSection")
-      .populate("createdBy", "firstName lastName email");
+      .populate("productionSection", { _id, sectionName })
+      .populate("createdBy", "fullname, username, role, shift")
+      .populate("updateBy", "fullname, username, role, shift");
     res.status(200).send(productionRecords);
   } catch (error) {
     res.status(500).send({
       message:
-        error.message || "Some error occurred while retrieving production records.",
+        error.message ||
+        "Some error occurred while retrieving production records.",
     });
   }
 };
@@ -104,10 +109,15 @@ const findProductionRecord = async (req, res) => {
   try {
     const productionRecord = await productionRecordModel
       .findById(req.params.productionRecordId)
-      .populate("stockItem")
+      .populate(
+        "stockItem",
+        "_id, itemName, SKU, storageUnit , parts, ingredientUnit, minThreshold, maxThreshold, costPerPart"
+      )
       .populate("recipe")
       .populate("productionSection")
-      .populate("createdBy", "firstName lastName email");
+      .populate("createdBy", "fullname, username, role, shift")
+      .populate("updateBy", "fullname, username, role, shift");
+
     if (!productionRecord) {
       return res.status(404).send({
         message: "Production Record not found",
@@ -117,11 +127,11 @@ const findProductionRecord = async (req, res) => {
   } catch (error) {
     res.status(500).send({
       message:
-        error.message || "Some error occurred while retrieving production record.",
+        error.message ||
+        "Some error occurred while retrieving production record.",
     });
   }
 };
-
 
 // Update a production record identified by the productionRecordId in the request
 const updateProductionRecord = async (req, res) => {
@@ -183,7 +193,7 @@ const updateProductionRecord = async (req, res) => {
     // Find production record and update it with the request body
     const productionRecord = await productionRecordModel.findByIdAndUpdate(
       req.params.productionRecordId,
-      {
+      {$set: {
         stockItem,
         quantity,
         productionSection,
@@ -192,7 +202,7 @@ const updateProductionRecord = async (req, res) => {
         productionCost,
         productionStartTime,
         updatedBy,
-      },
+      }},
       { new: true }
     );
     if (!productionRecord) {
@@ -204,7 +214,8 @@ const updateProductionRecord = async (req, res) => {
   } catch (error) {
     res.status(500).send({
       message:
-        error.message || "Some error occurred while updating the Production Record.",
+        error.message ||
+        "Some error occurred while updating the Production Record.",
     });
   }
 };
@@ -220,20 +231,22 @@ const deleteProductionRecord = async (req, res) => {
         message: "Production Record not found",
       });
     }
-    res.status(200).send({ message: "Production Record deleted successfully!" });
+    res
+      .status(200)
+      .send({ message: "Production Record deleted successfully!" });
   } catch (error) {
     res.status(500).send({
       message:
-        error.message || "Some error occurred while deleting the Production Record.",
+        error.message ||
+        "Some error occurred while deleting the Production Record.",
     });
   }
 };
 
-
-module.exports ={
-    createProductionRecord,
-    findAllProductionRecords,
-    findProductionRecord,
-    updateProductionRecord,
-    deleteProductionRecord
-}
+module.exports = {
+  createProductionRecord,
+  findAllProductionRecords,
+  findProductionRecord,
+  updateProductionRecord,
+  deleteProductionRecord,
+};

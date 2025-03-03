@@ -7,6 +7,11 @@ const productionRecordSchema = new mongoose.Schema(
       type: Number,
       required: [true, "Production number is required"],
     },
+    storeId: {
+      type: ObjectId,
+      ref: "Store",
+      required: [true, "Store is required"],
+    },
     stockItem: {
       type: ObjectId,
       ref: "StockItem",
@@ -16,25 +21,14 @@ const productionRecordSchema = new mongoose.Schema(
       type: Number,
       required: [true, "Quantity is required"],
     },
-    productionStartTime: {
-      type: Date,
-      required: [true, "Production start time is required"],
-      default: Date.now,
-    },
-    productionEndTime: {
-      type: Date,
-      required: false,
-    },
     productionStatus: {
-      // This is the status of the production
       type: String,
-      enum: ["Pending", "Completed"],
+      enum: ["Pending", "Completed", "Canceled", "Rejected"],
       default: "Pending",
     },
     productionSection: {
-      // This is the production section responsible for the production
       type: ObjectId,
-      ref: "preparationSection",
+      ref: "PreparationSection",
       required: [true, "Production section is required"],
     },
     recipe: {
@@ -46,7 +40,7 @@ const productionRecordSchema = new mongoose.Schema(
       {
         material: {
           type: ObjectId,
-          ref: "stockItem",
+          ref: "StockItem",
           required: [true, "Material is required"],
         },
         quantity: {
@@ -59,10 +53,8 @@ const productionRecordSchema = new mongoose.Schema(
         },
       },
     ],
-    // This is the cost of the production
     productionCost: {
       type: Number,
-      required: [true, "Production cost is required"],
     },
     createdBy: {
       type: ObjectId,
@@ -73,12 +65,26 @@ const productionRecordSchema = new mongoose.Schema(
       type: ObjectId,
       ref: "Employee",
     },
+    note: {
+      type: String,
+      trim: true,
+      maxLength: 200,
+    },
+    productionStartTime: {
+      type: Date,
+      required: [true, "Production start time is required"],
+      default: Date.now,
+    },
+    productionEndTime: {
+      type: Date,
+    },
   },
   {
     timestamps: true,
   }
 );
 
+// Middleware to calculate productionNumber and productionCost
 productionRecordSchema.pre("save", async function (next) {
   if (!this.productionNumber) {
     const lastRecord = await mongoose
@@ -95,6 +101,17 @@ productionRecordSchema.pre("save", async function (next) {
       0
     );
   }
+
+  // If production is completed and no end time is set, update it
+  if (this.productionStatus === "Completed" && !this.productionEndTime) {
+    this.productionEndTime = new Date();
+  }
+
+  // Ensure productionEndTime is not before productionStartTime
+  if (this.productionEndTime && this.productionEndTime < this.productionStartTime) {
+    return next(new Error("Production end time cannot be before start time"));
+  }
+
   next();
 });
 
