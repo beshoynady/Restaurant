@@ -4,7 +4,7 @@ const {
   findProductionRecord,
   updateProductionRecord,
   deleteProductionRecord,
-} = require("../controllers/productionRecord.controller");
+} = require("../controllers/ProductionRecord.controller.js");
 
 const { authenticateToken } = require("../utlits/authenticate");
 const checkSubscription = require("../utlits/checkSubscription");
