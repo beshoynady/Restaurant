@@ -34,3 +34,9 @@ router
   .route("/section/:sectionId")
   .get(authenticateToken, checkSubscription, getProductionOrdersByPreparationSection);
 
+router
+  .route("/status/:id")
+  .put(authenticateToken, checkSubscription, updateProductionStatus);
+
+module.exports = router;
+

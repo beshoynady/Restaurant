@@ -23,3 +23,5 @@ router
   .get(authenticateToken, checkSubscription, findProductionRecord)
   .put(authenticateToken, checkSubscription, updateProductionRecord)
   .delete(authenticateToken, checkSubscription, deleteProductionRecord);
+
+module.exports = router;
