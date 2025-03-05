@@ -186,6 +186,7 @@ const ProductionOrder = () => {
       if (productionOrdersData.status === 200) {
         toast.success("تم حذف أمر الإنتاج بنجاح");
         getProductionOrders();
+        setIsLoading(false);
       }
     } catch (error) {
       console.error(error);
