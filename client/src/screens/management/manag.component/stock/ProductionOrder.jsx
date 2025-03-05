@@ -384,7 +384,7 @@ const ProductionOrder = () => {
     setProductionOrderId(order._id);
     setStockItemId(order.stockItemId?._id);
     setStoreId(order.storeId?._id);
-    setPreparationSection(order.preparationSection?.name);
+    setPreparationSection(order.preparationSection?._id);
     setStockItem(order.stockItem);
     setUnit(order.unit);
     setQuantityRequested(order.quantityRequested);
@@ -575,7 +575,6 @@ const ProductionOrder = () => {
                 <th>الوحدة</th>
                 <th>الكمية المطلوبة</th>
                 <th>الحالة</th>
-                <th>ملاحظات</th>
                 <th>تم الإنشاء بواسطة</th>
                 <th>تاريخ الإنشاء</th>
                 <th>تم التعديل بواسطة</th>
@@ -602,12 +601,11 @@ const ProductionOrder = () => {
                     <td>{order.unit}</td>
                     <td>{order.quantityRequested}</td>
                     <td>{order.productionStatus}</td>
-                    <td>{order.notes || "لا توجد ملاحظات"}</td>
                     <td>{order.createdBy?.fullname || "غير معروف"}</td>
                     <td>{formatDateTime(order.createdAt)}</td>
                     <td>{order.updatedBy?.fullname || "غير معروف"}</td>
                     <td>{formatDateTime(order.updatedAt)}</td>
-                    <td>{order.notes}</td>
+                    <td>{order.notes || "لا توجد ملاحظات"}</td>
                     <td>
                       {productionOrderPermission?.update && (
                         <button
@@ -976,6 +974,7 @@ const ProductionOrder = () => {
                     الملاحظات
                   </label>
                   <textarea
+                    value={notes}
                     className="form-control border-primary m-0 p-2 h-auto"
                     onChange={(e) => setNotes(e.target.value)}
                   />
