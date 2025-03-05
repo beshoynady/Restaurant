@@ -79,7 +79,13 @@ const getProductionOrdersByPreparationSection = async (req, res) => {
 
 const getProductionOrders = async (req, res) => {
   try {
-    const productionOrders = await ProductionOrderModel.find();
+    const productionOrders = await ProductionOrderModel.find()
+    .populate("storeId", "_id name")
+    .populate("preparationSection", "_id name")
+    .populate("stockItem", "_id itemName SKU")
+    .populate("createdBy", "_id fullname username role")
+    .populate("updatedBy", "_id fullname username role");
+
     if (productionOrders.length === 0) {
       return res.status(404).send({ error: "No production orders found" });
     }
@@ -92,7 +98,12 @@ const getProductionOrders = async (req, res) => {
 const getProductionOrder = async (req, res) => {
   try {
     const { id } = req.params;
-    const productionOrder = await ProductionOrderModel.findById(id);
+    const productionOrder = await ProductionOrderModel.findById(id)
+      .populate("storeId", "_id name")
+      .populate("preparationSection", "_id name")
+      .populate("stockItem", "_id itemName SKU")
+      .populate("createdBy", "_id fullname username role")
+      .populate("updatedBy", "_id fullname username role");
     if (!productionOrder) {
       return res.status(404).send({ error: "Production order not found" });
     }

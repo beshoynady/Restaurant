@@ -76,7 +76,7 @@ const ProductionOrder = () => {
       if (!productionOrderData) {
         throw new Error("Unexpected response or empty data");
       }
-      if(productionOrderData.status === 201){
+      if (productionOrderData.status === 201) {
         toast.success("تم إنشاء أمر الإنتاج بنجاح");
         getProductionOrders();
       }
@@ -115,7 +115,7 @@ const ProductionOrder = () => {
         throw new Error("Unexpected response or empty data");
       }
 
-      if(response.status === 200){
+      if (response.status === 200) {
         toast.success("تم تحديث أمر الإنتاج بنجاح");
         getProductionOrders();
       }
@@ -588,7 +588,7 @@ const ProductionOrder = () => {
                     <td>{order.preparationSection?.name || "غير محدد"}</td>
                     <td>{order.unit}</td>
                     <td>{order.quantityRequested}</td>
-                    <td>{order.status}</td>
+                    <td>{order.productionStatus}</td>
                     <td>{order.notes || "لا توجد ملاحظات"}</td>
                     <td>{order.createdBy?.fullname || "غير معروف"}</td>
                     <td>{formatDateTime(order.createdAt)}</td>
@@ -852,7 +852,12 @@ const ProductionOrder = () => {
                     required
                     onChange={(e) => setStoreId(e.target.value)}
                   >
-                    <option>اختر المخزن</option>
+                    <option>
+                      {
+                        allStores.find((store) => store._id === storeId)
+                          ?.storeName
+                      }
+                    </option>
                     {allStores.map((store, i) => (
                       <option value={store._id} key={i}>
                         {store.storeName}
@@ -871,7 +876,13 @@ const ProductionOrder = () => {
                     required
                     onChange={(e) => getStockItemByCategory(e.target.value)}
                   >
-                    <option>اختر التصنيف</option>
+                    <option>
+                      {
+                        AllCategoryStock.find(
+                          (category) => category._id === category
+                        ).categoryName
+                      }
+                    </option>
                     {AllCategoryStock.map((category, i) => (
                       <option value={category._id} key={i}>
                         {category.categoryName}
@@ -889,7 +900,7 @@ const ProductionOrder = () => {
                     required
                     onChange={(e) => handleSelectStockItem(e.target.value)}
                   >
-                    <option>اختر الصنف</option>
+                    <option>{stockItem.itemName}</option>
                     {stockItemFiltered.map((item, i) => (
                       <option value={item._id} key={i}>
                         {item.itemName}
@@ -909,6 +920,7 @@ const ProductionOrder = () => {
                       required
                       min={0}
                       max={stockItem?.reorderQuantity}
+                      value={quantityRequested}
                       onChange={(e) => setQuantityRequested(e.target.value)}
                     />
                     <input
@@ -927,7 +939,13 @@ const ProductionOrder = () => {
                     className="form-control border-primary m-0 p-2 h-auto"
                     onChange={(e) => setPreparationSection(e.target.value)}
                   >
-                    <option>اختر القسم</option>
+                    <option>
+                      {
+                        listPreparationSections.find(
+                          (section) => section._id === preparationSection
+                        )?.name
+                      }
+                    </option>
                     {listPreparationSections.map((section, i) => (
                       <option value={section._id} key={i}>
                         {section.name}
