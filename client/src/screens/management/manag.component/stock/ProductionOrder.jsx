@@ -586,7 +586,7 @@ const ProductionOrder = () => {
                     <td>{order.updatedBy?.fullname || "غير معروف"}</td>
                     <td>{formatDateTime(order.updatedAt)}</td>
                     <td>
-                      {permissions?.update && (
+                      {productionOrderPermission?.update && (
                         <button
                           className="btn btn-sm btn-primary ml-2"
                           onClick={() => handleEdit(order)}
@@ -596,7 +596,7 @@ const ProductionOrder = () => {
                           </i>
                         </button>
                       )}
-                      {permissions?.delete && (
+                      {productionOrderPermission?.delete && (
                         <button
                           className="btn btn-sm btn-danger"
                           onClick={() => setProductionOrderId(order._id)}
