@@ -400,7 +400,7 @@ const getAllEmployee = async (req, res) => {
       .populate("shift")
       .populate("createdBy", "_id fullname username role")
       .populate("updatedBy", "_id fullname username role");
-      console.log("Employees: ", employees);
+      // console.log("Employees: ", employees);
     res.status(200).json(employees);
   } catch (err) {
     if (err instanceof mongoose.Error) {

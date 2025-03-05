@@ -601,7 +601,7 @@ const ProductionOrder = () => {
                       {productionOrderPermission?.update && (
                         <button
                           data-target="#editProductionOrderModal"
-                          data-toggle="model"
+                          data-toggle="modal"
                           className="btn btn-sm btn-primary ml-2"
                           onClick={() => handleEdit(order)}
                         >
@@ -613,7 +613,7 @@ const ProductionOrder = () => {
                       {productionOrderPermission?.delete && (
                         <button
                         data-target="#deleteProductionOrderModal"
-                        data-toggle ="model"
+                        data-toggle ="modal"
                           className="btn btn-sm btn-danger"
                           onClick={() => setProductionOrderId(order._id)}
                         >
