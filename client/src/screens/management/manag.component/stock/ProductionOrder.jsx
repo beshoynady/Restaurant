@@ -97,6 +97,12 @@ const ProductionOrder = () => {
       return;
     }
     setIsLoading(true);
+    console.log({ storeId,
+      preparationSection,
+      stockItem: stockItemId,
+      unit,
+      quantityRequested,
+      notes, });
     try {
       const response = await axios.put(
         `${apiUrl}/api/productionOrder/${productionOrderId}`,
@@ -571,6 +577,7 @@ const ProductionOrder = () => {
                 <th>تاريخ الإنشاء</th>
                 <th>تم التعديل بواسطة</th>
                 <th>تاريخ التعديل</th>
+                <th>ملاحظات</th>
                 <th>إجراءات</th>
               </tr>
             </thead>
@@ -597,6 +604,7 @@ const ProductionOrder = () => {
                     <td>{formatDateTime(order.createdAt)}</td>
                     <td>{order.updatedBy?.fullname || "غير معروف"}</td>
                     <td>{formatDateTime(order.updatedAt)}</td>
+                    <td>{order.notes}</td>
                     <td>
                       {productionOrderPermission?.update && (
                         <button
@@ -859,7 +867,7 @@ const ProductionOrder = () => {
                     required
                     onChange={(e) => setStoreId(e.target.value)}
                   >
-                    <option>
+                    <option value={storeId}>
                       {
                         allStores.find((store) => store._id === storeId)
                           ?.storeName
@@ -907,7 +915,7 @@ const ProductionOrder = () => {
                     required
                     onChange={(e) => handleSelectStockItem(e.target.value)}
                   >
-                    <option>{stockItem.itemName}</option>
+                    <option value={stockItem._id}>{stockItem.itemName}</option>
                     {stockItemFiltered.map((item, i) => (
                       <option value={item._id} key={i}>
                         {item.itemName}
