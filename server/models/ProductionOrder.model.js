@@ -14,7 +14,7 @@ const productionOrderSchema = new mongoose.Schema(
     },
     preparationSection: {
       type: ObjectId,
-      ref: "preparationSection",
+      ref: "PreparationSection",
       required: [true, "preparation section is required"],
     },
     stockItem: {
