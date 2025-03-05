@@ -143,12 +143,12 @@ const ProductionOrder = () => {
         config
       );
       const productionOrdersData = response.data;
+      console.log({ productionOrdersData });
       if (!productionOrders) {
         throw new Error("Unexpected response or empty data");
       }
 
       if (response.status === 200) {
-        console.log({ productionOrdersData });
         setProductionOrders(productionOrdersData);
         toast.success("تم استرداد أوامر الإنتاج بنجاح");
       }

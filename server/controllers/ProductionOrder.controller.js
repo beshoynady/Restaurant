@@ -82,18 +82,28 @@ const getProductionOrders = async (req, res) => {
   try {
     const productionOrders = await ProductionOrderModel.find()
       .populate("preparationSection", "_id name")
-      .populate("stockItem", "_id itemName SKU")
       .populate("storeId", "_id name")
-      .populate({ path: "stockItem", populate: { path: "categoryId" } })
+      .populate({
+        path: "stockItem",
+        select: "_id itemName SKU categoryId",
+        populate: {
+          path: "categoryId",
+          select: "_id categoryName",
+        },
+      })
       .populate("createdBy", "_id fullname username role")
-      .populate("updatedBy", "_id fullname username role");
-
+      .populate({
+        path: "updatedBy",
+        select: "_id fullname username role",
+        match: { _id: { $ne: null } }, // Ensure updatedBy is populated only if it exists
+      });
     if (productionOrders.length === 0) {
       return res.status(404).send({ error: "No production orders found" });
     }
     res.status(200).json(productionOrders);
   } catch (error) {
-    res.status(400).send(error);
+    console.error(error);
+    res.status(500).send({ error: "Server error" });
   }
 };
 
@@ -103,15 +113,27 @@ const getProductionOrder = async (req, res) => {
     const productionOrder = await ProductionOrderModel.findById(id)
       .populate("storeId", "_id name")
       .populate("preparationSection", "_id name")
-      .populate("stockItem", "_id itemName SKU")
+      .populate({
+        path: "stockItem",
+        select: "_id itemName SKU categoryId",
+        populate: {
+          path: "categoryId",
+          select: "_id categoryName",
+        },
+      })
       .populate("createdBy", "_id fullname username role")
-      .populate("updatedBy", "_id fullname username role");
+      .populate({
+        path: "updatedBy",
+        select: "_id fullname username role",
+        match: { _id: { $ne: null } }, // Ensure updatedBy is populated only if it exists
+      });
     if (!productionOrder) {
       return res.status(404).send({ error: "Production order not found" });
     }
     res.status(200).json(productionOrder);
   } catch (error) {
-    res.status(400).send(error);
+    console.error(error);
+    res.status(500).send({ error: "Server error" });
   }
 };
 
