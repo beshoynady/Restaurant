@@ -115,7 +115,11 @@ const ProductionOrder = () => {
         throw new Error("Unexpected response or empty data");
       }
 
-      toast.success("تم تحديث أمر الإنتاج بنجاح");
+      if(response.status === 200){
+        toast.success("تم تحديث أمر الإنتاج بنجاح");
+        getProductionOrders();
+      }
+
       setIsLoading(false);
     } catch (error) {
       console.error(error);
@@ -143,8 +147,8 @@ const ProductionOrder = () => {
         throw new Error("Unexpected response or empty data");
       }
 
-      if (productionOrders.status === 200) {
-        setProductionOrders(productionOrders);
+      if (response.status === 200) {
+        setProductionOrders(productionOrdersData);
         toast.success("تم استرداد أوامر الإنتاج بنجاح");
       }
       setIsLoading(false);
@@ -196,11 +200,11 @@ const ProductionOrder = () => {
       );
       const productionOrdersData = response.data;
 
-      if (!productionOrders) {
+      if (!productionOrdersData) {
         throw new Error("Unexpected response or empty data");
       }
-      if (productionOrders.status === 200) {
-        setProductionOrders(productionOrders);
+      if (response.status === 200) {
+        setProductionOrders(productionOrdersData);
         toast.success("تم استرداد أوامر الإنتاج بنجاح");
       }
 
@@ -225,12 +229,12 @@ const ProductionOrder = () => {
         config
       );
       const productionOrdersData = response.data;
-      if (!productionOrders) {
+      if (!productionOrdersData) {
         throw new Error("Unexpected response or empty data");
       }
 
-      if (productionOrders.status === 200) {
-        setProductionOrders(productionOrders);
+      if (response.status === 200) {
+        setProductionOrders(productionOrdersData);
         toast.success("تم استرداد أوامر الإنتاج بنجاح");
       }
       setIsLoading(false);
