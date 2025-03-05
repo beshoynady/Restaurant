@@ -1,3 +1,4 @@
+const path = require("path");
 const ProductionOrderModel = require("../models/ProductionOrder.model");
 
 const createProductionOrder = async (req, res) => {
@@ -80,11 +81,12 @@ const getProductionOrdersByPreparationSection = async (req, res) => {
 const getProductionOrders = async (req, res) => {
   try {
     const productionOrders = await ProductionOrderModel.find()
-    .populate("storeId", "_id name")
-    .populate("preparationSection", "_id name")
-    .populate("stockItem", "_id itemName SKU")
-    .populate("createdBy", "_id fullname username role")
-    .populate("updatedBy", "_id fullname username role");
+      .populate("preparationSection", "_id name")
+      .populate("stockItem", "_id itemName SKU")
+      .populate("storeId", "_id name")
+      .populate({ path: "stockItem", populate: { path: "categoryId" } })
+      .populate("createdBy", "_id fullname username role")
+      .populate("updatedBy", "_id fullname username role");
 
     if (productionOrders.length === 0) {
       return res.status(404).send({ error: "No production orders found" });

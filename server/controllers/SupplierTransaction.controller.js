@@ -72,7 +72,7 @@ const getSupplierTransactionById = async (req, res) => {
   try {
     const transaction = await SupplierTransactionModel.findById(req.params.id)
       .populate("supplier")
-      .populate("recordedBy")
+      .populate("recordedBy" )
       .populate("invoiceNumber");
     if (!transaction) {
       return res

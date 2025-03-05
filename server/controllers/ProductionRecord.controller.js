@@ -91,7 +91,7 @@ const findAllProductionRecords = async (req, res) => {
         "_id, itemName, SKU, storageUnit , parts, ingredientUnit, minThreshold, maxThreshold, costPerPart"
       )
       .populate("recipe")
-      .populate("preparationSection", { _id, sectionName })
+      .populate("preparationSection", " _id, sectionName ")
       .populate("createdBy", "fullname, username, role, shift")
       .populate("updateBy", "fullname, username, role, shift");
     res.status(200).send(productionRecords);
@@ -193,16 +193,18 @@ const updateProductionRecord = async (req, res) => {
     // Find production record and update it with the request body
     const productionRecord = await productionRecordModel.findByIdAndUpdate(
       req.params.productionRecordId,
-      {$set: {
-        stockItem,
-        quantity,
-        preparationSection,
-        recipe,
-        materialsUsed,
-        productionCost,
-        productionStartTime,
-        updatedBy,
-      }},
+      {
+        $set: {
+          stockItem,
+          quantity,
+          preparationSection,
+          recipe,
+          materialsUsed,
+          productionCost,
+          productionStartTime,
+          updatedBy,
+        },
+      },
       { new: true }
     );
     if (!productionRecord) {

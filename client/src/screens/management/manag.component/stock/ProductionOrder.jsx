@@ -148,6 +148,7 @@ const ProductionOrder = () => {
       }
 
       if (response.status === 200) {
+        console.log({ productionOrdersData });
         setProductionOrders(productionOrdersData);
         toast.success("تم استرداد أوامر الإنتاج بنجاح");
       }
@@ -560,6 +561,7 @@ const ProductionOrder = () => {
                 <th>رقم الطلب</th>
                 <th>اسم الصنف</th>
                 <th>المخزن</th>
+                <th>التصنيف</th>
                 <th>القسم</th>
                 <th>الوحدة</th>
                 <th>الكمية المطلوبة</th>
@@ -585,6 +587,7 @@ const ProductionOrder = () => {
                     <td>{order.orderNumber}</td>
                     <td>{order.stockItem?.name || "غير محدد"}</td>
                     <td>{order.store?.name || "غير محدد"}</td>
+                    <td>{order.stockItem?.categoryId.categoryName || "غير محدد"}</td>
                     <td>{order.preparationSection?.name || "غير محدد"}</td>
                     <td>{order.unit}</td>
                     <td>{order.quantityRequested}</td>
@@ -879,8 +882,8 @@ const ProductionOrder = () => {
                     <option>
                       {
                         AllCategoryStock.find(
-                          (category) => category._id === category
-                        ).categoryName
+                          (category) => category._id === stockItem.categoryId
+                        )?.categoryName
                       }
                     </option>
                     {AllCategoryStock.map((category, i) => (
