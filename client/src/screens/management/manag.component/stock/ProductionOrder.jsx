@@ -3,6 +3,7 @@ import axios from "axios";
 import { dataContext } from "../../../../App";
 import { toast } from "react-toastify";
 import "../orders/Orders.css";
+import { get } from "../../../../../../server/router/ProductionOrder.router";
 
 const ProductionOrder = () => {
   const {
@@ -71,11 +72,16 @@ const ProductionOrder = () => {
         config
       );
 
-      if (!response || !response.data) {
+      const productionOrderData = response.data;
+
+      if (!productionOrderData) {
         throw new Error("Unexpected response or empty data");
       }
+      if(productionOrderData.status === 201){
+        toast.success("تم إنشاء أمر الإنتاج بنجاح");
+        getProductionOrders();
+      }
 
-      toast.success("تم إنشاء أمر الإنتاج بنجاح");
       setIsLoading(false);
     } catch (error) {
       console.error(error);

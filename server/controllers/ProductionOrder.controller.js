@@ -10,7 +10,8 @@ const createProductionOrder = async (req, res) => {
       quantityRequested,
       notes,
     } = req.body;
-    const createdBy = req.employee.id;
+    const createdBy = await req.employee.id;
+
     if (
       !storeId ||
       !preparationSection ||
@@ -23,7 +24,15 @@ const createProductionOrder = async (req, res) => {
         error: "All fields are required to create a production order",
       });
     }
-    const productionOrder = await ProductionOrderModel.create(req.body);
+    const productionOrder = await ProductionOrderModel.create({
+      storeId,
+      preparationSection,
+      stockItem,
+      unit,
+      quantityRequested,
+      notes,
+      createdBy,
+    });
 
     res.status(201).send(productionOrder);
   } catch (error) {
