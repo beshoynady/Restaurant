@@ -22,6 +22,11 @@ const productionOrderSchema = new mongoose.Schema(
       ref: "StockItem",
       required: [true, "Stock item is required"],
     },
+    unit: {
+      type: String,
+      trim: true,
+      required: [true, "Unit is required"],
+    },
     quantityRequested: {
       type: Number,
       required: [true, "Quantity requested is required"],
@@ -32,7 +37,7 @@ const productionOrderSchema = new mongoose.Schema(
       enum: ["Pending", "In Progress", "Completed", "Canceled", "Rejected"],
       default: "Pending",
     },
-    note: {
+    notes: {
       type: String,
       trim: true,
       maxLength: 200,
@@ -42,6 +47,11 @@ const productionOrderSchema = new mongoose.Schema(
       ref: "Employee",
       required: [true, "Created by is required"],
     },
+    updatedBy: {
+      type: ObjectId,
+      ref: "Employee",
+      required: [true, "Updated by is required"],
+    },
   },
   { timestamps: true }
 );
@@ -50,12 +60,13 @@ productionOrderSchema.pre("save", async function (next) {
   if (!this.productionNumber) {
     const lastOrder = await mongoose
       .model("ProductionOrder")
-      .findOne()
+      .findOne({}, { productionNumber: 1 })
       .sort({ productionNumber: -1 });
 
     this.productionNumber = lastOrder ? lastOrder.productionNumber + 1 : 1;
   }
   next();
 });
+
 
 module.exports = mongoose.model("ProductionOrder", productionOrderSchema);
