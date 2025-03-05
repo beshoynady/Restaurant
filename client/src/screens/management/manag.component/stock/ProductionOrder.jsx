@@ -3,6 +3,7 @@ import axios from "axios";
 import { dataContext } from "../../../../App";
 import { toast } from "react-toastify";
 import "../orders/Orders.css";
+import { get } from "../../../../../../server/router/ProductionOrder.router";
 
 const ProductionOrder = () => {
   const {
@@ -382,12 +383,15 @@ const ProductionOrder = () => {
 
   const handleEdit = (order) => {
     setProductionOrderId(order._id);
+    setStockItemId(order.stockItemId?._id);
     setStoreId(order.storeId?._id);
     setPreparationSection(order.preparationSection?.name);
-    setStockItem(order.stockItem?._id);
+    setStockItem(order.stockItem);
     setUnit(order.unit);
     setQuantityRequested(order.quantityRequested);
     setNotes(order.notes);
+
+    getStockItemByCategory(order.stockItem.categoryId?._id);
   };
 
   const searchByitem = (name) => {
@@ -592,8 +596,8 @@ const ProductionOrder = () => {
                   >
                     <td>{index + 1}</td>
                     <td>{order.productionNumber}</td>
-                    <td>{order.stockItem?.name || "غير محدد"}</td>
-                    <td>{order.store?.storeName || "غير محدد"}</td>
+                    <td>{order.stockItem?.itemName || "غير محدد"}</td>
+                    <td>{order.storeId?.storeName || "غير محدد"}</td>
                     <td>{order.stockItem.categoryId?.categoryName || "غير محدد"}</td>
                     <td>{order.preparationSection?.name || "غير محدد"}</td>
                     <td>{order.unit}</td>
@@ -894,7 +898,7 @@ const ProductionOrder = () => {
                     <option>
                       {
                         AllCategoryStock.find(
-                          (category) => category._id === stockItem.categoryId
+                          (category) => category._id === stockItem.categoryId?._id
                         )?.categoryName
                       }
                     </option>
