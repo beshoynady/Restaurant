@@ -50,23 +50,11 @@ const productionOrderSchema = new mongoose.Schema(
     updatedBy: {
       type: ObjectId,
       ref: "Employee",
-      required: [true, "Updated by is required"],
     },
   },
   { timestamps: true }
 );
 
-productionOrderSchema.pre("save", async function (next) {
-  if (!this.productionNumber) {
-    const lastOrder = await mongoose
-      .model("ProductionOrder")
-      .findOne({}, { productionNumber: 1 })
-      .sort({ productionNumber: -1 });
-
-    this.productionNumber = lastOrder ? lastOrder.productionNumber + 1 : 1;
-  }
-  next();
-});
 
 
 module.exports = mongoose.model("ProductionOrder", productionOrderSchema);

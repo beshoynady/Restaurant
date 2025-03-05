@@ -24,7 +24,16 @@ const createProductionOrder = async (req, res) => {
         error: "All fields are required to create a production order",
       });
     }
+
+    const lastOrder = await ProductionOrderModel.findOne(
+      {},
+      { productionNumber: 1 }
+    ).sort({ productionNumber: -1 });
+
+    const newProductionNumber = lastOrder ? lastOrder.productionNumber + 1 : 1;
+
     const productionOrder = await ProductionOrderModel.create({
+      productionNumber: newProductionNumber,
       storeId,
       preparationSection,
       stockItem,
@@ -34,9 +43,9 @@ const createProductionOrder = async (req, res) => {
       createdBy,
     });
 
-    res.status(201).send(productionOrder);
+    res.status(201).json(productionOrder);
   } catch (error) {
-    res.status(400).send(error);
+    res.status(400).json(error);
   }
 };
 
