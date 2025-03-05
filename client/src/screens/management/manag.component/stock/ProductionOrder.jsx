@@ -454,7 +454,7 @@ const ProductionOrder = () => {
                       <span>انشاء امر تصنيع</span>
                     </a>
 
-                    {/* <a href="#deleteProductionOrdermModal" className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-danger" data-toggle="modal"> <span>حذف</span></a> */}
+                    {/* <a href="#deleteProductionOrderModal" className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-danger" data-toggle="modal"> <span>حذف</span></a> */}
                   </div>
                 )}
             </div>
@@ -584,7 +584,7 @@ const ProductionOrder = () => {
                     }
                   >
                     <td>{index + 1}</td>
-                    <td>{order.orderNumber}</td>
+                    <td>{order.productionNumber}</td>
                     <td>{order.stockItem?.name || "غير محدد"}</td>
                     <td>{order.store?.storeName || "غير محدد"}</td>
                     <td>{order.stockItem.categoryId?.categoryName || "غير محدد"}</td>
@@ -600,6 +600,8 @@ const ProductionOrder = () => {
                     <td>
                       {productionOrderPermission?.update && (
                         <button
+                          data-target="#editProductionOrderModal"
+                          data-toggle="model"
                           className="btn btn-sm btn-primary ml-2"
                           onClick={() => handleEdit(order)}
                         >
@@ -610,6 +612,8 @@ const ProductionOrder = () => {
                       )}
                       {productionOrderPermission?.delete && (
                         <button
+                        data-target="#deleteProductionOrderModal"
+                        data-toggle ="model"
                           className="btn btn-sm btn-danger"
                           onClick={() => setProductionOrderId(order._id)}
                         >
@@ -829,7 +833,7 @@ const ProductionOrder = () => {
         </div>
       </div>
 
-      <div id="editProductionOrdermModal" className="modal fade">
+      <div id="editProductionOrderModal" className="modal fade">
         <div className="modal-dialog modal-lg">
           <div className="modal-content shadow-lg border-0 rounded">
             <form onSubmit={updateProductionOrder}>
@@ -985,7 +989,7 @@ const ProductionOrder = () => {
         </div>
       </div>
 
-      <div id="deleteProductionOrdermModal" className="modal fade">
+      <div id="deleteProductionOrderModal" className="modal fade">
         <div className="modal-dialog modal-lg">
           <div className="modal-content shadow-lg border-0 rounded ">
             <form onSubmit={deleteProductionOrder}>
