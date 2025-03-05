@@ -82,7 +82,7 @@ const getProductionOrders = async (req, res) => {
   try {
     const productionOrders = await ProductionOrderModel.find()
       .populate("preparationSection", "_id name")
-      .populate("storeId", "_id name")
+      .populate("storeId", "_id storeName")
       .populate({
         path: "stockItem",
         select: "_id itemName SKU categoryId",
@@ -111,7 +111,7 @@ const getProductionOrder = async (req, res) => {
   try {
     const { id } = req.params;
     const productionOrder = await ProductionOrderModel.findById(id)
-      .populate("storeId", "_id name")
+      .populate("storeId", "_id storeName")
       .populate("preparationSection", "_id name")
       .populate({
         path: "stockItem",
