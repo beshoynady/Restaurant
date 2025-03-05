@@ -166,7 +166,8 @@ const ProductionOrder = () => {
     }
   };
 
-  const deleteProductionOrder = async () => {
+  const deleteProductionOrder = async (e) => {
+    e.preventDefault();
     const config = await handleGetTokenAndConfig();
     if (productionOrderPermission && !productionOrderPermission.delete) {
       toast.warn("ليس لديك صلاحية لحذف أمر الإنتاج");
