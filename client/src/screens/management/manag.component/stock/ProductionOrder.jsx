@@ -586,8 +586,8 @@ const ProductionOrder = () => {
                     <td>{index + 1}</td>
                     <td>{order.orderNumber}</td>
                     <td>{order.stockItem?.name || "غير محدد"}</td>
-                    <td>{order.store?.name || "غير محدد"}</td>
-                    <td>{order.stockItem?.categoryId.categoryName || "غير محدد"}</td>
+                    <td>{order.store?.storeName || "غير محدد"}</td>
+                    <td>{order.stockItem.categoryId?.categoryName || "غير محدد"}</td>
                     <td>{order.preparationSection?.name || "غير محدد"}</td>
                     <td>{order.unit}</td>
                     <td>{order.quantityRequested}</td>
