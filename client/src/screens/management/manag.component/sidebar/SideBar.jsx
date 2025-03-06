@@ -537,7 +537,7 @@ const SideBar = () => {
                             permission.resource === "Production Record"
                         )[0]?.read) && (
                         <li className="list">
-                          <Link to="productionorder">سجلات التصنيع</Link>
+                          <Link to="productionrecord">سجلات التصنيع</Link>
                         </li>
                       )}
                     </ul>
