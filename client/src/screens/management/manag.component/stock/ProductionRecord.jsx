@@ -743,7 +743,7 @@ const ProductionRecord = () => {
                                 <input
                                   className="form-control border-primary m-0 p-2 h-auto"
                                   readOnly
-                                  value={item.itemName}
+                                  value={item.itemId?.itemName}
                                 />
                               </td>
                               <td>
