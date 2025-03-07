@@ -61,6 +61,7 @@ const ProductionRecord = () => {
   const [materialsUsed, setMaterialsUsed] = useState([
     { material: "", quantity: 0, cost: 0 },
   ]);
+
   const handleAddMaterial = (ingredients) => {
     const listMaterials = [];
     ingredients.map((item) => {
@@ -303,6 +304,7 @@ const ProductionRecord = () => {
           config
         );
         const stockProductionRecipe = getStockProductionRecipe.data;
+        console.log({stockProductionRecipe})
         if (!stockProductionRecipe) {
           toast.warn("هذا العنصر لا يوجد له ريسبي");
         }
@@ -716,9 +718,9 @@ const ProductionRecord = () => {
                           <th scope="col" className="col-2">
                             التكلفه
                           </th>
-                          <th scope="col" className="col-2">
+                          {/* <th scope="col" className="col-2">
                             انتهاء
-                          </th>
+                          </th> */}
                           <th scope="col" className="col-4 NoPrint">
                             <button
                               type="button"
@@ -731,8 +733,8 @@ const ProductionRecord = () => {
                         </tr>
                       </thead>
                       <tbody id="TBody">
-                        {materialsUsed &&
-                          materialsUsed.map((item, i) => (
+                        {productionRecipe &&
+                          productionRecipe.ingredients.map((item, i) => (
                             <tr id="TRow" key={i}>
                               <th scope="w-100 d-flex flex-wrap align-items-center justify-content-between">
                                 {i + 1}
@@ -781,13 +783,13 @@ const ProductionRecord = () => {
                                 />
                               </td>
 
-                              <td>
+                              {/* <td>
                                 <input
                                   type="date"
                                   className="form-control p-0 m-0"
                                   name="Exp"
                                 />
-                              </td>
+                              </td> */}
                               <td className="NoPrint">
                                 <button
                                   type="button"
