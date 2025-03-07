@@ -31,6 +31,12 @@ const ProductionRecord = () => {
       (permission) => permission.resource === "Production Record"
     )[0];
 
+  const productionOrderPermission =
+    permissionsList &&
+    permissionsList.permissionsList.filter(
+      (permission) => permission.resource === "Production Order"
+    )[0];
+
   const [productionRecords, setProductionRecords] = useState([]);
   const [productionOrders, setProductionOrders] = useState([]);
 
@@ -42,7 +48,6 @@ const ProductionRecord = () => {
   const [productionStatus, setProductionStatus] = useState("Pending");
   const [quantityRequested, setQuantityRequested] = useState(0);
 
-
   const [notes, setNotes] = useState(""); // For notes or remarks
 
   const [productionOrderId, setProductionOrderId] = useState("");
@@ -53,21 +58,24 @@ const ProductionRecord = () => {
     "متوسط السعر",
   ];
 
-  const [materialsUsed , setMaterialsUsed] = useState([{material: "", quantity: 0, cost: 0}]);
-  const handleAddMaterial = () => {
-    setMaterialsUsed([...materialsUsed, {material: "", quantity: 0, cost: 0}]);
+  const [materialsUsed, setMaterialsUsed] = useState([
+    { material: "", quantity: 0, cost: 0 },
+  ]);
+  const handleAddMaterial = (ingredients) => {
+    const listMaterials = []
+    ingredients.map(item=>{
+      listMaterials.push(
+        { material: item._id, quantity: 0, cost: 0 },
+      );
+    })
+    setMaterialsUsed([...listMaterials])
   };
 
-  const handleRemoveMaterial = (index) => {
-    const newMaterialsUsed = [...materialsUsed];
-    newMaterialsUsed.splice(index, 1);
-    setMaterialsUsed(newMaterialsUsed);
-  }
   const handleMaterialChange = (e, index) => {
     const newMaterialsUsed = [...materialsUsed];
     newMaterialsUsed[index][e.target.name] = e.target.value;
     setMaterialsUsed(newMaterialsUsed);
-  }
+  };
 
   const handleMaterialSelect = (materialId, index) => {
     const material = AllStockItems.find((item) => item._id === materialId);
@@ -75,20 +83,23 @@ const ProductionRecord = () => {
     newMaterialsUsed[index].material = materialId;
     newMaterialsUsed[index].cost = material.costPerPart;
     setMaterialsUsed(newMaterialsUsed);
-  }
+  };
 
   const handleMaterialQuantity = (e, index) => {
     const newMaterialsUsed = [...materialsUsed];
     newMaterialsUsed[index].quantity = e.target.value;
     setMaterialsUsed(newMaterialsUsed);
-  }
+  };
 
-  
+  const resetFields = () => {
+    setStockItem({});
+    setStockItemId("");
+  };
 
   const createProductionRecord = async (e) => {
     e.preventDefault();
     try {
-      const {config } = handleGetTokenAndConfig();
+      const { config } = handleGetTokenAndConfig();
       const body = {
         productionOrder: productionOrderId,
         storeId,
@@ -112,48 +123,42 @@ const ProductionRecord = () => {
     } catch (error) {
       toast.error("حدث خطأ ما");
     }
+  };
 
-  }
-
-  const getAllProductionRecord = async()=>{
+  const getAllProductionRecord = async () => {
     const config = handleGetTokenAndConfig();
     try {
-
       const response = await axios.get(`${apiUrl}/productionRecord`, config);
 
       if (response.status === 200) {
         setProductionRecords(response.data);
-
-      }      
+      }
     } catch (error) {
       toast.error("حدث خطأ ما أثناء جلب البيانات");
     }
-  }
-    
+  };
 
   const searchByItem = (itemName) => {
-    if(itemName === "") {
+    if (itemName === "") {
       getAllProductionRecord();
     } else {
-    const filteredItems = productionRecords.filter((item) =>
-      item.stockItem?.itemName.toLowerCase().includes(itemName.toLowerCase())
-    );
-    setProductionRecords(filteredItems);
-  }
-};
+      const filteredItems = productionRecords.filter((item) =>
+        item.stockItem?.itemName.toLowerCase().includes(itemName.toLowerCase())
+      );
+      setProductionRecords(filteredItems);
+    }
+  };
 
   const searchByCategory = (category) => {
-    if(category === "") {
+    if (category === "") {
       getAllProductionRecord();
     } else {
-    const filteredItems = productionRecords.filter((item) =>
-      item.stockItem.categoryId?._id === category
-    );
-    setProductionRecords(filteredItems);
-  }
-};
-
-
+      const filteredItems = productionRecords.filter(
+        (item) => item.stockItem.categoryId?._id === category
+      );
+      setProductionRecords(filteredItems);
+    }
+  };
 
   const getProductionOrderByStore = (store) => {
     if (store) {
@@ -165,7 +170,7 @@ const ProductionRecord = () => {
     } else {
       getAllProductionRecord();
     }
-  }
+  };
 
   const getProductionOrderBySection = (section) => {
     if (section) {
@@ -176,10 +181,7 @@ const ProductionRecord = () => {
     } else {
       getAllProductionRecord();
     }
-  }
-
-
-
+  };
 
   const [AllStockItems, setAllStockItems] = useState([]);
 
@@ -270,7 +272,7 @@ const ProductionRecord = () => {
     const config = await handleGetTokenAndConfig();
     try {
       const response = await axios.get(apiUrl + "/api/productionOrder", config);
-      if(response.status === 200){
+      if (response.status === 200) {
         setProductionOrders(response.data.reverse());
       }
     } catch (error) {
@@ -279,6 +281,37 @@ const ProductionRecord = () => {
     }
   };
 
+  const [productionOrderSelected, setProductionOrderSelected] = useState({});
+  const [productionRecipe , setProductionRecipe]= useState("")
+  const handleSelectProductionOrder = async (orderId) => {
+    const config = handleGetTokenAndConfig();
+    try {
+      const getProductionOrder = await axios.get(
+        `${apiUrl}/api/productionorder/${orderId}`,
+        config
+      );
+      const productionOrder = getProductionOrder.data;
+      console.log({ getProductionOrder });
+      if (!productionOrder) {
+        toast.warn("امر التصنيع هذا لم يعد موجود");
+      }
+      if (productionOrder) {
+        setStockItemId(productionOrder.stockItem._id);
+        setProductionOrderSelected(productionOrder);
+        const getStockProductionRecipe = await axios.get(
+          `${apiUrl}/api/stockproductionrecipe/stockitem/${productionOrder.stockItem._id}`
+          ,config);
+          const stockProductionRecipe = getStockProductionRecipe.data
+          if(!stockProductionRecipe){
+            toast.warn("هذا العنصر لا يوجد له ريسبي")
+          }
+          if(stockProductionRecipe.status === 200){
+            setProductionRecipe(stockProductionRecipe)
+            handleAddMaterial(stockProductionRecipe.ingredients)
+          }
+      }
+    } catch (error) {}
+  };
 
   useEffect(() => {
     getAllProductionRecord();
@@ -453,7 +486,9 @@ const ProductionRecord = () => {
                     <td>{record.productionNumber}</td>
                     <td>{record.productionOrder.orderNumber}</td>
                     <td>{record.storeId?.storeName || "غير محدد"}</td>
-                    <td>{record.stockItem.categoryId?.categoryName || "غير محدد"}</td>
+                    <td>
+                      {record.stockItem.categoryId?.categoryName || "غير محدد"}
+                    </td>
                     <td>{record.stockItem?.itemName || "غير محدد"}</td>
                     <td>{record.preparationSection?.name || "غير محدد"}</td>
                     <td>{record.unit}</td>
@@ -482,8 +517,8 @@ const ProductionRecord = () => {
                       )}
                       {productionRecordPermission?.delete && (
                         <button
-                        data-target="#deleteProductionRecordModal"
-                        data-toggle ="modal"
+                          data-target="#deleteProductionRecordModal"
+                          data-toggle="modal"
                           className="btn btn-sm btn-danger"
                           onClick={() => setProductionOrderId(record._id)}
                         >
@@ -565,7 +600,7 @@ const ProductionRecord = () => {
         </div>
       </div>
 
-      {/* <div id="addProductionRecordModal" className="modal fade">
+      <div id="addProductionRecordModal" className="modal fade">
         <div className="modal-dialog modal-lg">
           <div className="modal-content shadow-lg border-0 rounded">
             <form onSubmit={createProductionRecord}>
@@ -580,110 +615,438 @@ const ProductionRecord = () => {
                   &times;
                 </button>
               </div>
+
               <div className="modal-body d-flex flex-wrap align-items-center p-3 text-right">
-                <div className="form-group col-12 col-md-6">
-                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
-                    اختر المخزن
-                  </label>
-                  <select
-                    type="text"
-                    className="form-control border-primary m-0 p-2 h-auto"
-                    required
-                    onChange={(e) => setStoreId(e.target.value)}
-                  >
-                    <option>اختر المخزن</option>
-                    {allStores.map((store, i) => (
-                      <option value={store._id} key={i}>
-                        {store.storeName}
-                      </option>
-                    ))}
-                  </select>
-                </div>
+                <div className="card">
+                  <div className="card-header text-center text-dark">
+                    <h4>ادخل بيانات فاتورة الشراء</h4>
+                  </div>
 
-                <div className="form-group col-12 col-md-6">
-                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
-                    اختر التصنيف
-                  </label>
-                  <select
-                    type="text"
-                    className="form-control border-primary m-0 p-2 h-auto"
-                    required
-                    onChange={(e) => getStockItemByCategory(e.target.value)}
-                  >
-                    <option>اختر التصنيف</option>
-                    {AllCategoryStock.map((category, i) => (
-                      <option value={category._id} key={i}>
-                        {category.categoryName}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <div className="form-group col-12 col-md-6">
-                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
-                    اختر الصنف
-                  </label>
-                  <select
-                    type="text"
-                    className="form-control border-primary m-0 p-2 h-auto"
-                    required
-                    onChange={(e) => handleSelectStockItem(e.target.value)}
-                  >
-                    <option>اختر الصنف</option>
-                    {stockItemFiltered.map((item, i) => (
-                      <option value={item._id} key={i}>
-                        {item.itemName}
-                      </option>
-                    ))}
-                  </select>
-                </div>
+                  <div className="card-body min-content">
+                    <div className="w-100 d-flex flex-wrap align-items-center justify-content-between">
+                      <div className="col-6">
+                        <div className="input-group mb-3 d-flex align-items-center justify-content-between flex-nowrap">
+                          <span
+                            className="input-group-text"
+                            htmlFor="productionOrder"
+                          >
+                            امر التصنيع
+                          </span>
+                          <select
+                            required
+                            className="form-control border-primary m-0 p-2 h-auto"
+                            id="productionOrder"
+                            onChange={(e) =>
+                              handleSelectProductionOrder(e.target.value)
+                            }
+                          >
+                            <option>اختر امر التصنيع</option>
+                            {productionOrders.map((order, i) => (
+                              <option value={order._id} key={i}>
+                                {order.orderNumber}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                        <div className="input-group mb-3 d-flex align-items-center justify-content-between flex-nowrap">
+                          <span
+                            className="input-group-text"
+                            htmlFor="notesInput"
+                          >
+                            عنصر المخزن
+                          </span>
+                          <input
+                            type="text"
+                            className="form-control border-primary m-0 p-2 h-auto"
+                            id="notesInput"
+                            readOnly
+                            value={productionOrderSelected.stockItem?.itemName}
+                          />
+                        </div>
+                      </div>
+                      <div className="col-6">
+                        <div className="input-group mb-3 d-flex align-items-center justify-content-between flex-nowrap">
+                          <span
+                            className="input-group-text"
+                            htmlFor="invoiceNumberInput"
+                          >
+                            المخزن
+                          </span>
+                          <input
+                            type="text"
+                            className="form-control border-primary m-0 p-2 h-auto"
+                            readOnly
+                            value={productionOrderSelected.storeId?.name}
+                          />
+                        </div>
+                        <div className="input-group mb-3 d-flex align-items-center justify-content-between flex-nowrap">
+                          <span
+                            className="input-group-text"
+                            htmlFor="invoiceDateInput"
+                          >
+                            الكمية المطلوبه
+                          </span>
+                          <input
+                            type="date"
+                            className="form-control border-primary m-0 p-2 h-auto"
+                            readOnly
+                            value={productionOrderSelected.quantityRequested}
+                          />
+                        </div>
+                      </div>
+                    </div>
 
-                <div className="form-group col-12 col-md-6">
-                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
-                    الكمية
-                  </label>
-                  <div className="form-group col-12 d-flex align-items-center">
-                    <input
-                      type="number"
-                      className="form-control border-primary m-0 p-2 h-auto"
-                      required
-                      min={0}
-                      max={stockItem?.reorderQuantity}
-                      onChange={(e) => setQuantityRequested(e.target.value)}
-                    />
-                    <input
-                      type="button"
-                      className="btn btn-primary ms-2 m-0 p-2 h-auto"
-                      value={unit}
-                    />
+                    <table className="table table-bordered table-striped table-hover">
+                      <thead className="table-success">
+                        <tr>
+                          <th scope="col">#</th>
+                          <th scope="col" className="col-4">
+                            الصنف
+                          </th>
+                          <th scope="col" className="col-2">
+                            مقدار الوصفة
+                          </th>
+                          <th scope="col" className="col-2">
+                            الوحده
+                          </th>
+                          <th scope="col" className="col-2">
+                            مقدار المستخدم
+                          </th>
+                          <th scope="col" className="col-2">
+                            التكلفه
+                          </th>
+                          <th scope="col" className="col-2">
+                            انتهاء
+                          </th>
+                          <th scope="col" className="col-4 NoPrint">
+                            <button
+                              type="button"
+                              className="h-100 btn btn-sm btn-success"
+                              onClick={handleNewItem}
+                            >
+                              +
+                            </button>
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody id="TBody">
+                        {materialsUsed&&materialsUsed.map((item, i) => (
+                          <tr id="TRow" key={i}>
+                            <th scope="w-100 d-flex flex-wrap align-items-center justify-content-between">
+                              {i + 1}
+                            </th>
+                            <td>
+                              <input
+                                className="form-control border-primary m-0 p-2 h-auto"
+                                readOnly
+                                value={item.itemName}
+                              />
+                            </td>
+                            <td>
+                              <input
+                                type="number"
+                                className="form-control p-0 m-0"
+                                name="qty"
+                                readOnly
+                                value={item.quantity}
+                              />
+                            </td>
+                            <td>
+                              <input
+                                type="text"
+                                readOnly
+                                value={item.unit}
+                                className="form-control p-0 m-0"
+                                name="ingredientUnit"
+                              />
+                            </td>
+
+                            <td>
+                              <input
+                                type="number"
+                                className="form-control p-0 m-0"
+                                name="Quntity"
+                                required
+                              />
+                            </td>
+
+                            <td>
+                              <input
+                                type="text"
+                                className="form-control p-0 m-0"
+                                name="amt"
+                                readOnly
+                              />
+                            </td>
+
+                            <td>
+                              <input
+                                type="date"
+                                className="form-control p-0 m-0"
+                                name="Exp"
+                              />
+                            </td>
+                            <td className="NoPrint">
+                              <button
+                                type="button"
+                                className="h-100 btn btn-sm btn-danger"
+                              >
+                                X
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+
+                    <div className="w-100 d-flex flex-wrap align-items-center justify-content-between">
+                      {/* <div className="col-6">
+                        <div className="input-group mb-3 d-flex align-items-center justify-content-between flex-nowrap">
+                          <span
+                            className="input-group-text"
+                            htmlFor="totalInput"
+                          >
+                            الإجمالي
+                          </span>
+                          <input
+                            type="text"
+                            className="form-control text-end"
+                            value={totalAmount}
+                            id="totalInput"
+                            readOnly
+                          />
+                        </div>
+                        <div className="input-group mb-3 d-flex align-items-center justify-content-between flex-nowrap">
+                          <span className="input-group-text" htmlFor="gstInput">
+                            ضريبة القيمة المضافة
+                          </span>
+                          <input
+                            type="number"
+                            className="form-control text-end"
+                            id="gstInput"
+                            onChange={(e) => setSalesTax(e.target.value)}
+                          />
+                        </div>
+                        <div className="input-group mb-3 d-flex align-items-center justify-content-between flex-nowrap">
+                          <span className="input-group-text" htmlFor="gstInput">
+                            خصم
+                          </span>
+                          <input
+                            type="number"
+                            className="form-control text-end"
+                            id="gstInput"
+                            onChange={(e) => setDiscount(e.target.value)}
+                          />
+                        </div>
+                        <div className="input-group mb-3 d-flex align-items-center justify-content-between flex-nowrap">
+                          <span
+                            className="input-group-text"
+                            htmlFor="netAmountInput"
+                          >
+                            المبلغ الصافي
+                          </span>
+                          <input
+                            type="text"
+                            className="form-control text-end"
+                            id="netAmountInput"
+                            value={netAmount}
+                            readOnly
+                          />
+                        </div>
+                        <div className="input-group mb-3 d-flex align-items-center justify-content-between flex-nowrap">
+                          <span className="input-group-text" htmlFor="gstInput">
+                            المخزن
+                          </span>
+                          <select
+                            className="form-control border-primary m-0 p-2 h-auto"
+                            name="paymentMethod"
+                            id="paymentMethod"
+                            onChange={(e) => setstoreId(e.target.value)}
+                          >
+                            <option>اختر المخزن </option>
+                            {allStores &&
+                              allStores.map((store, i) => {
+                                return (
+                                  <option value={store._id}>
+                                    {store.storeName}
+                                  </option>
+                                );
+                              })}
+                          </select>
+                        </div>
+                        <div className="input-group mb-3 d-flex align-items-center justify-content-between flex-nowrap">
+                          <span
+                            className="input-group-text"
+                            htmlFor="notesInput"
+                          >
+                            الملاحظات
+                          </span>
+                          <textarea
+                            className="form-control border-primary m-0 p-2 h-auto"
+                            id="notesInput"
+                            placeholder="الملاحظات"
+                            onChange={(e) => setNotes(e.target.value)}
+                            style={{ height: "auto" }}
+                          />
+                        </div>
+                      </div>
+                      <div className="col-6">
+                        <div className="input-group mb-3 d-flex align-items-center justify-content-between flex-nowrap">
+                          <span
+                            className="input-group-text"
+                            htmlFor="paidAmount"
+                          >
+                            مدفوع
+                          </span>
+                          <input
+                            type="number"
+                            className="form-control text-end"
+                            defaultValue={paidAmount}
+                            id="paidAmount"
+                            onChange={(e) => handlePaidAmount(e.target.value)}
+                          />
+                        </div>
+
+                        {paidAmount > 0 ? (
+                          listCashRegister ? (
+                            <>
+                              <div className="input-group mb-3 d-flex align-items-center justify-content-between flex-nowrap">
+                                <span
+                                  className="input-group-text"
+                                  htmlFor="gstInput"
+                                >
+                                  طريقه الدفع
+                                </span>
+                                <select
+                                  className="form-control border-primary m-0 p-2 h-auto"
+                                  name="paymentMethod"
+                                  id="paymentMethod"
+                                  onChange={(e) =>
+                                    handlePaymentMethod(
+                                      e.target.value,
+                                      employeeLoginInfo.id
+                                    )
+                                  }
+                                >
+                                  <option>اختر طريقه الدفع</option>
+                                  {financialInfo &&
+                                    financialInfo.map((financialInfo, i) => {
+                                      return (
+                                        <option
+                                          value={
+                                            financialInfo.paymentMethodName
+                                          }
+                                        >{`${financialInfo.paymentMethodName} ${financialInfo.accountNumber}`}</option>
+                                      );
+                                    })}
+                                </select>
+                              </div>
+                              <div className="input-group mb-3 d-flex align-items-center justify-content-between flex-nowrap">
+                                <span
+                                  className="input-group-text"
+                                  htmlFor="CashRegister"
+                                >
+                                  اختر حساب الدفع
+                                </span>
+                                <select
+                                  className="form-select border-primary col"
+                                  id="CashRegister"
+                                  required
+                                  onChange={(e) =>
+                                    selectCashRegister(e.target.value)
+                                  }
+                                >
+                                  <option>اختر حساب الدفع</option>
+                                  {listCashRegister.map((register) => (
+                                    <option
+                                      key={register._id}
+                                      value={register._id}
+                                    >
+                                      {register.name}
+                                    </option>
+                                  ))}
+                                </select>
+                              </div>
+                              {cashRegister && (
+                                <div className="input-group mb-3 d-flex align-items-center justify-content-between flex-wrap">
+                                  <span
+                                    className="input-group-text"
+                                    htmlFor="netAmountInput"
+                                  >
+                                    رصيد الخزينة
+                                  </span>
+                                  <input
+                                    type="text"
+                                    className="form-control text-end"
+                                    id="netAmountInput"
+                                    value={CashRegisterBalance}
+                                    readOnly
+                                  />
+                                  <button
+                                    type="button"
+                                    className="btn btn-success w-100 h-100 p-2"
+                                    id="netAmountInput"
+                                    onClick={confirmPayment}
+                                  >
+                                    تاكيد الدفع
+                                  </button>
+                                </div>
+                              )}
+                            </>
+                          ) : (
+                            <span className="input-group-text">
+                              ليس لك خزينة للدفع النقدي
+                            </span>
+                          )
+                        ) : null}
+
+                        <div className="input-group mb-3 d-flex align-items-center justify-content-between flex-nowrap">
+                          <span
+                            className="input-group-text"
+                            htmlFor="balanceDue"
+                          >
+                            باقي المستحق
+                          </span>
+                          <input
+                            type="text"
+                            className="form-control text-end"
+                            id="balanceDue"
+                            value={balanceDue}
+                            readOnly
+                          />
+                        </div>
+                        <div className="input-group mb-3 d-flex align-items-center justify-content-between flex-nowrap">
+                          <span className="input-group-text" htmlFor="gstInput">
+                            تاريخ الاستحقاق
+                          </span>
+                          <input
+                            type="date"
+                            className="form-control text-end"
+                            id="gstInput"
+                            onChange={(e) => setPaymentDueDate(e.target.value)}
+                          />
+                        </div>
+                        <div className="input-group mb-3 d-flex align-items-center justify-content-between flex-nowrap">
+                          <span
+                            className="input-group-text"
+                            htmlFor="netAmountInput"
+                          >
+                            حالة الفاتورة
+                          </span>
+                          <input
+                            type="text"
+                            className="form-control text-end"
+                            id="netAmountInput"
+                            value={paymentStatus}
+                            readOnly
+                          />
+                        </div>
+                      </div> */}
+                    </div>
                   </div>
                 </div>
-                <div className="form-group col-12 col-md-6">
-                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
-                    قسم الاعداد
-                  </label>
-                  <select
-                    required
-                    className="form-control border-primary m-0 p-2 h-auto"
-                    onChange={(e) => setPreparationSection(e.target.value)}
-                  >
-                    <option>اختر القسم</option>
-                    {listPreparationSections.map((section, i) => (
-                      <option value={section._id} key={i}>
-                        {section.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <div className="form-group col-12 col-md-6">
-                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
-                    الملاحظات
-                  </label>
-                  <textarea
-                    className="form-control border-primary m-0 p-2 h-auto"
-                    onChange={(e) => setNotes(e.target.value)}
-                  />
-                </div>
               </div>
+
               <div className="modal-footer d-flex flex-nowrap align-items-center justify-content-between m-0 p-1">
                 <input
                   type="submit"
@@ -703,7 +1066,7 @@ const ProductionRecord = () => {
         </div>
       </div>
 
-      <div id="editProductionRecordModal" className="modal fade">
+      {/* <div id="editProductionRecordModal" className="modal fade">
         <div className="modal-dialog modal-lg">
           <div className="modal-content shadow-lg border-0 rounded">
             <form onSubmit={updateProductionOrder}>
