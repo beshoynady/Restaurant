@@ -306,7 +306,7 @@ const ProductionRecord = () => {
         if (!stockProductionRecipe) {
           toast.warn("هذا العنصر لا يوجد له ريسبي");
         }
-        if (stockProductionRecipe.status === 200) {
+        if (getStockProductionRecipe.status === 200) {
           setProductionRecipe(stockProductionRecipe);
           handleAddMaterial(stockProductionRecipe.ingredients);
         }
@@ -677,7 +677,7 @@ const ProductionRecord = () => {
                             type="text"
                             className="form-control border-primary m-0 p-2 h-auto"
                             readOnly
-                            value={productionOrderSelected.storeId?.name}
+                            value={productionOrderSelected.storeId?.storeName}
                           />
                         </div>
                         <div className="input-group mb-3 d-flex align-items-center justify-content-between flex-nowrap">
