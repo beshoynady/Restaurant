@@ -33,7 +33,7 @@ const ProductionRecord = () => {
 
   const productionOrderPermission =
     permissionsList &&
-    permissionsList.permissionsList.filter(
+    permissionsList.filter(
       (permission) => permission.resource === "Production Order"
     )[0];
 
@@ -62,13 +62,11 @@ const ProductionRecord = () => {
     { material: "", quantity: 0, cost: 0 },
   ]);
   const handleAddMaterial = (ingredients) => {
-    const listMaterials = []
-    ingredients.map(item=>{
-      listMaterials.push(
-        { material: item._id, quantity: 0, cost: 0 },
-      );
-    })
-    setMaterialsUsed([...listMaterials])
+    const listMaterials = [];
+    ingredients.map((item) => {
+      listMaterials.push({ material: item._id, quantity: 0, cost: 0 });
+    });
+    setMaterialsUsed([...listMaterials]);
   };
 
   const handleMaterialChange = (e, index) => {
@@ -282,7 +280,7 @@ const ProductionRecord = () => {
   };
 
   const [productionOrderSelected, setProductionOrderSelected] = useState({});
-  const [productionRecipe , setProductionRecipe]= useState("")
+  const [productionRecipe, setProductionRecipe] = useState("");
   const handleSelectProductionOrder = async (orderId) => {
     const config = handleGetTokenAndConfig();
     try {
@@ -299,16 +297,17 @@ const ProductionRecord = () => {
         setStockItemId(productionOrder.stockItem._id);
         setProductionOrderSelected(productionOrder);
         const getStockProductionRecipe = await axios.get(
-          `${apiUrl}/api/stockproductionrecipe/stockitem/${productionOrder.stockItem._id}`
-          ,config);
-          const stockProductionRecipe = getStockProductionRecipe.data
-          if(!stockProductionRecipe){
-            toast.warn("هذا العنصر لا يوجد له ريسبي")
-          }
-          if(stockProductionRecipe.status === 200){
-            setProductionRecipe(stockProductionRecipe)
-            handleAddMaterial(stockProductionRecipe.ingredients)
-          }
+          `${apiUrl}/api/stockproductionrecipe/stockitem/${productionOrder.stockItem._id}`,
+          config
+        );
+        const stockProductionRecipe = getStockProductionRecipe.data;
+        if (!stockProductionRecipe) {
+          toast.warn("هذا العنصر لا يوجد له ريسبي");
+        }
+        if (stockProductionRecipe.status === 200) {
+          setProductionRecipe(stockProductionRecipe);
+          handleAddMaterial(stockProductionRecipe.ingredients);
+        }
       }
     } catch (error) {}
   };
@@ -730,72 +729,73 @@ const ProductionRecord = () => {
                         </tr>
                       </thead>
                       <tbody id="TBody">
-                        {materialsUsed&&materialsUsed.map((item, i) => (
-                          <tr id="TRow" key={i}>
-                            <th scope="w-100 d-flex flex-wrap align-items-center justify-content-between">
-                              {i + 1}
-                            </th>
-                            <td>
-                              <input
-                                className="form-control border-primary m-0 p-2 h-auto"
-                                readOnly
-                                value={item.itemName}
-                              />
-                            </td>
-                            <td>
-                              <input
-                                type="number"
-                                className="form-control p-0 m-0"
-                                name="qty"
-                                readOnly
-                                value={item.quantity}
-                              />
-                            </td>
-                            <td>
-                              <input
-                                type="text"
-                                readOnly
-                                value={item.unit}
-                                className="form-control p-0 m-0"
-                                name="ingredientUnit"
-                              />
-                            </td>
+                        {materialsUsed &&
+                          materialsUsed.map((item, i) => (
+                            <tr id="TRow" key={i}>
+                              <th scope="w-100 d-flex flex-wrap align-items-center justify-content-between">
+                                {i + 1}
+                              </th>
+                              <td>
+                                <input
+                                  className="form-control border-primary m-0 p-2 h-auto"
+                                  readOnly
+                                  value={item.itemName}
+                                />
+                              </td>
+                              <td>
+                                <input
+                                  type="number"
+                                  className="form-control p-0 m-0"
+                                  name="qty"
+                                  readOnly
+                                  value={item.quantity}
+                                />
+                              </td>
+                              <td>
+                                <input
+                                  type="text"
+                                  readOnly
+                                  value={item.unit}
+                                  className="form-control p-0 m-0"
+                                  name="ingredientUnit"
+                                />
+                              </td>
 
-                            <td>
-                              <input
-                                type="number"
-                                className="form-control p-0 m-0"
-                                name="Quntity"
-                                required
-                              />
-                            </td>
+                              <td>
+                                <input
+                                  type="number"
+                                  className="form-control p-0 m-0"
+                                  name="Quntity"
+                                  required
+                                />
+                              </td>
 
-                            <td>
-                              <input
-                                type="text"
-                                className="form-control p-0 m-0"
-                                name="amt"
-                                readOnly
-                              />
-                            </td>
+                              <td>
+                                <input
+                                  type="text"
+                                  className="form-control p-0 m-0"
+                                  name="amt"
+                                  readOnly
+                                />
+                              </td>
 
-                            <td>
-                              <input
-                                type="date"
-                                className="form-control p-0 m-0"
-                                name="Exp"
-                              />
-                            </td>
-                            <td className="NoPrint">
-                              <button
-                                type="button"
-                                className="h-100 btn btn-sm btn-danger"
-                              >
-                                X
-                              </button>
-                            </td>
-                          </tr>
-                        ))}
+                              <td>
+                                <input
+                                  type="date"
+                                  className="form-control p-0 m-0"
+                                  name="Exp"
+                                />
+                              </td>
+                              <td className="NoPrint">
+                                <button
+                                  type="button"
+                                  className="h-100 btn btn-sm btn-danger"
+                                >
+                                  X
+                                </button>
+                              </td>
+                            </tr>
+                          ))}
                       </tbody>
                     </table>
 
