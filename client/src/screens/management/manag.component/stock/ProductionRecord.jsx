@@ -124,7 +124,8 @@ const ProductionRecord = () => {
   };
 
   const getAllProductionRecord = async () => {
-    const config = handleGetTokenAndConfig();
+    const config = await handleGetTokenAndConfig();
+
     try {
       const response = await axios.get(`${apiUrl}/productionRecord`, config);
 
@@ -282,7 +283,8 @@ const ProductionRecord = () => {
   const [productionOrderSelected, setProductionOrderSelected] = useState({});
   const [productionRecipe, setProductionRecipe] = useState("");
   const handleSelectProductionOrder = async (orderId) => {
-    const config = handleGetTokenAndConfig();
+    const config = await handleGetTokenAndConfig();
+
     try {
       const getProductionOrder = await axios.get(
         `${apiUrl}/api/productionorder/${orderId}`,
@@ -686,7 +688,7 @@ const ProductionRecord = () => {
                             الكمية المطلوبه
                           </span>
                           <input
-                            type="date"
+                            type="text"
                             className="form-control border-primary m-0 p-2 h-auto"
                             readOnly
                             value={productionOrderSelected.quantityRequested}
