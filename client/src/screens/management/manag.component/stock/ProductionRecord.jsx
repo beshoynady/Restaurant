@@ -508,7 +508,7 @@ const ProductionRecord = () => {
                           data-target="#editProductionRecordModal"
                           data-toggle="modal"
                           className="btn btn-sm btn-primary ml-2"
-                          onClick={() => handleEdit(record)}
+                          // onClick={() => handleEdit(record)}
                         >
                           <i className="material-icons" title="تعديل">
                             &#xE254;
@@ -722,7 +722,7 @@ const ProductionRecord = () => {
                             <button
                               type="button"
                               className="h-100 btn btn-sm btn-success"
-                              onClick={handleNewItem}
+                              // onClick={handleNewItem}
                             >
                               +
                             </button>
