@@ -29,11 +29,11 @@ const Products = () => {
     permissionsList &&
     permissionsList.filter((perission) => perission.resource === "Products")[0];
 
-  const [productname, setproductname] = useState("");
-  const [productprice, setproductprice] = useState(0);
-  const [productdiscount, setproductdiscount] = useState(0);
-  const [productdescription, setproductdescription] = useState("");
-  const [productcategoryid, setproductcategoryid] = useState(null);
+  const [productName, setproductName] = useState("");
+  const [productPrice, setproductPrice] = useState(0);
+  const [productDiscount, setproductDiscount] = useState(0);
+  const [productDescription, setproductDescription] = useState("");
+  const [productCategoryId, setproductCategoryId] = useState(null);
   const [available, setavailable] = useState(false);
   const [productimg, setproductimg] = useState("");
 
@@ -156,9 +156,9 @@ const Products = () => {
         return;
       }
       const formData = new FormData();
-      formData.append("productname", productname);
-      formData.append("productdescription", productdescription);
-      formData.append("productcategoryid", productcategoryid);
+      formData.append("productName", productName);
+      formData.append("productDescription", productDescription);
+      formData.append("productCategoryId", productCategoryId);
       formData.append("available", available);
       formData.append("isAddon", isAddon);
       formData.append("preparationSection", preparationSection);
@@ -170,11 +170,11 @@ const Products = () => {
         //   formData.append(`sizes[${index}]`, size);
         // });
       } else {
-        formData.append("productprice", productprice);
+        formData.append("productPrice", productPrice);
 
-        if (productdiscount > 0) {
-          formData.append("productdiscount", productdiscount);
-          const priceAfterDiscount = productprice - productdiscount;
+        if (productDiscount > 0) {
+          formData.append("productDiscount", productDiscount);
+          const priceAfterDiscount = productPrice - productDiscount;
           formData.append(
             "priceAfterDiscount",
             priceAfterDiscount > 0 ? priceAfterDiscount : 0
@@ -265,11 +265,11 @@ const Products = () => {
   const handelEditProductModal = (product) => {
     setproductInfo(product);
     setproductId(product._id);
-    setproductname(product.name);
-    setproductdescription(product.description);
-    setproductprice(product.price);
-    setproductdiscount(product.discount);
-    setproductcategoryid(product.category._id);
+    setproductName(product.name);
+    setproductDescription(product.description);
+    setproductPrice(product.price);
+    setproductDiscount(product.discount);
+    setproductCategoryId(product.category._id);
     setavailable(product.available);
     setpreparationSection(product.preparationSection?._id);
     setsizes(
@@ -307,9 +307,9 @@ const Products = () => {
       }
       // Prepare request body
       const requestBody = {
-        productname: productname,
-        productdescription: productdescription,
-        productcategoryid: productcategoryid,
+        productName: productName,
+        productDescription: productDescription,
+        productCategoryId: productCategoryId,
         preparationSection: preparationSection,
         available: available,
         isAddon: isAddon,
@@ -320,9 +320,9 @@ const Products = () => {
         requestBody.hasSizes = hasSizes;
         requestBody.sizes = sizes;
       } else {
-        requestBody.productprice = productprice;
-        requestBody.productdiscount = productdiscount;
-        const priceAfterDiscount = productprice - productdiscount;
+        requestBody.productPrice = productPrice;
+        requestBody.productDiscount = productDiscount;
+        const priceAfterDiscount = productPrice - productDiscount;
         requestBody.priceAfterDiscount =
           priceAfterDiscount > 0 ? priceAfterDiscount : 0;
       }
@@ -887,7 +887,7 @@ const Products = () => {
                     type="text"
                     className="form-control border-primary m-0 p-2 h-auto"
                     required
-                    onChange={(e) => setproductname(e.target.value)}
+                    onChange={(e) => setproductName(e.target.value)}
                   />
                 </div>
                 <div className="form-group col-12 col-md-6">
@@ -896,7 +896,7 @@ const Products = () => {
                   </label>
                   <textarea
                     className="form-control border-primary m-0 p-2 h-auto"
-                    onChange={(e) => setproductdescription(e.target.value)}
+                    onChange={(e) => setproductDescription(e.target.value)}
                   ></textarea>
                 </div>
                 <div className="form-group col-12 col-md-6">
@@ -908,7 +908,7 @@ const Products = () => {
                     name="category"
                     id="category"
                     form="carform"
-                    onChange={(e) => setproductcategoryid(e.target.value)}
+                    onChange={(e) => setproductCategoryId(e.target.value)}
                   >
                     <option value="">اختر تصنيف</option>
                     {listofcategories.map((category, i) => {
@@ -1135,7 +1135,7 @@ const Products = () => {
                         type="number"
                         className="form-control border-primary m-0 p-2 h-auto"
                         required
-                        onChange={(e) => setproductprice(e.target.value)}
+                        onChange={(e) => setproductPrice(e.target.value)}
                       />
                     </div>
                     <div className="form-group col-12 col-md-6">
@@ -1145,10 +1145,10 @@ const Products = () => {
                       <input
                         type="number"
                         min={0}
-                        max={productprice}
+                        max={productPrice}
                         className="form-control border-primary m-0 p-2 h-auto"
                         required
-                        onChange={(e) => setproductdiscount(e.target.value)}
+                        onChange={(e) => setproductDiscount(e.target.value)}
                       />
                     </div>
                   </>
@@ -1296,7 +1296,7 @@ const Products = () => {
                     className="form-control border-primary m-0 p-2 h-auto"
                     defaultValue={productInfo.name}
                     required
-                    onChange={(e) => setproductname(e.target.value)}
+                    onChange={(e) => setproductName(e.target.value)}
                   />
                 </div>
                 <div className="form-group col-12 col-md-6">
@@ -1305,9 +1305,9 @@ const Products = () => {
                   </label>
                   <textarea
                     className="form-control border-primary m-0 p-2 h-auto"
-                    defaultValue={productdescription}
+                    defaultValue={productDescription}
                     required
-                    onChange={(e) => setproductdescription(e.target.value)}
+                    onChange={(e) => setproductDescription(e.target.value)}
                   ></textarea>
                 </div>
                 <div className="form-group col-12 col-md-6">
@@ -1319,7 +1319,7 @@ const Products = () => {
                     name="category"
                     id="category"
                     form="carform"
-                    onChange={(e) => setproductcategoryid(e.target.value)}
+                    onChange={(e) => setproductCategoryId(e.target.value)}
                   >
                     <option value={productInfo.category?._id}>
                       {productInfo.category?.name}
@@ -1564,10 +1564,10 @@ const Products = () => {
                       <input
                         type="number"
                         className="form-control border-primary m-0 p-2 h-auto"
-                        defaultValue={productprice}
-                        placeholder={productprice}
+                        defaultValue={productPrice}
+                        placeholder={productPrice}
                         required
-                        onChange={(e) => setproductprice(e.target.value)}
+                        onChange={(e) => setproductPrice(e.target.value)}
                       />
                       <div className="input-group-prepend col-4">
                         <span className="input-group-text">جنية</span>
@@ -1580,12 +1580,12 @@ const Products = () => {
                       <input
                         type="number"
                         min={0}
-                        max={productprice}
+                        max={productPrice}
                         className="form-control border-primary m-0 p-2 h-auto"
-                        defaultValue={productdiscount}
-                        placeholder={productdiscount}
+                        defaultValue={productDiscount}
+                        placeholder={productDiscount}
                         required
-                        onChange={(e) => setproductdiscount(e.target.value)}
+                        onChange={(e) => setproductDiscount(e.target.value)}
                       />
                       <div className="input-group-prepend col-4">
                         <span className="input-group-text">جنية</span>

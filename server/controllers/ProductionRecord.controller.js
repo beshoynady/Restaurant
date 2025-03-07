@@ -1,34 +1,45 @@
 const productionRecordModel = require("../models/ProductionRecord.model");
+const productionOrderModel = require("../models/ProductionOrder.model");
 const stockItemModel = require("../models/StockItems.model");
 const recipeModel = require("../models/Recipe.model");
 const preparationSectionModel = require("../models/PreparationSection.model");
 
 // Create and Save a new Production Record
+
 const createProductionRecord = async (req, res) => {
   try {
     const {
+      productionOrder,
       stockItem,
       quantity,
+      unit,
       preparationSection,
       recipe,
-      materialsUsed,
-      productionCost,
-      productionStartTime,
+      notes,
     } = req.body;
+    const productionStartTime = new Date();
 
     const createdBy = req.employee._id;
 
     // Validate request
     if (
+      !productionOrder ||
       !stockItem ||
       !quantity ||
       !preparationSection ||
-      !recipe ||
-      !materialsUsed ||
-      !productionCost
+      !unit ||
+      !recipe
     ) {
       return res.status(400).send({
         message: "All fields are required",
+      });
+    }
+    const productionOrderExists = await productionOrderModel.findById(
+      productionOrder
+    );
+    if (!productionOrderExists) {
+      return res.status(404).send({
+        message: "Production Order not found",
       });
     }
     const stockItemExists = await stockItemModel.findById(stockItem);
@@ -60,15 +71,20 @@ const createProductionRecord = async (req, res) => {
       });
     }
 
+    const lastRecord = await productionRecordModel
+      .findOne({}, { productionNumber: 1 })
+      .sort({ productionNumber: -1 });
+    let productionNumber = lastRecord ? lastRecord.productionNumber + 1 : 1;
+
     // Create a Production Record
     const productionRecord = productionRecordModel.create({
+      productionNumber,
       stockItem,
       quantity,
+      unit,
       preparationSection,
       recipe,
-      materialsUsed,
-      productionCost,
-      productionStartTime,
+      notes,
       createdBy,
     });
     res.status(201).send(productionRecord);
@@ -133,28 +149,103 @@ const findProductionRecord = async (req, res) => {
   }
 };
 
+const endProductionRecord = async (req, res) => {
+  try {
+    const { materialsUsed , productionStatus } = req.body;
+    if(!productionStatus){
+      return res.status(400).send({
+        message: "Production status is required",
+      });
+    }
+    if(productionStatus !== "Completed"){
+      return res.status(400).send({
+        message: "Production status must be completed",
+      });
+    }
+
+    if (!materialsUsed) {
+      return res.status(400).send({
+        message: "Materials used are required",
+      });
+    }
+    const materialsUsedExists = await stockItemModel.find({
+      _id: { $in: materialsUsed.map((m) => m.material) },
+    });
+    if (materialsUsedExists.length !== materialsUsed.length) {
+      return res.status(404).send({
+        message: "Material not found",
+      });
+    }
+    const productionCost = materialsUsed.reduce(
+      (total, item) => total + item.quantity * item.cost, 0 );
+
+    const productionRecord = await productionRecordModel.findByIdAndUpdate(
+      req.params.productionRecordId,
+      {
+        $set: {
+          materialsUsed,
+          productionCost,
+          productionEndTime: new Date(),
+        },
+      },
+      { new: true }
+      
+    );
+    if (!productionRecord) {
+      return res.status(404).send({
+        message: "Production Record not found",
+      });
+    }
+    res.status(200).send(productionRecord);
+  } catch (error) {
+    res.status(500).send({
+      message:
+        error.message ||
+        "Some error occurred while updating the Production Record.",
+    });
+  }
+};
+
 // Update a production record identified by the productionRecordId in the request
 const updateProductionRecord = async (req, res) => {
   try {
     const {
       stockItem,
       quantity,
+      unit,
       preparationSection,
       recipe,
       materialsUsed,
       productionCost,
-      productionStartTime,
     } = req.body;
 
     const updatedBy = req.employee._id;
+    const productionEndTime = new Date();
+    const productionRecordId = req.params.productionRecordId;
+
+    const productionRecordExists = await productionRecordModel.findById(
+      productionRecordId
+    );
+    if (!productionRecordExists) {
+      return res.status(404).send({
+        message: "Production Record not found",
+      });
+    }
+    if (productionRecordExists.productionStatus === "Completed") {
+      return res.status(400).send({
+        message: "Production has already been completed",
+      });
+    }
 
     // Validate request
     if (
       !stockItem ||
       !quantity ||
+      !unit ||
       !preparationSection ||
       !recipe ||
       !materialsUsed ||
+      !productionEndTime ||
       !productionCost
     ) {
       return res.status(400).send({
@@ -197,11 +288,12 @@ const updateProductionRecord = async (req, res) => {
         $set: {
           stockItem,
           quantity,
+          unit,
           preparationSection,
           recipe,
           materialsUsed,
           productionCost,
-          productionStartTime,
+          productionEndTime,
           updatedBy,
         },
       },
@@ -249,6 +341,7 @@ module.exports = {
   createProductionRecord,
   findAllProductionRecords,
   findProductionRecord,
+  endProductionRecord,
   updateProductionRecord,
   deleteProductionRecord,
 };

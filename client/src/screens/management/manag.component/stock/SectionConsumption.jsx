@@ -5,8 +5,6 @@ import { toast, ToastContainer } from "react-toastify";
 import "../orders/Orders.css";
 
 const SectionConsumption = () => {
-  
-
   const {
     restaurantData,
     permissionsList,
@@ -23,9 +21,9 @@ const SectionConsumption = () => {
     endPagination,
     setStartPagination,
     setEndPagination,
-  apiUrl,
-handleGetTokenAndConfig,
-} = useContext(dataContext);
+    apiUrl,
+    handleGetTokenAndConfig,
+  } = useContext(dataContext);
 
   const SectionUsegePermission =
     permissionsList &&
@@ -57,9 +55,9 @@ handleGetTokenAndConfig,
     e.preventDefault();
     try {
       const config = await handleGetTokenAndConfig();
-  
+
       const today = new Date().toISOString().split("T")[0];
-      
+
       let allSectionConsumption = [];
       try {
         const { data } = await axios.get(
@@ -71,43 +69,56 @@ handleGetTokenAndConfig,
         if (error.response && error.response.status === 404) {
           console.log("لا توجد سجلات لهذا القسم حتى الآن");
         } else {
-          throw error; 
+          throw error;
         }
       }
-  
-      const consumptionToday = allSectionConsumption&&allSectionConsumption.filter(
-        (consumption) =>
-          new Date(consumption.createdAt).toISOString().split("T")[0] === today
-      );
-  
+
+      const consumptionToday =
+        allSectionConsumption &&
+        allSectionConsumption.filter(
+          (consumption) =>
+            new Date(consumption.createdAt).toISOString().split("T")[0] ===
+            today
+        );
+
       let existingConsumption =
         consumptionToday.length > 0
-        ? consumptionToday.find((consumption) => consumption.stockItem?._id === stockItem)
-        : null;
-        
-        console.log({allSectionConsumption, consumptionToday, existingConsumption})
+          ? consumptionToday.find(
+              (consumption) => consumption.stockItem?._id === stockItem
+            )
+          : null;
+
+      console.log({
+        allSectionConsumption,
+        consumptionToday,
+        existingConsumption,
+      });
       if (existingConsumption) {
         if (SectionUsegePermission && !SectionUsegePermission.update) {
           toast.warn("ليس لديك صلاحية لتعديل عنصر في استهلاك القسم");
           return;
         }
-  
+
         const updatedData = {
           quantityTransferred:
             existingConsumption.quantityTransferred + quantityTransferred,
-            bookBalance:
-            existingConsumption.bookBalance + quantityTransferred,
+          bookBalance: existingConsumption.bookBalance + quantityTransferred,
           receivedBy,
         };
 
-        console.log({allSectionConsumption, consumptionToday, existingConsumption, updatedData})
-  
+        console.log({
+          allSectionConsumption,
+          consumptionToday,
+          existingConsumption,
+          updatedData,
+        });
+
         const response = await axios.put(
           `${apiUrl}/api/consumption/${existingConsumption._id}`,
           updatedData,
           config
         );
-  
+
         if (response.status === 200) {
           getAllConsumption();
           resetForm();
@@ -120,7 +131,7 @@ handleGetTokenAndConfig,
           toast.warn("ليس لديك صلاحية لإضافة عنصر إلى استهلاك القسم");
           return;
         }
-  
+
         const newConsumptionData = {
           section,
           stockItem,
@@ -131,13 +142,13 @@ handleGetTokenAndConfig,
           tickets: [],
           remarks,
         };
-  
+
         const response = await axios.post(
           `${apiUrl}/api/consumption`,
           newConsumptionData,
           config
         );
-  
+
         if (response.status === 201) {
           getAllConsumption();
           resetForm();
@@ -151,7 +162,6 @@ handleGetTokenAndConfig,
       console.error(error);
     }
   };
-  
 
   // Reset form fields
   const resetForm = () => {
@@ -163,7 +173,7 @@ handleGetTokenAndConfig,
 
   // Update a section item
   const updateSectionItem = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
     try {
       const config = await handleGetTokenAndConfig();
@@ -195,7 +205,7 @@ handleGetTokenAndConfig,
   };
 
   const deleteSectionItem = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     const config = await handleGetTokenAndConfig();
     if (SectionUsegePermission && !SectionUsegePermission.delete) {
       toast.warn("ليس لك صلاحية لحذف عنصر بمخزن الاستهلاك");
@@ -610,8 +620,8 @@ handleGetTokenAndConfig,
                           {formatDateTime(consumption.createdAt) || "غير محدد"}
                         </td>
                         <td>
-                           <button
-data-target="#updateSectionItemModal"
+                          <button
+                            data-target="#updateSectionItemModal"
                             className="btn btn-sm btn-primary ml-2 "
                             data-toggle="modal"
                             onClick={() => {
@@ -634,10 +644,10 @@ data-target="#updateSectionItemModal"
                               title="Edit"
                             >
                               &#xE254;
-                                </i>
-                              </button>
-                           <button
-data-target="#deleteStockItemModal"
+                            </i>
+                          </button>
+                          <button
+                            data-target="#deleteStockItemModal"
                             className="btn btn-sm btn-danger"
                             data-toggle="modal"
                             onClick={() => setConsumptionId(consumption._id)}
@@ -648,8 +658,8 @@ data-target="#deleteStockItemModal"
                               title="Delete"
                             >
                               &#xE872;
-                                </i>
-                              </button>
+                            </i>
+                          </button>
                         </td>
                       </tr>
                     );
@@ -1000,7 +1010,7 @@ data-target="#deleteStockItemModal"
       </div>
 
       <div id="deleteStockItemModal" className="modal fade">
-      <div className="modal-dialog modal-lg">
+        <div className="modal-dialog modal-lg">
           <div className="modal-content shadow-lg border-0 rounded ">
             <form onSubmit={deleteSectionItem}>
               <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">

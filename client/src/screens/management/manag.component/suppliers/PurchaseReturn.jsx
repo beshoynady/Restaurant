@@ -176,7 +176,7 @@ const PurchaseReturn = () => {
 
         // for (const recipe of allrecipes) {
         //   const recipeid = recipe._id;
-        //   const productname = recipe.productId.name;
+        //   const productName = recipe.productId.name;
         //   const arrayingredients = recipe.ingredients;
 
         //   const newIngredients = arrayingredients.map((ingredient) => {
@@ -201,7 +201,7 @@ const PurchaseReturn = () => {
         //   console.log({ updateRecipe });
 
         //   // Toast for successful update based on recipe change
-        //   toast.success(`تم تحديث وصفة  ${productname}`);
+        //   toast.success(`تم تحديث وصفة  ${productName}`);
         // }
       }
 

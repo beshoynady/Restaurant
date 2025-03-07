@@ -3,7 +3,7 @@ const { ObjectId } = mongoose.Schema;
 
 const productionOrderSchema = new mongoose.Schema(
   {
-    productionNumber: {
+    orderNumber: {
       type: Number,
       required: [true, "Production number is required"],
     },

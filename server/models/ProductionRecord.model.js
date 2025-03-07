@@ -7,6 +7,11 @@ const productionRecordSchema = new mongoose.Schema(
       type: Number,
       required: [true, "Production number is required"],
     },
+    productionOrder: {
+      type: ObjectId,
+      ref: "ProductionOrder",
+      required: [true, "Production order is required"],
+    },
     storeId: {
       type: ObjectId,
       ref: "Store",
@@ -20,6 +25,12 @@ const productionRecordSchema = new mongoose.Schema(
     quantity: {
       type: Number,
       required: [true, "Quantity is required"],
+    },
+    unit: {
+      type: String,
+      trim: true,
+      maxLength: 10,
+      required: [true, "Unit is required"],
     },
     productionStatus: {
       type: String,
@@ -65,7 +76,7 @@ const productionRecordSchema = new mongoose.Schema(
       type: ObjectId,
       ref: "Employee",
     },
-    note: {
+    notes: {
       type: String,
       trim: true,
       maxLength: 200,
@@ -84,35 +95,5 @@ const productionRecordSchema = new mongoose.Schema(
   }
 );
 
-// Middleware to calculate productionNumber and productionCost
-productionRecordSchema.pre("save", async function (next) {
-  if (!this.productionNumber) {
-    const lastRecord = await mongoose
-      .model("ProductionRecord")
-      .findOne()
-      .sort({ productionNumber: -1 });
-
-    this.productionNumber = lastRecord ? lastRecord.productionNumber + 1 : 1;
-  }
-
-  if (this.materialsUsed && this.materialsUsed.length > 0) {
-    this.productionCost = this.materialsUsed.reduce(
-      (total, item) => total + item.quantity * item.cost,
-      0
-    );
-  }
-
-  // If production is completed and no end time is set, update it
-  if (this.productionStatus === "Completed" && !this.productionEndTime) {
-    this.productionEndTime = new Date();
-  }
-
-  // Ensure productionEndTime is not before productionStartTime
-  if (this.productionEndTime && this.productionEndTime < this.productionStartTime) {
-    return next(new Error("Production end time cannot be before start time"));
-  }
-
-  next();
-});
 
 module.exports = mongoose.model("ProductionRecord", productionRecordSchema);

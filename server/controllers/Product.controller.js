@@ -6,13 +6,13 @@ const ProductModel = require("../models/Product.model.js");
 const createProduct = async (req, res) => {
   try {
     const {
-      productname,
-      productprice,
+      productName,
+      productPrice,
       preparationSection,
       discount,
       priceAfterDiscount,
-      productdescription,
-      productcategoryid,
+      productDescription,
+      productCategoryId,
       available,
       hasSizes,
       hasExtras,
@@ -29,7 +29,7 @@ const createProduct = async (req, res) => {
     const image = req.file ? req.file.filename : null;
 
     // Check if required fields are provided in the request
-    if (!productname || !productcategoryid) {
+    if (!productName || !productCategoryId) {
       return res.status(400).json({
         error: "Please provide name, and category of the product",
       });
@@ -58,13 +58,13 @@ const createProduct = async (req, res) => {
 
     // Create the product
     const newProduct = await ProductModel.create({
-      name: productname,
-      description: productdescription,
-      price: productprice,
+      name: productName,
+      description: productDescription,
+      price: productPrice,
       preparationSection,
       discount,
       priceAfterDiscount,
-      category: productcategoryid,
+      category: productCategoryId,
       available,
       hasSizes,
       sizes,
@@ -91,12 +91,12 @@ const updateProduct = async (req, res) => {
   try {
     const productId = req.params.productId;
     const {
-      productname,
-      productdescription,
-      productcategoryid,
-      productprice,
+      productName,
+      productDescription,
+      productCategoryId,
+      productPrice,
       preparationSection,
-      productdiscount,
+      productDiscount,
       priceAfterDiscount,
       available,
       productRecipe,
@@ -130,13 +130,13 @@ const updateProduct = async (req, res) => {
     }
 
     const updateData = {
-      name: productname,
-      description: productdescription,
-      price: productprice,
+      name: productName,
+      description: productDescription,
+      price: productPrice,
       preparationSection,
-      discount: productdiscount,
+      discount: productDiscount,
       priceAfterDiscount,
-      category: productcategoryid,
+      category: productCategoryId,
       available,
       productRecipe,
       hasSizes,

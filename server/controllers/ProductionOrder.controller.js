@@ -28,13 +28,13 @@ const createProductionOrder = async (req, res) => {
 
     const lastOrder = await ProductionOrderModel.findOne(
       {},
-      { productionNumber: 1 }
-    ).sort({ productionNumber: -1 });
+      { orderNumber: 1 }
+    ).sort({ orderNumber: -1 });
 
-    const newProductionNumber = lastOrder ? lastOrder.productionNumber + 1 : 1;
+    const neworderNumber = lastOrder ? lastOrder.orderNumber + 1 : 1;
 
     const productionOrder = await ProductionOrderModel.create({
-      productionNumber: newProductionNumber,
+      orderNumber: neworderNumber,
       storeId,
       preparationSection,
       stockItem,

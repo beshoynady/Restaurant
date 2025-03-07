@@ -2,6 +2,7 @@ const {
   createProductionRecord,
   findAllProductionRecords,
   findProductionRecord,
+  endProductionRecord,
   updateProductionRecord,
   deleteProductionRecord,
 } = require("../controllers/ProductionRecord.controller.js");
@@ -24,4 +25,8 @@ router
   .put(authenticateToken, checkSubscription, updateProductionRecord)
   .delete(authenticateToken, checkSubscription, deleteProductionRecord);
 
-  module.exports = router;
+// End a Production Record
+router
+  .route("/end/:productionRecordId")
+  .put(authenticateToken, checkSubscription, endProductionRecord);
+module.exports = router;

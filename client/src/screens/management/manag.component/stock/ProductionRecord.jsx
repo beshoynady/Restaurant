@@ -31,6 +31,9 @@ const ProductionRecord = () => {
       (permission) => permission.resource === "Production Record"
     )[0];
 
+  const [productionRecords, setProductionRecords] = useState([]);
+  const [productionOrders, setProductionOrders] = useState([]);
+
   const [storeId, setStoreId] = useState("");
   const [preparationSection, setPreparationSection] = useState("");
   const [stockItemId, setStockItemId] = useState("");
@@ -38,6 +41,7 @@ const ProductionRecord = () => {
   const [unit, setUnit] = useState("");
   const [productionStatus, setProductionStatus] = useState("Pending");
   const [quantityRequested, setQuantityRequested] = useState(0);
+
 
   const [notes, setNotes] = useState(""); // For notes or remarks
 
@@ -49,260 +53,140 @@ const ProductionRecord = () => {
     "متوسط السعر",
   ];
 
-  const createProductionOrder = async (e) => {
+  const [materialsUsed , setMaterialsUsed] = useState([{material: "", quantity: 0, cost: 0}]);
+  const handleAddMaterial = () => {
+    setMaterialsUsed([...materialsUsed, {material: "", quantity: 0, cost: 0}]);
+  };
+
+  const handleRemoveMaterial = (index) => {
+    const newMaterialsUsed = [...materialsUsed];
+    newMaterialsUsed.splice(index, 1);
+    setMaterialsUsed(newMaterialsUsed);
+  }
+  const handleMaterialChange = (e, index) => {
+    const newMaterialsUsed = [...materialsUsed];
+    newMaterialsUsed[index][e.target.name] = e.target.value;
+    setMaterialsUsed(newMaterialsUsed);
+  }
+
+  const handleMaterialSelect = (materialId, index) => {
+    const material = AllStockItems.find((item) => item._id === materialId);
+    const newMaterialsUsed = [...materialsUsed];
+    newMaterialsUsed[index].material = materialId;
+    newMaterialsUsed[index].cost = material.costPerPart;
+    setMaterialsUsed(newMaterialsUsed);
+  }
+
+  const handleMaterialQuantity = (e, index) => {
+    const newMaterialsUsed = [...materialsUsed];
+    newMaterialsUsed[index].quantity = e.target.value;
+    setMaterialsUsed(newMaterialsUsed);
+  }
+
+  
+
+  const createProductionRecord = async (e) => {
     e.preventDefault();
-    const config = await handleGetTokenAndConfig();
-    if (productionRecordPermission && !productionRecordPermission.create) {
-      toast.warn("ليس لديك صلاحية لإضافة أمر إنتاج");
-      return;
-    }
-    setIsLoading(true);
     try {
+      const {config } = handleGetTokenAndConfig();
+      const body = {
+        productionOrder: productionOrderId,
+        storeId,
+        preparationSection,
+        stockItem: stockItemId,
+        unit,
+        quantityRequested,
+        productionStatus,
+        notes,
+      };
       const response = await axios.post(
-        `${apiUrl}/api/productionOrder/`,
-        {
-          storeId,
-          preparationSection,
-          stockItem: stockItemId,
-          unit,
-          quantityRequested,
-          notes,
-        },
+        `${apiUrl}/productionRecord`,
+        body,
         config
       );
-
-      const productionOrderData = response.data;
-
-      if (!productionOrderData) {
-        throw new Error("Unexpected response or empty data");
+      if (response.status === 200) {
+        toast.success("تم انشاء السجل بنجاح");
+        getAllProductionRecord();
+        resetFields();
       }
-      if (productionOrderData.status === 201) {
-        toast.success("تم إنشاء أمر الإنتاج بنجاح");
-        getProductionOrders();
-      }
-
-      setIsLoading(false);
     } catch (error) {
-      console.error(error);
-      setIsLoading(false);
-      toast.error("فشل في إنشاء أمر الإنتاج");
+      toast.error("حدث خطأ ما");
     }
-  };
 
-  const updateProductionOrder = async (e) => {
-    e.preventDefault();
-    const config = await handleGetTokenAndConfig();
-    if (productionRecordPermission && !productionRecordPermission.update) {
-      toast.warn("ليس لديك صلاحية لتحديث أمر الإنتاج");
-      return;
-    }
-    setIsLoading(true);
-    console.log({ storeId,
-      preparationSection,
-      stockItem: stockItemId,
-      unit,
-      quantityRequested,
-      notes, });
+  }
+
+  const getAllProductionRecord = async()=>{
+    const config = handleGetTokenAndConfig();
     try {
-      const response = await axios.put(
-        `${apiUrl}/api/productionOrder/${productionOrderId}`,
-        {
-          storeId,
-          preparationSection,
-          stockItem: stockItemId,
-          unit,
-          quantityRequested,
-          notes,
-        },
-        config
-      );
 
-      if (!response || !response.data) {
-        throw new Error("Unexpected response or empty data");
-      }
+      const response = await axios.get(`${apiUrl}/productionRecord`, config);
 
       if (response.status === 200) {
-        toast.success("تم تحديث أمر الإنتاج بنجاح");
-        getProductionOrders();
-      }
+        setProductionRecords(response.data);
 
-      setIsLoading(false);
+      }      
     } catch (error) {
-      console.error(error);
-      setIsLoading(false);
-      toast.error("فشل في تحديث أمر الإنتاج");
+      toast.error("حدث خطأ ما أثناء جلب البيانات");
     }
-  };
+  }
+    
 
-  const [productionOrders, setProductionOrders] = useState([]);
+  const searchByItem = (itemName) => {
+    if(itemName === "") {
+      getAllProductionRecord();
+    } else {
+    const filteredItems = productionRecords.filter((item) =>
+      item.stockItem?.itemName.toLowerCase().includes(itemName.toLowerCase())
+    );
+    setProductionRecords(filteredItems);
+  }
+};
 
-  const getProductionOrders = async () => {
-    const config = await handleGetTokenAndConfig();
-    if (productionRecordPermission && !productionRecordPermission.read) {
-      toast.warn("ليس لديك صلاحية لعرض أوامر الإنتاج");
-      return;
-    }
-    setIsLoading(true);
-    try {
-      const response = await axios.get(
-        `${apiUrl}/api/productionOrder/`,
-        config
-      );
-      const productionOrdersData = response.data;
-      console.log({ productionOrdersData });
-      if (!productionOrders) {
-        throw new Error("Unexpected response or empty data");
-      }
+  const searchByCategory = (category) => {
+    if(category === "") {
+      getAllProductionRecord();
+    } else {
+    const filteredItems = productionRecords.filter((item) =>
+      item.stockItem.categoryId?._id === category
+    );
+    setProductionRecords(filteredItems);
+  }
+};
 
-      if (response.status === 200) {
-        setProductionOrders(productionOrdersData);
-        toast.success("تم استرداد أوامر الإنتاج بنجاح");
-      }
-      setIsLoading(false);
-    } catch (error) {
-      console.error(error);
-      setIsLoading(false);
-      toast.error("فشل في استرداد أوامر الإنتاج");
-    }
-  };
 
-  const deleteProductionOrder = async (e) => {
-    e.preventDefault();
-    const config = await handleGetTokenAndConfig();
-    if (productionRecordPermission && !productionRecordPermission.delete) {
-      toast.warn("ليس لديك صلاحية لحذف أمر الإنتاج");
-      return;
-    }
-    setIsLoading(true);
-    try {
-      const response = await axios.delete(
-        `${apiUrl}/api/productionOrder/${productionOrderId}`,
-        config
-      );
-      const productionOrdersData = response.data;
-      if (!productionOrdersData) {
-        throw new Error("Unexpected response or empty data");
-      }
-      if (productionOrdersData.status === 200) {
-        toast.success("تم حذف أمر الإنتاج بنجاح");
-        getProductionOrders();
-        setIsLoading(false);
-      }
-    } catch (error) {
-      console.error(error);
-      setIsLoading(false);
-      toast.error("فشل في حذف أمر الإنتاج");
-    }
-  };
 
-  const getProductionOrderByStore = async (storeId) => {
-    const config = await handleGetTokenAndConfig();
-    if (productionRecordPermission && !productionRecordPermission.read) {
-      toast.warn("ليس لديك صلاحية لعرض أوامر الإنتاج");
-      return;
-    }
-    setIsLoading(true);
-    try {
-      const response = await axios.get(
-        `${apiUrl}/api/productionOrder/store/${storeId}`,
-        config
-      );
-      const productionOrdersData = response.data;
-
-      if (!productionOrdersData) {
-        throw new Error("Unexpected response or empty data");
-      }
-      if (response.status === 200) {
-        setProductionOrders(productionOrdersData);
-        toast.success("تم استرداد أوامر الإنتاج بنجاح");
-      }
-
-      setIsLoading(false);
-    } catch (error) {
-      console.error(error);
-      setIsLoading(false);
-      toast.error("فشل في استرداد أوامر الإنتاج");
-    }
-  };
-
-  const getProductionOrderBySection = async (sectionId) => {
-    const config = await handleGetTokenAndConfig();
-    if (productionRecordPermission && !productionRecordPermission.read) {
-      toast.warn("ليس لديك صلاحية لعرض أوامر الإنتاج");
-      return;
-    }
-    setIsLoading(true);
-    try {
-      const response = await axios.get(
-        `${apiUrl}/api/productionOrder/section/${sectionId}`,
-        config
-      );
-      const productionOrdersData = response.data;
-      if (!productionOrdersData) {
-        throw new Error("Unexpected response or empty data");
-      }
-
-      if (response.status === 200) {
-        setProductionOrders(productionOrdersData);
-        toast.success("تم استرداد أوامر الإنتاج بنجاح");
-      }
-      setIsLoading(false);
-    } catch (error) {
-      console.error(error);
-      setIsLoading(false);
-      toast.error("فشل في استرداد أوامر الإنتاج");
-    }
-  };
-
-  // exchang production status
-
-  const changeProductionOrderStatus = async (id) => {
-    const config = await handleGetTokenAndConfig();
-    if (productionRecordPermission && !productionRecordPermission.read) {
-      toast.warn("ليس لديك صلاحية لعرض أوامر الإنتاج");
-      return;
-    }
-    setIsLoading(true);
-    try {
-      const response = await axios.get(
-        `${apiUrl}/api/productionOrder/status/${id}}`,
-        { productionStatus: "Canceled" },
-        config
+  const getProductionOrderByStore = (store) => {
+    if (store) {
+      const filteredItems = productionRecords.filter(
+        (item) => item.storeId?._id === store
       );
 
-      if (!response || !response.data) {
-        throw new Error("Unexpected response or empty data");
-      }
-
-      if (response.status === 200) {
-        toast.success("تم تغيير حالة الإنتاج بنجاح");
-      }
-
-      setIsLoading(false);
-    } catch (error) {
-      console.error(error);
-      setIsLoading(false);
-      toast.error("فشل في استرداد أوامر الإنتاج");
+      setProductionRecords(filteredItems);
+    } else {
+      getAllProductionRecord();
     }
-  };
+  }
 
-  const resetFields = () => {
-    setProductionOrderId("");
-    setStoreId("");
-    setPreparationSection("");
-    setStockItem("");
-    setUnit("");
-    setProductionStatus("Pending");
-    setQuantityRequested(0);
-    setNotes("");
-  };
+  const getProductionOrderBySection = (section) => {
+    if (section) {
+      const filteredItems = productionRecords.filter(
+        (item) => item.preparationSection?._id === section
+      );
+      setProductionRecords(filteredItems);
+    } else {
+      getAllProductionRecord();
+    }
+  }
+
+
+
 
   const [AllStockItems, setAllStockItems] = useState([]);
 
   // Function to retrieve all stock items
   const getStockItems = async () => {
     const config = await handleGetTokenAndConfig();
-    if (productionRecordPermission && !productionRecordPermission.read) {
+    if (productionOrderPermission && !productionOrderPermission.read) {
       toast.warn("ليس لك صلاحية لعرض عناصر المخزن");
       return;
     }
@@ -382,57 +266,22 @@ const ProductionRecord = () => {
     }
   };
 
-  const handleEdit = (order) => {
-    setProductionOrderId(order._id);
-    setStockItemId(order.stockItemId?._id);
-    setStoreId(order.storeId?._id);
-    setPreparationSection(order.preparationSection?._id);
-    setStockItem(order.stockItem);
-    setUnit(order.unit);
-    setQuantityRequested(order.quantityRequested);
-    setNotes(order.notes);
-
-    getStockItemByCategory(order.stockItem.categoryId?._id);
-  };
-
-  const searchByitem = (name) => {
-    if (!name) {
-      getStockItems();
-      return;
+  const getProductionOrders = async () => {
+    const config = await handleGetTokenAndConfig();
+    try {
+      const response = await axios.get(apiUrl + "/api/productionOrder", config);
+      if(response.status === 200){
+        setProductionOrders(response.data.reverse());
+      }
+    } catch (error) {
+      console.error("Error fetching production orders:", error);
+      toast.error("حدث خطأ اثناء جلب بيانات الطلبات! اعد تحميل الصفحة");
     }
-    const filter = productionOrders.filter((order) =>
-      order.stockItem?.itemName.toLowerCase().startsWith(name.toLowerCase())
-    );
-    setProductionOrders(filter);
   };
 
-  const searchByCategory = async (category) => {
-    if (!category) {
-      getStockItems();
-      return;
-    }
-    const filter = productionOrders.filter(
-      (order) => order.categoryId?._id === category
-    );
-    setAllStockItems(filter);
-  };
-
-  const [stockItemFiltered, setStockItemFiltered] = useState([]);
-  const getStockItemByCategory = (category) => {
-    const stockItems = AllStockItems.filter(
-      (item) => item.categoryId._id === category
-    );
-    setStockItemFiltered(stockItems);
-  };
-
-  const handleSelectStockItem = (stockItemId) => {
-    const stockItem = AllStockItems.find((item) => item._id === stockItemId);
-    setStockItem(stockItem);
-    setStockItemId(stockItemId);
-    setUnit(stockItem.storageUnit);
-  };
 
   useEffect(() => {
+    getAllProductionRecord();
     getStockItems();
     getAllStores();
     getAllCategoryStock();
@@ -457,7 +306,7 @@ const ProductionRecord = () => {
                 productionRecordPermission.create && (
                   <div className="col-12 col-md-6 p-0 m-0 d-flex flex-wrap aliegn-items-center justify-content-end print-hide">
                     <a
-                      href="#addProductionOrdermModal"
+                      href="#addProductionRecordModal"
                       className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-success"
                       data-toggle="modal"
                     >
@@ -465,7 +314,7 @@ const ProductionRecord = () => {
                       <span>انشاء سجل تصنيع</span>
                     </a>
 
-                    {/* <a href="#deleteProductionOrderModal" className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-danger" data-toggle="modal"> <span>حذف</span></a> */}
+                    {/* <a href="#deleteProductionRecordModal" className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-danger" data-toggle="modal"> <span>حذف</span></a> */}
                   </div>
                 )}
             </div>
@@ -504,7 +353,7 @@ const ProductionRecord = () => {
                 <input
                   type="text"
                   className="form-control border-primary m-0 p-2 h-auto"
-                  onChange={(e) => searchByitem(e.target.value)}
+                  onChange={(e) => searchByItem(e.target.value)}
                 />
               </div>
 
@@ -569,15 +418,21 @@ const ProductionRecord = () => {
             <thead>
               <tr>
                 <th>#</th>
-                <th>رقم الطلب</th>
-                <th>اسم الصنف</th>
+                <th>رقم الامر</th>
+                <th>رقم التصنيع</th>
                 <th>المخزن</th>
                 <th>التصنيف</th>
+                <th>اسم الصنف</th>
                 <th>القسم</th>
                 <th>الوحدة</th>
                 <th>الكمية المطلوبة</th>
+                <th>الكمية المنفذه</th>
+                <th>التكلفه</th>
+                <th>الكمية المنفذه</th>
                 <th>الحالة</th>
-                <th>تم الإنشاء بواسطة</th>
+                <th>البدايه</th>
+                <th>الانتهاء</th>
+                <th>تم بواسطة</th>
                 <th>تاريخ الإنشاء</th>
                 <th>تم التعديل بواسطة</th>
                 <th>تاريخ التعديل</th>
@@ -586,35 +441,39 @@ const ProductionRecord = () => {
               </tr>
             </thead>
             <tbody>
-              {productionOrders &&
-                productionOrders.map((order, index) => (
+              {productionRecords &&
+                productionRecords.map((record, index) => (
                   <tr
-                    key={order._id}
+                    key={record._id}
                     className={
-                      order.status === "Canceled" ? "bg-danger text-white" : ""
+                      record.status === "Canceled" ? "bg-danger text-white" : ""
                     }
                   >
                     <td>{index + 1}</td>
-                    <td>{order.productionNumber}</td>
-                    <td>{order.stockItem?.itemName || "غير محدد"}</td>
-                    <td>{order.storeId?.storeName || "غير محدد"}</td>
-                    <td>{order.stockItem.categoryId?.categoryName || "غير محدد"}</td>
-                    <td>{order.preparationSection?.name || "غير محدد"}</td>
-                    <td>{order.unit}</td>
-                    <td>{order.quantityRequested}</td>
-                    <td>{order.productionStatus}</td>
-                    <td>{order.createdBy?.fullname || "غير معروف"}</td>
-                    <td>{formatDateTime(order.createdAt)}</td>
-                    <td>{order.updatedBy?.fullname || "غير معروف"}</td>
-                    <td>{formatDateTime(order.updatedAt)}</td>
-                    <td>{order.notes || "لا توجد ملاحظات"}</td>
+                    <td>{record.productionNumber}</td>
+                    <td>{record.productionOrder.orderNumber}</td>
+                    <td>{record.storeId?.storeName || "غير محدد"}</td>
+                    <td>{record.stockItem.categoryId?.categoryName || "غير محدد"}</td>
+                    <td>{record.stockItem?.itemName || "غير محدد"}</td>
+                    <td>{record.preparationSection?.name || "غير محدد"}</td>
+                    <td>{record.unit}</td>
+                    <td>{record.productionOrder.quantityRequested}</td>
+                    <td>{record.quantity}</td>
+                    <td>{record.productionStatus}</td>
+                    <td>{formatDateTime(record.productionStartTime)}</td>
+                    <td>{formatDateTime(record.productionEndTime)}</td>
+                    <td>{record.createdBy?.fullname || "غير معروف"}</td>
+                    <td>{formatDateTime(record.createdAt)}</td>
+                    <td>{record.updatedBy?.fullname || "غير معروف"}</td>
+                    <td>{formatDateTime(record.updatedAt)}</td>
+                    <td>{record.notes || "لا توجد ملاحظات"}</td>
                     <td>
                       {productionRecordPermission?.update && (
                         <button
-                          data-target="#editProductionOrderModal"
+                          data-target="#editProductionRecordModal"
                           data-toggle="modal"
                           className="btn btn-sm btn-primary ml-2"
-                          onClick={() => handleEdit(order)}
+                          onClick={() => handleEdit(record)}
                         >
                           <i className="material-icons" title="تعديل">
                             &#xE254;
@@ -623,10 +482,10 @@ const ProductionRecord = () => {
                       )}
                       {productionRecordPermission?.delete && (
                         <button
-                        data-target="#deleteProductionOrderModal"
+                        data-target="#deleteProductionRecordModal"
                         data-toggle ="modal"
                           className="btn btn-sm btn-danger"
-                          onClick={() => setProductionOrderId(order._id)}
+                          onClick={() => setProductionOrderId(record._id)}
                         >
                           <i className="material-icons" title="حذف">
                             &#xE872;
@@ -643,11 +502,11 @@ const ProductionRecord = () => {
             <div className="hint-text text-dark">
               عرض{" "}
               <b>
-                {productionOrders.length > endPagination
+                {productionRecords.length > endPagination
                   ? endPagination
-                  : productionOrders.length}
+                  : productionRecords.length}
               </b>{" "}
-              من <b>{productionOrders.length}</b> عنصر
+              من <b>{productionRecords.length}</b> عنصر
             </div>
             <ul className="pagination">
               <li onClick={EditPagination} className="page-item disabled">
@@ -706,12 +565,12 @@ const ProductionRecord = () => {
         </div>
       </div>
 
-      <div id="addProductionOrdermModal" className="modal fade">
+      {/* <div id="addProductionRecordModal" className="modal fade">
         <div className="modal-dialog modal-lg">
           <div className="modal-content shadow-lg border-0 rounded">
-            <form onSubmit={createProductionOrder}>
+            <form onSubmit={createProductionRecord}>
               <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
-                <h4 className="modal-title">انشاء طلب تصنيع</h4>
+                <h4 className="modal-title">انشاء سجل تصنيع</h4>
                 <button
                   type="button"
                   className="close m-0 p-1"
@@ -844,7 +703,7 @@ const ProductionRecord = () => {
         </div>
       </div>
 
-      <div id="editProductionOrderModal" className="modal fade">
+      <div id="editProductionRecordModal" className="modal fade">
         <div className="modal-dialog modal-lg">
           <div className="modal-content shadow-lg border-0 rounded">
             <form onSubmit={updateProductionOrder}>
@@ -1001,7 +860,7 @@ const ProductionRecord = () => {
         </div>
       </div>
 
-      <div id="deleteProductionOrderModal" className="modal fade">
+      <div id="deleteProductionRecordModal" className="modal fade">
         <div className="modal-dialog modal-lg">
           <div className="modal-content shadow-lg border-0 rounded ">
             <form onSubmit={deleteProductionOrder}>
@@ -1039,8 +898,8 @@ const ProductionRecord = () => {
               </div>
             </form>
           </div>
-        </div>
-      </div>
+        </div> */}
+      {/* </div> */}
     </div>
   );
 };
