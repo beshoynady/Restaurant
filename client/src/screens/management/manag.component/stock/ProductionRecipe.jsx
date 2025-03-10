@@ -155,7 +155,7 @@ const ProductionRecipe = () => {
         ];
         // Update the recipe by sending a PUT request
         const addRecipeToStockProduction = await axios.put(
-          `${apiUrl}/api/stockproductionrecipe/${recipeOfStockItem._id}`,
+          `${apiUrl}/api/productionrecipe/${recipeOfStockItem._id}`,
           {
             ingredients: newIngredients,
           },
@@ -188,7 +188,7 @@ const ProductionRecipe = () => {
         });
         // Add the new recipe to the stockItem by sending a POST request
         const addRecipeToStockProduction = await axios.post(
-          `${apiUrl}/api/stockproductionrecipe`,
+          `${apiUrl}/api/productionrecipe`,
           {
             stockItem: stockItemId,
             stockItemName,
@@ -258,7 +258,7 @@ const ProductionRecipe = () => {
 
       if (recipeOfStockItem && recipeOfStockItem._id) {
         const addRecipeToStockProduction = await axios.put(
-          `${apiUrl}/api/stockproductionrecipe/${recipeOfStockItem._id}`,
+          `${apiUrl}/api/productionrecipe/${recipeOfStockItem._id}`,
           { serviceDetails: newServiceDetails },
           config
         );
@@ -302,11 +302,11 @@ const ProductionRecipe = () => {
       const totalcost = Math.round(total * 100) / 100;
 
       const editRecipeToProduct = await axios.put(
-        `${apiUrl}/api/stockproductionrecipe/${recipeOfStockItem._id}`,
+        `${apiUrl}/api/productionrecipe/${recipeOfStockItem._id}`,
         { ingredients: newIngredients, totalcost },
         config
       );
-      const editRecipeToProductData = await editRecipeToProduct.data.StockProductionRecipe;  
+      const editRecipeToProductData = await editRecipeToProduct.data.ProductionRecipe;  
       if (editRecipeToProductData) {
         console.log({ editRecipeToProductData });
         getRecipeOfStockItem(editRecipeToProductData.stockItem);
@@ -406,7 +406,7 @@ const ProductionRecipe = () => {
       setStockItemName(getStockItem.itemName);
 
       const getStockItemRecipe = await axios.get(
-        `${apiUrl}/api/stockproductionrecipe/stockitem/${itemId}`,
+        `${apiUrl}/api/productionrecipe/stockitem/${itemId}`,
         config
       );
 
@@ -470,13 +470,13 @@ const ProductionRecipe = () => {
       console.log({ totalcost: total });
       // productionRecipe.map(rec=>totalcost = totalcost + ingredient.totalcostofitem)
       const deleteRecipetoProduct = await axios.put(
-        `${apiUrl}/api/stockproductionrecipe/${recipeOfStockItem._id}`,
+        `${apiUrl}/api/productionrecipe/${recipeOfStockItem._id}`,
         { ingredients: newingredients, totalcost: total },
         config
       );
     } else {
       const deleteRecipetoProduct = await axios.delete(
-        `${apiUrl}/api/stockproductionrecipe/${recipeOfStockItem._id}`,
+        `${apiUrl}/api/productionrecipe/${recipeOfStockItem._id}`,
         config
       );
       console.log(deleteRecipetoProduct);
@@ -493,7 +493,7 @@ const ProductionRecipe = () => {
       }
       if (recipeOfStockItem) {
         const deleteRecipeToProduct = await axios.delete(
-          `${apiUrl}/api/stockproductionrecipe/${recipeOfStockItem._id}`,
+          `${apiUrl}/api/productionrecipe/${recipeOfStockItem._id}`,
           config
         );
 

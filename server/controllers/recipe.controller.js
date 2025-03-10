@@ -12,6 +12,7 @@ const createRecipe = async (req, res) => {
       preparationTime,
       ingredients,
       serviceDetails,
+      preparationSteps
     } = req.body;
 
     // Check if all required fields are present in the request body
@@ -80,6 +81,7 @@ const createRecipe = async (req, res) => {
       preparationTime,
       ingredients,
       serviceDetails,
+      preparationSteps
     });
 
     res.status(201).json(newRecipe);
@@ -100,7 +102,8 @@ const updateRecipe = async (req, res) => {
       numberOfMeals,
       preparationTime,
       ingredients,
-      serviceDetails
+      serviceDetails,
+      preparationSteps
     } = req.body;
 
     if (!id) {
@@ -117,6 +120,9 @@ const updateRecipe = async (req, res) => {
 
     if (preparationTime) {
       updateFields.preparationTime = preparationTime;
+    }
+    if(preparationSteps){
+      updateFields.preparationSteps = preparationSteps
     }
 
     if (Array.isArray(ingredients)) {

@@ -44,7 +44,7 @@ const productionRecordSchema = new mongoose.Schema(
     },
     recipe: {
       type: ObjectId,
-      ref: "StockProductionRecipe",
+      ref: "ProductionRecipe",
       required: [true, "Stock Production Recipe is required"],
     },
     materialsUsed: [

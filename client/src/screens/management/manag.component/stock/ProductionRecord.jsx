@@ -299,18 +299,18 @@ const ProductionRecord = () => {
       if (productionOrder) {
         setStockItemId(productionOrder.stockItem._id);
         setProductionOrderSelected(productionOrder);
-        const getStockProductionRecipe = await axios.get(
-          `${apiUrl}/api/stockproductionrecipe/stockitem/${productionOrder.stockItem._id}`,
+        const getProductionRecipe = await axios.get(
+          `${apiUrl}/api/productionrecipe/stockitem/${productionOrder.stockItem._id}`,
           config
         );
-        const stockProductionRecipe = getStockProductionRecipe.data;
-        console.log({stockProductionRecipe})
-        if (!stockProductionRecipe) {
+        const productionrecipe = getProductionRecipe.data;
+        console.log({productionrecipe})
+        if (!productionrecipe) {
           toast.warn("هذا العنصر لا يوجد له ريسبي");
         }
-        if (getStockProductionRecipe.status === 200) {
-          setProductionRecipe(stockProductionRecipe);
-          handleAddMaterial(stockProductionRecipe.ingredients);
+        if (getProductionRecipe.status === 200) {
+          setProductionRecipe(productionrecipe);
+          handleAddMaterial(productionrecipe.ingredients);
         }
       }
     } catch (error) {}

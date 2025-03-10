@@ -1,7 +1,7 @@
-const StockProductionRecipe = require("../models/StockProductionRecipe.model");
+const ProductionRecipe = require("../models/ProductionRecipe.model");
 
-// Create a new StockProductionRecipe
-const createStockProductionRecipe = async (req, res) => {
+// Create a new ProductionRecipe
+const createProductionRecipe = async (req, res) => {
   try {
     const {
       stockItem,
@@ -9,7 +9,7 @@ const createStockProductionRecipe = async (req, res) => {
       batchSize,
       preparationTime,
       ingredients,
-      serviceDetails,
+      preparationSteps
     } = req.body;
 
     // Validate required fields
@@ -39,56 +39,33 @@ const createStockProductionRecipe = async (req, res) => {
       }
     }
 
-    // Validate serviceDetails
-    const validateServiceDetails = (details) => {
-      if (details && typeof details === "object") {
-        const { dineIn, takeaway, delivery } = details;
-        [dineIn, takeaway, delivery].forEach((service) => {
-          if (!Array.isArray(service)) {
-            throw new Error("Service details must be arrays");
-          }
-          service.forEach((item) => {
-            if (
-              !item.itemId ||
-              !item.name ||
-              !item.quantity ||
-              !item.unit ||
-              typeof item.wastePercentage !== "number"
-            ) {
-              throw new Error("Invalid service details");
-            }
-          });
-        });
-      }
-    };
 
-    serviceDetails ?? validateServiceDetails(serviceDetails);
 
-    // Create and save the new StockProductionRecipe
-    const newStockProductionRecipe = await StockProductionRecipe.create({
+    // Create and save the new ProductionRecipe
+    const newProductionRecipe = await ProductionRecipe.create({
       stockItem,
       stockItemName,
       batchSize,
       preparationTime,
       ingredients,
-      serviceDetails,
+      preparationSteps
     });
 
-    await newStockProductionRecipe.save();
+    await newProductionRecipe.save();
     res.status(201).json({
-      message: "Stock production StockProductionRecipe created successfully.",
-      StockProductionRecipe: newStockProductionRecipe,
+      message: "Stock production ProductionRecipe created successfully.",
+      ProductionRecipe: newProductionRecipe,
     });
   } catch (error) {
     res.status(500).json({
-      error: "An error occurred while creating the StockProductionRecipe.",
+      error: "An error occurred while creating the ProductionRecipe.",
       details: error.message,
     });
   }
 };
 
-// Update an existing StockProductionRecipe
-const updateStockProductionRecipe = async (req, res) => {
+// Update an existing ProductionRecipe
+const updateProductionRecipe = async (req, res) => {
   try {
     const { id } = req.params;
     const {
@@ -97,13 +74,13 @@ const updateStockProductionRecipe = async (req, res) => {
       batchSize,
       preparationTime,
       ingredients,
-      serviceDetails,
+      preparationSteps
     } = req.body;
 
     if (!id) {
       return res
         .status(400)
-        .json({ message: "StockProductionRecipe ID is required" });
+        .json({ message: "ProductionRecipe ID is required" });
     }
 
     // Initialize the update object
@@ -135,35 +112,35 @@ const updateStockProductionRecipe = async (req, res) => {
 
     updateFields.serviceDetails = serviceDetails;
 
-    // Update the StockProductionRecipe by ID
-    const updatedStockProductionRecipe =
-      await StockProductionRecipe.findByIdAndUpdate(id, updateFields, {
+    // Update the ProductionRecipe by ID
+    const updatedProductionRecipe =
+      await ProductionRecipe.findByIdAndUpdate(id, updateFields, {
         new: true,
       });
 
-    if (!updatedStockProductionRecipe) {
+    if (!updatedProductionRecipe) {
       return res
         .status(404)
-        .json({ error: "StockProductionRecipe not found for updating." });
+        .json({ error: "ProductionRecipe not found for updating." });
     }
 
     res.status(200).json({
-      message: "StockProductionRecipe updated successfully.",
-      StockProductionRecipe: updatedStockProductionRecipe,
+      message: "ProductionRecipe updated successfully.",
+      ProductionRecipe: updatedProductionRecipe,
     });
   } catch (error) {
     res.status(500).json({
-      error: "An error occurred while updating the StockProductionRecipe.",
+      error: "An error occurred while updating the ProductionRecipe.",
       details: error.message,
     });
   }
 };
 
-// Get a single StockProductionRecipe by ID
-const getOneStockProductionRecipe = async (req, res) => {
+// Get a single ProductionRecipe by ID
+const getOneProductionRecipe = async (req, res) => {
   try {
     const { id } = req.params;
-    const StockProductionRecipe = await StockProductionRecipe.findById(id)
+    const ProductionRecipe = await ProductionRecipe.findById(id)
       .populate("stockItem", "_id itemName")
       .populate("ingredients.itemId", "_id itemName costPerPart minThreshold")
       .populate(
@@ -171,23 +148,23 @@ const getOneStockProductionRecipe = async (req, res) => {
         "_id itemName costPerPart minThreshold"
       );
 
-    if (!StockProductionRecipe) {
+    if (!ProductionRecipe) {
       return res
         .status(404)
-        .json({ message: "StockProductionRecipe not found" });
+        .json({ message: "ProductionRecipe not found" });
     }
 
-    res.status(200).json(StockProductionRecipe);
+    res.status(200).json(ProductionRecipe);
   } catch (error) {
     res.status(400).json({ message: error.message, error });
   }
 };
 
 
-const getStockProductionRecipeByStockItem = async (req, res) => {
+const getProductionRecipeByStockItem = async (req, res) => {
   try {
     const { id } = req.params;
-    const findStockProductionRecipe = await StockProductionRecipe.findOne({
+    const findProductionRecipe = await ProductionRecipe.findOne({
       stockItem: id,
     })
       .populate("stockItem", "_id itemName")
@@ -197,22 +174,22 @@ const getStockProductionRecipeByStockItem = async (req, res) => {
         "_id itemName costPerPart minThreshold"
       );
 
-    if (!findStockProductionRecipe) {
+    if (!findProductionRecipe) {
       return res
         .status(404)
-        .json({ message: "StockProductionRecipe not found" });
+        .json({ message: "ProductionRecipe not found" });
     }
 
-    res.status(200).json(findStockProductionRecipe);
+    res.status(200).json(findProductionRecipe);
   } catch (error) {
     res.status(400).json({ message: error.message, error });
   }
 };
 
 // Get all recipes
-const getAllStockProductionRecipe = async (req, res) => {
+const getAllProductionRecipe = async (req, res) => {
   try {
-    const recipes = await StockProductionRecipe.find()
+    const recipes = await ProductionRecipe.find()
       .populate("stockItem", "_id itemName")
       .populate("ingredients.itemId", "_id itemName costPerPart minThreshold")
       .populate(
@@ -226,31 +203,31 @@ const getAllStockProductionRecipe = async (req, res) => {
   }
 };
 
-// Delete a StockProductionRecipe by ID
-const deleteStockProductionRecipe = async (req, res) => {
+// Delete a ProductionRecipe by ID
+const deleteProductionRecipe = async (req, res) => {
   try {
     const { id } = req.params;
-    const deletedRecipe = await StockProductionRecipe.findByIdAndDelete(id);
+    const deletedRecipe = await ProductionRecipe.findByIdAndDelete(id);
 
     if (!deletedRecipe) {
       return res
         .status(404)
-        .json({ message: "StockProductionRecipe not found" });
+        .json({ message: "ProductionRecipe not found" });
     }
 
     res
       .status(200)
-      .json({ message: "StockProductionRecipe deleted successfully" });
+      .json({ message: "ProductionRecipe deleted successfully" });
   } catch (error) {
     res.status(400).json({ message: error.message, error });
   }
 };
 
 module.exports = {
-  createStockProductionRecipe,
-  updateStockProductionRecipe,
-  getOneStockProductionRecipe,
-  getStockProductionRecipeByStockItem,
-  getAllStockProductionRecipe,
-  deleteStockProductionRecipe,
+  createProductionRecipe,
+  updateProductionRecipe,
+  getOneProductionRecipe,
+  getProductionRecipeByStockItem,
+  getAllProductionRecipe,
+  deleteProductionRecipe,
 };

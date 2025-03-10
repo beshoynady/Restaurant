@@ -2752,7 +2752,7 @@ function App() {
               }
             />
             <Route
-              path="stockproductionrecipe"
+              path="productionrecipe"
               element={
                 <Suspense fallback={<LoadingPage />}>
                   <ProductionRecipe />

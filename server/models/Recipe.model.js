@@ -43,6 +43,7 @@ const recipeSchema = new mongoose.Schema(
           type: String,
           trim: true,
           required: true,
+          
         },
         amount: {
           type: Number,
@@ -56,6 +57,8 @@ const recipeSchema = new mongoose.Schema(
         wastePercentage: {
           type: Number,
           default: 0,
+          min: 0,
+          max: 100,
         },
       },
     ],
@@ -76,6 +79,12 @@ const recipeSchema = new mongoose.Schema(
             wastePercentage: { type: Number, default: 0, min: 0, max: 100 },
           },
         ],
+      },
+    ],
+    preparationSteps: [
+      {
+        stepNumber: { type: Number, required: true },
+        description: { type: String, trim: true, required: true },
       },
     ],
   },

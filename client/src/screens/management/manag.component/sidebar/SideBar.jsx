@@ -519,7 +519,7 @@ const SideBar = () => {
                             permission.resource === "Stock Production Recipes"
                         )[0]?.read) && (
                         <li className="list">
-                          <Link to="stockproductionrecipe">ريسبي التصنيع</Link>
+                          <Link to="productionrecipe">ريسبي التصنيع</Link>
                         </li>
                       )}
                       {(isProgrammer ||
