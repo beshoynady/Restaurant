@@ -674,7 +674,7 @@ const ProductRecipe = () => {
 
           <div className="table-filter print-hide">
             <div className="col-12 text-dark d-flex flex-wrap align-items-center justify-content-start p-0 m-0">
-              <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
+              {/* <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                   عرض
                 </label>
@@ -697,7 +697,7 @@ const ProductRecipe = () => {
                     return options;
                   })()}
                 </select>
-              </div>
+              </div> */}
               <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                   التصنيف
@@ -873,7 +873,7 @@ const ProductRecipe = () => {
             <tbody>
               {ingredients.length > 0
                 ? ingredients.map((ingredient, i) => {
-                    if ((i >= startPagination) & (i < endPagination)) {
+                    // if ((i >= startPagination) & (i < endPagination)) {
                       return (
                         <tr key={i}>
                           <td>
@@ -939,8 +939,8 @@ data-target="#deleteProductModal"
                           </td>
                         </tr>
                       );
-                    }
-                  })
+                    })
+                  // })
                 : ""}
               <tr>
                 <td colSpan="8" style={{ textAlign: "center" }}>
@@ -1194,7 +1194,7 @@ data-target="#deleteProductModal"
             </tbody>
           </table>
 
-          <div className="clearfix">
+          {/* <div className="clearfix">
             <div className="hint-text text-dark">
               عرض{" "}
               <b>
@@ -1257,7 +1257,7 @@ data-target="#deleteProductModal"
                 </a>
               </li>
             </ul>
-          </div>
+          </div> */}
         </div>
       </div>
 
