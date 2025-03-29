@@ -120,7 +120,7 @@ const createEmployeeSchema = Joi.object({
     }),
   isAdmin: Joi.boolean().default(true),
   isVerified: Joi.boolean().default(false),
-  sectionNumber: Joi.number().optional(),
+  sectionNumber: Joi.string().optional(),
 });
 
 

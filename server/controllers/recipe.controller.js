@@ -71,7 +71,13 @@ const createRecipe = async (req, res) => {
       preparationSteps,
     } = req.body;
 
-    if (!productId || !productName || !numberOfMeals || !preparationTime || !ingredients) {
+    if (
+      !productId ||
+      !productName ||
+      !numberOfMeals ||
+      !preparationTime ||
+      !ingredients
+    ) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
@@ -104,7 +110,13 @@ const createRecipe = async (req, res) => {
 const updateRecipe = async (req, res) => {
   try {
     const { id } = req.params;
-    const { numberOfMeals, preparationTime, ingredients, serviceDetails, preparationSteps } = req.body;
+    const {
+      numberOfMeals,
+      preparationTime,
+      ingredients,
+      serviceDetails,
+      preparationSteps,
+    } = req.body;
 
     if (!id) {
       return res.status(400).json({ message: "Recipe ID is required" });
@@ -149,7 +161,10 @@ const getOneRecipe = async (req, res) => {
     const recipe = await RecipeModel.findById(id)
       .populate("productId", "_id name")
       .populate("ingredients.itemId", "_id itemName costPerPart minThreshold")
-      .populate("serviceDetails.itemId", "_id itemName costPerPart minThreshold");
+      .populate(
+        "serviceDetails.itemId",
+        "_id itemName costPerPart minThreshold"
+      );
 
     if (!recipe) {
       return res.status(404).json({ message: "Recipe not found" });
@@ -167,7 +182,10 @@ const getAllRecipe = async (req, res) => {
     const recipes = await RecipeModel.find()
       .populate("productId", "_id name")
       .populate("ingredients.itemId", "_id itemName costPerPart minThreshold")
-      .populate("serviceDetails.itemId", "_id itemName costPerPart minThreshold");
+      .populate(
+        "serviceDetails.itemId",
+        "_id itemName costPerPart minThreshold"
+      );
 
     res.status(200).json(recipes);
   } catch (error) {

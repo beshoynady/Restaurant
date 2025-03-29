@@ -50,28 +50,25 @@ const ProductRecipe = () => {
     }
   };
 
-  const [productFilterd, setproductFilterd] = useState([]);
+  const [productFilterd, setProductFilterd] = useState([]);
   const getproductByCategory = (category) => {
     const products = listofProducts.filter(
       (product) => product.category._id === category
     );
-    setproductFilterd(products);
+    setProductFilterd(products);
   };
 
-  // const searchByName = (name) => {
-  //   const products = listofProducts.filter((pro) => pro.name.startsWith(name) === true)
-  //   setproductFilterd(products)
-  // }
-
-  const [listofcategories, setlistofcategories] = useState([]);
+  const [listOfCategories, setListOfCategories] = useState([]);
   const getallCategories = async () => {
     const config = await handleGetTokenAndConfig();
     try {
       const response = await axios.get(apiUrl + "/api/menucategory/");
-      const categories = await response.data;
-      // console.log(response.data)
-      setlistofcategories(categories);
-      // console.log(listofcategories)
+      if (response.status === 200) {
+        // console.log(response.data)
+        const categories = await response.data;
+
+        setListOfCategories(categories);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -83,21 +80,23 @@ const ProductRecipe = () => {
     const config = await handleGetTokenAndConfig();
     try {
       const response = await axios.get(apiUrl + "/api/stockitem/", config);
-      const StockItems = await response.data;
-      console.log(response.data);
-      setAllStockItems(StockItems);
+      if(response.status === 200){
+        const StockItems = await response.data;
+        console.log(response.data);
+        setAllStockItems(StockItems);
+      }
     } catch (error) {
       console.log(error);
     }
   };
 
-  const [product, setproduct] = useState({});
-  const [productId, setproductId] = useState("");
-  const [productName, setproductName] = useState("");
+  const [product, setProduct] = useState({});
+  const [productId, setProductId] = useState("");
+  const [productName, setProductName] = useState("");
 
   const [recipeOfProduct, setrecipeOfProduct] = useState({});
   const [ingredients, setingredients] = useState([]);
-  const [productTotalCost, setproductTotalCost] = useState(0);
+  const [productTotalCost, setProductTotalCost] = useState(0);
   const [serviceDetails, setserviceDetails] = useState([]);
   const [itemId, setitemId] = useState("");
   const [preparationTime, setpreparationTime] = useState(0);
@@ -111,9 +110,9 @@ const ProductRecipe = () => {
   ]);
   const [name, setname] = useState("");
   const [amount, setamount] = useState(0);
-  const [costofitem, setcostofitem] = useState(0);
+  const [costOfItem, setcostOfItem] = useState(0);
   const [unit, setunit] = useState("");
-  const [totalcostofitem, settotalcostofitem] = useState(0);
+  const [totalCostOfItem, settotalCostOfItem] = useState(0);
 
   const addRecipeItem = async (e) => {
     e.preventDefault();
@@ -137,17 +136,11 @@ const ProductRecipe = () => {
           ...ingredients,
           { itemId, name, amount, unit, wastePercentage },
         ];
-        // newServiceDetails = [
-        //   ...serviceDetails,
-        //   { itemId, name, amount, unit, wastePercentage },
-        // ];
-
         // Update the recipe by sending a PUT request
         const addRecipeToProduct = await axios.put(
           `${apiUrl}/api/recipe/${recipeOfProduct._id}`,
           {
             ingredients: newIngredients,
-            // , serviceDetails: newIngredients
           },
           config
         );
@@ -248,7 +241,6 @@ const ProductRecipe = () => {
     }
   };
 
-
   const addServiceItem = async (e) => {
     e.preventDefault();
     const config = await handleGetTokenAndConfig();
@@ -267,7 +259,7 @@ const ProductRecipe = () => {
       let newServiceDetails = { ...serviceDetails };
 
       if (!newServiceDetails[orderType]) {
-        newServiceDetails[orderType] = []; 
+        newServiceDetails[orderType] = [];
       }
 
       newServiceDetails[orderType].push({
@@ -361,7 +353,7 @@ const ProductRecipe = () => {
 
       const newIngredients = ingredients.map((ingredient) => {
         if (ingredient.itemId === itemId) {
-          return { itemId, name, amount, costofitem, unit, totalcostofitem };
+          return { itemId, name, amount, costOfItem, unit, totalCostOfItem };
         } else {
           return ingredient;
         }
@@ -369,7 +361,7 @@ const ProductRecipe = () => {
 
       let total = 0;
       for (let i = 0; i < newIngredients.length; i++) {
-        total += newIngredients[i].totalcostofitem;
+        total += newIngredients[i].totalCostOfItem;
       }
       const totalcost = Math.round(total * 100) / 100;
 
@@ -410,7 +402,7 @@ const ProductRecipe = () => {
       total += costOfIngredient;
     });
 
-    setproductTotalCost(total);
+    setProductTotalCost(total);
   };
   const [dineInCost, setdineInCost] = useState(0);
   const calculateTotalDineInCost = (serviceDetails) => {
@@ -485,10 +477,8 @@ const ProductRecipe = () => {
 
       let recipeOfProduct;
       if (product.hasSizes) {
-        const findSize = product.sizes?.find(
-          (size) => size._id === sizeId
-        );
-        console.log({findSize})
+        const findSize = product.sizes?.find((size) => size._id === sizeId);
+        console.log({ findSize });
         recipeOfProduct = findSize.sizeRecipe;
       } else {
         recipeOfProduct = product.productRecipe;
@@ -522,7 +512,7 @@ const ProductRecipe = () => {
         setrecipeOfProduct({});
         setingredients([]);
         setserviceDetails({});
-        setproductTotalCost(null); // Reset the total cost if no recipe is found
+        setProductTotalCost(null); // Reset the total cost if no recipe is found
         toast.warn("لم يتم العثور على وصفة مطابقة.");
       }
     } catch (error) {
@@ -534,11 +524,11 @@ const ProductRecipe = () => {
   const [sizes, setsizes] = useState([]);
 
   const handleSelectedProduct = (id) => {
-    setproductId(id);
+    setProductId(id);
     const findProduct = listofProducts.find((product) => product._id === id);
-    console.log({findProduct})
-    setproductName(findProduct.name);
-    setproduct(findProduct);
+    console.log({ findProduct });
+    setProductName(findProduct.name);
+    setProduct(findProduct);
     if (findProduct.hasSizes) {
       setsizes([...findProduct.sizes]);
       setsize({});
@@ -575,10 +565,10 @@ const ProductRecipe = () => {
       console.log({ newingredients });
       let total = 0;
       for (let i = 0; i < newingredients.length; i++) {
-        total += newingredients[i].totalcostofitem;
+        total += newingredients[i].totalCostOfItem;
       }
       console.log({ totalcost: total });
-      // productRecipe.map(rec=>totalcost = totalcost + ingredient.totalcostofitem)
+      // productRecipe.map(rec=>totalcost = totalcost + ingredient.totalCostOfItem)
       const deleteRecipetoProduct = await axios.put(
         `${apiUrl}/api/recipe/${recipeOfProduct._id}`,
         { ingredients: newingredients, totalcost: total },
@@ -707,7 +697,7 @@ const ProductRecipe = () => {
                   onChange={(e) => getproductByCategory(e.target.value)}
                 >
                   <option value={""}>اختر التصنيف</option>
-                  {listofcategories.map((category, i) => {
+                  {listOfCategories.map((category, i) => {
                     return (
                       <option value={category._id} key={i}>
                         {category.name}
@@ -874,74 +864,74 @@ const ProductRecipe = () => {
               {ingredients.length > 0
                 ? ingredients.map((ingredient, i) => {
                     // if ((i >= startPagination) & (i < endPagination)) {
-                      return (
-                        <tr key={i}>
-                          <td>
-                            <span className="custom-checkbox">
-                              <input
-                                type="checkbox"
-                                className="form-check-input form-check-input-lg"
-                                id="checkbox1"
-                                name="options[]"
-                                value="1"
-                              />
-                              <label htmlFor="checkbox1"></label>
-                            </span>
-                          </td>
-                          <td>{i + 1}</td>
-                          <td>{ingredient.name}</td>
-                          <td>{ingredient.unit}</td>
-                          <td>{ingredient.amount}</td>
-                          <td>{ingredient.itemId?.costPerPart}</td>
-                          <td>
-                            {Number(ingredient.amount) *
-                              Number(ingredient.itemId?.costPerPart)}
-                          </td>
-                          <td>
-                             <button
-data-target="#editRecipeModal"
-                              className="btn btn-sm btn-primary ml-2 "
-                              data-toggle="modal"
-                              onClick={() => {
-                                setrecipeid(ingredient._id);
-                                setitemId(ingredient.itemId);
-                                setname(ingredient.name);
-                                setamount(ingredient.amount);
-                                setunit(ingredient.unit);
-                                setwastePercentage(ingredient.wastePercentage);
-                              }}
+                    return (
+                      <tr key={i}>
+                        <td>
+                          <span className="custom-checkbox">
+                            <input
+                              type="checkbox"
+                              className="form-check-input form-check-input-lg"
+                              id="checkbox1"
+                              name="options[]"
+                              value="1"
+                            />
+                            <label htmlFor="checkbox1"></label>
+                          </span>
+                        </td>
+                        <td>{i + 1}</td>
+                        <td>{ingredient.name}</td>
+                        <td>{ingredient.unit}</td>
+                        <td>{ingredient.amount}</td>
+                        <td>{ingredient.itemId?.costPerPart}</td>
+                        <td>
+                          {Number(ingredient.amount) *
+                            Number(ingredient.itemId?.costPerPart)}
+                        </td>
+                        <td>
+                          <button
+                            data-target="#editRecipeModal"
+                            className="btn btn-sm btn-primary ml-2 "
+                            data-toggle="modal"
+                            onClick={() => {
+                              setrecipeid(ingredient._id);
+                              setitemId(ingredient.itemId);
+                              setname(ingredient.name);
+                              setamount(ingredient.amount);
+                              setunit(ingredient.unit);
+                              setwastePercentage(ingredient.wastePercentage);
+                            }}
+                          >
+                            <i
+                              className="material-icons"
+                              data-toggle="tooltip"
+                              title="Edit"
                             >
-                              <i
-                                className="material-icons"
-                                data-toggle="tooltip"
-                                title="Edit"
-                              >
-                                &#xE254;
-                              </i>
-                            </button>
+                              &#xE254;
+                            </i>
+                          </button>
 
-                             <button
-data-target="#deleteProductModal"
-                              className="btn btn-sm btn-danger"
-                              data-toggle="modal"
-                              onClick={() => {
-                                setitemId(ingredient.itemId);
-                              }}
+                          <button
+                            data-target="#deleteProductModal"
+                            className="btn btn-sm btn-danger"
+                            data-toggle="modal"
+                            onClick={() => {
+                              setitemId(ingredient.itemId);
+                            }}
+                          >
+                            <i
+                              className="material-icons"
+                              data-toggle="tooltip"
+                              title="Delete"
                             >
-                              <i
-                                className="material-icons"
-                                data-toggle="tooltip"
-                                title="Delete"
-                              >
-                                &#xE872;
-                              </i>
-                            </button>
-                          </td>
-                        </tr>
-                      );
-                    })
-                  // })
-                : ""}
+                              &#xE872;
+                            </i>
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })
+                : // })
+                  ""}
               <tr>
                 <td colSpan="8" style={{ textAlign: "center" }}>
                   اضافات خاصه بطلبات الصاله
@@ -984,7 +974,7 @@ data-target="#deleteProductModal"
                       </td>
                       <td>
                         <button
-                              data-target="#editRecipeModal"
+                          data-target="#editRecipeModal"
                           className="btn btn-sm btn-primary ml-2 "
                           data-toggle="modal"
                           onClick={() => {
@@ -1006,7 +996,7 @@ data-target="#deleteProductModal"
                         </button>
 
                         <button
-                              data-target="#deleteProductModal"
+                          data-target="#deleteProductModal"
                           className="btn btn-sm btn-danger"
                           data-toggle="modal"
                           onClick={() => {
@@ -1067,7 +1057,7 @@ data-target="#deleteProductModal"
                       </td>
                       <td>
                         <button
-                              data-target="#editRecipeModal"
+                          data-target="#editRecipeModal"
                           className="btn btn-sm btn-primary ml-2 "
                           data-toggle="modal"
                           onClick={() => {
@@ -1089,7 +1079,7 @@ data-target="#deleteProductModal"
                         </button>
 
                         <button
-                              data-target="#deleteProductModal"
+                          data-target="#deleteProductModal"
                           className="btn btn-sm btn-danger"
                           data-toggle="modal"
                           onClick={() => {
@@ -1150,7 +1140,7 @@ data-target="#deleteProductModal"
                       </td>
                       <td>
                         <button
-                              data-target="#editRecipeModal"
+                          data-target="#editRecipeModal"
                           className="btn btn-sm btn-primary ml-2 "
                           data-toggle="modal"
                           onClick={() => {
@@ -1172,7 +1162,7 @@ data-target="#deleteProductModal"
                         </button>
 
                         <button
-                              data-target="#deleteProductModal"
+                          data-target="#deleteProductModal"
                           className="btn btn-sm btn-danger"
                           data-toggle="modal"
                           onClick={() => {
@@ -1326,7 +1316,7 @@ data-target="#deleteProductModal"
                       if (selectedItem) {
                         setname(selectedItem.itemName);
                         setunit(selectedItem.ingredientUnit);
-                        setcostofitem(selectedItem.costPerPart);
+                        setcostOfItem(selectedItem.costPerPart);
                       }
                     }}
                   >
@@ -1351,7 +1341,7 @@ data-target="#deleteProductModal"
                       required
                       onChange={(e) => {
                         setamount(e.target.value);
-                        settotalcostofitem(e.target.value * costofitem);
+                        settotalCostOfItem(e.target.value * costOfItem);
                       }}
                     />
                     <input
@@ -1372,7 +1362,7 @@ data-target="#deleteProductModal"
                   <input
                     type="number"
                     className="form-control border-primary m-0 p-2 h-auto"
-                    value={costofitem || ""}
+                    value={costOfItem || ""}
                     readOnly
                   />
                 </div>
@@ -1385,7 +1375,7 @@ data-target="#deleteProductModal"
                   <input
                     type="number"
                     className="form-control border-primary m-0 p-2 h-auto"
-                    value={totalcostofitem || ""}
+                    value={totalCostOfItem || ""}
                     readOnly
                     required
                   />
@@ -1510,7 +1500,7 @@ data-target="#deleteProductModal"
                       if (selectedItem) {
                         setname(selectedItem.itemName);
                         setunit(selectedItem.ingredientUnit);
-                        setcostofitem(selectedItem.costPerPart);
+                        setcostOfItem(selectedItem.costPerPart);
                       }
                     }}
                   >
@@ -1535,7 +1525,7 @@ data-target="#deleteProductModal"
                       required
                       onChange={(e) => {
                         setamount(e.target.value);
-                        settotalcostofitem(e.target.value * costofitem);
+                        settotalCostOfItem(e.target.value * costOfItem);
                       }}
                     />
                     <input
@@ -1556,7 +1546,7 @@ data-target="#deleteProductModal"
                   <input
                     type="number"
                     className="form-control border-primary m-0 p-2 h-auto"
-                    value={costofitem || ""}
+                    value={costOfItem || ""}
                     readOnly
                   />
                 </div>
@@ -1569,7 +1559,7 @@ data-target="#deleteProductModal"
                   <input
                     type="number"
                     className="form-control border-primary m-0 p-2 h-auto"
-                    value={totalcostofitem || ""}
+                    value={totalCostOfItem || ""}
                     readOnly
                     required
                   />
@@ -1644,7 +1634,7 @@ data-target="#deleteProductModal"
                     type="Number"
                     className="form-control border-primary col-4"
                     required
-                    defaultValue={costofitem}
+                    defaultValue={costOfItem}
                     readOnly
                   />
                 </div>
@@ -1660,7 +1650,7 @@ data-target="#deleteProductModal"
                       required
                       onChange={(e) => {
                         setamount(e.target.value);
-                        settotalcostofitem(e.target.value * costofitem);
+                        settotalCostOfItem(e.target.value * costOfItem);
                       }}
                     />
                     <input
@@ -1679,7 +1669,7 @@ data-target="#deleteProductModal"
                   <input
                     type="Number"
                     className="form-control border-primary m-0 p-2 h-auto"
-                    defaultValue={totalcostofitem}
+                    defaultValue={totalCostOfItem}
                     required
                     readOnly
                   />
