@@ -4,6 +4,7 @@ import { useReactToPrint } from "react-to-print";
 import { dataContext } from "../../../../App";
 import { toast } from "react-toastify";
 import "../orders/Orders.css";
+import { use } from "react";
 
 const Tables = () => {
   const {
@@ -42,6 +43,17 @@ const Tables = () => {
   const [chairs, setChairs] = useState(0);
   const [sectionNumber, setSectionNumber] = useState("");
   const [isValid, setIsValid] = useState();
+  const [ListOfSections, setListOfSections] = useState([]);
+
+  const getSections = (allTable) => {
+    const uniqueSections = [];
+    allTable.forEach((table) => {
+      if (!uniqueSections.includes(table.sectionNumber)) {
+        uniqueSections.push(table.sectionNumber);
+      }
+    });
+    setListOfSections(uniqueSections);
+  };
 
   // Function to create a new table
   const createTable = async (e) => {
@@ -283,6 +295,17 @@ const Tables = () => {
     );
     setListOfTable(tables);
   };
+  const searchBySection = (sectionNumber) => {
+    if (!num) {
+      getAllTable();
+      return;
+    }
+    const tables = listOfTable.filter(
+      (table) => table.sectionNumber === sectionNumber
+    );
+    setListOfTable(tables);
+  };
+
   const filterByStatus = (Status) => {
     if (!Status) {
       getAllTable();
@@ -338,6 +361,11 @@ const Tables = () => {
       toast.error("Failed to delete selected orders");
     }
   };
+
+  useEffect(() => {
+    getAllTable();
+    getSections(allTable);
+  });
 
   return (
     <div className="w-100 px-3 d-flex align-items-center justify-content-start">
@@ -420,6 +448,23 @@ const Tables = () => {
                   onChange={(e) => searchByNum(e.target.value)}
                 />
               </div>
+              <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
+                <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                  القسم
+                </label>
+                <select
+                  className="form-control border-primary m-0 p-2 h-auto"
+                  name="section"
+                  id="section"
+                  onChange={(e) => searchBySection(e.target.value)}
+                ></select>
+                <option value="">اختر</option>
+                {ListOfSections.map((section, i) => (
+                  <option key={i} value={section}>
+                    {section}
+                  </option>
+                ))}
+              </div>
 
               <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
@@ -429,7 +474,6 @@ const Tables = () => {
                   className="form-control border-primary m-0 p-2 h-auto"
                   name="Status"
                   id="Status"
-                  form="carform"
                   onChange={(e) => filterByStatus(e.target.value)}
                 >
                   <option value="">اختر</option>
@@ -444,14 +488,14 @@ const Tables = () => {
             <thead>
               <tr>
                 <th>
-                  <span className="custom-checkbox">
+                  {/* <span className="custom-checkbox">
                     <input
                       type="checkbox"
                       className="form-check-input form-check-input-lg"
                       id="selectAll"
                     />
                     <label htmlFor="selectAll"></label>
-                  </span>
+                  </span> */}
                 </th>
                 <th>م</th>
                 <th>رقم الطاولة</th>
@@ -829,7 +873,6 @@ const Tables = () => {
                       className="form-control border-primary m-0 p-2 h-auto"
                       name="category"
                       id="category"
-                      form="carform"
                       onChange={(e) => setIsValid(e.target.value)}
                     >
                       <option value={isValid}>
