@@ -296,7 +296,7 @@ const Tables = () => {
     setListOfTable(tables);
   };
   const searchBySection = (sectionNumber) => {
-    if (!num) {
+    if (!sectionNumber) {
       getAllTable();
       return;
     }
