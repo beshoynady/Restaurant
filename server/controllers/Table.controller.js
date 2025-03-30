@@ -158,12 +158,6 @@ const updateTable = async (req, res) => {
       }
     }
 
-    // Validate required fields
-    if (!tableNumber || !chairs) {
-      return res.status(400).json({
-        message: "Table number and chairs are required fields.",
-      });
-    }
 
     // Update the table data
     const updatedTable = await TableModel.findByIdAndUpdate(

@@ -32,16 +32,16 @@ const Tables = () => {
     permissionsList &&
     permissionsList.filter((permission) => permission.resource === "Tables")[0];
 
-  const [qrimage, setqrimage] = useState("");
+  const [qrimage, setQrImage] = useState("");
   const [tableId, settableId] = useState("");
-  const [tableCode, settableCode] = useState("");
-  const [notes, setnotes] = useState("");
-  const [location, setlocation] = useState("");
-  const [listoftable, setlistoftable] = useState([...allTable]);
-  const [tableNumber, settableNumber] = useState("");
-  const [chairs, setchairs] = useState(0);
-  const [sectionNumber, setsectionNumber] = useState("");
-  const [isValid, setisValid] = useState();
+  const [tableCode, setTableCode] = useState("");
+  const [notes, setNotes] = useState("");
+  const [location, setLocation] = useState("");
+  const [listOfTable, setListOfTable] = useState([...allTable]);
+  const [tableNumber, setTableNumber] = useState("");
+  const [chairs, setChairs] = useState(0);
+  const [sectionNumber, setSectionNumber] = useState("");
+  const [isValid, setIsValid] = useState();
 
   // Function to create a new table
   const createTable = async (e) => {
@@ -183,7 +183,7 @@ const Tables = () => {
       );
       const qrData = response.data.QRCode;
       console.log({ qrData, URL });
-      setqrimage(qrData);
+      setQrImage(qrData);
       toast.success("تم إنشاء رمز QR بنجاح!");
     } catch (error) {
       console.error("حدث خطأ أثناء إنشاء رمز QR:", error);
@@ -237,7 +237,7 @@ const Tables = () => {
       );
       const qrData = response.data.QRCode;
 
-      setqrimage(qrData);
+      setQrImage(qrData);
       toast.success("تم إنشاء رمز QR بنجاح!", {
         position: toast.POSITION.TOP_CENTER,
         autoClose: 3000,
@@ -278,29 +278,29 @@ const Tables = () => {
       getAllTable();
       return;
     }
-    const tables = listoftable.filter(
+    const tables = listOfTable.filter(
       (table) => table.tableNumber.toString().startsWith(num) === true
     );
-    setlistoftable(tables);
+    setListOfTable(tables);
   };
   const filterByStatus = (Status) => {
     if (!Status) {
       getAllTable();
       return;
     }
-    const filter = listoftable.filter((table) => table.isValid === Status);
-    setlistoftable(filter);
+    const filter = listOfTable.filter((table) => table.isValid === Status);
+    setListOfTable(filter);
   };
 
   const printtableqr = useRef();
-  const handlePrinttableqr = useReactToPrint({
+  const handlePrintTableQr = useReactToPrint({
     content: () => printtableqr.current,
     copyStyles: true,
     removeAfterPrint: true,
   });
-  const printwepqr = useRef();
-  const handlePrintwepqr = useReactToPrint({
-    content: () => printwepqr.current,
+  const printWepQr = useRef();
+  const handlePrintWepQr = useReactToPrint({
+    content: () => printWepQr.current,
     copyStyles: true,
     removeAfterPrint: true,
   });
@@ -340,7 +340,7 @@ const Tables = () => {
   };
 
   return (
-    <div className="w-100 px-3 d-flex align-itmes-center justify-content-start">
+    <div className="w-100 px-3 d-flex align-items-center justify-content-start">
       <div className="table-responsive">
         <div className="table-wrapper p-3 mw-100">
           <div className="table-title">
@@ -350,7 +350,7 @@ const Tables = () => {
                   ادارة <b>الطاولات</b>
                 </h2>
               </div>
-              <div className="col-12 col-md-6 p-0 m-0 d-flex flex-wrap aliegn-items-center justify-content-end print-hide">
+              <div className="col-12 col-md-6 p-0 m-0 d-flex flex-wrap align-items-center justify-content-end print-hide">
                 <a
                   href="#qrwebModal"
                   className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-info"
@@ -463,12 +463,14 @@ const Tables = () => {
                 <th>تغير الكود</th>
                 <th>الكود</th>
                 <th>QR</th>
+                <th>تاريخ الانشاء</th>
+                <th>اخر تعديل</th>
                 <th>اجراءات</th>
               </tr>
             </thead>
             <tbody>
-              {listoftable &&
-                listoftable.map((table, i) => {
+              {listOfTable &&
+                listOfTable.map((table, i) => {
                   if ((i >= startPagination) & (i < endPagination)) {
                     return (
                       <tr key={i}>
@@ -502,14 +504,14 @@ const Tables = () => {
                         <td>{table.tableCode}</td>
                         <td>
                           <button
-                            data-target="qrTableModal"
+                            data-target="#qrTableModal"
                             className="btn btn-sm btn-primary ml-2 "
                             data-toggle="modal"
                             onClick={() => {
                               settableId(table._id);
-                              settableNumber(table.tableNumber);
-                              settableCode(table.tableCode);
-                              setqrimage("");
+                              setTableNumber(table.tableNumber);
+                              setTableCode(table.tableCode);
+                              setQrImage("");
                             }}
                           >
                             <span
@@ -521,6 +523,8 @@ const Tables = () => {
                             </span>
                           </button>
                         </td>
+                        <td>{formatDateTime(table.createdAt)}</td>
+                        <td>{formatDateTime(table.updatedAt)}</td>
                         <td>
                           <button
                             data-target="#editTableModal"
@@ -528,12 +532,12 @@ const Tables = () => {
                             data-toggle="modal"
                             onClick={() => {
                               settableId(table._id);
-                              settableNumber(table.tableNumber);
-                              setsectionNumber(table.sectionNumber);
-                              setchairs(table.chairs);
-                              setlocation(table.location);
-                              setisValid(table.isValid);
-                              setnotes(table.notes);
+                              setTableNumber(table.tableNumber);
+                              setSectionNumber(table.sectionNumber);
+                              setChairs(table.chairs);
+                              setLocation(table.location);
+                              setIsValid(table.isValid);
+                              setNotes(table.notes);
                             }}
                           >
                             <i
@@ -570,11 +574,11 @@ const Tables = () => {
             <div className="hint-text text-dark">
               عرض{" "}
               <b>
-                {listoftable.length > endPagination
+                {listOfTable.length > endPagination
                   ? endPagination
-                  : listoftable.length}
+                  : listOfTable.length}
               </b>{" "}
-              من <b>{listoftable.length}</b> عنصر
+              من <b>{listOfTable.length}</b> عنصر
             </div>
             <ul className="pagination">
               <li onClick={EditPagination} className="page-item disabled">
@@ -658,7 +662,7 @@ const Tables = () => {
                     className="form-control border-primary m-0 p-2 h-auto"
                     required
                     maxLength={20}
-                    onChange={(e) => setsectionNumber(e.target.value)}
+                    onChange={(e) => setSectionNumber(e.target.value)}
                   />
                 </div>
                 <div className="form-group col-12 col-md-6">
@@ -669,13 +673,13 @@ const Tables = () => {
                     type="text"
                     maxLength={20}
                     defaultValue={
-                      listoftable.length > 0
-                        ? listoftable[listoftable.length - 1].tableNumber
+                      listOfTable.length > 0
+                        ? listOfTable[listOfTable.length - 1].tableNumber
                         : ""
                     }
                     className="form-control border-primary m-0 p-2 h-auto"
                     required
-                    onChange={(e) => settableNumber(e.target.value)}
+                    onChange={(e) => setTableNumber(e.target.value)}
                   />
                 </div>
                 <div className="form-group col-12 col-md-6">
@@ -688,7 +692,7 @@ const Tables = () => {
                     required
                     max={20}
                     min={1}
-                    onChange={(e) => setchairs(e.target.value)}
+                    onChange={(e) => setChairs(e.target.value)}
                   />
                 </div>
                 <div className="form-group col-12 col-md-6">
@@ -700,7 +704,7 @@ const Tables = () => {
                     className="form-control border-primary m-0 p-2 h-auto"
                     required
                     maxLength={100}
-                    onChange={(e) => setlocation(e.target.value)}
+                    onChange={(e) => setLocation(e.target.value)}
                   ></input>
                 </div>
                 <div className="form-group col-12 col-md-6">
@@ -712,7 +716,7 @@ const Tables = () => {
                     name="category"
                     id="category"
                     form="carform"
-                    onChange={(e) => setisValid(e.target.value)}
+                    onChange={(e) => setIsValid(e.target.value)}
                   >
                     <option value="">اختر</option>
                     <option value={true}>متاح</option>
@@ -726,7 +730,7 @@ const Tables = () => {
                   <textarea
                     className="form-control border-primary m-0 p-2 h-auto"
                     maxLength={100}
-                    onChange={(e) => setnotes(e.target.value)}
+                    onChange={(e) => setNotes(e.target.value)}
                   ></textarea>
                 </div>
               </div>
@@ -775,7 +779,7 @@ const Tables = () => {
                       required
                       defaultValue={sectionNumber}
                       maxLength={20}
-                      onChange={(e) => setsectionNumber(e.target.value)}
+                      onChange={(e) => setSectionNumber(e.target.value)}
                     />
                   </div>
                   <div className="form-group col-12 col-md-6">
@@ -788,7 +792,7 @@ const Tables = () => {
                       maxLength={20}
                       className="form-control border-primary m-0 p-2 h-auto"
                       required
-                      onChange={(e) => settableNumber(e.target.value)}
+                      onChange={(e) => setTableNumber(e.target.value)}
                     />
                   </div>
                   <div className="form-group col-12 col-md-6">
@@ -802,7 +806,7 @@ const Tables = () => {
                       required
                       max={20}
                       min={1}
-                      onChange={(e) => setchairs(e.target.value)}
+                      onChange={(e) => setChairs(e.target.value)}
                     />
                   </div>
                   <div className="form-group col-12 col-md-6">
@@ -814,7 +818,7 @@ const Tables = () => {
                       className="form-control border-primary m-0 p-2 h-auto"
                       required
                       maxLength={100}
-                      onChange={(e) => setlocation(e.target.value)}
+                      onChange={(e) => setLocation(e.target.value)}
                     ></textarea>
                   </div>
                   <div className="form-group col-12 col-md-6">
@@ -826,24 +830,26 @@ const Tables = () => {
                       name="category"
                       id="category"
                       form="carform"
-                      onChange={(e) => setisValid(e.target.value)}
+                      onChange={(e) => setIsValid(e.target.value)}
                     >
-                      <option value={isValid}>{isValid?"متاح": "غير متاح"}</option>
+                      <option value={isValid}>
+                        {isValid ? "متاح" : "غير متاح"}
+                      </option>
                       <option value={true}>متاح</option>
                       <option value={false}>غير متاح</option>
                     </select>
                   </div>
                   <div className="form-group col-12 col-md-6">
-                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
-                    ملاحظات
-                  </label>
-                  <textarea
-                    className="form-control border-primary m-0 p-2 h-auto"
-                    defaultValue={notes}
-                    maxLength={100}
-                    onChange={(e) => setnotes(e.target.value)}
-                  ></textarea>
-                </div>
+                    <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                      ملاحظات
+                    </label>
+                    <textarea
+                      className="form-control border-primary m-0 p-2 h-auto"
+                      defaultValue={notes}
+                      maxLength={100}
+                      onChange={(e) => setNotes(e.target.value)}
+                    ></textarea>
+                  </div>
                 </div>
                 <div className="modal-footer p-0 m-0 d-flex flex-nowrap align-items-center justify-content-between">
                   <input
@@ -903,7 +909,7 @@ const Tables = () => {
                   <button
                     type="button"
                     className="col-6 btn p-3 m-0 btn-info"
-                    onClick={handlePrinttableqr}
+                    onClick={handlePrintTableQr}
                   >
                     طباعة
                   </button>
@@ -936,7 +942,7 @@ const Tables = () => {
               </div>
               <div className="modal-body d-flex flex-wrap align-items-center p-0 m-0 text-center">
                 <div
-                  ref={printwepqr}
+                  ref={printWepQr}
                   className="form-group qrprint w-100 h-auto p-0 m-0 d-flex align-items-center justify-content-center"
                 >
                   <div className="w-100 text-center text-dark">
@@ -966,7 +972,7 @@ const Tables = () => {
                   <button
                     type="button"
                     className="col-6 btn p-3 m-0 btn-info"
-                    onClick={handlePrintwepqr}
+                    onClick={handlePrintWepQr}
                   >
                     طباعة
                   </button>
