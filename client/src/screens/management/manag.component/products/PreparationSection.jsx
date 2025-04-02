@@ -12,7 +12,10 @@ const PreparationSection = () => {
     startPagination,
     endPagination,
     setStartPagination,
-    setEndPagination, handleGetTokenAndConfig, apiUrl } = useContext(dataContext)
+    setEndPagination,
+    handleGetTokenAndConfig,
+    apiUrl,
+  } = useContext(dataContext);
 
   const [preparationSectionName, setpreparationSectionName] = useState("");
   const [isActive, setisActive] = useState(false);
@@ -172,21 +175,19 @@ const PreparationSection = () => {
         <div className="table-wrapper p-3 mw-100">
           <div className="table-title">
             <div className="w-100 d-flex flex-wrap align-items-center justify-content-between">
-              <div className="col-12 col-md-4 text-md-right text-center mb-3 mb-md-0">
+              <div className="col-sm-6 text-right">
                 <h2>
                   ادارة <b>اقسام اعداد الطلبات</b>
                 </h2>
               </div>
-              <div className="col-12 col-md-8 d-flex flex-wrap justify-content-between align-items-center p-0">
-                <div className="col-12 col-sm-3 d-flex align-items-center m-0 p-0">
-                  <a
-                    href="#addPreparationSectionModal"
-                    className="btn btn-success w-100 d-flex align-items-center justify-content-center text-nowrap"
-                    data-toggle="modal"
-                  >
-                    <span>اضافه قسم اعداد</span>
-                  </a>
-                </div>
+              <div className="col-12 col-md-6 p-0 m-0 d-flex flex-wrap align-items-center justify-content-end print-hide">
+                <a
+                  href="#addPreparationSectionModal"
+                  className="btn btn-success w-100 d-flex align-items-center justify-content-center text-nowrap"
+                  data-toggle="modal"
+                >
+                  <span>اضافه قسم اعداد</span>
+                </a>
               </div>
             </div>
           </div>
@@ -276,11 +277,11 @@ const PreparationSection = () => {
                         <td>
                           {PreparationSection.updatedBy
                             ? PreparationSection.updatedBy?.username
-                            : "غير معروف"}
+                            : "لا يوجد"}
                         </td>
                         <td>
-                           <button
-data-target="#editPreparationSectionModal"
+                          <button
+                            data-target="#editPreparationSectionModal"
                             className="btn btn-sm btn-primary ml-2 "
                             data-toggle="modal"
                             onClick={() =>
@@ -293,11 +294,11 @@ data-target="#editPreparationSectionModal"
                               title="Edit"
                             >
                               &#xE254;
-                                </i>
-                              </button>
+                            </i>
+                          </button>
 
-                           <button
-data-target="#deletePreparationSectionModal"
+                          <button
+                            data-target="#deletePreparationSectionModal"
                             className="btn btn-sm btn-danger"
                             data-toggle="modal"
                             onClick={() =>
@@ -310,8 +311,8 @@ data-target="#deletePreparationSectionModal"
                               title="Delete"
                             >
                               &#xE872;
-                                </i>
-                              </button>
+                            </i>
+                          </button>
                         </td>
                       </tr>
                     );

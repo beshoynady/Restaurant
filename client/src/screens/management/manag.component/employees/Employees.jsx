@@ -28,7 +28,7 @@ const Employees = () => {
     toast[type](message);
   };
 
-  const permissionsForEmployee = permissionsList?.filter(
+  const c = permissionsList&&permissionsList?.filter(
     (permission) => permission.resource === "Employees"
   )[0];
 
@@ -62,21 +62,17 @@ const Employees = () => {
       notify("ليس لك صلاحية لعرض بيانات الموظفين", "info");
       return;
     }
-    if (permissionsForEmployee && permissionsForEmployee.read === true) {
-      try {
-        const response = await axios.get(`${apiUrl}/api/employee`, config);
-        const data = response.data;
-        if (data) {
-          setListOfEmployees(data);
-        } else {
-          toast.info("لا توجد بيانات لعرضها");
-        }
-        // console.log({ data });
-      } catch (error) {
-        console.log(error);
+    try {
+      const response = await axios.get(`${apiUrl}/api/employee`, config);
+      const data = response.data;
+      if (data) {
+        setListOfEmployees(data);
+      } else {
+        toast.info("لا توجد بيانات لعرضها");
       }
-    } else {
-      toast.error("ليس لك صلاحية لعرض بيانات الموظفين");
+      // console.log({ data });
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -461,7 +457,7 @@ const Employees = () => {
         <div className="table-wrapper p-3 mw-100">
           <div className="table-title">
             <div className="w-100 d-flex flex-wrap align-items-center justify-content-between">
-              <div className="text-right">
+              <div className="col-sm-6 text-right">
                 <h2>
                   ادارة <b>الموظفين</b>
                 </h2>
@@ -1397,7 +1393,7 @@ const Employees = () => {
                       >
                         السكشن المسؤول عنه
                       </label>
-                       <select
+                      <select
                         className="form-control border-primary m-0 p-2 h-auto"
                         onChange={(e) => setsectionNumber(e.target.value)}
                       >
