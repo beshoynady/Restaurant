@@ -28,7 +28,7 @@ const Employees = () => {
     toast[type](message);
   };
 
-  const c = permissionsList&&permissionsList?.filter(
+  const permissionsForEmployee = permissionsList&&permissionsList?.filter(
     (permission) => permission.resource === "Employees"
   )[0];
 
