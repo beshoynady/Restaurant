@@ -598,6 +598,7 @@ const Store = () => {
                     className="form-control border-primary m-0 p-2 h-auto"
                     onChange={(e) => setStatus(e.target.value)}
                   >
+                    <option value="">اختر...</option>
                     <option value="active">نشط</option>
                     <option value="inactive">غير نشط</option>
                     <option value="closed">مغلق</option>
@@ -773,6 +774,7 @@ const Store = () => {
                     value={status}
                     onChange={(e) => setStatus(e.target.value)}
                   >
+                    <option value="">اختر...</option>
                     <option value="active">نشط</option>
                     <option value="inactive">غير نشط</option>
                     <option value="closed">مغلق</option>

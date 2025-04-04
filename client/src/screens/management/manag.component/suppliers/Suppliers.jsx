@@ -29,26 +29,26 @@ const Suppliers = () => {
   const [name, setName] = useState("");
   const [responsiblePerson, setResponsiblePerson] = useState("");
 
-  const [phone, setphone] = useState(["رقم الموبايل"]);
+  const [phone, setPhone] = useState(["رقم الموبايل"]);
 
   const handleAddPhone = () => {
-    setphone([...phone, "رقم الموبايل"]);
+    setPhone([...phone, "رقم الموبايل"]);
   };
   const handleNewPhone = (index, e) => {
     const phoneList = [...phone];
     phoneList[index] = e.target.value;
-    setphone(phoneList);
+    setPhone(phoneList);
   };
 
   const handleDeletePhone = (index) => {
     const phoneList = [...phone];
     phoneList.splice(index, 1);
-    setphone(phoneList);
+    setPhone(phoneList);
   };
 
-  const [whatsapp, setwhatsapp] = useState("");
+  const [whatsapp, setWhatsapp] = useState("");
 
-  const [email, setemail] = useState("");
+  const [email, setEmail] = useState("");
 
   const [address, setAddress] = useState("");
 
@@ -70,7 +70,7 @@ const Suppliers = () => {
   };
 
   const [currentBalance, setCurrentBalance] = useState(0);
-  const [notes, setnotes] = useState("");
+  const [notes, setNotes] = useState("");
 
   const [paymentType, setPaymentType] = useState("");
 
@@ -96,20 +96,20 @@ const Suppliers = () => {
     setFinancialInfo(financialInfoList);
   };
 
-  const empityData = () => {
+  const emptyData = () => {
     setName("");
     setResponsiblePerson("");
     setAddress("");
-    setphone(["رقم الموبايل"]);
-    setwhatsapp("");
-    setemail("");
+    setPhone(["رقم الموبايل"]);
+    setWhatsapp("");
+    setEmail("");
     setCurrentBalance(0);
     setItemsSupplied(["اضف خامة"]);
     setPaymentType("");
     setFinancialInfo([
       { paymentMethodName: "", accountNumber: "", currency: "" },
     ]);
-    setnotes("");
+    setNotes("");
   };
 
   // Function to create a Supplier
@@ -124,8 +124,7 @@ const Suppliers = () => {
       return;
     }
 
-    if (whatsapp && !validatePhone(whatsapp, "الواتس اب")) return;
-    if (phone.some((number) => !validatePhone(number, "الموبايل"))) return;
+
 
     const supplierData = {
       name,
@@ -157,7 +156,7 @@ const Suppliers = () => {
         // إخطار بنجاح العملية
         toast.success("تم إنشاء المورد بنجاح");
         getAllSuppliers();
-        empityData();
+        emptyData();
       } else {
         throw new Error("فشل في إنشاء المورد");
       }
@@ -205,40 +204,6 @@ const Suppliers = () => {
     }
   };
 
-  // const addSupplierToStockItem = async (supplierId) => {
-  //   const config = await handleGetTokenAndConfig();
-
-  //   if (itemsSupplied) {
-  //     for (const item of itemsSupplied) {
-  //       const oldSupplier = AllStockItems.find(
-  //         (i) => i._id === item
-  //       )?.suppliers;
-  //       const suppliers = oldSupplier
-  //         ? [...oldSupplier, supplierId]
-  //         : [supplierId];
-  //       // console.log({ itemsSupplied, oldSupplier, suppliers });
-  //       try {
-  //         const response = await axios.put(
-  //           `${apiUrl}/api/stockitem/${item}`,
-  //           { suppliers },
-  //           config
-  //         );
-  //         console.log({ itemsSupplied, suppliers, response });
-  //         if (response) {
-  //           toast.success("تم تحديث عنصر المخزون بنجاح");
-  //         }
-  //         // Notify on success
-  //       } catch (error) {
-  //         // Notify on error
-  //         console.log({ error });
-  //         toast.error("فشل في تحديث عنصر المخزون");
-  //       }
-  //     }
-  //   }
-  // };
-
-  //Function to edit a Supplier item
-
   const updateSupplier = async (e) => {
     e.preventDefault();
     setIsLoading(true);
@@ -248,9 +213,6 @@ const Suppliers = () => {
         toast.warn("ليس لك صلاحية لتعديل حساب الموردين");
         return;
       }
-
-      if (whatsapp && !validatePhone(whatsapp, "الواتس اب")) return;
-      if (phone.some((number) => !validatePhone(number, "الموبايل"))) return;
 
       const updatedSupplierData = {
         name,
@@ -275,7 +237,7 @@ const Suppliers = () => {
         // Notify on success
         toast.success("تم تحديث المورد بنجاح");
         getAllSuppliers();
-        empityData();
+        emptyData();
       }
     } catch (error) {
       console.log(error);
@@ -367,14 +329,14 @@ const Suppliers = () => {
         setName(supplier.name);
         setResponsiblePerson(supplier.responsiblePerson);
         setAddress(supplier.address);
-        setphone(supplier.phone);
-        setwhatsapp(supplier.whatsapp);
-        setemail(supplier.email);
+        setPhone(supplier.phone);
+        setWhatsapp(supplier.whatsapp);
+        setEmail(supplier.email);
         setCurrentBalance(supplier.currentBalance);
         setItemsSupplied(supplier.itemsSupplied);
         setPaymentType(supplier.paymentType);
         setFinancialInfo(supplier.financialInfo);
-        setnotes(supplier.notes);
+        setNotes(supplier.notes);
         toast.success("تم استرداد بيانات المورد بنجاح");
       }
 
@@ -460,8 +422,8 @@ const Suppliers = () => {
         draggable: true,
         theme: "colored",
       });
+      setIsLoading(false);
       return false;
-     setIsLoading(false);
     }
 
     return true;
@@ -791,7 +753,7 @@ const Suppliers = () => {
                   <input
                     type="text"
                     className="form-control border-primary m-0 p-2 h-auto"
-                    onChange={(e) => setwhatsapp(e.target.value)}
+                    onChange={(e) => setWhatsapp(e.target.value)}
                   />
                 </div>
                 <div className="form-group w-100 h-auto px-3 d-flex flex-wrap align-itmes-center justify-content-start col-12  col-md-6 ">
@@ -801,7 +763,7 @@ const Suppliers = () => {
                   <input
                     type="text"
                     className="form-control border-primary m-0 p-2 h-auto"
-                    onChange={(e) => setemail(e.target.value)}
+                    onChange={(e) => setEmail(e.target.value)}
                   />
                 </div>
                 <div className="form-group w-100 h-auto px-3 d-flex flex-wrap align-itmes-center justify-content-start col-12  col-md-6 ">
@@ -980,7 +942,7 @@ const Suppliers = () => {
                   </label>
                   <textarea
                     className="form-control border-primary m-0 p-2 h-auto"
-                    onChange={(e) => setnotes(e.target.value)}
+                    onChange={(e) => setNotes(e.target.value)}
                   />
                 </div>
               </div>
@@ -1051,7 +1013,7 @@ const Suppliers = () => {
                     type="text"
                     className="form-control border-primary m-0 p-2 h-auto"
                     defaultValue={whatsapp}
-                    onChange={(e) => setwhatsapp(e.target.value)}
+                    onChange={(e) => setWhatsapp(e.target.value)}
                   />
                 </div>
                 <div className="form-group w-100 h-auto px-3 d-flex flex-wrap align-itmes-center justify-content-start col-12  col-md-6 ">
@@ -1062,7 +1024,7 @@ const Suppliers = () => {
                     type="text"
                     className="form-control border-primary m-0 p-2 h-auto"
                     defaultValue={email}
-                    onChange={(e) => setemail(e.target.value)}
+                    onChange={(e) => setEmail(e.target.value)}
                   />
                 </div>
                 <div className="form-group w-100 h-auto px-3 d-flex flex-wrap align-itmes-center justify-content-start col-12  col-md-6 ">
@@ -1232,7 +1194,7 @@ const Suppliers = () => {
                   <textarea
                     className="form-control border-primary m-0 p-2 h-auto"
                     defaultValue={notes}
-                    onChange={(e) => setnotes(e.target.value)}
+                    onChange={(e) => setNotes(e.target.value)}
                   />
                 </div>
               </div>

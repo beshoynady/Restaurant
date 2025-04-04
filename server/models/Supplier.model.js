@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 
 const { Schema } = mongoose;
+const { ObjectId } = mongoose.Schema.Types;
 
 // Supplier Schema
 const SupplierSchema = new Schema(
@@ -27,19 +28,11 @@ const SupplierSchema = new Schema(
         type: String,
         trim: true,
         required: true,
-        validate: {
-          validator: (v) => /^\+(?:[0-9] ?){6,14}[0-9]$/.test(v),
-          message: "Please enter a valid phone number",
-        },
       },
     ],
     whatsapp: {
       type: String,
       trim: true,
-      validate: {
-        validator: (v) => !v || /^\+(?:[0-9] ?){6,14}[0-9]$/.test(v),
-        message: "Please enter a valid WhatsApp number",
-      },
     },
     email: {
       type: String,
@@ -60,9 +53,10 @@ const SupplierSchema = new Schema(
     // Items supplied by the supplier
     itemsSupplied: [
       {
-        type: Schema.Types.ObjectId,
+        type: ObjectId,
         ref: "StockItem",
         default: [],
+        required: true,
       },
     ],
     // Current balance of the supplier
@@ -106,13 +100,15 @@ const SupplierSchema = new Schema(
       maxlength: 500,
     },
     createdBy: {
-      type: Schema.Types.ObjectId,
+      type: ObjectId,
       ref: "Employee",
       required: true,
+      index: true,
     },
   },
   { timestamps: true }
 );
+
 
 // Define the Supplier model
 const SupplierModel = mongoose.model("Supplier", SupplierSchema);

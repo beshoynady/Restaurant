@@ -119,9 +119,10 @@ const updateSupplierById = async (req, res) => {
       return res.status(400).json({ message: "Invalid payment type" });
     }
 
+
     const updatedSupplier = await SupplierModel.findByIdAndUpdate(
       supplierId,
-      {
+      {$set: {
         name,
         responsiblePerson,
         phone,
@@ -132,7 +133,8 @@ const updateSupplierById = async (req, res) => {
         itemsSupplied,
         currentBalance,
         financialInfo,
-        notes,
+        notes,},
+
       },
       { new: true, runValidators: true }
     )
