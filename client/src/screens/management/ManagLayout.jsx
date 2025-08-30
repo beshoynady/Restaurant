@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import "./ManagLayout.css";
 import { dataContext } from "../../App";
 import { Navigate, Outlet } from "react-router-dom";
@@ -8,16 +8,20 @@ import SideBar from "./manag.component/sidebar/SideBar";
 import { ToastContainer } from "react-toastify";
 
 const ManagLayout = () => {
-  const { employeeLoginInfo, apiUrl, handleGetTokenAndConfig } =
+  const { employeeLoginInfo, getUserInfoFromToken, apiUrl, handleGetTokenAndConfig } =
     useContext(dataContext);
+  
+    useEffect(() => {
+        getUserInfoFromToken(employeeLoginInfo);
+      }, []);
 
   const isLoggedIn = employeeLoginInfo?.isAdmin && employeeLoginInfo?.isActive;
 
+  console.log({ isLoggedIn });
   if (!isLoggedIn) {
-    console.log({ isLoggedIn });
     return <Navigate to="/login" replace />;
   }
-
+    
   return (
     <div className="manag-body">
       <ToastContainer />
