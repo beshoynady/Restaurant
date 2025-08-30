@@ -134,13 +134,18 @@ const NavBar = () => {
     setMessages((prevMessages) => prevMessages.filter((_, i) => i !== index));
   };
 
-  const employeeLogout = async () => {
+const employeeLogout = async () => {
   try {
-    await axios.post(`${apiUrl}/api/employee/logout`, {
-      credentials: "include",
-    });
+    await axios.post(
+      `${apiUrl}/api/employee/logout`,
+      {}, 
+      { withCredentials: true } // كده الكوكيز هتتبعت وتتمسح
+    );
 
+    // امسح الـ access token من localStorage
     localStorage.removeItem("token_e");
+
+    // رجع المستخدم لصفحة اللوجين
     window.location.href = "/login";
   } catch (error) {
     console.error("Logout error:", error);
