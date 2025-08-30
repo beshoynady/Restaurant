@@ -358,7 +358,7 @@ const loginEmployee = async (req, res) => {
     const refreshToken = jwt.sign(
       { id: findEmployee._id },
       process.env.JWT_REFRESH_SECRET,
-      { expiresIn: "7d" } 
+      { expiresIn: "7d" }
     );
 
     res.cookie("refreshToken", refreshToken, {
@@ -367,6 +367,22 @@ const loginEmployee = async (req, res) => {
       sameSite: "strict",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
+
+
+    // // Create a new refresh token
+    // const newRefreshToken = jwt.sign(
+    //   { id: findEmployee._id },
+    //   refreshSecretKey,
+    //   { expiresIn: "7d" }
+    // );
+
+    // // Store new refresh token in cookie
+    // res.cookie("refreshToken", newRefreshToken, {
+    //   httpOnly: true,
+    //   secure: process.env.NODE_ENV === "production",
+    //   sameSite: "strict",
+    //   maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    // });
 
     res.status(200).json({
       message: "Login successful",
@@ -409,7 +425,7 @@ const getAllEmployee = async (req, res) => {
       .populate("shift")
       .populate("createdBy", "_id fullname username role")
       .populate("updatedBy", "_id fullname username role");
-      // console.log("Employees: ", employees);
+    // console.log("Employees: ", employees);
     res.status(200).json(employees);
   } catch (err) {
     if (err instanceof mongoose.Error) {
