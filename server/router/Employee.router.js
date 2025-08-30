@@ -6,6 +6,7 @@ const {
   updateEmployee,
   getOneEmployee,
   loginEmployee,
+  employeeLogout,
   getAllEmployee,
   getCountEmployees,
   deleteEmployee,
@@ -30,4 +31,5 @@ router
 
 router.route("/login").post(loginEmployee);
 router.route("/refresh-token").post(refreshAccessToken);
+router.route("/logout").post(authenticateToken, employeeLogout);
 module.exports = router;

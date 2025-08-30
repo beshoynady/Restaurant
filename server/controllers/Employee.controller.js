@@ -41,9 +41,6 @@ const createFirstEmployee = async (req, res) => {
 };
 
 
-
-
-
 const createEmployeeSchema = Joi.object({
   fullname: Joi.string().min(3).max(100).required(),
   numberID: Joi.string()
@@ -391,6 +388,21 @@ const loginEmployee = async (req, res) => {
   }
 };
 
+const employeeLogout = async (req, res) => {
+  try {
+    res.clearCookie("refreshToken", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+    });
+
+    res.status(200).json({ message: "Logged out successfully" });
+  } catch (error) {
+    console.error("Logout error:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
 const getAllEmployee = async (req, res) => {
   try {
     const employees = await EmployeeModel.find()
@@ -450,6 +462,7 @@ module.exports = {
   updateEmployee,
   getOneEmployee,
   loginEmployee,
+  employeeLogout,
   getAllEmployee,
   getCountEmployees,
   deleteEmployee,

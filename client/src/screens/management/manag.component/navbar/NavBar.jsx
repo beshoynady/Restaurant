@@ -134,19 +134,20 @@ const NavBar = () => {
     setMessages((prevMessages) => prevMessages.filter((_, i) => i !== index));
   };
 
-  const employeeLogout = () => {
-    try {
-      // Remove admin token from local storage
+  const employeeLogout = async () => {
+  try {
+    await fetch("/api/auth/logout", {
+      method: "POST",
+      credentials: "include", // مهم عشان الكوكي يتبعت مع الريكوست
+    });
 
-      localStorage.removeItem("token_e");
-      window.location.href = `https://${window.location.hostname}/login`;
-    } catch (error) {
-      // Handle any potential errors
-      console.error("Logout error:", error);
-      // Display a notification to the user about the error
-      alert("حدث خطأ أثناء تسجيل الخروج. يرجى المحاولة مرة أخرى.");
-    }
-  };
+    localStorage.removeItem("token_e");
+    window.location.href = "/login";
+  } catch (error) {
+    console.error("Logout error:", error);
+    alert("حدث خطأ أثناء تسجيل الخروج. يرجى المحاولة مرة أخرى.");
+  }
+};
 
   const [fullscreen, setFullscreen] = useState(false);
   const toggleFullscreen = () => {
