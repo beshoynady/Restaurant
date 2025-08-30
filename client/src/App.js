@@ -289,9 +289,8 @@ function App() {
     const ampm = hours >= 12 ? "م" : "ص";
     hours = hours % 12;
     hours = hours ? hours : 12;
-    const formattedTime = `${hours}:${
-      minutes < 10 ? "0" + minutes : minutes
-    } ${ampm}`;
+    const formattedTime = `${hours}:${minutes < 10 ? "0" + minutes : minutes
+      } ${ampm}`;
     return formattedTime;
   };
   const formatDateTime = (dateString) => {
@@ -959,8 +958,8 @@ function App() {
         const updatedList =
           productOrderToUpdate.length > 0
             ? productOrderToUpdate.filter(
-                (product) => product.sizeId !== sizeId
-              )
+              (product) => product.sizeId !== sizeId
+            )
             : itemsInCart.filter((item) => item.sizeId !== sizeId);
 
         console.log({ updatedList });
@@ -1777,11 +1776,11 @@ function App() {
               if (extra._id === extraId) {
                 isPaid
                   ? setsubtotalSplitOrder(
-                      subtotalSplitOrder + extra.totalExtrasPrice
-                    )
+                    subtotalSplitOrder + extra.totalExtrasPrice
+                  )
                   : setsubtotalSplitOrder(
-                      subtotalSplitOrder - extra.totalExtrasPrice
-                    );
+                    subtotalSplitOrder - extra.totalExtrasPrice
+                  );
                 return {
                   ...extra,
                   isPaid: isPaid,
@@ -1900,7 +1899,7 @@ function App() {
     } catch (error) {
       console.error("Error refreshing token:", error);
       toast.error("انتهت صلاحية الجلسة. الرجاء تسجيل الدخول مرة أخرى.");
-       return <Navigate to="/login" replace />;
+      return <Navigate to="/login" replace />;
     }
   };
 
@@ -1918,12 +1917,15 @@ function App() {
   };
 
   const getUserInfoFromToken = async () => {
+    setIsLoading(true);
     const userToken = localStorage.getItem("token_u");
     const employeeToken = localStorage.getItem("token_e");
 
     if (!userToken && !employeeToken) {
       toast.error("رجاء تسجيل الدخول مره أخرى");
       setIsTokenValid(false);
+      setIsLoading(false);
+
       return;
     }
 
@@ -1935,6 +1937,8 @@ function App() {
         setEmployeeLoginInfo(decodedToken);
         await getPermissions(decodedToken);
         console.log({ EmployeeLoginInfo: decodedToken });
+        setIsLoading(false);
+
       }
 
       if (userToken) {
@@ -1948,6 +1952,8 @@ function App() {
               `${apiUrl}/api/user/${userId}`
             );
             setClientInfo(clientResponse.data);
+            setIsLoading(false);
+
           }
         }
       }
@@ -1957,6 +1963,11 @@ function App() {
       console.error("Error verifying token:", error);
       toast.error("خطأ أثناء التحقق من التوكن. يرجى تسجيل الدخول مرة أخرى.");
       setIsTokenValid(false);
+      setIsLoading(false);
+
+    } finally {
+      setIsLoading(false);
+
     }
   };
 
@@ -2097,14 +2108,14 @@ function App() {
     // Filter reservations that match the selected date
     const filterReservationsByDate = allReservations?.filter((reservation) => {
 
-        const reservationDateObj = new Date(reservation.reservationDate);
-        const selectedDateObj = new Date(reservationDate);
+      const reservationDateObj = new Date(reservation.reservationDate);
+      const selectedDateObj = new Date(reservationDate);
 
-        return (
-          reservationDateObj.getFullYear() === selectedDateObj.getFullYear() &&
-          reservationDateObj.getMonth() === selectedDateObj.getMonth() &&
-          reservationDateObj.getDate() === selectedDateObj.getDate()
-        );
+      return (
+        reservationDateObj.getFullYear() === selectedDateObj.getFullYear() &&
+        reservationDateObj.getMonth() === selectedDateObj.getMonth() &&
+        reservationDateObj.getDate() === selectedDateObj.getDate()
+      );
     });
 
     // Filter reservations that overlap with the selected time range
@@ -2131,7 +2142,7 @@ function App() {
           (startSelectedTime <= startReservationTime &&
             endSelectedTime >= endReservationTime)
         );
-    }
+      }
     );
 
     console.log({ filterReservationsByDate, filterReservationsByTime });
@@ -2194,7 +2205,7 @@ function App() {
           return (
             reservation.tableId === tableId &&
             reservationDateObj.getFullYear() ===
-              selectedDateObj.getFullYear() &&
+            selectedDateObj.getFullYear() &&
             reservationDateObj.getMonth() === selectedDateObj.getMonth() &&
             reservationDateObj.getDate() === selectedDateObj.getDate()
           );
