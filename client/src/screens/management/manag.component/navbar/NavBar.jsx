@@ -136,9 +136,8 @@ const NavBar = () => {
 
   const employeeLogout = async () => {
   try {
-    await fetch("/api/auth/logout", {
-      method: "POST",
-      credentials: "include", // مهم عشان الكوكي يتبعت مع الريكوست
+    await axios.post(`${apiUrl}/api/employee/logout`, {
+      credentials: "include",
     });
 
     localStorage.removeItem("token_e");
