@@ -14,7 +14,8 @@ const ManagLayout = () => {
   const isLoggedIn = employeeLoginInfo?.isAdmin && employeeLoginInfo?.isActive;
 
   if (!isLoggedIn) {
-    return <Navigate to="/login" />;
+    console.log({ isLoggedIn });
+    return <Navigate to="/login" replace />;
   }
 
   return (
