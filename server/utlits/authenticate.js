@@ -86,6 +86,21 @@ const refreshAccessToken = async (req, res) => {
         { expiresIn: "15m" }
       );
 
+       // Create a new refresh token
+      const newRefreshToken = jwt.sign(
+        { id: findEmployee._id },
+        refreshSecretKey,
+        { expiresIn: "7d" }
+      );
+
+      // Store new refresh token in cookie
+      res.cookie("refreshToken", newRefreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      });
+
       res.status(200).json({ accessToken: newAccessToken });
     } catch (error) {
       console.error("Error fetching employee for token refresh:", error);
