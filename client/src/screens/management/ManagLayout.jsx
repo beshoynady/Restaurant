@@ -12,6 +12,7 @@ const ManagLayout = () => {
     useContext(dataContext);
 
   const isLoggedIn = employeeLoginInfo?.isAdmin && employeeLoginInfo?.isActive;
+  console.log({employeeLoginInfo, isLoggedIn });
 
   if (!isLoggedIn) {
     return <Navigate to="/login" />;

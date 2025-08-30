@@ -1937,8 +1937,7 @@ function App() {
         setEmployeeLoginInfo(decodedToken);
         await getPermissions(decodedToken);
         console.log({ EmployeeLoginInfo: decodedToken });
-        setIsLoading(false);
-
+        setIsTokenValid(true); // ✅ السيشن صالح
       }
 
       if (userToken) {
@@ -1952,22 +1951,16 @@ function App() {
               `${apiUrl}/api/user/${userId}`
             );
             setClientInfo(clientResponse.data);
-            setIsLoading(false);
-
+            setIsTokenValid(true); // ✅ برضه السيشن صالح
           }
         }
       }
-
-      setIsTokenValid(false);
     } catch (error) {
       console.error("Error verifying token:", error);
       toast.error("خطأ أثناء التحقق من التوكن. يرجى تسجيل الدخول مرة أخرى.");
       setIsTokenValid(false);
-      setIsLoading(false);
-
     } finally {
       setIsLoading(false);
-
     }
   };
 
