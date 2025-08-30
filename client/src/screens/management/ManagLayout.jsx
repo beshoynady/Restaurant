@@ -2,17 +2,21 @@ import React, { useContext } from "react";
 import "./ManagLayout.css";
 import { dataContext } from "../../App";
 import { Navigate, Outlet } from "react-router-dom";
-// import { Outlet } from "react-router";
+import LoadingPage from "../management/manag.component/LoadingPage/LoadingPage";
 import NavBar from "./manag.component/navbar/NavBar";
 import SideBar from "./manag.component/sidebar/SideBar";
 import { ToastContainer } from "react-toastify";
 
 const ManagLayout = () => {
-  const { employeeLoginInfo, apiUrl, handleGetTokenAndConfig } =
+  const { employeeLoginInfo, isLoading, handleGetTokenAndConfig } =
     useContext(dataContext);
 
+  if (isLoading) {
+    return <LoadingPage />;
+  }
+
   const isLoggedIn = employeeLoginInfo?.isAdmin && employeeLoginInfo?.isActive;
-  console.log({employeeLoginInfo, isLoggedIn });
+  console.log({ employeeLoginInfo, isLoggedIn });
 
   if (!isLoggedIn) {
     return <Navigate to="/login" />;

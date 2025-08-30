@@ -1937,7 +1937,7 @@ function App() {
         setEmployeeLoginInfo(decodedToken);
         await getPermissions(decodedToken);
         console.log({ EmployeeLoginInfo: decodedToken });
-        setIsTokenValid(true); // ✅ السيشن صالح
+        setIsTokenValid(true); 
       }
 
       if (userToken) {
