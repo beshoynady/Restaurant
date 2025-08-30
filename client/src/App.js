@@ -1934,6 +1934,7 @@ function App() {
         decodedToken = jwt_decode(employeeToken);
         setEmployeeLoginInfo(decodedToken);
         await getPermissions(decodedToken);
+        console.log({ EmployeeLoginInfo: decodedToken });
       }
 
       if (userToken) {
