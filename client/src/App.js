@@ -1958,7 +1958,7 @@ function App() {
         }
       }
 
-      setIsTokenValid(true);
+      setIsTokenValid(false);
     } catch (error) {
       console.error("Error verifying token:", error);
       toast.error("خطأ أثناء التحقق من التوكن. يرجى تسجيل الدخول مرة أخرى.");
