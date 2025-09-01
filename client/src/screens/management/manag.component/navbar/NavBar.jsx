@@ -134,24 +134,29 @@ const NavBar = () => {
     setMessages((prevMessages) => prevMessages.filter((_, i) => i !== index));
   };
 
-const employeeLogout = async () => {
-  try {
-    await axios.post(
-      `${apiUrl}/api/employee/logout`,
-      {}, 
-      { withCredentials: true } // كده الكوكيز هتتبعت وتتمسح
-    );
+  const employeeLogout = async () => {
+    const config = await handleGetTokenAndConfig();
+    
+    try {
+      await axios.post(
+        `${apiUrl}/api/employee/logout`,
+        {},
+        {
+          ...config,
+          withCredentials: true,
+        }
+      );
 
-    // امسح الـ access token من localStorage
-    localStorage.removeItem("token_e");
+      // امسح الـ access token من localStorage
+      localStorage.removeItem("token_e");
 
-    // رجع المستخدم لصفحة اللوجين
-    window.location.href = "/login";
-  } catch (error) {
-    console.error("Logout error:", error);
-    alert("حدث خطأ أثناء تسجيل الخروج. يرجى المحاولة مرة أخرى.");
-  }
-};
+      // رجع المستخدم لصفحة اللوجين
+      window.location.href = "/login";
+    } catch (error) {
+      console.error("Logout error:", error);
+      alert("حدث خطأ أثناء تسجيل الخروج. يرجى المحاولة مرة أخرى.");
+    }
+  };
 
   const [fullscreen, setFullscreen] = useState(false);
   const toggleFullscreen = () => {
