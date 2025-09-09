@@ -1892,87 +1892,75 @@ const refreshToken = async () => {
       { withCredentials: true }
     );
 
-    console.log("Refresh token response:", response);
-
-    if (response && response.data.accessToken) {
+    if (response?.data?.accessToken) {
       localStorage.setItem("token_e", response.data.accessToken);
       return response.data.accessToken;
     }
 
-    return null; // لو مفيش توكن
+    return null;
   } catch (error) {
     console.error("Error refreshing token:", error);
     toast.error("انتهت صلاحية الجلسة. الرجاء تسجيل الدخول مرة أخرى.");
-
-    // إعادة التوجيه للـ login
     window.location.href = "/login";
     return null;
   }
 };
 
+const verifyToken = async () => {
+  const employeeToken = localStorage.getItem("token_e");
 
-  // Function to verify and refresh the token if needed
+  if (!employeeToken) {
+    return await refreshToken();
+  }
 
-  const verifyToken = async () => {
-    const employeeToken = localStorage.getItem("token_e");
-    if (!employeeToken) {
-      await refreshToken();
-    } else {
-      const decodedToken = jwt_decode(employeeToken);
-      const currentTime = Date.now() / 1000;
-      if (decodedToken.exp < currentTime) {
-        await refreshToken();
-      }
-    }
-  };
+  const decodedToken = jwt_decode(employeeToken);
+  const currentTime = Date.now() / 1000;
 
-  const getUserInfoFromToken = async () => {
-    setIsLoading(true);
+  if (decodedToken.exp < currentTime) {
+    return await refreshToken();
+  }
+
+  return employeeToken;
+};
+
+const getUserInfoFromToken = async () => {
+  try {
+    let employeeToken = await verifyToken();
     const userToken = localStorage.getItem("token_u");
-    const employeeToken = localStorage.getItem("token_e");
 
     if (!userToken && !employeeToken) {
       toast.error("رجاء تسجيل الدخول مره أخرى");
       setIsTokenValid(false);
-      setIsLoading(false);
-
       return;
     }
 
-    try {
-      let decodedToken = null;
+    if (employeeToken) {
+      const decodedToken = jwt_decode(employeeToken);
+      setEmployeeLoginInfo(decodedToken);
+      await getPermissions(decodedToken);
+      console.log({ EmployeeLoginInfo: decodedToken });
+      setIsTokenValid(true);
+    }
 
-      if (employeeToken) {
-        decodedToken = jwt_decode(employeeToken);
-        setEmployeeLoginInfo(decodedToken);
-        await getPermissions(decodedToken);
-        console.log({ EmployeeLoginInfo: decodedToken });
+    if (userToken) {
+      const decodedToken = jwt_decode(userToken);
+      setUserLoginInfo(decodedToken);
+
+      const userId = decodedToken?.userinfo?.id;
+      if (userId) {
+        const clientResponse = await axios.get(
+          `${apiUrl}/api/user/${userId}`
+        );
+        setClientInfo(clientResponse.data);
         setIsTokenValid(true);
       }
-
-      if (userToken) {
-        decodedToken = jwt_decode(userToken);
-        setUserLoginInfo(decodedToken);
-
-        if (decodedToken) {
-          const userId = decodedToken.userinfo.id;
-          if (userId) {
-            const clientResponse = await axios.get(
-              `${apiUrl}/api/user/${userId}`
-            );
-            setClientInfo(clientResponse.data);
-            setIsTokenValid(true); // ✅ برضه السيشن صالح
-          }
-        }
-      }
-    } catch (error) {
-      console.error("Error verifying token:", error);
-      toast.error("خطأ أثناء التحقق من التوكن. يرجى تسجيل الدخول مرة أخرى.");
-      setIsTokenValid(false);
-    } finally {
-      setIsLoading(false);
     }
-  };
+  } catch (error) {
+    console.error("Error verifying token:", error);
+    toast.error("خطأ أثناء التحقق من التوكن. يرجى تسجيل الدخول مرة أخرى.");
+    setIsTokenValid(false);
+  }
+};
 
   const getPermissions = async (decodedToken) => {
     try {
@@ -2301,16 +2289,15 @@ const refreshToken = async () => {
   };
 
   // عند التحقق من التوكن
-  useEffect(() => {
-    const initializeSession = async () => {
-      setIsLoading(true);
-      await verifyToken();
-      await getUserInfoFromToken();
-      setIsLoading(false);
-    };
+useEffect(() => {
+  const initializeSession = async () => {
+    setIsLoading(true);
+    await getUserInfoFromToken();
+    setIsLoading(false);
+  };
 
-    initializeSession();
-  }, []);
+  initializeSession();
+}, []);
 
   // جلب البيانات عند التأكد من صلاحية التوكن
   useEffect(() => {
