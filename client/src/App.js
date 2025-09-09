@@ -4,6 +4,9 @@ import axios from "axios";
 import jwt_decode from "jwt-decode";
 import io from "socket.io-client";
 
+import { useNavigate } from "react-router-dom";
+
+
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -180,6 +183,9 @@ function App() {
   axios.defaults.withCredentials = true;
 
   const apiUrl = process.env.REACT_APP_API_URL;
+
+  const navigate = useNavigate();
+
 
   const handleGetTokenAndConfig = async () => {
     await verifyToken();
@@ -1901,8 +1907,10 @@ const refreshToken = async () => {
   } catch (error) {
     console.error("Error refreshing token:", error);
     toast.error("انتهت صلاحية الجلسة. الرجاء تسجيل الدخول مرة أخرى.");
-    window.location.href = "/login";
-    return null;
+if (window.location.pathname !== "/login") {
+      navigate("/login", { replace: true });
+    }
+        return null;
   }
 };
 
