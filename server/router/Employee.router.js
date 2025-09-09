@@ -30,6 +30,6 @@ router
   .delete(authenticateToken, checkSubscription, deleteEmployee);
 
 router.route("/login").post(loginEmployee);
-router.route("/refresh-token").post(authenticateToken, checkSubscription,refreshAccessToken);
+router.route("/refresh-token").post(checkSubscription, refreshAccessToken);
 router.route("/logout").post(employeeLogout);
 module.exports = router;

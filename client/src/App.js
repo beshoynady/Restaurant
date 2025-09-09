@@ -1884,24 +1884,34 @@ function App() {
 
   const [isTokenValid, setIsTokenValid] = useState(true);
 
-  const refreshToken = async () => {
-    try {
-      const response = await axios.post(
-        `${apiUrl}/api/employee/refresh-token`,
-        {},
-        { withCredentials: true }
-      );
+const refreshToken = async () => {
+  try {
+    const response = await axios.post(
+      `${apiUrl}/api/employee/refresh-token`,
+      {},
+      { withCredentials: true }
+    );
 
-      if (response && response.data.accessToken) {
-        localStorage.setItem("token_e", response.data.accessToken);
-        return response.data.accessToken;
-      }
-    } catch (error) {
-      console.error("Error refreshing token:", error);
-      toast.error("انتهت صلاحية الجلسة. الرجاء تسجيل الدخول مرة أخرى.");
-      return <Navigate to="/login" replace />;
+    console.log("Refresh token response:", response);
+
+    if (response && response.data.accessToken) {
+      localStorage.setItem("token_e", response.data.accessToken);
+      return response.data.accessToken;
     }
-  };
+
+    return null; // لو مفيش توكن
+  } catch (error) {
+    console.error("Error refreshing token:", error);
+    toast.error("انتهت صلاحية الجلسة. الرجاء تسجيل الدخول مرة أخرى.");
+
+    // إعادة التوجيه للـ login
+    window.location.href = "/login";
+    return null;
+  }
+};
+
+
+  // Function to verify and refresh the token if needed
 
   const verifyToken = async () => {
     const employeeToken = localStorage.getItem("token_e");
