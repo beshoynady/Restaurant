@@ -523,26 +523,32 @@ const Info = () => {
     closed: false,
   }));
 
-  const [working_hours, setworking_hours] = useState([]);
+  const [working_hours, setworking_hours] = useState(initialOpeningHours);
 
   const handleSetFrom = (index, value) => {
-    console.log({ working_hours });
-    const updatedHours = [...working_hours];
-    updatedHours[index].from = value;
-    setworking_hours(updatedHours);
+    setworking_hours((prev) => {
+      const updated = [...prev];
+      updated[index] = { ...updated[index], from: value };
+      return updated;
+    });
   };
 
   const handleSetTo = (index, value) => {
-    const updatedHours = [...working_hours];
-    updatedHours[index].to = value;
-    setworking_hours(updatedHours);
+    setworking_hours((prev) => {
+      const updated = [...prev];
+      updated[index] = { ...updated[index], to: value };
+      return updated;
+    });
   };
 
   const handleCheckboxChange = (index) => {
-    const updatedHours = [...working_hours];
-    updatedHours[index].closed = !updatedHours[index].closed;
-    setworking_hours(updatedHours);
+    setworking_hours((prev) => {
+      const updated = [...prev];
+      updated[index] = { ...updated[index], closed: !updated[index].closed };
+      return updated;
+    });
   };
+
 
   const handleOpeningHours = async (e) => {
     e.preventDefault();
@@ -1601,9 +1607,8 @@ const Info = () => {
                             />
                           </div>
                           <div className="col-md-2 col-6 mb-2 mb-md-0">
-                            <p className="form-control-plaintext">{`${
-                              shift.hours > 0 ? shift.hours : 0
-                            } ساعات`}</p>
+                            <p className="form-control-plaintext">{`${shift.hours > 0 ? shift.hours : 0
+                              } ساعات`}</p>
                           </div>
                           <div className="col-md-1 col-6 m-0 p-0">
                             <button
