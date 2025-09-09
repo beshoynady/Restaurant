@@ -299,7 +299,7 @@ const NavBar = () => {
     >
       {/* <input type="checkbox" className="form-check-input form-check-input-lg" id="theme-toggle" hidden />
       <label htmlFor="theme-toggle" className="theme-toggle" onClick={toggleDir}></label> */}
-      <div className="navbar-nav ms-auto flex-row">
+      <div className="navbar-nav flex-row align-items-center w-100 px-1 mx-1 ms-auto h-100">
         <div className="nav-item mx-1 dropdown">
           <a
             className="nav-link d-flex align-items-center text-light"
