@@ -523,25 +523,25 @@ const Info = () => {
     closed: false,
   }));
 
-  const [opening_hours, setOpening_hours] = useState([]);
+  const [working_hours, setworking_hours] = useState([]);
 
   const handleSetFrom = (index, value) => {
-    console.log({ opening_hours });
-    const updatedHours = [...opening_hours];
+    console.log({ working_hours });
+    const updatedHours = [...working_hours];
     updatedHours[index].from = value;
-    setOpening_hours(updatedHours);
+    setworking_hours(updatedHours);
   };
 
   const handleSetTo = (index, value) => {
-    const updatedHours = [...opening_hours];
+    const updatedHours = [...working_hours];
     updatedHours[index].to = value;
-    setOpening_hours(updatedHours);
+    setworking_hours(updatedHours);
   };
 
   const handleCheckboxChange = (index) => {
-    const updatedHours = [...opening_hours];
+    const updatedHours = [...working_hours];
     updatedHours[index].closed = !updatedHours[index].closed;
-    setOpening_hours(updatedHours);
+    setworking_hours(updatedHours);
   };
 
   const handleOpeningHours = async (e) => {
@@ -550,7 +550,7 @@ const Info = () => {
     try {
       const response = await axios.put(
         `${apiUrl}/api/restaurant/${restaurantId}`,
-        { opening_hours },
+        { working_hours },
         config
       );
       if (response.status === 200) {
@@ -623,9 +623,9 @@ const Info = () => {
           }
         });
 
-        setOpening_hours(
-          restaurantData.opening_hours.length > 0
-            ? restaurantData.opening_hours
+        setworking_hours(
+          restaurantData.working_hours.length > 0
+            ? restaurantData.working_hours
             : initialOpeningHours
         );
       } else {
@@ -1482,11 +1482,11 @@ const Info = () => {
                                   className="form-control border-primary m-0 p-2 h-auto"
                                   name={`openingTime${day}`}
                                   disabled={
-                                    opening_hours &&
-                                    opening_hours[index]?.closed
+                                    working_hours &&
+                                    working_hours[index]?.closed
                                   }
                                   value={
-                                    opening_hours && opening_hours[index]?.from
+                                    working_hours && working_hours[index]?.from
                                   }
                                   onChange={(e) =>
                                     handleSetFrom(index, e.target.value)
@@ -1500,11 +1500,11 @@ const Info = () => {
                                   className="form-control border-primary m-0 p-2 h-auto"
                                   name={`closingTime${day}`}
                                   disabled={
-                                    opening_hours &&
-                                    opening_hours[index]?.closed
+                                    working_hours &&
+                                    working_hours[index]?.closed
                                   }
                                   value={
-                                    opening_hours && opening_hours[index]?.to
+                                    working_hours && working_hours[index]?.to
                                   }
                                   onChange={(e) =>
                                     handleSetTo(index, e.target.value)
@@ -1517,7 +1517,7 @@ const Info = () => {
                                   type="checkbox"
                                   className="form-check-input form-check-input-lg"
                                   name={`closed${day}`}
-                                  checked={opening_hours[index]?.closed}
+                                  checked={working_hours[index]?.closed}
                                   onChange={(e) => handleCheckboxChange(index)}
                                 />
                               </td>
