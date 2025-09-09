@@ -5,7 +5,7 @@ const dotenv = require("dotenv");
 const helmet = require("helmet"); // Security middleware
 const cookieParser = require("cookie-parser");
 const http = require("http");
-const socketIo = require("socket.io");
+const Server = require("socket.io");
 
 // Import database connection and route files
 const connectdb = require("./database/connectdb.js");
@@ -143,7 +143,7 @@ app.use("/api/productionrecord", routeProductionRecord);
 const server = http.createServer(app);
 
 // Setup Socket.io
-const io = new socketIo(server, {
+const io = new Server(server, {
   cors: {
     origin: (origin, callback) => {
       if (!origin || allowedOrigins.includes(origin)) {
