@@ -135,26 +135,40 @@ const NavBar = () => {
   };
 
   const employeeLogout = async () => {
-    const config = await handleGetTokenAndConfig();
-    
     try {
-      await axios.post(
+      // استرجاع الكونفيج والتوكن
+      const config = await handleGetTokenAndConfig();
+
+      const response = await axios.post(
         `${apiUrl}/api/employee/logout`,
-        {},
+        {}, // ممكن تحط refreshToken هنا لو API محتاجه
         {
           ...config,
-          withCredentials: true,
+          withCredentials: true, // عشان يمسح الكوكيز لو مستخدمها
         }
       );
 
-      // امسح الـ access token من localStorage
-      localStorage.removeItem("token_e");
-
-      // رجع المستخدم لصفحة اللوجين
-      window.location.href = "/login";
+      if (response.status === 200) {
+        toast.success("تم تسجيل الخروج بنجاح");
+      } else {
+        toast.error("لم يتم تسجيل الخروج. حاول مرة أخرى");
+      }
     } catch (error) {
+      // لو السيرفر رجع رسالة واضحة
+      if (error.response?.data?.message) {
+        toast.error(error.response.data.message);
+      } else {
+        toast.error("حدث خطأ أثناء تسجيل الخروج. حاول مرة أخرى.");
+      }
       console.error("Logout error:", error);
-      alert("حدث خطأ أثناء تسجيل الخروج. يرجى المحاولة مرة أخرى.");
+    } finally {
+      // تنظيف التوكنات والجلسة
+      localStorage.removeItem("token_e");
+      localStorage.removeItem("refresh_token_e"); // لو عندك ريفريش توكن
+      sessionStorage.clear();
+
+      // توجيه المستخدم لصفحة تسجيل الدخول
+      window.location.replace("/login");
     }
   };
 
