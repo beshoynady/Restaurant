@@ -523,7 +523,7 @@ const Info = () => {
     closed: false,
   }));
 
-  const [working_hours, setworking_hours] = useState([]);
+  const [working_hours, setworking_hours] = useState([...initialOpeningHours]);
 
   const handleSetFrom = (index, value) => {
     console.log({ working_hours });
@@ -601,7 +601,7 @@ const Info = () => {
         settakeAway(restaurantData.takeAway);
         setusesReservationSystem(restaurantData.usesReservationSystem);
 
-        restaurantData.social_media.forEach((item) => {
+        restaurantData.social_media?.forEach((item) => {
           switch (item.platform) {
             case "facebook":
               setFacebook(item.url);
@@ -624,9 +624,9 @@ const Info = () => {
         });
 
         setworking_hours(
-          restaurantData.working_hours.length > 0
-            ? restaurantData.working_hours
-            : initialOpeningHours
+          restaurantData.working_hours?.length > 0
+            ? [...restaurantData.working_hours]
+            : [...initialOpeningHours]
         );
       } else {
         toast.warning("لم يتم اضافه بيانات المطعم");
