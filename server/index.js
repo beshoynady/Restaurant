@@ -63,12 +63,20 @@ app.use(express.json({ limit: "100kb" })); // Limit request body size
 app.use(cookieParser()); // Parse cookies
 
 // CORS setup
+const allowedOrigins = [
+  "https://restaurant.menufy.tech",
+  "https://www.restaurant.menufy.tech",
+];
+
 app.use(
   cors({
-    origin: [
-      "https://restaurant.menufy.tech",
-      "https://www.restaurant.menufy.tech",
-    ],
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, origin);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
     allowedHeaders: ["Content-Type", "Authorization"],
@@ -135,12 +143,15 @@ app.use("/api/productionrecord", routeProductionRecord);
 const server = http.createServer(app);
 
 // Setup Socket.io
-const io = socketIo(server, {
+const io = new socketIo(server, {
   cors: {
-    origin: [
-      "https://restaurant.menufy.tech",
-      "https://www.restaurant.menufy.tech",
-    ],
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, origin);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     methods: ["GET", "POST"],
     allowedHeaders: ["content-type"],
   },
