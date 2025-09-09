@@ -5,7 +5,8 @@ const dotenv = require("dotenv");
 const helmet = require("helmet"); // Security middleware
 const cookieParser = require("cookie-parser");
 const http = require("http");
-const Server = require("socket.io");
+const { Server } = require("socket.io");
+
 
 // Import database connection and route files
 const connectdb = require("./database/connectdb.js");
