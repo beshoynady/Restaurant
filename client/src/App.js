@@ -1891,7 +1891,7 @@ function App() {
         {},
         { withCredentials: true }
       );
-      console.log("Refresh token response:", response);
+
       if (response && response.data.accessToken) {
         localStorage.setItem("token_e", response.data.accessToken);
         return response.data.accessToken;
@@ -1899,7 +1899,8 @@ function App() {
     } catch (error) {
       console.error("Error refreshing token:", error);
       toast.error("انتهت صلاحية الجلسة. الرجاء تسجيل الدخول مرة أخرى.");
-      return (window.location.href = "/login");
+      
+      return <Navigate to="/login" replace />;
     }
   };
 

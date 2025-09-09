@@ -625,8 +625,8 @@ const Info = () => {
 
         setworking_hours(
           restaurantData.working_hours?.length > 0
-            ? [...restaurantData.working_hours]
-            : [...initialOpeningHours]
+            ? restaurantData.working_hours
+            : initialOpeningHours
         );
       } else {
         toast.warning("لم يتم اضافه بيانات المطعم");
