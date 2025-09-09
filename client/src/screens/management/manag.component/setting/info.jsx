@@ -528,6 +528,7 @@ const Info = () => {
   const handleSetFrom = (index, value) => {
     console.log({initialOpeningHours, working_hours });
     const updatedHours = [...working_hours];
+    console.log({updatedHours, index, value ,"from": updatedHours[index].from});
     updatedHours[index].from = value;
     setworking_hours(updatedHours);
   };
@@ -1487,7 +1488,7 @@ const Info = () => {
                                     working_hours[index]?.closed
                                   }
                                   value={
-                                    working_hours && working_hours[index]?.from
+                                    working_hours && working_hours[index].from
                                   }
                                   onChange={(e) =>
                                     handleSetFrom(index, e.target.value)
@@ -1505,7 +1506,7 @@ const Info = () => {
                                     working_hours[index]?.closed
                                   }
                                   value={
-                                    working_hours && working_hours[index]?.to
+                                    working_hours && working_hours[index].to
                                   }
                                   onChange={(e) =>
                                     handleSetTo(index, e.target.value)
