@@ -523,10 +523,10 @@ const Info = () => {
     closed: false,
   }));
 
-  const [working_hours, setworking_hours] = useState([]);
+  const [working_hours, setworking_hours] = useState([initialOpeningHours]);
 
   const handleSetFrom = (index, value) => {
-    console.log({ working_hours });
+    console.log({initialOpeningHours, working_hours });
     const updatedHours = [...working_hours];
     updatedHours[index].from = value;
     setworking_hours(updatedHours);
