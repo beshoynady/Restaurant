@@ -1899,7 +1899,6 @@ function App() {
     } catch (error) {
       console.error("Error refreshing token:", error);
       toast.error("انتهت صلاحية الجلسة. الرجاء تسجيل الدخول مرة أخرى.");
-      
       return <Navigate to="/login" replace />;
     }
   };

@@ -523,12 +523,11 @@ const Info = () => {
     closed: false,
   }));
 
-  const [working_hours, setworking_hours] = useState([initialOpeningHours]);
+  const [working_hours, setworking_hours] = useState([]);
 
   const handleSetFrom = (index, value) => {
-    console.log({initialOpeningHours, working_hours });
+    console.log({ working_hours });
     const updatedHours = [...working_hours];
-    console.log({updatedHours, index, value ,"from": updatedHours[index].from});
     updatedHours[index].from = value;
     setworking_hours(updatedHours);
   };
@@ -570,7 +569,6 @@ const Info = () => {
     try {
       const response = await axios.get(`${apiUrl}/api/restaurant/`, config);
       const restaurantData = response.data[0];
-      console.log({ restaurantData });
 
       if (restaurantData) {
         setrestaurantId(restaurantData._id);
@@ -603,7 +601,7 @@ const Info = () => {
         settakeAway(restaurantData.takeAway);
         setusesReservationSystem(restaurantData.usesReservationSystem);
 
-        restaurantData.social_media?.forEach((item) => {
+        restaurantData.social_media.forEach((item) => {
           switch (item.platform) {
             case "facebook":
               setFacebook(item.url);
@@ -626,7 +624,7 @@ const Info = () => {
         });
 
         setworking_hours(
-          restaurantData.working_hours.length > 0
+          restaurantData.working_hours?.length > 0
             ? restaurantData.working_hours
             : initialOpeningHours
         );
@@ -1488,7 +1486,7 @@ const Info = () => {
                                     working_hours[index]?.closed
                                   }
                                   value={
-                                    working_hours && working_hours[index].from
+                                    working_hours && working_hours[index]?.from
                                   }
                                   onChange={(e) =>
                                     handleSetFrom(index, e.target.value)
@@ -1506,7 +1504,7 @@ const Info = () => {
                                     working_hours[index]?.closed
                                   }
                                   value={
-                                    working_hours && working_hours[index].to
+                                    working_hours && working_hours[index]?.to
                                   }
                                   onChange={(e) =>
                                     handleSetTo(index, e.target.value)
