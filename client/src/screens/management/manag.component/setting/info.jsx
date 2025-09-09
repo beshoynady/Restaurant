@@ -569,6 +569,7 @@ const Info = () => {
     try {
       const response = await axios.get(`${apiUrl}/api/restaurant/`, config);
       const restaurantData = response.data[0];
+      console.log({ restaurantData });
 
       if (restaurantData) {
         setrestaurantId(restaurantData._id);
@@ -624,7 +625,7 @@ const Info = () => {
         });
 
         setworking_hours(
-          restaurantData.working_hours?.length > 0
+          restaurantData.working_hours.length > 0
             ? restaurantData.working_hours
             : initialOpeningHours
         );
