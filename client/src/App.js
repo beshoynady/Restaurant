@@ -4,7 +4,6 @@ import axios from "axios";
 import jwt_decode from "jwt-decode";
 import io from "socket.io-client";
 
-import { useNavigate } from "react-router-dom";
 
 
 import { toast } from "react-toastify";
@@ -184,7 +183,6 @@ function App() {
 
   const apiUrl = process.env.REACT_APP_API_URL;
 
-  const navigate = useNavigate();
 
 
   const handleGetTokenAndConfig = async () => {
@@ -2303,7 +2301,7 @@ useEffect(() => {
     if (!token) {
       toast.error("انتهت صلاحية الجلسة. الرجاء تسجيل الدخول مرة أخرى.");
       if (window.location.pathname !== "/login") {
-        navigate("/login", { replace: true });
+        window.location.replace("/login");
       }
       setIsLoading(false);
       return;
