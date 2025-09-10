@@ -15,7 +15,7 @@ const connectDB = async () => {
             serverSelectionTimeoutMS: 30000, // Timeout duration for server selection
             connectTimeoutMS: 10000, // Timeout duration for connection
         });
-        console.log('Database connection successful');
+        
     } catch (error) {
         console.error(`Error connecting to MongoDB: ${error.message}`);
         await mongoose.disconnect(); // Disconnect in case of an error

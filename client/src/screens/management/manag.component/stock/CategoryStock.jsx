@@ -65,7 +65,7 @@ const CategoryStock = () => {
         toast.warn("حدث خطا اثناء جلب بيانات اصناف المخزن ! اعد تحميل الصفحة");
       }
     } catch (error) {
-      console.log(error);
+      
     }
   };
 
@@ -134,7 +134,7 @@ const CategoryStock = () => {
       getAllCategoryStock(); // Fetch updated category stock data
       getAllStockItem(); // Fetch updated stock item data
     } catch (error) {
-      console.log(error);
+      
       toast.error("حدث خطأ أثناء تعديل التصنيف. يرجى المحاولة مرة أخرى.");
     }
   };
@@ -160,7 +160,7 @@ const CategoryStock = () => {
         toast.success("تم حذف التصنيف بنجاح");
       }
     } catch (error) {
-      console.log(error);
+      
       toast.error("حدث خطأ أثناء حذف التصنيف. يرجى المحاولة مرة أخرى.");
     }
   };

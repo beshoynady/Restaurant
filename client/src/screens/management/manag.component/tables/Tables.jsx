@@ -84,17 +84,17 @@ const Tables = () => {
         isValid,
         notes,
       };
-      console.log({ config, tableData });
+      
 
       const response = await axios.post(
         `${apiUrl}/api/table/`,
         tableData,
         config
       );
-      // console.log({ response });
+      // 
 
       if (response.status === 201) {
-        console.log("تم إنشاء الطاولة بنجاح:", response.data);
+        
 
         await getAllTable();
         toast.success("تم إنشاء الطاولة بنجاح.");
@@ -149,7 +149,7 @@ const Tables = () => {
 
       // Handle successful response
       if (response.status === 200) {
-        console.log("Table updated successfully:", response.data);
+        
 
         // Refresh the table list
         await getAllTable();
@@ -194,7 +194,7 @@ const Tables = () => {
         config
       );
       const qrData = response.data.QRCode;
-      console.log({ qrData, URL });
+      
       setQrImage(qrData);
       toast.success("تم إنشاء رمز QR بنجاح!");
     } catch (error) {
@@ -277,7 +277,7 @@ const Tables = () => {
         `${apiUrl}/api/table/${tableId}`,
         config
       );
-      console.log(response.data);
+      
       settableId(null);
       getAllTable();
     } catch (error) {
@@ -343,7 +343,7 @@ const Tables = () => {
 
   const deleteSelectedIds = async (e) => {
     e.preventDefault();
-    console.log(selectedIds);
+    
     const config = await handleGetTokenAndConfig();
     if (tablePermission && !tablePermission.delete) {
       toast.warn("ليس لك صلاحية لحذف طاوله ");
@@ -357,7 +357,7 @@ const Tables = () => {
       toast.success("Selected orders deleted successfully");
       setSelectedIds([]);
     } catch (error) {
-      console.log(error);
+      
       toast.error("Failed to delete selected orders");
     }
   };

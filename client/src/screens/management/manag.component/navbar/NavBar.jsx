@@ -79,7 +79,7 @@ const NavBar = () => {
       const messageNotSeen = data.filter((mas) => mas.isSeen === false);
       setMessages(messageNotSeen);
     } catch (error) {
-      console.log(error);
+      
     }
   };
 
@@ -97,7 +97,7 @@ const NavBar = () => {
       );
       getAllCustomerMessage();
     } catch (error) {
-      console.log(error);
+      
     }
   };
 

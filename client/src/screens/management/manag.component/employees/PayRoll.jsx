@@ -71,7 +71,7 @@ const PayRoll = () => {
       );
       setListOfEmployee(employees);
     } catch (error) {
-      console.log(error);
+      
     }
   };
 
@@ -84,7 +84,7 @@ const PayRoll = () => {
       if (response.status === 200 && response.data) {
         const { data } = response;
         setshifts(data);
-        console.log({ Shifts: data });
+        
       } else {
         throw new Error("Invalid response format");
       }
@@ -100,7 +100,7 @@ const PayRoll = () => {
     const config = await handleGetTokenAndConfig();
     try {
       const response = await axios.get(apiUrl + "/api/payroll", config);
-      console.log({ response });
+      
       if (response.status === 200) {
         // Set all payroll data
         setAllPayRoll(response.data);
@@ -114,7 +114,7 @@ const PayRoll = () => {
         const filteredEmployeeTransactions = response.data.filter((salary) => {
           return salary.Year === currentYear && salary.Month === currentMonth;
         });
-        console.log({ filteredEmployeeTransactions });
+        
         // Set current payroll data
         setcurrentPayRoll(filteredEmployeeTransactions);
       }
@@ -131,14 +131,14 @@ const PayRoll = () => {
       const config = await handleGetTokenAndConfig();
       const response = await axios.get(apiUrl + "/api/expenses/", config);
       const expenses = await response.data;
-      console.log(response.data);
+      
       expenses.map((expense) => {
         if (expense.isSalary === true) {
           setexpenseId(expense._id);
         }
       });
     } catch (error) {
-      console.log(error);
+      
       toast.error("حدث خطأ أثناء جلب المصاريف");
     }
   };
@@ -167,7 +167,7 @@ const PayRoll = () => {
 
       setListOfEmployeTransactions(filterByMonth);
     } catch (error) {
-      console.log(error);
+      
     }
   };
 
@@ -180,7 +180,7 @@ const PayRoll = () => {
     const config = await handleGetTokenAndConfig();
     try {
       const response = await axios.get(`${apiUrl}/api/attendance`, config);
-      console.log({ response });
+      
       if (response.status === 200) {
         const currentYear = new Date().getFullYear();
         const currentMonth = new Date().getMonth() + 1;
@@ -409,7 +409,7 @@ const PayRoll = () => {
             );
 
             if (result) {
-              console.log("تم تحديث بيانات المرتب بنجاح");
+              
               toast.info(`تم تحديث بيانات مرتب ${employeeName} بنجاح`);
             }
           } catch (error) {
@@ -453,7 +453,7 @@ const PayRoll = () => {
             );
 
             if (result) {
-              console.log("تم إنشاء بيانات المرتب بنجاح");
+              
               toast.info(`تم انشاء مرتب ${employeeName} بنجاح`);
             }
           } catch (error) {
@@ -486,15 +486,15 @@ const PayRoll = () => {
       // Fetch all cash registers
       const response = await axios.get(apiUrl + "/api/cashRegister", config);
       const allCashRegisters = await response.data;
-      // console.log(response);
-      // console.log(allCashRegisters);
+      // 
+      // 
       // // Find the appropriate cash register
       const cashRegister = allCashRegisters
         ? allCashRegisters.filter(
             (CashRegister) => CashRegister.employee?._id === manager
           )
         : [];
-      // console.log(cashRegister);
+      // 
       // // Update selected cash register data
       setmyCashRegister(cashRegister);
       // Set values and variables
@@ -528,7 +528,7 @@ const PayRoll = () => {
   // Create daily expense based on selected cash register
   const createDailyExpense = async () => {
     const updatedBalance = balance - amount;
-    console.log({ updatedBalance });
+    
 
     const config = await handleGetTokenAndConfig();
     try {
@@ -570,11 +570,11 @@ const PayRoll = () => {
 
       if (updateCashRegister) {
         setbalance(updatedBalance);
-        console.log("Expense created successfully");
+        
       }
     } catch (error) {
-      console.log(error);
-      console.log("Failed to create expense");
+      
+      
     }
   };
 
@@ -602,7 +602,7 @@ const PayRoll = () => {
         // Create daily expense
         await createDailyExpense();
         // Log the update result
-        console.log(updatePayRoll);
+        
         getEmployees();
         getPayRoll();
         // Display a success toast notification upon successful payment
@@ -625,12 +625,12 @@ const PayRoll = () => {
     }
   };
   const filterEmpByStatus = (status) => {
-    console.log(status);
+    
     getEmployees();
     const filteredEmployees = ListOfEmployee.filter(
       (employee) => employee.isActive === status
     );
-    console.log(filteredEmployees);
+    
     setListOfEmployee(filteredEmployees);
   };
 
@@ -741,7 +741,7 @@ const PayRoll = () => {
                   className="form-control border-primary m-0 p-2 h-auto"
                   onChange={(e) => {
                     setthismonth(e.target.value);
-                    console.log(e.target.value);
+                    
                   }}
                 >
                   <option>الكل</option>

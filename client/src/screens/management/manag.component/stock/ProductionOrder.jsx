@@ -149,7 +149,7 @@ const ProductionOrder = () => {
         config
       );
       const productionOrdersData = response.data;
-      console.log({ productionOrdersData });
+      
       if (!productionOrders) {
         throw new Error("Unexpected response or empty data");
       }
@@ -317,7 +317,7 @@ const ProductionOrder = () => {
 
       const stockItems = response.data.reverse();
       setAllStockItems(stockItems);
-      console.log({ stockItems });
+      
       // Notify on success
       toast.success("تم استرداد عناصر المخزون بنجاح");
       setIsLoading(false);

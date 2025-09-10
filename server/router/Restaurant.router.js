@@ -54,13 +54,13 @@ const upload = multer({
 const deleteOldImage = (imagePath) => {
   if (fs.existsSync(imagePath)) {
     fs.unlinkSync(imagePath);
-    console.log("Old image deleted successfully");
+    
   }
 };
 
 const deleteOldImageMiddleware = async (req, res, next) => {
   try {
-    console.log("Middleware triggered");
+    
     const restaurantId = req.params.id;
     if (!restaurantId) {
       return res.status(400).json({ message: "Product ID is missing" });
@@ -81,7 +81,7 @@ const deleteOldImageMiddleware = async (req, res, next) => {
 
     if (restaurant.image && req.file) {
       const oldImagePath = path.join(imagesDir, restaurant.image);
-      console.log("Deleting old image:", oldImagePath);
+      
       deleteOldImage(oldImagePath);
     }
 

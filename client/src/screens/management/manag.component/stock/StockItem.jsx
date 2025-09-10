@@ -124,7 +124,7 @@ const StockItem = () => {
 
     try {
       setIsLoading(true);
-      console.log({ stores });
+      
 
       const response = await axios.post(
         `${apiUrl}/api/stockItem/`,
@@ -162,7 +162,7 @@ const StockItem = () => {
       toast.success("تم إنشاء عنصر المخزون بنجاح");
 
     } catch (error) {
-      console.log(error);
+      
       setIsLoading(false);
       toast.error("فشل في إنشاء عنصر المخزون");
     }
@@ -230,7 +230,7 @@ const StockItem = () => {
 
       toast.success("تم تحديث عنصر المخزون بنجاح");
     } catch (error) {
-      console.log(error);
+      
       toast.error("فشل في تحديث عنصر المخزون");
     } finally {
       resetFields();
@@ -253,7 +253,7 @@ const StockItem = () => {
         config
       );
       if (response.isActive === 200) {
-        console.log(response);
+        
         getStockItems(); // Update the list of stock items after deletion
 
         // Notify on success
@@ -261,7 +261,7 @@ const StockItem = () => {
       }
       setIsLoading(false);
     } catch (error) {
-      console.log(error);
+      
       setIsLoading(false);
       // Notify on error
       toast.error("فشل في حذف عنصر المخزون");
@@ -288,7 +288,7 @@ const StockItem = () => {
 
       const stockItems = response.data.reverse();
       setAllStockItems(stockItems);
-      console.log({ stockItems });
+      
       // Notify on success
       toast.success("تم استرداد عناصر المخزون بنجاح");
       setIsLoading(false);
@@ -349,7 +349,7 @@ const StockItem = () => {
     setIsActive(item.isActive);
     setStores(item.stores);
     setCostPerPart(item.costPerPart);
-    console.log({ stores: item.stores });
+    
   };
 
   const searchByitem = (name) => {

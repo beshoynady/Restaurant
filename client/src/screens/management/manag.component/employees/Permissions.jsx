@@ -24,11 +24,11 @@ const PermissionsComponent = () => {
     try {
       const config = await handleGetTokenAndConfig();
       const response = await axios.get(`${apiUrl}/api/employee`, config);
-      console.log({ employee: response });
+      
       if (response.status === 200) {
         const data = response.data;
         setListOfEmployees(data);
-        console.log({ data });
+        
       } else {
         throw new Error("Failed to fetch employees: Unexpected status code");
       }
@@ -47,7 +47,7 @@ const PermissionsComponent = () => {
       if (response.status === 200) {
         const data = response.data;
         setpermissionsList(data);
-        console.log({ data });
+        
       } else {
         throw new Error(
           `فشل في جلب الصلاحيات: رمز حالة غير متوقع ${response.status}`
@@ -137,8 +137,8 @@ const PermissionsComponent = () => {
   const [Permissions, setPermissions] = useState([]);
 
   const handeladdPermissions = (e, i) => {
-    // console.log({ permissionEmployee })
-    // console.log({ Permissions })
+    // 
+    // 
     const resource = permissionsListEn[i];
     const action = e.target.value;
     let updatePermissions = [...Permissions];
@@ -149,7 +149,7 @@ const PermissionsComponent = () => {
     if (findPermission.length > 0) {
       updatePermissions.map((permission, ind) => {
         if (permission.resource === resource) {
-          console.log({ permission });
+          
           if (action === "create") {
             permission.create = !permission.create;
             if (permission.create === true) {
@@ -168,7 +168,7 @@ const PermissionsComponent = () => {
               permission.read = true;
             }
           }
-          // console.log({ permission })
+          // 
 
           if (
             !permission.create &&
@@ -181,7 +181,7 @@ const PermissionsComponent = () => {
             );
             updatePermissions = [...update];
           }
-          // console.log({ permission })
+          // 
         }
       });
     } else {
@@ -202,9 +202,9 @@ const PermissionsComponent = () => {
         read: false,
         delete: false,
       };
-      // console.log({ newPermission })
+      // 
     }
-    // console.log({ updatePermissions })
+    // 
     setPermissions([...updatePermissions]);
   };
 
@@ -245,7 +245,7 @@ const PermissionsComponent = () => {
 
   const addPermissions = async (e) => {
     e.preventDefault();
-    // console.log({ permissionEmployee });
+    // 
 
     try {
       const config = await handleGetTokenAndConfig();
@@ -323,8 +323,8 @@ const PermissionsComponent = () => {
         if (permissionEmployee) {
           setpermissionEmployee(permissionEmployee);
           setPermissions(permissionEmployee.Permissions);
-          // console.log({ permissionEmployee });
-          // console.log({ selectedEmployee });
+          // 
+          // 
         } else {
           setpermissionEmployee([]);
           setPermissions([]);
@@ -381,7 +381,7 @@ const PermissionsComponent = () => {
         toast.info("هذا الموظف ليس له أي صلاحيات");
       }
 
-      console.log({ selectedEmployee, permissionEmployee });
+      
     } catch (error) {
       console.error("An error occurred in getEmployeesById:", error);
       toast.error("حدث خطأ غير متوقع");
@@ -549,7 +549,7 @@ const PermissionsComponent = () => {
                   </thead>
                   <tbody>
                     {permissionsListAr.map((permission, i) => {
-                      // console.log({permissionEmployee})
+                      // 
                       return (
                         <tr key={i}>
                           <td>{i + 1}</td>

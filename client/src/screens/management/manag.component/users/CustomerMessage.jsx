@@ -46,7 +46,7 @@ const CustomerMessage = () => {
       const response = await axios.get(`${apiUrl}/api/message`, config);
       setAllCustomerMessage(response.data);
     } catch (error) {
-      console.log(error);
+      
     }
   };
 
@@ -71,7 +71,7 @@ const CustomerMessage = () => {
       );
       getAllCustomerMessage();
     } catch (error) {
-      console.log(error);
+      
     }
   };
 
@@ -92,7 +92,7 @@ const CustomerMessage = () => {
       }
       getAllCustomerMessage();
     } catch (error) {
-      console.log(error);
+      
     }
   };
 
@@ -126,7 +126,7 @@ const CustomerMessage = () => {
       toast.warn("ليس لك صلاحية لحذف رسائل المستخدمين");
       return;
     }
-    console.log(selectedIds);
+    
     try {
       const config = await handleGetTokenAndConfig();
 
@@ -137,7 +137,7 @@ const CustomerMessage = () => {
       toast.success("تم حذف الرسائل المحدده");
       setSelectedIds([]);
     } catch (error) {
-      console.log(error);
+      
       toast.error("فشل حذف الرسائل المحددة ! حاول مره اخري");
     }
   };

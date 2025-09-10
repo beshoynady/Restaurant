@@ -70,9 +70,9 @@ const Employees = () => {
       } else {
         toast.info("لا توجد بيانات لعرضها");
       }
-      // console.log({ data });
+      // 
     } catch (error) {
-      console.log(error);
+      
     }
   };
 
@@ -85,7 +85,7 @@ const Employees = () => {
       if (response.status === 200 && response.data) {
         const { data } = response;
         setshifts(data);
-        console.log({ Shifts: data });
+        
       } else {
         throw new Error("Invalid response format");
       }
@@ -168,7 +168,7 @@ const Employees = () => {
         },
         config
       );
-      console.log({ newEmployee });
+      
       if (newEmployee) {
         notify("تم انشاء حساب الموظف بنجاح", "success");
       }
@@ -248,7 +248,7 @@ const Employees = () => {
       setIsExecuting(false);
     } catch (error) {
       notify("فشل تحديث بيانات الموظف! حاول مره اخري", "error");
-      console.log(error);
+      
       setIsExecuting(false);
     }
   };
@@ -353,7 +353,7 @@ const Employees = () => {
         notify("ليس لك صلاحية لحذف حساب الموظف", "info");
       }
     } catch (error) {
-      console.log(error);
+      
       notify("فشل حذف سجل الموظف !حاول مره اخري", "error");
     }
   };
@@ -373,7 +373,7 @@ const Employees = () => {
 
   const deleteSelectedIds = async (e) => {
     e.preventDefault();
-    console.log(selectedIds);
+    
     try {
       const config = await handleGetTokenAndConfig();
 
@@ -384,7 +384,7 @@ const Employees = () => {
       toast.success("Selected orders deleted successfully");
       setSelectedIds([]);
     } catch (error) {
-      console.log(error);
+      
       toast.error("Failed to delete selected orders");
     }
   };

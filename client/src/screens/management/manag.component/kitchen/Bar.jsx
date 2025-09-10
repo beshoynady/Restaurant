@@ -43,7 +43,7 @@ handleGetTokenAndConfig,
       const getAllRecipe = await axios.get(`${apiUrl}/api/recipe`, config);
       const allRecipeData = getAllRecipe.data;
       setAllRecipe(allRecipeData);
-      console.log({ getAllRecipe });
+      
     } catch (error) {
       console.error("Error fetching product recipe:", error.message);
     }
@@ -56,7 +56,7 @@ handleGetTokenAndConfig,
       // Fetch orders from the API
       const ordersResponse = await axios.get(`${apiUrl}/api/order/limit/50`);
       const BarOrders = ordersResponse.data;
-      // console.log({ BarOrders })
+      // 
       // Set all orders state
       setAllOrders(BarOrders);
 
@@ -79,12 +79,12 @@ handleGetTokenAndConfig,
 
       const updatedConsumptionOrderActive = [];
 
-      // console.log({ allRecipe, activeOrders })
+      // 
       activeOrders &&
         activeOrders.forEach((order) => {
           order.products.forEach((product) => {
             if (!product.isDone) {
-              // console.log({ order, product })
+              // 
               const productIngredients = product.sizeId
                 ? allRecipe.find(
                     (recipe) =>
@@ -95,7 +95,7 @@ handleGetTokenAndConfig,
                     (recipe) => recipe.productId._id === product.productId?._id
                   )?.ingredients || [];
 
-              // console.log({ productIngredients })
+              // 
 
               // Update consumptionOrderActive
               productIngredients &&
@@ -129,7 +129,7 @@ handleGetTokenAndConfig,
                         (recipe) => recipe.productId._id === extra.extraId._id
                       )?.ingredients || [];
 
-                    // console.log({ extraIngredients })
+                    // 
 
                     // Update consumptionOrderActive
                     extraIngredients &&
@@ -160,7 +160,7 @@ handleGetTokenAndConfig,
             }
           });
         });
-      console.log({ updatedConsumptionOrderActive });
+      
 
       // Set updated consumptionOrderActive state
       setConsumptionOrderActive(updatedConsumptionOrderActive);
@@ -181,7 +181,7 @@ handleGetTokenAndConfig,
       const config = await handleGetTokenAndConfig();
 
       setFilteredBarConsumptionToday([]);
-      console.log("Fetching Bar consumption...");
+      
 
       const response = await axios.get(`${apiUrl}/api/consumption`, config);
 
@@ -194,7 +194,7 @@ handleGetTokenAndConfig,
           return itemDate === date;
         });
 
-        console.log({ BarConsumptionsToday, BarConsumptions });
+        
         setFilteredBarConsumptionToday(BarConsumptionsToday);
       } else {
         console.error("Unexpected response or empty data");
@@ -424,7 +424,7 @@ handleGetTokenAndConfig,
           : [];
       setAllWaiters(waiterActive);
     } catch (error) {
-      console.log(error);
+      
     }
   };
 
@@ -475,18 +475,18 @@ handleGetTokenAndConfig,
         const lastWaiterIndex = sectionWaiters.findIndex(
           (waiter) => waiter._id === lastWaiterId
         );
-        console.log({ lastWaiterId, lastWaiterIndex });
+        
 
         waiterId =
           lastWaiterIndex !== -1 && lastWaiterIndex < sectionWaiters.length - 1
             ? sectionWaiters[lastWaiterIndex + 1]._id
             : sectionWaiters[0]._id;
       } else {
-        console.log("لا توجد طلبات سابقة لهذه الطاولة");
+        
         waiterId = sectionWaiters[0]._id;
       }
 
-      console.log({ waiterId });
+      
 
       return waiterId;
     } catch (error) {

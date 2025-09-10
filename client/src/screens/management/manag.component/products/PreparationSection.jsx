@@ -83,7 +83,7 @@ const PreparationSection = () => {
       const res = await axios.get(`${apiUrl}/api/preparationsection`, config);
       if (res.status === 200) {
         const PreparationSections = res.data.data;
-        console.log({ PreparationSections });
+        
         setAllPreparationSections(PreparationSections);
       } else {
         throw new Error("Failed to fetch data");

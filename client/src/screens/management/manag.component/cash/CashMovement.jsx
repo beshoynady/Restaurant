@@ -60,12 +60,12 @@ const CashMovement = () => {
           employeeLoginInfo.role === "manager"
         ) {
           setAllCashRegisters(cashRegisterData);
-          console.log({ cashRegisterData });
+          
         } else {
           const myCashRegister = cashRegisterData.filter(
             (CashRegister) => CashRegister.employee?._id === employeeId
           );
-          console.log({ myCashRegister });
+          
           setAllCashRegisters(myCashRegister);
         }
       }
@@ -113,7 +113,7 @@ const CashMovement = () => {
 
     try {
       const employeeId = await employeeLoginInfo.id;
-      console.log({ employeeId });
+      
 
       const response = await axios.get(apiUrl + "/api/cashmovement/", config);
       const AllCashMovement = response.data.reverse();
@@ -122,18 +122,18 @@ const CashMovement = () => {
           employeeLoginInfo.role === "owner" ||
           employeeLoginInfo.role === "manager"
         ) {
-          console.log({ AllCashMovement });
+          
           setAllCashMovement(AllCashMovement);
         } else {
           const myCashMovement = AllCashMovement.filter(
             (movement) => movement.registerId?.employee === employeeId
           );
-          console.log({ myCashMovement });
+          
           setAllCashMovement(myCashMovement);
         }
       }
     } catch (error) {
-      console.log(error);
+      
       toast.error("حدث خطأ أثناء جلب بيانات حركة الخزينه. حاول مرة أخرى .");
     }
   };
@@ -189,7 +189,7 @@ const CashMovement = () => {
         const isWithdrawal = type === "Withdraw";
         const updateAmount = isWithdrawal ? -amount : amount;
         const newBalance = CashRegisterBalance + updateAmount;
-        console.log({ isWithdrawal, updateAmount, newBalance });
+        
         // Update the cash register balance on the server
         const updateRegisterBalance = await axios.put(
           `${apiUrl}/api/cashregister/${cashRegister}`,
@@ -198,7 +198,7 @@ const CashMovement = () => {
           },
           config
         );
-        console.log({ updateRegisterBalance });
+        
         // If the cash register balance is updated successfully
         if (updateRegisterBalance.data) {
           // Show success toast message

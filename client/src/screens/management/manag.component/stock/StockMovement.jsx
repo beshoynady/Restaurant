@@ -110,8 +110,8 @@ const StockMovement = () => {
         ?.filter((movement) => movement.itemId?._id === itemId)
         .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0];
 
-      console.log({ allStockMovementsByStore, lastStockMovementByItem });
-      console.log({ inbound, outbound, balance });
+      
+      
 
       if (
         source === "Issuance" ||
@@ -140,11 +140,11 @@ const StockMovement = () => {
               (a, b) => new Date(a.movementDate) - new Date(b.movementDate)
             );
 
-          console.log({ batches });
+          
 
           let totalQuantity = Number(quantity);
           let totalCost = 0;
-          console.log({ totalQuantity, totalCost });
+          
 
           for (const batch of batches) {
             if (totalQuantity > 0) {
@@ -166,7 +166,7 @@ const StockMovement = () => {
                 config
               );
 
-              console.log({ updateBatch, quantityToUse });
+              
 
               outbound.quantity += quantityToUse;
               outbound.unitCost = totalCost / (quantity - totalQuantity);
@@ -211,7 +211,7 @@ const StockMovement = () => {
                 },
                 config
               );
-              console.log({ updateBatch });
+              
               // تحديث حركة الصادر
               outbound.quantity += quantityToUse;
               outbound.unitCost = totalCost / (quantity - totalQuantity);
@@ -294,7 +294,7 @@ const StockMovement = () => {
                 },
                 config
               );
-              console.log({ updateBatch });
+              
               if (totalQuantity <= 0) break;
             }
           }
@@ -307,7 +307,7 @@ const StockMovement = () => {
         }
         if (source === "Issuance") {
           const costPerPart = outbound.unitCost;
-          console.log({ costPerPart });
+          
           const updateCostPerPart = await axios.put(
             `${apiUrl}/api/stockitem/${itemId}`,
             {
@@ -472,7 +472,7 @@ const StockMovement = () => {
         getallStockMovement();
       }
     } catch (error) {
-      console.log(error);
+      
       toast.error("فشل حذف حركه المخزن! حاول مرة أخرى");
     } finally {
       setIsLoading(false);
@@ -486,11 +486,11 @@ const StockMovement = () => {
     try {
       const config = await handleGetTokenAndConfig();
       const response = await axios.get(apiUrl + "/api/stockmovement/", config);
-      console.log(response.data);
+      
       const StockMovements = await response.data;
       setAllStockMovements(StockMovements.reverse());
     } catch (error) {
-      console.log(error);
+      
     }
   };
 
@@ -514,7 +514,7 @@ const StockMovement = () => {
     try {
       const response = await axios.get(apiUrl + "/api/stockitem/", config);
       if (response) {
-        console.log(response.data);
+        
         setStockItems(response.data.reverse());
       }
     } catch (error) {
@@ -545,7 +545,7 @@ const StockMovement = () => {
       const response = await axios.get(apiUrl + "/api/employee", config);
       setEmployees(response.data);
     } catch (error) {
-      console.log(error);
+      
     }
   };
 
@@ -555,7 +555,7 @@ const StockMovement = () => {
       const response = await axios.get(apiUrl + "/api/supplier", config);
       setSuppliers(response.data);
     } catch (error) {
-      console.log(error);
+      
     }
   };
 
@@ -573,7 +573,7 @@ const StockMovement = () => {
   // Fetch all cash registers
   const handleSelectedItem = (e) => {
     const selectedItem = StockItems.find((item) => item._id === e.target.value);
-    console.log({ selectedItem });
+    
     if (selectedItem) {
       const { _id, storageUnit, parts, costMethod } = selectedItem;
       setItemId(_id);
@@ -663,7 +663,7 @@ const StockMovement = () => {
         .filter((movement) => movement.itemId?._id === itemId)
         .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0];
 
-      console.log({ lastStockMovementByItem });
+      
 
       setInbound({ quantity: 0, unitCost: 0, totalCost: 0 });
       setOutbound({ quantity: 0, unitCost: 0, totalCost: 0 });

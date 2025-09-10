@@ -80,14 +80,14 @@ const AttendanceManagement = () => {
         newattendanceData.lateMinutes = lateMinutes;
       }
 
-      console.log({ newattendanceData });
+      
 
       const createRecord = await axios.post(
         `${apiUrl}/api/attendance`,
         newattendanceData,
         config
       );
-      console.log({ createRecord });
+      
 
       if (createRecord.status === 201) {
         if (status === "Attendance") {
@@ -96,7 +96,7 @@ const AttendanceManagement = () => {
             { isActive: true },
             config
           );
-          console.log({ activeemployee });
+          
         }
 
         getallAttendanceRecords();
@@ -125,7 +125,7 @@ const AttendanceManagement = () => {
         overtimeMinutes,
         notes,
       };
-      console.log({ newattendanceData });
+      
       const response = await axios.put(
         `${apiUrl}/api/attendance/${recordId}`,
         newattendanceData,
@@ -159,7 +159,7 @@ const AttendanceManagement = () => {
     try {
       const config = await handleGetTokenAndConfig();
       const response = await axios.get(`${apiUrl}/api/attendance`, config);
-      console.log({ response });
+      
       if (response.status === 200) {
         setAllAttendanceRecords(response.data);
       }
@@ -177,7 +177,7 @@ const AttendanceManagement = () => {
       return;
     }
     if (record) {
-      console.log({ record });
+      
       setrecordToUpdate(record);
       setRecordId(record._id);
       setEmployee(record.employee._id);
@@ -211,7 +211,7 @@ const AttendanceManagement = () => {
       lateMinutes,
       notes,
     };
-    console.log({ editattendanceData });
+    
     try {
       const config = await handleGetTokenAndConfig();
       const response = await axios.put(
@@ -219,7 +219,7 @@ const AttendanceManagement = () => {
         editattendanceData,
         config
       );
-      console.log({ response });
+      
       if (response.status === 200) {
         getallAttendanceRecords();
         // attendance created successfully
@@ -269,9 +269,9 @@ const AttendanceManagement = () => {
       const response = await axios.get(`${apiUrl}/api/employee`, config);
       const data = response.data;
       setListOfEmployees(data);
-      // console.log({ data });
+      // 
     } catch (error) {
-      console.log(error);
+      
     }
   };
 
@@ -284,7 +284,7 @@ const AttendanceManagement = () => {
       if (response.status === 200 && response.data) {
         const { data } = response;
         setshifts(data);
-        console.log({ Shifts: data });
+        
       } else {
         throw new Error("Invalid response format");
       }
@@ -295,11 +295,11 @@ const AttendanceManagement = () => {
 
   const handleSelectEmployee = (e) => {
     const employeeid = e.target.value;
-    // console.log({ employeeid })
+    // 
     const employee = listOfEmployees.filter(
       (employee) => employee._id === employeeid
     )[0];
-    // console.log({ employee: employee.shift })
+    // 
     if (employee) {
       setEmployee(employeeid);
       if (employee && employee.shift) {
@@ -315,29 +315,29 @@ const AttendanceManagement = () => {
 
   const handleArrivealDate = (e) => {
     const arrivalDateTime = new Date(e.target.value);
-    console.log({ arrivalDateTime });
+    
     setArrivalDate(arrivalDateTime);
     const arrivalTimeInMinutes =
       arrivalDateTime.getHours() * 60 + arrivalDateTime.getMinutes();
-    console.log({ arrivalTimeInMinutes });
+    
 
     const shiftStartTime = new Date();
 
     const shiftStartTimeArray = shift.startTime.split(":");
-    console.log({ shiftStartTimeArray });
+    
     shiftStartTime.setHours(shiftStartTimeArray[0]);
     shiftStartTime.setMinutes(shiftStartTimeArray[1]);
-    console.log({ shiftStartTime });
+    
 
     const shiftStartTimeInMinutes =
       new Date(shiftStartTime).getHours() * 60 +
       new Date(shiftStartTime).getMinutes();
-    console.log({ shiftStartTimeInMinutes });
+    
 
     // تحويل فرق الساعات إلى دقائق وجمعها مع فرق الدقائق
     const calculateLateMinutes = arrivalTimeInMinutes - shiftStartTimeInMinutes;
 
-    console.log({ calculateLateMinutes });
+    
     setLateMinutes(calculateLateMinutes);
     if (calculateLateMinutes !== 0) {
       setIsLate(true);
@@ -358,7 +358,7 @@ const AttendanceManagement = () => {
     shiftEndTime.setHours(shiftEndTimeArray[0]);
     shiftEndTime.setMinutes(shiftEndTimeArray[1]);
 
-    console.log({ shiftEndTimeArray });
+    
 
     const shiftEndTimeInMinutes =
       new Date(shiftEndTime).getHours() * 60 +

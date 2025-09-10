@@ -120,7 +120,7 @@ const ManagerDash = () => {
           return orderTime >= startTime && orderTime <= endTime;
         });
         setorderShift(shiftOrders);
-        console.log({ shiftData, startTime, endTime, shiftOrders });
+        
       } else {
         toast.warn(
           "لا يمكن تحديد اوردرات الشيف لان هذا المستخدم ليس له شيفت محدد"
@@ -133,7 +133,7 @@ const ManagerDash = () => {
   };
 
   useEffect(() => {
-    console.log({ isRefresh });
+    
     fetchOrdersData();
   }, [isRefresh]);
 
@@ -172,7 +172,7 @@ const ManagerDash = () => {
       const res = await axios.get(`${apiUrl}/api/preparationsection`, config);
       if (res.status === 200) {
         const PreparationSections = res.data.data;
-        console.log({ PreparationSections });
+        
         setAllPreparationSections(PreparationSections);
       } else {
         throw new Error("Failed to fetch data");
@@ -196,7 +196,7 @@ const ManagerDash = () => {
   //     isSend: true,
   //   }));
 
-  //   console.log({ updatedProducts });
+  //   
 
   //   // Prepare the payload for updating the order
   //   const payload = { status, isActive, cashier };
@@ -293,7 +293,7 @@ const ManagerDash = () => {
   //             config
   //           );
   //           const orderProducts =await getOrder.data.products
-  //           console.log({ orderProducts });
+  //           
   //         const newProducts = await orderProducts.filter(product=>product.isSend === false)
 
   //         allPreparationSections &&
@@ -390,7 +390,7 @@ const ManagerDash = () => {
         config
       );
       const orderProducts = getOrder.data.products; // Extract the products from the order
-      console.log({ orderProducts });
+      
 
       // Filter products that are not yet sent to preparation
       const newProducts = orderProducts.filter((product) => !product.isSend);
@@ -551,18 +551,18 @@ const ManagerDash = () => {
         const lastWaiterIndex = sectionWaiters.findIndex(
           (waiter) => waiter._id === lastWaiterId
         );
-        // console.log({ lastWaiterId, lastWaiterIndex });
+        // 
 
         waiterId =
           lastWaiterIndex !== -1 && lastWaiterIndex < sectionWaiters.length - 1
             ? sectionWaiters[lastWaiterIndex + 1]._id
             : sectionWaiters[0]._id;
       } else {
-        console.log("لا توجد طلبات سابقة لهذه الطاولة");
+        
         waiterId = sectionWaiters[0]._id;
       }
 
-      console.log({ waiterId });
+      
 
       return waiterId;
     } catch (error) {
@@ -588,7 +588,7 @@ const ManagerDash = () => {
         config
       );
       const orderData = order.data;
-      console.log(orderData);
+      
       if (orderData) {
         setupdate(!update);
         if (orderData.help === "Requests assistance") {
@@ -600,7 +600,7 @@ const ManagerDash = () => {
         }
       }
     } catch (error) {
-      console.log(error);
+      
       toast.error("حدث خطأ أثناء إرسال الويتر");
     }
   };
@@ -617,9 +617,9 @@ const ManagerDash = () => {
         config
       );
       setupdate(!update);
-      console.log(order.data);
+      
     } catch (error) {
-      console.log(error);
+      
     }
   };
 
@@ -640,7 +640,7 @@ const ManagerDash = () => {
         config
       );
       const registers = response.data;
-      // console.log({response})
+      // 
       if (registers.length === 0) {
         toast.info("لم يتم العثور على  لهذا الموظف");
         return;
@@ -711,7 +711,7 @@ const ManagerDash = () => {
         }
       }
     } catch (error) {
-      console.log(error);
+      
       toast.error("فشل في تسجيل الإيراد");
     }
   };
@@ -783,7 +783,7 @@ const ManagerDash = () => {
         setorderType(order.orderType);
       }
     } catch (error) {
-      console.log(error);
+      
       // Display toast or handle error
     }
   };
@@ -882,7 +882,7 @@ const ManagerDash = () => {
         setkitchenProducts([]);
       }
     } catch (error) {
-      console.log(error);
+      
       toast.error("حدث خطأ اثناء ارسال الاوردر!");
     }
   };

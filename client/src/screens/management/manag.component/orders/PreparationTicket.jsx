@@ -162,7 +162,7 @@ handleGetTokenAndConfig,
 
   const deleteSelectedIds = async (e) => {
     e.preventDefault();
-    console.log(selectedIds);
+    
     const config = await handleGetTokenAndConfig();
     try {
       for (const Id of selectedIds) {
@@ -172,7 +172,7 @@ handleGetTokenAndConfig,
       toast.success("Selected orders deleted successfully");
       setSelectedIds([]);
     } catch (error) {
-      console.log(error);
+      
       toast.error("Failed to delete selected orders");
     }
   };

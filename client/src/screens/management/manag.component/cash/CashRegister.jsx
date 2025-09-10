@@ -61,7 +61,7 @@ const CashRegister = () => {
       } else {
         toast.info("لا توجد بيانات لعرضها");
       }
-      // console.log({ data });
+      // 
     } catch (error) {
       handleAxiosError(
         error,

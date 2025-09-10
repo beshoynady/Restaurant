@@ -232,7 +232,7 @@ const Suppliers = () => {
         updatedSupplierData,
         config
       );
-      console.log(response.data);
+      
       if (response) {
         // Notify on success
         toast.success("تم تحديث المورد بنجاح");
@@ -240,7 +240,7 @@ const Suppliers = () => {
         emptyData();
       }
     } catch (error) {
-      console.log(error);
+      
 
       // Notify on error
       toast.error("فشل في تحديث المورد");
@@ -263,7 +263,7 @@ const Suppliers = () => {
         config
       );
       if (response.status === 200) {
-        console.log(response);
+        
         // Optionally, you may want to update the list of suppliers after deletion
         getAllSuppliers(); // Update the list of suppliers after deletion
 
@@ -271,7 +271,7 @@ const Suppliers = () => {
         toast.success("تم حذف المورد بنجاح");
       }
     } catch (error) {
-      console.log(error);
+      
 
       // Notify on error
       toast.error("فشل في حذف المورد");
@@ -384,7 +384,7 @@ const Suppliers = () => {
       const res = await axios.get(apiUrl + "/api/categoryStock/", config);
       setAllCategoryStock(res.data);
     } catch (error) {
-      console.log(error);
+      
 
       // Notify on error
       toast.error("فشل في استرداد فئة المخزون");

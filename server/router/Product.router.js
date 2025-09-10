@@ -55,14 +55,14 @@ const upload = multer({
 const deleteOldImage = (imagePath) => {
   if (fs.existsSync(imagePath)) {
     fs.unlinkSync(imagePath);
-    console.log('Old image deleted successfully');
+    
   }
 };
 
 // Middleware لحذف الصورة القديمة إذا كانت هناك صورة جديدة يتم رفعها
 const deleteOldImageMiddleware = async (req, res, next) => {
   try {
-    console.log('Middleware triggered');
+    
     const productId = req.params.productId;
     if (!productId) {
       return res.status(400).json({ message: 'Product ID is missing' });
@@ -78,7 +78,7 @@ const deleteOldImageMiddleware = async (req, res, next) => {
 
     if (product.image && req.file) {
       const oldImagePath = path.join(imagesDir, product.image);
-      console.log('Deleting old image:', oldImagePath);
+      
       deleteOldImage(oldImagePath);
     }
 
@@ -91,7 +91,7 @@ const deleteOldImageMiddleware = async (req, res, next) => {
 
 const deleteImageProductMiddleware = async (req, res, next) => {
   try {
-    console.log('Middleware triggered');
+    
     const productId = req.params.productId;
     if (!productId) {
       return res.status(400).json({ message: 'Product ID is missing' });
@@ -106,7 +106,7 @@ const deleteImageProductMiddleware = async (req, res, next) => {
 
     if (product.image) {
       const oldImagePath = path.join(imagesDir, product.image);
-      console.log('Deleting old image:', oldImagePath);
+      
       deleteOldImage(oldImagePath);
     }
 

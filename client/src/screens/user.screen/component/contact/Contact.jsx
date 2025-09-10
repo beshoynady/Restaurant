@@ -42,7 +42,7 @@ const Contact = () => {
           },
         }
       );
-      console.log({ send });
+      
       if (send.status === 201) {
         //  socket.emit("sendorder", "هناك رساله جديدة");
 

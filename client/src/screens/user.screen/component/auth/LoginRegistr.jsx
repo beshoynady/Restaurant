@@ -45,7 +45,7 @@ const LoginRegistr = (props) => {
     try {
       const response = await axios.get(`${apiUrl}/api/deliveryarea`);
       const data = await response.data;
-      console.log({ data });
+      
       if (data) {
         setAreas(data);
       } else {
@@ -64,7 +64,7 @@ const LoginRegistr = (props) => {
 
   const login = async (e, phone, password, getUserInfoFromToken) => {
     e.preventDefault();
-    console.log({ phone, password });
+    
 
     try {
       // Check if phone and password are provided
@@ -78,7 +78,7 @@ const LoginRegistr = (props) => {
         phone,
         password,
       });
-      console.log({ response });
+      
       // Handle response data
       if (response && response.data) {
         const { accessToken, findUser } = response.data;

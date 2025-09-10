@@ -100,7 +100,7 @@ const Cart = (props) => {
       className="cart-section"
       style={open_cart ? { display: "flex" } : { display: "none" }}
     >
-      {console.log({ itemsInCart })}
+     
       <div className="cart-wrapper">
         <div className="cart-container">
           <div className="slide-controler">

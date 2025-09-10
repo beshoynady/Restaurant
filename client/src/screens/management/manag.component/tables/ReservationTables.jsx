@@ -106,7 +106,7 @@ const ReservationTables = () => {
               new Date(reservation.endTime).getTime())
       );
 
-      console.log({ filterReservationsByTable, filterReservationsByTime });
+      
       if (
         filterReservationsByTime.length === 0 ||
         (filterReservationsByTime.length === 1 &&
@@ -208,9 +208,9 @@ const ReservationTables = () => {
       setFilteredClients(client);
       const userId = client._id;
       setUserId(userId);
-      console.log(client);
-      console.log(name);
-      console.log(userId);
+      
+      
+      
     }
   };
 
@@ -263,7 +263,7 @@ const ReservationTables = () => {
 
   // const deleteSelectedIds = async (e) => {
   //   e.preventDefault();
-  //   console.log(selectedIds)
+  //   
   //   try{
   // const config = await handleGetTokenAndConfig();
   //     for (const Id of selectedIds) {
@@ -273,7 +273,7 @@ const ReservationTables = () => {
   //     toast.success('Selected orders deleted successfully');
   //     setSelectedIds([]);
   //   } catch (error) {
-  //     console.log(error);
+  //     
   //     toast.error('Failed to delete selected orders');
   //   }
   // };
@@ -740,11 +740,11 @@ const ReservationTables = () => {
                           if (reservationDate) {
                             const StartedDate = new Date(reservationDate);
                             const timeParts = e.target.value.split(":");
-                            console.log({ timeParts });
+                            
                             if (StartedDate) {
                               StartedDate.setHours(parseInt(timeParts[0]));
                               StartedDate.setMinutes(parseInt(timeParts[1]));
-                              console.log({ StartedDate });
+                              
                               setStartTime(StartedDate);
                             }
                           } else {
@@ -781,11 +781,11 @@ const ReservationTables = () => {
                           if (reservationDate) {
                             const EndedDate = new Date(reservationDate);
                             const timeParts = e.target.value.split(":");
-                            console.log({ timeParts });
+                            
                             if (EndedDate) {
                               EndedDate.setHours(parseInt(timeParts[0]));
                               EndedDate.setMinutes(parseInt(timeParts[1]));
-                              console.log({ EndedDate });
+                              
                               setEndTime(EndedDate);
                             }
                           } else {
@@ -987,11 +987,11 @@ const ReservationTables = () => {
                           if (reservationDate) {
                             const StartedDate = new Date(reservationDate);
                             const timeParts = e.target.value.split(":");
-                            console.log({ timeParts });
+                            
                             if (StartedDate) {
                               StartedDate.setHours(parseInt(timeParts[0]));
                               StartedDate.setMinutes(parseInt(timeParts[1]));
-                              console.log({ StartedDate });
+                              
                               setStartTime(StartedDate);
                             }
                           } else {
@@ -1036,11 +1036,11 @@ const ReservationTables = () => {
                           if (reservationDate) {
                             const EndedDate = new Date(reservationDate);
                             const timeParts = e.target.value.split(":");
-                            console.log({ timeParts });
+                            
                             if (EndedDate) {
                               EndedDate.setHours(parseInt(timeParts[0]));
                               EndedDate.setMinutes(parseInt(timeParts[1]));
-                              console.log({ EndedDate });
+                              
                               setEndTime(EndedDate);
                               getAvailableTables(
                                 reservationDate,

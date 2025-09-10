@@ -63,7 +63,7 @@ const ProductionRecipe = () => {
 
       const stockItems = response.data.reverse();
       setAllStockItems(stockItems);
-      console.log({ stockItems });
+      
       // Notify on success
       toast.success("تم استرداد عناصر المخزون بنجاح");
       setIsLoading(false);
@@ -308,7 +308,7 @@ const ProductionRecipe = () => {
       );
       const editRecipeToProductData = await editRecipeToProduct.data.ProductionRecipe;  
       if (editRecipeToProductData) {
-        console.log({ editRecipeToProductData });
+        
         getRecipeOfStockItem(editRecipeToProductData.stockItem);
         toast.success("تم تعديل المكون بنجاح");
       } else {
@@ -412,7 +412,7 @@ const ProductionRecipe = () => {
 
       const recipeOfStockItem = getStockItemRecipe.data;
 
-      console.log({ recipeOfStockItem });
+      
       if (recipeOfStockItem && recipeOfStockItem.ingredients?.length > 0) {
         setrecipeOfStockItem(recipeOfStockItem);
         setpreparationTime(recipeOfStockItem.preparationTime);
@@ -424,8 +424,8 @@ const ProductionRecipe = () => {
         calculateTotalDineInCost(serviceDetails);
         calculateTotaldeliveryCost(serviceDetails);
         calculateTotaltakeawayCost(serviceDetails);
-        console.log("المكونات:", ingredients);
-        console.log("serviceDetails:", serviceDetails);
+        
+        
         if (ingredients) {
           setingredients([...ingredients].reverse());
           toast.success("تم جلب مكونات الوصفة بنجاح");
@@ -462,12 +462,12 @@ const ProductionRecipe = () => {
       const newingredients = ingredients.filter(
         (ingredient) => ingredient.itemId != itemId
       );
-      console.log({ newingredients });
+      
       let total = 0;
       for (let i = 0; i < newingredients.length; i++) {
         total += newingredients[i].totalcostofitem;
       }
-      console.log({ totalcost: total });
+      
       // productionRecipe.map(rec=>totalcost = totalcost + ingredient.totalcostofitem)
       const deleteRecipetoProduct = await axios.put(
         `${apiUrl}/api/productionrecipe/${recipeOfStockItem._id}`,
@@ -479,7 +479,7 @@ const ProductionRecipe = () => {
         `${apiUrl}/api/productionrecipe/${recipeOfStockItem._id}`,
         config
       );
-      console.log(deleteRecipetoProduct);
+      
     }
   };
 
@@ -497,7 +497,7 @@ const ProductionRecipe = () => {
           config
         );
 
-        console.log(deleteRecipeToProduct);
+        
 
         deleteRecipeToProduct.status === 200
           ? toast.success("تم حذف الوصفة بنجاح")
@@ -520,7 +520,7 @@ const ProductionRecipe = () => {
         config
       );
       const stockItemData = await getStockItem.data;
-      console.log({ stockItemData });
+      
       setname(stockItemData.itemName);
       setunit(stockItemData.ingredientUnit);
       setcostofitem(stockItemData.costPerPart);

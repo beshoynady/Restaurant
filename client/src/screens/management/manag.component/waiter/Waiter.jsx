@@ -49,7 +49,7 @@ const Waiter = () => {
       setActivePreparationTickets(filterWaiterTickets);
       // setPendingPayments(recentPaymentStatus);
     } catch (error) {
-      console.log(error);
+      
     }
   };
 
@@ -74,12 +74,12 @@ const Waiter = () => {
   //       (order) => order.orderType === "Internal"
   //     );
 
-  //     console.log({ internalOrdersData: internalOrdersData });
+  //     
   //     const products =
   //       internalOrdersData.length > 0
   //         ? internalOrdersData.flatMap((order) => order.products)
   //         : [];
-  //     console.log({ products: products });
+  //     
   //     const productsFiltered =
   //       products.length > 0
   //         ? products.filter(
@@ -88,13 +88,13 @@ const Waiter = () => {
   //           )
   //         : [];
 
-  //     console.log({ productsFiltered: productsFiltered });
+  //     
 
   //     if (productsFiltered.length > 0) {
   //       setInternalOrders(internalOrdersData);
   //     }
   //   } catch (error) {
-  //     console.log(error);
+  //     
   //   }
   // };
 
@@ -116,7 +116,7 @@ const Waiter = () => {
       fetchActivePreparationTickets();
       toast.success("تم تاكيد استلام الاوردر!");
     } catch (error) {
-      console.log(error);
+      
       toast.error("حدث خطا اثناء قبول الاوردر!");
     }
   };
@@ -166,7 +166,7 @@ const Waiter = () => {
         toast.success("تم تاكيد توصيل الاوردر!");
       }
     } catch (error) {
-      console.log(error);
+      
       toast.error("حدث خطا اثناء تاكيد توصيل الاوردر!");
     }
   };
@@ -186,7 +186,7 @@ const Waiter = () => {
         toast.success("تم تاكيد الاتجاه لتقديم المساعده!");
       }
     } catch (error) {
-      console.log(error);
+      
       toast.error("حدث خطاء اثناء تاكيد الاتجاه للعميل!");
     }
   };
@@ -204,7 +204,7 @@ const Waiter = () => {
       // fetchInternalOrders();
       toast.success("تم تاكيد تقديم المساعده!");
     } catch (error) {
-      console.log(error);
+      
       toast.error("حدث خطا اثناء تاكيد تقديم المساعدع!");
     }
   };

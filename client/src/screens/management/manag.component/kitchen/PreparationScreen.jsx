@@ -66,7 +66,7 @@ const PreparationScreen = () => {
       const getAllRecipe = await axios.get(`${apiUrl}/api/recipe`, config);
       const allRecipeData = getAllRecipe.data;
       setAllRecipe(allRecipeData);
-      console.log({ getAllRecipe });
+      
     } catch (error) {
       console.error("Error fetching product recipe:", error.message);
     }
@@ -172,7 +172,7 @@ const PreparationScreen = () => {
       const config = await handleGetTokenAndConfig();
 
       setFilteredSectionConsumptionToday([]);
-      // console.log("Fetching Section consumption...");
+      // 
 
       const response = await axios.get(`${apiUrl}/api/consumption`, config);
 
@@ -187,7 +187,7 @@ const PreparationScreen = () => {
           }
         );
 
-        // console.log({ SectionConsumptionsToday, SectionConsumptions });
+        // 
         setFilteredSectionConsumptionToday(SectionConsumptionsToday);
       } else {
         console.error("Unexpected response or empty data");
@@ -214,7 +214,7 @@ const PreparationScreen = () => {
           : [];
       setAllWaiters(waiterActive);
     } catch (error) {
-      console.log(error);
+      
     }
   };
 
@@ -236,7 +236,7 @@ const PreparationScreen = () => {
       if (!getTicket) {
         throw new Error("Ticket not found");
       }
-      // console.log({AllPreparationTicket, getTicket})
+      // 
 
       if (getTicket.status) {
       }
@@ -267,18 +267,18 @@ const PreparationScreen = () => {
         const lastWaiterIndex = sectionWaiters.findIndex(
           (waiter) => waiter._id === lastWaiterId
         );
-        // console.log({ lastWaiterId, lastWaiterIndex });
+        // 
 
         waiterId =
           lastWaiterIndex !== -1 && lastWaiterIndex < sectionWaiters.length - 1
             ? sectionWaiters[lastWaiterIndex + 1]._id
             : sectionWaiters[0]._id;
       } else {
-        console.log("لا توجد طلبات سابقة لهذه الطاولة");
+        
         waiterId = sectionWaiters[0]._id;
       }
 
-      console.log({ waiterId });
+      
 
       return waiterId;
     } catch (error) {
@@ -454,11 +454,11 @@ const PreparationScreen = () => {
           : product
       );
 
-      // console.log({updatedOrderProducts, updateTicketProducts, updatedOrderProducts})
+      // 
 
       if (orderType === "Internal") {
         const waiter = await specifiedWaiter(ticketId);
-        console.log({ waiter });
+        
         if (!waiter) {
           toast.warn("لا يوجد نادل متاح لتسليم الطلب. يرجى مراجعة الإدارة!");
           return;
@@ -481,7 +481,7 @@ const PreparationScreen = () => {
           },
           config
         );
-        console.log({ updateTicket, updateOrder });
+        
         waiterSocket.emit("orderReady", `أورد جاهز في المطبخ-${waiter}`);
       } else {
         const updateOrder = await axios.put(
@@ -496,7 +496,7 @@ const PreparationScreen = () => {
           { preparationStatus: "Prepared", isDone: true },
           config
         );
-        console.log({ updateTicket, updateOrder });
+        
         waiterSocket.emit("orderReady", "أورد جاهز في المطبخ");
       }
 

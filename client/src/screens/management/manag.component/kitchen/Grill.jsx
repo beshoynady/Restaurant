@@ -30,7 +30,7 @@ const Grill = () => {
       const res = await axios.get(`${apiUrl}/api/preparationsection`, config);
       if (res.status === 200) {
         const PreparationSections = res.data.data;
-        console.log({ PreparationSections });
+        
         setAllPreparationSections(PreparationSections);
       } else {
         throw new Error("Failed to fetch data");
@@ -58,7 +58,7 @@ const Grill = () => {
       const getAllRecipe = await axios.get(`${apiUrl}/api/recipe`, config);
       const allRecipeData = getAllRecipe.data;
       setAllRecipe(allRecipeData);
-      console.log({ getAllRecipe });
+      
     } catch (error) {
       console.error("Error fetching product recipe:", error.message);
     }
@@ -75,8 +75,8 @@ const Grill = () => {
       );
 
       const PreparationTicket = Response.data.data;
-      console.log({ Response, Section, PreparationTicket });
-      // console.log({ kitchenTickets })
+      
+      // 
       // Set all Tickets state
       setAllPreparationTicket(PreparationTicket);
       const kitchenPreparationTicket = PreparationTicket.filter(
@@ -84,7 +84,7 @@ const Grill = () => {
           ticket.preparationSection._id === Section && ticket.isActive === true
       );
 
-      console.log({ kitchenPreparationTicket });
+      
       // Set active Tickets state
       setPreparationTicketActive(kitchenPreparationTicket);
 
@@ -93,12 +93,12 @@ const Grill = () => {
       const allRecipe = allRecipeData;
       const updatedConsumptionPreparationTicketActive = [];
 
-      // console.log({ allRecipe, activeTickets })
+      // 
       kitchenPreparationTicket &&
         kitchenPreparationTicket.forEach((ticket) => {
           ticket.products.forEach((product) => {
             if (!product.isDone) {
-              // console.log({ Ticket, product })
+              // 
               const productIngredients = product.sizeId
                 ? allRecipe.find(
                     (recipe) =>
@@ -109,7 +109,7 @@ const Grill = () => {
                     (recipe) => recipe.productId._id === product.productId?._id
                   )?.ingredients || [];
 
-              // console.log({ productIngredients })
+              // 
 
               // Update consumptionPreparationTicketActive
               productIngredients &&
@@ -144,7 +144,7 @@ const Grill = () => {
                         (recipe) => recipe.productId._id === extra.extraId._id
                       )?.ingredients || [];
 
-                    // console.log({ extraIngredients })
+                    // 
 
                     // Update consumptionPreparationTicketActive
                     extraIngredients &&
@@ -175,7 +175,7 @@ const Grill = () => {
             }
           });
         });
-      console.log({ updatedConsumptionPreparationTicketActive });
+      
 
       // Set updated consumptionPreparationTicketActive state
       setConsumptionPreparationTicketActive(
@@ -197,7 +197,7 @@ const Grill = () => {
       const config = await handleGetTokenAndConfig();
 
       setFilteredKitchenConsumptionToday([]);
-      // console.log("Fetching kitchen consumption...");
+      // 
 
       const response = await axios.get(`${apiUrl}/api/consumption`, config);
 
@@ -212,7 +212,7 @@ const Grill = () => {
           }
         );
 
-        // console.log({ kitchenConsumptionsToday, kitchenConsumptions });
+        // 
         setFilteredKitchenConsumptionToday(kitchenConsumptionsToday);
       } else {
         console.error("Unexpected response or empty data");
@@ -234,7 +234,7 @@ const Grill = () => {
         { preparationStatus },
         config
       );
-      console.log({ id, preparationStatus, response });
+      
       if (response.status === 200) {
         // Fetch Tickets from the API
         getAllPreparationTicket();
@@ -260,7 +260,7 @@ const Grill = () => {
       const { products: kitchenProducts } = preparationticketData.data.data;
       const orderId = await preparationticketData.data.data?.order._id;
       const orderProducts = preparationticketData.data.data.order?.products;
-      // console.log({preparationticketData:preparationticketData.data.data, orderId, orderProducts,  kitchenProducts});
+      // 
 
       if (!kitchenProducts.length) {
         toast.warn("لا توجد منتجات بحاجة إلى تجهيز في المطبخ");
@@ -384,11 +384,11 @@ const Grill = () => {
           : product
       );
 
-      // console.log({updatedOrderProducts, updateTicketProducts, updateTicket})
+      // 
 
       if (type === "Internal") {
         const waiter = await specifiedWaiter(id);
-        console.log({ waiter });
+        
         if (!waiter) {
           toast.warn("لا يوجد نادل متاح لتسليم الطلب. يرجى مراجعة الإدارة!");
           return;
@@ -410,7 +410,7 @@ const Grill = () => {
           },
           config
         );
-        console.log({ updateTicket });
+        
         waiterSocket.emit("orderReady", `أورد جاهز في المطبخ-${waiter}`);
       } else {
         await axios.put(
@@ -456,7 +456,7 @@ const Grill = () => {
           : [];
       setAllWaiters(waiterActive);
     } catch (error) {
-      console.log(error);
+      
     }
   };
 
@@ -478,7 +478,7 @@ const Grill = () => {
       if (!getTicket) {
         throw new Error("Ticket not found");
       }
-      // console.log({AllPreparationTicket, getTicket})
+      // 
 
       if (getTicket.status) {
       }
@@ -509,18 +509,18 @@ const Grill = () => {
         const lastWaiterIndex = sectionWaiters.findIndex(
           (waiter) => waiter._id === lastWaiterId
         );
-        // console.log({ lastWaiterId, lastWaiterIndex });
+        // 
 
         waiterId =
           lastWaiterIndex !== -1 && lastWaiterIndex < sectionWaiters.length - 1
             ? sectionWaiters[lastWaiterIndex + 1]._id
             : sectionWaiters[0]._id;
       } else {
-        console.log("لا توجد طلبات سابقة لهذه الطاولة");
+        
         waiterId = sectionWaiters[0]._id;
       }
 
-      // console.log({ waiterId });
+      // 
 
       return waiterId;
     } catch (error) {

@@ -70,13 +70,13 @@ handleGetTokenAndConfig,
     try {
       const config = await handleGetTokenAndConfig();
       const response = await axios.get(apiUrl + "/api/stockmovement/", config);
-      console.log(response.data);
+      
       const stockActions = await response.data;
       const filterBatches = stockActions.filter(action => action.inbound?.quantity > 0);
 
       setbatches(filterBatches)
     } catch (error) {
-      console.log(error);
+      
     }
   };
 
@@ -103,7 +103,7 @@ handleGetTokenAndConfig,
     try {
       const response = await axios.get(apiUrl + "/api/stockitem/", config);
       if (response) {
-        console.log(response.data);
+        
         setStockItems(response.data.reverse());
       }
     } catch (error) {

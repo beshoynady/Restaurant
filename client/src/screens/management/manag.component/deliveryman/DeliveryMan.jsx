@@ -42,7 +42,7 @@ handleGetTokenAndConfig,
   //     setPendingOrders(recentStatus);
   //     setPendingPayments(recentPaymentStatus);
   //   } catch (error) {
-  //     console.log(error);
+  //     
   //   }
   // };
 
@@ -61,10 +61,10 @@ handleGetTokenAndConfig,
       const deliveryOrdersData = activeOrders.filter(
         (order) => order.status === "Prepared" || order.status === "On the way"
       );
-      console.log({ deliveryOrdersData: deliveryOrdersData });
+      
       setDeliveryOrders(activeOrders);
     } catch (error) {
-      console.log(error);
+      
     }
   };
 
@@ -92,7 +92,7 @@ handleGetTokenAndConfig,
         toast.success("Order is on the way!");
       }
     } catch (error) {
-      console.log(error);
+      
       toast.error("Error updating order status!");
     }
   };
@@ -123,7 +123,7 @@ handleGetTokenAndConfig,
       }
       //  fetchPendingData();
     } catch (error) {
-      console.log(error);
+      
       toast.error("Error delivering order!");
     }
   };
@@ -143,7 +143,7 @@ handleGetTokenAndConfig,
         setShowModal(!showModal);
       }
     } catch (error) {
-      console.log(error);
+      
       // Display toast or handle error
     }
   };

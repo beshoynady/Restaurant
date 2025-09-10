@@ -160,29 +160,29 @@ const io = new Server(server, {
 
 // Handle socket.io connections
 // io.on('connect', (socket) => {
-//   console.log('New client connected');
+//   
 
 //   // Listen for new order notifications
 //   socket.on('neworder', (notification) => {
-//     console.log("Notification received:", notification); // Confirm receipt
+//      // Confirm receipt
 //     // Emit the notification back to the client for testing purposes
 //     socket.broadcast.emit('neworder', notification);
 //   });
 //   socket.on('orderkit', (notification) => {
-//     console.log("Notification received:", notification); // Confirm receipt
+//      // Confirm receipt
 //     // Emit the notification back to the client for testing purposes
 //     socket.broadcast.emit('orderkit', notification);
 //   });
 
 //   socket.on('orderwaiter', (notification) => {
-//     console.log("Notification received:", notification); // Confirm receipt
+//      // Confirm receipt
 //     // Emit the notification back to the client for testing purposes
 //     socket.broadcast.emit('orderwaiter', notification);
 //   });
 
 //   // Handle disconnect event
 //   socket.on('disconnect', () => {
-//     console.log('Client disconnected');
+//     
 //   });
 // });
 
@@ -194,80 +194,80 @@ const waiterNamespace = io.of("/waiter");
 
 // التعامل مع اتصالات الكاشير
 cashierNamespace.on("connection", (socket) => {
-  console.log("Cashier connected");
+  
 
   // استقبال إشعار من العميل إلى الكاشير
   socket.on("neworder", (notification) => {
-    console.log("New order received:", notification);
+    
     // إرسال الإشعار إلى المطبخ
     cashierNamespace.emit("neworder", notification);
   });
 
   socket.on("disconnect", () => {
-    console.log("Cashier disconnected");
+    
   });
 });
 
 // التعامل مع اتصالات المطبخ
 kitchenNamespace.on("connection", (socket) => {
-  console.log("Kitchen connected");
+  
 
   socket.on("orderkitchen", (notification) => {
-    console.log("Order ready notification:", notification);
+    
     kitchenNamespace.emit("orderkitchen", notification);
   });
 
   socket.on("disconnect", () => {
-    console.log("Kitchen disconnected");
+    
   });
 });
 
 BarNamespace.on("connection", (socket) => {
-  console.log("Bar connected");
+  
 
   socket.on("orderBar", (notification) => {
-    console.log("Order ready notification:", notification);
+    
     BarNamespace.emit("orderBar", notification);
   });
 
   socket.on("disconnect", () => {
-    console.log("Bar disconnected");
+    
   });
 });
 
 GrillNamespace.on("connection", (socket) => {
-  console.log("Grill connected");
+  
 
   socket.on("orderGrill", (notification) => {
-    console.log("Order ready notification:", notification);
+    
     GrillNamespace.emit("orderGrill", notification);
   });
 
   socket.on("disconnect", () => {
-    console.log("Grill disconnected");
+    
   });
 });
 
 // التعامل مع اتصالات الويتر
 waiterNamespace.on("connection", (socket) => {
-  console.log("Waiter connected");
+  
 
   socket.on("orderReady", (notification) => {
-    console.log("Help request received:", notification);
+    
     waiterNamespace.emit("orderReady", notification);
   });
   socket.on("helprequest", (notification) => {
-    console.log("Help request received:", notification);
+    
     waiterNamespace.emit("helprequest", notification);
   });
 
   socket.on("orderwaiter", (notification) => {
-    console.log("Order ready notification:", notification);
+    
     waiterNamespace.emit("orderwaiter", notification);
   });
 
   socket.on("disconnect", () => {
-    console.log("Waiter disconnected");
+    
   });
 });
 
@@ -275,5 +275,5 @@ const port = process.env.PORT || 8000;
 
 // Start the server
 server.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+  
 });

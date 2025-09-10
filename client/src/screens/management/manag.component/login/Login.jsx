@@ -20,12 +20,12 @@ const Login = () => {
   const checkIfEmployeesExist = async () => {
     try {
       const response = await axios.get(`${apiUrl}/api/employee/count`);
-      console.log({ response });
+      
       const count = response.data ? response.data.count : 0;
       if (count === 0) {
         setShowCreateButton(true);
       }
-      console.log({ count });
+      
     } catch (error) {
       console.error("Network Error:", error);
       toast.error("حدث خطأ في الشبكة.");
@@ -82,7 +82,7 @@ const Login = () => {
       const fristEmployee = await axios.post(
         `${apiUrl}/api/employee/create-first`
       );
-      console.log({ fristEmployee });
+      
       toast.success("تم إنشاء أول موظف بنجاح");
       checkIfEmployeesExist();
     } catch (error) {

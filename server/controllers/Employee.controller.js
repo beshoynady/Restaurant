@@ -12,7 +12,7 @@ const createFirstEmployee = async (req, res) => {
     if (employeeCount > 0) {
       return res.status(400).json({ message: "First employee already created" });
     }
-    console.log("Received request to create first employee");
+    
 
     const defaultEmployeeData = {
       fullname: "Beshoy Nady",
@@ -293,7 +293,7 @@ const updateEmployee = async (req, res) => {
     res.status(200).json(updatedEmployee);
   } catch (err) {
     res.status(500).json({ message: "Error updating employee", err });
-    console.log({ message: "Error updating employee", err });
+    
   }
 };
 
@@ -409,7 +409,7 @@ const getAllEmployee = async (req, res) => {
       .populate("shift")
       .populate("createdBy", "_id fullname username role")
       .populate("updatedBy", "_id fullname username role");
-    // console.log("Employees: ", employees);
+    // 
     res.status(200).json(employees);
   } catch (err) {
     if (err instanceof mongoose.Error) {

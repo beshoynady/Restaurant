@@ -460,7 +460,7 @@ export default function Offers() {
                                 );
                                 setextraArea(!extraArea);
                                 setproductId(size._id);
-                                console.log({ sizeid: size._id });
+                                
                               }}
                             >
                               add_circle

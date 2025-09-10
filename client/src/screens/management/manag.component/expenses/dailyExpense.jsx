@@ -97,7 +97,7 @@ const DailyExpense = () => {
       const response = await axios.get(apiUrl + "/api/expenses/", config);
       setAllExpenses(response.data.reverse());
     } catch (error) {
-      console.log(error);
+      
     }
   };
 
@@ -206,7 +206,7 @@ const DailyExpense = () => {
         );
 
         const data = response.data;
-        console.log(response.data);
+        
 
         const cashMovement = await axios.put(
           `${apiUrl}/api/cashMovement/${cashMovementId}`,
@@ -238,10 +238,10 @@ const DailyExpense = () => {
           }
         }
       } else {
-        console.log("Cash movement ID value is empty.");
+        
       }
     } catch (error) {
-      console.log(error);
+      
       // Toast notification for error
       toast.error("Failed to update expense");
     }
@@ -290,10 +290,10 @@ const DailyExpense = () => {
           getallDailyExpenses();
         }
       } else {
-        console.log("Cash movement ID value is empty.");
+        
       }
     } catch (error) {
-      console.log(error);
+      
       // Toast notification for error
       toast.error("Failed to delete expense");
     }
@@ -308,10 +308,10 @@ const DailyExpense = () => {
       }
       const response = await axios.get(apiUrl + "/api/dailyexpense/", config);
       const dailyExpenses = await response.data.reverse();
-      console.log(response.data);
+      
       setAllDailyExpenses(dailyExpenses);
     } catch (error) {
-      console.log(error);
+      
     }
   };
 

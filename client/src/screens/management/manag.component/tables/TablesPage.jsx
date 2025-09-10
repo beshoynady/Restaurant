@@ -44,7 +44,7 @@ const TablesPage = () => {
       const activeOrders = orders.data.filter(
         (order) => order.isActive === true
       );
-      // console.log({ activeOrders });
+      // 
       // Set active orders
       setOrderActive(activeOrders);
 
@@ -53,11 +53,11 @@ const TablesPage = () => {
         (activeOrder) => activeOrder.table != null
       );
 
-      // console.log({ getactiveTable });
+      // 
       // Set table IDs
       setactiveTable(getactiveTable);
     } catch (error) {
-      console.log(error);
+      
     }
   };
   

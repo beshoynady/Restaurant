@@ -140,11 +140,11 @@ const Reservation = () => {
                   if (reservationDate) {
                     const StartedDate = new Date(reservationDate);
                     const timeParts = e.target.value.split(":");
-                    console.log({ timeParts });
+                    
                     if (StartedDate) {
                       StartedDate.setHours(parseInt(timeParts[0]));
                       StartedDate.setMinutes(parseInt(timeParts[1]));
-                      console.log({ StartedDate });
+                      
                       setStartTime(StartedDate);
                     }
                   } else {
@@ -181,11 +181,11 @@ const Reservation = () => {
                   if (reservationDate) {
                     const EndedDate = new Date(reservationDate);
                     const timeParts = e.target.value.split(":");
-                    console.log({ timeParts });
+                    
                     if (EndedDate) {
                       EndedDate.setHours(parseInt(timeParts[0]));
                       EndedDate.setMinutes(parseInt(timeParts[1]));
-                      console.log({ EndedDate });
+                      
                       setEndTime(EndedDate);
                       getAvailableTables(reservationDate, startTime, EndedDate);
                     }

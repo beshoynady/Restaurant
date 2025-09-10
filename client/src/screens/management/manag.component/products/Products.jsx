@@ -114,7 +114,7 @@ const Products = () => {
   const [extras, setExtras] = useState([]);
 
   const addExtra = (extraId) => {
-    console.log({ extraId });
+    
     if (extras.includes(extraId)) {
       setExtras(extras.filter((item) => item !== extraId));
     } else {
@@ -134,7 +134,7 @@ const Products = () => {
       const res = await axios.get(`${apiUrl}/api/preparationsection`, config);
       if (res.status === 200) {
         const PreparationSections = res.data.data;
-        console.log({ PreparationSections });
+        
         setAllPreparationSections(PreparationSections);
       } else {
         throw new Error("Failed to fetch data");
@@ -212,11 +212,11 @@ const Products = () => {
         },
       });
 
-      console.log({ responsecreateproduct: response });
+      
 
       if (response.status === 201) {
         getallproducts();
-        console.log(response.data);
+        
         toast.success("تم إنشاء المنتج بنجاح.");
       } else {
         throw new Error(
@@ -289,7 +289,7 @@ const Products = () => {
     setHasExtras(product.hasExtras);
     if (product.hasExtras) {
       const list = product.extras.map((ext) => ext._id);
-      console.log({ list });
+      
       setExtras(list);
     } else {
       setExtras([]);
@@ -340,7 +340,7 @@ const Products = () => {
         requestBody.image = productimg;
       }
 
-      console.log({ requestBody });
+      
 
       // Perform the API request to update the product
       const response = await axios.put(
@@ -355,7 +355,7 @@ const Products = () => {
       );
 
       // Handle successful response
-      console.log(response.data);
+      
       if (response) {
         // Refresh categories and products after successful update
         getallCategories();
@@ -366,7 +366,7 @@ const Products = () => {
       }
     } catch (error) {
       // Handle errors
-      console.log(error);
+      
 
       // Show error toast
       toast.error("حدث خطأ أثناء تحديث المنتج. الرجاء المحاولة مرة أخرى.");
@@ -382,7 +382,7 @@ const Products = () => {
       const response = await axios.get(apiUrl + "/api/product/");
       if (response) {
         const products = await response.data;
-        console.log({ products });
+        
         setlistofProducts(products.reverse());
         const filterAddon = products.filter(
           (product) => product.isAddon === true
@@ -392,7 +392,7 @@ const Products = () => {
         }
       }
     } catch (error) {
-      console.log(error);
+      
     }
   };
 
@@ -404,7 +404,7 @@ const Products = () => {
 
       if (response.status === 200) {
         const allOrders = response.data;
-        console.log({ allOrders });
+        
         setAllOrders(allOrders);
       } else {
         console.error("Failed to fetch orders");
@@ -464,11 +464,11 @@ const Products = () => {
         config
       );
       if (response) {
-        console.log(response);
+        
         getallproducts();
       }
     } catch (error) {
-      console.log(error);
+      
     }
   };
 
@@ -478,11 +478,11 @@ const Products = () => {
     try {
       const response = await axios.get(apiUrl + "/api/menucategory/", config);
       const categories = await response.data;
-      // console.log(response.data)
+      // 
       setlistofcategories(categories);
-      // console.log(listofcategories)
+      // 
     } catch (error) {
-      console.log(error);
+      
     }
   };
 

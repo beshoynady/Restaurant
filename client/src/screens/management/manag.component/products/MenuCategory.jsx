@@ -106,7 +106,7 @@ const MenuCategory = () => {
 
       if (deleted.status === 200) {
         getallCategory();
-        console.log("Category deleted successfully.");
+        
         toast.success("Category deleted successfully.");
       } else {
         throw new Error("Failed to delete category.");
@@ -159,7 +159,7 @@ const MenuCategory = () => {
     e.preventDefault();
     const config = await handleGetTokenAndConfig();
     try {
-      console.log({ allCategory });
+      
       // Initialize a variable to track if all requests are done
       let done = true;
       // Iterate over all categories

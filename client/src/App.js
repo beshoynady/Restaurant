@@ -452,7 +452,7 @@ function App() {
           (menuCategory) => menuCategory.status === true
         );
       // Set fetched categories in the state
-      console.log({ activeMenuCategories });
+      
 
       setAllMenuCategories(activeMenuCategories);
 
@@ -478,7 +478,7 @@ function App() {
       const config = await handleGetTokenAndConfig();
       // Fetch all orders from the API
       const response = await axios.get(apiUrl + "/api/order", config);
-      console.log({ order: response });
+      
       // Check if response is successful
       if (response.status !== 200) {
         throw new Error("Failed to fetch orders.");
@@ -513,7 +513,7 @@ function App() {
         }
 
         setAllTable(tables);
-        console.log("Tables retrieved successfully:", tables);
+        
       } else {
         console.error("Unexpected response status:", response.status);
       }
@@ -551,7 +551,7 @@ function App() {
 
       if (response.status === 200) {
         setAllEmployees(response.data);
-        console.log("Employees data fetched successfully:", response.data);
+        
       } else {
         console.error(
           "Failed to fetch employees data: Unexpected response status",
@@ -569,7 +569,7 @@ function App() {
   const [menuCategoryId, setMenuCategoryId] = useState("");
 
   const filterByMenuCategoryId = (e) => {
-    // console.log(e.target.value)
+    // 
     setMenuCategoryId(e.target.value);
   };
 
@@ -579,7 +579,7 @@ function App() {
     try {
       // incrementProductQuantity the count state
       setCount(count + 1);
-      console.log({ productOrderToUpdate, productId, sizeId });
+      
       // Find the product either in the order or in all products
       const findProduct =
         productOrderToUpdate.length > 0
@@ -612,8 +612,8 @@ function App() {
         });
       }
 
-      console.log(findProduct);
-      console.log(itemsInCart);
+      
+      
     } catch (error) {
       console.error("Error incrementing product quantity:", error.message);
       // You can handle the error appropriately, such as displaying an error message to the user.
@@ -631,7 +631,7 @@ function App() {
           ? productOrderToUpdate.find((product) => product._id === productId)
           : allProducts.find((product) => product._id === productId);
 
-      console.log({ findProduct });
+      
       if (!findProduct) {
         throw new Error("Product not found.");
       }
@@ -686,7 +686,7 @@ function App() {
   const addNoteToProduct = (e, productId, sizeId) => {
     try {
       e.preventDefault();
-      console.log({ productNote, productId, sizeId });
+      
       // Find the product either in the order or in all products
       const findProduct =
         productOrderToUpdate.length > 0
@@ -719,8 +719,8 @@ function App() {
         });
       }
 
-      console.log(findProduct);
-      console.log(itemsInCart);
+      
+      
     } catch (error) {
       console.error("Error incrementing product quantity:", error.message);
       // You can handle the error appropriately, such as displaying an error message to the user.
@@ -730,9 +730,9 @@ function App() {
   const [productExtras, setproductExtras] = useState([]);
 
   const handleAddProductExtras = (extra, ind) => {
-    // console.log({productExtras, extra, ind})
+    // 
     const newExtras = [...productExtras];
-    console.log({ newExtras1: newExtras });
+    
 
     if (newExtras.length > 0) {
       if (newExtras[ind]) {
@@ -780,14 +780,14 @@ function App() {
         totalExtrasPrice: extra.price,
       };
     }
-    console.log({ newExtras2: newExtras });
+    
     calculateOrderCost();
     setproductExtras(newExtras);
   };
 
   const addExtrasToProduct = (e, productId, sizeId) => {
     e.preventDefault();
-    console.log({ productId, sizeId, productExtras });
+    
     if (productExtras.length < 1) {
       return;
     }
@@ -825,8 +825,8 @@ function App() {
         });
       }
 
-      console.log({ findProduct });
-      console.log({ itemsInCart });
+      
+      
       calculateOrderCost();
       setproductExtras([]);
     } catch (error) {
@@ -858,7 +858,7 @@ function App() {
 
         if (sizeId && cartItem.sizes && cartItem.sizes.length > 0) {
           const size = cartItem.sizes.find((size) => size._id === sizeId);
-          console.log({ size });
+          
           if (size) {
             newItem.sizeId = size._id;
             newItem.size = size.sizeName;
@@ -878,7 +878,7 @@ function App() {
             : [];
         }
 
-        console.log({ newItem });
+        
         if (itemsInCart.length > 0) {
           if (sizeId) {
             const repeatedItem = itemsInCart.find(
@@ -902,7 +902,7 @@ function App() {
           setitemId([sizeId ? sizeId : productId]);
         }
       }
-      // console.log({ itemsInCart })
+      // 
     } catch (error) {
       console.error("Error adding item to cart:", error.message);
     } finally {
@@ -920,7 +920,7 @@ function App() {
           ? productOrderToUpdate.find((product) => product._id === productId)
           : allProducts.find((product) => product._id === productId);
 
-      console.log({ productToUpdate });
+      
       if (!productToUpdate) {
         throw new Error("Product not found.");
       }
@@ -940,7 +940,7 @@ function App() {
         productToUpdate.extrasSelected = [];
         productToUpdate.notes = "";
       }
-      // console.log({ productToUpdate })
+      // 
     } catch (error) {
       console.error(
         "Error resetting product quantity and notes:",
@@ -953,7 +953,7 @@ function App() {
   const deleteItemFromCart = (id, sizeId) => {
     try {
       if (sizeId) {
-        console.log({ itemsInCart, sizeId });
+        
         // Determine which list to operate on based on the presence of items in productOrderToUpdate
         const updatedList =
           productOrderToUpdate.length > 0
@@ -962,14 +962,14 @@ function App() {
             )
             : itemsInCart.filter((item) => item.sizeId !== sizeId);
 
-        console.log({ updatedList });
+        
         // Update the list of item IDs
         const updatedItemId = itemId.filter((itemId) => itemId !== sizeId);
         if (updatedList.length === 0) {
           getAllProducts();
           // return
         }
-        // console.log({ itemsInCart })
+        // 
         // Update the state based on the list being modified
         if (productOrderToUpdate.length > 0) {
           setproductOrderToUpdate(updatedList);
@@ -981,14 +981,14 @@ function App() {
         // Reset the quantity and notes of the deleted item
         resetProductQuantityAndNotes(id, sizeId);
       } else {
-        console.log({ itemsInCart, id });
+        
         // Determine which list to operate on based on the presence of items in productOrderToUpdate
         const updatedList =
           productOrderToUpdate.length > 0
             ? productOrderToUpdate.filter((product) => product.productId !== id)
             : itemsInCart.filter((item) => item.productId !== id);
 
-        console.log({ updatedList });
+        
         // Update the list of item IDs
         const updatedItemId = itemId.filter((itemId) => itemId !== id);
         if (updatedList.length === 0) {
@@ -1044,7 +1044,7 @@ function App() {
         totalExtras = 0;
       });
 
-      console.log({ totalCost });
+      
       // Update the state with the total cost
       setcostOrder(totalCost);
     } catch (error) {
@@ -1069,7 +1069,7 @@ function App() {
     try {
       setIsLoading(true);
       const config = await handleGetTokenAndConfig();
-      // console.log({ itemsInCart })
+      // 
       // Find the user's orders
       const userOrders =
         allOrders &&
@@ -1550,7 +1550,7 @@ function App() {
 
     try {
       // Log client ID for debugging
-      console.log(clientId);
+      
 
       // Filter orders related to the client's table
       const tableOrder =
@@ -1634,7 +1634,7 @@ function App() {
         }, 60000 * 10);
       }
     } catch (error) {
-      console.log(error);
+      
       // Show error toast if there's an issue with marking the order for checkout
       toast.error("حدث خطأ اثناء طلب الحساب ! حاول مره اخري");
     }
@@ -1655,15 +1655,15 @@ function App() {
       const lasttableorder =
         tableorder.length > 0 ? tableorder[tableorder.length - 1] : [];
       const lasttableorderactive = lasttableorder.isActive;
-      // console.log({ lasttableorder });
-      // console.log({ lasttableorderactive });
+      // 
+      // 
       if (lasttableorderactive) {
         const id = await lasttableorder._id;
         const myOrder = await axios.get(apiUrl + "/api/order/" + id);
         const data = myOrder.data;
-        // console.log(data);
-        // console.log(data._id);
-        // console.log({ listProductsOrder: data.products });
+        // 
+        // 
+        // 
         setmyOrder(data);
         setmyOrderId(data._id);
         setorderTotal(data.total);
@@ -1672,7 +1672,7 @@ function App() {
         setorderSubtotal(data.subTotal);
         setlistProductsOrder(data.products);
         setnewlistofproductorder(data.products);
-        // console.log({ JSONlistProductsOrder: JSON.parse(JSON.stringify(data.products)) });
+        // 
       }
     } catch (error) {
       console.error(error);
@@ -1684,7 +1684,7 @@ function App() {
 
   const putNumOfPaid = (id, sizeid, numOfPaid) => {
     try {
-      console.log({ listProductsOrder, newlistofproductorder });
+      
 
       const updatedProducts = newlistofproductorder.map((product) => {
         if (
@@ -1710,7 +1710,7 @@ function App() {
       });
 
       setnewlistofproductorder(updatedProducts);
-      console.log({ listProductsOrder, updatedProducts });
+      
 
       calcSubtotalSplitOrder(updatedProducts);
     } catch (error) {
@@ -1746,7 +1746,7 @@ function App() {
           const numOfPaidDifference = Math.abs(
             originalProduct.numOfPaid - product.numOfPaid
           );
-          console.log({ numOfPaidDifference });
+          
 
           const priceToUse =
             originalProduct.priceAfterDiscount > 0
@@ -1759,7 +1759,7 @@ function App() {
       });
 
       setsubtotalSplitOrder(total);
-      console.log({ total, products });
+      
     } catch (error) {
       console.error(error);
       toast.error("حدث خطأ أثناء حساب المجموع للطلب المقسم.");
@@ -1803,7 +1803,7 @@ function App() {
     try {
       e.preventDefault();
 
-      console.log({ newlistofproductorder });
+      
       // Send a PUT request to update the order with split details
       const updateOrder = await axios.put(`${apiUrl}/api/order/${myOrderId}`, {
         products: newlistofproductorder,
@@ -1811,12 +1811,12 @@ function App() {
         subtotalSplitOrder,
       });
       if (updateOrder) {
-        console.log({ updateOrder });
+        
         // Display a success toast message upon successful payment
         toast.success("تم دفع جزء من الفاتورة بنجاح");
 
         // Log the updated order details
-        // console.log({ updateOrder });
+        // 
       }
     } catch (error) {
       // Display an error toast message if payment fails
@@ -1897,7 +1897,7 @@ function App() {
   };
 
   const refreshToken = async () => {
-    console.log({isTokenValid});
+    
     if(!isTokenValid) return;
 
     try {
@@ -1922,7 +1922,7 @@ function App() {
   const verifyToken = async () => {
     const employeeToken = localStorage.getItem("token_e");
     if (!employeeToken) {
-      console.log("No employee token found.");
+      
       setIsTokenValid(false);
       return;
     } else {
@@ -1955,7 +1955,7 @@ function App() {
         decodedToken = jwt_decode(employeeToken);
         setEmployeeLoginInfo(decodedToken);
         await getPermissions(decodedToken);
-        console.log({ EmployeeLoginInfo: decodedToken });
+        
         setIsTokenValid(true);
       }
 
@@ -2065,9 +2065,9 @@ function App() {
       const subTotal = costOrder;
       const total = subTotal + addition - discount;
 
-      console.log({ subTotal });
-      console.log({ total });
-      console.log({ updatelist: productOrderToUpdate });
+      
+      
+      
 
       const response = await axios.put(`${apiUrl}/api/order/${id}`, {
         products: productOrderToUpdate,
@@ -2105,7 +2105,7 @@ function App() {
       if (response.data) {
         setAllReservations(response.data);
       } else {
-        console.log("No data returned from the server");
+        
       }
     } catch (error) {
       console.error("Error fetching reservations:", error);
@@ -2115,7 +2115,7 @@ function App() {
   const [availableTableIds, setavailableTableIds] = useState([]);
 
   const getAvailableTables = (reservationDate, startTime, endTime) => {
-    console.log({ allReservations, reservationDate, startTime, endTime });
+    
 
     // Filter reservations that match the selected date
     const filterReservationsByDate = allReservations?.filter((reservation) => {
@@ -2157,11 +2157,11 @@ function App() {
       }
     );
 
-    console.log({ filterReservationsByDate, filterReservationsByTime });
+    
 
     // Retrieve all table IDs
     const allTableIds = allTable?.map((table) => table._id) || [];
-    console.log({ allTableIds });
+    
 
     // Retrieve reserved table IDs based on the filtered reservations
     const reservedTableIds = [];
@@ -2174,7 +2174,7 @@ function App() {
     const availableTableIds = allTableIds.filter(
       (tableId) => !reservedTableIds.includes(tableId)
     );
-    console.log({ availableTableIds });
+    
 
     // Update state with available table IDs
     setavailableTableIds(availableTableIds);
@@ -2200,13 +2200,13 @@ function App() {
       // setIsLoading(true)
 
       // Logging input data for debugging purposes
-      // console.log({ tableId, tableNumber, userId, numberOfGuests, customerName, customerPhone, reservationDate, startTime, endTime, reservationNote, createdBy });
+      // 
 
       // Convert reservationDate to Date object
       const selectedDate = new Date(reservationDate);
 
       // Logging selectedDate for debugging purposes
-      console.log({ selectedDate: selectedDate.getTime() });
+      
 
       // Filter reservations by table and selected date
       const filterReservationsByTable = allReservations.filter(
@@ -2225,7 +2225,7 @@ function App() {
       );
 
       // Logging filterReservationsByTable for debugging purposes
-      // console.log({ filterReservationsByTable });
+      // 
       // Filter reservations by table and selected date
       const conflictingReservation = filterReservationsByTable.find(
         (reservation) => {
@@ -2246,7 +2246,7 @@ function App() {
         }
       );
 
-      // console.log({ conflictingReservation });
+      // 
 
       // Display error message if there is a conflicting reservation
       if (conflictingReservation) {

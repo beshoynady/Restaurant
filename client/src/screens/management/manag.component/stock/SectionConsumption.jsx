@@ -67,7 +67,7 @@ const SectionConsumption = () => {
         allSectionConsumption = data.data;
       } catch (error) {
         if (error.response && error.response.status === 404) {
-          console.log("لا توجد سجلات لهذا القسم حتى الآن");
+          
         } else {
           throw error;
         }
@@ -222,7 +222,7 @@ const SectionConsumption = () => {
         toast.error("Failed to deltet SectionConsumption items");
       }
     } catch (error) {
-      console.log(error);
+      
       toast.error("Failed to retrieve SectionConsumption items");
     }
   };
@@ -237,14 +237,14 @@ const SectionConsumption = () => {
       if (response.status === 200) {
         const stockItems = response.data.reverse();
         setAllStockItems(stockItems);
-        console.log(response.data);
+        
       } else {
         // Handle other statuses if needed
-        console.log(`Unexpected status code: ${response.status}`);
+        
         toast.error("Failed to retrieve stock items");
       }
     } catch (error) {
-      console.log(error);
+      
       toast.error("Failed to retrieve stock items");
     }
   };
@@ -280,7 +280,7 @@ const SectionConsumption = () => {
       const res = await axios.get(apiUrl + "/api/categoryStock/");
       setAllCategoryStock(res.data);
     } catch (error) {
-      console.log(error);
+      
 
       // Notify on error
       toast.error("Failed to retrieve category stock");
@@ -298,14 +298,14 @@ const SectionConsumption = () => {
       return;
     }
     try {
-      console.log("Fetching Section consumption...");
+      
       const response = await axios.get(`${apiUrl}/api/consumption/`, config);
       if (response && response.data) {
         const allConsumptions = response.data.data;
         setAllSectionConsumption(allConsumptions.reverse());
         setSectionConsumptionForView(filterByTime("today", allConsumptions));
       } else {
-        console.log("Unexpected response or empty data");
+        
       }
     } catch (error) {
       console.error("Error fetching Section consumption:", error);
@@ -321,7 +321,7 @@ const SectionConsumption = () => {
       return;
     }
     try {
-      console.log("Fetching Section consumption...");
+      
       const response = await axios.get(
         `${apiUrl}/api/consumption/bysection/${selectedSectionId}`,
         config
@@ -333,7 +333,7 @@ const SectionConsumption = () => {
           filterByTime("today", SectionConsumptions)
         );
       } else {
-        console.log("Unexpected response or empty data");
+        
       }
     } catch (error) {
       console.error("Error fetching Section consumption:", error);
@@ -348,7 +348,7 @@ const SectionConsumption = () => {
 
   const handleDateChange = (e) => {
     const selectedDate = e.target.value;
-    console.log("Selected Date:", selectedDate);
+    
     setDate(selectedDate);
   };
 
@@ -369,13 +369,13 @@ const SectionConsumption = () => {
 
   // // Function to filter Section consumption based on creation date
   // const filterByConsumCreatedAt = () => {
-  //   console.log({datett:date})
+  //   
   //   const filtered = allSectionConsumption.filter((consumption) => {
   //     new Date(kitConsumption.createdAt).toISOString().split('T')[0] === date;
-  //     console.log({createdAt:kitConsumption.createdAt})
+  //     
   //     return itemDate === date;
   //   });
-  //   console.log({filtered})
+  //   
   //   setSectionConsumptionForView(filtered);
   // };
 

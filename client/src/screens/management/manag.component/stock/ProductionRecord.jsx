@@ -203,7 +203,7 @@ const ProductionRecord = () => {
 
       const stockItems = response.data.reverse();
       setAllStockItems(stockItems);
-      console.log({ stockItems });
+      
       // Notify on success
       toast.success("تم استرداد عناصر المخزون بنجاح");
       setIsLoading(false);
@@ -292,7 +292,7 @@ const ProductionRecord = () => {
         config
       );
       const productionOrder = getProductionOrder.data;
-      console.log({ getProductionOrder });
+      
       if (!productionOrder) {
         toast.warn("امر التصنيع هذا لم يعد موجود");
       }
@@ -304,7 +304,7 @@ const ProductionRecord = () => {
           config
         );
         const productionrecipe = getProductionRecipe.data;
-        console.log({productionrecipe})
+        
         if (!productionrecipe) {
           toast.warn("هذا العنصر لا يوجد له ريسبي");
         }

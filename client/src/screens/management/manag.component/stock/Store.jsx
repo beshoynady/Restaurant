@@ -97,7 +97,7 @@ const Store = () => {
         toast.info("لا توجد بيانات لعرضها");
       }
     } catch (error) {
-      console.log("Error fetching employees:", error);
+      
       toast.error("حدث خطأ أثناء جلب بيانات الموظفين");
     }
   };
@@ -110,7 +110,7 @@ const Store = () => {
       const response = await axios.get(`${apiUrl}/api/stockitem/`, config);
       setAllStockItems(response.data.reverse());
     } catch (error) {
-      console.log("Error fetching stock items:", error);
+      
       toast.error("حدث خطأ أثناء جلب بيانات الأصناف");
     }
   };
@@ -178,7 +178,7 @@ const Store = () => {
         toast.error("حدث خطأ أثناء تعديل المتجر. يرجى المحاولة مرة أخرى.");
       }
     } catch (error) {
-      console.log("Error editing store:", error);
+      
       toast.error("حدث خطأ أثناء تعديل المتجر. يرجى المحاولة مرة أخرى.");
     }
   };
@@ -205,7 +205,7 @@ const Store = () => {
         toast.error("حدث خطأ أثناء حذف المتجر. يرجى المحاولة مرة أخرى.");
       }
     } catch (error) {
-      console.log("Error deleting store:", error);
+      
       toast.error("حدث خطأ أثناء حذف المتجر. يرجى المحاولة مرة أخرى.");
     }
   };

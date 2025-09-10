@@ -43,7 +43,7 @@ const Orders = () => {
       const ordersData = response.data;
       if (ordersData && ordersData.length > 0) {
         setListOfOrders(ordersData.reverse()); // Update state with fetched orders
-        console.log("Fetched orders:", ordersData);
+        
       } else {
         setListOfOrders([]); // Clear the list if no orders are found
         toast.info("لا توجد طلبات متاحة حالياً."); // Inform the user
@@ -85,7 +85,7 @@ const Orders = () => {
         setlistProductsOrder(order.products);
       }
     } catch (error) {
-      console.log(error);
+      
       // Display toast or handle error
     }
   };
@@ -170,7 +170,7 @@ const Orders = () => {
 
   const deleteSelectedIds = async (e) => {
     e.preventDefault();
-    console.log(selectedIds);
+    
     const config = await handleGetTokenAndConfig();
     try {
       for (const Id of selectedIds) {
@@ -180,7 +180,7 @@ const Orders = () => {
       toast.success("Selected orders deleted successfully");
       setSelectedIds([]);
     } catch (error) {
-      console.log(error);
+      
       toast.error("Failed to delete selected orders");
     }
   };

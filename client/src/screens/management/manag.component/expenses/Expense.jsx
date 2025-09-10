@@ -62,14 +62,14 @@ const ExpenseItem = () => {
         { description, expenseType, isSalary },
         config
       );
-      console.log(response.data);
+      
       getAllExpenses();
       toast.success("تم إنشاء المصروف بنجاح");
       toast.info(
         "لا يمكن تعديل بيانات حساب المصروفات بعد تسجيل اي مصروفات به "
       );
     } catch (error) {
-      console.log(error);
+      
       toast.error("حدث خطأ أثناء إنشاء المصروف");
     }
   };
@@ -93,13 +93,13 @@ const ExpenseItem = () => {
         { description, expenseType, isSalary },
         config
       );
-      console.log(response.data);
+      
       if (response.status === 200) {
         getAllExpenses();
         toast.success("تم تعديل المصروف بنجاح");
       }
     } catch (error) {
-      console.log(error);
+      
       toast.error("حدث خطأ أثناء تعديل المصروف");
     }
   };
@@ -123,12 +123,12 @@ const ExpenseItem = () => {
         config
       );
       if (response.status === 200) {
-        console.log(response);
+        
         getAllExpenses();
         toast.success("تم حذف المصروف بنجاح");
       }
     } catch (error) {
-      console.log(error);
+      
       toast.error("حدث خطأ أثناء حذف المصروف");
     }
   };
@@ -142,10 +142,10 @@ const ExpenseItem = () => {
       }
       const response = await axios.get(apiUrl + "/api/expenses/", config);
       const expenses = await response.data.reverse();
-      console.log(response.data);
+      
       setAllExpenses(expenses);
     } catch (error) {
-      console.log(error);
+      
       toast.error("حدث خطأ أثناء جلب المصاريف");
     }
   };
@@ -156,10 +156,10 @@ const ExpenseItem = () => {
       const config = await handleGetTokenAndConfig();
       const response = await axios.get(apiUrl + "/api/dailyexpense/", config);
       const dailyExpenses = await response.data.reverse();
-      console.log(response.data);
+      
       setAllDailyExpenses(dailyExpenses);
     } catch (error) {
-      console.log(error);
+      
     }
   };
 
@@ -213,7 +213,7 @@ const ExpenseItem = () => {
         }
         return { ...expense, amount: total };
       });
-    console.log({ updatedExpenses });
+    
     setAllExpenses(updatedExpenses);
   }, [allDailyExpenses]);
 

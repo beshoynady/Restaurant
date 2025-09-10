@@ -106,7 +106,7 @@ const POS = () => {
 
   const handelcustomerDeliveryArea = (area) => {
     const deliveryArea = JSON.parse(area);
-    // console.log({deliveryArea})
+    // 
     setdeliveryAreaId(deliveryArea._id);
     setdeliveryAreaName(deliveryArea.name);
     setdeliveryFee(deliveryArea.delivery_fee);
@@ -116,7 +116,7 @@ const POS = () => {
     try {
       const response = await axios.get(`${apiUrl}/api/deliveryarea`);
       const data = await response.data;
-      console.log({ data });
+      
       if (data) {
         setAreas(data);
       } else {
@@ -196,7 +196,7 @@ const POS = () => {
       if (!clientname && !clientphone && !deliveryAreaId && !clientaddress) {
         toast.warn("تاكد من الاسم و الموبايل و منطقه التوصل و العنوان ");
       }
-      // console.log({clientname, clientphone, deliveryAreaId, clientaddress})
+      // 
       const response = await axios.post(
         `${apiUrl}/api/customer`,
         {
@@ -259,7 +259,7 @@ const POS = () => {
         config
       );
       const registers = response.data;
-      // console.log({response})
+      // 
       if (registers.length === 0) {
         toast.info("لم يتم العثور على حسابات النقدية لهذا الموظف");
         return;
@@ -337,7 +337,7 @@ const POS = () => {
         }
       }
     } catch (error) {
-      console.log(error);
+      
       // إخطار المستخدم بالفشل
       toast.error("فشل في تسجيل الإيراد");
     }
@@ -718,7 +718,7 @@ const POS = () => {
                                             scrollbarWidth: "thin",
                                           }}
                                         >
-                                          {console.log({ productExtras })}
+                                          {}
                                           <input
                                             type="checkbox"
                                             className="form-check-input "

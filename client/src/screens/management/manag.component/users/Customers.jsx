@@ -51,7 +51,7 @@ const Customers = () => {
       const config = await handleGetTokenAndConfig();
 
       const response = await axios.get(`${apiUrl}/api/customer`, config);
-      console.log({ AllCustomers: response });
+      
       const data = await response.data;
       setAllCustomers(data);
     } catch (error) {
@@ -85,7 +85,7 @@ const Customers = () => {
         customerData,
         config
       );
-      console.log({ customerData, response });
+      
       getAllCustomers();
       toast.success("تم إنشاء العميل بنجاح.");
     } catch (error) {
@@ -185,7 +185,7 @@ const Customers = () => {
     try {
       const response = await axios.get(`${apiUrl}/api/deliveryarea`);
       const data = await response.data;
-      // console.log({ data })
+      // 
       if (data) {
         setAreas(data);
       } else {

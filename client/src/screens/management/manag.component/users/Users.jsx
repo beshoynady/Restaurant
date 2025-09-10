@@ -42,9 +42,9 @@ handleGetTokenAndConfig,
       }
       const response = await axios.get(apiUrl + "/api/user", config);
       setAllUsers(response.data);
-      console.log({ AllUsers: response });
+      
     } catch (error) {
-      console.log(error);
+      
     }
   };
   const changeorderVarified = async (e, id) => {
@@ -57,7 +57,7 @@ handleGetTokenAndConfig,
 
       // Get the value from the event
       const isVarified = e.target.value;
-      console.log(e.target.value);
+      
 
       // Send a request to update the 'isVarified' status
       const response = await axios.put(
@@ -65,7 +65,7 @@ handleGetTokenAndConfig,
         { isVarified },
         config
       );
-      console.log(response.data);
+      
 
       // Notify success using toast
       toast.success("تم تغير الحاله بنجاح");
@@ -138,7 +138,7 @@ handleGetTokenAndConfig,
         isActive,
         isVarified,
       });
-      // console.log({response})
+      // 
       if (response.status === 200) {
         toast.success("تم تحديث المستخدم بنجاح");
       }
@@ -173,7 +173,7 @@ handleGetTokenAndConfig,
       const config = await handleGetTokenAndConfig();
       const response = await axios.get(`${apiUrl}/api/deliveryarea`);
       const data = await response.data;
-      // console.log({ data })
+      // 
       if (data) {
         setAreas(data);
       } else {

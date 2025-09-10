@@ -71,7 +71,7 @@ const EmployeeTransactions = () => {
         toast.success("تم اضافه السجل بنجاح");
       }
     } catch (error) {
-      console.log(error);
+      
       toast.error("حدث خطاء اثناء اضافه معامله للموظف");
     } finally {
       setIsLoading(false);
@@ -107,7 +107,7 @@ const EmployeeTransactions = () => {
       getEmployeeTransactions();
       toast.success("تم تعديل السجل بنجاح");
     } catch (error) {
-      console.log(error);
+      
       toast.error("An error occurred while updating the transaction");
     } finally {
       setIsLoading(false);
@@ -135,7 +135,7 @@ const EmployeeTransactions = () => {
         toast.success("تم حذف السجل بنجاح");
       }
     } catch (error) {
-      console.log(error);
+      
       toast.error("An error occurred while deleting the transaction");
     } finally {
       setIsLoading(false);
@@ -161,7 +161,7 @@ const EmployeeTransactions = () => {
         setlistofEmployeeTransactions(response.data.reverse());
       }
     } catch (error) {
-      console.log(error);
+      
     } finally {
       setIsLoading(false);
     }
