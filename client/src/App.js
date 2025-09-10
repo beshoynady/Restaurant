@@ -6,6 +6,8 @@ import io from "socket.io-client";
 
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useNavigate } from "react-router-dom";
+
 
 import LoadingPage from "./screens/management/manag.component/LoadingPage/LoadingPage";
 import NoInternetPage from "./screens/management/manag.component/LoadingPage/NoInternetPage";
@@ -1883,45 +1885,17 @@ function App() {
   const [clientInfo, setClientInfo] = useState({});
 
   const [isTokenValid, setIsTokenValid] = useState(true);
+  const navigate = useNavigate();
 
-
-   const handleLogout = async () => {
-      try {
-        // استرجاع الكونفيج والتوكن
-        const config = await handleGetTokenAndConfig();
-  
-        const response = await axios.post(
-          `${apiUrl}/api/employee/logout`,
-          {}, // ممكن تحط refreshToken هنا لو API محتاجه
-          {
-            ...config,
-            withCredentials: true, // عشان يمسح الكوكيز لو مستخدمها
-          }
-        );
-  
-        if (response.status === 200) {
-          toast.success("تم تسجيل الخروج بنجاح");
-        } else {
-          toast.error("لم يتم تسجيل الخروج. حاول مرة أخرى");
-        }
-      } catch (error) {
-        // لو السيرفر رجع رسالة واضحة
-        if (error.response?.data?.message) {
-          toast.error(error.response.data.message);
-        } else {
-          toast.error("حدث خطأ أثناء تسجيل الخروج. حاول مرة أخرى.");
-        }
-        console.error("Logout error:", error);
-      } finally {
-        // تنظيف التوكنات والجلسة
-        localStorage.removeItem("token_e");
-        localStorage.removeItem("refresh_token_e"); // لو عندك ريفريش توكن
-        sessionStorage.clear();
-  
-        // توجيه المستخدم لصفحة تسجيل الدخول
-        window.location.replace("/login");
-      }
-    };
+  // دالة خروج موحدة
+  const handleLogout = () => {
+    localStorage.removeItem("token_e");
+    localStorage.removeItem("token_u");
+    setIsTokenValid(false);
+    if (window.location.pathname !== "/login") {
+      navigate("/login", { replace: true });
+    }
+  };
 
   const refreshToken = async () => {
     try {
@@ -1930,7 +1904,7 @@ function App() {
         {},
         { withCredentials: true }
       );
-      console.log("Refresh token response:", response);
+
       if (response && response.data.accessToken) {
         localStorage.setItem("token_e", response.data.accessToken);
         return response.data.accessToken;
@@ -1938,18 +1912,16 @@ function App() {
     } catch (error) {
       console.error("Error refreshing token:", error);
       toast.error("انتهت صلاحية الجلسة. الرجاء تسجيل الدخول مرة أخرى.");
-      setIsTokenValid(false);
-      //  handleLogout();
+      handleLogout();
       return null;
     }
   };
 
   const verifyToken = async () => {
     const employeeToken = localStorage.getItem("token_e");
-if (!employeeToken) {
-    await refreshToken();
-    return;
-  } else {
+    if (!employeeToken) {
+      await refreshToken();
+    } else {
       const decodedToken = jwt_decode(employeeToken);
       const currentTime = Date.now() / 1000;
       if (decodedToken.exp < currentTime) {
@@ -2334,7 +2306,6 @@ if (!employeeToken) {
 
   // عند التحقق من التوكن
   useEffect(() => {
-    if (window.location.pathname.pathname === "/login") return;
     const initializeSession = async () => {
       setIsLoading(true);
       await verifyToken();
@@ -2347,24 +2318,12 @@ if (!employeeToken) {
 
   // جلب البيانات عند التأكد من صلاحية التوكن
   useEffect(() => {
-
     if (isTokenValid) {
       fetchData();
     }
   }, [isTokenValid]);
 
-  // تحديث التكلفة عند تغير الحالة
-  useEffect(() => {
-    if (isTokenValid) {
-      calculateOrderCost();
-      getAllOrders();
-    }
-  }, [count, itemsInCart, productOrderToUpdate, isLogin]);
-
-  //++++++++++++++++++++++++++ SOCKETS ++++++++++++++++++++++++++++
-
   const [isOnline, setIsOnline] = useState(navigator.onLine);
-
 
   useEffect(() => {
     const handleOnline = () => setIsOnline(true);
@@ -2408,6 +2367,13 @@ if (!employeeToken) {
     }
   }, []);
 
+  // تحديث التكلفة عند تغير الحالة
+  useEffect(() => {
+    if (isTokenValid) {
+      calculateOrderCost();
+      getAllOrders();
+    }
+  }, [count, itemsInCart, productOrderToUpdate, isLogin]);
 
   return (
     <dataContext.Provider
