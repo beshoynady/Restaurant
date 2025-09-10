@@ -1891,7 +1891,7 @@ function App() {
         {},
         { withCredentials: true }
       );
-
+      console.log("Refresh token response:", response);
       if (response && response.data.accessToken) {
         localStorage.setItem("token_e", response.data.accessToken);
         return response.data.accessToken;
