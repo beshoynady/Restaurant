@@ -1885,7 +1885,7 @@ function App() {
   const [clientInfo, setClientInfo] = useState({});
 
   const [isTokenValid, setIsTokenValid] = useState(true);
-  const navigate = useNavigate, useLocation();
+  const navigate = useNavigate();
   const location = useLocation();
 
   // دالة خروج موحدة
