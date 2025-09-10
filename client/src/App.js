@@ -1893,8 +1893,9 @@ function App() {
     localStorage.removeItem("token_e");
     localStorage.removeItem("token_u");
     setIsTokenValid(false);
+
     if (window.location.pathname !== "/login") {
-      navigate("/login", { replace: true });
+      window.location.replace("/login");
     }
   };
 
@@ -2307,7 +2308,7 @@ function App() {
 
   // عند التحقق من التوكن
   useEffect(() => {
-    if (location.pathname  === "/login") {
+    if (location.pathname === "/login") {
       return;
     }
     const initializeSession = async () => {
