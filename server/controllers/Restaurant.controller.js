@@ -186,7 +186,7 @@ const updateRestaurant = async (req, res) => {
           subscriptionEnd,
           salesTaxRate,
           serviceTaxRate,
-        }, $unset: { opening_hours: "" }
+        }
       },
       { new: true, runValidators: true }
     );
