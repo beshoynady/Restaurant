@@ -1939,7 +1939,7 @@ function App() {
       console.error("Error refreshing token:", error);
       toast.error("انتهت صلاحية الجلسة. الرجاء تسجيل الدخول مرة أخرى.");
       setIsTokenValid(false);
-       handleLogout();
+      //  handleLogout();
       return null;
     }
   };
@@ -1947,7 +1947,7 @@ function App() {
   const verifyToken = async () => {
     const employeeToken = localStorage.getItem("token_e");
 if (!employeeToken) {
-    handleLogout();
+    await refreshToken();
     return;
   } else {
       const decodedToken = jwt_decode(employeeToken);
