@@ -6,7 +6,7 @@ import io from "socket.io-client";
 
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useNavigate, useLocation } from "react-router-dom";
+import {useLocation } from "react-router-dom";
 
 
 import LoadingPage from "./screens/management/manag.component/LoadingPage/LoadingPage";
@@ -1885,7 +1885,6 @@ function App() {
   const [clientInfo, setClientInfo] = useState({});
 
   const [isTokenValid, setIsTokenValid] = useState(true);
-  const navigate = useNavigate();
   const location = useLocation();
 
   // دالة خروج موحدة
