@@ -584,6 +584,7 @@ const Info = () => {
     try {
       const response = await axios.get(`${apiUrl}/api/restaurant/`, config);
       const restaurantData = response.data[0];
+      console.log({ restaurantData });
 
       if (restaurantData) {
         setrestaurantId(restaurantData._id);

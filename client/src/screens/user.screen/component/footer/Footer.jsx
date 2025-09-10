@@ -147,8 +147,8 @@ const Footer = () => {
             <h5 className="text-uppercase mb-4">مواعيد العمل</h5>
             <table className="table text-center text-white">
               <tbody className="font-weight-normal">
-                {restaurantData.opening_hours
-                  ? restaurantData.opening_hours.map((item, index) => (
+                {restaurantData.working_hours
+                  ? restaurantData.working_hours.map((item, index) => (
                       <tr key={index}>
                         <td>{item.day}:</td>
                         <td>

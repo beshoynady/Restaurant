@@ -97,7 +97,7 @@ const restaurantSchema = new mongoose.Schema(
         },
       },
     ],
-    opening_hours: [
+    working_hours: [
       {
         day: {
           type: String,
