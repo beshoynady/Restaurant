@@ -1884,6 +1884,45 @@ function App() {
 
   const [isTokenValid, setIsTokenValid] = useState(true);
 
+
+   const handleLogout = async () => {
+      try {
+        // استرجاع الكونفيج والتوكن
+        const config = await handleGetTokenAndConfig();
+  
+        const response = await axios.post(
+          `${apiUrl}/api/employee/logout`,
+          {}, // ممكن تحط refreshToken هنا لو API محتاجه
+          {
+            ...config,
+            withCredentials: true, // عشان يمسح الكوكيز لو مستخدمها
+          }
+        );
+  
+        if (response.status === 200) {
+          toast.success("تم تسجيل الخروج بنجاح");
+        } else {
+          toast.error("لم يتم تسجيل الخروج. حاول مرة أخرى");
+        }
+      } catch (error) {
+        // لو السيرفر رجع رسالة واضحة
+        if (error.response?.data?.message) {
+          toast.error(error.response.data.message);
+        } else {
+          toast.error("حدث خطأ أثناء تسجيل الخروج. حاول مرة أخرى.");
+        }
+        console.error("Logout error:", error);
+      } finally {
+        // تنظيف التوكنات والجلسة
+        localStorage.removeItem("token_e");
+        localStorage.removeItem("refresh_token_e"); // لو عندك ريفريش توكن
+        sessionStorage.clear();
+  
+        // توجيه المستخدم لصفحة تسجيل الدخول
+        window.location.replace("/login");
+      }
+    };
+
   const refreshToken = async () => {
     try {
       const response = await axios.post(
@@ -1899,16 +1938,18 @@ function App() {
     } catch (error) {
       console.error("Error refreshing token:", error);
       toast.error("انتهت صلاحية الجلسة. الرجاء تسجيل الدخول مرة أخرى.");
-      window.location.href = `https://${window.location.hostname}/login`;
+      setIsTokenValid(false);
+       handleLogout();
       return null;
     }
   };
 
   const verifyToken = async () => {
     const employeeToken = localStorage.getItem("token_e");
-    if (!employeeToken) {
-      await refreshToken();
-    } else {
+if (!employeeToken) {
+    handleLogout();
+    return;
+  } else {
       const decodedToken = jwt_decode(employeeToken);
       const currentTime = Date.now() / 1000;
       if (decodedToken.exp < currentTime) {
