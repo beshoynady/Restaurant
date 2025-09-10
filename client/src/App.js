@@ -1897,7 +1897,9 @@ function App() {
   };
 
   const refreshToken = async () => {
+    console.log({isTokenValid});
     if(!isTokenValid) return;
+
     try {
       const response = await axios.post(
         `${apiUrl}/api/employee/refresh-token`,
@@ -1920,12 +1922,15 @@ function App() {
   const verifyToken = async () => {
     const employeeToken = localStorage.getItem("token_e");
     if (!employeeToken) {
-      await refreshToken();
+      console.log("No employee token found.");
+      setIsTokenValid(false);
+      return;
     } else {
       const decodedToken = jwt_decode(employeeToken);
       const currentTime = Date.now() / 1000;
       if (decodedToken.exp < currentTime) {
         await refreshToken();
+
       }
     }
   };
