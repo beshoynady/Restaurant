@@ -2293,6 +2293,7 @@ function App() {
 
   // عند التحقق من التوكن
   useEffect(() => {
+    if (window.location.pathname.pathname === "/login") return;
     const initializeSession = async () => {
       setIsLoading(true);
       await verifyToken();
@@ -2305,12 +2306,24 @@ function App() {
 
   // جلب البيانات عند التأكد من صلاحية التوكن
   useEffect(() => {
+
     if (isTokenValid) {
       fetchData();
     }
   }, [isTokenValid]);
 
+  // تحديث التكلفة عند تغير الحالة
+  useEffect(() => {
+    if (isTokenValid) {
+      calculateOrderCost();
+      getAllOrders();
+    }
+  }, [count, itemsInCart, productOrderToUpdate, isLogin]);
+
+  //++++++++++++++++++++++++++ SOCKETS ++++++++++++++++++++++++++++
+
   const [isOnline, setIsOnline] = useState(navigator.onLine);
+
 
   useEffect(() => {
     const handleOnline = () => setIsOnline(true);
@@ -2354,13 +2367,6 @@ function App() {
     }
   }, []);
 
-  // تحديث التكلفة عند تغير الحالة
-  useEffect(() => {
-    if (isTokenValid) {
-      calculateOrderCost();
-      getAllOrders();
-    }
-  }, [count, itemsInCart, productOrderToUpdate, isLogin]);
 
   return (
     <dataContext.Provider
