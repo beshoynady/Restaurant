@@ -154,7 +154,11 @@ const updateRestaurant = async (req, res) => {
     if (!existingRestaurant) {
       return res.status(404).json({ message: "Restaurant not found" });
     }
-
+    if (existingRestaurant.opening_hours && !existingRestaurant.working_hours) {
+      existingRestaurant.working_hours = existingRestaurant.opening_hours;
+      existingRestaurant.opening_hours = undefined;
+      await existingRestaurant.save();
+    }
     const image = req.file ? req.file.filename : existingRestaurant.image;
 
     // تحديث المطعم
