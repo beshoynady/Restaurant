@@ -1897,6 +1897,7 @@ function App() {
   };
 
   const refreshToken = async () => {
+    if(!isTokenValid) return;
     try {
       const response = await axios.post(
         `${apiUrl}/api/employee/refresh-token`,
