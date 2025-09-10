@@ -31,7 +31,7 @@ const Info = () => {
     try {
       const response = await axios.get(`${apiUrl}/api/shift`, config);
       const data = await response.data;
-      
+
       if (data) {
         setShifts(data);
       } else {
@@ -44,7 +44,7 @@ const Info = () => {
 
   const addShift = () => {
     setShifts([...shifts, { shiftType: "", startTime: "", endTime: "" }]);
-    
+
   };
 
   const removeShift = async (index, id) => {
@@ -52,7 +52,7 @@ const Info = () => {
     const updatedShifts = shifts.filter((_, i) => i !== index);
     if (id) {
       const response = await axios.delete(`${apiUrl}/api/shift/${id}`, config);
-      
+
       if (response.status === 200) {
         toast.success("تمت حذف الوردية بنجاح");
       } else {
@@ -96,7 +96,7 @@ const Info = () => {
             { startTime, endTime, shiftType },
             config
           );
-          
+
           if (response.status === 200) {
             toast.success("تمت تعديل بيانات الوردية بنجاح");
           } else {
@@ -108,7 +108,7 @@ const Info = () => {
             { startTime, endTime, shiftType },
             config
           );
-          
+
           if (response.status === 201) {
             toast.success("تمت إضافة الوردية بنجاح");
           } else {
@@ -130,7 +130,7 @@ const Info = () => {
     try {
       const response = await axios.get(`${apiUrl}/api/deliveryarea`, config);
       const data = await response.data;
-      
+
       if (data) {
         setAreas(data);
       } else {
@@ -145,7 +145,7 @@ const Info = () => {
 
   const addArea = () => {
     setAreas([...areas, { name: "", delivery_fee: 0 }]);
-    
+
   };
 
   const removeArea = async (index, id) => {
@@ -156,7 +156,7 @@ const Info = () => {
         `${apiUrl}/api/deliveryarea/${id}`,
         config
       );
-      
+
       if (response.status === 200) {
         toast.success("تمت حذف منطقه التوصيل بنجاح");
       } else {
@@ -184,7 +184,7 @@ const Info = () => {
     const config = await handleGetTokenAndConfig();
     try {
       areas.map(async (area, i) => {
-        
+
         const id = area._id ? area._id : null;
         const name = area.name;
         const delivery_fee = area.delivery_fee;
@@ -194,7 +194,7 @@ const Info = () => {
             { name, delivery_fee },
             config
           );
-          
+
           if (response.status === 200) {
             toast.success("تمت تعديل بيانات منطقه التوصيل بنجاح");
           } else {
@@ -206,7 +206,7 @@ const Info = () => {
             { name, delivery_fee },
             config
           );
-          
+
           if (response.status === 201) {
             toast.success("تمت إضافة منطقه التوصيل بنجاح");
           } else {
@@ -263,7 +263,7 @@ const Info = () => {
 
   const [features, setfeatures] = useState([]);
   const handleFeaturesCheckboxChange = (feature) => {
-    
+
     if (features.includes(feature)) {
       setfeatures(features.filter((item) => item !== feature));
     } else {
@@ -275,7 +275,7 @@ const Info = () => {
     e.preventDefault();
     const config = await handleGetTokenAndConfig();
     try {
-      
+
       const response = await axios.put(
         `${apiUrl}/api/restaurant/${restaurantId}`,
         { features },
@@ -319,7 +319,7 @@ const Info = () => {
 
   const [acceptedPayments, setacceptedPayments] = useState([]);
   const handleacceptedPaymentsCheckboxChange = (acceptedPayment) => {
-    
+
     if (acceptedPayments.includes(acceptedPayment)) {
       setacceptedPayments(
         acceptedPayments.filter((item) => item !== acceptedPayment)
@@ -333,7 +333,7 @@ const Info = () => {
     e.preventDefault();
     const config = await handleGetTokenAndConfig();
     try {
-      
+
       const response = await axios.put(
         `${apiUrl}/api/restaurant/${restaurantId}`,
         { acceptedPayments },
@@ -411,7 +411,7 @@ const Info = () => {
         salesTaxRate,
         serviceTaxRate,
       };
-      
+
       let response;
       if (restaurantId) {
         response = await axios.put(
@@ -475,7 +475,7 @@ const Info = () => {
         youtube ? { platform: "youtube", url: youtube } : "",
       ];
 
-      
+
 
       // إرسال البيانات إلى الخادم باستخدام axios
       const response = await axios.put(
@@ -483,7 +483,7 @@ const Info = () => {
         { contact, social_media },
         config
       );
-      
+
 
       if (response.status === 200) {
         toast.success("تمت إضافة بيانات التواصل بنجاح");
@@ -526,22 +526,30 @@ const Info = () => {
   const [working_hours, setworking_hours] = useState(initialOpeningHours);
 
   const handleSetFrom = (index, value) => {
+    console.log({ index, value });
     setworking_hours((prev) => {
       const updated = [...prev];
       updated[index] = { ...updated[index], from: value };
       return updated;
     });
+    console.log({working_hours});
   };
 
   const handleSetTo = (index, value) => {
+    console.log({ index, value });
+
     setworking_hours((prev) => {
       const updated = [...prev];
       updated[index] = { ...updated[index], to: value };
       return updated;
     });
+        console.log({working_hours});
+
   };
 
   const handleCheckboxChange = (index) => {
+    console.log({ index });
+
     setworking_hours((prev) => {
       const updated = [...prev];
       updated[index] = { ...updated[index], closed: !updated[index].closed };
@@ -553,6 +561,7 @@ const Info = () => {
   const handleOpeningHours = async (e) => {
     e.preventDefault();
     const config = await handleGetTokenAndConfig();
+    console.log({ working_hours });
     try {
       const response = await axios.put(
         `${apiUrl}/api/restaurant/${restaurantId}`,
@@ -647,7 +656,7 @@ const Info = () => {
   const [subscriptionEnd, setSubscriptionEnd] = useState("");
 
   const updateSubscriptionDates = async (e) => {
-    
+
     e.preventDefault();
     const config = await handleGetTokenAndConfig();
     if (employeeLoginInfo.role !== "programer") {
@@ -660,7 +669,7 @@ const Info = () => {
         { subscriptionStart, subscriptionEnd },
         config
       );
-      
+
       if (response.status === 200) {
         toast.success("تمت تعديل بيانات الاشتراك بنجاح");
         getRestaurant();
@@ -687,7 +696,7 @@ const Info = () => {
   }, [subscriptionStart, subscriptionEnd]);
 
   const calculateRemainingTime = (startDate, endDate) => {
-    
+
     const start = new Date(startDate);
     const end = new Date(endDate);
     const today = new Date();
@@ -1487,12 +1496,13 @@ const Info = () => {
                                   type="time"
                                   className="form-control border-primary m-0 p-2 h-auto"
                                   name={`openingTime${day}`}
+                                  readOnly={working_hours && working_hours[index]?.closed}
                                   disabled={
                                     working_hours &&
                                     working_hours[index]?.closed
                                   }
                                   value={
-                                    working_hours && working_hours[index]?.from
+                                    working_hours && working_hours[index].from
                                   }
                                   onChange={(e) =>
                                     handleSetFrom(index, e.target.value)
@@ -1505,12 +1515,13 @@ const Info = () => {
                                   type="time"
                                   className="form-control border-primary m-0 p-2 h-auto"
                                   name={`closingTime${day}`}
+                                  readOnly={working_hours && working_hours[index]?.closed}
                                   disabled={
                                     working_hours &&
                                     working_hours[index]?.closed
                                   }
                                   value={
-                                    working_hours && working_hours[index]?.to
+                                    working_hours && working_hours[index].to
                                   }
                                   onChange={(e) =>
                                     handleSetTo(index, e.target.value)
