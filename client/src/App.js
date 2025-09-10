@@ -1892,6 +1892,7 @@ function App() {
 
     if (window.location.pathname !== "/login") {
       window.location.replace("/login");
+      return;
     }
   };
 
