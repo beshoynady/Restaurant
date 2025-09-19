@@ -84,7 +84,7 @@ const Tables = () => {
         isValid,
         notes,
       };
-      
+
 
       const response = await axios.post(
         `${apiUrl}/api/table/`,
@@ -94,7 +94,7 @@ const Tables = () => {
       // 
 
       if (response.status === 201) {
-        
+
 
         await getAllTable();
         toast.success("تم إنشاء الطاولة بنجاح.");
@@ -149,7 +149,7 @@ const Tables = () => {
 
       // Handle successful response
       if (response.status === 200) {
-        
+
 
         // Refresh the table list
         await getAllTable();
@@ -194,7 +194,7 @@ const Tables = () => {
         config
       );
       const qrData = response.data.QRCode;
-      
+
       setQrImage(qrData);
       toast.success("تم إنشاء رمز QR بنجاح!");
     } catch (error) {
@@ -277,7 +277,7 @@ const Tables = () => {
         `${apiUrl}/api/table/${tableId}`,
         config
       );
-      
+
       settableId(null);
       getAllTable();
     } catch (error) {
@@ -295,6 +295,7 @@ const Tables = () => {
     );
     setListOfTable(tables);
   };
+
   const searchBySection = (sectionNumber) => {
     if (!sectionNumber) {
       getAllTable();
@@ -316,6 +317,7 @@ const Tables = () => {
   };
 
   const printtableqr = useRef();
+
   const handlePrintTableQr = useReactToPrint({
     content: () => printtableqr.current,
     copyStyles: true,
@@ -343,7 +345,7 @@ const Tables = () => {
 
   const deleteSelectedIds = async (e) => {
     e.preventDefault();
-    
+
     const config = await handleGetTokenAndConfig();
     if (tablePermission && !tablePermission.delete) {
       toast.warn("ليس لك صلاحية لحذف طاوله ");
@@ -357,7 +359,7 @@ const Tables = () => {
       toast.success("Selected orders deleted successfully");
       setSelectedIds([]);
     } catch (error) {
-      
+
       toast.error("Failed to delete selected orders");
     }
   };
@@ -365,7 +367,7 @@ const Tables = () => {
   useEffect(() => {
     getAllTable();
     getSections(allTable);
-  });
+  }, []);
 
   return (
     <div className="w-100 px-3 d-flex align-items-center justify-content-start">

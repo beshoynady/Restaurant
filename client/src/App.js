@@ -504,9 +504,6 @@ function App() {
         const tables = response.data.allTables || [];
 
         if (tables.length === 0) {
-          console.warn(
-            "No tables found. The restaurant may be new or data is missing."
-          );
           toast.warn(
             "No tables found. The restaurant may be new or data is missing."
           );

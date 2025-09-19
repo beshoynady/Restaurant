@@ -328,7 +328,7 @@ const loginEmployee = async (req, res) => {
     const findEmployee = await EmployeeModel.findOne({ phone });
 
     if (!findEmployee) {
-      return res.status(404).json({ message: "Employee not found" });
+      return res.status(404).json({ message: "Employee not found by phone number" });
     }
 
     if (!findEmployee.isActive) {
