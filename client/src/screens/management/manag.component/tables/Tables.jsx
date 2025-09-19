@@ -365,7 +365,6 @@ const Tables = () => {
   };
 
   useEffect(() => {
-    getAllTable();
     getSections(allTable);
   }, []);
 

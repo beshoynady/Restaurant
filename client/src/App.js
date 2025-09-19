@@ -2327,7 +2327,7 @@ function App() {
     if (isTokenValid) {
       fetchData();
     }
-  }, []);
+  }, [isTokenValid]);
 
   const [isOnline, setIsOnline] = useState(navigator.onLine);
 
