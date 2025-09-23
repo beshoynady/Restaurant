@@ -458,13 +458,14 @@ const Tables = () => {
                   name="section"
                   id="section"
                   onChange={(e) => searchBySection(e.target.value)}
-                ></select>
+                >
                 <option value="">اختر</option>
                 {ListOfSections.map((section, i) => (
                   <option key={i} value={section}>
                     {section}
                   </option>
                 ))}
+                </select>
               </div>
 
               <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
