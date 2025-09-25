@@ -126,10 +126,8 @@ const Tables = () => {
     setLocation("");
     setIsValid();
     setNotes("");
-    settableId("");
     setQrImage("");
     setTableCode("");
-
   }
 
   // Function to edit an existing table
