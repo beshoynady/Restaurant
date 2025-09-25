@@ -288,6 +288,7 @@ const Tables = () => {
   const searchByNum = async (num) => {
     await getAllTable();
     if (!num) {
+      await getAllTable();
       return;
     }
     const tables = listOfTable.filter(
@@ -299,6 +300,7 @@ const Tables = () => {
   const searchBySection = async(sectionNumber) => {
     await getAllTable();
     if (!sectionNumber) {
+      await getAllTable();
       return;
     }
     const tables = listOfTable.filter(
@@ -310,6 +312,7 @@ const Tables = () => {
   const filterByStatus = async (Status) => {
     await getAllTable();
     if (!Status) {
+      await getAllTable();
       return;
     }
     const filter = listOfTable.filter((table) => table.isValid === Status);
