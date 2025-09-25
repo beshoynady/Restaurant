@@ -119,6 +119,19 @@ const Tables = () => {
     }
   };
 
+  const resetAll = () => {
+    setTableNumber("");
+    setChairs(0);
+    setSectionNumber("");
+    setLocation("");
+    setIsValid();
+    setNotes("");
+    settableId("");
+    setQrImage("");
+    setTableCode("");
+
+  }
+
   // Function to edit an existing table
   const editTable = async (e) => {
     e.preventDefault();
@@ -154,6 +167,7 @@ const Tables = () => {
         // Refresh the table list
         await getAllTable();
 
+        resetAll();
         // Show success notification
         toast.success("تم تعديل الطاولة بنجاح.");
       }
@@ -297,7 +311,7 @@ const Tables = () => {
     setListOfTable(tables);
   };
 
-  const searchBySection = async(sectionNumber) => {
+  const searchBySection = async (sectionNumber) => {
     await getAllTable();
     if (!sectionNumber) {
       await getAllTable();
