@@ -285,8 +285,8 @@ const Tables = () => {
     }
   };
 
-  const searchByNum = (num) => {
-    getAllTable();
+  const searchByNum = async (num) => {
+    await getAllTable();
     if (!num) {
       return;
     }
@@ -296,8 +296,8 @@ const Tables = () => {
     setListOfTable(tables);
   };
 
-  const searchBySection = (sectionNumber) => {
-    getAllTable();
+  const searchBySection = async(sectionNumber) => {
+    await getAllTable();
     if (!sectionNumber) {
       return;
     }
@@ -307,8 +307,8 @@ const Tables = () => {
     setListOfTable(tables);
   };
 
-  const filterByStatus = (Status) => {
-    getAllTable();
+  const filterByStatus = async (Status) => {
+    await getAllTable();
     if (!Status) {
       return;
     }
