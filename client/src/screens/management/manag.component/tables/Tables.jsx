@@ -286,8 +286,8 @@ const Tables = () => {
   };
 
   const searchByNum = (num) => {
+    getAllTable();
     if (!num) {
-      getAllTable();
       return;
     }
     const tables = listOfTable.filter(
@@ -297,8 +297,8 @@ const Tables = () => {
   };
 
   const searchBySection = (sectionNumber) => {
+    getAllTable();
     if (!sectionNumber) {
-      getAllTable();
       return;
     }
     const tables = listOfTable.filter(
@@ -308,8 +308,8 @@ const Tables = () => {
   };
 
   const filterByStatus = (Status) => {
+    getAllTable();
     if (!Status) {
-      getAllTable();
       return;
     }
     const filter = listOfTable.filter((table) => table.isValid === Status);
@@ -324,6 +324,7 @@ const Tables = () => {
     removeAfterPrint: true,
   });
   const printWepQr = useRef();
+
   const handlePrintWepQr = useReactToPrint({
     content: () => printWepQr.current,
     copyStyles: true,
@@ -459,12 +460,12 @@ const Tables = () => {
                   id="section"
                   onChange={(e) => searchBySection(e.target.value)}
                 >
-                <option value="">اختر</option>
-                {ListOfSections.map((section, i) => (
-                  <option key={i} value={section}>
-                    {section}
-                  </option>
-                ))}
+                  <option value="">اختر</option>
+                  {ListOfSections.map((section, i) => (
+                    <option key={i} value={section}>
+                      {section}
+                    </option>
+                  ))}
                 </select>
               </div>
 
