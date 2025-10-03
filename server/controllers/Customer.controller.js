@@ -1,4 +1,4 @@
-const CustomerModel = require('../models/Customer.model');
+const CustomerModel = require("../models/customer.model");
 
 const createCustomer = async (req, res) => {
   const { name, phone, deliveryArea, address, notes } = req.body;
@@ -6,25 +6,31 @@ const createCustomer = async (req, res) => {
   try {
     const existingCustomer = await CustomerModel.findOne({ phone });
     if (existingCustomer) {
-      return res.status(409).json({ message: 'Customer with this phone number already exists' });
+      return res
+        .status(409)
+        .json({ message: "Customer with this phone number already exists" });
     }
 
     const newCustomer = await CustomerModel.create({
-      name, phone, deliveryArea, address,notes,
+      name,
+      phone,
+      deliveryArea,
+      address,
+      notes,
     });
 
     res.status(201).json(newCustomer);
   } catch (error) {
-    res.status(500).json({ message: 'Server error', error });
+    res.status(500).json({ message: "Server error", error });
   }
 };
 
 const getAllCustomers = async (req, res) => {
   try {
-    const customers = await CustomerModel.find({}).populate('deliveryArea');
+    const customers = await CustomerModel.find({}).populate("deliveryArea");
     res.status(200).json(customers);
   } catch (error) {
-    res.status(500).json({ message: 'Server error', error });
+    res.status(500).json({ message: "Server error", error });
   }
 };
 
@@ -32,15 +38,17 @@ const getCustomerByMobile = async (req, res) => {
   const { phone } = req.params;
 
   try {
-    const customer = await CustomerModel.findOne({ phone }).populate('deliveryArea');
+    const customer = await CustomerModel.findOne({ phone }).populate(
+      "deliveryArea"
+    );
 
     if (!customer) {
-      return res.status(404).json({ message: 'Customer not found' });
+      return res.status(404).json({ message: "Customer not found" });
     }
 
     res.json(customer);
   } catch (error) {
-    res.status(500).json({ message: 'Server error', error });
+    res.status(500).json({ message: "Server error", error });
   }
 };
 
@@ -48,21 +56,29 @@ const getCustomerById = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const customer = await CustomerModel.findById(id).populate('deliveryArea');
+    const customer = await CustomerModel.findById(id).populate("deliveryArea");
 
     if (!customer) {
-      return res.status(404).json({ message: 'Customer not found' });
+      return res.status(404).json({ message: "Customer not found" });
     }
 
     res.json(customer);
   } catch (error) {
-    res.status(500).json({ message: 'Server error', error });
+    res.status(500).json({ message: "Server error", error });
   }
 };
 
 const updateCustomerById = async (req, res) => {
   const { id } = req.params;
-  const { name, phone, deliveryArea, address, isVarified, notes, refusesOrders } = req.body;
+  const {
+    name,
+    phone,
+    deliveryArea,
+    address,
+    isVarified,
+    notes,
+    refusesOrders,
+  } = req.body;
 
   try {
     const customer = await CustomerModel.findByIdAndUpdate(
@@ -72,12 +88,12 @@ const updateCustomerById = async (req, res) => {
     );
 
     if (!customer) {
-      return res.status(404).json({ message: 'Customer not found' });
+      return res.status(404).json({ message: "Customer not found" });
     }
 
     res.json(customer);
   } catch (error) {
-    res.status(500).json({ message: 'Server error', error });
+    res.status(500).json({ message: "Server error", error });
   }
 };
 
@@ -88,12 +104,12 @@ const deleteCustomerById = async (req, res) => {
     const customer = await CustomerModel.findByIdAndDelete(id);
 
     if (!customer) {
-      return res.status(404).json({ message: 'Customer not found' });
+      return res.status(404).json({ message: "Customer not found" });
     }
 
     res.status(204).send();
   } catch (error) {
-    res.status(500).json({ message: 'Server error', error });
+    res.status(500).json({ message: "Server error", error });
   }
 };
 

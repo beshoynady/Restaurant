@@ -7,45 +7,44 @@ const cookieParser = require("cookie-parser");
 const http = require("http");
 const { Server } = require("socket.io");
 
-
 // Import database connection and route files
 const connectdb = require("./database/connectdb.js");
-const routeRestaurant = require("./router/Restaurant.router.js");
-const routePermission = require("./router/Permission.router.js");
-const routeAttendance = require("./router/AttendanceRecord.router.js");
-const routeShift = require("./router/Shift.router.js");
-const routePreparationSection = require("./router/PreparationSection.router.js");
-const routePreparationTicket = require("./router/PreparationTicket.router.js");
-const routeDeliveryArea = require("./router/DeliveryArea.router.js");
-const routeReservation = require("./router/Reservation.router.js");
-const routeMessage = require("./router/Message.router.js");
-const routeAuth = require("./router/Auth.router.js");
-const routeMenuCategory = require("./router/MenuCategory.router.js");
-const routeProduct = require("./router/Product.router.js");
-const routeRecipe = require("./router/Recipe.router.js");
-const routeProductionRecipe = require("./router/ProductionRecipe.router.js");
-const routeUser = require("./router/User.router.js");
-const routeCustomer = require("./router/Customer.router.js");
-const routeEmployee = require("./router/Employee.router.js");
-const routePayroll = require("./router/PayRoll.router.js");
-const routeEmployeeTransactions = require("./router/EmployeeTransactions.router.js");
-const routeTable = require("./router/Table.router.js");
-const routeOrder = require("./router/Order.router.js");
-const routeCategoryStock = require("./router/CategoryStock.router.js");
-const routeStockItems = require("./router/StockItem.router.js");
-const routeSupplier = require("./router/Supplier.router.js");
-const routeSupplierTransaction = require("./router/SupplierTransaction.router.js");
-const routePurchase = require("./router/Purchase.router.js");
-const routePurchaseReturn = require("./router/PurchaseReturnInvoice.router.js");
-const routeStore = require("./router/Store.router.js");
-const routeStockMovement = require("./router/StockMovement.router.js");
-const routeConsumption = require("./router/Consumption.router.js");
-const routeExpense = require("./router/Expense.router.js");
-const routeDailyExpense = require("./router/DailyExpense.router.js");
-const routeCashRegister = require("./router/CashRegister.router.js");
-const routeCashMovement = require("./router/CashMovement.router.js");
-const routeProductionOrder = require("./router/ProductionOrder.router.js");
-const routeProductionRecord = require("./router/ProductionRecord.router.js");
+const routeRestaurant = require("./router/restaurant.router.js");
+const routePermission = require("./router/permission.router.js");
+const routeAttendance = require("./router/attendance-record.router.js");
+const routeShift = require("./router/shift.router.js");
+const routePreparationSection = require("./router/preparation-section.router.js");
+const routePreparationTicket = require("./router/preparation-ticket.router.js");
+const routeDeliveryArea = require("./router/delivery-area.router.js");
+const routeReservation = require("./router/reservation.router.js");
+const routeMessage = require("./router/message.router.js");
+const routeAuth = require("./router/auth.router.js");
+const routeMenuCategory = require("./router/menu-category.router.js");
+const routeProduct = require("./router/product.router.js");
+const routeRecipe = require("./router/recipe.router.js");
+const routeProductionRecipe = require("./router/production-recipe.router.js");
+const routeUser = require("./router/user.router.js");
+const routeCustomer = require("./router/customer.router.js");
+const routeEmployee = require("./router/employee.router.js");
+const routePayroll = require("./router/payroll,router.js");
+const routeEmployeeTransactions = require("./router/employee-transactions.router.js");
+const routeTable = require("./router/table.router.js");
+const routeOrder = require("./router/order.router.js");
+const routeCategoryStock = require("./router/category-stock.router.js");
+const routeStockItems = require("./router/stock-item.router.js");
+const routeSupplier = require("./router/supplier.router.js");
+const routeSupplierTransaction = require("./router/supplier-transaction.router.js");
+const routePurchase = require("./router/purchase.router.js");
+const routePurchaseReturn = require("./router/purchase-return-invoice.router.js");
+const routeStore = require("./router/store.router.js");
+const routeStockMovement = require("./router/stock-movement.router.js");
+const routeConsumption = require("./router/consumption.router.js");
+const routeExpense = require("./router/expense.router.js");
+const routeDailyExpense = require("./router/daily-expense.router.js");
+const routeCashRegister = require("./router/cash-register.router.js");
+const routeCashMovement = require("./router/cash-movement.router.js");
+const routeProductionOrder = require("./router/production-order.router.js");
+const routeProductionRecord = require("./router/production-record.router.js");
 
 // Load environment variables from .env file
 dotenv.config();
@@ -160,7 +159,7 @@ const io = new Server(server, {
 
 // Handle socket.io connections
 // io.on('connect', (socket) => {
-//   
+//
 
 //   // Listen for new order notifications
 //   socket.on('neworder', (notification) => {
@@ -182,7 +181,7 @@ const io = new Server(server, {
 
 //   // Handle disconnect event
 //   socket.on('disconnect', () => {
-//     
+//
 //   });
 // });
 
@@ -194,86 +193,57 @@ const waiterNamespace = io.of("/waiter");
 
 // التعامل مع اتصالات الكاشير
 cashierNamespace.on("connection", (socket) => {
-  
-
   // استقبال إشعار من العميل إلى الكاشير
   socket.on("neworder", (notification) => {
-    
     // إرسال الإشعار إلى المطبخ
     cashierNamespace.emit("neworder", notification);
   });
 
-  socket.on("disconnect", () => {
-    
-  });
+  socket.on("disconnect", () => {});
 });
 
 // التعامل مع اتصالات المطبخ
 kitchenNamespace.on("connection", (socket) => {
-  
-
   socket.on("orderkitchen", (notification) => {
-    
     kitchenNamespace.emit("orderkitchen", notification);
   });
 
-  socket.on("disconnect", () => {
-    
-  });
+  socket.on("disconnect", () => {});
 });
 
 BarNamespace.on("connection", (socket) => {
-  
-
   socket.on("orderBar", (notification) => {
-    
     BarNamespace.emit("orderBar", notification);
   });
 
-  socket.on("disconnect", () => {
-    
-  });
+  socket.on("disconnect", () => {});
 });
 
 GrillNamespace.on("connection", (socket) => {
-  
-
   socket.on("orderGrill", (notification) => {
-    
     GrillNamespace.emit("orderGrill", notification);
   });
 
-  socket.on("disconnect", () => {
-    
-  });
+  socket.on("disconnect", () => {});
 });
 
 // التعامل مع اتصالات الويتر
 waiterNamespace.on("connection", (socket) => {
-  
-
   socket.on("orderReady", (notification) => {
-    
     waiterNamespace.emit("orderReady", notification);
   });
   socket.on("helprequest", (notification) => {
-    
     waiterNamespace.emit("helprequest", notification);
   });
 
   socket.on("orderwaiter", (notification) => {
-    
     waiterNamespace.emit("orderwaiter", notification);
   });
 
-  socket.on("disconnect", () => {
-    
-  });
+  socket.on("disconnect", () => {});
 });
 
 const port = process.env.PORT || 8000;
 
 // Start the server
-server.listen(port, () => {
-  
-});
+server.listen(port, () => {});

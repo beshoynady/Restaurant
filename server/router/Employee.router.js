@@ -10,10 +10,10 @@ const {
   getAllEmployee,
   getCountEmployees,
   deleteEmployee,
-} = require("../controllers/Employee.controller.js");
+} = require("../controllers/employee.controller.js");
 
-const {authenticateToken, refreshAccessToken} = require("../utlits/authenticate");
-const checkSubscription = require("../utlits/checkSubscription");
+const {authenticateToken, refreshAccessToken} = require("../middlewares/authenticate.js");
+const checkSubscription = require("../middlewares/checkSubscription.js");
 
 router.route("/create-first").post(createFirstEmployee);
 router.route("/count").get(getCountEmployees);

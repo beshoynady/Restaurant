@@ -1,5 +1,5 @@
 const QRCode = require("qrcode");
-const TableModel = require("../models/Table.model");
+const TableModel = require("../models/table.model");
 
 // Create a new table
 const createTable = async (req, res) => {

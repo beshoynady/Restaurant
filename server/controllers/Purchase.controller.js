@@ -1,4 +1,4 @@
-const purchaseInvoiceModel = require("../models/Purchase.model");
+const purchaseInvoiceModel = require("../models/purchase.model");
 
 // Create a new purchase invoice
 const createPurchaseInvoice = async (req, res) => {

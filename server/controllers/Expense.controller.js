@@ -1,4 +1,4 @@
-const ExpenseModel = require('../models/Expense.model');
+const ExpenseModel = require('../models/expense.model');
 
 const createExpense = async (req, res) => {
   const { description, expenseType , isSalary } = req.body;

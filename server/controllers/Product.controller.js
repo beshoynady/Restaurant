@@ -1,6 +1,6 @@
 const path = require("path");
 const fs = require("fs");
-const ProductModel = require("../models/Product.model.js");
+const ProductModel = require("../models/product.model.js");
 
 // Create a new product
 const createProduct = async (req, res) => {

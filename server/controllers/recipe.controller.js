@@ -1,4 +1,4 @@
-const RecipeModel = require("../models/Recipe.model");
+const RecipeModel = require("../models/recipe.model");
 
 // Validate ingredients
 const validateIngredients = (ingredients) => {

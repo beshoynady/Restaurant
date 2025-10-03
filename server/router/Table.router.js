@@ -1,6 +1,6 @@
 const express = require("express");
-const { authenticateToken } = require("../utlits/authenticate");
-const checkSubscription = require("../utlits/checkSubscription");
+const { authenticateToken } = require("../middlewares/authenticate");
+const checkSubscription = require("../middlewares/checkSubscription");
 
 const {
   createTable,
@@ -9,7 +9,7 @@ const {
   showOneTable,
   updateTable,
   deleteTable,
-} = require("../controllers/Table.controller");
+} = require("../controllers/table.controller");
 
 const router = express.Router();
 

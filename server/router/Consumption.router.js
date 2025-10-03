@@ -7,10 +7,10 @@ const {
   createConsumption,
   updateConsumptionById,
   deleteConsumptionById,
-} = require("../controllers/Consumption.controller");
+} = require("../controllers/consumption.controller");
 
-const {authenticateToken} = require("../utlits/authenticate");
-const checkSubscription = require("../utlits/checkSubscription");
+const {authenticateToken} = require("../middlewares/authenticate");
+const checkSubscription = require("../middlewares/checkSubscription");
 
 // Define routes using router.route for Kitchen Consumptions
 router

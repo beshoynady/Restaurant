@@ -6,10 +6,10 @@ const {
     getSupplierById,
     updateSupplierById,
     deleteSupplierById
-} = require('../controllers/Supplier.controller');
+} = require('../controllers/supplier.controller');
 
-const {authenticateToken} = require("../utlits/authenticate");
-const checkSubscription = require('../utlits/checkSubscription')
+const {authenticateToken} = require("../middlewares/authenticate");
+const checkSubscription = require('../middlewares/checkSubscription')
 
 router.route('/')
     .post(authenticateToken, checkSubscription, createSupplier)

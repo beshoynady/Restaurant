@@ -6,10 +6,10 @@ const {
     getPurchaseInvoiceById,
     updatePurchaseInvoiceById,
     deletePurchaseInvoiceById
-} = require('../controllers/Purchase.controller');
+} = require('../controllers/purchase.controller');
 
-const {authenticateToken} = require("../utlits/authenticate");
-const checkSubscription = require('../utlits/checkSubscription')
+const {authenticateToken} = require("../middlewares/authenticate");
+const checkSubscription = require('../middlewares/checkSubscription')
 
 // Routes for purchase management
 router.route('/')

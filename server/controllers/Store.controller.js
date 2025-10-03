@@ -1,16 +1,10 @@
-const StoreModel = require("../models/Store.model"); // Adjust the path as needed
+const StoreModel = require("../models/store.model"); // Adjust the path as needed
 
 // Create a new store
 const createStore = async (req, res, next) => {
   try {
-    const {
-      storeName,
-      storeCode,
-      description,
-      address,
-      storekeeper,
-      status,
-    } = req.body;
+    const { storeName, storeCode, description, address, storekeeper, status } =
+      req.body;
 
     const createdBy = req.employee.id; // Assume the logged-in employee's ID is available
 
@@ -42,7 +36,12 @@ const createStore = async (req, res, next) => {
 
     res.status(201).json(newStore);
   } catch (error) {
-    res.status(500).json({ error: "An error occurred while creating the store.", details: error.message });
+    res
+      .status(500)
+      .json({
+        error: "An error occurred while creating the store.",
+        details: error.message,
+      });
     next(error);
   }
 };
@@ -55,7 +54,12 @@ const getAllStores = async (req, res) => {
       .populate("createdBy", "_id fullname role shift");
     res.status(200).json(stores);
   } catch (error) {
-    res.status(500).json({ error: "An error occurred while fetching stores.", details: error.message });
+    res
+      .status(500)
+      .json({
+        error: "An error occurred while fetching stores.",
+        details: error.message,
+      });
   }
 };
 
@@ -71,20 +75,34 @@ const getStoreById = async (req, res) => {
     }
     res.status(200).json(store);
   } catch (error) {
-    res.status(500).json({ error: "An error occurred while fetching the store.", details: error.message });
+    res
+      .status(500)
+      .json({
+        error: "An error occurred while fetching the store.",
+        details: error.message,
+      });
   }
 };
 
 // Update a store
 const updateStore = async (req, res) => {
   const { id } = req.params;
-  const { storeName, storeCode, description, address, storekeeper, status } = req.body;
+  const { storeName, storeCode, description, address, storekeeper, status } =
+    req.body;
   const updatedBy = req.employee.id;
 
   try {
     const updatedStore = await StoreModel.findByIdAndUpdate(
       id,
-      { storeName, storeCode, description, address, storekeeper, status, updatedBy },
+      {
+        storeName,
+        storeCode,
+        description,
+        address,
+        storekeeper,
+        status,
+        updatedBy,
+      },
       { new: true, runValidators: true }
     )
       .populate("storekeeper", "_id fullname role shift")
@@ -94,7 +112,12 @@ const updateStore = async (req, res) => {
     }
     res.status(200).json(updatedStore);
   } catch (error) {
-    res.status(500).json({ error: "An error occurred while updating the store.", details: error.message });
+    res
+      .status(500)
+      .json({
+        error: "An error occurred while updating the store.",
+        details: error.message,
+      });
   }
 };
 
@@ -108,7 +131,12 @@ const deleteStore = async (req, res) => {
     }
     res.status(200).json({ message: "Store deleted successfully." });
   } catch (error) {
-    res.status(500).json({ error: "An error occurred while deleting the store.", details: error.message });
+    res
+      .status(500)
+      .json({
+        error: "An error occurred while deleting the store.",
+        details: error.message,
+      });
   }
 };
 

@@ -7,143 +7,145 @@ import io from "socket.io-client";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import LoadingPage from "./screens/management/manag.component/LoadingPage/LoadingPage";
-import NoInternetPage from "./screens/management/manag.component/LoadingPage/NoInternetPage";
-import Userscreen from "./screens/user.screen/Userscreen";
-import Login from "./screens/management/manag.component/login/Login";
+import LoadingPage from "./layouts/adminLayout/adminComponent/LoadingPage/LoadingPage.js";
+import NoInternetPage from "./layouts/adminLayout/adminComponent/LoadingPage/NoInternetPage.js";
+import Userscreen from "./layouts/clientLayout/Userscreen.jsx";
+import Login from "./layouts/adminLayout/adminComponent/login/Login.js";
 
 const ManagLayout = React.lazy(() =>
-  import("./screens/management/ManagLayout")
+  import("./layouts/adminLayout/ManagLayout.jsx")
 );
 const ManagerDash = React.lazy(() =>
-  import("./screens/management/manag.component/managerdash/ManagerDash")
+  import("./layouts/adminLayout/adminComponent/managerdash/ManagerDash.js")
 );
 const ManagerDashBoard = React.lazy(() =>
-  import(
-    "./screens/management/manag.component/managerdash/ManagerDashBoard.jsx"
-  )
+  import("./layouts/adminLayout/adminComponent/managerdash/ManagerDashBoard.js")
 );
 const Info = React.lazy(() =>
-  import("./screens/management/manag.component/setting/info")
+  import("./layouts/adminLayout/adminComponent/setting/info.js")
 );
 const Orders = React.lazy(() =>
-  import("./screens/management/manag.component/orders/Orders")
+  import("./layouts/adminLayout/adminComponent/orders/Orders.js")
 );
 const PreparationTicket = React.lazy(() =>
-  import("./screens/management/manag.component/orders/PreparationTicket.jsx")
+  import("./layouts/adminLayout/adminComponent/orders/preparation-ticket.js")
 );
 const Products = React.lazy(() =>
-  import("./screens/management/manag.component/products/Products")
+  import("./layouts/adminLayout/adminComponent/products/Products.js")
 );
 const PreparationSection = React.lazy(() =>
-  import("./screens/management/manag.component/products/PreparationSection.jsx")
+  import("./layouts/adminLayout/adminComponent/products/preparation-section.js")
 );
 const ProductRecipe = React.lazy(() =>
-  import("./screens/management/manag.component/products/ProductRecipe")
+  import("./layouts/adminLayout/adminComponent/products/ProductRecipe.js")
 );
 const Tables = React.lazy(() =>
-  import("./screens/management/manag.component/tables/Tables")
+  import("./layouts/adminLayout/adminComponent/tables/Tables.js")
 );
 const TablesPage = React.lazy(() =>
-  import("./screens/management/manag.component/tables/TablesPage")
+  import("./layouts/adminLayout/adminComponent/tables/TablesPage.js")
 );
 const ReservationTables = React.lazy(() =>
-  import("./screens/management/manag.component/tables/ReservationTables")
+  import("./layouts/adminLayout/adminComponent/tables/ReservationTables.js")
 );
 const Employees = React.lazy(() =>
-  import("./screens/management/manag.component/employees/Employees")
+  import("./layouts/adminLayout/adminComponent/employees/Employees.js")
 );
 const PermissionsComponent = React.lazy(() =>
-  import("./screens/management/manag.component/employees/Permissions")
+  import("./layouts/adminLayout/adminComponent/employees/permissions.js")
 );
 const EmployeeTransactions = React.lazy(() =>
-  import("./screens/management/manag.component/employees/EmployeeTransactions")
+  import(
+    "./layouts/adminLayout/adminComponent/employees/employee-transactions.js"
+  )
 );
 const PayRoll = React.lazy(() =>
-  import("./screens/management/manag.component/employees/PayRoll")
+  import("./layouts/adminLayout/adminComponent/employees/payroll,js")
 );
 const AttendanceManagement = React.lazy(() =>
-  import("./screens/management/manag.component/employees/attendance")
+  import("./layouts/adminLayout/adminComponent/employees/attendance.js")
 );
 const MenuCategory = React.lazy(() =>
-  import("./screens/management/manag.component/products/MenuCategory")
+  import("./layouts/adminLayout/adminComponent/products/menu-category.js")
 );
 const PreparationScreen = React.lazy(() =>
-  import("./screens/management/manag.component/kitchen/PreparationScreen.jsx")
+  import("./layouts/adminLayout/adminComponent/kitchen/PreparationScreen.js")
 );
 
 const Waiter = React.lazy(() =>
-  import("./screens/management/manag.component/waiter/Waiter")
+  import("./layouts/adminLayout/adminComponent/waiter/Waiter.jsx")
 );
 const DeliveryMan = React.lazy(() =>
-  import("./screens/management/manag.component/deliveryman/DeliveryMan")
+  import("./layouts/adminLayout/adminComponent/deliveryman/DeliveryMan.js")
 );
 const POS = React.lazy(() =>
-  import("./screens/management/manag.component/pos/POS")
+  import("./layouts/adminLayout/adminComponent/pos/POS.js")
 );
 const Suppliers = React.lazy(() =>
-  import("./screens/management/manag.component/suppliers/Suppliers")
+  import("./layouts/adminLayout/adminComponent/suppliers/Suppliers.js")
 );
 const Purchase = React.lazy(() =>
-  import("./screens/management/manag.component/suppliers/Purchase")
+  import("./layouts/adminLayout/adminComponent/suppliers/purchase.js")
 );
 const PurchaseReturn = React.lazy(() =>
-  import("./screens/management/manag.component/suppliers/PurchaseReturn.jsx")
+  import("./layouts/adminLayout/adminComponent/suppliers/purchase-return.js")
 );
 const SupplierTransaction = React.lazy(() =>
-  import("./screens/management/manag.component/suppliers/SupplierTransaction")
+  import(
+    "./layouts/adminLayout/adminComponent/suppliers/supplier-transaction.js"
+  )
 );
 const CategoryStock = React.lazy(() =>
-  import("./screens/management/manag.component/stock/CategoryStock")
+  import("./layouts/adminLayout/adminComponent/stock/category-stock.js")
 );
 const Store = React.lazy(() =>
-  import("./screens/management/manag.component/stock/Store.jsx")
+  import("./layouts/adminLayout/adminComponent/stock/store.js")
 );
 const StockItem = React.lazy(() =>
-  import("./screens/management/manag.component/stock/StockItem")
+  import("./layouts/adminLayout/adminComponent/stock/stock-item.js")
 );
 const ProductionRecipe = React.lazy(() =>
-  import("./screens/management/manag.component/stock/ProductionRecipe.jsx")
+  import("./layouts/adminLayout/adminComponent/stock/production-recipe.js")
 );
 const ProductionOrder = React.lazy(() =>
-  import("./screens/management/manag.component/stock/ProductionOrder.jsx")
+  import("./layouts/adminLayout/adminComponent/stock/production-order.js")
 );
 const ProductionRecord = React.lazy(() =>
-  import("./screens/management/manag.component/stock/ProductionRecord.jsx")
+  import("./layouts/adminLayout/adminComponent/stock/production-record.js")
 );
 const StockMovement = React.lazy(() =>
-  import("./screens/management/manag.component/stock/StockMovement")
+  import("./layouts/adminLayout/adminComponent/stock/stock-movement.js")
 );
 const BatchStockReport = React.lazy(() =>
-  import("./screens/management/manag.component/stock/BatchStockReport.jsx")
+  import("./layouts/adminLayout/adminComponent/stock/BatchStockReport.js")
 );
 const SectionConsumption = React.lazy(() =>
-  import("./screens/management/manag.component/stock/SectionConsumption.jsx")
+  import("./layouts/adminLayout/adminComponent/stock/SectionConsumption.js")
 );
 
 const ExpenseItem = React.lazy(() =>
-  import("./screens/management/manag.component/expenses/Expense")
+  import("./layouts/adminLayout/adminComponent/expenses/expense.js")
 );
 const DailyExpense = React.lazy(() =>
-  import("./screens/management/manag.component/expenses/dailyExpense")
+  import("./layouts/adminLayout/adminComponent/expenses/daily-expense.js")
 );
 const CashRegister = React.lazy(() =>
-  import("./screens/management/manag.component/cash/CashRegister")
+  import("./layouts/adminLayout/adminComponent/cash/cash-register.jsx")
 );
 const CashMovement = React.lazy(() =>
-  import("./screens/management/manag.component/cash/CashMovement")
+  import("./layouts/adminLayout/adminComponent/cash/cash-movement.js")
 );
 const Users = React.lazy(() =>
-  import("./screens/management/manag.component/users/Users")
+  import("./layouts/adminLayout/adminComponent/users/users.js")
 );
 const Customers = React.lazy(() =>
-  import("./screens/management/manag.component/users/Customers")
+  import("./layouts/adminLayout/adminComponent/users/Customers.js")
 );
 const CustomerMessage = React.lazy(() =>
-  import("./screens/management/manag.component/users/CustomerMessage")
+  import("./layouts/adminLayout/adminComponent/users/CustomerMessage.js")
 );
 const ProfitLoss = React.lazy(() =>
-  import("./screens/management/manag.component/reports/ProfitAndLoss.jsx")
+  import("./layouts/adminLayout/adminComponent/reports/ProfitAndLoss.js")
 );
 
 const cashierSocket = io(`${process.env.REACT_APP_API_URL}/cashier`, {
@@ -289,8 +291,9 @@ function App() {
     const ampm = hours >= 12 ? "م" : "ص";
     hours = hours % 12;
     hours = hours ? hours : 12;
-    const formattedTime = `${hours}:${minutes < 10 ? "0" + minutes : minutes
-      } ${ampm}`;
+    const formattedTime = `${hours}:${
+      minutes < 10 ? "0" + minutes : minutes
+    } ${ampm}`;
     return formattedTime;
   };
   const formatDateTime = (dateString) => {
@@ -453,7 +456,6 @@ function App() {
         );
       // Set fetched categories in the state
 
-
       setAllMenuCategories(activeMenuCategories);
 
       const mainCategory =
@@ -510,7 +512,6 @@ function App() {
         }
 
         setAllTable(tables);
-
       } else {
         console.error("Unexpected response status:", response.status);
       }
@@ -548,7 +549,6 @@ function App() {
 
       if (response.status === 200) {
         setAllEmployees(response.data);
-
       } else {
         console.error(
           "Failed to fetch employees data: Unexpected response status",
@@ -566,7 +566,7 @@ function App() {
   const [menuCategoryId, setMenuCategoryId] = useState("");
 
   const filterByMenuCategoryId = (e) => {
-    // 
+    //
     setMenuCategoryId(e.target.value);
   };
 
@@ -608,9 +608,6 @@ function App() {
           }
         });
       }
-
-
-
     } catch (error) {
       console.error("Error incrementing product quantity:", error.message);
       // You can handle the error appropriately, such as displaying an error message to the user.
@@ -627,7 +624,6 @@ function App() {
         productOrderToUpdate.length > 0
           ? productOrderToUpdate.find((product) => product._id === productId)
           : allProducts.find((product) => product._id === productId);
-
 
       if (!findProduct) {
         throw new Error("Product not found.");
@@ -715,9 +711,6 @@ function App() {
           }
         });
       }
-
-
-
     } catch (error) {
       console.error("Error incrementing product quantity:", error.message);
       // You can handle the error appropriately, such as displaying an error message to the user.
@@ -727,9 +720,8 @@ function App() {
   const [productExtras, setproductExtras] = useState([]);
 
   const handleAddProductExtras = (extra, ind) => {
-    // 
+    //
     const newExtras = [...productExtras];
-
 
     if (newExtras.length > 0) {
       if (newExtras[ind]) {
@@ -822,8 +814,6 @@ function App() {
         });
       }
 
-
-
       calculateOrderCost();
       setproductExtras([]);
     } catch (error) {
@@ -875,7 +865,6 @@ function App() {
             : [];
         }
 
-
         if (itemsInCart.length > 0) {
           if (sizeId) {
             const repeatedItem = itemsInCart.find(
@@ -899,7 +888,7 @@ function App() {
           setitemId([sizeId ? sizeId : productId]);
         }
       }
-      // 
+      //
     } catch (error) {
       console.error("Error adding item to cart:", error.message);
     } finally {
@@ -916,7 +905,6 @@ function App() {
         productOrderToUpdate.length > 0
           ? productOrderToUpdate.find((product) => product._id === productId)
           : allProducts.find((product) => product._id === productId);
-
 
       if (!productToUpdate) {
         throw new Error("Product not found.");
@@ -937,7 +925,7 @@ function App() {
         productToUpdate.extrasSelected = [];
         productToUpdate.notes = "";
       }
-      // 
+      //
     } catch (error) {
       console.error(
         "Error resetting product quantity and notes:",
@@ -950,15 +938,13 @@ function App() {
   const deleteItemFromCart = (id, sizeId) => {
     try {
       if (sizeId) {
-
         // Determine which list to operate on based on the presence of items in productOrderToUpdate
         const updatedList =
           productOrderToUpdate.length > 0
             ? productOrderToUpdate.filter(
-              (product) => product.sizeId !== sizeId
-            )
+                (product) => product.sizeId !== sizeId
+              )
             : itemsInCart.filter((item) => item.sizeId !== sizeId);
-
 
         // Update the list of item IDs
         const updatedItemId = itemId.filter((itemId) => itemId !== sizeId);
@@ -966,7 +952,7 @@ function App() {
           getAllProducts();
           // return
         }
-        // 
+        //
         // Update the state based on the list being modified
         if (productOrderToUpdate.length > 0) {
           setproductOrderToUpdate(updatedList);
@@ -978,13 +964,11 @@ function App() {
         // Reset the quantity and notes of the deleted item
         resetProductQuantityAndNotes(id, sizeId);
       } else {
-
         // Determine which list to operate on based on the presence of items in productOrderToUpdate
         const updatedList =
           productOrderToUpdate.length > 0
             ? productOrderToUpdate.filter((product) => product.productId !== id)
             : itemsInCart.filter((item) => item.productId !== id);
-
 
         // Update the list of item IDs
         const updatedItemId = itemId.filter((itemId) => itemId !== id);
@@ -1041,7 +1025,6 @@ function App() {
         totalExtras = 0;
       });
 
-
       // Update the state with the total cost
       setcostOrder(totalCost);
     } catch (error) {
@@ -1066,7 +1049,7 @@ function App() {
     try {
       setIsLoading(true);
       const config = await handleGetTokenAndConfig();
-      // 
+      //
       // Find the user's orders
       const userOrders =
         allOrders &&
@@ -1548,7 +1531,6 @@ function App() {
     try {
       // Log client ID for debugging
 
-
       // Filter orders related to the client's table
       const tableOrder =
         allOrders &&
@@ -1631,7 +1613,6 @@ function App() {
         }, 60000 * 10);
       }
     } catch (error) {
-
       // Show error toast if there's an issue with marking the order for checkout
       toast.error("حدث خطأ اثناء طلب الحساب ! حاول مره اخري");
     }
@@ -1652,15 +1633,15 @@ function App() {
       const lasttableorder =
         tableorder.length > 0 ? tableorder[tableorder.length - 1] : [];
       const lasttableorderactive = lasttableorder.isActive;
-      // 
-      // 
+      //
+      //
       if (lasttableorderactive) {
         const id = await lasttableorder._id;
         const myOrder = await axios.get(apiUrl + "/api/order/" + id);
         const data = myOrder.data;
-        // 
-        // 
-        // 
+        //
+        //
+        //
         setmyOrder(data);
         setmyOrderId(data._id);
         setorderTotal(data.total);
@@ -1669,7 +1650,7 @@ function App() {
         setorderSubtotal(data.subTotal);
         setlistProductsOrder(data.products);
         setnewlistofproductorder(data.products);
-        // 
+        //
       }
     } catch (error) {
       console.error(error);
@@ -1681,8 +1662,6 @@ function App() {
 
   const putNumOfPaid = (id, sizeid, numOfPaid) => {
     try {
-
-
       const updatedProducts = newlistofproductorder.map((product) => {
         if (
           (sizeid &&
@@ -1707,7 +1686,6 @@ function App() {
       });
 
       setnewlistofproductorder(updatedProducts);
-
 
       calcSubtotalSplitOrder(updatedProducts);
     } catch (error) {
@@ -1744,7 +1722,6 @@ function App() {
             originalProduct.numOfPaid - product.numOfPaid
           );
 
-
           const priceToUse =
             originalProduct.priceAfterDiscount > 0
               ? originalProduct.priceAfterDiscount
@@ -1756,7 +1733,6 @@ function App() {
       });
 
       setsubtotalSplitOrder(total);
-
     } catch (error) {
       console.error(error);
       toast.error("حدث خطأ أثناء حساب المجموع للطلب المقسم.");
@@ -1773,11 +1749,11 @@ function App() {
               if (extra._id === extraId) {
                 isPaid
                   ? setsubtotalSplitOrder(
-                    subtotalSplitOrder + extra.totalExtrasPrice
-                  )
+                      subtotalSplitOrder + extra.totalExtrasPrice
+                    )
                   : setsubtotalSplitOrder(
-                    subtotalSplitOrder - extra.totalExtrasPrice
-                  );
+                      subtotalSplitOrder - extra.totalExtrasPrice
+                    );
                 return {
                   ...extra,
                   isPaid: isPaid,
@@ -1800,7 +1776,6 @@ function App() {
     try {
       e.preventDefault();
 
-
       // Send a PUT request to update the order with split details
       const updateOrder = await axios.put(`${apiUrl}/api/order/${myOrderId}`, {
         products: newlistofproductorder,
@@ -1808,12 +1783,11 @@ function App() {
         subtotalSplitOrder,
       });
       if (updateOrder) {
-
         // Display a success toast message upon successful payment
         toast.success("تم دفع جزء من الفاتورة بنجاح");
 
         // Log the updated order details
-        // 
+        //
       }
     } catch (error) {
       // Display an error toast message if payment fails
@@ -1894,7 +1868,6 @@ function App() {
   };
 
   const refreshToken = async () => {
-
     if (!isTokenValid) return;
 
     try {
@@ -1919,7 +1892,6 @@ function App() {
   const verifyToken = async () => {
     const employeeToken = localStorage.getItem("token_e");
     if (!employeeToken) {
-
       setIsTokenValid(false);
       return;
     } else {
@@ -1927,7 +1899,6 @@ function App() {
       const currentTime = Date.now() / 1000;
       if (decodedToken.exp < currentTime) {
         await refreshToken();
-
       }
     }
   };
@@ -2099,7 +2070,6 @@ function App() {
       if (response.data) {
         setAllReservations(response.data);
       } else {
-
       }
     } catch (error) {
       console.error("Error fetching reservations:", error);
@@ -2109,11 +2079,8 @@ function App() {
   const [availableTableIds, setavailableTableIds] = useState([]);
 
   const getAvailableTables = (reservationDate, startTime, endTime) => {
-
-
     // Filter reservations that match the selected date
     const filterReservationsByDate = allReservations?.filter((reservation) => {
-
       const reservationDateObj = new Date(reservation.reservationDate);
       const selectedDateObj = new Date(reservationDate);
 
@@ -2151,11 +2118,8 @@ function App() {
       }
     );
 
-
-
     // Retrieve all table IDs
     const allTableIds = allTable?.map((table) => table._id) || [];
-
 
     // Retrieve reserved table IDs based on the filtered reservations
     const reservedTableIds = [];
@@ -2168,7 +2132,6 @@ function App() {
     const availableTableIds = allTableIds.filter(
       (tableId) => !reservedTableIds.includes(tableId)
     );
-
 
     // Update state with available table IDs
     setavailableTableIds(availableTableIds);
@@ -2191,20 +2154,25 @@ function App() {
   ) => {
     try {
       e.preventDefault();
-      setIsLoading(true)
+      setIsLoading(true);
 
-      if(!tableId || !reservationDate || !startTime || !endTime || !customerName || !customerPhone){
+      if (
+        !tableId ||
+        !reservationDate ||
+        !startTime ||
+        !endTime ||
+        !customerName ||
+        !customerPhone
+      ) {
         toast.error("يرجى ملء جميع الحقول المطلوبة");
-        setIsLoading(false)
+        setIsLoading(false);
         return;
       }
-
 
       // Convert reservationDate to Date object
       const selectedDate = new Date(reservationDate);
 
       // Logging selectedDate for debugging purposes
-
 
       // Filter reservations by table and selected date
       const filterReservationsByTable = allReservations.filter(
@@ -2215,7 +2183,7 @@ function App() {
           return (
             reservation.tableId === tableId &&
             reservationDateObj.getFullYear() ===
-            selectedDateObj.getFullYear() &&
+              selectedDateObj.getFullYear() &&
             reservationDateObj.getMonth() === selectedDateObj.getMonth() &&
             reservationDateObj.getDate() === selectedDateObj.getDate()
           );
@@ -2223,7 +2191,7 @@ function App() {
       );
 
       // Logging filterReservationsByTable for debugging purposes
-      // 
+      //
       // Filter reservations by table and selected date
       const conflictingReservation = filterReservationsByTable.find(
         (reservation) => {
@@ -2244,7 +2212,7 @@ function App() {
         }
       );
 
-      // 
+      //
 
       // Display error message if there is a conflicting reservation
       if (conflictingReservation) {

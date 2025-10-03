@@ -5,8 +5,8 @@ const fs = require('fs');
 
 const router = express.Router();
 
-const {authenticateToken} = require("../utlits/authenticate");;
-const checkSubscription = require('../utlits/checkSubscription');
+const {authenticateToken} = require("../middlewares/authenticate");;
+const checkSubscription = require('../middlewares/checkSubscription');
 const {
   createProduct,
   getAllProducts,
@@ -15,7 +15,7 @@ const {
   getProduct,
   updateProduct,
   deleteProduct,
-} = require("../controllers/Product.controller");
+} = require("../controllers/product.controller");
 
 
 

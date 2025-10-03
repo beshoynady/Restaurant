@@ -1,4 +1,4 @@
-const EmployeeModel = require("../models/Employee.model");
+const EmployeeModel = require("../models/employee.model");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 require("dotenv").config();

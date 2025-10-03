@@ -7,10 +7,10 @@ const {
     getPermissionByEmployee,
     updatePermissionById,
     deletePermissionById
-} = require('../controllers/Permissions.controller');
+} = require('../controllers/permissions.controller');
 
-const {authenticateToken} = require("../utlits/authenticate");
-const checkSubscription = require('../utlits/checkSubscription')
+const {authenticateToken} = require("../middlewares/authenticate");
+const checkSubscription = require('../middlewares/checkSubscription')
 
 router.route('/')
     .post(authenticateToken, checkSubscription, createPermission)

@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const payrollController = require('../controllers/Payroll.controller');
-const {authenticateToken} = require("../utlits/authenticate");
-const checkSubscription = require('../utlits/checkSubscription')
+const payrollController = require('../controllers/payroll,controller');
+const {authenticateToken} = require("../middlewares/authenticate");
+const checkSubscription = require('../middlewares/checkSubscription')
 
 router.route('/')
     .post(authenticateToken, checkSubscription, payrollController.createPayroll)

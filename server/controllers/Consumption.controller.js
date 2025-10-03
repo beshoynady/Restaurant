@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const ConsumptionModel = require("../models/Consumption.model");
+const ConsumptionModel = require("../models/consumption.model");
 
 // Create a new consumption
 const createConsumption = async (req, res) => {
@@ -18,8 +18,16 @@ const createConsumption = async (req, res) => {
     } = req.body;
 
     // Validate required fields
-    if (!section || !stockItem || !quantityTransferred || !deliveredBy || !receivedBy) {
-      return res.status(400).json({ success: false, error: "Missing required fields" });
+    if (
+      !section ||
+      !stockItem ||
+      !quantityTransferred ||
+      !deliveredBy ||
+      !receivedBy
+    ) {
+      return res
+        .status(400)
+        .json({ success: false, error: "Missing required fields" });
     }
 
     const consumptionData = {
@@ -96,7 +104,7 @@ const updateConsumptionById = async (req, res) => {
           remarks,
         },
         $push: {
-          tickets: ticketId , 
+          tickets: ticketId,
         },
       },
       { new: true, runValidators: true }
@@ -123,7 +131,6 @@ const updateConsumptionById = async (req, res) => {
   }
 };
 
-
 // Get all consumptions
 const getAllConsumptions = async (req, res) => {
   try {
@@ -146,7 +153,9 @@ const getConsumptionById = async (req, res) => {
   const { id } = req.params;
   try {
     if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res.status(400).json({ success: false, error: "Invalid ID format" });
+      return res
+        .status(400)
+        .json({ success: false, error: "Invalid ID format" });
     }
 
     const consumption = await ConsumptionModel.findById(id)
@@ -157,7 +166,9 @@ const getConsumptionById = async (req, res) => {
       .populate("receivedBy", "_id fullname username role");
 
     if (!consumption) {
-      return res.status(404).json({ success: false, error: "Consumption record not found" });
+      return res
+        .status(404)
+        .json({ success: false, error: "Consumption record not found" });
     }
 
     res.status(200).json({ success: true, data: consumption });
@@ -166,7 +177,7 @@ const getConsumptionById = async (req, res) => {
     res.status(500).json({ success: false, error: "Internal Server Error" });
   }
 };
-// Get single consumption by section 
+// Get single consumption by section
 const getConsumptionBySection = async (req, res) => {
   const { sectionId } = req.params;
 
@@ -215,19 +226,22 @@ const getConsumptionBySection = async (req, res) => {
   }
 };
 
-
 // Delete consumption by ID
 const deleteConsumptionById = async (req, res) => {
   const { id } = req.params;
   try {
     if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res.status(400).json({ success: false, error: "Invalid ID format" });
+      return res
+        .status(400)
+        .json({ success: false, error: "Invalid ID format" });
     }
 
     const deletedConsumption = await ConsumptionModel.findByIdAndDelete(id);
 
     if (!deletedConsumption) {
-      return res.status(404).json({ success: false, error: "Consumption record not found" });
+      return res
+        .status(404)
+        .json({ success: false, error: "Consumption record not found" });
     }
 
     res.status(200).json({ success: true, data: {} });

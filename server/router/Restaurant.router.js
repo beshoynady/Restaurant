@@ -12,10 +12,10 @@ const {
   updateRestaurant,
   deleteRestaurant,
   updateSubscriptionDates,
-} = require("../controllers/Restaurant.controller");
+} = require("../controllers/restaurant.controller");
 
-const {authenticateToken} = require("../utlits/authenticate");
-const checkSubscription = require("../utlits/checkSubscription");
+const { authenticateToken } = require("../middlewares/authenticate");
+const checkSubscription = require("../middlewares/checkSubscription");
 
 const imagesDir = path.join(__dirname, "..", "images");
 
@@ -54,13 +54,11 @@ const upload = multer({
 const deleteOldImage = (imagePath) => {
   if (fs.existsSync(imagePath)) {
     fs.unlinkSync(imagePath);
-    
   }
 };
 
 const deleteOldImageMiddleware = async (req, res, next) => {
   try {
-    
     const restaurantId = req.params.id;
     if (!restaurantId) {
       return res.status(400).json({ message: "Product ID is missing" });
@@ -81,7 +79,7 @@ const deleteOldImageMiddleware = async (req, res, next) => {
 
     if (restaurant.image && req.file) {
       const oldImagePath = path.join(imagesDir, restaurant.image);
-      
+
       deleteOldImage(oldImagePath);
     }
 

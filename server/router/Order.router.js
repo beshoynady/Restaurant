@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const {authenticateToken} = require("../utlits/authenticate");
-const checkSubscription = require('../utlits/checkSubscription')
+const {authenticateToken} = require("../middlewares/authenticate");
+const checkSubscription = require('../middlewares/checkSubscription')
 
 const {
     createOrder,
@@ -10,7 +10,7 @@ const {
     getLimitOrders,
     updateOrder,
     deleteOrder
-} = require("../controllers/Order.controller");
+} = require("../controllers/order.controller");
 
 
 router.route("/").post(createOrder).get(getOrders);

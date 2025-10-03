@@ -6,10 +6,10 @@ const {
   getStoreById,
   updateStore,
   deleteStore,
-} = require("../controllers/Store.controller");
+} = require("../controllers/store.controller");
 
-const {authenticateToken} = require("../utlits/authenticate");
-const checkSubscription = require("../utlits/checkSubscription");
+const { authenticateToken } = require("../middlewares/authenticate");
+const checkSubscription = require("../middlewares/checkSubscription");
 
 // Create a new store
 router

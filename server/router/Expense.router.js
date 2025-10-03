@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const expensesController = require('../controllers/Expense.controller');
-const {authenticateToken} = require("../utlits/authenticate");
-const checkSubscription = require('../utlits/checkSubscription')
+const expensesController = require('../controllers/expense.controller');
+const {authenticateToken} = require("../middlewares/authenticate");
+const checkSubscription = require('../middlewares/checkSubscription')
 
 
 router.route("/")

@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const recipeController = require('../controllers/recipe.controller');
-const {authenticateToken} = require("../utlits/authenticate");
-const checkSubscription = require('../utlits/checkSubscription')
+const {authenticateToken} = require("../middlewares/authenticate");
+const checkSubscription = require('../middlewares/checkSubscription')
 
 router.route('/')
     .post(authenticateToken, checkSubscription, recipeController.createRecipe)

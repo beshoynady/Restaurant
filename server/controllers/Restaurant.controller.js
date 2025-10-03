@@ -1,4 +1,4 @@
-const RestaurantModel = require("../models/Restaurant.model");
+const RestaurantModel = require("../models/restaurant.model");
 const mongoose = require("mongoose");
 
 // Create a new restaurant
@@ -186,7 +186,7 @@ const updateRestaurant = async (req, res) => {
           subscriptionEnd,
           salesTaxRate,
           serviceTaxRate,
-        }
+        },
       },
       { new: true, runValidators: true }
     );
@@ -230,12 +230,10 @@ const updateSubscriptionDates = async (req, res) => {
   try {
     const employee = req.employee;
     if (employee.role !== "programer") {
-      return res
-        .status(403)
-        .json({
-          message:
-            "Access denied. Only programmers can update subscription dates.",
-        });
+      return res.status(403).json({
+        message:
+          "Access denied. Only programmers can update subscription dates.",
+      });
     }
 
     const { id } = req.params;

@@ -6,9 +6,9 @@ const {
   getShiftById,
   updateShift,
   deleteShift
-} = require('../controllers/Shift.controller');
-const {authenticateToken} = require("../utlits/authenticate");
-const checkSubscription = require('../utlits/checkSubscription')
+} = require('../controllers/shift.controller');
+const {authenticateToken} = require("../middlewares/authenticate");
+const checkSubscription = require('../middlewares/checkSubscription')
 
 router.route('/')
   .post(authenticateToken, checkSubscription, createShift)
