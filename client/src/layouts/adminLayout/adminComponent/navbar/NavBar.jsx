@@ -78,9 +78,7 @@ const NavBar = () => {
       const data = await response.data.reverse();
       const messageNotSeen = data.filter((mas) => mas.isSeen === false);
       setMessages(messageNotSeen);
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   };
 
   const updateisSeenMessage = async (id) => {
@@ -96,9 +94,7 @@ const NavBar = () => {
         config
       );
       getAllCustomerMessage();
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   };
 
   const toggleDropdown = () => {
@@ -200,6 +196,25 @@ const NavBar = () => {
       exitFullScreen.call(doc);
       setFullscreen(false);
     }
+  };
+
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    return localStorage.getItem("theme") === "dark";
+  });
+
+  useEffect(() => {
+    const body = document.body;
+    if (isDarkMode) {
+      body.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      body.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    }
+  }, [isDarkMode]);
+
+  const toggleTheme = () => {
+    setIsDarkMode((prev) => !prev);
   };
 
   useEffect(() => {
@@ -452,6 +467,9 @@ const NavBar = () => {
             <i className="fa-solid fa-minimize fa-xl text-light"></i>
           )}
         </div>
+        <button className="toggle-theme-btn" onClick={toggleTheme}>
+          {isDarkMode ? "☀️ الوضع النهاري" : "🌙 الوضع الليلي"}
+        </button>
         {/* <form className="form-inline my-2 my-lg-0 me-auto">
       <div className="input-group">
         <input className="form-control border-primary m-0 p-2 h-auto" type="search" placeholder="Search" aria-label="Search" />
