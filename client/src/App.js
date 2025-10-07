@@ -7,145 +7,143 @@ import io from "socket.io-client";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import LoadingPage from "./layouts/adminLayout/adminComponent/LoadingPage/LoadingPage.jsx";
-import NoInternetPage from "./layouts/adminLayout/adminComponent/LoadingPage/NoInternetPage.jsx";
-import Userscreen from "./layouts/clientLayout/Userscreen.jsx";
-import Login from "./layouts/adminLayout/adminComponent/login/Login.jsx";
+import LoadingPage from "./screens/management/manag.component/LoadingPage/LoadingPage";
+import NoInternetPage from "./screens/management/manag.component/LoadingPage/NoInternetPage";
+import Userscreen from "./screens/user.screen/Userscreen";
+import Login from "./screens/management/manag.component/login/Login";
 
 const ManagLayout = React.lazy(() =>
-  import("./layouts/adminLayout/ManagLayout.jsx")
+  import("./screens/management/ManagLayout")
 );
 const ManagerDash = React.lazy(() =>
-  import("./layouts/adminLayout/adminComponent/managerdash/ManagerDash.jsx")
+  import("./screens/management/manag.component/managerdash/ManagerDash")
 );
 const ManagerDashBoard = React.lazy(() =>
-  import("./layouts/adminLayout/adminComponent/managerdash/ManagerDashBoard.jsx")
-);
-const Info = React.lazy(() =>
-  import("./layouts/adminLayout/adminComponent/setting/info.jsx")
-);
-const Orders = React.lazy(() =>
-  import("./layouts/adminLayout/adminComponent/orders/Orders.jsx")
-);
-const PreparationTicket = React.lazy(() =>
-  import("./layouts/adminLayout/adminComponent/orders/preparation-ticket.jsx")
-);
-const Products = React.lazy(() =>
-  import("./layouts/adminLayout/adminComponent/products/Products.jsx")
-);
-const PreparationSection = React.lazy(() =>
-  import("./layouts/adminLayout/adminComponent/products/preparation-section.jsx")
-);
-const ProductRecipe = React.lazy(() =>
-  import("./layouts/adminLayout/adminComponent/products/ProductRecipe.jsx")
-);
-const Tables = React.lazy(() =>
-  import("./layouts/adminLayout/adminComponent/tables/Tables.jsx")
-);
-const TablesPage = React.lazy(() =>
-  import("./layouts/adminLayout/adminComponent/tables/TablesPage.jsx")
-);
-const ReservationTables = React.lazy(() =>
-  import("./layouts/adminLayout/adminComponent/tables/ReservationTables.jsx")
-);
-const Employees = React.lazy(() =>
-  import("./layouts/adminLayout/adminComponent/employees/Employees.jsx")
-);
-const PermissionsComponent = React.lazy(() =>
-  import("./layouts/adminLayout/adminComponent/employees/permissions.jsx")
-);
-const EmployeeTransactions = React.lazy(() =>
   import(
-    "./layouts/adminLayout/adminComponent/employees/employee-transactions.jsx"
+    "./screens/management/manag.component/managerdash/ManagerDashBoard.jsx"
   )
 );
+const Info = React.lazy(() =>
+  import("./screens/management/manag.component/setting/info")
+);
+const Orders = React.lazy(() =>
+  import("./screens/management/manag.component/orders/Orders")
+);
+const PreparationTicket = React.lazy(() =>
+  import("./screens/management/manag.component/orders/PreparationTicket.jsx")
+);
+const Products = React.lazy(() =>
+  import("./screens/management/manag.component/products/Products")
+);
+const PreparationSection = React.lazy(() =>
+  import("./screens/management/manag.component/products/PreparationSection.jsx")
+);
+const ProductRecipe = React.lazy(() =>
+  import("./screens/management/manag.component/products/ProductRecipe")
+);
+const Tables = React.lazy(() =>
+  import("./screens/management/manag.component/tables/Tables")
+);
+const TablesPage = React.lazy(() =>
+  import("./screens/management/manag.component/tables/TablesPage")
+);
+const ReservationTables = React.lazy(() =>
+  import("./screens/management/manag.component/tables/ReservationTables")
+);
+const Employees = React.lazy(() =>
+  import("./screens/management/manag.component/employees/Employees")
+);
+const PermissionsComponent = React.lazy(() =>
+  import("./screens/management/manag.component/employees/Permissions")
+);
+const EmployeeTransactions = React.lazy(() =>
+  import("./screens/management/manag.component/employees/EmployeeTransactions")
+);
 const PayRoll = React.lazy(() =>
-  import("./layouts/adminLayout/adminComponent/employees/payroll,jsx")
+  import("./screens/management/manag.component/employees/PayRoll")
 );
 const AttendanceManagement = React.lazy(() =>
-  import("./layouts/adminLayout/adminComponent/employees/attendance.jsx")
+  import("./screens/management/manag.component/employees/attendance")
 );
 const MenuCategory = React.lazy(() =>
-  import("./layouts/adminLayout/adminComponent/products/menu-category.jsx")
+  import("./screens/management/manag.component/products/MenuCategory")
 );
 const PreparationScreen = React.lazy(() =>
-  import("./layouts/adminLayout/adminComponent/kitchen/PreparationScreen.jsx")
+  import("./screens/management/manag.component/kitchen/PreparationScreen.jsx")
 );
 
 const Waiter = React.lazy(() =>
-  import("./layouts/adminLayout/adminComponent/waiter/Waiter.jsx")
+  import("./screens/management/manag.component/waiter/Waiter")
 );
 const DeliveryMan = React.lazy(() =>
-  import("./layouts/adminLayout/adminComponent/deliveryman/DeliveryMan.jsx")
+  import("./screens/management/manag.component/deliveryman/DeliveryMan")
 );
 const POS = React.lazy(() =>
-  import("./layouts/adminLayout/adminComponent/pos/POS.jsx")
+  import("./screens/management/manag.component/pos/POS")
 );
 const Suppliers = React.lazy(() =>
-  import("./layouts/adminLayout/adminComponent/suppliers/Suppliers.jsx")
+  import("./screens/management/manag.component/suppliers/Suppliers")
 );
 const Purchase = React.lazy(() =>
-  import("./layouts/adminLayout/adminComponent/suppliers/purchase.jsx")
+  import("./screens/management/manag.component/suppliers/Purchase")
 );
 const PurchaseReturn = React.lazy(() =>
-  import("./layouts/adminLayout/adminComponent/suppliers/purchase-return.jsx")
+  import("./screens/management/manag.component/suppliers/PurchaseReturn.jsx")
 );
 const SupplierTransaction = React.lazy(() =>
-  import(
-    "./layouts/adminLayout/adminComponent/suppliers/supplier-transaction.jsx"
-  )
+  import("./screens/management/manag.component/suppliers/SupplierTransaction")
 );
 const CategoryStock = React.lazy(() =>
-  import("./layouts/adminLayout/adminComponent/stock/category-stock.jsx")
+  import("./screens/management/manag.component/stock/CategoryStock")
 );
 const Store = React.lazy(() =>
-  import("./layouts/adminLayout/adminComponent/stock/store.jsx")
+  import("./screens/management/manag.component/stock/Store.jsx")
 );
 const StockItem = React.lazy(() =>
-  import("./layouts/adminLayout/adminComponent/stock/stock-item.jsx")
+  import("./screens/management/manag.component/stock/StockItem")
 );
 const ProductionRecipe = React.lazy(() =>
-  import("./layouts/adminLayout/adminComponent/stock/production-recipe.jsx")
+  import("./screens/management/manag.component/stock/ProductionRecipe.jsx")
 );
 const ProductionOrder = React.lazy(() =>
-  import("./layouts/adminLayout/adminComponent/stock/production-order.jsx")
+  import("./screens/management/manag.component/stock/ProductionOrder.jsx")
 );
 const ProductionRecord = React.lazy(() =>
-  import("./layouts/adminLayout/adminComponent/stock/production-record.jsx")
+  import("./screens/management/manag.component/stock/ProductionRecord.jsx")
 );
 const StockMovement = React.lazy(() =>
-  import("./layouts/adminLayout/adminComponent/stock/stock-movement.jsx")
+  import("./screens/management/manag.component/stock/StockMovement")
 );
 const BatchStockReport = React.lazy(() =>
-  import("./layouts/adminLayout/adminComponent/stock/BatchStockReport.jsx")
+  import("./screens/management/manag.component/stock/BatchStockReport.jsx")
 );
 const SectionConsumption = React.lazy(() =>
-  import("./layouts/adminLayout/adminComponent/stock/SectionConsumption.jsx")
+  import("./screens/management/manag.component/stock/SectionConsumption.jsx")
 );
 
 const ExpenseItem = React.lazy(() =>
-  import("./layouts/adminLayout/adminComponent/expenses/expense.jsx")
+  import("./screens/management/manag.component/expenses/Expense")
 );
 const DailyExpense = React.lazy(() =>
-  import("./layouts/adminLayout/adminComponent/expenses/daily-expense.jsx")
+  import("./screens/management/manag.component/expenses/dailyExpense")
 );
 const CashRegister = React.lazy(() =>
-  import("./layouts/adminLayout/adminComponent/cash/cash-register.jsx")
+  import("./screens/management/manag.component/cash/CashRegister")
 );
 const CashMovement = React.lazy(() =>
-  import("./layouts/adminLayout/adminComponent/cash/cash-movement.jsx")
+  import("./screens/management/manag.component/cash/CashMovement")
 );
 const Users = React.lazy(() =>
-  import("./layouts/adminLayout/adminComponent/users/users.jsx")
+  import("./screens/management/manag.component/users/Users")
 );
 const Customers = React.lazy(() =>
-  import("./layouts/adminLayout/adminComponent/users/Customers.jsx")
+  import("./screens/management/manag.component/users/Customers")
 );
 const CustomerMessage = React.lazy(() =>
-  import("./layouts/adminLayout/adminComponent/users/CustomerMessage.jsx")
+  import("./screens/management/manag.component/users/CustomerMessage")
 );
 const ProfitLoss = React.lazy(() =>
-  import("./layouts/adminLayout/adminComponent/reports/ProfitAndLoss.jsx")
+  import("./screens/management/manag.component/reports/ProfitAndLoss.jsx")
 );
 
 const cashierSocket = io(`${process.env.REACT_APP_API_URL}/cashier`, {
