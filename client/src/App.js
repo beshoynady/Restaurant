@@ -7,8 +7,8 @@ import io from "socket.io-client";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import LoadingPage from "./layouts/adminLayout/adminComponent/LoadingPage/LoadingPage.js";
-import NoInternetPage from "./layouts/adminLayout/adminComponent/LoadingPage/NoInternetPage.js";
+import LoadingPage from "./layouts/adminLayout/adminComponent/LoadingPage/LoadingPage.jsx";
+import NoInternetPage from "./layouts/adminLayout/adminComponent/LoadingPage/NoInternetPage.jsx";
 import Userscreen from "./layouts/clientLayout/Userscreen.jsx";
 import Login from "./layouts/adminLayout/adminComponent/login/Login.js";
 
