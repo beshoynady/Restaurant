@@ -1,26 +1,31 @@
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 
-// Load environment variables from .env file
+// 🟡 تحميل متغيرات البيئة
 dotenv.config();
-const url = process.env.MONGODB_URL;
 
-// Function to connect to the database
+// 🟢 قراءة URL من ملف .env
+const mongoURL = process.env.MONGODB_URL;
+
+// 🧠 دالة الاتصال بقاعدة البيانات
 const connectDB = async () => {
-    try {
-        // Attempt to connect to the database
-        await mongoose.connect(url, {
-            useNewUrlParser: true, // Use the new URL parser
-            useUnifiedTopology: true, // Use the unified topology layer
-            serverSelectionTimeoutMS: 30000, // Timeout duration for server selection
-            connectTimeoutMS: 10000, // Timeout duration for connection
-        });
-        
-    } catch (error) {
-        console.error(`Error connecting to MongoDB: ${error.message}`);
-        await mongoose.disconnect(); // Disconnect in case of an error
-    }
+  try {
+    console.log(`🔌 Connecting to MongoDB at ${mongoURL} ...`);
+
+    await mongoose.connect(mongoURL, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      serverSelectionTimeoutMS: 30000, // 30 ثانية لاختيار السيرفر
+      connectTimeoutMS: 10000,         // 10 ثوانٍ لبدء الاتصال
+    });
+
+    console.log('✅ MongoDB Connected Successfully');
+  } catch (error) {
+    console.error(`❌ MongoDB Connection Error: ${error.message}`);
+    // إعادة المحاولة بعد 5 ثواني
+    setTimeout(connectDB, 5000);
+  }
 };
 
-// Export the connection function
+// 📤 تصدير الدالة
 module.exports = connectDB;
