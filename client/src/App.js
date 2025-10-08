@@ -15,6 +15,7 @@ import Login from "./layouts/adminLayout/adminComponent/login/Login";
 const ManagLayout = React.lazy(() =>
   import("./layouts/adminLayout/ManagLayout")
 );
+
 const ManagerDash = React.lazy(() =>
   import("./layouts/adminLayout/adminComponent/managerdash/ManagerDash")
 );
@@ -2501,7 +2502,7 @@ function App() {
           <Route path="/login" element={<Login />} />
 
           <Route
-            path="/adminLayout/*"
+            path="/admin/*"
             element={
               <Suspense fallback={<LoadingPage />}>
                 <ManagLayout />
