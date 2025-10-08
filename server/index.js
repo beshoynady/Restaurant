@@ -57,11 +57,12 @@ const frontEnd = process.env.FRONT_END_URL;
 
 // Security middleware
 app.use(
-  helmet.crossOriginResourcePolicy({
-    policy: "cross-origin",
+  helmet({
+    crossOriginResourcePolicy: { policy: "cross-origin" },
     contentSecurityPolicy: false,
   })
 );
+
 
 // Middleware setup
 app.use(express.json({ limit: "100kb" })); // Limit request body size
@@ -70,7 +71,7 @@ app.use(cookieParser()); // Parse cookies
 // CORS setup
 const allowedOrigins = [
   "https://restaurant.menufy.tech",
-  "https://www.restaurant.menufy.tech",
+  frontEnd,
 ];
 
 app.use(
@@ -150,7 +151,7 @@ const server = http.createServer(app);
 // Setup Socket.io
 const io = new Server(server, {
   cors: {
-    origin: ["https://restaurant.menufy.tech", "https://www.restaurant.menufy.tech"],
+    origin: allowedOrigins,
     methods: ["GET", "POST"],
     credentials: true,
   }
