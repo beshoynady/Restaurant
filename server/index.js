@@ -150,16 +150,10 @@ const server = http.createServer(app);
 // Setup Socket.io
 const io = new Server(server, {
   cors: {
-    origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, origin);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
+    origin: ["https://restaurant.menufy.tech", "https://www.restaurant.menufy.tech"],
     methods: ["GET", "POST"],
-    allowedHeaders: ["content-type"],
-  },
+    credentials: true,
+  }
 });
 
 // Handle socket.io connections
