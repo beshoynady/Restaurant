@@ -56,7 +56,12 @@ const app = express();
 const frontEnd = process.env.FRONT_END_URL;
 
 // Security middleware
-app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
+app.use(
+  helmet.crossOriginResourcePolicy({
+    policy: "cross-origin",
+    contentSecurityPolicy: false,
+  })
+);
 
 // Middleware setup
 app.use(express.json({ limit: "100kb" })); // Limit request body size
@@ -246,4 +251,6 @@ waiterNamespace.on("connection", (socket) => {
 const port = process.env.PORT || 8000;
 
 // Start the server
-server.listen(port, () => {});
+server.listen(port, () => {
+  console.log(`🚀 Server is running on port ${port} in ${process.env.NODE_ENV} mode`);
+});
