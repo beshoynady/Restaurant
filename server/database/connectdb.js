@@ -1,26 +1,43 @@
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 
-// Load environment variables from .env file
+// Load environment variables from .env
 dotenv.config();
-const url = process.env.MONGODB_URL;
 
-// Function to connect to the database
+// Build MongoDB URI dynamically
+const {
+  MONGODB_HOST,
+  MONGODB_PORT,
+  MONGODB_NAME,
+  MONGODB_USER,
+  MONGODB_PASS,
+  MONGODB_AUTH_SOURCE,
+} = process.env;
+
+const mongoURI = `mongodb://${MONGODB_USER}:${encodeURIComponent(MONGODB_PASS)}@${MONGODB_HOST}:${MONGODB_PORT}/${MONGODB_NAME}?authSource=${MONGODB_AUTH_SOURCE}`;
+
+// Connect function
 const connectDB = async () => {
-    try {
-        // Attempt to connect to the database
-        await mongoose.connect(url, {
-            useNewUrlParser: true, // Use the new URL parser
-            useUnifiedTopology: true, // Use the unified topology layer
-            serverSelectionTimeoutMS: 30000, // Timeout duration for server selection
-            connectTimeoutMS: 10000, // Timeout duration for connection
-        });
-        
-    } catch (error) {
-        console.error(`Error connecting to MongoDB: ${error.message}`);
-        await mongoose.disconnect(); // Disconnect in case of an error
-    }
+  try {
+    console.log(`🔌 Connecting to MongoDB at ${MONGODB_HOST}:${MONGODB_PORT}/${MONGODB_NAME} ...`);
+
+    await mongoose.connect(mongoURI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      serverSelectionTimeoutMS: 30000,
+      connectTimeoutMS: 10000,
+    });
+
+    console.log('✅ MongoDB Connected Successfully');
+  } catch (error) {
+    console.error(`❌ MongoDB Connection Error: ${error.message}`);
+    process.exit(1); // Exit process with failure
+  }
 };
 
-// Export the connection function
+// Handle unexpected disconnections
+mongoose.connection.on('disconnected', () => {
+  console.warn('⚠️ MongoDB disconnected. Retrying...');
+});
+
 module.exports = connectDB;
