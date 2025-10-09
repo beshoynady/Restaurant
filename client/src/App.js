@@ -217,6 +217,7 @@ function App() {
 
   // Reataurant data //
   const [restaurantData, setrestaurantData] = useState({});
+
   const getRestaurant = async () => {
     try {
       const config = await handleGetTokenAndConfig(); // Get the token and config

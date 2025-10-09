@@ -467,9 +467,15 @@ const NavBar = () => {
             <i className="fa-solid fa-minimize fa-xl text-light"></i>
           )}
         </div>
-        <button className="toggle-theme-btn" onClick={toggleTheme}>
-          {isDarkMode ? "☀️ الوضع النهاري" : "🌙 الوضع الليلي"}
-        </button>
+        <div
+          className="nav-item d-flex align-items-center justify-content-center mx-1"
+          style={{ cursor: "pointer" }}
+          onClick={toggleDir}
+        >
+          <button className="toggle-theme-btn">
+            {isDarkMode ? "☀️" : "🌙"}
+          </button>
+        </div>
         {/* <form className="form-inline my-2 my-lg-0 me-auto">
       <div className="input-group">
         <input className="form-control border-primary m-0 p-2 h-auto" type="search" placeholder="Search" aria-label="Search" />

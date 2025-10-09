@@ -72,7 +72,7 @@ const SideBar = () => {
                   role === "manager" ||
                   role === "owner") && (
                   <li className="list">
-                    <Link to="/management">
+                    <Link to="/admin">
                       <span className="material-symbols-outlined list-icon ml-2">
                         dashboard
                       </span>
@@ -80,7 +80,7 @@ const SideBar = () => {
                     </Link>
                     <ul className="submenu blank">
                       <li className="list">
-                        <Link to="/" className="linkname">
+                        <Link to="/admin" className="linkname">
                           لوحة التحكم
                         </Link>
                       </li>
