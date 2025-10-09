@@ -111,7 +111,7 @@ const NavBar = () => {
     setShowNotifications(false);
   };
 
-  const toggleTheme = () => {
+  const toggleDir = () => {
     const html = document.documentElement;
     const newDir = html.getAttribute("dir") === "ltr" ? "rtl" : "ltr";
     const newLang = newDir === "rtl" ? "ar" : "en";
@@ -327,7 +327,7 @@ const NavBar = () => {
       style={{ height: "50px", backgroundColor: "#343a40" }}
     >
       {/* <input type="checkbox" className="form-check-input form-check-input-lg" id="theme-toggle" hidden />
-      <label htmlFor="theme-toggle" className="theme-toggle" onClick={toggleTheme}></label> */}
+      <label htmlFor="theme-toggle" className="theme-toggle" onClick={toggleDir}></label> */}
       <div className="navbar-nav flex-row align-items-center w-100 px-1 mx-1 ms-auto h-100">
         <div className="nav-item mx-1 dropdown">
           <a
