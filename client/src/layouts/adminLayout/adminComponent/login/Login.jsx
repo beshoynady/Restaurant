@@ -63,8 +63,9 @@ const Login = () => {
           localStorage.setItem("token_e", data.accessToken);
           getUserInfoFromToken();
         }
-        if (data.findEmployee.isActive === true) {
+        if (data.findEmployee.isActive === true && data.findEmployee.role === "admin" === false) {
           window.location.href = `${clientUrl}/admin`;
+          toast.success("تم تسجيل الدخول بنجاح");
         } else {
           toast.error("غير مسموح لك بالدخول");
         }

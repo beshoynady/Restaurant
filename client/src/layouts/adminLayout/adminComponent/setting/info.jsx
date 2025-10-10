@@ -22,6 +22,7 @@ const Info = () => {
     setEndPagination,
     handleGetTokenAndConfig,
     apiUrl,
+    clientUrl,
   } = useContext(dataContext);
 
   const [shifts, setShifts] = useState([]);
@@ -44,7 +45,6 @@ const Info = () => {
 
   const addShift = () => {
     setShifts([...shifts, { shiftType: "", startTime: "", endTime: "" }]);
-
   };
 
   const removeShift = async (index, id) => {
@@ -145,7 +145,6 @@ const Info = () => {
 
   const addArea = () => {
     setAreas([...areas, { name: "", delivery_fee: 0 }]);
-
   };
 
   const removeArea = async (index, id) => {
@@ -184,7 +183,6 @@ const Info = () => {
     const config = await handleGetTokenAndConfig();
     try {
       areas.map(async (area, i) => {
-
         const id = area._id ? area._id : null;
         const name = area.name;
         const delivery_fee = area.delivery_fee;
@@ -225,9 +223,9 @@ const Info = () => {
 
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [image, setimage] = useState("");
+  const [image, setImage] = useState("");
   const [aboutText, setaboutText] = useState("");
-  const [website, setwebsite] = useState("");
+  const [website, setwebsite] = useState(`${clientUrl}`);
   const [locationUrl, setlocationUrl] = useState("");
   const [dineIn, setdineIn] = useState(false);
   const [takeAway, settakeAway] = useState(false);
@@ -263,7 +261,6 @@ const Info = () => {
 
   const [features, setfeatures] = useState([]);
   const handleFeaturesCheckboxChange = (feature) => {
-
     if (features.includes(feature)) {
       setfeatures(features.filter((item) => item !== feature));
     } else {
@@ -275,7 +272,6 @@ const Info = () => {
     e.preventDefault();
     const config = await handleGetTokenAndConfig();
     try {
-
       const response = await axios.put(
         `${apiUrl}/api/restaurant/${restaurantId}`,
         { features },
@@ -319,7 +315,6 @@ const Info = () => {
 
   const [acceptedPayments, setacceptedPayments] = useState([]);
   const handleacceptedPaymentsCheckboxChange = (acceptedPayment) => {
-
     if (acceptedPayments.includes(acceptedPayment)) {
       setacceptedPayments(
         acceptedPayments.filter((item) => item !== acceptedPayment)
@@ -333,7 +328,6 @@ const Info = () => {
     e.preventDefault();
     const config = await handleGetTokenAndConfig();
     try {
-
       const response = await axios.put(
         `${apiUrl}/api/restaurant/${restaurantId}`,
         { acceptedPayments },
@@ -352,6 +346,10 @@ const Info = () => {
 
   const handleFileUpload = (e) => {
     const file = e.target.files[0];
+    if (file) {
+      setImage(file);
+      setPreview(URL.createObjectURL(file)); // show preview of the image
+    }
     const maxSize = 1024 * 1024; // 1 MB
     const allowedTypes = ["image/jpeg", "image/jpg", "image/png"];
 
@@ -371,7 +369,7 @@ const Info = () => {
       }
 
       // If both checks pass, set the file
-      setimage(file);
+      setImage(file);
     } else {
       toast.error("No file selected.");
     }
@@ -475,15 +473,12 @@ const Info = () => {
         youtube ? { platform: "youtube", url: youtube } : "",
       ];
 
-
-
       // إرسال البيانات إلى الخادم باستخدام axios
       const response = await axios.put(
         `${apiUrl}/api/restaurant/${restaurantId}`,
         { contact, social_media },
         config
       );
-
 
       if (response.status === 200) {
         toast.success("تمت إضافة بيانات التواصل بنجاح");
@@ -532,7 +527,7 @@ const Info = () => {
       updated[index] = { ...updated[index], from: value };
       return updated;
     });
-    console.log({working_hours});
+    console.log({ working_hours });
   };
 
   const handleSetTo = (index, value) => {
@@ -543,8 +538,7 @@ const Info = () => {
       updated[index] = { ...updated[index], to: value };
       return updated;
     });
-        console.log({working_hours});
-
+    console.log({ working_hours });
   };
 
   const handleCheckboxChange = (index) => {
@@ -556,7 +550,6 @@ const Info = () => {
       return updated;
     });
   };
-
 
   const handleOpeningHours = async (e) => {
     e.preventDefault();
@@ -591,7 +584,7 @@ const Info = () => {
         setName(restaurantData.name);
         setSubscriptionStart(restaurantData.subscriptionStart);
         setSubscriptionEnd(restaurantData.subscriptionEnd);
-        setimage(restaurantData.image);
+        setImage(restaurantData.image);
         setwebsite(restaurantData.website);
         setlocationUrl(restaurantData.locationUrl);
         setaboutText(restaurantData.aboutText);
@@ -657,7 +650,6 @@ const Info = () => {
   const [subscriptionEnd, setSubscriptionEnd] = useState("");
 
   const updateSubscriptionDates = async (e) => {
-
     e.preventDefault();
     const config = await handleGetTokenAndConfig();
     if (employeeLoginInfo.role !== "programer") {
@@ -697,7 +689,6 @@ const Info = () => {
   }, [subscriptionStart, subscriptionEnd]);
 
   const calculateRemainingTime = (startDate, endDate) => {
-
     const start = new Date(startDate);
     const end = new Date(endDate);
     const today = new Date();
@@ -722,6 +713,16 @@ const Info = () => {
     }
 
     return { months, days };
+  };
+
+  const [preview, setPreview] = useState(null); // رابط العرض المؤقت
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImage(file);
+      setPreview(URL.createObjectURL(file)); // ← عرض الصورة مؤقتاً
+    }
   };
 
   useEffect(() => {
@@ -1005,7 +1006,9 @@ const Info = () => {
                         style={{ height: "120px", backgroundColor: "gray" }}
                       >
                         <img
-                          src={`${apiUrl}/images/${image}`}
+                          src={`${
+                            image ? `${apiUrl}/images/${image}` : preview
+                          }`}
                           alt="image"
                           className="img-fluid"
                           style={{ width: "100%", height: "100%" }}
@@ -1497,7 +1500,10 @@ const Info = () => {
                                   type="time"
                                   className="form-control border-primary m-0 p-2 h-auto"
                                   name={`openingTime${day}`}
-                                  readOnly={working_hours && working_hours[index]?.closed}
+                                  readOnly={
+                                    working_hours &&
+                                    working_hours[index]?.closed
+                                  }
                                   disabled={
                                     working_hours &&
                                     working_hours[index]?.closed
@@ -1516,7 +1522,10 @@ const Info = () => {
                                   type="time"
                                   className="form-control border-primary m-0 p-2 h-auto"
                                   name={`closingTime${day}`}
-                                  readOnly={working_hours && working_hours[index]?.closed}
+                                  readOnly={
+                                    working_hours &&
+                                    working_hours[index]?.closed
+                                  }
                                   disabled={
                                     working_hours &&
                                     working_hours[index]?.closed
@@ -1619,8 +1628,9 @@ const Info = () => {
                             />
                           </div>
                           <div className="col-md-2 col-6 mb-2 mb-md-0">
-                            <p className="form-control-plaintext">{`${shift.hours > 0 ? shift.hours : 0
-                              } ساعات`}</p>
+                            <p className="form-control-plaintext">{`${
+                              shift.hours > 0 ? shift.hours : 0
+                            } ساعات`}</p>
                           </div>
                           <div className="col-md-1 col-6 m-0 p-0">
                             <button
