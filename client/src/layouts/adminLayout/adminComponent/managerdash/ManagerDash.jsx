@@ -120,7 +120,6 @@ const ManagerDash = () => {
           return orderTime >= startTime && orderTime <= endTime;
         });
         setorderShift(shiftOrders);
-        
       } else {
         toast.warn(
           "لا يمكن تحديد اوردرات الشيف لان هذا المستخدم ليس له شيفت محدد"
@@ -133,7 +132,6 @@ const ManagerDash = () => {
   };
 
   useEffect(() => {
-    
     fetchOrdersData();
   }, [isRefresh]);
 
@@ -172,7 +170,7 @@ const ManagerDash = () => {
       const res = await axios.get(`${apiUrl}/api/preparationsection`, config);
       if (res.status === 200) {
         const PreparationSections = res.data.data;
-        
+
         setAllPreparationSections(PreparationSections);
       } else {
         throw new Error("Failed to fetch data");
@@ -196,7 +194,7 @@ const ManagerDash = () => {
   //     isSend: true,
   //   }));
 
-  //   
+  //
 
   //   // Prepare the payload for updating the order
   //   const payload = { status, isActive, cashier };
@@ -293,7 +291,7 @@ const ManagerDash = () => {
   //             config
   //           );
   //           const orderProducts =await getOrder.data.products
-  //           
+  //
   //         const newProducts = await orderProducts.filter(product=>product.isSend === false)
 
   //         allPreparationSections &&
@@ -390,7 +388,6 @@ const ManagerDash = () => {
         config
       );
       const orderProducts = getOrder.data.products; // Extract the products from the order
-      
 
       // Filter products that are not yet sent to preparation
       const newProducts = orderProducts.filter((product) => !product.isSend);
@@ -551,18 +548,15 @@ const ManagerDash = () => {
         const lastWaiterIndex = sectionWaiters.findIndex(
           (waiter) => waiter._id === lastWaiterId
         );
-        // 
+        //
 
         waiterId =
           lastWaiterIndex !== -1 && lastWaiterIndex < sectionWaiters.length - 1
             ? sectionWaiters[lastWaiterIndex + 1]._id
             : sectionWaiters[0]._id;
       } else {
-        
         waiterId = sectionWaiters[0]._id;
       }
-
-      
 
       return waiterId;
     } catch (error) {
@@ -588,7 +582,7 @@ const ManagerDash = () => {
         config
       );
       const orderData = order.data;
-      
+
       if (orderData) {
         setupdate(!update);
         if (orderData.help === "Requests assistance") {
@@ -600,7 +594,6 @@ const ManagerDash = () => {
         }
       }
     } catch (error) {
-      
       toast.error("حدث خطأ أثناء إرسال الويتر");
     }
   };
@@ -617,10 +610,7 @@ const ManagerDash = () => {
         config
       );
       setupdate(!update);
-      
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   };
 
   const [paymentMethod, setpaymentMethod] = useState("");
@@ -640,7 +630,7 @@ const ManagerDash = () => {
         config
       );
       const registers = response.data;
-      // 
+      //
       if (registers.length === 0) {
         toast.info("لم يتم العثور على  لهذا الموظف");
         return;
@@ -711,7 +701,6 @@ const ManagerDash = () => {
         }
       }
     } catch (error) {
-      
       toast.error("فشل في تسجيل الإيراد");
     }
   };
@@ -783,7 +772,6 @@ const ManagerDash = () => {
         setorderType(order.orderType);
       }
     } catch (error) {
-      
       // Display toast or handle error
     }
   };
@@ -882,7 +870,6 @@ const ManagerDash = () => {
         setkitchenProducts([]);
       }
     } catch (error) {
-      
       toast.error("حدث خطأ اثناء ارسال الاوردر!");
     }
   };
@@ -913,7 +900,7 @@ const ManagerDash = () => {
               <a
                 href={`http://${window.location.hostname}`}
                 target="_blank"
-                className="btn btn-outline-light"
+                className="btn btn-outline-outline-light"
               >
                 <i className="bx bx-world"></i>
                 <span className="ms-2">زيارة الموقع</span>
@@ -1054,7 +1041,7 @@ const ManagerDash = () => {
                 <div className="row align-items-center justify-content-between mb-3">
                   <div className="col p-0">
                     <button
-                      className="btn btn-primary w-100 p-1 text-center"
+                      className="btn btn-outline-primary w-100 p-1 text-center"
                       style={{ fontSize: "14px" }}
                       onClick={() => setlistOrderShow(listDayOrder)}
                     >
@@ -1066,7 +1053,7 @@ const ManagerDash = () => {
                   </div>
                   <div className="col p-0">
                     <button
-                      className="btn btn-primary w-100 p-1 text-center"
+                      className="btn btn-outline-primary w-100 p-1 text-center"
                       style={{ fontSize: "14px" }}
                       onClick={() => setlistOrderShow(orderShift)}
                     >
@@ -1078,7 +1065,7 @@ const ManagerDash = () => {
                   </div>
                   <div className="col p-0">
                     <button
-                      className="btn btn-warning w-100 p-1 text-center"
+                      className="btn btn-outline-warning w-100 p-1 text-center"
                       style={{ fontSize: "14px" }}
                       onClick={() => setlistOrderShow(pendingOrder)}
                     >
@@ -1090,7 +1077,7 @@ const ManagerDash = () => {
                   </div>
                   <div className="col p-0">
                     <button
-                      className="btn btn-warning w-100 p-1 text-center"
+                      className="btn btn-outline-warning w-100 p-1 text-center"
                       style={{ fontSize: "14px" }}
                       onClick={() => setlistOrderShow(pendingPayment)}
                     >
@@ -1102,7 +1089,7 @@ const ManagerDash = () => {
                   </div>
                   <div className="col p-0">
                     <button
-                      className="btn btn-danger w-100 p-1 text-center"
+                      className="btn btn-outline-danger w-100 p-1 text-center"
                       style={{ fontSize: "14px" }}
                       onClick={() => setlistOrderShow(cancelledOrders)}
                     >
@@ -1115,8 +1102,8 @@ const ManagerDash = () => {
                 </div>
 
                 <div className="table-responsive">
-                  <table className="table table-striped table-hover">
-                    <thead>
+                  <table className="table align-middle table-striped table-hover mb-0">
+                    <thead className="table-primary">
                       <tr>
                         <th>م</th>
                         <th>رقم الفاتورة</th>
@@ -1178,7 +1165,7 @@ const ManagerDash = () => {
                                     <a
                                       href="#invoiceSplitModal"
                                       type="button"
-                                      className="btn btn-primary"
+                                      className="btn btn-outline-primary"
                                       data-toggle="modal"
                                       onClick={() =>
                                         getOrderDetalis(recent.serial)
@@ -1221,7 +1208,7 @@ const ManagerDash = () => {
                                 <a
                                   href="#kitchenorderModal"
                                   data-toggle="modal"
-                                  className="btn btn-info"
+                                  className="btn btn-outline-info"
                                 >
                                   جديد
                                 </a>
@@ -1234,8 +1221,8 @@ const ManagerDash = () => {
                               <td>
                                 {recent.orderType === "Delivery" && (
                                   <select
+                                    className="form-select form-select-sm border-primary m-0 p-2 h-auto"
                                     name="status"
-                                    className="form-control border-primary m-0 p-2 h-auto"
                                     onChange={(e) =>
                                       putdeliveryman(e.target.value, recent._id)
                                     }
@@ -1266,7 +1253,7 @@ const ManagerDash = () => {
                                 {recent.payment_status === "Pending" ? (
                                   <button
                                     data-target="paymentModal"
-                                    className="btn btn-primary text-light"
+                                    className="btn btn-outline-primary text-light"
                                     data-toggle="modal"
                                     onClick={() => {
                                       getOrderDetalis(recent.serial);
@@ -1281,8 +1268,13 @@ const ManagerDash = () => {
                             </tr>
                           ))
                       ) : (
-                        <tr>
-                          <td colSpan="11">لا توجد اوردرات</td>
+                        <tr className="text-center">
+                          <td
+                            colSpan="11"
+                            className="py-3 text-muted bg-body-tertiary"
+                          >
+                            لا توجد أوردرات
+                          </td>
                         </tr>
                       )}
                     </tbody>
@@ -1373,9 +1365,9 @@ const ManagerDash = () => {
           {/* متابعه الطاوله */}
 
           <div className="col-12 col-lg-4 h-auto">
-            <div className="card">
-              <div className="card-header">
-                <h3 className="card-title">متابعة الطاولة</h3>
+            <div className="card shadow-sm border-0">
+              <div className="card-header bg-body-tertiary">
+                <h3 className="card-title mb-0">متابعة الطاولة</h3>
               </div>
               <div className="card-body">
                 <ul className="list-group">
@@ -1389,26 +1381,26 @@ const ManagerDash = () => {
                     )
                     .map((order, i) => (
                       <li
-                        className={`list-group-item ${
+                        className={`list-group-item border-0 shadow-sm mb-2 ${
                           order.helpStatus === "Not send"
-                            ? "bg-warning text-dark"
+                            ? "list-group-item-warning"
                             : order.helpStatus === "Assistance done"
-                            ? "bg-success"
-                            : "bg-info"
-                        } mb-2`}
+                            ? "list-group-item-success"
+                            : "list-group-item-info"
+                        }`}
                         key={i}
                       >
-                        <div className="d-flex justify-content-between align-items-center">
-                          <div className="d-flex w-50 justify-content-between align-items-center">
+                        <div className="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                          <div className="d-flex flex-column flex-md-row w-50 justify-content-between align-items-center">
                             <p
-                              className="w-50 text-dark"
-                              style={{ fontSize: "18px", fontWeight: "900" }}
+                              className="mb-1 fw-bold text-body"
+                              style={{ fontSize: "18px" }}
                             >
-                              طاوله : {order.table && order.table?.tableNumber}
+                              طاولة: {order.table?.tableNumber}
                             </p>
                             <p
-                              className="w-50 text-dark"
-                              style={{ fontSize: "18px", fontWeight: "900" }}
+                              className="mb-1 fw-bold text-body"
+                              style={{ fontSize: "18px" }}
                             >
                               {order.help === "Requests assistance"
                                 ? "يحتاج المساعدة"
@@ -1421,26 +1413,25 @@ const ManagerDash = () => {
                           {order.helpStatus === "Not send" ? (
                             <button
                               type="button"
-                              className="btn btn-primary"
+                              className="btn btn-outline-primary btn-sm"
                               onClick={() => sendWaiter(order._id)}
                             >
-                              ارسال ويتر
+                              إرسال ويتر
                             </button>
                           ) : (
-                            <div className="d-flex flex-nowrap w-50 text-dark justify-content-between align-items-center">
+                            <div className="d-flex flex-nowrap w-50 justify-content-between align-items-center">
                               <p
-                                className="w-50 text-dark text-center"
-                                style={{ fontSize: "18px", fontWeight: "900" }}
+                                className="mb-0 fw-bold text-body text-center w-50"
+                                style={{ fontSize: "18px" }}
                               >
-                                {" "}
                                 {order.waiter?.username}
                               </p>
                               <p
-                                className="w-50 text-dark text-center"
-                                style={{ fontSize: "18px", fontWeight: "900" }}
+                                className="mb-0 fw-bold text-body text-center w-50"
+                                style={{ fontSize: "18px" }}
                               >
                                 {order.helpStatus === "Send waiter"
-                                  ? "تم ارسال"
+                                  ? "تم الإرسال"
                                   : order.helpStatus === "On the way"
                                   ? "في الطريق"
                                   : order.helpStatus === "Assistance done"
@@ -1611,12 +1602,12 @@ const ManagerDash = () => {
               <div className="modal-footer w-100 d-flex flex-row flex-nowrap align-items-center justify-content-between">
                 <input
                   type="submit"
-                  className="btn btn-success col-6 h-100 px-2 py-3 m-0"
+                  className="btn btn-outline-success col-6 h-100 px-2 py-3 m-0"
                   value="تم"
                 />
                 <input
                   type="button"
-                  className="btn btn-danger col-6 h-100 px-2 py-3 m-0"
+                  className="btn btn-outline-danger col-6 h-100 px-2 py-3 m-0"
                   data-dismiss="modal"
                   value="إغلاق"
                 />
@@ -1858,13 +1849,13 @@ const ManagerDash = () => {
               <div className="modal-footer d-flex flex-nowrap align-items-center justify-content-between m-0 p-1">
                 <input
                   type="button"
-                  className="btn btn-danger col-6 h-100 px-2 py-3 m-0"
+                  className="btn btn-outline-danger col-6 h-100 px-2 py-3 m-0"
                   data-dismiss="modal"
                   value="الغاء"
                 />
                 <input
                   type="submit"
-                  className="btn btn-success col-6 h-100 px-2 py-3 m-0"
+                  className="btn btn-outline-success col-6 h-100 px-2 py-3 m-0"
                   value="Print"
                   onClick={handlePrintInvoiceSplit}
                 />
@@ -1890,7 +1881,7 @@ const ManagerDash = () => {
                 </button>
                 <button
                   type="button"
-                  className="h-100 btn btn-primary"
+                  className="h-100 btn btn-outline-primary"
                   value="طباعه للشيف"
                   onClick={(e) => handlePrintKitchen(e)}
                 >
@@ -2042,13 +2033,13 @@ const ManagerDash = () => {
               <div className="modal-footer d-flex flex-nowrap align-items-center justify-content-between m-0 p-1">
                 <input
                   type="button"
-                  className="btn btn-danger col-6 h-100 px-2 py-3 m-0"
+                  className="btn btn-outline-danger col-6 h-100 px-2 py-3 m-0"
                   data-dismiss="modal"
                   value="اغلاق"
                 />
                 <input
                   type="button"
-                  className="btn btn-success col-6 h-100 px-2 py-3 m-0"
+                  className="btn btn-outline-success col-6 h-100 px-2 py-3 m-0"
                   value="تم الموافقه"
                   onClick={(e) =>
                     isPrint
