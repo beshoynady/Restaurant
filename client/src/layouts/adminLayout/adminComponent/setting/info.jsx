@@ -1015,36 +1015,48 @@ const Info = () => {
                   <div className="col-12 col-lg-6 d-flex flex-wrap">
                     <div className="form-check form-check-flat mb-2 mr-4 d-flex align-items-center w-50">
                       <input
-                        type="checkbox"
                         className="form-check-input"
+                        id="dineInCheck"
+                        type="checkbox"
                         checked={dineIn}
                         onChange={() => setdineIn(!dineIn)}
                       />
-                      <label className="form-check-label mr-4">الصالة</label>
+                      <label className="form-check-label mr-4"
+                      htmlFor="takeawayCheck"
+                      style={{ cursor: "pointer" }}
+                      >الصالة</label>
                     </div>
                     <div
                       className="form-check form-check-flat mb-2 mr-4 d-flex align-items-center w-50"
                       
                     >
                       <input
-                        type="checkbox"
                         className="form-check-input"
+                        type="checkbox"
+                        id="takeawayCheck"
                         checked={takeAway}
                         onChange={() => settakeAway(!takeAway)}
                       />
-                      <label className="form-check-label mr-4">التيك اوي</label>
+                      <label className="form-check-label mr-4" 
+                      htmlFor="takeawayCheck"
+                      style={{ cursor: "pointer" }}
+                      >التيك اوي</label>
                     </div>
                     <div
                       className="form-check form-check-flat mb-2 mr-4 d-flex align-items-center w-50"
                     >
                       <input
-                        type="checkbox"
                         className="form-check-input"
+                        type="checkbox"
+                        id="deliveryCheck"
                         checked={deliveryService}
                         onChange={() => setdeliveryService(!deliveryService)}
 
                       />
-                      <label className="form-check-label mr-4">
+                      <label className="form-check-label mr-4" 
+                      htmlFor="deliveryCheck"
+                      style={{ cursor: "pointer" }}
+                      >
                         خدمة التوصيل
                       </label>
                     </div>
@@ -1053,13 +1065,17 @@ const Info = () => {
  
                     >
                       <input
-                        type="checkbox"
                         className="form-check-input"
+                        type="checkbox"
+                        id="reservationCheck"
                         checked={usesReservationSystem}
                         onChange={() =>
                         setusesReservationSystem(!usesReservationSystem)}
                       />
-                      <label className="form-check-label mr-4">
+                      <label className="form-check-label mr-4"
+                      htmlFor="reservationCheck"
+                      style={{ cursor: "pointer" }}
+                      >
                         حجز الطاولة
                       </label>
                     </div>
