@@ -211,15 +211,6 @@ const Orders = () => {
 
   return (
     <div className="container-fluid py-3">
-      {/* ✅ زر تبديل الوضع */}
-      <div className="d-flex justify-content-end mb-3">
-        <button
-          onClick={toggleTheme}
-          className={`btn btn-${isDarkMode ? "light" : "dark"} btn-sm`}
-        >
-          {isDarkMode ? "الوضع النهاري ☀️" : "الوضع الليلي 🌙"}
-        </button>
-      </div>
 
       {/* ✅ العنوان */}
       <div className="table-title mb-4">
