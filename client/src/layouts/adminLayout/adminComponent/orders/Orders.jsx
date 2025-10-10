@@ -43,6 +43,7 @@ const Orders = () => {
       const ordersData = response.data;
       if (ordersData && ordersData.length > 0) {
         setListOfOrders(ordersData.reverse()); // Update state with fetched orders
+        
       } else {
         setListOfOrders([]); // Clear the list if no orders are found
         toast.info("لا توجد طلبات متاحة حالياً."); // Inform the user
@@ -84,6 +85,7 @@ const Orders = () => {
         setlistProductsOrder(order.products);
       }
     } catch (error) {
+      
       // Display toast or handle error
     }
   };
@@ -168,7 +170,7 @@ const Orders = () => {
 
   const deleteSelectedIds = async (e) => {
     e.preventDefault();
-
+    
     const config = await handleGetTokenAndConfig();
     try {
       for (const Id of selectedIds) {
@@ -178,6 +180,7 @@ const Orders = () => {
       toast.success("Selected orders deleted successfully");
       setSelectedIds([]);
     } catch (error) {
+      
       toast.error("Failed to delete selected orders");
     }
   };
@@ -213,19 +216,21 @@ const Orders = () => {
     <div className="w-100 px-3 d-flex align-itmes-center justify-content-start">
       <div className="table-responsive">
         <div className="table-wrapper p-3 mw-100">
-          <div className="card h-100 w-100" style={{ overflow: "auto" }}>
-            <div className="card-header w-100">
-              <h2 className="card-title">
-                ادارة <b>الاوردرات</b>
-              </h2>
-            </div>
-            {/* <div className="col-12 col-md-6 p-0 m-0 d-flex flex-wrap aliegn-items-center justify-content-end print-hide">
+          <div className="table-title">
+            <div className="w-100 d-flex flex-wrap align-items-center justify-content-between">
+              <div className="text-right">
+                <h2>
+                  ادارة <b>الاوردرات</b>
+                </h2>
+              </div>
+              {/* <div className="col-12 col-md-6 p-0 m-0 d-flex flex-wrap aliegn-items-center justify-content-end print-hide">
                         <a href="#addOrderModal" className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-success" data-toggle="modal"> <span>اضافة اوردر جديد</span></a>
                         <a href="#deleteListOrderModal" className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-danger" data-toggle="modal" > <span>حذف</span></a>
                       </div> */}
+            </div>
           </div>
-          <div className="card-body w-auto print-hide">
-            <div className="row mb-3">
+          <div className="table-filter print-hide">
+            <div className="col-12 text-dark d-flex flex-wrap align-items-center justify-content-start p-0 m-0">
               <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                   عرض
@@ -360,164 +365,153 @@ const Orders = () => {
               </div>
             </div>
           </div>
-          <div className="table-responsive">
-            <table className="table align-middle table-striped table-hover mb-0">
-              <thead className="table-primary">
-                <tr>
-                  {/* <th>
+
+          <table className="table table-striped table-hover">
+            <thead>
+              <tr>
+                {/* <th>
                           <span className="custom-checkbox">
                             <input type="checkbox" className="form-check-input form-check-input-lg" id="selectAll" />
                             <label htmlFor="selectAll"></label>
                           </span>
                         </th> */}
-                  <th>م</th>
-                  <th>رقم الفاتورة</th>
-                  <th>رقم الاوردر</th>
-                  <th>العميل</th>
-                  <th>المكان</th>
-                  <th>الاجمالي</th>
-                  <th>حالة الطلب</th>
-                  <th>الكاشير</th>
-                  <th>حالة الدفع</th>
-                  <th>تاريخ الدفع</th>
-                  <th>اجراءات</th>
-                </tr>
-              </thead>
-              <tbody>
-                {listOfOrders &&
-                  listOfOrders.map((order, i) => {
-                    if ((i >= startPagination) & (i < endPagination)) {
-                      return (
-                        <tr key={i}>
-                          <td>{i + 1}</td>
-                          <td>
-                            <a
-                              data-toggle="modal"
-                              data-target="#invoiceOrderModal"
-                              onClick={() => {
-                                getOrderDataBySerial(order.serial);
-                                setShowModal(!showModal);
-                              }}
+                <th>م</th>
+                <th>رقم الفاتورة</th>
+                <th>رقم الاوردر</th>
+                <th>العميل</th>
+                <th>المكان</th>
+                <th>الاجمالي</th>
+                <th>حالة الطلب</th>
+                <th>الكاشير</th>
+                <th>حالة الدفع</th>
+                <th>تاريخ الدفع</th>
+                <th>اجراءات</th>
+              </tr>
+            </thead>
+            <tbody>
+              {listOfOrders &&
+                listOfOrders.map((order, i) => {
+                  if ((i >= startPagination) & (i < endPagination)) {
+                    return (
+                      <tr key={i}>
+                        <td>{i + 1}</td>
+                        <td>
+                          <a
+                            data-toggle="modal"
+                            data-target="#invoiceOrderModal"
+                            onClick={() => {
+                              getOrderDataBySerial(order.serial);
+                              setShowModal(!showModal);
+                            }}
+                          >
+                            {order.serial}{" "}
+                          </a>
+                        </td>
+
+                        <td>{order.orderNum ? order.orderNum : "--"}</td>
+                        <td>
+                          {order.table != null
+                            ? order.table.tableNumber
+                            : order.user
+                            ? order.user?.username
+                            : order.createdBy
+                            ? order.createdBy?.fullname
+                            : "--"}
+                        </td>
+
+                        <td>{order.orderType}</td>
+                        <td>{order.total}</td>
+                        <td>{order.status}</td>
+                        <td>{order.cashier && order.cashier.fullname}</td>
+                        <td>{order.payment_status}</td>
+                        <td>{formatDateTime(order.payment_date)}</td>
+
+                        <td>
+                          {/* <a href="#editOrderModal" className="btn btn-sm btn-primary ml-2 " data-toggle="modal"><i className="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a> */}
+                          <button
+                            data-target="#deleteOrderModal"
+                            className="btn btn-sm btn-danger"
+                            data-toggle="modal"
+                            onClick={() => setOrderId(order._id)}
+                          >
+                            <i
+                              className="material-icons"
+                              data-toggle="tooltip"
+                              title="Delete"
                             >
-                              {order.serial}{" "}
-                            </a>
-                          </td>
-
-                          <td>{order.orderNum ? order.orderNum : "--"}</td>
-                          <td>
-                            {order.table != null
-                              ? order.table.tableNumber
-                              : order.user
-                              ? order.user?.username
-                              : order.createdBy
-                              ? order.createdBy?.fullname
-                              : "--"}
-                          </td>
-
-                          <td>{order.orderType}</td>
-                          <td>{order.total}</td>
-                          <td>{order.status}</td>
-                          <td>{order.cashier && order.cashier.fullname}</td>
-                          <td>{order.payment_status}</td>
-                          <td>{formatDateTime(order.payment_date)}</td>
-
-                          <td>
-                            {/* <a href="#editOrderModal" className="btn btn-sm btn-primary ml-2 " data-toggle="modal"><i className="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a> */}
-                            <button
-                              data-target="#deleteOrderModal"
-                              className="btn btn-sm btn-danger"
-                              data-toggle="modal"
-                              onClick={() => setOrderId(order._id)}
-                            >
-                              <i
-                                className="material-icons"
-                                data-toggle="tooltip"
-                                title="Delete"
-                              >
-                                &#xE872;
-                              </i>
-                            </button>
-                          </td>
-                        </tr>
-                      );
-                    }
-                  })}
-              </tbody>
-            </table>
-            <div className="clearfix">
-              <div className="hint-text text-dark">
-                عرض{" "}
-                <b>
-                  {listOfOrders.length > endPagination
-                    ? endPagination
-                    : listOfOrders.length}
-                </b>{" "}
-                من <b>{listOfOrders.length}</b> عنصر
-              </div>
-              <ul className="pagination">
-                <li onClick={EditPagination} className="page-item disabled">
-                  <a href="#">السابق</a>
-                </li>
-                <li
-                  onClick={EditPagination}
-                  className={`page-item ${endPagination === 5 ? "active" : ""}`}
-                >
-                  <a href="#" className="page-link">
-                    1
-                  </a>
-                </li>
-                <li
-                  onClick={EditPagination}
-                  className={`page-item ${
-                    endPagination === 10 ? "active" : ""
-                  }`}
-                >
-                  <a href="#" className="page-link">
-                    2
-                  </a>
-                </li>
-                <li
-                  onClick={EditPagination}
-                  className={`page-item ${
-                    endPagination === 15 ? "active" : ""
-                  }`}
-                >
-                  <a href="#" className="page-link">
-                    3
-                  </a>
-                </li>
-                <li
-                  onClick={EditPagination}
-                  className={`page-item ${
-                    endPagination === 20 ? "active" : ""
-                  }`}
-                >
-                  <a href="#" className="page-link">
-                    4
-                  </a>
-                </li>
-                <li
-                  onClick={EditPagination}
-                  className={`page-item ${
-                    endPagination === 25 ? "active" : ""
-                  }`}
-                >
-                  <a href="#" className="page-link">
-                    5
-                  </a>
-                </li>
-                <li
-                  onClick={EditPagination}
-                  className={`page-item ${
-                    endPagination === 30 ? "active" : ""
-                  }`}
-                >
-                  <a href="#" className="page-link">
-                    التالي
-                  </a>
-                </li>
-              </ul>
+                              &#xE872;
+                            </i>
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  }
+                })}
+            </tbody>
+          </table>
+          <div className="clearfix">
+            <div className="hint-text text-dark">
+              عرض{" "}
+              <b>
+                {listOfOrders.length > endPagination
+                  ? endPagination
+                  : listOfOrders.length}
+              </b>{" "}
+              من <b>{listOfOrders.length}</b> عنصر
             </div>
+            <ul className="pagination">
+              <li onClick={EditPagination} className="page-item disabled">
+                <a href="#">السابق</a>
+              </li>
+              <li
+                onClick={EditPagination}
+                className={`page-item ${endPagination === 5 ? "active" : ""}`}
+              >
+                <a href="#" className="page-link">
+                  1
+                </a>
+              </li>
+              <li
+                onClick={EditPagination}
+                className={`page-item ${endPagination === 10 ? "active" : ""}`}
+              >
+                <a href="#" className="page-link">
+                  2
+                </a>
+              </li>
+              <li
+                onClick={EditPagination}
+                className={`page-item ${endPagination === 15 ? "active" : ""}`}
+              >
+                <a href="#" className="page-link">
+                  3
+                </a>
+              </li>
+              <li
+                onClick={EditPagination}
+                className={`page-item ${endPagination === 20 ? "active" : ""}`}
+              >
+                <a href="#" className="page-link">
+                  4
+                </a>
+              </li>
+              <li
+                onClick={EditPagination}
+                className={`page-item ${endPagination === 25 ? "active" : ""}`}
+              >
+                <a href="#" className="page-link">
+                  5
+                </a>
+              </li>
+              <li
+                onClick={EditPagination}
+                className={`page-item ${endPagination === 30 ? "active" : ""}`}
+              >
+                <a href="#" className="page-link">
+                  التالي
+                </a>
+              </li>
+            </ul>
           </div>
         </div>
       </div>
