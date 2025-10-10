@@ -211,12 +211,12 @@ const Orders = () => {
 
   return (
     <div className="w-100 px-3 d-flex align-itmes-center justify-content-start">
-      <div className="table-responsive">
-        <div className="table-wrapper p-3 mw-100">
-          <div className="table-title">
-            <div className="w-100 d-flex flex-wrap align-items-center justify-content-between">
+      <div className="w-100 d-flex flex-wrap align-content-start justify-content-between align-items-start">
+        <div className="col-12 col-lg-8 h-auto mb-3">
+          <div className="card h-100 w-100" style={{ overflow: "auto" }}>
+            <div className="card-header w-100">
               <div className="text-right">
-                <h2>
+                <h2 className="card-title">
                   ادارة <b>الاوردرات</b>
                 </h2>
               </div>
