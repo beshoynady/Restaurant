@@ -64,7 +64,7 @@ const Login = () => {
           getUserInfoFromToken();
         }
         if (data.findEmployee.isActive === true) {
-          window.location.href = `https://${window.location.hostname}/admin`;
+          window.location.href = `${apiUrl}/admin`;
         } else {
           toast.error("غير مسموح لك بالدخول");
         }

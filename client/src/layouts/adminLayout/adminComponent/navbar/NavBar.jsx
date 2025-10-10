@@ -202,15 +202,9 @@ const NavBar = () => {
     return localStorage.getItem("theme") === "dark";
   });
 
-  useEffect(() => {
-    const body = document.body;
-    if (isDarkMode) {
-      body.classList.add("dark");
-      localStorage.setItem("theme", "dark");
-    } else {
-      body.classList.remove("dark");
-      localStorage.setItem("theme", "light");
-    }
+   useEffect(() => {
+    document.body.setAttribute("data-bs-theme", isDarkMode ? "dark" : "light");
+    localStorage.setItem("theme", isDarkMode ? "dark" : "light");
   }, [isDarkMode]);
 
   const toggleTheme = () => {
