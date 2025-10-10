@@ -211,27 +211,26 @@ const Orders = () => {
 
   return (
     <div className="w-100 px-3 d-flex align-itmes-center justify-content-start">
-      <div className="table-responsive w-100 p-2 bg-light text-dark dark:bg-gray-900 dark:text-gray-100 transition-colors duration-300 rounded-3 shadow-sm">
-        <div className="table-wrapper p-3 mw-100 rounded-3 bg-white dark:bg-gray-800 shadow-md">
-          <div className="table-title mb-3 border-bottom border-primary pb-2">
-            <div className="w-100 d-flex flex-wrap align-items-center justify-content-between">
-              <div className="text-right">
-                <h2 className="fw-bold text-primary dark:text-blue-400">
-                  إدارة <b>الأوردرات</b>
-                </h2>
-              </div>
+        <div className="table-wrapper p-3 mw-100">
+          <div className="card h-100 w-100" style={{ overflow: "auto" }}>
+            <div className="card-header w-100">
+              <h3 className="card-title">
+                ادارة <b>الاوردرات</b>
+              </h3>
             </div>
+            {/* <div className="col-12 col-md-6 p-0 m-0 d-flex flex-wrap aliegn-items-center justify-content-end print-hide">
+                        <a href="#addOrderModal" className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-success" data-toggle="modal"> <span>اضافة اوردر جديد</span></a>
+                        <a href="#deleteListOrderModal" className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-danger" data-toggle="modal" > <span>حذف</span></a>
+                      </div> */}
           </div>
-
-          <div className="table-filter print-hide bg-white dark:bg-gray-800 p-3 rounded-3 shadow-sm">
-            <div className="col-12 d-flex flex-wrap align-items-center justify-content-start gap-3">
-              {/* عدد العرض */}
-              <div className="filter-group d-flex flex-wrap align-items-center gap-2">
-                <label className="form-label fw-bolder text-dark dark:text-gray-100">
+          <div className="card-body w-auto">
+            <div className="row mb-3">
+              <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
+                <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                   عرض
                 </label>
                 <select
-                  className="form-control border-primary dark:border-blue-400 dark:bg-gray-700 dark:text-gray-100"
+                  className="form-control border-primary m-0 p-2 h-auto"
                   onChange={(e) => {
                     setStartPagination(0);
                     setEndPagination(e.target.value);
@@ -251,25 +250,23 @@ const Orders = () => {
                 </select>
               </div>
 
-              {/* رقم الفاتورة */}
-              <div className="filter-group d-flex flex-wrap align-items-center gap-2">
-                <label className="form-label fw-bolder text-dark dark:text-gray-100">
+              <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
+                <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                   رقم الفاتورة
                 </label>
                 <input
                   type="text"
-                  className="form-control border-primary dark:border-blue-400 dark:bg-gray-700 dark:text-gray-100"
+                  className="form-control border-primary m-0 p-2 h-auto"
                   onChange={(e) => searchBySerial(e.target.value)}
                 />
               </div>
 
-              {/* نوع الأوردر */}
-              <div className="filter-group d-flex flex-wrap align-items-center gap-2">
-                <label className="form-label fw-bolder text-dark dark:text-gray-100">
-                  نوع الأوردر
+              <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
+                <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                  نوع الاوردر
                 </label>
                 <select
-                  className="form-control border-primary dark:border-blue-400 dark:bg-gray-700 dark:text-gray-100"
+                  className="form-control border-primary m-0 p-2 h-auto"
                   onChange={(e) => getOrdersByType(e.target.value)}
                 >
                   <option value={""}>الكل</option>
@@ -277,16 +274,26 @@ const Orders = () => {
                   <option value="Delivery">Delivery</option>
                   <option value="Takeaway">Takeaway</option>
                 </select>
+                {/* <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
+                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0">Status</label>
+                  <select className="form-control border-primary m-0 p-2 h-auto">
+                    <option>Any</option>
+                    <option>Delivered</option>
+                    <option>Shipped</option>
+                    <option>Pending</option>
+                    <option>Cancelled</option>
+                  </select>
+                </div>
+                <span className="filter-icon"><i className="fa fa-filter"></i></span> */}
               </div>
 
-              {/* الفلترة حسب الوقت */}
-              <div className="w-100 d-flex flex-wrap align-items-center justify-content-start mt-3 gap-3">
-                <div className="filter-group d-flex flex-wrap align-items-center gap-2">
-                  <label className="form-label fw-bolder text-dark dark:text-gray-100">
+              <div className="col-12 text-dark d-flex flex-wrap align-items-center justify-content-start p-0 m-0 mt-3">
+                <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
+                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                     فلتر حسب الوقت
                   </label>
                   <select
-                    className="form-control border-primary dark:border-blue-400 dark:bg-gray-700 dark:text-gray-100"
+                    className="form-control border-primary m-0 p-2 h-auto"
                     onChange={(e) =>
                       setListOfOrders(
                         filterByTime(e.target.value, listOfOrders)
@@ -297,42 +304,43 @@ const Orders = () => {
                     <option value="today">اليوم</option>
                     <option value="week">هذا الأسبوع</option>
                     <option value="month">هذا الشهر</option>
-                    <option value="year">هذه السنة</option>
+                    <option value="month">هذه السنه</option>
                   </select>
                 </div>
 
-                {/* الفلترة حسب التاريخ */}
-                <div className="d-flex flex-wrap align-items-center gap-2">
-                  <label className="form-label fw-bold text-nowrap text-dark dark:text-gray-100">
-                    مدة محددة:
+                <div className="d-flex align-items-stretch justify-content-between flex-nowrap p-0 m-0 px-1">
+                  <label className="form-label text-nowrap d-flex align-items-center justify-content-center p-0 m-0 ml-1">
+                    <strong>مدة محددة:</strong>
                   </label>
 
-                  <div className="d-flex flex-wrap align-items-center gap-2">
-                    <label className="form-label fw-bolder text-dark dark:text-gray-100">
+                  <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
+                    <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                       من
                     </label>
                     <input
                       type="date"
-                      className="form-control border-primary dark:border-blue-400 dark:bg-gray-700 dark:text-gray-100"
+                      className="form-control border-primary m-0 p-2 h-auto"
                       onChange={(e) => setStartDate(e.target.value)}
+                      placeholder="اختر التاريخ"
                     />
                   </div>
 
-                  <div className="d-flex flex-wrap align-items-center gap-2">
-                    <label className="form-label fw-bolder text-dark dark:text-gray-100">
+                  <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
+                    <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                       إلى
                     </label>
                     <input
                       type="date"
-                      className="form-control border-primary dark:border-blue-400 dark:bg-gray-700 dark:text-gray-100"
+                      className="form-control border-primary m-0 p-2 h-auto"
                       onChange={(e) => setEndDate(e.target.value)}
+                      placeholder="اختر التاريخ"
                     />
                   </div>
 
-                  <div className="d-flex align-items-center gap-2">
+                  <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
                     <button
                       type="button"
-                      className="btn btn-primary dark:bg-blue-500 dark:hover:bg-blue-600"
+                      className="btn btn-primary h-100 p-2 "
                       onClick={() =>
                         setListOfOrders(filterByDateRange(listOfOrders))
                       }
@@ -341,7 +349,7 @@ const Orders = () => {
                     </button>
                     <button
                       type="button"
-                      className="btn btn-warning dark:bg-yellow-600 dark:hover:bg-yellow-700"
+                      className="btn btn-warning h-100 p-2"
                       onClick={getOrders}
                     >
                       استعادة
@@ -352,127 +360,175 @@ const Orders = () => {
             </div>
           </div>
 
-          {/* جدول الأوردرات */}
-          <table className="table table-striped table-hover mt-3 rounded-3 overflow-hidden dark:table-dark">
-            <thead className="bg-primary text-white dark:bg-blue-600">
-              <tr>
-                <th>م</th>
-                <th>رقم الفاتورة</th>
-                <th>رقم الأوردر</th>
-                <th>العميل</th>
-                <th>المكان</th>
-                <th>الإجمالي</th>
-                <th>حالة الطلب</th>
-                <th>الكاشير</th>
-                <th>حالة الدفع</th>
-                <th>تاريخ الدفع</th>
-                <th>إجراءات</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              {listOfOrders && listOfOrders.length > 0 ? (
-                listOfOrders.map((order, i) => {
-                  if ((i >= startPagination) & (i < endPagination)) {
-                    return (
-                      <tr
-                        key={i}
-                        className="hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-                      >
-                        <td>{i + 1}</td>
-                        <td>
-                          <a
-                            data-toggle="modal"
-                            data-target="#invoiceOrderModal"
-                            className="text-primary dark:text-blue-400 cursor-pointer"
-                            onClick={() => {
-                              getOrderDataBySerial(order.serial);
-                              setShowModal(!showModal);
-                            }}
-                          >
-                            {order.serial}
-                          </a>
-                        </td>
-                        <td>{order.orderNum || "--"}</td>
-                        <td>
-                          {order.table
-                            ? order.table.tableNumber
-                            : order.user
-                            ? order.user?.username
-                            : order.createdBy
-                            ? order.createdBy?.fullname
-                            : "--"}
-                        </td>
-                        <td>{order.orderType}</td>
-                        <td>{order.total}</td>
-                        <td>{order.status}</td>
-                        <td>{order.cashier?.fullname}</td>
-                        <td>{order.payment_status}</td>
-                        <td>{formatDateTime(order.payment_date)}</td>
-                        <td>
-                          <button
-                            data-target="#deleteOrderModal"
-                            className="btn btn-sm btn-danger dark:bg-red-600 dark:hover:bg-red-700"
-                            data-toggle="modal"
-                            onClick={() => setOrderId(order._id)}
-                          >
-                            <i className="material-icons" title="Delete">
-                              &#xE872;
-                            </i>
-                          </button>
-                        </td>
-                      </tr>
-                    );
-                  }
-                })
-              ) : (
+          <div className="table-responsive">
+            <table className="table align-middle table-striped table-hover mb-0">
+              <thead className="table-primary">
+                {" "}
                 <tr>
-                  <td colSpan="11" className="text-center py-4 fw-bold">
-                    لا توجد أوردرات
-                  </td>
+                  {/* <th>
+                          <span className="custom-checkbox">
+                            <input type="checkbox" className="form-check-input form-check-input-lg" id="selectAll" />
+                            <label htmlFor="selectAll"></label>
+                          </span>
+                        </th> */}
+                  <th>م</th>
+                  <th>رقم الفاتورة</th>
+                  <th>رقم الاوردر</th>
+                  <th>العميل</th>
+                  <th>المكان</th>
+                  <th>الاجمالي</th>
+                  <th>حالة الطلب</th>
+                  <th>الكاشير</th>
+                  <th>حالة الدفع</th>
+                  <th>تاريخ الدفع</th>
+                  <th>اجراءات</th>
                 </tr>
-              )}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {listOfOrders &&
+                  listOfOrders.map((order, i) => {
+                    if ((i >= startPagination) & (i < endPagination)) {
+                      return (
+                        <tr key={i}>
+                          <td>{i + 1}</td>
+                          <td>
+                            <a
+                              data-toggle="modal"
+                              data-target="#invoiceOrderModal"
+                              onClick={() => {
+                                getOrderDataBySerial(order.serial);
+                                setShowModal(!showModal);
+                              }}
+                            >
+                              {order.serial}{" "}
+                            </a>
+                          </td>
 
-          {/* التصفح */}
-          <div className="clearfix mt-3 d-flex flex-wrap justify-content-between align-items-center text-dark dark:text-gray-200">
-            <div className="hint-text">
-              عرض{" "}
-              <b>
-                {listOfOrders.length > endPagination
-                  ? endPagination
-                  : listOfOrders.length}
-              </b>{" "}
-              من <b>{listOfOrders.length}</b> عنصر
-            </div>
+                          <td>{order.orderNum ? order.orderNum : "--"}</td>
+                          <td>
+                            {order.table != null
+                              ? order.table.tableNumber
+                              : order.user
+                              ? order.user?.username
+                              : order.createdBy
+                              ? order.createdBy?.fullname
+                              : "--"}
+                          </td>
 
-            <ul className="pagination m-0 p-0">
-              {[5, 10, 15, 20, 25, 30].map((num, index) => (
+                          <td>{order.orderType}</td>
+                          <td>{order.total}</td>
+                          <td>{order.status}</td>
+                          <td>{order.cashier && order.cashier.fullname}</td>
+                          <td>{order.payment_status}</td>
+                          <td>{formatDateTime(order.payment_date)}</td>
+
+                          <td>
+                            {/* <a href="#editOrderModal" className="btn btn-sm btn-primary ml-2 " data-toggle="modal"><i className="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a> */}
+                            <button
+                              data-target="#deleteOrderModal"
+                              className="btn btn-sm btn-danger"
+                              data-toggle="modal"
+                              onClick={() => setOrderId(order._id)}
+                            >
+                              <i
+                                className="material-icons"
+                                data-toggle="tooltip"
+                                title="Delete"
+                              >
+                                &#xE872;
+                              </i>
+                            </button>
+                          </td>
+                        </tr>
+                      );
+                    }
+                  })}
+              </tbody>
+            </table>
+            <div className="clearfix">
+              <div className="hint-text text-dark">
+                عرض{" "}
+                <b>
+                  {listOfOrders.length > endPagination
+                    ? endPagination
+                    : listOfOrders.length}
+                </b>{" "}
+                من <b>{listOfOrders.length}</b> عنصر
+              </div>
+              <ul className="pagination">
+                <li onClick={EditPagination} className="page-item disabled">
+                  <a href="#">السابق</a>
+                </li>
                 <li
-                  key={num}
                   onClick={EditPagination}
-                  className={`page-item cursor-pointer ${
-                    endPagination === num ? "active" : ""
+                  className={`page-item ${endPagination === 5 ? "active" : ""}`}
+                >
+                  <a href="#" className="page-link">
+                    1
+                  </a>
+                </li>
+                <li
+                  onClick={EditPagination}
+                  className={`page-item ${
+                    endPagination === 10 ? "active" : ""
                   }`}
                 >
                   <a href="#" className="page-link">
-                    {index + 1}
+                    2
                   </a>
                 </li>
-              ))}
-            </ul>
+                <li
+                  onClick={EditPagination}
+                  className={`page-item ${
+                    endPagination === 15 ? "active" : ""
+                  }`}
+                >
+                  <a href="#" className="page-link">
+                    3
+                  </a>
+                </li>
+                <li
+                  onClick={EditPagination}
+                  className={`page-item ${
+                    endPagination === 20 ? "active" : ""
+                  }`}
+                >
+                  <a href="#" className="page-link">
+                    4
+                  </a>
+                </li>
+                <li
+                  onClick={EditPagination}
+                  className={`page-item ${
+                    endPagination === 25 ? "active" : ""
+                  }`}
+                >
+                  <a href="#" className="page-link">
+                    5
+                  </a>
+                </li>
+                <li
+                  onClick={EditPagination}
+                  className={`page-item ${
+                    endPagination === 30 ? "active" : ""
+                  }`}
+                >
+                  <a href="#" className="page-link">
+                    التالي
+                  </a>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
-      </div>
-
+      {/* Invoice Modal */}
       <InvoiceComponent
         ModalId="invoiceOrderModal"
         orderData={orderData}
         showModal={showModal}
         setShowModal={setShowModal}
       />
-
+      {/* Delete Modal HTML */}
       <div id="deleteOrderModal" className="modal fade">
         <div className="modal-dialog modal-lg">
           <div className="modal-content shadow-lg border-0 rounded ">
