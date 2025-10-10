@@ -1022,7 +1022,7 @@ const Info = () => {
                         onChange={() => setdineIn(!dineIn)}
                       />
                       <label className="form-check-label mr-4"
-                      htmlFor="takeawayCheck"
+                      htmlFor="dineInCheck"
                       style={{ cursor: "pointer" }}
                       >الصالة</label>
                     </div>
@@ -1128,6 +1128,7 @@ const Info = () => {
                                 <input
                                   type="checkbox"
                                   className="form-check-input"
+                                  id={`acceptedPaymentCheck${i}`}
                                   value={AcceptedPayment}
                                   checked={acceptedPayments.includes(
                                     AcceptedPayment
@@ -1138,7 +1139,7 @@ const Info = () => {
                                     )
                                   }
                                 />
-                                <label className="form-check-label mr-4">
+                                <label className="form-check-label mr-4" htmlFor={`acceptedPaymentCheck${i}`}>
                                   {listAcceptedPaymentsAr[i]}
                                 </label>
                               </div>
@@ -1191,13 +1192,14 @@ const Info = () => {
                                 <input
                                   type="checkbox"
                                   className="form-check-input"
+                                  id={`featureCheck${i}`}
                                   value={feature}
                                   checked={features.includes(feature)}
                                   onChange={() =>
                                     handleFeaturesCheckboxChange(feature)
                                   }
                                 />
-                                <label className="form-check-label mr-4">
+                                <label className="form-check-label mr-4" htmlFor={`featureCheck${i}`}>
                                   {listFeaturesAr[i]}
                                 </label>
                               </div>
