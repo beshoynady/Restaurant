@@ -3,7 +3,7 @@ import axios from "axios";
 import { dataContext } from "../../../../App";
 import { useReactToPrint } from "react-to-print";
 import { toast } from "react-toastify";
-import "./Orders.css";
+// import "./Orders.css";
 import InvoiceComponent from "../invoice/invoice";
 
 const Orders = () => {
@@ -210,117 +210,258 @@ const Orders = () => {
   }, []);
 
   return (
-    <div className="container-fluid py-3">
-
-      {/* ✅ العنوان */}
-      <div className="table-title mb-4">
-        <h2 className="text-primary text-end">
-          إدارة <b>الأوردرات</b>
-        </h2>
-      </div>
-
-      {/* ✅ الفلاتر */}
-      <div className="table-filter bg-body-tertiary p-3 rounded-3 shadow-sm mb-4">
-        <div className="row g-3 align-items-end">
-          {/* عدد العرض */}
-          <div className="col-6 col-md-3 col-lg-2">
-            <label className="form-label fw-semibold">عرض</label>
-            <select
-              className="form-select border-primary"
-              onChange={(e) => {
-                setStartPagination(0);
-                setEndPagination(e.target.value);
-              }}
-            >
-              {[...Array(19)].map((_, i) => {
-                const val = (i + 1) * 5;
-                return (
-                  <option key={val} value={val}>
-                    {val}
-                  </option>
-                );
-              })}
-            </select>
+    <div className="w-100 px-3 d-flex align-itmes-center justify-content-start">
+      <div className="table-responsive w-100 p-2 bg-light text-dark dark:bg-gray-900 dark:text-gray-100 transition-colors duration-300 rounded-3 shadow-sm">
+        <div className="table-wrapper p-3 mw-100 rounded-3 bg-white dark:bg-gray-800 shadow-md">
+          <div className="table-title mb-3 border-bottom border-primary pb-2">
+            <div className="w-100 d-flex flex-wrap align-items-center justify-content-between">
+              <div className="text-right">
+                <h2 className="fw-bold text-primary dark:text-blue-400">
+                  إدارة <b>الأوردرات</b>
+                </h2>
+              </div>
+            </div>
           </div>
 
-          {/* رقم الفاتورة */}
-          <div className="col-6 col-md-3 col-lg-2">
-            <label className="form-label fw-semibold">رقم الفاتورة</label>
-            <input
-              type="text"
-              className="form-control border-primary"
-              placeholder="ابحث..."
-              onChange={(e) => searchBySerial(e.target.value)}
-            />
+          <div className="table-filter print-hide bg-white dark:bg-gray-800 p-3 rounded-3 shadow-sm">
+            <div className="col-12 d-flex flex-wrap align-items-center justify-content-start gap-3">
+              {/* عدد العرض */}
+              <div className="filter-group d-flex flex-wrap align-items-center gap-2">
+                <label className="form-label fw-bolder text-dark dark:text-gray-100">
+                  عرض
+                </label>
+                <select
+                  className="form-control border-primary dark:border-blue-400 dark:bg-gray-700 dark:text-gray-100"
+                  onChange={(e) => {
+                    setStartPagination(0);
+                    setEndPagination(e.target.value);
+                  }}
+                >
+                  {(() => {
+                    const options = [];
+                    for (let i = 5; i < 100; i += 5) {
+                      options.push(
+                        <option key={i} value={i}>
+                          {i}
+                        </option>
+                      );
+                    }
+                    return options;
+                  })()}
+                </select>
+              </div>
+
+              {/* رقم الفاتورة */}
+              <div className="filter-group d-flex flex-wrap align-items-center gap-2">
+                <label className="form-label fw-bolder text-dark dark:text-gray-100">
+                  رقم الفاتورة
+                </label>
+                <input
+                  type="text"
+                  className="form-control border-primary dark:border-blue-400 dark:bg-gray-700 dark:text-gray-100"
+                  onChange={(e) => searchBySerial(e.target.value)}
+                />
+              </div>
+
+              {/* نوع الأوردر */}
+              <div className="filter-group d-flex flex-wrap align-items-center gap-2">
+                <label className="form-label fw-bolder text-dark dark:text-gray-100">
+                  نوع الأوردر
+                </label>
+                <select
+                  className="form-control border-primary dark:border-blue-400 dark:bg-gray-700 dark:text-gray-100"
+                  onChange={(e) => getOrdersByType(e.target.value)}
+                >
+                  <option value={""}>الكل</option>
+                  <option value="Internal">Internal</option>
+                  <option value="Delivery">Delivery</option>
+                  <option value="Takeaway">Takeaway</option>
+                </select>
+              </div>
+
+              {/* الفلترة حسب الوقت */}
+              <div className="w-100 d-flex flex-wrap align-items-center justify-content-start mt-3 gap-3">
+                <div className="filter-group d-flex flex-wrap align-items-center gap-2">
+                  <label className="form-label fw-bolder text-dark dark:text-gray-100">
+                    فلتر حسب الوقت
+                  </label>
+                  <select
+                    className="form-control border-primary dark:border-blue-400 dark:bg-gray-700 dark:text-gray-100"
+                    onChange={(e) =>
+                      setListOfOrders(
+                        filterByTime(e.target.value, listOfOrders)
+                      )
+                    }
+                  >
+                    <option value="">اختر</option>
+                    <option value="today">اليوم</option>
+                    <option value="week">هذا الأسبوع</option>
+                    <option value="month">هذا الشهر</option>
+                    <option value="year">هذه السنة</option>
+                  </select>
+                </div>
+
+                {/* الفلترة حسب التاريخ */}
+                <div className="d-flex flex-wrap align-items-center gap-2">
+                  <label className="form-label fw-bold text-nowrap text-dark dark:text-gray-100">
+                    مدة محددة:
+                  </label>
+
+                  <div className="d-flex flex-wrap align-items-center gap-2">
+                    <label className="form-label fw-bolder text-dark dark:text-gray-100">
+                      من
+                    </label>
+                    <input
+                      type="date"
+                      className="form-control border-primary dark:border-blue-400 dark:bg-gray-700 dark:text-gray-100"
+                      onChange={(e) => setStartDate(e.target.value)}
+                    />
+                  </div>
+
+                  <div className="d-flex flex-wrap align-items-center gap-2">
+                    <label className="form-label fw-bolder text-dark dark:text-gray-100">
+                      إلى
+                    </label>
+                    <input
+                      type="date"
+                      className="form-control border-primary dark:border-blue-400 dark:bg-gray-700 dark:text-gray-100"
+                      onChange={(e) => setEndDate(e.target.value)}
+                    />
+                  </div>
+
+                  <div className="d-flex align-items-center gap-2">
+                    <button
+                      type="button"
+                      className="btn btn-primary dark:bg-blue-500 dark:hover:bg-blue-600"
+                      onClick={() =>
+                        setListOfOrders(filterByDateRange(listOfOrders))
+                      }
+                    >
+                      <i className="fa fa-search"></i>
+                    </button>
+                    <button
+                      type="button"
+                      className="btn btn-warning dark:bg-yellow-600 dark:hover:bg-yellow-700"
+                      onClick={getOrders}
+                    >
+                      استعادة
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
-          {/* نوع الأوردر */}
-          <div className="col-6 col-md-3 col-lg-2">
-            <label className="form-label fw-semibold">نوع الأوردر</label>
-            <select
-              className="form-select border-primary"
-              onChange={(e) => getOrdersByType(e.target.value)}
-            >
-              <option value="">الكل</option>
-              <option value="Internal">Internal</option>
-              <option value="Delivery">Delivery</option>
-              <option value="Takeaway">Takeaway</option>
-            </select>
-          </div>
+          {/* جدول الأوردرات */}
+          <table className="table table-striped table-hover mt-3 rounded-3 overflow-hidden dark:table-dark">
+            <thead className="bg-primary text-white dark:bg-blue-600">
+              <tr>
+                <th>م</th>
+                <th>رقم الفاتورة</th>
+                <th>رقم الأوردر</th>
+                <th>العميل</th>
+                <th>المكان</th>
+                <th>الإجمالي</th>
+                <th>حالة الطلب</th>
+                <th>الكاشير</th>
+                <th>حالة الدفع</th>
+                <th>تاريخ الدفع</th>
+                <th>إجراءات</th>
+              </tr>
+            </thead>
 
-          {/* فلترة حسب الوقت */}
-          <div className="col-6 col-md-3 col-lg-2">
-            <label className="form-label fw-semibold">فلترة حسب الوقت</label>
-            <select
-              className="form-select border-primary"
-              onChange={(e) =>
-                setListOfOrders(filterByTime(e.target.value, listOfOrders))
-              }
-            >
-              <option value="">اختر</option>
-              <option value="today">اليوم</option>
-              <option value="week">هذا الأسبوع</option>
-              <option value="month">هذا الشهر</option>
-              <option value="year">هذه السنة</option>
-            </select>
-          </div>
+            <tbody>
+              {listOfOrders && listOfOrders.length > 0 ? (
+                listOfOrders.map((order, i) => {
+                  if ((i >= startPagination) & (i < endPagination)) {
+                    return (
+                      <tr
+                        key={i}
+                        className="hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                      >
+                        <td>{i + 1}</td>
+                        <td>
+                          <a
+                            data-toggle="modal"
+                            data-target="#invoiceOrderModal"
+                            className="text-primary dark:text-blue-400 cursor-pointer"
+                            onClick={() => {
+                              getOrderDataBySerial(order.serial);
+                              setShowModal(!showModal);
+                            }}
+                          >
+                            {order.serial}
+                          </a>
+                        </td>
+                        <td>{order.orderNum || "--"}</td>
+                        <td>
+                          {order.table
+                            ? order.table.tableNumber
+                            : order.user
+                            ? order.user?.username
+                            : order.createdBy
+                            ? order.createdBy?.fullname
+                            : "--"}
+                        </td>
+                        <td>{order.orderType}</td>
+                        <td>{order.total}</td>
+                        <td>{order.status}</td>
+                        <td>{order.cashier?.fullname}</td>
+                        <td>{order.payment_status}</td>
+                        <td>{formatDateTime(order.payment_date)}</td>
+                        <td>
+                          <button
+                            data-target="#deleteOrderModal"
+                            className="btn btn-sm btn-danger dark:bg-red-600 dark:hover:bg-red-700"
+                            data-toggle="modal"
+                            onClick={() => setOrderId(order._id)}
+                          >
+                            <i className="material-icons" title="Delete">
+                              &#xE872;
+                            </i>
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  }
+                })
+              ) : (
+                <tr>
+                  <td colSpan="11" className="text-center py-4 fw-bold">
+                    لا توجد أوردرات
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
 
-          {/* التاريخ من */}
-          <div className="col-6 col-md-3 col-lg-2">
-            <label className="form-label fw-semibold">من</label>
-            <input
-              type="date"
-              className="form-control border-primary"
-              onChange={(e) => setStartDate(e.target.value)}
-            />
-          </div>
+          {/* التصفح */}
+          <div className="clearfix mt-3 d-flex flex-wrap justify-content-between align-items-center text-dark dark:text-gray-200">
+            <div className="hint-text">
+              عرض{" "}
+              <b>
+                {listOfOrders.length > endPagination
+                  ? endPagination
+                  : listOfOrders.length}
+              </b>{" "}
+              من <b>{listOfOrders.length}</b> عنصر
+            </div>
 
-          {/* التاريخ إلى */}
-          <div className="col-6 col-md-3 col-lg-2">
-            <label className="form-label fw-semibold">إلى</label>
-            <input
-              type="date"
-              className="form-control border-primary"
-              onChange={(e) => setEndDate(e.target.value)}
-            />
-          </div>
-
-          {/* أزرار البحث والاستعادة */}
-          <div className="col-12 col-md-3 col-lg-2 d-flex gap-2">
-            <button
-              type="button"
-              className="btn btn-primary w-50"
-              onClick={() => setListOfOrders(filterByDateRange(listOfOrders))}
-            >
-              <i className="fa fa-search"></i>
-            </button>
-            <button
-              type="button"
-              className="btn btn-warning w-50"
-              onClick={getOrders}
-            >
-              استعادة
-            </button>
+            <ul className="pagination m-0 p-0">
+              {[5, 10, 15, 20, 25, 30].map((num, index) => (
+                <li
+                  key={num}
+                  onClick={EditPagination}
+                  className={`page-item cursor-pointer ${
+                    endPagination === num ? "active" : ""
+                  }`}
+                >
+                  <a href="#" className="page-link">
+                    {index + 1}
+                  </a>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
       </div>
