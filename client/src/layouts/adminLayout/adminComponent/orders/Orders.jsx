@@ -211,20 +211,22 @@ const Orders = () => {
 
   return (
     <div className="w-100 px-3 d-flex align-itmes-center justify-content-start">
-      <div className="w-100 d-flex flex-wrap align-content-start justify-content-between align-items-start">
-        <div className="col-12 col-lg-8 h-auto mb-3">
+      <div className="table-responsive">
+        <div className="table-wrapper p-3 mw-100">
           <div className="card h-100 w-100" style={{ overflow: "auto" }}>
             <div className="card-header w-100">
-              <div className="text-right">
-                <h2 className="card-title">
-                  ادارة <b>الاوردرات</b>
-                </h2>
-              </div>
+              <h2 className="card-title">
+                ادارة <b>الاوردرات</b>
+              </h2>
             </div>
+            {/* <div className="col-12 col-md-6 p-0 m-0 d-flex flex-wrap aliegn-items-center justify-content-end print-hide">
+                        <a href="#addOrderModal" className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-success" data-toggle="modal"> <span>اضافة اوردر جديد</span></a>
+                        <a href="#deleteListOrderModal" className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-danger" data-toggle="modal" > <span>حذف</span></a>
+                      </div> */}
           </div>
-          <div className="card-body w-auto">
+          <div className="card-body w-auto print-hide">
             <div className="row mb-3">
-              <div className="col-4">
+              <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                   عرض
                 </label>
@@ -358,7 +360,6 @@ const Orders = () => {
               </div>
             </div>
           </div>
-
           <div className="table-responsive">
             <table className="table align-middle table-striped table-hover mb-0">
               <thead className="table-primary">
