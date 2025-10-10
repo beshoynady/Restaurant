@@ -136,7 +136,6 @@ const Employees = () => {
       !password ||
       !address ||
       !phone ||
-      !shift ||
       !role
     ) {
       notify("جميع الحقول مطلوبة! رجاءً ملء جميع الحقول", "error");
@@ -936,7 +935,6 @@ const Employees = () => {
                     <select
                       id="shift"
                       className="form-control border-primary m-0 p-2 h-auto"
-                      required
                       onChange={(e) => setshift(e.target.value)}
                     >
                       <option value="">اختر</option>

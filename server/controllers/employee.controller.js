@@ -83,11 +83,8 @@ const createEmployeeSchema = Joi.object({
     )
     .required(),
   isActive: Joi.boolean().default(true),
-  shift: Joi.string().when("role", {
-    is: Joi.not("programer").valid(),
-    then: Joi.required(),
-    otherwise: Joi.optional(),
-  }),
+  shift: Joi.string().optional(),
+  
   workingDays: Joi.number()
     .min(0)
     .max(31)
