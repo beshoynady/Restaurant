@@ -43,7 +43,6 @@ const Orders = () => {
       const ordersData = response.data;
       if (ordersData && ordersData.length > 0) {
         setListOfOrders(ordersData.reverse()); // Update state with fetched orders
-        
       } else {
         setListOfOrders([]); // Clear the list if no orders are found
         toast.info("لا توجد طلبات متاحة حالياً."); // Inform the user
@@ -85,7 +84,6 @@ const Orders = () => {
         setlistProductsOrder(order.products);
       }
     } catch (error) {
-      
       // Display toast or handle error
     }
   };
@@ -170,7 +168,7 @@ const Orders = () => {
 
   const deleteSelectedIds = async (e) => {
     e.preventDefault();
-    
+
     const config = await handleGetTokenAndConfig();
     try {
       for (const Id of selectedIds) {
@@ -180,7 +178,6 @@ const Orders = () => {
       toast.success("Selected orders deleted successfully");
       setSelectedIds([]);
     } catch (error) {
-      
       toast.error("Failed to delete selected orders");
     }
   };
@@ -215,188 +212,148 @@ const Orders = () => {
   return (
     <div className="w-100 px-3 d-flex align-itmes-center justify-content-start">
       <div className="table-responsive">
-        <div className="table-wrapper p-3 mw-100">
-          <div className="table-title">
-            <div className="w-100 d-flex flex-wrap align-items-center justify-content-between">
-              <div className="text-right">
-                <h2>
-                  ادارة <b>الاوردرات</b>
-                </h2>
-              </div>
-              {/* <div className="col-12 col-md-6 p-0 m-0 d-flex flex-wrap aliegn-items-center justify-content-end print-hide">
-                        <a href="#addOrderModal" className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-success" data-toggle="modal"> <span>اضافة اوردر جديد</span></a>
-                        <a href="#deleteListOrderModal" className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-danger" data-toggle="modal" > <span>حذف</span></a>
-                      </div> */}
+        <div className="table-wrapper p-3 mw-100 bg-body border-0 rounded shadow-sm">
+          <div className="table-title mb-3">
+            <div className="d-flex flex-wrap align-items-center justify-content-between">
+              <h2 className="fw-bold text-body">
+                إدارة <b>الأوردرات</b>
+              </h2>
             </div>
           </div>
-          <div className="table-filter print-hide">
-            <div className="col-12 text-dark d-flex flex-wrap align-items-center justify-content-start p-0 m-0">
-              <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
-                <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+
+          <div className="table-filter print-hide mb-3">
+            <div className="col-12 d-flex flex-wrap align-items-center justify-content-start p-0 m-0">
+              {/* 🔹 عدد العناصر */}
+              <div className="filter-group d-flex align-items-center gap-2 mb-2">
+                <label className="form-label fw-bolder text-body m-0">
                   عرض
                 </label>
                 <select
-                  className="form-control border-primary m-0 p-2 h-auto"
+                  className="form-select border-primary h-auto"
                   onChange={(e) => {
                     setStartPagination(0);
                     setEndPagination(e.target.value);
                   }}
                 >
-                  {(() => {
-                    const options = [];
-                    for (let i = 5; i < 100; i += 5) {
-                      options.push(
-                        <option key={i} value={i}>
-                          {i}
-                        </option>
-                      );
-                    }
-                    return options;
-                  })()}
+                  {[...Array(19)].map((_, i) => (
+                    <option key={i} value={(i + 1) * 5}>
+                      {(i + 1) * 5}
+                    </option>
+                  ))}
                 </select>
               </div>
 
-              <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
-                <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+              {/* 🔹 رقم الفاتورة */}
+              <div className="filter-group d-flex align-items-center gap-2 mb-2">
+                <label className="form-label fw-bolder text-body m-0">
                   رقم الفاتورة
                 </label>
                 <input
                   type="text"
-                  className="form-control border-primary m-0 p-2 h-auto"
+                  className="form-control border-primary h-auto"
                   onChange={(e) => searchBySerial(e.target.value)}
                 />
               </div>
 
-              <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
-                <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
-                  نوع الاوردر
+              {/* 🔹 نوع الأوردر */}
+              <div className="filter-group d-flex align-items-center gap-2 mb-2">
+                <label className="form-label fw-bolder text-body m-0">
+                  نوع الأوردر
                 </label>
                 <select
-                  className="form-control border-primary m-0 p-2 h-auto"
+                  className="form-select border-primary h-auto"
                   onChange={(e) => getOrdersByType(e.target.value)}
                 >
-                  <option value={""}>الكل</option>
+                  <option value="">الكل</option>
                   <option value="Internal">Internal</option>
                   <option value="Delivery">Delivery</option>
                   <option value="Takeaway">Takeaway</option>
                 </select>
-                {/* <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
-                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0">Status</label>
-                  <select className="form-control border-primary m-0 p-2 h-auto">
-                    <option>Any</option>
-                    <option>Delivered</option>
-                    <option>Shipped</option>
-                    <option>Pending</option>
-                    <option>Cancelled</option>
-                  </select>
-                </div>
-                <span className="filter-icon"><i className="fa fa-filter"></i></span> */}
               </div>
 
-              <div className="col-12 text-dark d-flex flex-wrap align-items-center justify-content-start p-0 m-0 mt-3">
-                <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
-                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
-                    فلتر حسب الوقت
+              {/* 🔹 فلترة حسب الوقت */}
+              <div className="filter-group d-flex align-items-center gap-2 mb-2 mt-2 flex-wrap">
+                <label className="form-label fw-bolder text-body m-0">
+                  فلتر حسب الوقت
+                </label>
+                <select
+                  className="form-select border-primary h-auto"
+                  onChange={(e) =>
+                    setListOfOrders(filterByTime(e.target.value, listOfOrders))
+                  }
+                >
+                  <option value="">اختر</option>
+                  <option value="today">اليوم</option>
+                  <option value="week">هذا الأسبوع</option>
+                  <option value="month">هذا الشهر</option>
+                  <option value="year">هذه السنة</option>
+                </select>
+
+                {/* 🔹 فلترة حسب مدة محددة */}
+                <div className="d-flex align-items-center gap-2 flex-wrap">
+                  <label className="form-label fw-bold m-0 text-body">من</label>
+                  <input
+                    type="date"
+                    className="form-control border-primary h-auto"
+                    onChange={(e) => setStartDate(e.target.value)}
+                  />
+                  <label className="form-label fw-bold m-0 text-body">
+                    إلى
                   </label>
-                  <select
-                    className="form-control border-primary m-0 p-2 h-auto"
-                    onChange={(e) =>
-                      setListOfOrders(
-                        filterByTime(e.target.value, listOfOrders)
-                      )
+                  <input
+                    type="date"
+                    className="form-control border-primary h-auto"
+                    onChange={(e) => setEndDate(e.target.value)}
+                  />
+                  <button
+                    type="button"
+                    className="btn btn-primary"
+                    onClick={() =>
+                      setListOfOrders(filterByDateRange(listOfOrders))
                     }
                   >
-                    <option value="">اختر</option>
-                    <option value="today">اليوم</option>
-                    <option value="week">هذا الأسبوع</option>
-                    <option value="month">هذا الشهر</option>
-                    <option value="month">هذه السنه</option>
-                  </select>
-                </div>
-
-                <div className="d-flex align-items-stretch justify-content-between flex-nowrap p-0 m-0 px-1">
-                  <label className="form-label text-nowrap d-flex align-items-center justify-content-center p-0 m-0 ml-1">
-                    <strong>مدة محددة:</strong>
-                  </label>
-
-                  <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
-                    <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
-                      من
-                    </label>
-                    <input
-                      type="date"
-                      className="form-control border-primary m-0 p-2 h-auto"
-                      onChange={(e) => setStartDate(e.target.value)}
-                      placeholder="اختر التاريخ"
-                    />
-                  </div>
-
-                  <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
-                    <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
-                      إلى
-                    </label>
-                    <input
-                      type="date"
-                      className="form-control border-primary m-0 p-2 h-auto"
-                      onChange={(e) => setEndDate(e.target.value)}
-                      placeholder="اختر التاريخ"
-                    />
-                  </div>
-
-                  <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
-                    <button
-                      type="button"
-                      className="btn btn-primary h-100 p-2 "
-                      onClick={() =>
-                        setListOfOrders(filterByDateRange(listOfOrders))
-                      }
-                    >
-                      <i className="fa fa-search"></i>
-                    </button>
-                    <button
-                      type="button"
-                      className="btn btn-warning h-100 p-2"
-                      onClick={getOrders}
-                    >
-                      استعادة
-                    </button>
-                  </div>
+                    <i className="fa fa-search"></i>
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-warning"
+                    onClick={getOrders}
+                  >
+                    استعادة
+                  </button>
                 </div>
               </div>
             </div>
           </div>
 
-          <table className="table table-striped table-hover">
-            <thead>
+          {/* 🔹 الجدول */}
+          <table className="table table-striped table-hover align-middle">
+            <thead className="table-light">
               <tr>
-                {/* <th>
-                          <span className="custom-checkbox">
-                            <input type="checkbox" className="form-check-input form-check-input-lg" id="selectAll" />
-                            <label htmlFor="selectAll"></label>
-                          </span>
-                        </th> */}
                 <th>م</th>
                 <th>رقم الفاتورة</th>
-                <th>رقم الاوردر</th>
+                <th>رقم الأوردر</th>
                 <th>العميل</th>
                 <th>المكان</th>
-                <th>الاجمالي</th>
+                <th>الإجمالي</th>
                 <th>حالة الطلب</th>
                 <th>الكاشير</th>
                 <th>حالة الدفع</th>
                 <th>تاريخ الدفع</th>
-                <th>اجراءات</th>
+                <th>إجراءات</th>
               </tr>
             </thead>
             <tbody>
-              {listOfOrders &&
+              {listOfOrders && listOfOrders.length > 0 ? (
                 listOfOrders.map((order, i) => {
-                  if ((i >= startPagination) & (i < endPagination)) {
+                  if (i >= startPagination && i < endPagination) {
                     return (
                       <tr key={i}>
                         <td>{i + 1}</td>
                         <td>
                           <a
+                            href="#"
+                            className="text-primary fw-semibold"
                             data-toggle="modal"
                             data-target="#invoiceOrderModal"
                             onClick={() => {
@@ -404,53 +361,56 @@ const Orders = () => {
                               setShowModal(!showModal);
                             }}
                           >
-                            {order.serial}{" "}
+                            {order.serial}
                           </a>
                         </td>
-
-                        <td>{order.orderNum ? order.orderNum : "--"}</td>
+                        <td>{order.orderNum || "--"}</td>
                         <td>
-                          {order.table != null
+                          {order.table
                             ? order.table.tableNumber
                             : order.user
-                            ? order.user?.username
+                            ? order.user.username
                             : order.createdBy
-                            ? order.createdBy?.fullname
+                            ? order.createdBy.fullname
                             : "--"}
                         </td>
-
                         <td>{order.orderType}</td>
                         <td>{order.total}</td>
                         <td>{order.status}</td>
-                        <td>{order.cashier && order.cashier.fullname}</td>
+                        <td>{order.cashier?.fullname || "--"}</td>
                         <td>{order.payment_status}</td>
                         <td>{formatDateTime(order.payment_date)}</td>
-
                         <td>
-                          {/* <a href="#editOrderModal" className="btn btn-sm btn-primary ml-2 " data-toggle="modal"><i className="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a> */}
                           <button
-                            data-target="#deleteOrderModal"
                             className="btn btn-sm btn-danger"
                             data-toggle="modal"
+                            data-target="#deleteOrderModal"
                             onClick={() => setOrderId(order._id)}
                           >
-                            <i
-                              className="material-icons"
-                              data-toggle="tooltip"
-                              title="Delete"
-                            >
-                              &#xE872;
-                            </i>
+                            <i className="material-icons">&#xE872;</i>
                           </button>
                         </td>
                       </tr>
                     );
                   }
-                })}
+                  return null;
+                })
+              ) : (
+                <tr>
+                  <td
+                    colSpan="11"
+                    className="text-center py-3 text-secondary-emphasis bg-body-secondary"
+                  >
+                    لا توجد أوردرات
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
-          <div className="clearfix">
-            <div className="hint-text text-dark">
+
+          {/* 🔹 الفوتر */}
+          <div className="clearfix mt-3">
+            <div className="hint-text text-body">
               عرض{" "}
               <b>
                 {listOfOrders.length > endPagination
@@ -459,58 +419,21 @@ const Orders = () => {
               </b>{" "}
               من <b>{listOfOrders.length}</b> عنصر
             </div>
+
             <ul className="pagination">
-              <li onClick={EditPagination} className="page-item disabled">
-                <a href="#">السابق</a>
-              </li>
-              <li
-                onClick={EditPagination}
-                className={`page-item ${endPagination === 5 ? "active" : ""}`}
-              >
-                <a href="#" className="page-link">
-                  1
-                </a>
-              </li>
-              <li
-                onClick={EditPagination}
-                className={`page-item ${endPagination === 10 ? "active" : ""}`}
-              >
-                <a href="#" className="page-link">
-                  2
-                </a>
-              </li>
-              <li
-                onClick={EditPagination}
-                className={`page-item ${endPagination === 15 ? "active" : ""}`}
-              >
-                <a href="#" className="page-link">
-                  3
-                </a>
-              </li>
-              <li
-                onClick={EditPagination}
-                className={`page-item ${endPagination === 20 ? "active" : ""}`}
-              >
-                <a href="#" className="page-link">
-                  4
-                </a>
-              </li>
-              <li
-                onClick={EditPagination}
-                className={`page-item ${endPagination === 25 ? "active" : ""}`}
-              >
-                <a href="#" className="page-link">
-                  5
-                </a>
-              </li>
-              <li
-                onClick={EditPagination}
-                className={`page-item ${endPagination === 30 ? "active" : ""}`}
-              >
-                <a href="#" className="page-link">
-                  التالي
-                </a>
-              </li>
+              {[5, 10, 15, 20, 25, 30].map((num, idx) => (
+                <li
+                  key={idx}
+                  onClick={EditPagination}
+                  className={`page-item ${
+                    endPagination === num ? "active" : ""
+                  }`}
+                >
+                  <a href="#" className="page-link">
+                    {idx + 1}
+                  </a>
+                </li>
+              ))}
             </ul>
           </div>
         </div>
