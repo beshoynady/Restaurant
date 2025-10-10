@@ -35,9 +35,7 @@ const employeeSchema = new mongoose.Schema(
     shift: {
       type: ObjectId,
       ref: "Shift",
-      required: function () {
-        return this.role !== "programer";
-      },
+      default: null,
     },
     numberID: {
       type: String,
