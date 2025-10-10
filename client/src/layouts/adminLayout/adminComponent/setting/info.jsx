@@ -1027,34 +1027,40 @@ const Info = () => {
                       />
                       <label className="form-check-label mr-4">الصالة</label>
                     </div>
-                    <div className="form-check form-check-flat mb-2 mr-4 d-flex align-items-center w-50">
+                    <div
+                      className="form-check form-check-flat mb-2 mr-4 d-flex align-items-center w-50"
+                      onChange={() => settakeAway(!takeAway)}
+                    >
                       <input
                         type="checkbox"
                         className="form-check-input"
                         checked={takeAway}
-                        onChange={() => settakeAway(!takeAway)}
                       />
                       <label className="form-check-label mr-4">التيك اوي</label>
                     </div>
-                    <div className="form-check form-check-flat mb-2 mr-4 d-flex align-items-center w-50">
+                    <div
+                      className="form-check form-check-flat mb-2 mr-4 d-flex align-items-center w-50"
+                      onChange={() => setdeliveryService(!deliveryService)}
+                    >
                       <input
                         type="checkbox"
                         className="form-check-input"
                         checked={deliveryService}
-                        onChange={() => setdeliveryService(!deliveryService)}
                       />
                       <label className="form-check-label mr-4">
                         خدمة التوصيل
                       </label>
                     </div>
-                    <div className="form-check form-check-flat mb-2 mr-4 d-flex align-items-center w-50">
+                    <div
+                      className="form-check form-check-flat mb-2 mr-4 d-flex align-items-center w-50"
+                      onChange={() =>
+                        setusesReservationSystem(!usesReservationSystem)
+                      }
+                    >
                       <input
                         type="checkbox"
                         className="form-check-input"
                         checked={usesReservationSystem}
-                        onChange={() =>
-                          setusesReservationSystem(!usesReservationSystem)
-                        }
                       />
                       <label className="form-check-label mr-4">
                         حجز الطاولة
