@@ -11,7 +11,7 @@ import pos from "../../../../image/pos.jpg";
 const Login = () => {
   const {
     getUserInfoFromToken,
-    setIsLoading, handleGetTokenAndConfig, apiUrl } = useContext(dataContext)
+    setIsLoading, handleGetTokenAndConfig, apiUrl, clientUrl } = useContext(dataContext)
 
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
@@ -64,7 +64,7 @@ const Login = () => {
           getUserInfoFromToken();
         }
         if (data.findEmployee.isActive === true) {
-          window.location.href = `${apiUrl}/admin`;
+          window.location.href = `${clientUrl}/admin`;
         } else {
           toast.error("غير مسموح لك بالدخول");
         }

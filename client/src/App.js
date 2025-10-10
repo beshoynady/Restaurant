@@ -181,6 +181,7 @@ function App() {
   axios.defaults.withCredentials = true;
 
   const apiUrl = process.env.REACT_APP_API_URL;
+  const clientUrl = process.env.REACT_APP_URL;
 
   const handleGetTokenAndConfig = async () => {
     await verifyToken();
@@ -2356,6 +2357,7 @@ function App() {
         restaurantData,
         clientInfo,
         apiUrl,
+        clientUrl,
 
         // الدوال المتعلقة بالمصادقة
         apiUrl,
