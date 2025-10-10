@@ -435,7 +435,8 @@ const Info = () => {
         toast.success(
           restaurantId ? "تم تحديث المطعم بنجاح" : "تمت إضافة المطعم بنجاح"
         );
-        getRestaurant(); // تحديث البيانات أو إعادة توجيه المستخدم
+        getRestaurant(); 
+        URL.revokeObjectURL(preview);
       } else {
         toast.error("حدث خطأ أثناء معالجة الطلب");
       }
@@ -717,13 +718,6 @@ const Info = () => {
 
   const [preview, setPreview] = useState(null); // رابط العرض المؤقت
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setImage(file);
-      setPreview(URL.createObjectURL(file)); // ← عرض الصورة مؤقتاً
-    }
-  };
 
   useEffect(() => {
     getRestaurant();
