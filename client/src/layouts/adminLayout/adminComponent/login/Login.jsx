@@ -1,4 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+
 import "./Login.css";
 import { dataContext } from "../../../../App";
 import { toast } from "react-toastify";
@@ -9,6 +11,7 @@ import menu from "../../../../image/emenu.jpg";
 import pos from "../../../../image/pos.jpg";
 
 const Login = () => {
+  const navigate = useNavigate();
   const {
     getUserInfoFromToken,
     setIsLoading,
@@ -45,6 +48,7 @@ const Login = () => {
 
   const adminLogin = async (e) => {
     e.preventDefault();
+
     if (!phone || !password) {
       toast.error("ادخل رقم الموبايل و الباسورد بشكل صحيح");
       return;
@@ -53,28 +57,27 @@ const Login = () => {
     try {
       const response = await axios.post(
         `${apiUrl}/api/employee/login`,
-        {
-          phone,
-          password,
-        },
+        { phone, password },
         { withCredentials: true }
       );
-      if (response && response.data) {
-        const { data } = response;
-        toast.success("تم تسجيل الدخول بنجاح");
-        if (data.accessToken) {
-          localStorage.setItem("token_e", data.accessToken);
-          getUserInfoFromToken();
-        }
-        const employee = data.findEmployee;
 
-        if (employee?.isActive && employee?.isAdmin) {
-          window.location.href = `${clientUrl}/admin`;
-          toast.success("تم تسجيل الدخول بنجاح");
-        } else {
-          toast.error("غير مسموح لك بالدخول");
-        }
+      const { data } = response;
+      if (!data) return toast.error("فشل تسجيل الدخول");
+
+      const employee = data.findEmployee;
+      if (!employee?.isActive || !employee?.isAdmin) {
+        return toast.error("غير مسموح لك بالدخول");
       }
+
+      // حفظ التوكن أولًا
+      localStorage.setItem("token_e", data.accessToken);
+
+      // انتظر قليلاً لضمان الحفظ ثم استدعاء الدالة
+      await new Promise((resolve) => setTimeout(resolve, 150));
+      await getUserInfoFromToken();
+
+      toast.success("تم تسجيل الدخول بنجاح");
+      navigate("/admin"); // تنقل بدون refresh
     } catch (error) {
       console.error(error);
       toast.error(
@@ -82,6 +85,46 @@ const Login = () => {
       );
     }
   };
+
+  // const adminLogin = async (e) => {
+  //   e.preventDefault();
+  //   if (!phone || !password) {
+  //     toast.error("ادخل رقم الموبايل و الباسورد بشكل صحيح");
+  //     return;
+  //   }
+
+  //   try {
+  //     const response = await axios.post(
+  //       `${apiUrl}/api/employee/login`,
+  //       {
+  //         phone,
+  //         password,
+  //       },
+  //       { withCredentials: true }
+  //     );
+  //     if (response && response.data) {
+  //       const { data } = response;
+  //       toast.success("تم تسجيل الدخول بنجاح");
+  //       if (data.accessToken) {
+  //         localStorage.setItem("token_e", data.accessToken);
+  //         await getUserInfoFromToken();
+  //       }
+  //       const employee = data.findEmployee;
+
+  //       if (employee?.isActive && employee?.isAdmin) {
+  //         window.location.href = `${clientUrl}/admin`;
+  //         toast.success("تم تسجيل الدخول بنجاح");
+  //       } else {
+  //         toast.error("غير مسموح لك بالدخول");
+  //       }
+  //     }
+  //   } catch (error) {
+  //     console.error(error);
+  //     toast.error(
+  //       error.response?.data?.message || "حدث خطأ. الرجاء المحاولة مرة أخرى."
+  //     );
+  //   }
+  // };
 
   const handleCreateFirstEmployee = async () => {
     try {
