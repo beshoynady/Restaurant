@@ -59,19 +59,19 @@ const Employees = () => {
   const [listOfEmployees, setListOfEmployees] = useState([]);
 
   const getEmployees = async () => {
-    const config = await handleGetTokenAndConfig();
+    // const config = await handleGetTokenAndConfig();
     if (permissionsForEmployee && permissionsForEmployee.read === false) {
       notify("ليس لك صلاحية لعرض بيانات الموظفين", "info");
       return;
     }
     try {
-      const response = await axios.get(`${apiUrl}/api/employee`, config);
-      const data = response.data;
-      if (data) {
-        setListOfEmployees(data);
-      } else {
-        toast.info("لا توجد بيانات لعرضها");
-      }
+      // const response = await axios.get(`${apiUrl}/api/employee`, config);
+      // const data = response.data;
+      // if (data) {
+      //   setListOfEmployees(data);
+      // } else {
+      //   toast.info("لا توجد بيانات لعرضها");
+      // }
       //
     } catch (error) {
       console.error("Failed to fetch employees:", error);
