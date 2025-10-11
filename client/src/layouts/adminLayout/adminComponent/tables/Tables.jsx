@@ -122,7 +122,7 @@ const Tables = () => {
 
       if (response.status === 201) {
         toast.success("✅ تم إنشاء الطاولة بنجاح.");
-        getAllTable(); // تحديث القائمة
+        await getAllTable();
       }
     } catch (error) {
       if (
@@ -390,6 +390,7 @@ const Tables = () => {
   };
 
   const filterByLocation = async (location) => {
+    await getAllTable();
     if (!location) {
       await getAllTable();
       return;
@@ -463,7 +464,7 @@ const Tables = () => {
                   ادارة <b>الطاولات</b>
                 </h2>
               </div>
-              <div className="col-12 col-md-6 p-0 m-0 d-flex flex-wrap align-items-center justify-content-end print-hide">
+              <div className="col-12 col-md-8 p-0 m-0 d-flex flex-wrap align-items-center justify-content-end print-hide">
                 <a
                   href="#qrwebModal"
                   className="d-flex align-items-center justify-content-center h-100 m-0 btn btn-info"
