@@ -1066,7 +1066,7 @@ const Tables = () => {
                 <input
                   type="button"
                   className="btn btn-danger col-6 h-100 px-2 py-3 m-0"
-                  data-bs-dismiss="modal"
+                  data-dismiss="modal"
                   value="إغلاق"
                 />
               </div>
