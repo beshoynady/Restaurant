@@ -1855,10 +1855,10 @@ function App() {
     localStorage.removeItem("token_u");
     setIsTokenValid(false);
 
-    if (window.location.pathname !== "/login") {
-      navigate("/login", { replace: true });
-      return;
-    }
+    // if (window.location.pathname !== "/login") {
+    //   navigate("/login", { replace: true });
+    //   return;
+    // }
   };
 
   const refreshToken = async () => {
@@ -1962,9 +1962,9 @@ const getEmployeeInfoFromToken = async () => {
     setIsLoading(false);
 
     // ✅ تأكيد إننا مش بالفعل في /login علشان ما نعملش redirect لنفسها
-    if (window.location.pathname !== "/login") {
-      navigate("/login", { replace: true });
-    }
+    // if (window.location.pathname !== "/login") {
+    //   navigate("/login", { replace: true });
+    // }
 
     return;
   }
@@ -1983,9 +1983,9 @@ const getEmployeeInfoFromToken = async () => {
     setIsTokenValid(false);
 
     // ✅ فقط لو المستخدم مش في صفحة /login بالفعل
-    if (window.location.pathname !== "/login") {
-      navigate("/login", { replace: true });
-    }
+    // if (window.location.pathname !== "/login") {
+    //   navigate("/login", { replace: true });
+    // }
   } finally {
     setIsLoading(false);
   }
