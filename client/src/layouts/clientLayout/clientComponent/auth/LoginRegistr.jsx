@@ -22,7 +22,7 @@ const LoginRegistr = (props) => {
     endPagination,
     setStartPagination,
     setEndPagination,
-    getUserInfoFromToken, handleGetTokenAndConfig, apiUrl } = useContext(dataContext)
+    getClientInfoFromToken, handleGetTokenAndConfig, apiUrl } = useContext(dataContext)
 
   const openlogin = props.openlogin;
   const [openform, setopenform] = useState(props.openlogin);
@@ -62,7 +62,7 @@ const LoginRegistr = (props) => {
     authform.current.style.display = "none";
   };
 
-  const login = async (e, phone, password, getUserInfoFromToken) => {
+  const login = async (e, phone, password, getClientInfoFromToken) => {
     e.preventDefault();
     
 
@@ -88,7 +88,7 @@ const LoginRegistr = (props) => {
           // Store access token in local storage
           localStorage.setItem("token_u", accessToken);
           // Retrieve user info from token if needed
-          getUserInfoFromToken();
+          getClientInfoFromToken();
           // Update login state
           // setisLogin(true);
           toast.success("تم تسجيل الدخول!");
@@ -197,7 +197,7 @@ const LoginRegistr = (props) => {
             <form
               ref={loginForm}
               className="login"
-              onSubmit={(e) => login(e, phone, password, getUserInfoFromToken)}
+              onSubmit={(e) => login(e, phone, password, getClientInfoFromToken)}
             >
               <div className="field">
                 <input

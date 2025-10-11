@@ -13,7 +13,7 @@ import pos from "../../../../image/pos.jpg";
 const Login = () => {
   const navigate = useNavigate();
   const {
-    getUserInfoFromToken,
+    getEmployeeInfoFromToken,
     setIsLoading,
     handleGetTokenAndConfig,
     apiUrl,
@@ -74,7 +74,7 @@ const Login = () => {
 
       // انتظر قليلاً لضمان الحفظ ثم استدعاء الدالة
       await new Promise((resolve) => setTimeout(resolve, 150));
-      await getUserInfoFromToken();
+      await getEmployeeInfoFromToken();
 
       toast.success("تم تسجيل الدخول بنجاح");
       navigate("/admin"); // تنقل بدون refresh
@@ -107,7 +107,7 @@ const Login = () => {
   //       toast.success("تم تسجيل الدخول بنجاح");
   //       if (data.accessToken) {
   //         localStorage.setItem("token_e", data.accessToken);
-  //         await getUserInfoFromToken();
+  //         await getEmployeeInfoFromToken();
   //       }
   //       const employee = data.findEmployee;
 

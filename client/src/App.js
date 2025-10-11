@@ -1888,55 +1888,133 @@ function App() {
     }
   };
 
-  const getUserInfoFromToken = async () => {
-    setIsLoading(true);
-    if (window.location.pathname === "/admin") {
-      const employeeToken = localStorage.getItem("token_e");
-      if (!employeeToken) {
-        toast.error("رجاء تسجيل الدخول مره أخرى");
-        setIsTokenValid(false);
-        setIsLoading(false);
+  // const getUserInfoFromToken = async () => {
+  //   setIsLoading(true);
+  //   if (window.location.pathname === "/admin") {
+  //     const employeeToken = localStorage.getItem("token_e");
+  //     if (!employeeToken) {
+  //       toast.error("رجاء تسجيل الدخول مره أخرى");
+  //       setIsTokenValid(false);
+  //       setIsLoading(false);
   
-        return;
-      }
-    }
-    const userToken = localStorage.getItem("token_u");
+  //       return;
+  //     }
+  //   }
+  //   const userToken = localStorage.getItem("token_u");
     
 
-    try {
-      let decodedToken = null;
+  //   try {
+  //     let decodedToken = null;
 
-      if (employeeToken) {
-        decodedToken = jwt_decode(employeeToken);
-        setEmployeeLoginInfo(decodedToken);
-        await getPermissions(decodedToken);
+  //     if (employeeToken) {
+  //       decodedToken = jwt_decode(employeeToken);
+  //       setEmployeeLoginInfo(decodedToken);
+  //       await getPermissions(decodedToken);
 
-        setIsTokenValid(true);
-      }
+  //       setIsTokenValid(true);
+  //     }
 
-      if (userToken) {
-        decodedToken = jwt_decode(userToken);
-        setUserLoginInfo(decodedToken);
+  //     if (userToken) {
+  //       decodedToken = jwt_decode(userToken);
+  //       setUserLoginInfo(decodedToken);
 
-        if (decodedToken) {
-          const userId = decodedToken.userinfo.id;
-          if (userId) {
-            const clientResponse = await axios.get(
-              `${apiUrl}/api/user/${userId}`
-            );
-            setClientInfo(clientResponse.data);
-            setIsTokenValid(true); // ✅ برضه السيشن صالح
-          }
-        }
-      }
-    } catch (error) {
-      console.error("Error verifying token:", error);
-      toast.error("خطأ أثناء التحقق من التوكن. يرجى تسجيل الدخول مرة أخرى.");
-      setIsTokenValid(false);
-    } finally {
-      setIsLoading(false);
+  //       if (decodedToken) {
+  //         const userId = decodedToken.userinfo.id;
+  //         if (userId) {
+  //           const clientResponse = await axios.get(
+  //             `${apiUrl}/api/user/${userId}`
+  //           );
+  //           setClientInfo(clientResponse.data);
+  //           setIsTokenValid(true); // ✅ برضه السيشن صالح
+  //         }
+  //       }
+  //     }
+  //   } catch (error) {
+  //     console.error("Error verifying token:", error);
+  //     toast.error("خطأ أثناء التحقق من التوكن. يرجى تسجيل الدخول مرة أخرى.");
+  //     setIsTokenValid(false);
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
+
+
+
+  // ✅ دالة التحقق من توكن الموظف
+const getEmployeeInfoFromToken = async () => {
+  // ✅ لو المستخدم في صفحة تسجيل الدخول، ما تعملش أي حاجة
+  if (window.location.pathname === "/login") return;
+
+  setIsLoading(true);
+  const employeeToken = localStorage.getItem("token_e");
+
+  // ✅ لو مفيش توكن والصفحة مش /login، رجّع المستخدم لتسجيل الدخول
+  if (!employeeToken) {
+    toast.error("رجاء تسجيل الدخول مره أخرى");
+    setIsTokenValid(false);
+    setIsLoading(false);
+
+    // ✅ تأكيد إننا مش بالفعل في /login علشان ما نعملش redirect لنفسها
+    if (window.location.pathname !== "/login") {
+      window.location.replace("/login");
     }
-  };
+
+    return;
+  }
+
+  try {
+    const decodedToken = jwt_decode(employeeToken);
+    setEmployeeLoginInfo(decodedToken);
+
+    // ✅ جلب الصلاحيات
+    await getPermissions(decodedToken);
+
+    setIsTokenValid(true);
+  } catch (error) {
+    console.error("Error verifying employee token:", error);
+    toast.error("خطأ أثناء التحقق من توكن الموظف. يرجى تسجيل الدخول مرة أخرى.");
+    setIsTokenValid(false);
+
+    // ✅ فقط لو المستخدم مش في صفحة /login بالفعل
+    if (window.location.pathname !== "/login") {
+      window.location.replace("/login");
+    }
+  } finally {
+    setIsLoading(false);
+  }
+};
+
+
+// ✅ دالة التحقق من توكن العميل (اليوزر)
+const getClientInfoFromToken = async () => {
+  setIsLoading(true);
+  const userToken = localStorage.getItem("token_u");
+
+  if (!userToken) {
+    setIsTokenValid(false);
+    setIsLoading(false);
+    return;
+  }
+
+  try {
+    const decodedToken = jwt_decode(userToken);
+    setUserLoginInfo(decodedToken);
+
+    if (decodedToken?.userinfo?.id) {
+      const userId = decodedToken.userinfo.id;
+
+      const clientResponse = await axios.get(`${apiUrl}/api/user/${userId}`);
+      setClientInfo(clientResponse.data);
+      setIsTokenValid(true);
+    }
+  } catch (error) {
+    console.error("Error verifying client token:", error);
+    toast.error("خطأ أثناء التحقق من توكن العميل. يرجى تسجيل الدخول مرة أخرى.");
+    setIsTokenValid(false);
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   const getPermissions = async (decodedToken) => {
     try {
@@ -2270,7 +2348,7 @@ function App() {
     const initializeSession = async () => {
       setIsLoading(true);
       await verifyToken();
-      await getUserInfoFromToken();
+      await getEmployeeInfoFromToken();
       setIsLoading(false);
     };
 
@@ -2351,7 +2429,9 @@ function App() {
         userLoginInfo,
         employeeLoginInfo,
         permissionsList,
-        getUserInfoFromToken,
+        // getUserInfoFromToken,
+        getEmployeeInfoFromToken,
+        getClientInfoFromToken,
 
         // الدوال المتعلقة بالمنتجات والفئات
         allProducts,
