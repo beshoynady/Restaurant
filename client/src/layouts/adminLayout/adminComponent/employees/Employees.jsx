@@ -455,6 +455,8 @@ const Employees = () => {
     getEmployees();
     getShifts();
   }, []);
+
+  
   const [listOfSectionNumber, setlistOfSectionNumber] = useState([]);
   useEffect(() => {
     const sectionNumbers = [];
