@@ -57,7 +57,6 @@ const Employees = () => {
   const [listOfEmployees, setListOfEmployees] = useState([]);
 
   const getEmployees = async () => {
-    // setIsLoading(true);
     const config = await handleGetTokenAndConfig();
     if (permissionsForEmployee && permissionsForEmployee.read === false) {
       notify("ليس لك صلاحية لعرض بيانات الموظفين", "info");
@@ -70,14 +69,13 @@ const Employees = () => {
       const data = response.data;
       if (data) {
         setListOfEmployees(data);
+        toast.success("تم جلب بيانات الموظفين بنجاح");
       } else {
         toast.info("لا توجد بيانات لعرضها");
       }
       // 
     } catch (error) {
       console.error("Failed to fetch employees:", error);
-    } finally {
-      // setIsLoading(false);
     }
   };
 
@@ -451,10 +449,12 @@ const Employees = () => {
     bodyClass: "printpage",
   });
 
-  useEffect(() => {
-    getEmployees();
-    getShifts();
-  }, []);
+useEffect(() => {
+  (async () => {
+    await getEmployees();
+    await getShifts();
+  })();
+}, []);
 
 
   const [listOfSectionNumber, setlistOfSectionNumber] = useState([]);
