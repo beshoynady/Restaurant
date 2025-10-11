@@ -45,6 +45,17 @@ const Tables = () => {
   const [isValid, setIsValid] = useState();
   const [status, setStatus] = useState("available");
   const [ListOfSections, setListOfSections] = useState([]);
+  const [listOfLocations, setListOfLocations] = useState([]);
+  useEffect(() => {
+    const uniqueLocations = [];
+    allTable.forEach((table) => {
+      if (!uniqueLocations.includes(table.location)) {
+        uniqueLocations.push(table.location);
+      }
+    });
+    setListOfLocations(uniqueLocations);
+  }, [allTable])
+  
 
 const listOfStatus = [
   "available",
@@ -362,13 +373,32 @@ const listOfStatus = [
     setListOfTable(tables);
   };
 
+  const filterByValidity = async (isValid) => {
+    await getAllTable();
+    if (isValid === undefined) {
+      await getAllTable();
+      return;
+    }
+    const filter = listOfTable.filter((table) => table.isValid === isValid);
+    setListOfTable(filter);
+  };
+
   const filterByStatus = async (Status) => {
     await getAllTable();
     if (!Status) {
       await getAllTable();
       return;
     }
-    const filter = listOfTable.filter((table) => table.isValid === Status);
+    const filter = listOfTable.filter((table) => table.status === Status);
+    setListOfTable(filter);
+  };
+
+  const filterByLocation = async (location) => {
+      if (!location) {
+      await getAllTable();
+      return;
+    }
+    const filter = listOfTable.filter((table) => table.location === location);
     setListOfTable(filter);
   };
 
@@ -528,6 +558,24 @@ const listOfStatus = [
 
               <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
                 <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                  المكان
+                </label>
+                <select
+                  className="form-control border-primary m-0 p-2 h-auto"
+                  name="valid"
+                  id="valid"
+                  onChange={(e) => filterByLocation(e.target.value)}
+                >
+                  <option value="">اختر</option>
+                  {listOfLocations.map((location, i) => (
+                    <option key={i} value={location}>
+                      {location}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
+                <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                   الحالة
                 </label>
                 <select
@@ -535,6 +583,24 @@ const listOfStatus = [
                   name="Status"
                   id="Status"
                   onChange={(e) => filterByStatus(e.target.value)}
+                >
+                  <option value="">اختر</option>
+                  {listOfStatus.map((status, i) => (
+                    <option key={i} value={status}>
+                      {status}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="filter-group d-flex flex-wrap align-items-center justify-content-between p-0 mb-1">
+                <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                  متاح
+                </label>
+                <select
+                  className="form-control border-primary m-0 p-2 h-auto"
+                  name="Status"
+                  id="Status"
+                  onChange={(e) => filterByValidity(e.target.value)}
                 >
                   <option value="">اختر</option>
                   <option value={true}>متاح</option>
@@ -924,6 +990,7 @@ const listOfStatus = [
                   </label>
                   <input
                     type="Number"
+                    value={chairs}
                     defaultValue={chairs}
                     className="form-control border-primary m-0 p-2 h-auto"
                     required
@@ -973,8 +1040,8 @@ const listOfStatus = [
                     onChange={(e) => setStatus(e.target.value)}
                   >
                     <option value={status}>{status}</option>
-                    {listOfStatus.map((status, i) => ( 
-                      <option key={i} value={status}>
+                    {listOfStatus.filter((s) => s !== status).map((status, i) => ( 
+                      <option key={i} value={status} d>
                         {status}
                       </option>
                     ))}
