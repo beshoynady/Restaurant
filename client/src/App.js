@@ -1942,8 +1942,6 @@ function App() {
 
   // ✅ دالة التحقق من توكن الموظف
 const getEmployeeInfoFromToken = async () => {
-  // ✅ لو المستخدم في صفحة تسجيل الدخول، ما تعملش أي حاجة
-  if (window.location.pathname === "/login") return;
 
   setIsLoading(true);
   const employeeToken = localStorage.getItem("token_e");
