@@ -187,7 +187,6 @@ function App() {
     await verifyToken();
     const token = localStorage.getItem("token_e");
     if (!token) {
-      window.location.href = "/login";
       return null;
     }
     const config = {
@@ -2263,9 +2262,9 @@ function App() {
 
   // عند التحقق من التوكن
   useEffect(() => {
-    if (window.location.pathname === "/login") {
-      return;
-    }
+    // if (window.location.pathname === "/login") {
+    //   return;
+    // }
     const initializeSession = async () => {
       setIsLoading(true);
       await verifyToken();
