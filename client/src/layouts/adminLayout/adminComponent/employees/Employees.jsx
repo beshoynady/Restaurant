@@ -7,8 +7,6 @@ import { useReactToPrint } from "react-to-print";
 import "../orders/Orders.css";
 
 const Employees = () => {
-  const [isExecuting, setIsExecuting] = useState(false);
-
   const {
     permissionsList,
     restaurantData,
@@ -122,11 +120,6 @@ const Employees = () => {
     e.preventDefault();
     setIsLoading(true);
 
-    if (isExecuting) {
-      toast.warn("انتظر لانشاء حساب الموظف");
-      return;
-    }
-
     // Check if the user has the permission to create an employee
     if (permissionsForEmployee && permissionsForEmployee.create === false) {
       notify("ليس لك صلاحية لانشاء حساب موظف", "info");
@@ -151,7 +144,6 @@ const Employees = () => {
 
     try {
       const config = await handleGetTokenAndConfig();
-      setIsExecuting(true);
 
       const newEmployee = await axios.post(
         apiUrl + "/api/employee",
@@ -180,11 +172,9 @@ const Employees = () => {
       }
 
       getEmployees();
-      setIsExecuting(false);
     } catch (error) {
-      console.error(error);
       notify("فشل انشاء حساب الموظف! حاول مرة اخرى", "error");
-      setIsExecuting(false);
+      console.error("Failed to create employee:", error);
     } finally {
       setIsLoading(false);
     }
@@ -198,13 +188,8 @@ const Employees = () => {
       notify("ليس لك صلاحية لتعديل حساب الموظف", "info");
       return;
     }
-    if (isExecuting) {
-      toast.warn("انتظر لتعديل حساب الموظف");
-      return;
-    }
 
     try {
-      setIsExecuting(true);
       if (permissionsForEmployee && permissionsForEmployee.update === true) {
         const updateData = password
           ? {
@@ -254,14 +239,12 @@ const Employees = () => {
       } else {
         notify("ليس لك صلاحية لتعديل حساب موظف", "info");
       }
-      setIsExecuting(false);
     } catch (error) {
       notify("فشل تحديث بيانات الموظف! حاول مره اخري", "error");
-
-      setIsExecuting(false);
+      console.error("Failed to update employee:", error);
     } finally {
       setIsLoading(false);
-    }
+    } 
   };
 
   const [employeeShift, setemployeeShift] = useState({});
