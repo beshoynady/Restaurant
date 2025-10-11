@@ -183,7 +183,7 @@ export const dataContext = createContext({});
 
 function App() {
   
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
 
 
