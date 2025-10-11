@@ -187,7 +187,7 @@ function App() {
     await verifyToken();
     const token = localStorage.getItem("token_e");
     if (!token) {
-      toast.error("!رجاء تسجيل الدخول مره اخري");
+      window.location.href = "/login";
       return null;
     }
     const config = {
