@@ -449,11 +449,10 @@ const Employees = () => {
     bodyClass: "printpage",
   });
 
-  // useEffect(() => {
-  //   getEmployees();
-  //   getShifts();
-  // }, []);
-  
+  useEffect(() => {
+    // getEmployees();
+    getShifts();
+  }, []);
   const [listOfSectionNumber, setlistOfSectionNumber] = useState([]);
   useEffect(() => {
     const sectionNumbers = [];
