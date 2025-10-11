@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import axios from "axios";
 import jwt_decode from "jwt-decode";
 import io from "socket.io-client";
+import { useNavigate } from "react-router-dom";
 
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -177,7 +178,15 @@ const waiterSocket = io(`${process.env.REACT_APP_API_URL}/waiter`, {
 
 export const dataContext = createContext({});
 
+
+
+
 function App() {
+  
+  const navigate = useNavigate();
+
+
+
   axios.defaults.withCredentials = true;
 
   const apiUrl = process.env.REACT_APP_API_URL;
@@ -1847,7 +1856,7 @@ function App() {
     setIsTokenValid(false);
 
     if (window.location.pathname !== "/login") {
-      window.location.replace("/login");
+      navigate("/login", { replace: true });
       return;
     }
   };
@@ -1942,7 +1951,6 @@ function App() {
 
   // ✅ دالة التحقق من توكن الموظف
 const getEmployeeInfoFromToken = async () => {
-  console.log("بيانات توكن الموظف:");
 
   setIsLoading(true);
   const employeeToken = localStorage.getItem("token_e");
@@ -1955,7 +1963,7 @@ const getEmployeeInfoFromToken = async () => {
 
     // ✅ تأكيد إننا مش بالفعل في /login علشان ما نعملش redirect لنفسها
     if (window.location.pathname !== "/login") {
-      window.location.replace("/login");
+      navigate("/login", { replace: true });
     }
 
     return;
@@ -1976,7 +1984,7 @@ const getEmployeeInfoFromToken = async () => {
 
     // ✅ فقط لو المستخدم مش في صفحة /login بالفعل
     if (window.location.pathname !== "/login") {
-      window.location.replace("/login");
+      navigate("/login", { replace: true });
     }
   } finally {
     setIsLoading(false);
