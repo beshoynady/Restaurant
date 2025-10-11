@@ -190,7 +190,7 @@ function App() {
     await verifyToken();
     const token = localStorage.getItem("token_e");
     if (!token) {
-      navigate("/login");
+      
       return null;
     }
     const config = {
@@ -1881,7 +1881,6 @@ function App() {
   const verifyToken = async () => {
     const employeeToken = localStorage.getItem("token_e");
     if (!employeeToken) {
-      navigate("/login");
       setIsTokenValid(false);
       return;
     } else {
