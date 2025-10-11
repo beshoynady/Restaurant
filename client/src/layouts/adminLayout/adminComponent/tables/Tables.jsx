@@ -163,8 +163,6 @@ const Tables = () => {
   const editTable = async (e) => {
     e.preventDefault();
 
-    setIsLoading(true);
-
     // Check if the user is authenticated
     const config = await handleGetTokenAndConfig();
     if (tablePermission && !tablePermission.update) {
@@ -221,8 +219,6 @@ const Tables = () => {
         console.error("Error updating table:", error);
         toast.error("حدث خطأ أثناء تعديل الطاولة. الرجاء المحاولة مرة أخرى.");
       }
-    } finally {
-      setIsLoading(false);
     }
   };
 
