@@ -4,7 +4,6 @@ import { useReactToPrint } from "react-to-print";
 import { dataContext } from "../../../../App";
 import { toast } from "react-toastify";
 import "../orders/Orders.css";
-import { use } from "react";
 
 const Tables = () => {
   const {
