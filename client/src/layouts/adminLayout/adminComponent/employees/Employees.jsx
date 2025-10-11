@@ -449,12 +449,12 @@ const Employees = () => {
     bodyClass: "printpage",
   });
 
-useEffect(() => {
-  (async () => {
-    await getEmployees();
-    await getShifts();
-  })();
-}, []);
+// useEffect(() => {
+//   (async () => {
+//     await getEmployees();
+//     await getShifts();
+//   })();
+// }, []);
 
 
   const [listOfSectionNumber, setlistOfSectionNumber] = useState([]);
