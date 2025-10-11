@@ -450,8 +450,8 @@ const Employees = () => {
   });
 
   useEffect(() => {
-    // getEmployees();
-    getShifts();
+    getEmployees();
+    // getShifts();
   }, []);
   const [listOfSectionNumber, setlistOfSectionNumber] = useState([]);
   useEffect(() => {
