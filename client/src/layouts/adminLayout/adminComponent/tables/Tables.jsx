@@ -197,9 +197,6 @@ const Tables = () => {
 
         // Show success notification
         toast.success("تم تعديل الطاولة بنجاح.");
-        const modalEl = document.getElementById("editTableModal");
-        const modal = bootstrap.Modal.getInstance(modalEl);
-        modal.hide();
       }
     } catch (error) {
       // Handle specific errors based on status codes and messages
