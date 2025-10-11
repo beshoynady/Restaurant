@@ -181,8 +181,6 @@ export const dataContext = createContext({});
 
 function App() {
   axios.defaults.withCredentials = true;
-  const navigate = useNavigate();
-
   const apiUrl = process.env.REACT_APP_API_URL;
   const clientUrl = process.env.REACT_APP_URL;
 
@@ -190,7 +188,7 @@ function App() {
     await verifyToken();
     const token = localStorage.getItem("token_e");
     if (!token) {
-      
+      window.location.href = "/login";
       return null;
     }
     const config = {
