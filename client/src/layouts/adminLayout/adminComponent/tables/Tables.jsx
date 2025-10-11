@@ -54,17 +54,16 @@ const Tables = () => {
       }
     });
     setListOfLocations(uniqueLocations);
-  }, [allTable])
-  
+  }, [allTable]);
 
-const listOfStatus = [
-  "available",
-  "reserved",
-  "occupied",
-  "cleaning",
-  "maintenance",
-  "out_of_service",
-];
+  const listOfStatus = [
+    "available",
+    "reserved",
+    "occupied",
+    "cleaning",
+    "maintenance",
+    "out_of_service",
+  ];
 
   const getSections = (allTable) => {
     const uniqueSections = [];
@@ -125,7 +124,6 @@ const listOfStatus = [
       if (response.status === 201) {
         toast.success("✅ تم إنشاء الطاولة بنجاح.");
         getAllTable(); // تحديث القائمة
-        
       }
     } catch (error) {
       if (
@@ -394,7 +392,7 @@ const listOfStatus = [
   };
 
   const filterByLocation = async (location) => {
-      if (!location) {
+    if (!location) {
       await getAllTable();
       return;
     }
@@ -905,12 +903,11 @@ const listOfStatus = [
                     form="carform"
                     onChange={(e) => setStatus(e.target.value)}
                   >
-                    {listOfStatus.map((status, i) => ( 
+                    {listOfStatus.map((status, i) => (
                       <option key={i} value={status}>
                         {status}
                       </option>
                     ))}
-
                   </select>
                 </div>
                 <div className="form-group col-12 col-md-6">
@@ -1040,12 +1037,13 @@ const listOfStatus = [
                     onChange={(e) => setStatus(e.target.value)}
                   >
                     <option value={status}>{status}</option>
-                    {listOfStatus.filter((s) => s !== status).map((status, i) => ( 
-                      <option key={i} value={status} d>
-                        {status}
-                      </option>
-                    ))}
-
+                    {listOfStatus
+                      .filter((s) => s !== status)
+                      .map((status, i) => (
+                        <option key={i} value={status} d>
+                          {status}
+                        </option>
+                      ))}
                   </select>
                 </div>
                 <div className="form-group col-12 col-md-6">
@@ -1069,7 +1067,7 @@ const listOfStatus = [
                 <input
                   type="button"
                   className="btn btn-danger col-6 h-100 px-2 py-3 m-0"
-                  data-dismiss="modal"
+                  data-bs-dismiss="modal"
                   value="إغلاق"
                 />
               </div>
