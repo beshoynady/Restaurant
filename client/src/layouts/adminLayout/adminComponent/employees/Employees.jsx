@@ -466,10 +466,21 @@ const Employees = () => {
     setlistOfSectionNumber([...new Set(sectionNumbers)]);
   }, [role]);
 
-    useEffect(() => {
-    // getEmployees();
-    // getShifts();
-  }, []);
+useEffect(() => {
+  let mounted = true;
+
+  const init = async () => {
+    await getEmployees();
+    await getShifts();
+  };
+
+  if (mounted) init();
+
+  return () => {
+    mounted = false;
+  };
+}, []); // فاضي = ينفذ مرة واحدة فقط
+
 
   return (
     <div className="w-100 px-3 d-flex align-itmes-center justify-content-start">
