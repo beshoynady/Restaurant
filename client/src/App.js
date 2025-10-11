@@ -200,21 +200,6 @@ function App() {
 
   const [isRefresh, setIsRefresh] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [isDarkMode, setIsDarkMode] = useState(false);
-
-  useEffect(() => {
-    // Toggle dark mode styles
-    const body = document.body;
-    if (isDarkMode) {
-      body.classList.add("dark-mode");
-    } else {
-      body.classList.remove("dark-mode");
-    }
-  }, [isDarkMode]);
-
-  const toggleDarkMode = () => {
-    setIsDarkMode(!isDarkMode);
-  };
 
   // Reataurant data //
   const [restaurantData, setrestaurantData] = useState({});
@@ -2278,9 +2263,9 @@ function App() {
 
   // عند التحقق من التوكن
   useEffect(() => {
-    if (window.location.pathname === "/login") {
-      return;
-    }
+    // if (window.location.pathname === "/login") {
+    //   return;
+    // }
     const initializeSession = async () => {
       setIsLoading(true);
       await verifyToken();
