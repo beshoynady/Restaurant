@@ -102,8 +102,6 @@ const listOfStatus = [
         isValid,
         status,
         notes,
-        branchId, // ✅ إضافة مهمة (لو النظام متعدد الفروع)
-        zoneId, // ✅ المنطقة داخل المطعم
       };
 
       // إرسال الطلب للسيرفر
@@ -116,12 +114,7 @@ const listOfStatus = [
       if (response.status === 201) {
         toast.success("✅ تم إنشاء الطاولة بنجاح.");
         getAllTable(); // تحديث القائمة
-        // إعادة تعيين الحقول بعد الإنشاء
-        setSectionNumber("");
-        setTableNumber("");
-        setChairs("");
-        setLocation("");
-        setNotes("");
+        
       }
     } catch (error) {
       if (
