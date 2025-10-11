@@ -57,7 +57,6 @@ const Employees = () => {
   const [listOfEmployees, setListOfEmployees] = useState([]);
 
   const getEmployees = async () => {
-    setIsLoading(true);
     const config = await handleGetTokenAndConfig();
     if (permissionsForEmployee && permissionsForEmployee.read === false) {
       notify("ليس لك صلاحية لعرض بيانات الموظفين", "info");
@@ -74,9 +73,7 @@ const Employees = () => {
       // 
     } catch (error) {
       console.error("Failed to fetch employees:", error);
-    } finally {
-      setIsLoading(false);
-    }
+    } 
   };
 
   const [shifts, setshifts] = useState([]);
@@ -453,21 +450,23 @@ const Employees = () => {
     getEmployees();
     getShifts();
   }, []);
-  const [listOfSectionNumber, setlistOfSectionNumber] = useState([]);
-  useEffect(() => {
-    const sectionNumbers = [];
-    allTable &&
-      allTable.forEach((table) => {
-        if (table.sectionNumber) {
-          if (sectionNumbers.includes(table.sectionNumber)) {
-            return;
-          }
 
-          sectionNumbers.push(table.sectionNumber);
-        }
-      });
-    setlistOfSectionNumber([...new Set(sectionNumbers)]);
-  }, [role]);
+  const [listOfSectionNumber, setlistOfSectionNumber] = useState([]);
+
+  // useEffect(() => {
+  //   const sectionNumbers = [];
+  //   allTable &&
+  //     allTable.forEach((table) => {
+  //       if (table.sectionNumber) {
+  //         if (sectionNumbers.includes(table.sectionNumber)) {
+  //           return;
+  //         }
+
+  //         sectionNumbers.push(table.sectionNumber);
+  //       }
+  //     });
+  //   setlistOfSectionNumber([...new Set(sectionNumbers)]);
+  // }, []);
 
   return (
     <div className="w-100 px-3 d-flex align-itmes-center justify-content-start">

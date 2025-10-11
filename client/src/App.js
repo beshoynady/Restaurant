@@ -1888,57 +1888,6 @@ function App() {
     }
   };
 
-  // const getUserInfoFromToken = async () => {
-  //   setIsLoading(true);
-  //   if (window.location.pathname === "/admin") {
-  //     const employeeToken = localStorage.getItem("token_e");
-  //     if (!employeeToken) {
-  //       toast.error("رجاء تسجيل الدخول مره أخرى");
-  //       setIsTokenValid(false);
-  //       setIsLoading(false);
-  
-  //       return;
-  //     }
-  //   }
-  //   const userToken = localStorage.getItem("token_u");
-    
-
-  //   try {
-  //     let decodedToken = null;
-
-  //     if (employeeToken) {
-  //       decodedToken = jwt_decode(employeeToken);
-  //       setEmployeeLoginInfo(decodedToken);
-  //       await getPermissions(decodedToken);
-
-  //       setIsTokenValid(true);
-  //     }
-
-  //     if (userToken) {
-  //       decodedToken = jwt_decode(userToken);
-  //       setUserLoginInfo(decodedToken);
-
-  //       if (decodedToken) {
-  //         const userId = decodedToken.userinfo.id;
-  //         if (userId) {
-  //           const clientResponse = await axios.get(
-  //             `${apiUrl}/api/user/${userId}`
-  //           );
-  //           setClientInfo(clientResponse.data);
-  //           setIsTokenValid(true); // ✅ برضه السيشن صالح
-  //         }
-  //       }
-  //     }
-  //   } catch (error) {
-  //     console.error("Error verifying token:", error);
-  //     toast.error("خطأ أثناء التحقق من التوكن. يرجى تسجيل الدخول مرة أخرى.");
-  //     setIsTokenValid(false);
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
-
-
 
   // ✅ دالة التحقق من توكن الموظف
 const getEmployeeInfoFromToken = async () => {
@@ -1977,9 +1926,7 @@ const getEmployeeInfoFromToken = async () => {
     if (window.location.pathname !== "/login") {
       window.location.replace("/login");
     }
-  } finally {
-    setIsLoading(false);
-  }
+  } 
 };
 
 
