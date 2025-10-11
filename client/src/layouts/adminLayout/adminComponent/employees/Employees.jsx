@@ -56,20 +56,17 @@ const Employees = () => {
 
   const [listOfEmployees, setListOfEmployees] = useState([]);
 
-  const getEmployees = async () => {
+  const getEmployees = async () => { 
     const config = await handleGetTokenAndConfig();
     if (permissionsForEmployee && permissionsForEmployee.read === false) {
       notify("ليس لك صلاحية لعرض بيانات الموظفين", "info");
       return;
     }
     try {
-      console.log("Fetching employees with config:", config);
-      toast.info("جاري جلب بيانات الموظفين...");
       const response = await axios.get(`${apiUrl}/api/employee`, config);
       const data = response.data;
       if (data) {
         setListOfEmployees(data);
-        toast.success("تم جلب بيانات الموظفين بنجاح");
       } else {
         toast.info("لا توجد بيانات لعرضها");
       }
@@ -77,7 +74,8 @@ const Employees = () => {
     } catch (error) {
       console.error("Failed to fetch employees:", error);
     }
-  };
+  }
+
 
   const [shifts, setshifts] = useState([]);
 
@@ -449,29 +447,27 @@ const Employees = () => {
     bodyClass: "printpage",
   });
 
-// useEffect(() => {
-//   (async () => {
-//     await getEmployees();
-//     await getShifts();
-//   })();
-// }, []);
-
-
+  useEffect(() => {
+    console.log("dddddddddddddddddddddd")
+     getEmployees();
+    getShifts();
+  }, [])
+  
   const [listOfSectionNumber, setlistOfSectionNumber] = useState([]);
-  // useEffect(() => {
-  //   const sectionNumbers = [];
-  //   allTable &&
-  //     allTable.forEach((table) => {
-  //       if (table.sectionNumber) {
-  //         if (sectionNumbers.includes(table.sectionNumber)) {
-  //           return;
-  //         }
+  useEffect(() => {
+    const sectionNumbers = [];
+    allTable &&
+      allTable.forEach((table) => {
+        if (table.sectionNumber) {
+          if (sectionNumbers.includes(table.sectionNumber)) {
+            return;
+          }
 
-  //         sectionNumbers.push(table.sectionNumber);
-  //       }
-  //     });
-  //   setlistOfSectionNumber([...new Set(sectionNumbers)]);
-  // }, [role]);
+          sectionNumbers.push(table.sectionNumber);
+        }
+      });
+    setlistOfSectionNumber([...new Set(sectionNumbers)]);
+  }, [role]);
 
   return (
     <div className="w-100 px-3 d-flex align-itmes-center justify-content-start">
