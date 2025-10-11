@@ -1,7 +1,5 @@
 import React, { createContext, useState, useEffect, Suspense } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-
 import axios from "axios";
 import jwt_decode from "jwt-decode";
 import io from "socket.io-client";
@@ -181,6 +179,7 @@ export const dataContext = createContext({});
 
 function App() {
   axios.defaults.withCredentials = true;
+
   const apiUrl = process.env.REACT_APP_API_URL;
   const clientUrl = process.env.REACT_APP_URL;
 
@@ -188,7 +187,7 @@ function App() {
     await verifyToken();
     const token = localStorage.getItem("token_e");
     if (!token) {
-      window.location.href = "/login";
+      toast.error("!رجاء تسجيل الدخول مره اخري");
       return null;
     }
     const config = {
