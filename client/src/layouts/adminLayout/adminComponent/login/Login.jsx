@@ -68,7 +68,7 @@ const Login = () => {
         }
         const employee = data.findEmployee;
 
-        if (employee?.isActive && employee?.role === "admin") {
+        if (employee?.isActive && employee?.isAdmin) {
           window.location.href = `${clientUrl}/admin`;
           toast.success("تم تسجيل الدخول بنجاح");
         } else {
