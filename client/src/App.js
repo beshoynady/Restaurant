@@ -3,7 +3,6 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import axios from "axios";
 import jwt_decode from "jwt-decode";
 import io from "socket.io-client";
-import { useNavigate } from "react-router-dom";
 
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -178,15 +177,7 @@ const waiterSocket = io(`${process.env.REACT_APP_API_URL}/waiter`, {
 
 export const dataContext = createContext({});
 
-
-
-
 function App() {
-  
-  // const navigate = useNavigate();
-
-
-
   axios.defaults.withCredentials = true;
 
   const apiUrl = process.env.REACT_APP_API_URL;
@@ -1855,10 +1846,10 @@ function App() {
     localStorage.removeItem("token_u");
     setIsTokenValid(false);
 
-    // if (window.location.pathname !== "/login") {
-    //   navigate("/login", { replace: true });
-    //   return;
-    // }
+    if (window.location.pathname !== "/login") {
+      window.location.replace("/login");
+      return;
+    }
   };
 
   const refreshToken = async () => {
@@ -1962,9 +1953,9 @@ const getEmployeeInfoFromToken = async () => {
     setIsLoading(false);
 
     // ✅ تأكيد إننا مش بالفعل في /login علشان ما نعملش redirect لنفسها
-    // if (window.location.pathname !== "/login") {
-    //   navigate("/login", { replace: true });
-    // }
+    if (window.location.pathname !== "/login") {
+      window.location.replace("/login");
+    }
 
     return;
   }
@@ -1983,9 +1974,9 @@ const getEmployeeInfoFromToken = async () => {
     setIsTokenValid(false);
 
     // ✅ فقط لو المستخدم مش في صفحة /login بالفعل
-    // if (window.location.pathname !== "/login") {
-    //   navigate("/login", { replace: true });
-    // }
+    if (window.location.pathname !== "/login") {
+      window.location.replace("/login");
+    }
   } finally {
     setIsLoading(false);
   }
