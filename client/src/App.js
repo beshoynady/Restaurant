@@ -1890,16 +1890,18 @@ function App() {
 
   const getUserInfoFromToken = async () => {
     setIsLoading(true);
-    const userToken = localStorage.getItem("token_u");
-    const employeeToken = localStorage.getItem("token_e");
-
-    if (!userToken && !employeeToken) {
-      toast.error("رجاء تسجيل الدخول مره أخرى");
-      setIsTokenValid(false);
-      setIsLoading(false);
-
-      return;
+    if (window.location.pathname === "/admin") {
+      const employeeToken = localStorage.getItem("token_e");
+      if (!employeeToken) {
+        toast.error("رجاء تسجيل الدخول مره أخرى");
+        setIsTokenValid(false);
+        setIsLoading(false);
+  
+        return;
+      }
     }
+    const userToken = localStorage.getItem("token_u");
+    
 
     try {
       let decodedToken = null;
