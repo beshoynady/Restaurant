@@ -2263,9 +2263,9 @@ function App() {
 
   // عند التحقق من التوكن
   useEffect(() => {
-    if (window.location.pathname === "/login") {
-      return;
-    }
+    // if (window.location.pathname === "/login") {
+    //   return;
+    // }
     const initializeSession = async () => {
       setIsLoading(true);
       await verifyToken();
