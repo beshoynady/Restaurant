@@ -57,6 +57,7 @@ const Employees = () => {
   const [listOfEmployees, setListOfEmployees] = useState([]);
 
   const getEmployees = async () => {
+    setIsLoading(true);
     const config = await handleGetTokenAndConfig();
     if (permissionsForEmployee && permissionsForEmployee.read === false) {
       notify("ليس لك صلاحية لعرض بيانات الموظفين", "info");
@@ -72,13 +73,16 @@ const Employees = () => {
       }
       // 
     } catch (error) {
-
+      console.error("Failed to fetch employees:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const [shifts, setshifts] = useState([]);
 
   const getShifts = async () => {
+    setIsLoading(true);
     try {
       const config = await handleGetTokenAndConfig();
       const response = await axios.get(`${apiUrl}/api/shift`, config);
@@ -91,6 +95,8 @@ const Employees = () => {
       }
     } catch (error) {
       console.error("Failed to fetch shifts:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -114,6 +120,7 @@ const Employees = () => {
 
   const createEmployee = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
 
     if (isExecuting) {
       toast.warn("انتظر لانشاء حساب الموظف");
@@ -178,11 +185,14 @@ const Employees = () => {
       console.error(error);
       notify("فشل انشاء حساب الموظف! حاول مرة اخرى", "error");
       setIsExecuting(false);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const editEmployee = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     const config = await handleGetTokenAndConfig();
     if (permissionsForEmployee && permissionsForEmployee.update === false) {
       notify("ليس لك صلاحية لتعديل حساب الموظف", "info");
@@ -249,6 +259,8 @@ const Employees = () => {
       notify("فشل تحديث بيانات الموظف! حاول مره اخري", "error");
 
       setIsExecuting(false);
+    } finally {
+      setIsLoading(false);
     }
   };
 

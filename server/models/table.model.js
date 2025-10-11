@@ -61,14 +61,14 @@ const TableSchema = new Schema(
     status: {
       type: String,
       enum: [
-        "Available",
-        "Reserved",
-        "Occupied",
-        "Cleaning",
-        "Maintenance",
-        "Out of Service",
+        "available",
+        "reserved",
+        "occupied",
+        "cleaning",
+        "maintenance",
+        "out_of_service",
       ],
-      default: "Available",
+      default: "available",
     },
     // Location of the table within the section
     location: {

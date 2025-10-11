@@ -43,7 +43,17 @@ const Tables = () => {
   const [chairs, setChairs] = useState(0);
   const [sectionNumber, setSectionNumber] = useState("");
   const [isValid, setIsValid] = useState();
+  const [status, setStatus] = useState("available");
   const [ListOfSections, setListOfSections] = useState([]);
+
+const listOfStatus = [
+  "available",
+  "reserved",
+  "occupied",
+  "cleaning",
+  "maintenance",
+  "out_of_service",
+];
 
   const getSections = (allTable) => {
     const uniqueSections = [];
@@ -58,23 +68,31 @@ const Tables = () => {
   // Function to create a new table
   const createTable = async (e) => {
     e.preventDefault();
-
-    const config = await handleGetTokenAndConfig();
-
-    if (tablePermission && !tablePermission.create) {
-      toast.warn("ليس لك صلاحية لانشاء طاوله جديدة");
-      return;
-    }
-
-    const generateTableCode = () => {
-      return [...Array(20)]
-        .map(() => Math.random().toString(36).charAt(2))
-        .join("");
-    };
+    setIsLoading(true);
 
     try {
+      // الحصول على الـ token و config
+      const config = await handleGetTokenAndConfig();
+      if (!config) {
+        toast.error("يرجى تسجيل الدخول مرة أخرى.");
+        return;
+      }
+
+      // تحقق من صلاحية الإنشاء
+      if (tablePermission && !tablePermission.create) {
+        toast.warn("ليس لك صلاحية لإنشاء طاولة جديدة.");
+        return;
+      }
+
+      // توليد كود فريد للطاولة (لـ QR أو معرف داخلي)
+      const generateTableCode = () => {
+        return [...Array(20)]
+          .map(() => Math.random().toString(36).charAt(2))
+          .join("");
+      };
       const tableCode = generateTableCode();
 
+      // بناء بيانات الطاولة
       const tableData = {
         sectionNumber,
         tableNumber,
@@ -82,22 +100,28 @@ const Tables = () => {
         location,
         tableCode,
         isValid,
+        status,
         notes,
+        branchId, // ✅ إضافة مهمة (لو النظام متعدد الفروع)
+        zoneId, // ✅ المنطقة داخل المطعم
       };
 
-
+      // إرسال الطلب للسيرفر
       const response = await axios.post(
         `${apiUrl}/api/table/`,
         tableData,
         config
       );
-      // 
 
       if (response.status === 201) {
-
-
-        await getAllTable();
-        toast.success("تم إنشاء الطاولة بنجاح.");
+        toast.success("✅ تم إنشاء الطاولة بنجاح.");
+        getAllTable(); // تحديث القائمة
+        // إعادة تعيين الحقول بعد الإنشاء
+        setSectionNumber("");
+        setTableNumber("");
+        setChairs("");
+        setLocation("");
+        setNotes("");
       }
     } catch (error) {
       if (
@@ -116,8 +140,11 @@ const Tables = () => {
         console.error("خطأ أثناء إنشاء الطاولة:", error);
         toast.error("حدث خطأ أثناء إنشاء الطاولة. الرجاء المحاولة مرة أخرى.");
       }
+    } finally {
+      setIsLoading(false);
     }
   };
+  // Function to reset all input fields
 
   const resetAll = () => {
     setTableNumber("");
@@ -126,14 +153,16 @@ const Tables = () => {
     setLocation("");
     setIsValid();
     setNotes("");
+    setStatus("");
     setQrImage("");
     setTableCode("");
-  }
+  };
 
   // Function to edit an existing table
   const editTable = async (e) => {
     e.preventDefault();
-     
+
+    setIsLoading(true);
 
     // Check if the user is authenticated
     const config = await handleGetTokenAndConfig();
@@ -149,6 +178,7 @@ const Tables = () => {
         sectionNumber,
         location,
         isValid,
+        status,
         notes,
       };
 
@@ -161,7 +191,6 @@ const Tables = () => {
 
       // Handle successful response
       if (response.status === 200) {
-
         resetAll();
 
         // Refresh the table list
@@ -191,12 +220,15 @@ const Tables = () => {
         console.error("Error updating table:", error);
         toast.error("حدث خطأ أثناء تعديل الطاولة. الرجاء المحاولة مرة أخرى.");
       }
+    } finally {
+      setIsLoading(false);
     }
   };
 
   // Function to create QR code for the table URL
   const createQR = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     const config = await handleGetTokenAndConfig();
 
     try {
@@ -213,12 +245,19 @@ const Tables = () => {
     } catch (error) {
       console.error("حدث خطأ أثناء إنشاء رمز QR:", error);
       toast.error("حدث خطأ أثناء إنشاء رمز QR!");
+    } finally {
+      setIsLoading(false);
     }
   };
 
   // Function to create web QR code
   const changeCode = async (e, tableId) => {
     e.preventDefault();
+    if (tablePermission && !tablePermission.update) {
+      toast.warn("ليس لك صلاحية لتعديل كود الطاولة");
+      return;
+    }
+    setIsLoading(true);
     const config = await handleGetTokenAndConfig();
 
     const generateTableCode = () => {
@@ -247,11 +286,14 @@ const Tables = () => {
         position: toast.POSITION.TOP_CENTER,
         autoClose: 5000,
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const createwebQR = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     const config = await handleGetTokenAndConfig();
     try {
       const URL = `https://${window.location.hostname}/`;
@@ -274,12 +316,15 @@ const Tables = () => {
         position: toast.POSITION.TOP_CENTER,
         autoClose: 5000,
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
   // Function to delete a table
   const deleteTable = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     const config = await handleGetTokenAndConfig();
     if (tablePermission && !tablePermission.delete) {
       toast.warn("ليس لك صلاحية لحذف طاوله ");
@@ -295,6 +340,8 @@ const Tables = () => {
       getAllTable();
     } catch (error) {
       console.error("Error deleting table:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -362,7 +409,7 @@ const Tables = () => {
 
   const deleteSelectedIds = async (e) => {
     e.preventDefault();
-
+    setIsLoading(true);
     const config = await handleGetTokenAndConfig();
     if (tablePermission && !tablePermission.delete) {
       toast.warn("ليس لك صلاحية لحذف طاوله ");
@@ -376,8 +423,9 @@ const Tables = () => {
       toast.success("Selected orders deleted successfully");
       setSelectedIds([]);
     } catch (error) {
-
       toast.error("Failed to delete selected orders");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -600,6 +648,7 @@ const Tables = () => {
                               setChairs(table.chairs);
                               setLocation(table.location);
                               setIsValid(table.isValid);
+                              setStatus(table.status);
                               setNotes(table.notes);
                             }}
                           >
@@ -788,6 +837,25 @@ const Tables = () => {
                 </div>
                 <div className="form-group col-12 col-md-6">
                   <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                    الحالة
+                  </label>
+                  <select
+                    className="form-control border-primary m-0 p-2 h-auto"
+                    name="category"
+                    id="category"
+                    form="carform"
+                    onChange={(e) => setStatus(e.target.value)}
+                  >
+                    {listOfStatus.map((status, i) => ( 
+                      <option key={i} value={status}>
+                        {status}
+                      </option>
+                    ))}
+
+                  </select>
+                </div>
+                <div className="form-group col-12 col-md-6">
+                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
                     ملاحظات
                   </label>
                   <textarea
@@ -815,120 +883,140 @@ const Tables = () => {
         </div>
       </div>
 
-        <div id="editTableModal" className="modal fade">
-          <div className="modal-dialog modal-lg">
-            <div className="modal-content shadow-lg border-0 rounded ">
-              <form onSubmit={editTable}>
-                <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
-                  <h4 className="modal-title">تعديل طاولة</h4>
-                  <button
-                    type="button"
-                    className="close m-0 p-1"
-                    data-dismiss="modal"
-                    aria-hidden="true"
+      <div id="editTableModal" className="modal fade">
+        <div className="modal-dialog modal-lg">
+          <div className="modal-content shadow-lg border-0 rounded ">
+            <form onSubmit={editTable}>
+              <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
+                <h4 className="modal-title">تعديل طاولة</h4>
+                <button
+                  type="button"
+                  className="close m-0 p-1"
+                  data-dismiss="modal"
+                  aria-hidden="true"
+                >
+                  &times;
+                </button>
+              </div>
+              <div className="modal-body d-flex flex-wrap align-items-center p-0 m-0 text-center">
+                <div className="form-group col-12 col-md-6">
+                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                    رقم السكشن
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control border-primary m-0 p-2 h-auto"
+                    required
+                    defaultValue={sectionNumber}
+                    maxLength={20}
+                    onChange={(e) => setSectionNumber(e.target.value)}
+                  />
+                </div>
+                <div className="form-group col-12 col-md-6">
+                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                    رقم الطاولة
+                  </label>
+                  <input
+                    type="text"
+                    defaultValue={tableNumber}
+                    maxLength={20}
+                    className="form-control border-primary m-0 p-2 h-auto"
+                    required
+                    onChange={(e) => setTableNumber(e.target.value)}
+                  />
+                </div>
+                <div className="form-group col-12 col-md-6">
+                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                    عدد المقاعد
+                  </label>
+                  <input
+                    type="Number"
+                    defaultValue={chairs}
+                    className="form-control border-primary m-0 p-2 h-auto"
+                    required
+                    max={20}
+                    min={1}
+                    onChange={(e) => setChairs(e.target.value)}
+                  />
+                </div>
+                <div className="form-group col-12 col-md-6">
+                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                    المكان
+                  </label>
+                  <textarea
+                    defaultValue={location}
+                    className="form-control border-primary m-0 p-2 h-auto"
+                    required
+                    maxLength={100}
+                    onChange={(e) => setLocation(e.target.value)}
+                  ></textarea>
+                </div>
+                <div className="form-group col-12 col-md-6">
+                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                    متاح
+                  </label>
+                  <select
+                    className="form-control border-primary m-0 p-2 h-auto"
+                    name="category"
+                    id="category"
+                    onChange={(e) => setIsValid(e.target.value)}
                   >
-                    &times;
-                  </button>
+                    <option value={isValid}>
+                      {isValid ? "متاح" : "غير متاح"}
+                    </option>
+                    <option value={true}>متاح</option>
+                    <option value={false}>غير متاح</option>
+                  </select>
                 </div>
-                <div className="modal-body d-flex flex-wrap align-items-center p-0 m-0 text-center">
-                  <div className="form-group col-12 col-md-6">
-                    <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
-                      رقم السكشن
-                    </label>
-                    <input
-                      type="text"
-                      className="form-control border-primary m-0 p-2 h-auto"
-                      required
-                      defaultValue={sectionNumber}
-                      maxLength={20}
-                      onChange={(e) => setSectionNumber(e.target.value)}
-                    />
-                  </div>
-                  <div className="form-group col-12 col-md-6">
-                    <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
-                      رقم الطاولة
-                    </label>
-                    <input
-                      type="text"
-                      defaultValue={tableNumber}
-                      maxLength={20}
-                      className="form-control border-primary m-0 p-2 h-auto"
-                      required
-                      onChange={(e) => setTableNumber(e.target.value)}
-                    />
-                  </div>
-                  <div className="form-group col-12 col-md-6">
-                    <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
-                      عدد المقاعد
-                    </label>
-                    <input
-                      type="Number"
-                      defaultValue={chairs}
-                      className="form-control border-primary m-0 p-2 h-auto"
-                      required
-                      max={20}
-                      min={1}
-                      onChange={(e) => setChairs(e.target.value)}
-                    />
-                  </div>
-                  <div className="form-group col-12 col-md-6">
-                    <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
-                      المكان
-                    </label>
-                    <textarea
-                      defaultValue={location}
-                      className="form-control border-primary m-0 p-2 h-auto"
-                      required
-                      maxLength={100}
-                      onChange={(e) => setLocation(e.target.value)}
-                    ></textarea>
-                  </div>
-                  <div className="form-group col-12 col-md-6">
-                    <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
-                      متاح
-                    </label>
-                    <select
-                      className="form-control border-primary m-0 p-2 h-auto"
-                      name="category"
-                      id="category"
-                      onChange={(e) => setIsValid(e.target.value)}
-                    >
-                      <option value={isValid}>
-                        {isValid ? "متاح" : "غير متاح"}
+                <div className="form-group col-12 col-md-6">
+                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                    الحالة
+                  </label>
+                  <select
+                    className="form-control border-primary m-0 p-2 h-auto"
+                    name="category"
+                    id="category"
+                    form="carform"
+                    onChange={(e) => setStatus(e.target.value)}
+                  >
+                    <option value={status}>{status}</option>
+                    {listOfStatus.map((status, i) => ( 
+                      <option key={i} value={status}>
+                        {status}
                       </option>
-                      <option value={true}>متاح</option>
-                      <option value={false}>غير متاح</option>
-                    </select>
-                  </div>
-                  <div className="form-group col-12 col-md-6">
-                    <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
-                      ملاحظات
-                    </label>
-                    <textarea
-                      className="form-control border-primary m-0 p-2 h-auto"
-                      defaultValue={notes}
-                      maxLength={100}
-                      onChange={(e) => setNotes(e.target.value)}
-                    ></textarea>
-                  </div>
+                    ))}
+
+                  </select>
                 </div>
-                <div className="modal-footer p-0 m-0 d-flex flex-nowrap align-items-center justify-content-between">
-                  <input
-                    type="submit"
-                    className="btn btn-success col-6 h-100 px-2 py-3 m-0"
-                    value="حفظ"
-                  />
-                  <input
-                    type="button"
-                    className="btn btn-danger col-6 h-100 px-2 py-3 m-0"
-                    data-dismiss="modal"
-                    value="إغلاق"
-                  />
+                <div className="form-group col-12 col-md-6">
+                  <label className="form-label text-wrap text-right fw-bolder p-0 m-0">
+                    ملاحظات
+                  </label>
+                  <textarea
+                    className="form-control border-primary m-0 p-2 h-auto"
+                    defaultValue={notes}
+                    maxLength={100}
+                    onChange={(e) => setNotes(e.target.value)}
+                  ></textarea>
                 </div>
-              </form>
-            </div>
+              </div>
+              <div className="modal-footer p-0 m-0 d-flex flex-nowrap align-items-center justify-content-between">
+                <input
+                  type="submit"
+                  className="btn btn-success col-6 h-100 px-2 py-3 m-0"
+                  value="حفظ"
+                />
+                <input
+                  type="button"
+                  className="btn btn-danger col-6 h-100 px-2 py-3 m-0"
+                  data-dismiss="modal"
+                  value="إغلاق"
+                />
+              </div>
+            </form>
           </div>
         </div>
+      </div>
 
       <div id="qrTableModal" className="modal fade">
         <div className="modal-dialog modal-lg">
