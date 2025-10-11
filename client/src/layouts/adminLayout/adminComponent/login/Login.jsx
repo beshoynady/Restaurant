@@ -11,7 +11,11 @@ import pos from "../../../../image/pos.jpg";
 const Login = () => {
   const {
     getUserInfoFromToken,
-    setIsLoading, handleGetTokenAndConfig, apiUrl, clientUrl } = useContext(dataContext)
+    setIsLoading,
+    handleGetTokenAndConfig,
+    apiUrl,
+    clientUrl,
+  } = useContext(dataContext);
 
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
@@ -20,12 +24,11 @@ const Login = () => {
   const checkIfEmployeesExist = async () => {
     try {
       const response = await axios.get(`${apiUrl}/api/employee/count`);
-      
+
       const count = response.data ? response.data.count : 0;
       if (count === 0) {
         setShowCreateButton(true);
       }
-      
     } catch (error) {
       console.error("Network Error:", error);
       toast.error("حدث خطأ في الشبكة.");
@@ -63,7 +66,9 @@ const Login = () => {
           localStorage.setItem("token_e", data.accessToken);
           getUserInfoFromToken();
         }
-        if (data.findEmployee.isActive === true && data.findEmployee.role === "admin" === false) {
+        const employee = data.findEmployee;
+
+        if (employee?.isActive && employee?.role === "admin") {
           window.location.href = `${clientUrl}/admin`;
           toast.success("تم تسجيل الدخول بنجاح");
         } else {
@@ -83,7 +88,7 @@ const Login = () => {
       const fristEmployee = await axios.post(
         `${apiUrl}/api/employee/create-first`
       );
-      
+
       toast.success("تم إنشاء أول موظف بنجاح");
       checkIfEmployeesExist();
     } catch (error) {
