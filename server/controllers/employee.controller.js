@@ -200,7 +200,7 @@ const updateEmployeeSchema = Joi.object({
   numberID: Joi.string().length(14).required(),
   username: Joi.string().min(3).max(100).required(),
   address: Joi.string().min(3).max(200).required(),
-  email: Joi.string().email().max(100).allow(""),
+  email: Joi.string().email().max(100).allow("").optional(),
   phone: Joi.string().length(11).required(),
   password: Joi.string().min(3).max(200).optional(),
   basicSalary: Joi.number().min(0).required(),
@@ -224,7 +224,7 @@ const updateEmployeeSchema = Joi.object({
   insuranceRate: Joi.number().min(0).max(100).optional(),
   isAdmin: Joi.boolean().default(true),
   isVerified: Joi.boolean().default(false),
-  sectionNumber: Joi.number().optional(),
+  sectionNumber: Joi.string().allow("").optional(),
 });
 
 const updateEmployee = async (req, res) => {
@@ -280,7 +280,7 @@ const updateEmployee = async (req, res) => {
 
     const updatedEmployee = await EmployeeModel.findByIdAndUpdate(
       id,
-      updateData,
+      { $set: updateData },
       { new: true }
     );
     if (!updatedEmployee) {
