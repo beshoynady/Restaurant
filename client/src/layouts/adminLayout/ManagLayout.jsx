@@ -8,8 +8,14 @@ import SideBar from "./adminComponent/sidebar/SideBar";
 import { ToastContainer } from "react-toastify";
 
 const ManagLayout = () => {
-  const { employeeLoginInfo, isLoading, handleGetTokenAndConfig } =
-    useContext(dataContext);
+  const context = useContext(dataContext);
+
+if (!context) {
+  console.error("ManagLayout must be used within a dataContext.Provider");
+  return null;
+}
+
+const { employeeLoginInfo, isLoading } = context;
 
   if (isLoading) {
     return <LoadingPage />;

@@ -28,9 +28,11 @@ const Employees = () => {
     toast[type](message);
   };
 
-  const permissionsForEmployee = permissionsList && permissionsList?.filter(
-    (permission) => permission.resource === "Employees"
-  )[0];
+  const permissionsForEmployee =
+    permissionsList &&
+    permissionsList?.filter(
+      (permission) => permission.resource === "Employees"
+    )[0];
 
   const roleEn = [
     "owner",
@@ -57,7 +59,6 @@ const Employees = () => {
   const [listOfEmployees, setListOfEmployees] = useState([]);
 
   const getEmployees = async () => {
-    setIsLoading(true);
     const config = await handleGetTokenAndConfig();
     if (permissionsForEmployee && permissionsForEmployee.read === false) {
       notify("ليس لك صلاحية لعرض بيانات الموظفين", "info");
@@ -71,32 +72,26 @@ const Employees = () => {
       } else {
         toast.info("لا توجد بيانات لعرضها");
       }
-      // 
+      //
     } catch (error) {
       console.error("Failed to fetch employees:", error);
-    } finally {
-      setIsLoading(false);
     }
   };
 
   const [shifts, setshifts] = useState([]);
 
   const getShifts = async () => {
-    setIsLoading(true);
     try {
       const config = await handleGetTokenAndConfig();
       const response = await axios.get(`${apiUrl}/api/shift`, config);
       if (response.status === 200 && response.data) {
         const { data } = response;
         setshifts(data);
-
       } else {
         throw new Error("Invalid response format");
       }
     } catch (error) {
       console.error("Failed to fetch shifts:", error);
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -120,7 +115,6 @@ const Employees = () => {
 
   const createEmployee = async (e) => {
     e.preventDefault();
-    setIsLoading(true);
 
     if (isExecuting) {
       toast.warn("انتظر لانشاء حساب الموظف");
@@ -185,14 +179,11 @@ const Employees = () => {
       console.error(error);
       notify("فشل انشاء حساب الموظف! حاول مرة اخرى", "error");
       setIsExecuting(false);
-    } finally {
-      setIsLoading(false);
-    }
+    } 
   };
 
   const editEmployee = async (e) => {
     e.preventDefault();
-    setIsLoading(true);
     const config = await handleGetTokenAndConfig();
     if (permissionsForEmployee && permissionsForEmployee.update === false) {
       notify("ليس لك صلاحية لتعديل حساب الموظف", "info");
@@ -208,38 +199,38 @@ const Employees = () => {
       if (permissionsForEmployee && permissionsForEmployee.update === true) {
         const updateData = password
           ? {
-            fullname,
-            numberID,
-            username,
-            email,
-            shift,
-            address,
-            phone,
-            password,
-            basicSalary,
-            taxRate,
-            insuranceRate,
-            workingDays,
-            isActive,
-            role,
-            sectionNumber,
-          }
+              fullname,
+              numberID,
+              username,
+              email,
+              shift,
+              address,
+              phone,
+              password,
+              basicSalary,
+              taxRate,
+              insuranceRate,
+              workingDays,
+              isActive,
+              role,
+              sectionNumber,
+            }
           : {
-            fullname,
-            numberID,
-            username,
-            email,
-            shift,
-            address,
-            phone,
-            basicSalary,
-            taxRate,
-            insuranceRate,
-            workingDays,
-            isActive,
-            role,
-            sectionNumber,
-          };
+              fullname,
+              numberID,
+              username,
+              email,
+              shift,
+              address,
+              phone,
+              basicSalary,
+              taxRate,
+              insuranceRate,
+              workingDays,
+              isActive,
+              role,
+              sectionNumber,
+            };
 
         const update = await axios.put(
           `${apiUrl}/api/employee/${employeeid}`,
@@ -257,11 +248,11 @@ const Employees = () => {
       setIsExecuting(false);
     } catch (error) {
       notify("فشل تحديث بيانات الموظف! حاول مره اخري", "error");
+      console.error(error);
+      
 
       setIsExecuting(false);
-    } finally {
-      setIsLoading(false);
-    }
+    } 
   };
 
   const [employeeShift, setemployeeShift] = useState({});
@@ -371,7 +362,6 @@ const Employees = () => {
         notify("ليس لك صلاحية لحذف حساب الموظف", "info");
       }
     } catch (error) {
-
       notify("فشل حذف سجل الموظف !حاول مره اخري", "error");
     }
   };
@@ -402,7 +392,6 @@ const Employees = () => {
       toast.success("Selected orders deleted successfully");
       setSelectedIds([]);
     } catch (error) {
-
       toast.error("Failed to delete selected orders");
     }
   };
@@ -453,6 +442,7 @@ const Employees = () => {
     getEmployees();
     getShifts();
   }, []);
+
   const [listOfSectionNumber, setlistOfSectionNumber] = useState([]);
   useEffect(() => {
     const sectionNumbers = [];
@@ -632,82 +622,82 @@ const Employees = () => {
             <tbody>
               {listOfEmployees.length > 0
                 ? listOfEmployees.map((employee, i) => {
-                  if (i >= startPagination && i < endPagination) {
-                    return (
-                      <tr key={i}>
-                        <td>{i + 1}</td>
-                        <td>{employee.fullname}</td>
-                        <td>{employee.numberID}</td>
-                        <td>{employee.address}</td>
-                        <td>{employee.phone}</td>
-                        <td>{employee.email}</td>
-                        <td>{employee.username}</td>
-                        <td>{employee.role}</td>
-                        <td>{employee.workingDays}</td>
-                        <td>{employee.basicSalary}</td>
-                        <td>{employee.taxRate}</td>
-                        <td>{employee.insuranceRate}</td>
-                        <td>{employee.isActive ? "متاح" : "غير متاح"}</td>
-                        <td>
-                          {employee.isAdmin ? "في الفريق" : "ترك العمل"}
-                        </td>
-                        <td>{employee.sectionNumber}</td>
-                        <td>{employee.shift && employee.shift?.shiftType}</td>
-                        <td>
-                          {employee.createdBy && employee.createdBy?.username}
-                        </td>
-                        <td>
-                          {employee.updatedBy && employee.updatedBy?.username}
-                        </td>
-                        <td>
-                          {employee.createdAt &&
-                            formatDateTime(employee.createdAt)}
-                        </td>
-                        <td>
-                          {permissionsForEmployee?.update ? (
-                            <button
-                              data-target="#editEmployeeModal"
-                              className="btn btn-sm btn-primary ml-2 "
-                              data-toggle="modal"
-                            >
-                              <i
-                                className="material-icons"
-                                data-toggle="tooltip"
-                                title="Edit"
-                                onClick={() =>
-                                  handleEditEmployee(JSON.stringify(employee))
-                                }
+                    if (i >= startPagination && i < endPagination) {
+                      return (
+                        <tr key={i}>
+                          <td>{i + 1}</td>
+                          <td>{employee.fullname}</td>
+                          <td>{employee.numberID}</td>
+                          <td>{employee.address}</td>
+                          <td>{employee.phone}</td>
+                          <td>{employee.email}</td>
+                          <td>{employee.username}</td>
+                          <td>{employee.role}</td>
+                          <td>{employee.workingDays}</td>
+                          <td>{employee.basicSalary}</td>
+                          <td>{employee.taxRate}</td>
+                          <td>{employee.insuranceRate}</td>
+                          <td>{employee.isActive ? "متاح" : "غير متاح"}</td>
+                          <td>
+                            {employee.isAdmin ? "في الفريق" : "ترك العمل"}
+                          </td>
+                          <td>{employee.sectionNumber}</td>
+                          <td>{employee.shift && employee.shift?.shiftType}</td>
+                          <td>
+                            {employee.createdBy && employee.createdBy?.username}
+                          </td>
+                          <td>
+                            {employee.updatedBy && employee.updatedBy?.username}
+                          </td>
+                          <td>
+                            {employee.createdAt &&
+                              formatDateTime(employee.createdAt)}
+                          </td>
+                          <td>
+                            {permissionsForEmployee?.update ? (
+                              <button
+                                data-target="#editEmployeeModal"
+                                className="btn btn-sm btn-primary ml-2 "
+                                data-toggle="modal"
                               >
-                                &#xE254;
-                              </i>
-                            </button>
-                          ) : (
-                            ""
-                          )}
-                          {permissionsForEmployee?.delete ? (
-                            <button
-                              data-target="#deleteEmployeeModal"
-                              className="btn btn-sm btn-danger"
-                              data-toggle="modal"
-                            >
-                              <i
-                                className="material-icons"
-                                data-toggle="tooltip"
-                                title="Delete"
-                                onClick={() => setemployeeid(employee._id)}
+                                <i
+                                  className="material-icons"
+                                  data-toggle="tooltip"
+                                  title="Edit"
+                                  onClick={() =>
+                                    handleEditEmployee(JSON.stringify(employee))
+                                  }
+                                >
+                                  &#xE254;
+                                </i>
+                              </button>
+                            ) : (
+                              ""
+                            )}
+                            {permissionsForEmployee?.delete ? (
+                              <button
+                                data-target="#deleteEmployeeModal"
+                                className="btn btn-sm btn-danger"
+                                data-toggle="modal"
                               >
-                                &#xE872;
-                              </i>
-                            </button>
-                          ) : (
-                            ""
-                          )}
-                        </td>
-                      </tr>
-                    );
-                  }
-                  return null;
-                })
+                                <i
+                                  className="material-icons"
+                                  data-toggle="tooltip"
+                                  title="Delete"
+                                  onClick={() => setemployeeid(employee._id)}
+                                >
+                                  &#xE872;
+                                </i>
+                              </button>
+                            ) : (
+                              ""
+                            )}
+                          </td>
+                        </tr>
+                      );
+                    }
+                    return null;
+                  })
                 : ""}
             </tbody>
           </table>
