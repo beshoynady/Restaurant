@@ -764,12 +764,13 @@ const Products = () => {
                             )}
                           </td>
                         </tr>
-                        {product.sizes.length > 0 &&
+                        {product.sizes.length > 0 && 
                           product.sizes.map((size, j) => (
                             <tr key={j + i}>
                               <td>{i + 1}</td>
                               <td></td>
                               <td>{size.sizeName}</td>
+                              <td></td>
                               <td></td>
                               <td></td>
                               <td></td>

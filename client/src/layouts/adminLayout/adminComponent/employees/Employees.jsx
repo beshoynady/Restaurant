@@ -239,6 +239,7 @@ const Employees = () => {
         );
         if (update.status === 200) {
           getEmployees();
+          resetFeilds()
           notify("تم تحديث بيانات الموظف", "success");
           // Additional logic if needed after successful update
         }
@@ -249,11 +250,31 @@ const Employees = () => {
     } catch (error) {
       notify("فشل تحديث بيانات الموظف! حاول مره اخري", "error");
       console.error(error);
-      
+
 
       setIsExecuting(false);
     } 
   };
+  const resetFeilds = () => {
+    setemployeeid("");
+    setfullname("");
+    setnumberID("");
+    setusername("");
+    setaddress("");
+    setemail("");
+    setisActive(true);
+    setphone("");
+    setrole("");
+    setbasicSalary(0);
+    setworkingDays(0);
+    setshift("");
+    settaxRate(0);
+    setinsuranceRate(0);
+    setsectionNumber("");
+    setemployeeShift({});
+    setpassword("");
+
+  }
 
   const [employeeShift, setemployeeShift] = useState({});
   const handleEditEmployee = (employeeData) => {
