@@ -16,7 +16,10 @@ const Userscreen = () => {
     restaurantData,
     allProducts,
     productsOffer,
-    sizesOffer, handleGetTokenAndConfig, apiUrl } = useContext(dataContext)
+    sizesOffer,
+    handleGetTokenAndConfig,
+    apiUrl,
+  } = useContext(dataContext);
 
   return (
     <div className="userscreen" style={{ direction: "rtl" }}>
@@ -26,7 +29,7 @@ const Userscreen = () => {
       {(productsOffer.length > 0 || sizesOffer.length > 0) && <Offers />}
       {allProducts.length > 0 && <Menu />}
       {restaurantData?.locationUrl && <Location />}
-      {(restaurantData?.contact || restaurantData?.social_media) && <Contact />}
+      {(restaurantData?.contact || restaurantData?.socialMedia) && <Contact />}
       {restaurantData?.usesReservationSystem && <Reservation />}
       <Footer />
     </div>

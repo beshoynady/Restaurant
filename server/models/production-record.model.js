@@ -6,6 +6,14 @@ const productionRecordSchema = new mongoose.Schema(
     productionNumber: {
       type: Number,
       required: [true, "Production number is required"],
+      trim: true,
+      unique: true,
+      min: [1, "Production number must be at least 1"],
+      index: true,
+      validate: {
+        validator: Number.isInteger,
+        message: "Production number must be an integer",
+      },
     },
     productionOrder: {
       type: ObjectId,
@@ -25,12 +33,19 @@ const productionRecordSchema = new mongoose.Schema(
     quantity: {
       type: Number,
       required: [true, "Quantity is required"],
+      min: [1, "Quantity must be at least 1"],
+      validate: {
+        validator: Number.isInteger,
+        message: "Quantity must be an integer",
+      },
+      default: 1,
     },
     unit: {
       type: String,
       trim: true,
       maxLength: 10,
       required: [true, "Unit is required"],
+
     },
     productionStatus: {
       type: String,

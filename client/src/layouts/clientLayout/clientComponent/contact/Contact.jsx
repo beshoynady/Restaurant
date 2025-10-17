@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react"; 
+import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { dataContext } from "../../../../App";
 
@@ -42,7 +42,7 @@ const Contact = () => {
           },
         }
       );
-      
+
       if (send.status === 201) {
         //  socket.emit("sendorder", "هناك رساله جديدة");
 
@@ -63,7 +63,7 @@ const Contact = () => {
         </div>
         <div className="contact-content">
           <div className="right">
-            {restaurantData.social_media?.map((item, index) => {
+            {restaurantData.socialMedia?.map((item, index) => {
               return item.platform === "facebook" ? (
                 <p key={index}>
                   صفحتنا علي الفيس بوك

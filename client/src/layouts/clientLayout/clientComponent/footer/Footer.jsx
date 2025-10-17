@@ -20,8 +20,8 @@ const Footer = () => {
             <h5 className="text-uppercase mb-4">{restaurantData.name}</h5>
             <p>{restaurantData.aboutText}</p>
             <div className="mt-4">
-              {restaurantData.social_media &&
-                restaurantData.social_media.map((item, i) =>
+              {restaurantData.socialMedia &&
+                restaurantData.socialMedia.map((item, i) =>
                   item.platform === "facebook" ? (
                     <a
                       key={i}

@@ -2,11 +2,13 @@ const mongoose = require("mongoose");
 
 const restaurantSchema = new mongoose.Schema(
   {
-    name: {
+    brandName: {
       type: String,
       required: true,
       unique: true,
       trim: true,
+      maxlength: 100,
+      minlength: 2,
     },
     description: {
       type: String,
@@ -14,80 +16,31 @@ const restaurantSchema = new mongoose.Schema(
       trim: true,
       maxlength: 500,
     },
-    image: {
+    // logo and coverImage fields to store image filenames
+    logo: {
+      type: String,
+      trim: true,
+
+    },
+    coverImage: {
       type: String,
       trim: true,
     },
-    locationUrl: {
-      type: String,
-      trim: true,
-      match: [/^https?:\/\/[^\s$.?#].[^\s]*$/, "Please enter a valid URL"],
-    },
+    // aboutText field for detailed information about the restaurant 
     aboutText: {
       type: String,
       required: true,
       trim: true,
       maxlength: 1000,
     },
-    address: {
-      country: {
-        type: String,
-        required: true,
-        trim: true,
-      },
-      state: {
-        type: String,
-        required: true,
-        trim: true,
-      },
-      city: {
-        type: String,
-        required: true,
-        trim: true,
-      },
-      street: {
-        type: String,
-        required: true,
-        trim: true,
-      },
-      postal_code: {
-        type: String,
-        trim: true,
-      },
-    },
-    contact: {
-      phone: [
-        {
-          type: String,
-          trim: true,
-          match: [
-            /^(\+?\d{1,4}[-\s]?)?\d{11}$/,
-            "Please enter a valid phone number",
-          ],
-        },
-      ],
-      whatsapp: {
-        type: String,
-        trim: true,
-        match: [
-          /^(\+?\d{1,4}[-\s]?)?\d{11}$/,
-          "Please enter a valid phone number",
-        ],
-      },
-      email: {
-        type: String,
-        lowercase: true,
-        trim: true,
-        match: [/\S+@\S+\.\S+/, "Please enter a valid email address"],
-      },
-    },
-    social_media: [
+    // array of social media links 
+    socialMedia: [
       {
         platform: {
           type: String,
-          required: true,
+          enum: ["facebook", "instagram", "twitter", "tiktok", "youtube"],
           trim: true,
-          enum: ["facebook", "twitter", "instagram", "linkedin", "youtube"],
+          required: true,
         },
         url: {
           type: String,
@@ -97,96 +50,40 @@ const restaurantSchema = new mongoose.Schema(
         },
       },
     ],
-    working_hours: [
-      {
-        day: {
-          type: String,
-          required: true,
-          enum: [
-            "Saturday",
-            "Sunday",
-            "Monday",
-            "Tuesday",
-            "Wednesday",
-            "Thursday",
-            "Friday",
-          ],
-        },
-        from: String,
-        to: String,
-        closed: Boolean,
-      },
-    ],
+    // website field for the restaurant's menu or homepage 
     website: {
       type: String,
       trim: true,
       match: [/^https?:\/\/[^\s$.?#].[^\s]*$/, "Please enter a valid URL"],
     },
-    acceptedPayments: {
-      type: [String],
-      enum: [
-        "Cash",
-        "Credit Card",
-        "Debit Card",
-        "Vodafone Cash",
-        "Etisalat Cash",
-        "Orange Cash",
-        "Fawry",
-        "Meeza",
-        "PayPal",
-        "Aman",
-        "Other",
-      ],
-      default: "Cash",
-    },
-    features: {
-      type: [String],
-      enum: [
-        "WiFi",
-        "Parking",
-        "Outdoor Seating",
-        "Wheelchair Accessible",
-        "Live Music",
-        "Pet Friendly",
-        "Kids Friendly",
-        "Other",
-      ],
-    },
-    dineIn: {
-      type: Boolean,
-      required: true,
-      default: false,
-    },
-    takeAway: {
-      type: Boolean,
-      required: true,
-      default: false,
-    },
-    deliveryService: {
-      type: Boolean,
-      required: true,
-      default: false,
-    },
-    usesReservationSystem: {
-      type: Boolean,
-      required: true,
-      default: false,
-    },
+    // tax rates 
     salesTaxRate: {
       type: Number,
       required: true,
       default: 0,
+      max: 100,
+      min: 0,
+
     },
+    // service tax rate 
     serviceTaxRate: {
       type: Number,
       required: true,
       default: 0,
+      max: 100,
+      min: 0,
     },
+    
     subscriptionStart: {
       type: Date,
+      default: Date.now,
+      
     },
     subscriptionEnd: {
       type: Date,
+      default: null,
+      // null means no expiration (lifetime subscription)
+
     },
   },
   { timestamps: true }

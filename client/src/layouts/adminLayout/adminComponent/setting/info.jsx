@@ -435,7 +435,7 @@ const Info = () => {
         toast.success(
           restaurantId ? "تم تحديث المطعم بنجاح" : "تمت إضافة المطعم بنجاح"
         );
-        getRestaurant(); 
+        getRestaurant();
         URL.revokeObjectURL(preview);
         setPreview(null);
       } else {
@@ -455,8 +455,8 @@ const Info = () => {
   const [instagram, setInstagram] = useState("");
   const [linkedin, setLinkedin] = useState("");
   const [youtube, setYoutube] = useState("");
-  // const [social_media, setsocial_media] = useState([{platform:'', url:''}]);
-  // const [listSocial_media, setlistSocial_media] = useState(['facebook', 'twitter', 'instagram', 'linkedin', 'youtube']);
+  // const [socialMedia, setsocialMedia] = useState([{platform:'', url:''}]);
+  // const [listsocialMedia, setlistsocialMedia] = useState(['facebook', 'twitter', 'instagram', 'linkedin', 'youtube']);
 
   const handleContactSocialmedia = async (e) => {
     e.preventDefault();
@@ -467,7 +467,7 @@ const Info = () => {
         whatsapp: whatsapp ? whatsapp : null,
         email: email ? email : null,
       };
-      const social_media = [
+      const socialMedia = [
         facebook ? { platform: "facebook", url: facebook } : "",
         twitter ? { platform: "twitter", url: twitter } : "",
         instagram ? { platform: "instagram", url: instagram } : "",
@@ -478,7 +478,7 @@ const Info = () => {
       // إرسال البيانات إلى الخادم باستخدام axios
       const response = await axios.put(
         `${apiUrl}/api/restaurant/${restaurantId}`,
-        { contact, social_media },
+        { contact, socialMedia },
         config
       );
 
@@ -612,7 +612,7 @@ const Info = () => {
         settakeAway(restaurantData.takeAway);
         setusesReservationSystem(restaurantData.usesReservationSystem);
 
-        restaurantData.social_media.forEach((item) => {
+        restaurantData.socialMedia.forEach((item) => {
           switch (item.platform) {
             case "facebook":
               setFacebook(item.url);
@@ -718,7 +718,6 @@ const Info = () => {
   };
 
   const [preview, setPreview] = useState(null); // رابط العرض المؤقت
-
 
   useEffect(() => {
     getRestaurant();
@@ -1021,15 +1020,15 @@ const Info = () => {
                         checked={dineIn}
                         onChange={() => setdineIn(!dineIn)}
                       />
-                      <label className="form-check-label mr-4"
-                      htmlFor="dineInCheck"
-                      style={{ cursor: "pointer" }}
-                      >الصالة</label>
+                      <label
+                        className="form-check-label mr-4"
+                        htmlFor="dineInCheck"
+                        style={{ cursor: "pointer" }}
+                      >
+                        الصالة
+                      </label>
                     </div>
-                    <div
-                      className="form-check form-check-flat mb-2 mr-4 d-flex align-items-center w-50"
-                      
-                    >
+                    <div className="form-check form-check-flat mb-2 mr-4 d-flex align-items-center w-50">
                       <input
                         className="form-check-input"
                         type="checkbox"
@@ -1037,44 +1036,44 @@ const Info = () => {
                         checked={takeAway}
                         onChange={() => settakeAway(!takeAway)}
                       />
-                      <label className="form-check-label mr-4" 
-                      htmlFor="takeawayCheck"
-                      style={{ cursor: "pointer" }}
-                      >التيك اوي</label>
+                      <label
+                        className="form-check-label mr-4"
+                        htmlFor="takeawayCheck"
+                        style={{ cursor: "pointer" }}
+                      >
+                        التيك اوي
+                      </label>
                     </div>
-                    <div
-                      className="form-check form-check-flat mb-2 mr-4 d-flex align-items-center w-50"
-                    >
+                    <div className="form-check form-check-flat mb-2 mr-4 d-flex align-items-center w-50">
                       <input
                         className="form-check-input"
                         type="checkbox"
                         id="deliveryCheck"
                         checked={deliveryService}
                         onChange={() => setdeliveryService(!deliveryService)}
-
                       />
-                      <label className="form-check-label mr-4" 
-                      htmlFor="deliveryCheck"
-                      style={{ cursor: "pointer" }}
+                      <label
+                        className="form-check-label mr-4"
+                        htmlFor="deliveryCheck"
+                        style={{ cursor: "pointer" }}
                       >
                         خدمة التوصيل
                       </label>
                     </div>
-                    <div
-                      className="form-check form-check-flat mb-2 mr-4 d-flex align-items-center w-50"
- 
-                    >
+                    <div className="form-check form-check-flat mb-2 mr-4 d-flex align-items-center w-50">
                       <input
                         className="form-check-input"
                         type="checkbox"
                         id="reservationCheck"
                         checked={usesReservationSystem}
                         onChange={() =>
-                        setusesReservationSystem(!usesReservationSystem)}
+                          setusesReservationSystem(!usesReservationSystem)
+                        }
                       />
-                      <label className="form-check-label mr-4"
-                      htmlFor="reservationCheck"
-                      style={{ cursor: "pointer" }}
+                      <label
+                        className="form-check-label mr-4"
+                        htmlFor="reservationCheck"
+                        style={{ cursor: "pointer" }}
                       >
                         حجز الطاولة
                       </label>
@@ -1139,7 +1138,10 @@ const Info = () => {
                                     )
                                   }
                                 />
-                                <label className="form-check-label mr-4" htmlFor={`acceptedPaymentCheck${i}`}>
+                                <label
+                                  className="form-check-label mr-4"
+                                  htmlFor={`acceptedPaymentCheck${i}`}
+                                >
                                   {listAcceptedPaymentsAr[i]}
                                 </label>
                               </div>
@@ -1199,7 +1201,10 @@ const Info = () => {
                                     handleFeaturesCheckboxChange(feature)
                                   }
                                 />
-                                <label className="form-check-label mr-4" htmlFor={`featureCheck${i}`}>
+                                <label
+                                  className="form-check-label mr-4"
+                                  htmlFor={`featureCheck${i}`}
+                                >
                                   {listFeaturesAr[i]}
                                 </label>
                               </div>
