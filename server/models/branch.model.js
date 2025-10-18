@@ -34,14 +34,28 @@ const branchSchema = new Schema(
     },
 
     address: {
-      country: { type: String, required: true, trim: true, maxlength: 100 },
-      stateOrProvince: { type: String, trim: true, maxlength: 100 },
-      city: { type: String, required: true, trim: true, maxlength: 100 },
-      area: { type: String, trim: true, maxlength: 100 },
-      street: { type: String, trim: true, maxlength: 150 },
-      buildingNumber: { type: String, trim: true, maxlength: 20 },
-      floor: { type: String, trim: true, maxlength: 10 },
-      landmark: { type: String, trim: true, maxlength: 150 },
+      en: {
+        country: { type: String, required: true, trim: true, maxlength: 100 },
+        stateOrProvince: { type: String, trim: true, maxlength: 100 },
+        city: { type: String, required: true, trim: true, maxlength: 100 },
+        area: { type: String, trim: true, maxlength: 100 },
+        street: { type: String, trim: true, maxlength: 150 },
+        buildingNumber: { type: String, trim: true, maxlength: 20 },
+        floor: { type: String, trim: true, maxlength: 10 },
+        landmark: { type: String, trim: true, maxlength: 150 },
+        fullAddress: { type: String, trim: true, maxlength: 500 },
+      },
+      ar: {
+        country: { type: String, required: true, trim: true, maxlength: 100 },
+        stateOrProvince: { type: String, trim: true, maxlength: 100 },
+        city: { type: String, required: true, trim: true, maxlength: 100 },
+        area: { type: String, trim: true, maxlength: 100 },
+        street: { type: String, trim: true, maxlength: 150 },
+        buildingNumber: { type: String, trim: true, maxlength: 20 },
+        floor: { type: String, trim: true, maxlength: 10 },
+        landmark: { type: String, trim: true, maxlength: 150 },
+        fullAddress: { type: String, trim: true, maxlength: 500 },
+      },
       postalCode: {
         type: String,
         trim: true,
@@ -49,7 +63,6 @@ const branchSchema = new Schema(
       },
       latitude: { type: Number, min: -90, max: 90 },
       longitude: { type: Number, min: -180, max: 180 },
-      fullAddress: { type: String, trim: true, maxlength: 500 },
     },
 
     contact: {
@@ -57,19 +70,11 @@ const branchSchema = new Schema(
         {
           type: String,
           trim: true,
-          match: [
-            /^(\+?\d{1,4}[-\s]?)?\d{11}$/,
-            "Please enter a valid phone number",
-          ],
         },
       ],
       whatsapp: {
         type: String,
         trim: true,
-        match: [
-          /^(\+?\d{1,4}[-\s]?)?\d{11}$/,
-          "Please enter a valid phone number",
-        ],
       },
       email: {
         type: String,
@@ -164,8 +169,19 @@ const branchSchema = new Schema(
 
 // Auto-generate full address before saving
 branchSchema.pre("save", function (next) {
-  const addr = this.address || {};
-  this.address.fullAddress = [
+  const addr = this.address.ar || this.address.en || {};
+  this.address.ar.fullAddress = [
+    addr.buildingNumber,
+    addr.street,
+    addr.area,
+    addr.city,
+    addr.stateOrProvince,
+    addr.country,
+  ]
+    .filter(Boolean)
+    .join(", ");
+
+  this.address.en.fullAddress = [
     addr.buildingNumber,
     addr.street,
     addr.area,

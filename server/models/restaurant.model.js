@@ -3,18 +3,36 @@ const mongoose = require("mongoose");
 const restaurantSchema = new mongoose.Schema(
   {
     brandName: {
-      type: String,
-      required: true,
-      unique: true,
-      trim: true,
-      maxlength: 100,
-      minlength: 2,
+      en: {
+        type: String,
+        required: true,
+        unique: true,
+        trim: true,
+        maxlength: 100,
+        minlength: 2,
+      },
+      ar: {
+        type: String,
+        required: true,
+        unique: true,
+        trim: true,
+        maxlength: 100,
+        minlength: 2,
+      },
     },
     description: {
-      type: String,
-      required: true,
-      trim: true,
-      maxlength: 500,
+      en: {
+        type: String,
+        required: true,
+        trim: true,
+        maxlength: 500,
+      },
+      ar: {
+        type: String,
+        required: true,
+        trim: true,
+        maxlength: 500,
+      },
     },
     // logo and coverImage fields to store image filenames
     logo: {
@@ -28,10 +46,18 @@ const restaurantSchema = new mongoose.Schema(
     },
     // aboutText field for detailed information about the restaurant 
     aboutText: {
-      type: String,
-      required: true,
-      trim: true,
-      maxlength: 1000,
+      en: {
+        type: String,
+        required: true,
+        trim: true,
+        maxlength: 1000,
+      },
+      ar: {
+        type: String,
+        required: true,
+        trim: true,
+        maxlength: 1000,
+      },
     },
     // array of social media links 
     socialMedia: [

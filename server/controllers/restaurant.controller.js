@@ -6,11 +6,26 @@ const Joi = require("joi");
 /*                            JOI VALIDATION SCHEMAS                          */
 /* -------------------------------------------------------------------------- */
 
-// ✅ Schema for creation
+/**
+ * Joi schema for restaurant creation
+ * Covers all fields in restaurant.model.js
+ */
 const createRestaurantSchema = Joi.object({
-  brandName: Joi.string().min(2).max(100).required(),
-  description: Joi.string().min(10).max(500).required(),
-  aboutText: Joi.string().min(20).max(1000).required(),
+  brandName: Joi.object({
+    en: Joi.string().min(2).max(100).required(),
+    ar: Joi.string().min(2).max(100).required(),
+  }).required(),
+
+  description: Joi.object({
+    en: Joi.string().min(10).max(500).required(),
+    ar: Joi.string().min(10).max(500).required(),
+  }).required(),
+
+  aboutText: Joi.object({
+    en: Joi.string().min(20).max(1000).required(),
+    ar: Joi.string().min(20).max(1000).required(),
+  }).required(),
+
   socialMedia: Joi.array()
     .items(
       Joi.object({
@@ -21,18 +36,36 @@ const createRestaurantSchema = Joi.object({
       })
     )
     .optional(),
+
   website: Joi.string().uri().optional(),
+
   salesTaxRate: Joi.number().min(0).max(100).default(0),
   serviceTaxRate: Joi.number().min(0).max(100).default(0),
+
   subscriptionStart: Joi.date().default(Date.now),
   subscriptionEnd: Joi.date().allow(null),
 });
 
-// ✅ Schema for update
+/**
+ * Joi schema for restaurant update
+ * Same as creation but all fields optional
+ */
 const updateRestaurantSchema = Joi.object({
-  brandName: Joi.string().min(2).max(100),
-  description: Joi.string().min(10).max(500),
-  aboutText: Joi.string().min(20).max(1000),
+  brandName: Joi.object({
+    en: Joi.string().min(2).max(100),
+    ar: Joi.string().min(2).max(100),
+  }),
+
+  description: Joi.object({
+    en: Joi.string().min(10).max(500),
+    ar: Joi.string().min(10).max(500),
+  }),
+
+  aboutText: Joi.object({
+    en: Joi.string().min(20).max(1000),
+    ar: Joi.string().min(20).max(1000),
+  }),
+
   socialMedia: Joi.array().items(
     Joi.object({
       platform: Joi.string()
@@ -41,6 +74,7 @@ const updateRestaurantSchema = Joi.object({
       url: Joi.string().uri().required(),
     })
   ),
+
   website: Joi.string().uri(),
   salesTaxRate: Joi.number().min(0).max(100),
   serviceTaxRate: Joi.number().min(0).max(100),
@@ -54,29 +88,26 @@ const updateRestaurantSchema = Joi.object({
 
 const createRestaurant = async (req, res) => {
   try {
-    const {
-      brandName,
-      description,
-      aboutText,
-      socialMedia,
-      website,
-      salesTaxRate,
-      serviceTaxRate,
-      subscriptionStart,
-      subscriptionEnd,
-    } = req.body;
-
-    // Validate with Joi
+    // Validate request body with Joi
     const { error } = createRestaurantSchema.validate(req.body, {
       abortEarly: false,
     });
     if (error)
-      return res
-        .status(400)
-        .json({ success: false, message: error.details.map((d) => d.message) });
+      return res.status(400).json({
+        success: false,
+        message: error.details.map((d) => d.message),
+      });
 
-    // Check if brand name already exists
-    const existing = await RestaurantModel.findOne({ brandName });
+    const { brandName } = req.body;
+
+    // Check if restaurant brand name already exists (EN or AR)
+    const existing = await RestaurantModel.findOne({
+      $or: [
+        { "brandName.en": brandName.en },
+        { "brandName.ar": brandName.ar },
+      ],
+    });
+
     if (existing)
       return res
         .status(409)
@@ -86,16 +117,9 @@ const createRestaurant = async (req, res) => {
     const logo = req.files?.logo?.[0]?.filename || null;
     const coverImage = req.files?.coverImage?.[0]?.filename || null;
 
+    // Create restaurant
     const newRestaurant = await RestaurantModel.create({
-      brandName,
-      description,
-      aboutText,
-      socialMedia,
-      website,
-      salesTaxRate,
-      serviceTaxRate,
-      subscriptionStart,
-      subscriptionEnd,
+      ...req.body,
       logo,
       coverImage,
     });
@@ -142,7 +166,6 @@ const getAllRestaurants = async (req, res) => {
 const getRestaurantById = async (req, res) => {
   try {
     const { id } = req.params;
-
     if (!mongoose.Types.ObjectId.isValid(id))
       return res
         .status(400)
@@ -171,61 +194,36 @@ const getRestaurantById = async (req, res) => {
 const updateRestaurant = async (req, res) => {
   try {
     const { id } = req.params;
-    // Validate restaurant ID 
+
     if (!mongoose.Types.ObjectId.isValid(id))
       return res
         .status(400)
         .json({ success: false, message: "Invalid restaurant ID" });
 
-    const {
-      brandName,
-      description,
-      aboutText,
-      socialMedia,
-      website,
-      salesTaxRate,
-      serviceTaxRate,
-      subscriptionStart,
-      subscriptionEnd,
-    } = req.body;
-
     const { error } = updateRestaurantSchema.validate(req.body, {
       abortEarly: false,
     });
     if (error)
-      return res
-        .status(400)
-        .json({ success: false, message: error.details.map((d) => d.message) });
+      return res.status(400).json({
+        success: false,
+        message: error.details.map((d) => d.message),
+      });
 
-
-    // Check if restaurant exists 
-    const existingRestaurant = await RestaurantModel.findById(id);
-    if (!existingRestaurant)
+    // Find existing restaurant
+    const existing = await RestaurantModel.findById(id);
+    if (!existing)
       return res
         .status(404)
         .json({ success: false, message: "Restaurant not found" });
 
-    // Handle new uploaded images
-    const logo = req.files?.logo?.[0]?.filename || existingRestaurant.logo;
+    // Handle image updates
+    const logo = req.files?.logo?.[0]?.filename || existing.logo;
     const coverImage =
-      req.files?.coverImage?.[0]?.filename || existingRestaurant.coverImage;
+      req.files?.coverImage?.[0]?.filename || existing.coverImage;
 
-    // Update restaurant details 
     const updatedRestaurant = await RestaurantModel.findByIdAndUpdate(
       id,
-      {
-        brandName,
-        description,
-        aboutText,
-        socialMedia,
-        website,
-        salesTaxRate,
-        serviceTaxRate,
-        subscriptionStart,
-        subscriptionEnd,
-        logo,
-        coverImage,
-      },
+      { ...req.body, logo, coverImage },
       { new: true, runValidators: true }
     );
 
@@ -262,9 +260,10 @@ const deleteRestaurant = async (req, res) => {
         .status(404)
         .json({ success: false, message: "Restaurant not found" });
 
-    return res
-      .status(200)
-      .json({ success: true, message: "Restaurant deleted successfully" });
+    return res.status(200).json({
+      success: true,
+      message: "Restaurant deleted successfully",
+    });
   } catch (error) {
     console.error("❌ Error deleting restaurant:", error);
     return res.status(500).json({
