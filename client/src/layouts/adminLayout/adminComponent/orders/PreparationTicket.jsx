@@ -5,11 +5,9 @@ import { useReactToPrint } from "react-to-print";
 import { toast } from "react-toastify";
 import "./Orders.css";
 import InvoiceComponent from "../invoice/invoice";
-import PreparationSection from "../products/PreparationSection";
+import department from "../products/department";
 
 const PreparationTicket = () => {
-  
-
   const {
     restaurantData,
     permissionsList,
@@ -26,26 +24,23 @@ const PreparationTicket = () => {
     endPagination,
     setStartPagination,
     setEndPagination,
-  apiUrl,
-handleGetTokenAndConfig,
-} = useContext(dataContext);
+    apiUrl,
+    handleGetTokenAndConfig,
+  } = useContext(dataContext);
 
   const [showModal, setShowModal] = useState(false);
 
   const [PreparationTickets, setPreparationTickets] = useState([]);
-  const [preparationSections, setPreparationSections] = useState([]);
+  const [departments, setdepartments] = useState([]);
 
   // Fetch all preparation sections
-  const fetchPreparationSections = async () => {
+  const fetchdepartments = async () => {
     const config = await handleGetTokenAndConfig();
 
     try {
-      const response = await axios.get(
-        `${apiUrl}/api/preparationsection`,
-        config
-      );
+      const response = await axios.get(`${apiUrl}/api/department`, config);
       if (response.status === 200) {
-        setPreparationSections(response.data.data);
+        setdepartments(response.data.data);
       } else {
         throw new Error("Failed to fetch sections.");
       }
@@ -56,7 +51,6 @@ handleGetTokenAndConfig,
       );
     }
   };
-
 
   const fetchPreparationTickets = async () => {
     const config = await handleGetTokenAndConfig();
@@ -79,8 +73,6 @@ handleGetTokenAndConfig,
     }
   };
 
-
-
   const printContainer = useRef();
 
   const Print = useReactToPrint({
@@ -98,54 +90,53 @@ handleGetTokenAndConfig,
   const [PreparationTicketId, setPreparationTicketId] = useState("");
 
   // Delete order
-    const handleDeletePreparationTickets = async (event) => {
-      event.preventDefault();
-    
-      // Check if the user is authenticated
-      const config = await handleGetTokenAndConfig();
-    
-      try {
-        const PreparationTicketIdToDelete = PreparationTicketId; // Use a clear and descriptive variable name
-        const deleteUrl = `${apiUrl}/api/preparationticket/${PreparationTicketIdToDelete}`; // Construct the API URL
-    
-        // Send a DELETE request to the server
-        await axios.delete(deleteUrl, config);
-    
-        // Refresh the orders list after deletion
-        await fetchPreparationTickets();
-    
-        // Show a success message
-        toast.success("تم حذف التذكره بنجاح.");
-      } catch (error) {
-        // Handle specific error scenarios based on status code
-        if (error.response) {
-          // Server responded with a status code outside the 2xx range
-          const { status, data } = error.response;
-          if (status === 401) {
-            toast.error("غير مصرح. يرجى تسجيل الدخول مرة أخرى.");
-          } else if (status === 404) {
-            await fetchPreparationTickets();
-            toast.error("التذكره غير موجود. قد يكون تم حذفه مسبقًا.");
-          } else {
-            await fetchPreparationTickets();
-            toast.error(data?.message || "حدث خطأ غير متوقع.");
-          }
-        } else if (error.request) {
+  const handleDeletePreparationTickets = async (event) => {
+    event.preventDefault();
+
+    // Check if the user is authenticated
+    const config = await handleGetTokenAndConfig();
+
+    try {
+      const PreparationTicketIdToDelete = PreparationTicketId; // Use a clear and descriptive variable name
+      const deleteUrl = `${apiUrl}/api/preparationticket/${PreparationTicketIdToDelete}`; // Construct the API URL
+
+      // Send a DELETE request to the server
+      await axios.delete(deleteUrl, config);
+
+      // Refresh the orders list after deletion
+      await fetchPreparationTickets();
+
+      // Show a success message
+      toast.success("تم حذف التذكره بنجاح.");
+    } catch (error) {
+      // Handle specific error scenarios based on status code
+      if (error.response) {
+        // Server responded with a status code outside the 2xx range
+        const { status, data } = error.response;
+        if (status === 401) {
+          toast.error("غير مصرح. يرجى تسجيل الدخول مرة أخرى.");
+        } else if (status === 404) {
           await fetchPreparationTickets();
-          // Request was made but no response was received
-          console.error("No response received:", error.request);
-          toast.error("فشل الاتصال بالخادم. يرجى التحقق من الشبكة.");
+          toast.error("التذكره غير موجود. قد يكون تم حذفه مسبقًا.");
         } else {
           await fetchPreparationTickets();
-          // Something else went wrong during the request setup
-          console.error("Request setup error:", error.message);
-          toast.error("حدث خطأ غير متوقع. يرجى المحاولة مرة أخرى.");
+          toast.error(data?.message || "حدث خطأ غير متوقع.");
         }
-      } finally{
+      } else if (error.request) {
         await fetchPreparationTickets();
+        // Request was made but no response was received
+        console.error("No response received:", error.request);
+        toast.error("فشل الاتصال بالخادم. يرجى التحقق من الشبكة.");
+      } else {
+        await fetchPreparationTickets();
+        // Something else went wrong during the request setup
+        console.error("Request setup error:", error.message);
+        toast.error("حدث خطأ غير متوقع. يرجى المحاولة مرة أخرى.");
       }
-    };
-    
+    } finally {
+      await fetchPreparationTickets();
+    }
+  };
 
   const [selectedIds, setSelectedIds] = useState([]);
   const handleCheckboxChange = (e) => {
@@ -162,7 +153,7 @@ handleGetTokenAndConfig,
 
   const deleteSelectedIds = async (e) => {
     e.preventDefault();
-    
+
     const config = await handleGetTokenAndConfig();
     try {
       for (const Id of selectedIds) {
@@ -172,7 +163,6 @@ handleGetTokenAndConfig,
       toast.success("Selected orders deleted successfully");
       setSelectedIds([]);
     } catch (error) {
-      
       toast.error("Failed to delete selected orders");
     }
   };
@@ -180,7 +170,8 @@ handleGetTokenAndConfig,
   // Filter orders by serial number
   const searchBySerial = (serial) => {
     if (serial) {
-      const PreparationTicketsfilter = PreparationTickets.filter((Ticket) => Ticket.order?.serial.toString().startsWith(serial)
+      const PreparationTicketsfilter = PreparationTickets.filter((Ticket) =>
+        Ticket.order?.serial.toString().startsWith(serial)
       );
       setPreparationTickets(PreparationTicketsfilter);
     } else {
@@ -193,15 +184,17 @@ handleGetTokenAndConfig,
     if (!type) {
       fetchPreparationTickets();
     } else {
-      const PreparationTicketsfilter = PreparationTickets.filter((Ticket) => Ticket.order?.orderType === type);
+      const PreparationTicketsfilter = PreparationTickets.filter(
+        (Ticket) => Ticket.order?.orderType === type
+      );
       setPreparationTickets(PreparationTicketsfilter.reverse());
     }
   };
 
   // Fetch orders on component mount
   useEffect(() => {
-    fetchPreparationSections();
-    fetchPreparationTickets()
+    fetchdepartments();
+    fetchPreparationTickets();
   }, []);
 
   return (
@@ -294,7 +287,7 @@ handleGetTokenAndConfig,
                     className="form-control border-primary m-0 p-2 h-auto"
                     onChange={(e) =>
                       setPreparationTickets(
-                        filterByTime(e.target.value, PreparationSection)
+                        filterByTime(e.target.value, department)
                       )
                     }
                   >
@@ -340,14 +333,17 @@ handleGetTokenAndConfig,
                       type="button"
                       className="btn btn-primary h-100 p-2 "
                       onClick={() =>
-                        setPreparationTickets(filterByDateRange(PreparationTickets))
+                        setPreparationTickets(
+                          filterByDateRange(PreparationTickets)
+                        )
                       }
                     >
                       <i className="fa fa-search"></i>
                     </button>
                     <button
                       type="button"
-                      className="btn btn-warning h-100 p-2" onClick={fetchPreparationTickets}
+                      className="btn btn-warning h-100 p-2"
+                      onClick={fetchPreparationTickets}
                     >
                       استعادة
                     </button>
@@ -399,7 +395,11 @@ handleGetTokenAndConfig,
                           </a>
                         </td>
 
-                        <td>{Ticket.order?.orderNum ? Ticket.order?.orderNum : "--"}</td>
+                        <td>
+                          {Ticket.order?.orderNum
+                            ? Ticket.order?.orderNum
+                            : "--"}
+                        </td>
                         <td>
                           {Ticket.order?.table != null
                             ? Ticket.order?.table.tableNumber
@@ -411,18 +411,19 @@ handleGetTokenAndConfig,
                         </td>
 
                         <td>{Ticket.order?.orderType}</td>
-                        <td>{Ticket.preparationSection?.name}</td>
+                        <td>{Ticket.department?.name}</td>
                         <td>{Ticket.preparationStatus}</td>
-                        <td>{Ticket.responsibleEmployee && Ticket.responsibleEmployee?.fullname}</td>
-                        <td>{Ticket.waiter?.fullname}</td>
                         <td>
-                          {formatDateTime(Ticket.createdAt)}
+                          {Ticket.responsibleEmployee &&
+                            Ticket.responsibleEmployee?.fullname}
                         </td>
+                        <td>{Ticket.waiter?.fullname}</td>
+                        <td>{formatDateTime(Ticket.createdAt)}</td>
 
                         <td>
                           {/* <a href="#editOrderModal" className="btn btn-sm btn-primary ml-2 " data-toggle="modal"><i className="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a> */}
-                           <button
-data-target="#deletePreparationTicketModal"
+                          <button
+                            data-target="#deletePreparationTicketModal"
                             className="btn btn-sm btn-danger"
                             data-toggle="modal"
                             onClick={() => setPreparationTicketId(Ticket._id)}
@@ -433,8 +434,8 @@ data-target="#deletePreparationTicketModal"
                               title="Delete"
                             >
                               &#xE872;
-                                </i>
-                              </button>
+                            </i>
+                          </button>
                         </td>
                       </tr>
                     );

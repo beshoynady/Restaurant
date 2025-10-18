@@ -67,7 +67,6 @@ const SectionConsumption = () => {
         allSectionConsumption = data.data;
       } catch (error) {
         if (error.response && error.response.status === 404) {
-          
         } else {
           throw error;
         }
@@ -222,7 +221,6 @@ const SectionConsumption = () => {
         toast.error("Failed to deltet SectionConsumption items");
       }
     } catch (error) {
-      
       toast.error("Failed to retrieve SectionConsumption items");
     }
   };
@@ -237,30 +235,25 @@ const SectionConsumption = () => {
       if (response.status === 200) {
         const stockItems = response.data.reverse();
         setAllStockItems(stockItems);
-        
       } else {
         // Handle other statuses if needed
-        
+
         toast.error("Failed to retrieve stock items");
       }
     } catch (error) {
-      
       toast.error("Failed to retrieve stock items");
     }
   };
 
-  const [preparationSections, setPreparationSections] = useState([]);
+  const [departments, setdepartments] = useState([]);
   // Fetch all preparation sections
-  const fetchPreparationSections = async () => {
+  const fetchdepartments = async () => {
     const config = await handleGetTokenAndConfig();
 
     try {
-      const response = await axios.get(
-        `${apiUrl}/api/preparationsection`,
-        config
-      );
+      const response = await axios.get(`${apiUrl}/api/department`, config);
       if (response.status === 200) {
-        setPreparationSections(response.data.data);
+        setdepartments(response.data.data);
       } else {
         throw new Error("Failed to fetch sections.");
       }
@@ -280,8 +273,6 @@ const SectionConsumption = () => {
       const res = await axios.get(apiUrl + "/api/categoryStock/");
       setAllCategoryStock(res.data);
     } catch (error) {
-      
-
       // Notify on error
       toast.error("Failed to retrieve category stock");
     }
@@ -298,14 +289,12 @@ const SectionConsumption = () => {
       return;
     }
     try {
-      
       const response = await axios.get(`${apiUrl}/api/consumption/`, config);
       if (response && response.data) {
         const allConsumptions = response.data.data;
         setAllSectionConsumption(allConsumptions.reverse());
         setSectionConsumptionForView(filterByTime("today", allConsumptions));
       } else {
-        
       }
     } catch (error) {
       console.error("Error fetching Section consumption:", error);
@@ -321,7 +310,6 @@ const SectionConsumption = () => {
       return;
     }
     try {
-      
       const response = await axios.get(
         `${apiUrl}/api/consumption/bysection/${selectedSectionId}`,
         config
@@ -333,7 +321,6 @@ const SectionConsumption = () => {
           filterByTime("today", SectionConsumptions)
         );
       } else {
-        
       }
     } catch (error) {
       console.error("Error fetching Section consumption:", error);
@@ -348,7 +335,7 @@ const SectionConsumption = () => {
 
   const handleDateChange = (e) => {
     const selectedDate = e.target.value;
-    
+
     setDate(selectedDate);
   };
 
@@ -369,20 +356,20 @@ const SectionConsumption = () => {
 
   // // Function to filter Section consumption based on creation date
   // const filterByConsumCreatedAt = () => {
-  //   
+  //
   //   const filtered = allSectionConsumption.filter((consumption) => {
   //     new Date(kitConsumption.createdAt).toISOString().split('T')[0] === date;
-  //     
+  //
   //     return itemDate === date;
   //   });
-  //   
+  //
   //   setSectionConsumptionForView(filtered);
   // };
 
   useEffect(() => {
     getStockItems();
     getAllConsumption();
-    fetchPreparationSections();
+    fetchdepartments();
     // filterByConsumCreatedAt()
   }, [date]);
 
@@ -450,7 +437,7 @@ const SectionConsumption = () => {
                   <option value="" disabled selected>
                     اختر القسم
                   </option>
-                  {preparationSections.map((section) => (
+                  {departments.map((section) => (
                     <option key={section._id} value={section._id}>
                       {section.name}
                     </option>
@@ -768,7 +755,7 @@ const SectionConsumption = () => {
                     required
                   >
                     <option value="">اختر القسم</option>
-                    {preparationSections.map((section, i) => (
+                    {departments.map((section, i) => (
                       <option value={section._id} key={i}>
                         {section.name}
                       </option>

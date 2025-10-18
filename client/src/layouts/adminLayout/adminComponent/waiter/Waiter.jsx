@@ -48,9 +48,7 @@ const Waiter = () => {
       });
       setActivePreparationTickets(filterWaiterTickets);
       // setPendingPayments(recentPaymentStatus);
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   };
 
   // State for internal orders
@@ -74,12 +72,12 @@ const Waiter = () => {
   //       (order) => order.orderType === "Internal"
   //     );
 
-  //     
+  //
   //     const products =
   //       internalOrdersData.length > 0
   //         ? internalOrdersData.flatMap((order) => order.products)
   //         : [];
-  //     
+  //
   //     const productsFiltered =
   //       products.length > 0
   //         ? products.filter(
@@ -88,13 +86,13 @@ const Waiter = () => {
   //           )
   //         : [];
 
-  //     
+  //
 
   //     if (productsFiltered.length > 0) {
   //       setInternalOrders(internalOrdersData);
   //     }
   //   } catch (error) {
-  //     
+  //
   //   }
   // };
 
@@ -116,7 +114,6 @@ const Waiter = () => {
       fetchActivePreparationTickets();
       toast.success("تم تاكيد استلام الاوردر!");
     } catch (error) {
-      
       toast.error("حدث خطا اثناء قبول الاوردر!");
     }
   };
@@ -166,7 +163,6 @@ const Waiter = () => {
         toast.success("تم تاكيد توصيل الاوردر!");
       }
     } catch (error) {
-      
       toast.error("حدث خطا اثناء تاكيد توصيل الاوردر!");
     }
   };
@@ -186,7 +182,6 @@ const Waiter = () => {
         toast.success("تم تاكيد الاتجاه لتقديم المساعده!");
       }
     } catch (error) {
-      
       toast.error("حدث خطاء اثناء تاكيد الاتجاه للعميل!");
     }
   };
@@ -204,7 +199,6 @@ const Waiter = () => {
       // fetchInternalOrders();
       toast.success("تم تاكيد تقديم المساعده!");
     } catch (error) {
-      
       toast.error("حدث خطا اثناء تاكيد تقديم المساعدع!");
     }
   };
@@ -348,7 +342,7 @@ const Waiter = () => {
                       نوع الطلب: {Ticket.order?.orderType}
                     </p>
                     <p className="card-text">
-                      القسم: {Ticket.preparationSection?.name}
+                      القسم: {Ticket.department?.name}
                     </p>
                   </div>
 

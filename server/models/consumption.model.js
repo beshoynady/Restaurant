@@ -5,7 +5,7 @@ const ConsumptionSchema = new mongoose.Schema(
   {
     section: {
       type: ObjectId,
-      ref: "PreparationSection", // The preparation section receiving the items (e.g., Kitchen, Bar).
+      ref: "department", // The preparation section receiving the items (e.g., Kitchen, Bar).
       required: true,
     },
     stockItem: {

@@ -158,20 +158,20 @@ const ManagerDash = () => {
     "تم التسليم",
     "ملغي",
   ];
-  // const preparationSection = ["Kitchen", "Bar", "Grill"]
+  // const department = ["Kitchen", "Bar", "Grill"]
   const [update, setupdate] = useState(false);
 
-  const [allPreparationSections, setAllPreparationSections] = useState([]);
+  const [alldepartments, setAlldepartments] = useState([]);
 
-  const getAllPreparationSections = async () => {
+  const getAlldepartments = async () => {
     const config = await handleGetTokenAndConfig();
 
     try {
-      const res = await axios.get(`${apiUrl}/api/preparationsection`, config);
+      const res = await axios.get(`${apiUrl}/api/department`, config);
       if (res.status === 200) {
-        const PreparationSections = res.data.data;
+        const departments = res.data.data;
 
-        setAllPreparationSections(PreparationSections);
+        setAlldepartments(departments);
       } else {
         throw new Error("Failed to fetch data");
       }
@@ -214,11 +214,11 @@ const ManagerDash = () => {
   //       }
 
   //       // Handle other statuses (e.g., Approved)
-  //       if (preparationSection?.length > 0) {
-  //         preparationSection.forEach((section) => {
+  //       if (department?.length > 0) {
+  //         department.forEach((section) => {
   //           const sectionProducts = orderProducts.filter(
   //             (product) =>
-  //               product.productId?.preparationSection === section && !product.isSend
+  //               product.productId?.department === section && !product.isSend
   //           );
 
   //           if (sectionProducts.length > 0) {
@@ -227,7 +227,7 @@ const ManagerDash = () => {
   //                 `${apiUrl}/api/preparationticket`,
   //                 {
   //                   order: orderId,
-  //                   preparationSection: section,
+  //                   department: section,
   //                   products: sectionProducts.map((product) => ({
   //                     ...product,
   //                     orderproductId: product._id,
@@ -294,12 +294,12 @@ const ManagerDash = () => {
   //
   //         const newProducts = await orderProducts.filter(product=>product.isSend === false)
 
-  //         allPreparationSections &&
-  //         allPreparationSections.map((section) => {
+  //         alldepartments &&
+  //         alldepartments.map((section) => {
   //             const sectionProducts = [];
   //             newProducts &&
   //               newProducts.map((product) => {
-  //                 if (product.productId?.preparationSection === section._id && product.isSend === false) {
+  //                 if (product.productId?.department === section._id && product.isSend === false) {
   //                   sectionProducts.push({
   //                     ...product,
   //                     orderproductId:product._id
@@ -312,7 +312,7 @@ const ManagerDash = () => {
   //                   `${apiUrl}/api/preparationticket`,
   //                   {
   //                     order: orderId,
-  //                     preparationSection: section,
+  //                     department: section,
   //                     products: sectionProducts,
   //                   },
   //                   config
@@ -393,14 +393,14 @@ const ManagerDash = () => {
       const newProducts = orderProducts.filter((product) => !product.isSend);
 
       // Iterate over all preparation sections
-      allPreparationSections &&
-        allPreparationSections.forEach((section) => {
+      alldepartments &&
+        alldepartments.forEach((section) => {
           const sectionProducts = [];
 
           // Filter products that belong to the current preparation section
           newProducts.forEach((product) => {
             if (
-              product.productId?.preparationSection === section._id &&
+              product.productId?.department === section._id &&
               !product.isSend
             ) {
               sectionProducts.push({
@@ -417,7 +417,7 @@ const ManagerDash = () => {
                 `${apiUrl}/api/preparationticket`,
                 {
                   order: orderId,
-                  preparationSection: section,
+                  department: section,
                   products: sectionProducts,
                 },
                 config
@@ -880,7 +880,7 @@ const ManagerDash = () => {
   }, [update, isRefresh]);
 
   useEffect(() => {
-    getAllPreparationSections();
+    getAlldepartments();
     employeeLoginInfo && getCashRegistersByEmployee(employeeLoginInfo?.id);
   }, []);
 

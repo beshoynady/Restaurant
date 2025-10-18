@@ -54,6 +54,12 @@ const permissionsSchema = new Schema(
         update: { type: Boolean, default: false },
         read: { type: Boolean, default: false },
         delete: { type: Boolean, default: false },
+
+        // Additional fields can be added here
+        viewReports: { type: Boolean, default: false },
+        approve: { type: Boolean, default: false },
+        reject: { type: Boolean, default: false },
+        
       },
     ],
     createdBy: {

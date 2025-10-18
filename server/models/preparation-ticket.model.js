@@ -8,9 +8,9 @@ const PreparationTicketSchema = new mongoose.Schema(
       ref: "Order",
       required: true,
     },
-    preparationSection: {
+    department: {
       type: ObjectId,
-      ref: "PreparationSection",
+      ref: "department",
       required: true,
     },
     preparationStatus: {

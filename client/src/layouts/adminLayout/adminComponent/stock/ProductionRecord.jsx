@@ -41,7 +41,7 @@ const ProductionRecord = () => {
   const [productionOrders, setProductionOrders] = useState([]);
 
   const [storeId, setStoreId] = useState("");
-  const [preparationSection, setPreparationSection] = useState("");
+  const [department, setdepartment] = useState("");
   const [stockItemId, setStockItemId] = useState("");
   const [stockItem, setStockItem] = useState({});
   const [unit, setUnit] = useState("");
@@ -102,7 +102,7 @@ const ProductionRecord = () => {
       const body = {
         productionOrder: productionOrderId,
         storeId,
-        preparationSection,
+        department,
         stockItem: stockItemId,
         unit,
         quantityRequested,
@@ -175,7 +175,7 @@ const ProductionRecord = () => {
   const getProductionOrderBySection = (section) => {
     if (section) {
       const filteredItems = productionRecords.filter(
-        (item) => item.preparationSection?._id === section
+        (item) => item.department?._id === section
       );
       setProductionRecords(filteredItems);
     } else {
@@ -203,7 +203,7 @@ const ProductionRecord = () => {
 
       const stockItems = response.data.reverse();
       setAllStockItems(stockItems);
-      
+
       // Notify on success
       toast.success("تم استرداد عناصر المخزون بنجاح");
       setIsLoading(false);
@@ -231,18 +231,15 @@ const ProductionRecord = () => {
     }
   };
 
-  const [listPreparationSections, setListPreparationSections] = useState([]);
+  const [listdepartments, setListdepartments] = useState([]);
   // Fetch all preparation sections
-  const fetchPreparationSections = async () => {
+  const fetchdepartments = async () => {
     const config = await handleGetTokenAndConfig();
 
     try {
-      const response = await axios.get(
-        `${apiUrl}/api/preparationsection`,
-        config
-      );
+      const response = await axios.get(`${apiUrl}/api/department`, config);
       if (response.status === 200) {
-        setListPreparationSections(response.data.data);
+        setListdepartments(response.data.data);
       } else {
         throw new Error("Failed to fetch sections.");
       }
@@ -292,7 +289,7 @@ const ProductionRecord = () => {
         config
       );
       const productionOrder = getProductionOrder.data;
-      
+
       if (!productionOrder) {
         toast.warn("امر التصنيع هذا لم يعد موجود");
       }
@@ -304,7 +301,7 @@ const ProductionRecord = () => {
           config
         );
         const productionrecipe = getProductionRecipe.data;
-        
+
         if (!productionrecipe) {
           toast.warn("هذا العنصر لا يوجد له ريسبي");
         }
@@ -322,7 +319,7 @@ const ProductionRecord = () => {
     getAllStores();
     getAllCategoryStock();
     getProductionOrders();
-    fetchPreparationSections();
+    fetchdepartments();
   }, []);
 
   return (
@@ -439,7 +436,7 @@ const ProductionRecord = () => {
                   onChange={(e) => getProductionOrderBySection(e.target.value)}
                 >
                   <option value={""}>الكل</option>
-                  {listPreparationSections.map((section, i) => {
+                  {listdepartments.map((section, i) => {
                     return (
                       <option value={section._id} key={i}>
                         {section.name}
@@ -493,7 +490,7 @@ const ProductionRecord = () => {
                       {record.stockItem.categoryId?.categoryName || "غير محدد"}
                     </td>
                     <td>{record.stockItem?.itemName || "غير محدد"}</td>
-                    <td>{record.preparationSection?.name || "غير محدد"}</td>
+                    <td>{record.department?.name || "غير محدد"}</td>
                     <td>{record.unit}</td>
                     <td>{record.productionOrder.quantityRequested}</td>
                     <td>{record.quantity}</td>
@@ -1181,16 +1178,16 @@ const ProductionRecord = () => {
                   <select
                     required
                     className="form-control border-primary m-0 p-2 h-auto"
-                    onChange={(e) => setPreparationSection(e.target.value)}
+                    onChange={(e) => setdepartment(e.target.value)}
                   >
                     <option>
                       {
-                        listPreparationSections.find(
-                          (section) => section._id === preparationSection
+                        listdepartments.find(
+                          (section) => section._id === department
                         )?.name
                       }
                     </option>
-                    {listPreparationSections.map((section, i) => (
+                    {listdepartments.map((section, i) => (
                       <option value={section._id} key={i}>
                         {section.name}
                       </option>

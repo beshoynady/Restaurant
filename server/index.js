@@ -13,7 +13,7 @@ const routeRestaurant = require("./router/restaurant.router.js");
 const routePermission = require("./router/permission.router.js");
 const routeAttendance = require("./router/attendance-record.router.js");
 const routeShift = require("./router/shift.router.js");
-const routePreparationSection = require("./router/preparation-section.router.js");
+const routedepartment = require("./router/preparation-section.router.js");
 const routePreparationTicket = require("./router/preparation-ticket.router.js");
 const routeDeliveryArea = require("./router/delivery-area.router.js");
 const routeReservation = require("./router/reservation.router.js");
@@ -63,16 +63,12 @@ app.use(
   })
 );
 
-
 // Middleware setup
 app.use(express.json({ limit: "100kb" })); // Limit request body size
 app.use(cookieParser()); // Parse cookies
 
 // CORS setup
-const allowedOrigins = [
-  "https://restaurant.menufy.tech",
-  frontEnd,
-];
+const allowedOrigins = ["https://restaurant.menufy.tech", frontEnd];
 
 app.use(
   cors({
@@ -113,7 +109,7 @@ app.use("/api/restaurant", routeRestaurant);
 app.use("/api/permission", routePermission);
 app.use("/api/attendance", routeAttendance);
 app.use("/api/shift", routeShift);
-app.use("/api/preparationsection", routePreparationSection);
+app.use("/api/department", routedepartment);
 app.use("/api/preparationticket", routePreparationTicket);
 app.use("/api/deliveryarea", routeDeliveryArea);
 app.use("/api/product", routeProduct);
@@ -154,7 +150,7 @@ const io = new Server(server, {
     origin: allowedOrigins,
     methods: ["GET", "POST"],
     credentials: true,
-  }
+  },
 });
 
 // Handle socket.io connections
@@ -247,5 +243,7 @@ const port = process.env.PORT || 8000;
 
 // Start the server
 server.listen(port, () => {
-  console.log(`🚀 Server is running on port ${port} in ${process.env.NODE_ENV} mode`);
+  console.log(
+    `🚀 Server is running on port ${port} in ${process.env.NODE_ENV} mode`
+  );
 });

@@ -13,7 +13,10 @@ const Waiter = () => {
     kitchenSocket,
     BarSocket,
     GrillSocket,
-    waiterSocket, handleGetTokenAndConfig, apiUrl } = useContext(dataContext)
+    waiterSocket,
+    handleGetTokenAndConfig,
+    apiUrl,
+  } = useContext(dataContext);
 
   // Refs for buttons
   const start = useRef();
@@ -42,9 +45,7 @@ const Waiter = () => {
         setPendingOrders(recentStatus);
         setPendingPayments(recentPaymentStatus);
       }
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   };
 
   // State for internal orders
@@ -67,12 +68,11 @@ const Waiter = () => {
         (order) => order.orderType === "Internal"
       );
 
-      
       const products =
         internalOrdersData.length > 0
           ? internalOrdersData.flatMap((order) => order.products)
           : [];
-      
+
       const productsFiltered =
         products.length > 0
           ? products.filter(
@@ -81,26 +81,22 @@ const Waiter = () => {
             )
           : [];
 
-      
-
       if (productsFiltered.length > 0) {
         setInternalOrders(internalOrdersData);
       }
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   };
 
   const updateOrderOnWay = async (id, products) => {
     try {
       const config = await handleGetTokenAndConfig();
-      const preparationSection = [];
+      const department = [];
       products.forEach((product) => {
-        const section = product.productId?.preparationSection;
-        if (section) preparationSection.push(section);
+        const section = product.productId?.department;
+        if (section) department.push(section);
       });
 
-      for (const section of preparationSection) {
+      for (const section of department) {
         const preparationStatus = {
           [`preparationStatus.${section}`]: "On the way",
         };
@@ -122,7 +118,6 @@ const Waiter = () => {
       fetchPendingData();
       toast.success("تم تاكيد استلام الاوردر!");
     } catch (error) {
-      
       toast.error("حدث خطا اثناء قبول الاوردر!");
     }
   };
@@ -143,13 +138,13 @@ const Waiter = () => {
         },
         config
       );
-      const preparationSection = [];
+      const department = [];
       products.forEach((product) => {
-        const section = product.productId?.preparationSection;
-        if (section) preparationSection.push(section);
+        const section = product.productId?.department;
+        if (section) department.push(section);
       });
 
-      for (const section of preparationSection) {
+      for (const section of department) {
         const preparationStatus = {
           [`preparationStatus.${section}`]: "On the way",
         };
@@ -172,7 +167,6 @@ const Waiter = () => {
         toast.success("تم تاكيد توصيل الاوردر!");
       }
     } catch (error) {
-      
       toast.error("حدث خطا اثناء تاكيد توصيل الاوردر!");
     }
   };
@@ -192,7 +186,6 @@ const Waiter = () => {
         toast.success("تم تاكيد الاتجاه لتقديم المساعده!");
       }
     } catch (error) {
-      
       toast.error("حدث خطاء اثناء تاكيد الاتجاه للعميل!");
     }
   };
@@ -206,7 +199,6 @@ const Waiter = () => {
       fetchInternalOrders();
       toast.success("تم تاكيد تقديم المساعده!");
     } catch (error) {
-      
       toast.error("حدث خطا اثناء تاكيد تقديم المساعدع!");
     }
   };

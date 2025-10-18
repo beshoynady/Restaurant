@@ -114,7 +114,6 @@ const Products = () => {
   const [extras, setExtras] = useState([]);
 
   const addExtra = (extraId) => {
-    
     if (extras.includes(extraId)) {
       setExtras(extras.filter((item) => item !== extraId));
     } else {
@@ -122,20 +121,20 @@ const Products = () => {
     }
   };
 
-  const [preparationSection, setpreparationSection] = useState("");
-  // const preparationSectionList = ["Kitchen", "Bar", "Grill"]
+  const [department, setdepartment] = useState("");
+  // const departmentList = ["Kitchen", "Bar", "Grill"]
 
-  const [allPreparationSections, setAllPreparationSections] = useState([]);
+  const [alldepartments, setAlldepartments] = useState([]);
 
-  const getAllPreparationSections = async () => {
+  const getAlldepartments = async () => {
     const config = await handleGetTokenAndConfig();
 
     try {
-      const res = await axios.get(`${apiUrl}/api/preparationsection`, config);
+      const res = await axios.get(`${apiUrl}/api/department`, config);
       if (res.status === 200) {
-        const PreparationSections = res.data.data;
-        
-        setAllPreparationSections(PreparationSections);
+        const departments = res.data.data;
+
+        setAlldepartments(departments);
       } else {
         throw new Error("Failed to fetch data");
       }
@@ -161,7 +160,7 @@ const Products = () => {
       formData.append("productCategoryId", productCategoryId);
       formData.append("available", available);
       formData.append("isAddon", isAddon);
-      formData.append("preparationSection", preparationSection);
+      formData.append("department", department);
 
       if (hasSizes) {
         formData.append("hasSizes", hasSizes);
@@ -212,11 +211,9 @@ const Products = () => {
         },
       });
 
-      
-
       if (response.status === 201) {
         getallproducts();
-        
+
         toast.success("تم إنشاء المنتج بنجاح.");
       } else {
         throw new Error(
@@ -271,7 +268,7 @@ const Products = () => {
     setproductDiscount(product.discount);
     setproductCategoryId(product.category._id);
     setavailable(product.available);
-    setpreparationSection(product.preparationSection?._id);
+    setdepartment(product.department?._id);
     setsizes(
       product.sizes
         ? product.sizes
@@ -289,7 +286,7 @@ const Products = () => {
     setHasExtras(product.hasExtras);
     if (product.hasExtras) {
       const list = product.extras.map((ext) => ext._id);
-      
+
       setExtras(list);
     } else {
       setExtras([]);
@@ -310,7 +307,7 @@ const Products = () => {
         productName: productName,
         productDescription: productDescription,
         productCategoryId: productCategoryId,
-        preparationSection: preparationSection,
+        department: department,
         available: available,
         isAddon: isAddon,
       };
@@ -340,8 +337,6 @@ const Products = () => {
         requestBody.image = productimg;
       }
 
-      
-
       // Perform the API request to update the product
       const response = await axios.put(
         `${apiUrl}/api/product/${productId}`,
@@ -355,7 +350,7 @@ const Products = () => {
       );
 
       // Handle successful response
-      
+
       if (response) {
         // Refresh categories and products after successful update
         getallCategories();
@@ -366,7 +361,6 @@ const Products = () => {
       }
     } catch (error) {
       // Handle errors
-      
 
       // Show error toast
       toast.error("حدث خطأ أثناء تحديث المنتج. الرجاء المحاولة مرة أخرى.");
@@ -382,7 +376,7 @@ const Products = () => {
       const response = await axios.get(apiUrl + "/api/product/");
       if (response) {
         const products = await response.data;
-        
+
         setlistofProducts(products.reverse());
         const filterAddon = products.filter(
           (product) => product.isAddon === true
@@ -391,9 +385,7 @@ const Products = () => {
           setlistofProductsAddon(filterAddon);
         }
       }
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   };
 
   const [allOrders, setAllOrders] = useState([]);
@@ -404,7 +396,7 @@ const Products = () => {
 
       if (response.status === 200) {
         const allOrders = response.data;
-        
+
         setAllOrders(allOrders);
       } else {
         console.error("Failed to fetch orders");
@@ -464,12 +456,9 @@ const Products = () => {
         config
       );
       if (response) {
-        
         getallproducts();
       }
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   };
 
   const [listofcategories, setlistofcategories] = useState([]);
@@ -478,12 +467,10 @@ const Products = () => {
     try {
       const response = await axios.get(apiUrl + "/api/menucategory/", config);
       const categories = await response.data;
-      // 
+      //
       setlistofcategories(categories);
-      // 
-    } catch (error) {
-      
-    }
+      //
+    } catch (error) {}
   };
 
   const calculateTotalCost = (ingredients) => {
@@ -502,7 +489,7 @@ const Products = () => {
     getallproducts();
     getallCategories();
     getAllOrders();
-    getAllPreparationSections();
+    getAlldepartments();
   }, []);
 
   return (
@@ -702,7 +689,7 @@ const Products = () => {
                             {product.description}
                           </td>
                           <td>{product.category.name}</td>
-                          <td>{product.preparationSection?.name}</td>
+                          <td>{product.department?.name}</td>
                           <td>
                             {product.comboItems
                               ?.map(
@@ -764,7 +751,7 @@ const Products = () => {
                             )}
                           </td>
                         </tr>
-                        {product.sizes.length > 0 && 
+                        {product.sizes.length > 0 &&
                           product.sizes.map((size, j) => (
                             <tr key={j + i}>
                               <td>{i + 1}</td>
@@ -927,20 +914,20 @@ const Products = () => {
                   </label>
                   <select
                     className="form-control border-primary m-0 p-2 h-auto"
-                    name="preparationSection"
-                    id="preparationSection"
+                    name="department"
+                    id="department"
                     form="carform"
-                    onChange={(e) => setpreparationSection(e.target.value)}
+                    onChange={(e) => setdepartment(e.target.value)}
                   >
                     <option value="">اختر القسم</option>
-                    {/* {preparationSectionList.map((section, i) => {
+                    {/* {departmentList.map((section, i) => {
                       return (
                         <option value={section} key={i}>
                           {section}
                         </option>
                       );
                     })} */}
-                    {allPreparationSections.map((section, i) => {
+                    {alldepartments.map((section, i) => {
                       return (
                         <option value={section._id} key={i}>
                           {section.name}
@@ -1340,20 +1327,18 @@ const Products = () => {
                   </label>
                   <select
                     className="form-control border-primary m-0 p-2 h-auto"
-                    name="preparationSection"
-                    id="preparationSection"
+                    name="department"
+                    id="department"
                     form="carform"
-                    onChange={(e) => setpreparationSection(e.target.value)}
+                    onChange={(e) => setdepartment(e.target.value)}
                   >
-                    {preparationSection ? (
-                      <option value={preparationSection}>
-                        {preparationSection}
-                      </option>
+                    {department ? (
+                      <option value={department}>{department}</option>
                     ) : (
                       "لم يتم تحديد قسم"
                     )}
 
-                    {/* {preparationSectionList.map((section, i) => {
+                    {/* {departmentList.map((section, i) => {
                       return (
                         <option value={section} key={i}>
                           {section}
@@ -1361,18 +1346,18 @@ const Products = () => {
                       );
                     })} */}
 
-                    {preparationSection ? (
-                      <option value={preparationSection._id}>
+                    {department ? (
+                      <option value={department._id}>
                         {
-                          allPreparationSections.find(
-                            (section) => section._id === preparationSection
+                          alldepartments.find(
+                            (section) => section._id === department
                           )?.name
                         }
                       </option>
                     ) : (
                       "لم يتم تحديد قسم"
                     )}
-                    {allPreparationSections.map((section, i) => {
+                    {alldepartments.map((section, i) => {
                       return (
                         <option value={section._id} key={i}>
                           {section.name}

@@ -3,7 +3,7 @@ const router = require("express").Router();
 const {
   createProductionOrder,
   getProductionOrdersByStore,
-  getProductionOrdersByPreparationSection,
+  getProductionOrdersBydepartment,
   getProductionOrders,
   getProductionOrder,
   updateProductionOrder,
@@ -32,11 +32,7 @@ router
 
 router
   .route("/section/:sectionId")
-  .get(
-    authenticateToken,
-    checkSubscription,
-    getProductionOrdersByPreparationSection
-  );
+  .get(authenticateToken, checkSubscription, getProductionOrdersBydepartment);
 
 router
   .route("/status/:id")

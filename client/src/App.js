@@ -36,8 +36,8 @@ const PreparationTicket = React.lazy(() =>
 const Products = React.lazy(() =>
   import("./layouts/adminLayout/adminComponent/products/Products")
 );
-const PreparationSection = React.lazy(() =>
-  import("./layouts/adminLayout/adminComponent/products/PreparationSection.jsx")
+const department = React.lazy(() =>
+  import("./layouts/adminLayout/adminComponent/products/department.jsx")
 );
 const ProductRecipe = React.lazy(() =>
   import("./layouts/adminLayout/adminComponent/products/ProductRecipe")
@@ -1896,12 +1896,11 @@ function App() {
   //       toast.error("رجاء تسجيل الدخول مره أخرى");
   //       setIsTokenValid(false);
   //       setIsLoading(false);
-  
+
   //       return;
   //     }
   //   }
   //   const userToken = localStorage.getItem("token_u");
-    
 
   //   try {
   //     let decodedToken = null;
@@ -1938,81 +1937,81 @@ function App() {
   //   }
   // };
 
-
-
   // ✅ دالة التحقق من توكن الموظف
-const getEmployeeInfoFromToken = async () => {
+  const getEmployeeInfoFromToken = async () => {
+    setIsLoading(true);
+    const employeeToken = localStorage.getItem("token_e");
 
-  setIsLoading(true);
-  const employeeToken = localStorage.getItem("token_e");
+    // ✅ لو مفيش توكن والصفحة مش /login، رجّع المستخدم لتسجيل الدخول
+    if (!employeeToken) {
+      toast.error("رجاء تسجيل الدخول مره أخرى");
+      setIsTokenValid(false);
+      setIsLoading(false);
 
-  // ✅ لو مفيش توكن والصفحة مش /login، رجّع المستخدم لتسجيل الدخول
-  if (!employeeToken) {
-    toast.error("رجاء تسجيل الدخول مره أخرى");
-    setIsTokenValid(false);
-    setIsLoading(false);
+      // ✅ تأكيد إننا مش بالفعل في /login علشان ما نعملش redirect لنفسها
+      if (window.location.pathname !== "/login") {
+        window.location.replace("/login");
+      }
 
-    // ✅ تأكيد إننا مش بالفعل في /login علشان ما نعملش redirect لنفسها
-    if (window.location.pathname !== "/login") {
-      window.location.replace("/login");
+      return;
     }
 
-    return;
-  }
+    try {
+      const decodedToken = jwt_decode(employeeToken);
+      setEmployeeLoginInfo(decodedToken);
 
-  try {
-    const decodedToken = jwt_decode(employeeToken);
-    setEmployeeLoginInfo(decodedToken);
+      // ✅ جلب الصلاحيات
+      await getPermissions(decodedToken);
 
-    // ✅ جلب الصلاحيات
-    await getPermissions(decodedToken);
-
-    setIsTokenValid(true);
-  } catch (error) {
-    console.error("Error verifying employee token:", error);
-    toast.error("خطأ أثناء التحقق من توكن الموظف. يرجى تسجيل الدخول مرة أخرى.");
-    setIsTokenValid(false);
-
-    // ✅ فقط لو المستخدم مش في صفحة /login بالفعل
-    if (window.location.pathname !== "/login") {
-      window.location.replace("/login");
-    }
-  } finally {
-    setIsLoading(false);
-  }
-};
-
-
-// ✅ دالة التحقق من توكن العميل (اليوزر)
-const getClientInfoFromToken = async () => {
-  setIsLoading(true);
-  const userToken = localStorage.getItem("token_u");
-
-  if (!userToken) {
-    setIsTokenValid(false);
-    setIsLoading(false);
-    return;
-  }
-
-  try {
-    const decodedToken = jwt_decode(userToken);
-    setUserLoginInfo(decodedToken);
-
-    if (decodedToken?.userinfo?.id) {
-      const userId = decodedToken.userinfo.id;
-
-      const clientResponse = await axios.get(`${apiUrl}/api/user/${userId}`);
-      setClientInfo(clientResponse.data);
       setIsTokenValid(true);
+    } catch (error) {
+      console.error("Error verifying employee token:", error);
+      toast.error(
+        "خطأ أثناء التحقق من توكن الموظف. يرجى تسجيل الدخول مرة أخرى."
+      );
+      setIsTokenValid(false);
+
+      // ✅ فقط لو المستخدم مش في صفحة /login بالفعل
+      if (window.location.pathname !== "/login") {
+        window.location.replace("/login");
+      }
+    } finally {
+      setIsLoading(false);
     }
-  } catch (error) {
-    console.error("Error verifying client token:", error);
-    toast.error("خطأ أثناء التحقق من توكن العميل. يرجى تسجيل الدخول مرة أخرى.");
-    setIsTokenValid(false);
-  } finally {
-    setIsLoading(false);
-  }
-};
+  };
+
+  // ✅ دالة التحقق من توكن العميل (اليوزر)
+  const getClientInfoFromToken = async () => {
+    setIsLoading(true);
+    const userToken = localStorage.getItem("token_u");
+
+    if (!userToken) {
+      setIsTokenValid(false);
+      setIsLoading(false);
+      return;
+    }
+
+    try {
+      const decodedToken = jwt_decode(userToken);
+      setUserLoginInfo(decodedToken);
+
+      if (decodedToken?.userinfo?.id) {
+        const userId = decodedToken.userinfo.id;
+
+        const clientResponse = await axios.get(`${apiUrl}/api/user/${userId}`);
+        setClientInfo(clientResponse.data);
+        setIsTokenValid(true);
+      }
+    } catch (error) {
+      console.error("Error verifying client token:", error);
+      toast.error(
+        "خطأ أثناء التحقق من توكن العميل. يرجى تسجيل الدخول مرة أخرى."
+      );
+      setIsTokenValid(false);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const getPermissions = async (decodedToken) => {
     try {
@@ -2634,10 +2633,10 @@ const getClientInfoFromToken = async () => {
               }
             />
             <Route
-              path="preparationsection"
+              path="department"
               element={
                 <Suspense fallback={<LoadingPage />}>
-                  <PreparationSection />
+                  <department />
                 </Suspense>
               }
             />

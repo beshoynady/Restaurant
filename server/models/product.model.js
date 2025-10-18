@@ -25,9 +25,9 @@ const productSchema = new mongoose.Schema(
       required: [true, "Category is required"],
     },
 
-    preparationSection: {
+    department: {
       type: ObjectId,
-      ref: 'PreparationSection',
+      ref: "department",
       required: [true, "Preparation section is required"],
       description: "Defines the section responsible for preparing the product",
     },

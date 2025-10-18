@@ -2,7 +2,7 @@ const productionRecordModel = require("../models/production-record.model");
 const productionOrderModel = require("../models/production-order.model");
 const stockItemModel = require("../models/stock-items.model");
 const recipeModel = require("../models/recipe.model");
-const preparationSectionModel = require("../models/preparation-section.model");
+const departmentModel = require("../models/preparation-section.model");
 
 // Create and Save a new Production Record
 
@@ -13,7 +13,7 @@ const createProductionRecord = async (req, res) => {
       stockItem,
       quantity,
       unit,
-      preparationSection,
+      department,
       recipe,
       notes,
     } = req.body;
@@ -26,7 +26,7 @@ const createProductionRecord = async (req, res) => {
       !productionOrder ||
       !stockItem ||
       !quantity ||
-      !preparationSection ||
+      !department ||
       !unit ||
       !recipe
     ) {
@@ -54,10 +54,8 @@ const createProductionRecord = async (req, res) => {
         message: "Recipe not found",
       });
     }
-    const preparationSectionExists = await preparationSectionModel.findById(
-      preparationSection
-    );
-    if (!preparationSectionExists) {
+    const departmentExists = await departmentModel.findById(department);
+    if (!departmentExists) {
       return res.status(404).send({
         message: "Production section not found",
       });
@@ -82,7 +80,7 @@ const createProductionRecord = async (req, res) => {
       stockItem,
       quantity,
       unit,
-      preparationSection,
+      department,
       recipe,
       notes,
       createdBy,
@@ -107,7 +105,7 @@ const findAllProductionRecords = async (req, res) => {
         "_id, itemName, SKU, storageUnit , parts, ingredientUnit, minThreshold, maxThreshold, costPerPart"
       )
       .populate("recipe")
-      .populate("preparationSection", " _id, sectionName ")
+      .populate("department", " _id, sectionName ")
       .populate("createdBy", "fullname, username, role, shift")
       .populate("updateBy", "fullname, username, role, shift");
     res.status(200).send(productionRecords);
@@ -130,7 +128,7 @@ const findProductionRecord = async (req, res) => {
         "_id, itemName, SKU, storageUnit , parts, ingredientUnit, minThreshold, maxThreshold, costPerPart"
       )
       .populate("recipe")
-      .populate("preparationSection")
+      .populate("department")
       .populate("createdBy", "fullname, username, role, shift")
       .populate("updateBy", "fullname, username, role, shift");
 
@@ -214,7 +212,7 @@ const updateProductionRecord = async (req, res) => {
       stockItem,
       quantity,
       unit,
-      preparationSection,
+      department,
       recipe,
       materialsUsed,
       productionCost,
@@ -243,7 +241,7 @@ const updateProductionRecord = async (req, res) => {
       !stockItem ||
       !quantity ||
       !unit ||
-      !preparationSection ||
+      !department ||
       !recipe ||
       !materialsUsed ||
       !productionEndTime ||
@@ -265,10 +263,8 @@ const updateProductionRecord = async (req, res) => {
         message: "Recipe not found",
       });
     }
-    const preparationSectionExists = await preparationSectionModel.findById(
-      preparationSection
-    );
-    if (!preparationSectionExists) {
+    const departmentExists = await departmentModel.findById(department);
+    if (!departmentExists) {
       return res.status(404).send({
         message: "Production section not found",
       });
@@ -290,7 +286,7 @@ const updateProductionRecord = async (req, res) => {
           stockItem,
           quantity,
           unit,
-          preparationSection,
+          department,
           recipe,
           materialsUsed,
           productionCost,

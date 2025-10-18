@@ -21,17 +21,17 @@ const Grill = () => {
   const start = useRef();
   const ready = useRef();
 
-  const [allPreparationSections, setAllPreparationSections] = useState([]);
+  const [alldepartments, setAlldepartments] = useState([]);
 
-  const getAllPreparationSections = async () => {
+  const getAlldepartments = async () => {
     const config = await handleGetTokenAndConfig();
 
     try {
-      const res = await axios.get(`${apiUrl}/api/preparationsection`, config);
+      const res = await axios.get(`${apiUrl}/api/department`, config);
       if (res.status === 200) {
-        const PreparationSections = res.data.data;
-        
-        setAllPreparationSections(PreparationSections);
+        const departments = res.data.data;
+
+        setAlldepartments(departments);
       } else {
         throw new Error("Failed to fetch data");
       }
@@ -58,7 +58,6 @@ const Grill = () => {
       const getAllRecipe = await axios.get(`${apiUrl}/api/recipe`, config);
       const allRecipeData = getAllRecipe.data;
       setAllRecipe(allRecipeData);
-      
     } catch (error) {
       console.error("Error fetching product recipe:", error.message);
     }
@@ -75,16 +74,15 @@ const Grill = () => {
       );
 
       const PreparationTicket = Response.data.data;
-      
-      // 
+
+      //
       // Set all Tickets state
       setAllPreparationTicket(PreparationTicket);
       const kitchenPreparationTicket = PreparationTicket.filter(
         (ticket) =>
-          ticket.preparationSection._id === Section && ticket.isActive === true
+          ticket.department._id === Section && ticket.isActive === true
       );
 
-      
       // Set active Tickets state
       setPreparationTicketActive(kitchenPreparationTicket);
 
@@ -93,12 +91,12 @@ const Grill = () => {
       const allRecipe = allRecipeData;
       const updatedConsumptionPreparationTicketActive = [];
 
-      // 
+      //
       kitchenPreparationTicket &&
         kitchenPreparationTicket.forEach((ticket) => {
           ticket.products.forEach((product) => {
             if (!product.isDone) {
-              // 
+              //
               const productIngredients = product.sizeId
                 ? allRecipe.find(
                     (recipe) =>
@@ -109,7 +107,7 @@ const Grill = () => {
                     (recipe) => recipe.productId._id === product.productId?._id
                   )?.ingredients || [];
 
-              // 
+              //
 
               // Update consumptionPreparationTicketActive
               productIngredients &&
@@ -144,7 +142,7 @@ const Grill = () => {
                         (recipe) => recipe.productId._id === extra.extraId._id
                       )?.ingredients || [];
 
-                    // 
+                    //
 
                     // Update consumptionPreparationTicketActive
                     extraIngredients &&
@@ -175,7 +173,6 @@ const Grill = () => {
             }
           });
         });
-      
 
       // Set updated consumptionPreparationTicketActive state
       setConsumptionPreparationTicketActive(
@@ -197,7 +194,7 @@ const Grill = () => {
       const config = await handleGetTokenAndConfig();
 
       setFilteredKitchenConsumptionToday([]);
-      // 
+      //
 
       const response = await axios.get(`${apiUrl}/api/consumption`, config);
 
@@ -212,7 +209,7 @@ const Grill = () => {
           }
         );
 
-        // 
+        //
         setFilteredKitchenConsumptionToday(kitchenConsumptionsToday);
       } else {
         console.error("Unexpected response or empty data");
@@ -234,7 +231,7 @@ const Grill = () => {
         { preparationStatus },
         config
       );
-      
+
       if (response.status === 200) {
         // Fetch Tickets from the API
         getAllPreparationTicket();
@@ -260,7 +257,7 @@ const Grill = () => {
       const { products: kitchenProducts } = preparationticketData.data.data;
       const orderId = await preparationticketData.data.data?.order._id;
       const orderProducts = preparationticketData.data.data.order?.products;
-      // 
+      //
 
       if (!kitchenProducts.length) {
         toast.warn("لا توجد منتجات بحاجة إلى تجهيز في المطبخ");
@@ -384,11 +381,11 @@ const Grill = () => {
           : product
       );
 
-      // 
+      //
 
       if (type === "Internal") {
         const waiter = await specifiedWaiter(id);
-        
+
         if (!waiter) {
           toast.warn("لا يوجد نادل متاح لتسليم الطلب. يرجى مراجعة الإدارة!");
           return;
@@ -410,7 +407,7 @@ const Grill = () => {
           },
           config
         );
-        
+
         waiterSocket.emit("orderReady", `أورد جاهز في المطبخ-${waiter}`);
       } else {
         await axios.put(
@@ -455,9 +452,7 @@ const Grill = () => {
           ? allWaiters.filter((waiter) => waiter.isActive === true)
           : [];
       setAllWaiters(waiterActive);
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   };
 
   // Determines the next available waiter to take an Ticket
@@ -478,7 +473,7 @@ const Grill = () => {
       if (!getTicket) {
         throw new Error("Ticket not found");
       }
-      // 
+      //
 
       if (getTicket.status) {
       }
@@ -509,18 +504,17 @@ const Grill = () => {
         const lastWaiterIndex = sectionWaiters.findIndex(
           (waiter) => waiter._id === lastWaiterId
         );
-        // 
+        //
 
         waiterId =
           lastWaiterIndex !== -1 && lastWaiterIndex < sectionWaiters.length - 1
             ? sectionWaiters[lastWaiterIndex + 1]._id
             : sectionWaiters[0]._id;
       } else {
-        
         waiterId = sectionWaiters[0]._id;
       }
 
-      // 
+      //
 
       return waiterId;
     } catch (error) {
@@ -545,7 +539,7 @@ const Grill = () => {
     getAllWaiters();
     // getAllPreparationTicket();
     getKitchenConsumption();
-    getAllPreparationSections();
+    getAlldepartments();
   }, []);
 
   useEffect(() => {
@@ -579,8 +573,8 @@ const Grill = () => {
             <option value="" disabled selected>
               اختر القسم
             </option>
-            {allPreparationSections &&
-              allPreparationSections.map((section) => (
+            {alldepartments &&
+              alldepartments.map((section) => (
                 <option key={section._id} value={section._id}>
                   {section.name}
                 </option>
@@ -733,7 +727,7 @@ const Grill = () => {
                         // .filter(
                         //   (product) =>
                         //     product.isDone === false &&
-                        //     product.productId?.preparationSection === "Kitchen"
+                        //     product.productId?.department === "Kitchen"
                         // )
                         .map((product, i) => {
                           return (

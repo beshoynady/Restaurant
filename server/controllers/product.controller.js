@@ -8,7 +8,7 @@ const createProduct = async (req, res) => {
     const {
       productName,
       productPrice,
-      preparationSection,
+      department,
       discount,
       priceAfterDiscount,
       productDescription,
@@ -35,9 +35,9 @@ const createProduct = async (req, res) => {
       });
     }
     // Check if required fields are provided in the request
-    if (!preparationSection) {
+    if (!department) {
       return res.status(400).json({
-        error: "Please provide preparationSection of the product",
+        error: "Please provide department of the product",
       });
     }
 
@@ -61,7 +61,7 @@ const createProduct = async (req, res) => {
       name: productName,
       description: productDescription,
       price: productPrice,
-      preparationSection,
+      department,
       discount,
       priceAfterDiscount,
       category: productCategoryId,
@@ -95,7 +95,7 @@ const updateProduct = async (req, res) => {
       productDescription,
       productCategoryId,
       productPrice,
-      preparationSection,
+      department,
       productDiscount,
       priceAfterDiscount,
       available,
@@ -133,7 +133,7 @@ const updateProduct = async (req, res) => {
       name: productName,
       description: productDescription,
       price: productPrice,
-      preparationSection,
+      department,
       discount: productDiscount,
       priceAfterDiscount,
       category: productCategoryId,
@@ -172,7 +172,7 @@ const getAllProducts = async (req, res) => {
   try {
     const allProducts = await ProductModel.find({})
       .populate("category")
-      .populate("preparationSection" ,"_id name")
+      .populate("department", "_id name")
       .populate("sizes.sizeRecipe")
       .populate({
         path: "productRecipe",
@@ -208,7 +208,7 @@ const getProductByCategory = async (req, res) => {
     const categoryid = req.params.categoryid;
     const products = await ProductModel.find({ category: categoryid })
       .populate("category")
-      .populate("preparationSection")
+      .populate("department")
       .populate("sizes.sizeRecipe")
       .populate({
         path: "productRecipe",
@@ -239,7 +239,7 @@ const getOneProduct = async (req, res) => {
     const productId = req.params.productId;
     const product = await ProductModel.findById(productId)
       .populate("category")
-      .populate("preparationSection" ,"_id name")
+      .populate("department", "_id name")
       .populate("sizes.sizeRecipe")
       .populate({
         path: "productRecipe",

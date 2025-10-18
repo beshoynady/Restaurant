@@ -3,19 +3,13 @@ const ProductionOrderModel = require("../models/production-order.model");
 
 const createProductionOrder = async (req, res) => {
   try {
-    const {
-      storeId,
-      preparationSection,
-      stockItem,
-      unit,
-      quantityRequested,
-      notes,
-    } = req.body;
+    const { storeId, department, stockItem, unit, quantityRequested, notes } =
+      req.body;
     const createdBy = await req.employee.id;
 
     if (
       !storeId ||
-      !preparationSection ||
+      !department ||
       !stockItem ||
       !unit ||
       !quantityRequested ||
@@ -36,7 +30,7 @@ const createProductionOrder = async (req, res) => {
     const productionOrder = await ProductionOrderModel.create({
       orderNumber: neworderNumber,
       storeId,
-      preparationSection,
+      department,
       stockItem,
       unit,
       quantityRequested,
@@ -63,11 +57,11 @@ const getProductionOrdersByStore = async (req, res) => {
   }
 };
 
-const getProductionOrdersByPreparationSection = async (req, res) => {
+const getProductionOrdersBydepartment = async (req, res) => {
   try {
-    const { preparationSection } = req.params;
+    const { department } = req.params;
     const productionOrders = await ProductionOrderModel.find({
-      preparationSection,
+      department,
     });
     if (productionOrders.length === 0) {
       return res.status(404).send({ error: "No production orders found" });
@@ -81,7 +75,7 @@ const getProductionOrdersByPreparationSection = async (req, res) => {
 const getProductionOrders = async (req, res) => {
   try {
     const productionOrders = await ProductionOrderModel.find()
-      .populate("preparationSection", "_id name")
+      .populate("department", "_id name")
       .populate("storeId", "_id storeName")
       .populate({
         path: "stockItem",
@@ -112,7 +106,7 @@ const getProductionOrder = async (req, res) => {
     const { id } = req.params;
     const productionOrder = await ProductionOrderModel.findById(id)
       .populate("storeId", "_id storeName")
-      .populate("preparationSection", "_id name")
+      .populate("department", "_id name")
       .populate({
         path: "stockItem",
         select: "_id itemName SKU categoryId",
@@ -140,18 +134,12 @@ const getProductionOrder = async (req, res) => {
 const updateProductionOrder = async (req, res) => {
   try {
     const { id } = req.params;
-    const {
-      storeId,
-      preparationSection,
-      stockItem,
-      unit,
-      quantityRequested,
-      notes,
-    } = req.body;
+    const { storeId, department, stockItem, unit, quantityRequested, notes } =
+      req.body;
     const updatedBy = req.employee.id;
     if (
       !storeId ||
-      !preparationSection ||
+      !department ||
       !stockItem ||
       !unit ||
       !quantityRequested ||
@@ -176,7 +164,7 @@ const updateProductionOrder = async (req, res) => {
       {
         $set: {
           storeId,
-          preparationSection,
+          department,
           stockItem,
           unit,
           quantityRequested,
@@ -260,7 +248,7 @@ const deleteProductionOrder = async (req, res) => {
 module.exports = {
   createProductionOrder,
   getProductionOrdersByStore,
-  getProductionOrdersByPreparationSection,
+  getProductionOrdersBydepartment,
   getProductionOrders,
   getProductionOrder,
   updateProductionOrder,

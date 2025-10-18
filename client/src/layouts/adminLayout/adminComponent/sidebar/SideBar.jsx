@@ -302,7 +302,7 @@ const SideBar = () => {
                     </div>
                     <ul className="submenu">
                       <li className="list">
-                        <Link to="preparationsection">اقسام الاعداد</Link>
+                        <Link to="department">اقسام الاعداد</Link>
                       </li>
                       {(isProgrammer ||
                         permissionsList?.filter(

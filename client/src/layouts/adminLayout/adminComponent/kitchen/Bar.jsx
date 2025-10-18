@@ -11,8 +11,6 @@ const BarSocket = io(`${process.env.REACT_APP_API_URL}/bar`, {
 });
 
 const Bar = () => {
-  
-
   const {
     formatDate,
     formatTime,
@@ -23,9 +21,9 @@ const Bar = () => {
     BarSocket,
     GrillSocket,
     waiterSocket,
-  apiUrl,
-handleGetTokenAndConfig,
-} = useContext(dataContext);
+    apiUrl,
+    handleGetTokenAndConfig,
+  } = useContext(dataContext);
 
   const start = useRef();
   const ready = useRef();
@@ -43,7 +41,6 @@ handleGetTokenAndConfig,
       const getAllRecipe = await axios.get(`${apiUrl}/api/recipe`, config);
       const allRecipeData = getAllRecipe.data;
       setAllRecipe(allRecipeData);
-      
     } catch (error) {
       console.error("Error fetching product recipe:", error.message);
     }
@@ -56,7 +53,7 @@ handleGetTokenAndConfig,
       // Fetch orders from the API
       const ordersResponse = await axios.get(`${apiUrl}/api/order/limit/50`);
       const BarOrders = ordersResponse.data;
-      // 
+      //
       // Set all orders state
       setAllOrders(BarOrders);
 
@@ -79,12 +76,12 @@ handleGetTokenAndConfig,
 
       const updatedConsumptionOrderActive = [];
 
-      // 
+      //
       activeOrders &&
         activeOrders.forEach((order) => {
           order.products.forEach((product) => {
             if (!product.isDone) {
-              // 
+              //
               const productIngredients = product.sizeId
                 ? allRecipe.find(
                     (recipe) =>
@@ -95,7 +92,7 @@ handleGetTokenAndConfig,
                     (recipe) => recipe.productId._id === product.productId?._id
                   )?.ingredients || [];
 
-              // 
+              //
 
               // Update consumptionOrderActive
               productIngredients &&
@@ -129,7 +126,7 @@ handleGetTokenAndConfig,
                         (recipe) => recipe.productId._id === extra.extraId._id
                       )?.ingredients || [];
 
-                    // 
+                    //
 
                     // Update consumptionOrderActive
                     extraIngredients &&
@@ -160,7 +157,6 @@ handleGetTokenAndConfig,
             }
           });
         });
-      
 
       // Set updated consumptionOrderActive state
       setConsumptionOrderActive(updatedConsumptionOrderActive);
@@ -181,7 +177,6 @@ handleGetTokenAndConfig,
       const config = await handleGetTokenAndConfig();
 
       setFilteredBarConsumptionToday([]);
-      
 
       const response = await axios.get(`${apiUrl}/api/consumption`, config);
 
@@ -194,7 +189,6 @@ handleGetTokenAndConfig,
           return itemDate === date;
         });
 
-        
         setFilteredBarConsumptionToday(BarConsumptionsToday);
       } else {
         console.error("Unexpected response or empty data");
@@ -240,7 +234,7 @@ handleGetTokenAndConfig,
       );
       const { products: orderProducts } = orderData;
       const BarProducts = orderProducts.filter(
-        (product) => product.productId?.preparationSection === "Bar"
+        (product) => product.productId?.department === "Bar"
       );
 
       if (!BarProducts.length) {
@@ -355,8 +349,7 @@ handleGetTokenAndConfig,
       const updatedProducts = orderProducts.map((product) => {
         if (
           BarProducts.some(
-            (BarProduct) =>
-              BarProduct.productId?._id === product.productId._id
+            (BarProduct) => BarProduct.productId?._id === product.productId._id
           )
         ) {
           return { ...product, isDone: true };
@@ -423,9 +416,7 @@ handleGetTokenAndConfig,
           ? allWaiters.filter((waiter) => waiter.isActive === true)
           : [];
       setAllWaiters(waiterActive);
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   };
 
   // Determines the next available waiter to take an order
@@ -475,18 +466,14 @@ handleGetTokenAndConfig,
         const lastWaiterIndex = sectionWaiters.findIndex(
           (waiter) => waiter._id === lastWaiterId
         );
-        
 
         waiterId =
           lastWaiterIndex !== -1 && lastWaiterIndex < sectionWaiters.length - 1
             ? sectionWaiters[lastWaiterIndex + 1]._id
             : sectionWaiters[0]._id;
       } else {
-        
         waiterId = sectionWaiters[0]._id;
       }
-
-      
 
       return waiterId;
     } catch (error) {
@@ -579,7 +566,7 @@ handleGetTokenAndConfig,
               order.products.filter(
                 (product) =>
                   product.isDone === false &&
-                  product.productId?.preparationSection === "Bar"
+                  product.productId?.department === "Bar"
               ).length > 0
             ) {
               return (
@@ -633,7 +620,7 @@ handleGetTokenAndConfig,
                         .filter(
                           (product) =>
                             product.isDone === false &&
-                            product.productId?.preparationSection === "Bar"
+                            product.productId?.department === "Bar"
                         )
                         .map((product, i) => {
                           return (

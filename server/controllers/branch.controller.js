@@ -7,14 +7,20 @@ const Joi = require("joi");
 /* -------------------------------------------------------------------------- */
 
 // Schema for creating a new branch
+const validCreateBranchSchema = Joi.object({
+  branchName: Joi.object({
+    en: Joi.string().min(2).max(100).required(),
+    ar: Joi.string().min(2).max(100).required(),
+  }).required(),
 
-const validBranchSchema = Joi.object({
-  branchName: Joi.string().min(2).max(100).required(),
-  managerName: Joi.string().min(2).max(100).allow(""),
+  manager: Joi.string().required(),
+
   isMainBranch: Joi.boolean().default(false),
+
   status: Joi.string()
     .valid("active", "inactive", "under_maintenance")
     .default("active"),
+
   address: Joi.object({
     country: Joi.string().max(100).required(),
     stateOrProvince: Joi.string().max(100).allow(""),
@@ -27,6 +33,7 @@ const validBranchSchema = Joi.object({
     longitude: Joi.number().min(-180).max(180),
     fullAddress: Joi.string().max(500).allow(""),
   }).required(),
+
   contact: Joi.object({
     phone: Joi.array()
       .items(Joi.string().pattern(/^(\+?\d{1,4}[-\s]?)?\d{11}$/))
@@ -34,6 +41,7 @@ const validBranchSchema = Joi.object({
       .required(),
     email: Joi.string().email().allow(""),
   }).required(),
+
   working_hours: Joi.array()
     .items(
       Joi.object({
@@ -54,6 +62,7 @@ const validBranchSchema = Joi.object({
       })
     )
     .required(),
+
   acceptedPayments: Joi.array()
     .items(
       Joi.object({
@@ -79,6 +88,7 @@ const validBranchSchema = Joi.object({
     )
     .min(1)
     .required(),
+
   features: Joi.array()
     .items(
       Joi.object({
@@ -101,12 +111,100 @@ const validBranchSchema = Joi.object({
       })
     )
     .max(20),
+
   dineIn: Joi.boolean().default(false),
   takeAway: Joi.boolean().default(false),
   deliveryService: Joi.boolean().default(false),
   usesReservationSystem: Joi.boolean().default(false),
   createdBy: Joi.string().required(),
 });
+
+const validUpdateBranchSchema = Joi.object({
+  branchName: Joi.object({
+    en: Joi.string().min(2).max(100),
+    ar: Joi.string().min(2).max(100),
+  }),
+  manager: Joi.string(),
+  isMainBranch: Joi.boolean(),
+  status: Joi.string().valid("active", "inactive", "under_maintenance"),
+  address: Joi.object({
+    country: Joi.string().max(100),
+    stateOrProvince: Joi.string().max(100).allow(""),
+    city: Joi.string().max(100),
+    area: Joi.string().max(100).allow(""),
+    street: Joi.string().max(150).allow(""),
+    buildingNumber: Joi.string().max(20).allow(""),
+    postalCode: Joi.string().pattern(/^\d{3,10}$/).allow(""),
+    latitude: Joi.number().min(-90).max(90),
+    longitude: Joi.number().min(-180).max(180),
+    fullAddress: Joi.string().max(500).allow(""),
+  }),
+  contact: Joi.object({
+    phone: Joi.array().items(Joi.string().pattern(/^(\+?\d{1,4}[-\s]?)?\d{11}$/)).min(1),
+    email: Joi.string().email().allow(""),
+  }),
+  working_hours: Joi.array().items(
+    Joi.object({
+      day: Joi.string().valid(
+        "Saturday",
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday"
+      ),
+      openTime: Joi.string(),
+      closeTime: Joi.string(),
+      isClosed: Joi.boolean(),
+    })
+  ),
+  acceptedPayments: Joi.array().items(
+    Joi.object({
+      name: Joi.string().valid(
+        "Cash",
+        "Credit Card",
+        "Debit Card",
+        "Vodafone Cash",
+        "Etisalat Cash",
+        "Orange Cash",
+        "Fawry",
+        "Meeza",
+        "PayPal",
+        "Aman",
+        "Instapay",
+        "Apple Pay",
+        "Other" 
+      ),
+      type: Joi.string().valid("Offline", "Online"),
+    })
+  ),
+  features: Joi.array().items(
+    Joi.object({
+      name: Joi.string().valid(
+        "WiFi",
+        "Parking",
+        "Outdoor Seating",
+        "Wheelchair Accessible",
+        "Live Music",
+        "Pet Friendly",
+        "Kids Friendly",
+        "Air Conditioning",
+        "Smoking Area",
+        "Other"
+      ),
+      enabled: Joi.boolean(),
+      description: Joi.string().max(150).allow(""),
+    })
+  ),
+  dineIn: Joi.boolean(),
+  takeAway: Joi.boolean(),
+  deliveryService: Joi.boolean(),
+  usesReservationSystem: Joi.boolean(),
+  updatedBy: Joi.string().required(),
+});
+
+
 
 /* -------------------------------------------------------------------------- */
 /*                            🏗️  Create Branch Controller                    */
@@ -118,18 +216,6 @@ const validBranchSchema = Joi.object({
  */
 const createBranch = async (req, res) => {
   try {
-    const { error } = validBranchSchema.validate(req.body, {
-      abortEarly: false,
-    });
-
-    if (error) {
-      return res.status(400).json({
-        success: false,
-        message: "Validation failed.",
-        errors: error.details.map((e) => e.message),
-      });
-    }
-
     const {
       branchName,
       managerName,
@@ -146,12 +232,25 @@ const createBranch = async (req, res) => {
       usesReservationSystem,
       createdBy,
     } = req.body;
+  
+    // ✅ Validate request body
+    const { error } = validCreateBranchSchema.validate(req.body, {
+      abortEarly: false,
+    });
 
+    if (error) {
+      return res.status(400).json({
+        success: false,
+        message: "Validation failed.",
+        errors: error.details.map((e) => e.message),
+      });
+    }
     // ✅ Verify creator is a valid admin
     const existingEmployee = await EmployeeModel.findOne({
       _id: createdBy,
       role: "admin",
     });
+
     if (!existingEmployee) {
       return res.status(403).json({
         success: false,
@@ -162,7 +261,7 @@ const createBranch = async (req, res) => {
     // ✅ Check for duplicate branch name or address
     const existingBranch = await Branch.findOne({
       $or: [
-        { branchName: branchName.trim() },
+        { "branchName.en": branchName?.en?.trim() ,"branchName.ar": branchName?.ar?.trim()},
         { "address.fullAddress": address?.fullAddress?.trim() },
       ],
     });
@@ -253,7 +352,7 @@ const getAllBranches = async (req, res) => {
 
 const getBranchById = async (req, res) => {
   try {
-    const { id } = await req.params;
+    const { id } = req.params;
     const branch = await Branch.findById(id);
     if (!branch) {
       return res.status(404).json({
@@ -274,6 +373,18 @@ const getBranchById = async (req, res) => {
 const updateBranch = async (req, res) => {
   try {
     const { id } = req.params;
+    const { branchName, managerName, isMainBranch, status, address, contact, working_hours, acceptedPayments, features, dineIn, takeAway, deliveryService, usesReservationSystem, updatedBy } = req.body;
+    // ✅ Validate request body
+    const { error } = validUpdateBranchSchema.validate(req.body, {
+      abortEarly: false,
+    });
+    if (error) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid request data.",
+        error: error.details.map((detail) => detail.message),
+      });
+    }
 
     const branch = await Branch.findById(id);
     if (!branch) {
@@ -282,8 +393,52 @@ const updateBranch = async (req, res) => {
         message: "Branch not found.",
       });
     }
+    // ✅ If updating to main branch, ensure no other main branch exists
+    if (isMainBranch && !branch.isMainBranch) {
+      const mainBranchExists = await Branch.findOne({ isMainBranch: true });
+      if (mainBranchExists) {
+        return res.status(400).json({
+          success: false,
+          message: "Another main branch already exists.",
+        });
+      }
+    }
 
-    const updatedBranch = await Branch.findByIdAndUpdate(id, req.body, {
+    if (branchName?.en || branchName?.ar) {
+      const duplicate = await Branch.findOne({
+        _id: { $ne: id },
+        $or: [
+          ...(branchName?.en ? [{ "branchName.en": branchName.en }] : []),
+          ...(branchName?.ar ? [{ "branchName.ar": branchName.ar }] : []),
+        ],
+      });
+
+      if (duplicate)
+        return res.status(409).json({
+          success: false,
+          message:
+            "A branch with this name already exists.",
+        });
+    }
+
+    const fieldsToUpdate = {};
+    if (branchName) fieldsToUpdate.branchName = branchName;
+    if (managerName) fieldsToUpdate.managerName = managerName;
+    if (isMainBranch !== undefined) fieldsToUpdate.isMainBranch = isMainBranch;
+    if (status) fieldsToUpdate.status = status;
+    if (address) fieldsToUpdate.address = address;
+    if (contact) fieldsToUpdate.contact = contact;
+    if (working_hours) fieldsToUpdate.working_hours = working_hours;
+    if (acceptedPayments) fieldsToUpdate.acceptedPayments = acceptedPayments;
+    if (features) fieldsToUpdate.features = features;
+    if (dineIn !== undefined) fieldsToUpdate.dineIn = dineIn;
+    if (takeAway !== undefined) fieldsToUpdate.takeAway = takeAway;
+    if (deliveryService !== undefined) fieldsToUpdate.deliveryService = deliveryService;
+    if (usesReservationSystem !== undefined) fieldsToUpdate.usesReservationSystem = usesReservationSystem;
+    if (updatedBy) fieldsToUpdate.updatedBy = updatedBy;
+    
+
+    const updatedBranch = await Branch.findByIdAndUpdate(id, fieldsToUpdate, {
       new: true,
       runValidators: true,
     });

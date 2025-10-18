@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import { dataContext } from "../../../../App";
 import "../orders/Orders.css";
 
-const PreparationSection = () => {
+const department = () => {
   const {
     allProducts,
     setIsLoading,
@@ -17,38 +17,38 @@ const PreparationSection = () => {
     apiUrl,
   } = useContext(dataContext);
 
-  const [preparationSectionName, setpreparationSectionName] = useState("");
+  const [departmentName, setdepartmentName] = useState("");
   const [isActive, setisActive] = useState(false);
 
-  const [PreparationSectionId, setPreparationSectionId] = useState("");
+  const [departmentId, setdepartmentId] = useState("");
 
-  const [allPreparationSections, setAllPreparationSections] = useState([]);
+  const [alldepartments, setAlldepartments] = useState([]);
 
-  const createPreparationSection = async (event) => {
+  const createdepartment = async (event) => {
     event.preventDefault();
 
     const config = await handleGetTokenAndConfig();
 
-    const PreparationSectionData = {
-      name: preparationSectionName,
+    const departmentData = {
+      name: departmentName,
       isActive,
     };
 
     try {
       const response = await axios.post(
-        `${apiUrl}/api/preparationsection/`,
-        PreparationSectionData,
+        `${apiUrl}/api/department/`,
+        departmentData,
         config
       );
       if (response.status === 409) {
         toast.error("هذا القسم موجود بالفعل تاكد من الاسم.");
       }
       console.log({
-        newPreparationSection: response.data.data,
-        PreparationSectionData,
+        newdepartment: response.data.data,
+        departmentData,
       });
       if (response.status === 201) {
-        await getAllPreparationSections();
+        await getAlldepartments();
         toast.success("تم إنشاء قسم الاعداد بنجاح.");
       } else {
         throw new Error("حدث خطأ أثناء إنشاء قسم الاعداد.");
@@ -76,15 +76,15 @@ const PreparationSection = () => {
     }
   };
 
-  const getAllPreparationSections = async () => {
+  const getAlldepartments = async () => {
     const config = await handleGetTokenAndConfig();
 
     try {
-      const res = await axios.get(`${apiUrl}/api/preparationsection`, config);
+      const res = await axios.get(`${apiUrl}/api/department`, config);
       if (res.status === 200) {
-        const PreparationSections = res.data.data;
-        
-        setAllPreparationSections(PreparationSections);
+        const departments = res.data.data;
+
+        setAlldepartments(departments);
       } else {
         throw new Error("Failed to fetch data");
       }
@@ -94,25 +94,25 @@ const PreparationSection = () => {
     }
   };
 
-  const editPreparationSection = async (event) => {
+  const editdepartment = async (event) => {
     event.preventDefault();
 
     const config = await handleGetTokenAndConfig();
 
     const bodyData = {
-      name: preparationSectionName,
+      name: departmentName,
       isActive,
     };
 
     try {
       const editResponse = await axios.put(
-        `${apiUrl}/api/preparationsection/${PreparationSectionId}`,
+        `${apiUrl}/api/department/${departmentId}`,
         bodyData,
         config
       );
 
       if (editResponse.status === 200) {
-        getAllPreparationSections();
+        getAlldepartments();
         toast.success("تم تعديل قسم الاعداد بنجاح.");
       } else {
         throw new Error("فشل تعديل قسم الاعداد");
@@ -123,18 +123,18 @@ const PreparationSection = () => {
     }
   };
 
-  const deletePreparationSection = async (event) => {
+  const deletedepartment = async (event) => {
     event.preventDefault();
 
     const config = await handleGetTokenAndConfig();
 
     try {
       const deleted = await axios.delete(
-        `${apiUrl}/api/preparationsection/${PreparationSectionId}`,
+        `${apiUrl}/api/department/${departmentId}`,
         config
       );
       if (deleted.status === 200) {
-        getAllPreparationSections();
+        getAlldepartments();
         toast.success("تم حذف قسم الاعداد بنجاح.");
       } else {
         throw new Error("فشل حذف قسم الاعداد");
@@ -145,28 +145,27 @@ const PreparationSection = () => {
     }
   };
 
-  const searchByPreparationSectionName = (name) => {
+  const searchBydepartmentName = (name) => {
     if (!name) {
-      getAllPreparationSections();
+      getAlldepartments();
     } else {
-      const preparationSection = allPreparationSections
-        ? allPreparationSections.filter(
-            (PreparationSection) =>
-              PreparationSection.name.startsWith(name) === true
+      const department = alldepartments
+        ? alldepartments.filter(
+            (department) => department.name.startsWith(name) === true
           )
         : [];
-      setAllPreparationSections(preparationSection);
+      setAlldepartments(department);
     }
   };
 
-  const handlePreparationSectionData = (PreparationSection) => {
-    setPreparationSectionId(PreparationSection._id);
-    setpreparationSectionName(PreparationSection.name);
-    setisActive(PreparationSection.isActive);
+  const handledepartmentData = (department) => {
+    setdepartmentId(department._id);
+    setdepartmentName(department.name);
+    setisActive(department.isActive);
   };
 
   useEffect(() => {
-    getAllPreparationSections();
+    getAlldepartments();
   }, []);
 
   return (
@@ -182,7 +181,7 @@ const PreparationSection = () => {
               </div>
               <div className="col-12 col-md-6 p-0 m-0 d-flex flex-wrap align-items-center justify-content-end print-hide">
                 <a
-                  href="#addPreparationSectionModal"
+                  href="#adddepartmentModal"
                   className="btn btn-success w-100 d-flex align-items-center justify-content-center text-nowrap"
                   data-toggle="modal"
                 >
@@ -226,9 +225,7 @@ const PreparationSection = () => {
                 <input
                   type="text"
                   className="form-control border-primary m-0 p-2 h-auto"
-                  onChange={(e) =>
-                    searchByPreparationSectionName(e.target.value)
-                  }
+                  onChange={(e) => searchBydepartmentName(e.target.value)}
                 />
               </div>
             </div>
@@ -252,8 +249,8 @@ const PreparationSection = () => {
               </tr>
             </thead>
             <tbody>
-              {allPreparationSections &&
-                allPreparationSections.map((PreparationSection, i) => {
+              {alldepartments &&
+                alldepartments.map((department, i) => {
                   if ((i >= startPagination) & (i < endPagination)) {
                     return (
                       <tr key={i}>
@@ -264,29 +261,25 @@ const PreparationSection = () => {
                                   </span>
                                 </td> */}
                         <td>{i + 1}</td>
-                        <td>{PreparationSection.name}</td>
-                        <td>
-                          {PreparationSection.isActive ? "متاحة" : "ليست متاحة"}
-                        </td>
+                        <td>{department.name}</td>
+                        <td>{department.isActive ? "متاحة" : "ليست متاحة"}</td>
 
                         <td>
-                          {PreparationSection.createdBy
-                            ? PreparationSection.createdBy?.username
+                          {department.createdBy
+                            ? department.createdBy?.username
                             : "غير معروف"}
                         </td>
                         <td>
-                          {PreparationSection.updatedBy
-                            ? PreparationSection.updatedBy?.username
+                          {department.updatedBy
+                            ? department.updatedBy?.username
                             : "لا يوجد"}
                         </td>
                         <td>
                           <button
-                            data-target="#editPreparationSectionModal"
+                            data-target="#editdepartmentModal"
                             className="btn btn-sm btn-primary ml-2 "
                             data-toggle="modal"
-                            onClick={() =>
-                              handlePreparationSectionData(PreparationSection)
-                            }
+                            onClick={() => handledepartmentData(department)}
                           >
                             <i
                               className="material-icons"
@@ -298,12 +291,10 @@ const PreparationSection = () => {
                           </button>
 
                           <button
-                            data-target="#deletePreparationSectionModal"
+                            data-target="#deletedepartmentModal"
                             className="btn btn-sm btn-danger"
                             data-toggle="modal"
-                            onClick={() =>
-                              setPreparationSectionId(PreparationSection._id)
-                            }
+                            onClick={() => setdepartmentId(department._id)}
                           >
                             <i
                               className="material-icons"
@@ -325,11 +316,11 @@ const PreparationSection = () => {
             <div className="hint-text text-dark">
               عرض{" "}
               <b>
-                {allPreparationSections.length > endPagination
+                {alldepartments.length > endPagination
                   ? endPagination
-                  : allPreparationSections.length}
+                  : alldepartments.length}
               </b>{" "}
-              من <b>{allPreparationSections.length}</b> عنصر
+              من <b>{alldepartments.length}</b> عنصر
             </div>
             <ul className="pagination">
               <li onClick={EditPagination} className="page-item disabled">
@@ -370,10 +361,10 @@ const PreparationSection = () => {
         </div>
       </div>
 
-      <div id="addPreparationSectionModal" className="modal fade">
+      <div id="adddepartmentModal" className="modal fade">
         <div className="modal-dialog modal-lg">
           <div className="modal-content shadow-lg border-0 rounded ">
-            <form onSubmit={(e) => createPreparationSection(e, setIsLoading)}>
+            <form onSubmit={(e) => createdepartment(e, setIsLoading)}>
               <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                 <h4 className="modal-title">اضافه قسم اعداد</h4>
                 <button
@@ -394,8 +385,8 @@ const PreparationSection = () => {
                     type="text"
                     className="form-control border-primary m-0 p-2 h-auto"
                     required
-                    value={preparationSectionName}
-                    onChange={(e) => setpreparationSectionName(e.target.value)}
+                    value={departmentName}
+                    onChange={(e) => setdepartmentName(e.target.value)}
                   />
                 </div>
                 <div className="form-group col-12 col-md-6">
@@ -431,10 +422,10 @@ const PreparationSection = () => {
         </div>
       </div>
 
-      <div id="editPreparationSectionModal" className="modal fade">
+      <div id="editdepartmentModal" className="modal fade">
         <div className="modal-dialog modal-lg">
           <div className="modal-content shadow-lg border-0 rounded ">
-            <form onSubmit={editPreparationSection}>
+            <form onSubmit={editdepartment}>
               <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                 <h4 className="modal-title">تعديل قسم الاعداد</h4>
                 <button
@@ -455,8 +446,8 @@ const PreparationSection = () => {
                     type="text"
                     className="form-control border-primary m-0 p-2 h-auto"
                     required
-                    value={preparationSectionName}
-                    onChange={(e) => setpreparationSectionName(e.target.value)}
+                    value={departmentName}
+                    onChange={(e) => setdepartmentName(e.target.value)}
                   />
                 </div>
                 <div className="form-group col-12 col-md-6">
@@ -492,10 +483,10 @@ const PreparationSection = () => {
         </div>
       </div>
 
-      <div id="deletePreparationSectionModal" className="modal fade">
+      <div id="deletedepartmentModal" className="modal fade">
         <div className="modal-dialog modal-lg">
           <div className="modal-content shadow-lg border-0 rounded ">
-            <form onSubmit={deletePreparationSection}>
+            <form onSubmit={deletedepartment}>
               <div className="modal-header d-flex flex-wrap align-items-center text-light bg-primary">
                 <h4 className="modal-title">حذف قسم اعداد</h4>
                 <button
@@ -534,4 +525,4 @@ const PreparationSection = () => {
   );
 };
 
-export default PreparationSection;
+export default department;

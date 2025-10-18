@@ -12,9 +12,9 @@ const productionOrderSchema = new mongoose.Schema(
       ref: "Store",
       required: [true, "Store is required"],
     },
-    preparationSection: {
+    department: {
       type: ObjectId,
-      ref: "PreparationSection",
+      ref: "department",
       required: [true, "preparation section is required"],
     },
     stockItem: {
@@ -54,7 +54,5 @@ const productionOrderSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
-
-
 
 module.exports = mongoose.model("ProductionOrder", productionOrderSchema);

@@ -14,7 +14,7 @@ const PreparationScreen = () => {
     handleGetTokenAndConfig,
   } = useContext(dataContext);
 
-  const [preparationSections, setPreparationSections] = useState([]);
+  const [departments, setdepartments] = useState([]);
   const [selectedSectionId, setSelectedSectionId] = useState(null);
   const [AllPreparationTicket, setAllPreparationTicket] = useState([]); // State for all Tickets
   const [TicketsToday, setTicketsToday] = useState([]); // State for all Tickets
@@ -38,16 +38,13 @@ const PreparationScreen = () => {
   const [activeTab, setActiveTab] = useState("newTickets");
 
   // Fetch all preparation sections
-  const fetchPreparationSections = async () => {
+  const fetchdepartments = async () => {
     const config = await handleGetTokenAndConfig();
 
     try {
-      const response = await axios.get(
-        `${apiUrl}/api/preparationsection`,
-        config
-      );
+      const response = await axios.get(`${apiUrl}/api/department`, config);
       if (response.status === 200) {
-        setPreparationSections(response.data.data);
+        setdepartments(response.data.data);
       } else {
         throw new Error("Failed to fetch sections.");
       }
@@ -66,7 +63,6 @@ const PreparationScreen = () => {
       const getAllRecipe = await axios.get(`${apiUrl}/api/recipe`, config);
       const allRecipeData = getAllRecipe.data;
       setAllRecipe(allRecipeData);
-      
     } catch (error) {
       console.error("Error fetching product recipe:", error.message);
     }
@@ -86,7 +82,7 @@ const PreparationScreen = () => {
 
       const filteredTicketsToday = tickets.filter((ticket) => {
         const itemDate = formatDate(ticket.createdAt);
-        return itemDate === date && ticket.preparationSection._id === sectionId;
+        return itemDate === date && ticket.department._id === sectionId;
       });
       setTicketsToday(filteredTicketsToday);
 
@@ -172,7 +168,7 @@ const PreparationScreen = () => {
       const config = await handleGetTokenAndConfig();
 
       setFilteredSectionConsumptionToday([]);
-      // 
+      //
 
       const response = await axios.get(`${apiUrl}/api/consumption`, config);
 
@@ -187,7 +183,7 @@ const PreparationScreen = () => {
           }
         );
 
-        // 
+        //
         setFilteredSectionConsumptionToday(SectionConsumptionsToday);
       } else {
         console.error("Unexpected response or empty data");
@@ -213,9 +209,7 @@ const PreparationScreen = () => {
           ? allWaiters.filter((waiter) => waiter.isActive === true)
           : [];
       setAllWaiters(waiterActive);
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   };
 
   // Determines the next available waiter to take an Ticket
@@ -236,7 +230,7 @@ const PreparationScreen = () => {
       if (!getTicket) {
         throw new Error("Ticket not found");
       }
-      // 
+      //
 
       if (getTicket.status) {
       }
@@ -267,18 +261,15 @@ const PreparationScreen = () => {
         const lastWaiterIndex = sectionWaiters.findIndex(
           (waiter) => waiter._id === lastWaiterId
         );
-        // 
+        //
 
         waiterId =
           lastWaiterIndex !== -1 && lastWaiterIndex < sectionWaiters.length - 1
             ? sectionWaiters[lastWaiterIndex + 1]._id
             : sectionWaiters[0]._id;
       } else {
-        
         waiterId = sectionWaiters[0]._id;
       }
-
-      
 
       return waiterId;
     } catch (error) {
@@ -454,11 +445,11 @@ const PreparationScreen = () => {
           : product
       );
 
-      // 
+      //
 
       if (orderType === "Internal") {
         const waiter = await specifiedWaiter(ticketId);
-        
+
         if (!waiter) {
           toast.warn("لا يوجد نادل متاح لتسليم الطلب. يرجى مراجعة الإدارة!");
           return;
@@ -481,7 +472,7 @@ const PreparationScreen = () => {
           },
           config
         );
-        
+
         waiterSocket.emit("orderReady", `أورد جاهز في المطبخ-${waiter}`);
       } else {
         const updateOrder = await axios.put(
@@ -496,7 +487,7 @@ const PreparationScreen = () => {
           { preparationStatus: "Prepared", isDone: true },
           config
         );
-        
+
         waiterSocket.emit("orderReady", "أورد جاهز في المطبخ");
       }
 
@@ -527,7 +518,7 @@ const PreparationScreen = () => {
     getAllRecipe();
     getAllWaiters();
     getSectionConsumption();
-    fetchPreparationSections();
+    fetchdepartments();
   }, []);
 
   useEffect(() => {
@@ -565,7 +556,7 @@ const PreparationScreen = () => {
             <option value="" disabled selected>
               اختر القسم
             </option>
-            {preparationSections.map((section) => (
+            {departments.map((section) => (
               <option key={section._id} value={section._id}>
                 {section.name}
               </option>

@@ -45,16 +45,15 @@ const productionRecordSchema = new mongoose.Schema(
       trim: true,
       maxLength: 10,
       required: [true, "Unit is required"],
-
     },
     productionStatus: {
       type: String,
       enum: ["Pending", "Completed", "Canceled", "Rejected"],
       default: "Pending",
     },
-    preparationSection: {
+    department: {
       type: ObjectId,
-      ref: "PreparationSection",
+      ref: "department",
       required: [true, "Production section is required"],
     },
     recipe: {
@@ -109,6 +108,5 @@ const productionRecordSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
-
 
 module.exports = mongoose.model("ProductionRecord", productionRecordSchema);

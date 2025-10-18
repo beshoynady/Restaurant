@@ -32,7 +32,7 @@ const ProductionOrder = () => {
     )[0];
 
   const [storeId, setStoreId] = useState("");
-  const [preparationSection, setPreparationSection] = useState("");
+  const [department, setdepartment] = useState("");
   const [stockItemId, setStockItemId] = useState("");
   const [stockItem, setStockItem] = useState({});
   const [unit, setUnit] = useState("");
@@ -62,7 +62,7 @@ const ProductionOrder = () => {
         `${apiUrl}/api/productionOrder/`,
         {
           storeId,
-          preparationSection,
+          department,
           stockItem: stockItemId,
           unit,
           quantityRequested,
@@ -97,18 +97,20 @@ const ProductionOrder = () => {
       return;
     }
     setIsLoading(true);
-    console.log({ storeId,
-      preparationSection,
+    console.log({
+      storeId,
+      department,
       stockItem: stockItemId,
       unit,
       quantityRequested,
-      notes, });
+      notes,
+    });
     try {
       const response = await axios.put(
         `${apiUrl}/api/productionOrder/${productionOrderId}`,
         {
           storeId,
-          preparationSection,
+          department,
           stockItem: stockItemId,
           unit,
           quantityRequested,
@@ -149,7 +151,7 @@ const ProductionOrder = () => {
         config
       );
       const productionOrdersData = response.data;
-      
+
       if (!productionOrders) {
         throw new Error("Unexpected response or empty data");
       }
@@ -289,7 +291,7 @@ const ProductionOrder = () => {
   const resetFields = () => {
     setProductionOrderId("");
     setStoreId("");
-    setPreparationSection("");
+    setdepartment("");
     setStockItem("");
     setUnit("");
     setProductionStatus("Pending");
@@ -317,7 +319,7 @@ const ProductionOrder = () => {
 
       const stockItems = response.data.reverse();
       setAllStockItems(stockItems);
-      
+
       // Notify on success
       toast.success("تم استرداد عناصر المخزون بنجاح");
       setIsLoading(false);
@@ -345,18 +347,15 @@ const ProductionOrder = () => {
     }
   };
 
-  const [listPreparationSections, setListPreparationSections] = useState([]);
+  const [listdepartments, setListdepartments] = useState([]);
   // Fetch all preparation sections
-  const fetchPreparationSections = async () => {
+  const fetchdepartments = async () => {
     const config = await handleGetTokenAndConfig();
 
     try {
-      const response = await axios.get(
-        `${apiUrl}/api/preparationsection`,
-        config
-      );
+      const response = await axios.get(`${apiUrl}/api/department`, config);
       if (response.status === 200) {
-        setListPreparationSections(response.data.data);
+        setListdepartments(response.data.data);
       } else {
         throw new Error("Failed to fetch sections.");
       }
@@ -386,7 +385,7 @@ const ProductionOrder = () => {
     setProductionOrderId(order._id);
     setStockItemId(order.stockItemId?._id);
     setStoreId(order.storeId?._id);
-    setPreparationSection(order.preparationSection?._id);
+    setdepartment(order.department?._id);
     setStockItem(order.stockItem);
     setUnit(order.unit);
     setQuantityRequested(order.quantityRequested);
@@ -437,7 +436,7 @@ const ProductionOrder = () => {
     getAllStores();
     getAllCategoryStock();
     getProductionOrders();
-    fetchPreparationSections();
+    fetchdepartments();
   }, []);
 
   return (
@@ -554,7 +553,7 @@ const ProductionOrder = () => {
                   onChange={(e) => getProductionOrderBySection(e.target.value)}
                 >
                   <option value={""}>الكل</option>
-                  {listPreparationSections.map((section, i) => {
+                  {listdepartments.map((section, i) => {
                     return (
                       <option value={section._id} key={i}>
                         {section.name}
@@ -598,8 +597,10 @@ const ProductionOrder = () => {
                     <td>{order.orderNumber}</td>
                     <td>{order.stockItem?.itemName || "غير محدد"}</td>
                     <td>{order.storeId?.storeName || "غير محدد"}</td>
-                    <td>{order.stockItem.categoryId?.categoryName || "غير محدد"}</td>
-                    <td>{order.preparationSection?.name || "غير محدد"}</td>
+                    <td>
+                      {order.stockItem.categoryId?.categoryName || "غير محدد"}
+                    </td>
+                    <td>{order.department?.name || "غير محدد"}</td>
                     <td>{order.unit}</td>
                     <td>{order.quantityRequested}</td>
                     <td>{order.productionStatus}</td>
@@ -623,8 +624,8 @@ const ProductionOrder = () => {
                       )}
                       {productionOrderPermission?.delete && (
                         <button
-                        data-target="#deleteProductionOrderModal"
-                        data-toggle ="modal"
+                          data-target="#deleteProductionOrderModal"
+                          data-toggle="modal"
                           className="btn btn-sm btn-danger"
                           onClick={() => setProductionOrderId(order._id)}
                         >
@@ -805,10 +806,10 @@ const ProductionOrder = () => {
                   <select
                     required
                     className="form-control border-primary m-0 p-2 h-auto"
-                    onChange={(e) => setPreparationSection(e.target.value)}
+                    onChange={(e) => setdepartment(e.target.value)}
                   >
                     <option>اختر القسم</option>
-                    {listPreparationSections.map((section, i) => (
+                    {listdepartments.map((section, i) => (
                       <option value={section._id} key={i}>
                         {section.name}
                       </option>
@@ -897,7 +898,8 @@ const ProductionOrder = () => {
                     <option>
                       {
                         AllCategoryStock.find(
-                          (category) => category._id === stockItem.categoryId?._id
+                          (category) =>
+                            category._id === stockItem.categoryId?._id
                         )?.categoryName
                       }
                     </option>
@@ -955,16 +957,16 @@ const ProductionOrder = () => {
                   <select
                     required
                     className="form-control border-primary m-0 p-2 h-auto"
-                    onChange={(e) => setPreparationSection(e.target.value)}
+                    onChange={(e) => setdepartment(e.target.value)}
                   >
                     <option>
                       {
-                        listPreparationSections.find(
-                          (section) => section._id === preparationSection
+                        listdepartments.find(
+                          (section) => section._id === department
                         )?.name
                       }
                     </option>
-                    {listPreparationSections.map((section, i) => (
+                    {listdepartments.map((section, i) => (
                       <option value={section._id} key={i}>
                         {section.name}
                       </option>
