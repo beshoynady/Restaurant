@@ -10,10 +10,11 @@ const { Server } = require("socket.io");
 // Import database connection and route files
 const connectdb = require("./database/connectdb.js");
 const routeRestaurant = require("./router/restaurant.router.js");
+const routeBranch = require("./router/branch.router.js");
 const routePermission = require("./router/permission.router.js");
 const routeAttendance = require("./router/attendance-record.router.js");
 const routeShift = require("./router/shift.router.js");
-const routedepartment = require("./router/preparation-section.router.js");
+const routeDepartment = require("./router/department.router.js");
 const routePreparationTicket = require("./router/preparation-ticket.router.js");
 const routeDeliveryArea = require("./router/delivery-area.router.js");
 const routeReservation = require("./router/reservation.router.js");
@@ -25,6 +26,7 @@ const routeRecipe = require("./router/recipe.router.js");
 const routeProductionRecipe = require("./router/production-recipe.router.js");
 const routeUser = require("./router/user.router.js");
 const routeCustomer = require("./router/customer.router.js");
+const routerJopTitle = require("./router/job-title.router.js")
 const routeEmployee = require("./router/employee.router.js");
 const routePayroll = require("./router/payroll.router.js");
 const routeEmployeeTransactions = require("./router/employee-transactions.router.js");
@@ -106,10 +108,11 @@ app.use("/api", limiter); // Apply rate limiting to all API routeS
 
 // Route requests to appropriate routers
 app.use("/api/restaurant", routeRestaurant);
+app.use("/api/branch", routeBranch);
 app.use("/api/permission", routePermission);
 app.use("/api/attendance", routeAttendance);
 app.use("/api/shift", routeShift);
-app.use("/api/department", routedepartment);
+app.use("/api/department", routeDepartment);
 app.use("/api/preparationticket", routePreparationTicket);
 app.use("/api/deliveryarea", routeDeliveryArea);
 app.use("/api/product", routeProduct);
@@ -117,6 +120,7 @@ app.use("/api/recipe", routeRecipe);
 app.use("/api/menucategory", routeMenuCategory);
 app.use("/api/customer", routeCustomer);
 app.use("/api/user", routeUser);
+app.use("/api/jop-title", routerJopTitle)
 app.use("/api/employee", routeEmployee);
 app.use("/api/message", routeMessage);
 app.use("/api/payroll", routePayroll);

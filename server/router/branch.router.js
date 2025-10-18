@@ -1,4 +1,4 @@
-const express = require;
+const express = require('express');
 const router = express.Router();
 const {
   createBranch,
@@ -9,7 +9,6 @@ const {
 } = require("../controllers/branch.controller");
 const { authenticateToken } = require("../middlewares/authenticate");
 const checkSubscription = require("../middlewares/checkSubscription");
-e("express");
 
 /* -------------------------------------------------------------------------- */
 /*                                 🚀 Endpoints                               * /

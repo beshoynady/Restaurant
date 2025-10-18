@@ -4,6 +4,12 @@ const { ObjectId } = mongoose.Schema;
 // Define the schema for an employee
 const employeeSchema = new mongoose.Schema(
   {
+    branch :{
+      type: ObjectId,
+      ref: "branch",
+      require: true
+
+    },
     fullname: {
       type: String,
       trim: true,
@@ -22,7 +28,6 @@ const employeeSchema = new mongoose.Schema(
       type: String,
       trim: true,
       unique: true,
-      length: 11,
       required: [true, "Phone number is required"],
     },
     password: {
@@ -41,8 +46,6 @@ const employeeSchema = new mongoose.Schema(
       type: String,
       unique: true,
       trim: true,
-      minlength: 14,
-      maxlength: 14,
       required: function () {
         return this.role !== "programer";
       },
@@ -69,19 +72,8 @@ const employeeSchema = new mongoose.Schema(
       default: false,
     },
     role: {
-      type: String,
-      trim: true,
-      enum: [
-        "programer",
-        "owner",
-        "manager",
-        "cashier",
-        "waiter",
-        "deliveryman",
-        "chef",
-        "Bartender",
-        "Grill Chef",
-      ],
+      type: ObjectId,
+      ref: "title-job",
       required: [true, "Role is required"],
     },
     sectionNumber: {
