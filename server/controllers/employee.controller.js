@@ -1,363 +1,297 @@
 const EmployeeModel = require("../models/employee.model");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-require("dotenv").config();
 const Joi = require("joi");
+require("dotenv").config();
 
+/* ===========================================================
+ *  ✅ 1. Joi Schema for FIRST EMPLOYEE (Super Admin)
+ *  - Used once during system initialization
+ *  - Skips restaurant/branch/department/jobTitle
+ * =========================================================== */
+const createFirstEmployeeSchema = Joi.object({
+  personalInfo: Joi.object({
+    fullName: Joi.object({
+      en: Joi.string().min(3).max(100).required(),
+      ar: Joi.string().min(3).max(100).required(),
+    }),
+    gender: Joi.string().valid("male", "female", "other").required(),
+    dateOfBirth: Joi.date().required(),
+    nationalID: Joi.string().min(10).max(30).required(),
+  }).required(),
+
+  contactInfo: Joi.object({
+    phone: Joi.string().length(11).required(),
+    email: Joi.string().email().optional(),
+  }).required(),
+
+  credentials: Joi.object({
+    username: Joi.string().min(3).max(100).required(),
+    password: Joi.string().min(6).max(200).required(),
+  }).required(),
+
+  employmentInfo: Joi.object({
+    employeeCode: Joi.string().default("EMP-0001"),
+    hireDate: Joi.date().default(Date.now),
+    contractType: Joi.string()
+      .valid("permanent", "temporary", "part-time", "internship")
+      .default("permanent"),
+    dailyWorkingHours: Joi.number().min(1).max(24).default(8),
+    weeklyOffDay: Joi.string()
+      .valid("Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday")
+      .default("Friday"),
+  }).optional(),
+
+  financialInfo: Joi.object({
+    basicSalary: Joi.number().min(0).default(0),
+    salaryType: Joi.string()
+      .valid("monthly", "weekly", "daily", "hourly")
+      .default("monthly"),
+  }).optional(),
+});
+
+/* ===========================================================
+ *  ✅ 2. Joi Schema for REGULAR EMPLOYEE
+ * =========================================================== */
+const createEmployeeSchema = Joi.object({
+  restaurant: Joi.string().required(),
+  branch: Joi.string().required(),
+  department: Joi.string().required(),
+  jobTitle: Joi.string().required(),
+
+  personalInfo: Joi.object({
+    fullName: Joi.object({
+      en: Joi.string().min(3).max(100).required(),
+      ar: Joi.string().min(3).max(100).required(),
+    }),
+    gender: Joi.string().valid("male", "female", "other").required(),
+    dateOfBirth: Joi.date().required(),
+    nationalID: Joi.string().min(10).max(30).required(),
+  }),
+
+  contactInfo: Joi.object({
+    phone: Joi.string().length(11).required(),
+    email: Joi.string().email().optional(),
+  }),
+
+  employmentInfo: Joi.object({
+    employeeCode: Joi.string().required(),
+    hireDate: Joi.date().required(),
+    contractType: Joi.string()
+      .valid("permanent", "temporary", "part-time", "internship")
+      .required(),
+    dailyWorkingHours: Joi.number().min(1).max(24).optional(),
+    weeklyOffDay: Joi.string().optional(),
+  }),
+
+  financialInfo: Joi.object({
+    basicSalary: Joi.number().min(0).required(),
+    salaryType: Joi.string()
+      .valid("monthly", "weekly", "daily", "hourly")
+      .default("monthly"),
+    payDay: Joi.number().min(1).max(31).optional(),
+  }),
+
+  credentials: Joi.object({
+    username: Joi.string().min(3).max(100).required(),
+    password: Joi.string().min(6).max(200).required(),
+    isAdmin: Joi.boolean().default(false),
+  }),
+});
+
+/* ===========================================================
+ *  ✅ 3. CREATE FIRST EMPLOYEE (Super Admin)
+ * =========================================================== */
 const createFirstEmployee = async (req, res) => {
   try {
-    // Check if there are any employees in the database
+    const { personalInfo, contactInfo, credentials, employmentInfo, financialInfo } = req.body;
+
+    // 🔸 Validate request body
+    const { error } = createFirstEmployeeSchema.validate(req.body);
+    if (error)
+      return res.status(400).json({ status: "error", message: error.details[0].message });
+
+    // 🔸 Check if this is truly the first employee
     const employeeCount = await EmployeeModel.countDocuments();
-    // If there are employees, return an error
-    if (employeeCount > 0) {
-      return res.status(400).json({ message: "First employee already created" });
-    }
-    
+    if (employeeCount > 0)
+      return res.status(400).json({
+        status: "error",
+        message: "❌ Initialization already completed. First employee exists.",
+      });
 
-    const defaultEmployeeData = {
-      fullname: "Beshoy Nady",
-      phone: "01122455010",
-      role: "programer",
-      username: "BeshoyNady",
-      isActive: true,
-      isAdmin: true,
-      isVerified: true,
-    };
+    // 🔸 Check duplicates
+    const existing = await EmployeeModel.findOne({
+      $or: [
+        { "contactInfo.phone": contactInfo.phone },
+        { "credentials.username": credentials.username },
+        { "personalInfo.nationalID": personalInfo.nationalID },
+      ],
+    });
+    if (existing)
+      return res
+        .status(409)
+        .json({ status: "error", message: "❌ Duplicate phone, username, or ID." });
 
-    const hashedPassword = await bcrypt.hash('Beshoy@88', 10);
+    // 🔸 Hash password securely
+    const hashedPassword = await bcrypt.hash(credentials.password, 10);
 
-    // Create the first employee with default data    
+    // 🔸 Create Super Admin
     const newEmployee = await EmployeeModel.create({
-      ...defaultEmployeeData,
-      password: hashedPassword,
+      personalInfo,
+      contactInfo,
+      employmentInfo,
+      financialInfo,
+      credentials: { ...credentials, password: hashedPassword, isAdmin: true },
+      createdBy: null,
     });
 
-    return res.status(201).json({ newEmployee });
-
+    return res.status(201).json({
+      status: "success",
+      message: "✅ First employee (Super Admin) created successfully.",
+      data: newEmployee,
+    });
   } catch (err) {
-    console.error("Error creating the first employee:", err);
-    return res.status(500).json({ message: "Error creating the first employee", err: err.message });
+    console.error("Error creating first employee:", err);
+    res.status(500).json({
+      status: "error",
+      message: "Internal server error while creating first employee.",
+      error: err.message,
+    });
   }
 };
 
-
-const createEmployeeSchema = Joi.object({
-  fullname: Joi.string().min(3).max(100).required(),
-  numberID: Joi.string()
-    .length(14)
-    .when("role", {
-      is: Joi.not("programer").valid(),
-      then: Joi.required(),
-      otherwise: Joi.optional(),
-    }),
-  username: Joi.string()
-    .min(3)
-    .max(100)
-    .when("role", {
-      is: Joi.not("programer").valid(),
-      then: Joi.required(),
-      otherwise: Joi.optional(),
-    }),
-  address: Joi.string().min(3).max(200).optional(),
-  email: Joi.string().email().max(100).allow(""),
-  phone: Joi.string().length(11).required(),
-  password: Joi.string().min(3).max(200).required(),
-  basicSalary: Joi.number()
-    .min(0)
-    .when("role", {
-      is: Joi.not("programer").valid(),
-      then: Joi.required(),
-      otherwise: Joi.optional(),
-    }),
-  role: Joi.string()
-    .valid(
-      "programer",
-      "owner",
-      "manager",
-      "cashier",
-      "waiter",
-      "deliveryman",
-      "chef",
-      "Bartender",
-      "Grill Chef",
-    )
-    .required(),
-  isActive: Joi.boolean().default(true),
-  shift: Joi.string().optional(),
-  
-  workingDays: Joi.number()
-    .min(0)
-    .max(31)
-    .when("role", {
-      is: Joi.not("programer").valid(),
-      then: Joi.required(),
-      otherwise: Joi.optional(),
-    }),
-  taxRate: Joi.number()
-    .min(0)
-    .max(100)
-    .when("role", {
-      is: Joi.not("programer").valid(),
-      then: Joi.required(),
-      otherwise: Joi.optional(),
-    }),
-  insuranceRate: Joi.number()
-    .min(0)
-    .max(100)
-    .when("role", {
-      is: Joi.not("programer").valid(),
-      then: Joi.required(),
-      otherwise: Joi.optional(),
-    }),
-  isAdmin: Joi.boolean().default(true),
-  isVerified: Joi.boolean().default(false),
-  sectionNumber: Joi.string().allow("").optional(),
-});
-
-
-
+/* ===========================================================
+ *  ✅ 4. CREATE EMPLOYEE
+ * =========================================================== */
 const createEmployee = async (req, res) => {
   try {
-    const createdBy = req.employee.id;
+    const { contactInfo, credentials, personalInfo } = req.body;
+    const createdBy = req.employee?.id || null;
+
+    // 🔸 Validate with Joi
     const { error } = createEmployeeSchema.validate(req.body);
-    if (error) {
-      return res.status(400).json({ message: error.details[0].message });
-    }
+    if (error)
+      return res.status(400).json({ status: "error", message: error.details[0].message });
 
-    const {
-      fullname,
-      numberID,
-      username,
-      shift,
-      email,
-      address,
-      phone,
-      workingDays,
-      basicSalary,
-      role,
-      sectionNumber,
-      taxRate,
-      insuranceRate,
-      isActive,
-    } = req.body;
+    // 🔸 Check for duplicates
+    const existingEmployee = await EmployeeModel.findOne({
+      $or: [
+        { "contactInfo.phone": contactInfo.phone },
+        { "credentials.username": credentials.username },
+        { "personalInfo.nationalID": personalInfo.nationalID },
+      ],
+    });
+    if (existingEmployee)
+      return res.status(409).json({
+        status: "error",
+        message: "❌ Employee with same phone, username, or ID already exists.",
+      });
 
-    if (!fullname) {
-      return res.status(400).json({ message: "Invalid input: Fullname " });
-    }
-    if (!phone) {
-      return res.status(400).json({ message: "Invalid input: Phone" });
-    }
-    if (!numberID) {
-      return res.status(400).json({ message: "Invalid input: numberID " });
-    }
-    if (!req.body.password) {
-      return res
-        .status(400)
-        .json({ message: "Invalid input: password missing" });
-    }
+    // 🔸 Hash password
+    const hashedPassword = await bcrypt.hash(credentials.password, 10);
 
-    const isEmployeeFound = await EmployeeModel.findOne({ phone });
-    if (isEmployeeFound) {
-      return res.status(409).json({ message: "This phone is already in use" });
-    }
-
-    const isEmployeeNumberIDFound = await EmployeeModel.findOne({ numberID });
-    if (isEmployeeNumberIDFound) {
-      return res
-        .status(409)
-        .json({ message: "This numberID is already in use" });
-    }
-
-    const hashedPassword = await bcrypt.hash(req.body.password, 10);
-
+    // 🔸 Create employee
     const newEmployee = await EmployeeModel.create({
-      fullname,
-      username,
-      numberID,
-      email,
-      shift,
-      phone,
-      address,
-      password: hashedPassword,
-      workingDays,
-      basicSalary,
-      role,
-      sectionNumber,
-      taxRate,
-      insuranceRate,
-      isActive,
+      ...req.body,
+      "credentials.password": hashedPassword,
       createdBy,
     });
 
-    res.status(201).json({ newEmployee });
+    res.status(201).json({
+      status: "success",
+      message: "✅ Employee created successfully.",
+      data: newEmployee,
+    });
   } catch (err) {
-    res.status(500).json({ message: "Error creating employee", err });
+    console.error("Error creating employee:", err);
+    res.status(500).json({
+      status: "error",
+      message: "Internal server error while creating employee.",
+      error: err.message,
+    });
   }
 };
 
-const updateEmployeeSchema = Joi.object({
-  fullname: Joi.string().min(3).max(100).required(),
-  numberID: Joi.string().length(14).required(),
-  username: Joi.string().min(3).max(100).required(),
-  address: Joi.string().min(3).max(200).required(),
-  email: Joi.string().email().max(100).allow("").optional(),
-  phone: Joi.string().length(11).required(),
-  password: Joi.string().min(3).max(200).optional(),
-  basicSalary: Joi.number().min(0).required(),
-  role: Joi.string()
-    .valid(
-      "programer",
-      "owner",
-      "manager",
-      "cashier",
-      "waiter",
-      "deliveryman",
-      "chef",
-      "Bartender",
-      "Grill Chef",
-    )
-    .required(),
-  isActive: Joi.boolean().optional(),
-  shift: Joi.string().optional(),
-  workingDays: Joi.number().min(0).max(31).optional(),
-  taxRate: Joi.number().min(0).max(100).optional(),
-  insuranceRate: Joi.number().min(0).max(100).optional(),
-  isAdmin: Joi.boolean().default(true),
-  isVerified: Joi.boolean().default(false),
-  sectionNumber: Joi.string().allow("").optional(),
-});
-
+/* ===========================================================
+ *  ✅ 5. UPDATE EMPLOYEE
+ * =========================================================== */
 const updateEmployee = async (req, res) => {
   try {
-    const updatedBy = req.employee.id;
-    const id = req.params.employeeId;
-    const { error } = updateEmployeeSchema.validate(req.body);
-    if (error) {
-      return res.status(400).json({ message: error.details[0].message });
+    const { employeeId } = req.params;
+    const updatedBy = req.employee?.id;
+    const { credentials } = req.body;
+
+    // 🔸 Find existing employee
+    const employee = await EmployeeModel.findById(employeeId);
+    if (!employee)
+      return res.status(404).json({ status: "error", message: "Employee not found." });
+
+    // 🔸 Hash password if updated
+    if (credentials?.password) {
+      req.body.credentials.password = await bcrypt.hash(credentials.password, 10);
     }
 
-    const {
-      fullname,
-      numberID,
-      username,
-      shift,
-      email,
-      address,
-      phone,
-      workingDays,
-      basicSalary,
-      role,
-      sectionNumber,
-      taxRate,
-      insuranceRate,
-      isActive,
-      isVerified,
-      password,
-    } = req.body;
-
-    const updateData = {
-      fullname,
-      numberID,
-      username,
-      shift,
-      email,
-      address,
-      phone,
-      workingDays,
-      basicSalary,
-      role,
-      sectionNumber,
-      taxRate,
-      insuranceRate,
-      isActive,
-      isVerified,
-      updatedBy,
-    };
-
-    if (password) {
-      updateData.password = await bcrypt.hash(password, 10);
-    }
-
+    // 🔸 Update employee data
     const updatedEmployee = await EmployeeModel.findByIdAndUpdate(
-      id,
-      { $set: updateData },
+      employeeId,
+      { $set: { ...req.body, updatedBy } },
       { new: true }
     );
-    if (!updatedEmployee) {
-      return res.status(404).json({ message: "Employee not found" });
-    }
 
-    res.status(200).json(updatedEmployee);
+    res.status(200).json({
+      status: "success",
+      message: "✅ Employee updated successfully.",
+      data: updatedEmployee,
+    });
   } catch (err) {
-    res.status(500).json({ message: "Error updating employee", err });
-    
+    console.error("Error updating employee:", err);
+    res.status(500).json({
+      status: "error",
+      message: "Internal server error while updating employee.",
+      error: err.message,
+    });
   }
 };
 
-const getOneEmployee = async (req, res) => {
-  try {
-    const employeeId = req.params.employeeId;
-    const employee = await EmployeeModel.findById(employeeId)
-      .populate("shift")
-      .populate("createdBy", "_id fullname username role")
-      .populate("updatedBy", "_id fullname username role");
-
-    if (!employee) {
-      return res.status(404).json({ message: "Employee not found" });
-    }
-
-    res.status(200).json(employee);
-  } catch (err) {
-    res.status(500).json({ message: "Error fetching employee", err });
-  }
-};
-
-
-
+/* ===========================================================
+ *  ✅ 6. LOGIN EMPLOYEE
+ * =========================================================== */
 const loginEmployee = async (req, res) => {
   try {
-    const { phone, password } = req.body;
+    const { username, password } = req.body;
 
-    if (!phone || !password) {
-      return res.status(400).json({ message: "Phone number and password are required" });
-    }
+    // 🔸 Find employee by username
+    const employee = await EmployeeModel.findOne({ "credentials.username": username });
+    if (!employee)
+      return res.status(404).json({ status: "error", message: "Employee not found." });
 
-    const findEmployee = await EmployeeModel.findOne({ phone });
+    if (!employee.employmentInfo?.isActive)
+      return res.status(403).json({ status: "error", message: "Employee is not active." });
 
-    if (!findEmployee) {
-      return res.status(404).json({ message: "Employee not found by phone number" });
-    }
+    // 🔸 Compare password
+    const isMatch = await bcrypt.compare(password, employee.credentials.password);
+    if (!isMatch)
+      return res.status(401).json({ status: "error", message: "Invalid username or password." });
 
-    if (!findEmployee.isActive) {
-      return res.status(403).json({ message: "Employee is not active" });
-    }
-
-    const match = await bcrypt.compare(password, findEmployee.password);
-
-    if (!match) {
-      return res.status(401).json({ message: "Invalid credentials" });
-    }
-
+    // 🔸 Generate tokens
     const accessToken = jwt.sign(
       {
-        id: findEmployee._id,
-        username: findEmployee.username,
-        isAdmin: findEmployee.isAdmin,
-        isActive: findEmployee.isActive,
-        isVerified: findEmployee.isVerified,
-        role: findEmployee.role,
-        shift: findEmployee.shift,
+        id: employee._id,
+        username: employee.credentials.username,
+        isAdmin: employee.credentials.isAdmin,
+        role: employee.jobTitle,
       },
       process.env.JWT_SECRET_KEY,
       { expiresIn: "15m" }
     );
 
     const refreshToken = jwt.sign(
-      { id: findEmployee._id },
+      { id: employee._id },
       process.env.JWT_REFRESH_SECRET,
       { expiresIn: "7d" }
     );
 
+    // 🔸 Save refresh token in cookie
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
@@ -366,101 +300,90 @@ const loginEmployee = async (req, res) => {
     });
 
     res.status(200).json({
-      message: "Login successful",
+      status: "success",
+      message: "✅ Login successful.",
       accessToken,
-      findEmployee
+      employee,
     });
-  } catch (error) {
-    console.error("Error logging in:", error);
-
-    if (error instanceof mongoose.Error) {
-      return res.status(500).json({ message: "Database error occurred while processing your request. Please try again later." });
-    }
-
-    if (error instanceof jwt.JsonWebTokenError) {
-      return res.status(500).json({ message: "Token generation failed. Please try again later." });
-    }
-
-    res.status(500).json({ message: "Internal server error. Please try again later." });
+  } catch (err) {
+    console.error("Login error:", err);
+    res.status(500).json({ status: "error", message: "Internal server error.", error: err.message });
   }
 };
 
+/* ===========================================================
+ *  ✅ 7. LOGOUT EMPLOYEE
+ * =========================================================== */
 const employeeLogout = async (req, res) => {
   try {
     res.clearCookie("refreshToken", {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
+      secure: process.env.NODE_ENV === "production",
     });
-
-    res.status(200).json({ message: "Logged out successfully" });
-  } catch (error) {
-    console.error("Logout error:", error);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(200).json({ status: "success", message: "✅ Logged out successfully." });
+  } catch (err) {
+    res.status(500).json({ status: "error", message: "Logout failed.", error: err.message });
   }
 };
 
+/* ===========================================================
+ *  ✅ 8. GET ALL EMPLOYEES
+ * =========================================================== */
 const getAllEmployee = async (req, res) => {
   try {
     const employees = await EmployeeModel.find()
-      .populate("shift")
-      .populate("createdBy", "_id fullname username role")
-      .populate("updatedBy", "_id fullname username role");
-    // 
-    res.status(200).json(employees);
+      .populate("branch jobTitle department")
+      .populate("createdBy", "_id personalInfo.fullName credentials.username")
+      .populate("updatedBy", "_id personalInfo.fullName credentials.username");
+
+    res.status(200).json({
+      status: "success",
+      count: employees.length,
+      employees,
+    });
   } catch (err) {
-    if (err instanceof mongoose.Error) {
-      return res.status(500).json({
-        message: "Database error occurred while fetching employees. Please try again later.",
-        error: err.message,
-      });
-    }
     res.status(500).json({
-      message: "Internal server error. Please try again later.",
+      status: "error",
+      message: "Error fetching employees.",
       error: err.message,
     });
   }
 };
 
-const getCountEmployees = async (req, res) => {
-  try {
-    // Count the number of employees
-    const employeeCount = await EmployeeModel.countDocuments();
-    // Return the count in the response
-    res.status(200).json({ count: employeeCount });
-  } catch (err) {
-    // Handle errors occurred during the process
-    console.error("Error counting employees:", err);
-    res
-      .status(500)
-      .json({ message: "An error occurred while counting employees", err });
-  }
-};
-
+/* ===========================================================
+ *  ✅ 9. DELETE EMPLOYEE
+ * =========================================================== */
 const deleteEmployee = async (req, res) => {
   try {
-    const employeeId = req.params.employeeId;
+    const { employeeId } = req.params;
     const deletedEmployee = await EmployeeModel.findByIdAndDelete(employeeId);
-    if (!deletedEmployee) {
-      return res.status(404).json({ message: "Employee not found" });
-    }
+    if (!deletedEmployee)
+      return res.status(404).json({ status: "error", message: "Employee not found." });
 
-    res
-      .status(200)
-      .json({ message: "Employee deleted successfully", deletedEmployee });
+    res.status(200).json({
+      status: "success",
+      message: "✅ Employee deleted successfully.",
+      data: deletedEmployee,
+    });
   } catch (err) {
-    res.status(500).json({ message: "Error deleting employee", err });
+    res.status(500).json({
+      status: "error",
+      message: "Error deleting employee.",
+      error: err.message,
+    });
   }
 };
 
+/* ===========================================================
+ *  EXPORT CONTROLLERS
+ * =========================================================== */
 module.exports = {
   createFirstEmployee,
   createEmployee,
   updateEmployee,
-  getOneEmployee,
   loginEmployee,
   employeeLogout,
   getAllEmployee,
-  getCountEmployees,
   deleteEmployee,
 };
