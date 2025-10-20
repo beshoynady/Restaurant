@@ -11,6 +11,8 @@ import LoadingPage from "./layouts/adminLayout/adminComponent/LoadingPage/Loadin
 import NoInternetPage from "./layouts/adminLayout/adminComponent/LoadingPage/NoInternetPage";
 import Userscreen from "./layouts/clientLayout/Userscreen";
 import Login from "./layouts/adminLayout/adminComponent/login/Login";
+import SetupWizard from "./layouts/adminLayout/adminComponent/Setup/SetupWizard.jsx";
+
 
 const ManagLayout = React.lazy(() =>
   import("./layouts/adminLayout/ManagLayout")
@@ -2565,8 +2567,14 @@ function App() {
         <Routes>
           <Route path="/" element={<Userscreen />} />
           <Route path="/:id" element={<Userscreen />} />
-          <Route path="/login" element={<Login />} />
+ {/* 🔹 Login page */}
+        <Route path="/login" element={<Login />} />
 
+        {/* 🔹 Setup Wizard (for first-time setup) */}
+        <Route path="/setup" element={<SetupWizard />} />
+
+        {/* 🔹 Redirect any unknown route to login */}
+        <Route path="*" element={<Login />} />
           <Route
             path="/admin/*"
             element={

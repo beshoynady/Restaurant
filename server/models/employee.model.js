@@ -12,17 +12,14 @@ const employeeSchema = new mongoose.Schema(
     restaurant: {
       type: ObjectId,
       ref: "Restaurant",
-      required: [true, "Restaurant reference is required"],
     },
     branch: {
       type: ObjectId,
       ref: "Branch",
-      required: [true, "Branch reference is required"],
     },
     department: {
       type: ObjectId,
       ref: "Department",
-      required: [true, "Department reference is required"],
     },
     jobTitle: {
       type: ObjectId,
@@ -103,7 +100,6 @@ const employeeSchema = new mongoose.Schema(
         type: String,
         trim: true,
         unique: true,
-        required: true,
         uppercase: true,
       },
       hireDate: { type: Date, required: true },
@@ -142,7 +138,7 @@ const employeeSchema = new mongoose.Schema(
 
     // 🔹 Financial details
     financialInfo: {
-      basicSalary: { type: Number, min: 0, required: true },
+      basicSalary: { type: Number, min: 0 },
       allowance: { type: Number, min: 0, default: 0 },
       bonus: { type: Number, min: 0, default: 0 },
       taxRate: { type: Number, min: 0, max: 100, default: 0 },
@@ -218,7 +214,6 @@ const employeeSchema = new mongoose.Schema(
     createdBy: {
       type: ObjectId,
       ref: "Employee",
-      required: true,
       default: null,
     },
     updatedBy: { type: ObjectId, ref: "Employee", default: null },

@@ -38,7 +38,15 @@ const createFirstEmployeeSchema = Joi.object({
       .default("permanent"),
     dailyWorkingHours: Joi.number().min(1).max(24).default(8),
     weeklyOffDay: Joi.string()
-      .valid("Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday")
+      .valid(
+        "Saturday",
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday"
+      )
       .default("Friday"),
   }).optional(),
 
@@ -97,6 +105,8 @@ const createEmployeeSchema = Joi.object({
     password: Joi.string().min(6).max(200).required(),
     isAdmin: Joi.boolean().default(false),
   }),
+
+  createdBy: Joi.string().required(),
 });
 
 /* ===========================================================
@@ -104,12 +114,20 @@ const createEmployeeSchema = Joi.object({
  * =========================================================== */
 const createFirstEmployee = async (req, res) => {
   try {
-    const { personalInfo, contactInfo, credentials, employmentInfo, financialInfo } = req.body;
+    const {
+      personalInfo,
+      contactInfo,
+      credentials,
+      employmentInfo,
+      financialInfo,
+    } = req.body;
 
     // 🔸 Validate request body
     const { error } = createFirstEmployeeSchema.validate(req.body);
     if (error)
-      return res.status(400).json({ status: "error", message: error.details[0].message });
+      return res
+        .status(400)
+        .json({ status: "error", message: error.details[0].message });
 
     // 🔸 Check if this is truly the first employee
     const employeeCount = await EmployeeModel.countDocuments();
@@ -130,7 +148,10 @@ const createFirstEmployee = async (req, res) => {
     if (existing)
       return res
         .status(409)
-        .json({ status: "error", message: "❌ Duplicate phone, username, or ID." });
+        .json({
+          status: "error",
+          message: "❌ Duplicate phone, username, or ID.",
+        });
 
     // 🔸 Hash password securely
     const hashedPassword = await bcrypt.hash(credentials.password, 10);
@@ -171,7 +192,9 @@ const createEmployee = async (req, res) => {
     // 🔸 Validate with Joi
     const { error } = createEmployeeSchema.validate(req.body);
     if (error)
-      return res.status(400).json({ status: "error", message: error.details[0].message });
+      return res
+        .status(400)
+        .json({ status: "error", message: error.details[0].message });
 
     // 🔸 Check for duplicates
     const existingEmployee = await EmployeeModel.findOne({
@@ -224,11 +247,16 @@ const updateEmployee = async (req, res) => {
     // 🔸 Find existing employee
     const employee = await EmployeeModel.findById(employeeId);
     if (!employee)
-      return res.status(404).json({ status: "error", message: "Employee not found." });
+      return res
+        .status(404)
+        .json({ status: "error", message: "Employee not found." });
 
     // 🔸 Hash password if updated
     if (credentials?.password) {
-      req.body.credentials.password = await bcrypt.hash(credentials.password, 10);
+      req.body.credentials.password = await bcrypt.hash(
+        credentials.password,
+        10
+      );
     }
 
     // 🔸 Update employee data
@@ -261,17 +289,28 @@ const loginEmployee = async (req, res) => {
     const { username, password } = req.body;
 
     // 🔸 Find employee by username
-    const employee = await EmployeeModel.findOne({ "credentials.username": username });
+    const employee = await EmployeeModel.findOne({
+      "credentials.username": username,
+    });
     if (!employee)
-      return res.status(404).json({ status: "error", message: "Employee not found." });
+      return res
+        .status(404)
+        .json({ status: "error", message: "Employee not found." });
 
     if (!employee.employmentInfo?.isActive)
-      return res.status(403).json({ status: "error", message: "Employee is not active." });
+      return res
+        .status(403)
+        .json({ status: "error", message: "Employee is not active." });
 
     // 🔸 Compare password
-    const isMatch = await bcrypt.compare(password, employee.credentials.password);
+    const isMatch = await bcrypt.compare(
+      password,
+      employee.credentials.password
+    );
     if (!isMatch)
-      return res.status(401).json({ status: "error", message: "Invalid username or password." });
+      return res
+        .status(401)
+        .json({ status: "error", message: "Invalid username or password." });
 
     // 🔸 Generate tokens
     const accessToken = jwt.sign(
@@ -307,7 +346,13 @@ const loginEmployee = async (req, res) => {
     });
   } catch (err) {
     console.error("Login error:", err);
-    res.status(500).json({ status: "error", message: "Internal server error.", error: err.message });
+    res
+      .status(500)
+      .json({
+        status: "error",
+        message: "Internal server error.",
+        error: err.message,
+      });
   }
 };
 
@@ -321,9 +366,13 @@ const employeeLogout = async (req, res) => {
       sameSite: "strict",
       secure: process.env.NODE_ENV === "production",
     });
-    res.status(200).json({ status: "success", message: "✅ Logged out successfully." });
+    res
+      .status(200)
+      .json({ status: "success", message: "✅ Logged out successfully." });
   } catch (err) {
-    res.status(500).json({ status: "error", message: "Logout failed.", error: err.message });
+    res
+      .status(500)
+      .json({ status: "error", message: "Logout failed.", error: err.message });
   }
 };
 
@@ -359,7 +408,9 @@ const deleteEmployee = async (req, res) => {
     const { employeeId } = req.params;
     const deletedEmployee = await EmployeeModel.findByIdAndDelete(employeeId);
     if (!deletedEmployee)
-      return res.status(404).json({ status: "error", message: "Employee not found." });
+      return res
+        .status(404)
+        .json({ status: "error", message: "Employee not found." });
 
     res.status(200).json({
       status: "success",
