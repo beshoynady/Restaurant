@@ -1,56 +1,62 @@
 import React, { useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-
-import "./Login.css";
-import { dataContext } from "../../../../App";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { dataContext } from "../../../../App";
+import SetupWizard from "../Setup/SetupWizard"; // ✅ Import setup wizard screen
 
+// Images
 import restaurant from "../../../../image/SmartRestaurant.jpg";
 import menu from "../../../../image/emenu.jpg";
 import pos from "../../../../image/pos.jpg";
 
+// ✅ Functional component using hooks
 const Login = () => {
   const navigate = useNavigate();
   const {
     getEmployeeInfoFromToken,
     setIsLoading,
-    handleGetTokenAndConfig,
     apiUrl,
-    clientUrl,
   } = useContext(dataContext);
 
+  // ===============================
+  // 🔹 Component States
+  // ===============================
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
-  const [showCreateButton, setShowCreateButton] = useState(false);
+  const [hasEmployees, setHasEmployees] = useState(null); // null = not loaded yet
 
+  // ===============================
+  // 🔹 Check if employees exist
+  // ===============================
   const checkIfEmployeesExist = async () => {
+    setIsLoading(true);
     try {
       const response = await axios.get(`${apiUrl}/api/employee/count`);
-
-      const count = response.data ? response.data.count : 0;
-      if (count === 0) {
-        setShowCreateButton(true);
-      }
+      const count = response?.data?.count || 0;
+      setHasEmployees(count > 0);
     } catch (error) {
-      console.error("Network Error:", error);
-      toast.error("حدث خطأ في الشبكة.");
-      setShowCreateButton(true);
+      console.error("Error checking employees:", error);
+      toast.error("Network error while checking employees.");
+      setHasEmployees(false);
     } finally {
       setIsLoading(false);
     }
   };
 
+  // ✅ Run check once on mount
   useEffect(() => {
-    setIsLoading(true);
     checkIfEmployeesExist();
   }, []);
 
-  const adminLogin = async (e) => {
+  // ===============================
+  // 🔹 Handle Admin Login
+  // ===============================
+  const handleAdminLogin = async (e) => {
     e.preventDefault();
 
-    if (!phone || !password) {
-      toast.error("ادخل رقم الموبايل و الباسورد بشكل صحيح");
+    if (!phone.trim() || !password.trim()) {
+      toast.error("Please enter both phone number and password.");
       return;
     }
 
@@ -62,221 +68,163 @@ const Login = () => {
       );
 
       const { data } = response;
-      if (!data) return toast.error("فشل تسجيل الدخول");
+      if (!data) return toast.error("Login failed. Try again.");
 
       const employee = data.findEmployee;
       if (!employee?.isActive || !employee?.isAdmin) {
-        return toast.error("غير مسموح لك بالدخول");
+        return toast.error("You are not authorized to access admin panel.");
       }
 
-      // حفظ التوكن أولًا
+      // ✅ Save token locally and fetch employee info
       localStorage.setItem("token_e", data.accessToken);
-
-      // انتظر قليلاً لضمان الحفظ ثم استدعاء الدالة
       await new Promise((resolve) => setTimeout(resolve, 150));
       await getEmployeeInfoFromToken();
 
-      toast.success("تم تسجيل الدخول بنجاح");
-      navigate("/admin"); // تنقل بدون refresh
+      toast.success("Login successful!");
+      navigate("/admin");
     } catch (error) {
-      console.error(error);
+      console.error("Login Error:", error);
       toast.error(
-        error.response?.data?.message || "حدث خطأ. الرجاء المحاولة مرة أخرى."
+        error.response?.data?.message || "An error occurred during login."
       );
     }
   };
 
-  // const adminLogin = async (e) => {
-  //   e.preventDefault();
-  //   if (!phone || !password) {
-  //     toast.error("ادخل رقم الموبايل و الباسورد بشكل صحيح");
-  //     return;
-  //   }
+  // ===============================
+  // 🔹 UI Render Logic
+  // ===============================
 
-  //   try {
-  //     const response = await axios.post(
-  //       `${apiUrl}/api/employee/login`,
-  //       {
-  //         phone,
-  //         password,
-  //       },
-  //       { withCredentials: true }
-  //     );
-  //     if (response && response.data) {
-  //       const { data } = response;
-  //       toast.success("تم تسجيل الدخول بنجاح");
-  //       if (data.accessToken) {
-  //         localStorage.setItem("token_e", data.accessToken);
-  //         await getEmployeeInfoFromToken();
-  //       }
-  //       const employee = data.findEmployee;
+  // Still loading employees → show nothing yet
+  if (hasEmployees === null) {
+    return (
+      <div className="d-flex align-items-center justify-content-center vh-100">
+        <div className="spinner-border text-primary" role="status">
+          <span className="sr-only">Loading...</span>
+        </div>
+      </div>
+    );
+  }
 
-  //       if (employee?.isActive && employee?.isAdmin) {
-  //         window.location.href = `${clientUrl}/admin`;
-  //         toast.success("تم تسجيل الدخول بنجاح");
-  //       } else {
-  //         toast.error("غير مسموح لك بالدخول");
-  //       }
-  //     }
-  //   } catch (error) {
-  //     console.error(error);
-  //     toast.error(
-  //       error.response?.data?.message || "حدث خطأ. الرجاء المحاولة مرة أخرى."
-  //     );
-  //   }
-  // };
+  // No employees yet → show setup wizard
+  if (hasEmployees === false) {
+    return <SetupWizard />;
+  }
 
-  const handleCreateFirstEmployee = async () => {
-    try {
-      const fristEmployee = await axios.post(
-        `${apiUrl}/api/employee/create-first`
-      );
-
-      toast.success("تم إنشاء أول موظف بنجاح");
-      checkIfEmployeesExist();
-    } catch (error) {
-      console.error("Error creating first employee:", error);
-      toast.error("حدث خطأ أثناء إنشاء أول موظف.");
-    }
-  };
-
+  // Employees exist → show login screen
   return (
     <section className="login-body">
       <div className="container h-100">
-        <div className="login-box">
-          <div className="col-12 col-md-6 d-flex flex-wrap align-items-center justify-content-between">
-            <div className="d-flex flex-wrap align-items-center justify-content-center">
-              <div className="logo">
-                <span className="logo-font">Smart</span> Menu
-              </div>
-              <div className="app-description">
-                <p>
-                  أدخل رقم هاتفك وكلمة المرور للوصول إلى تطبيق Smart Menu
-                  <pr />
-                  الذي يمكنك من إدارة أقسام مطعمك بسهولة والتحكم الشامل في
-                  عملياته.
-                </p>
-              </div>
+        <div className="row login-box align-items-center justify-content-center">
+          {/* ==========================
+              🔹 Login Form Section
+          =========================== */}
+          <div className="col-12 col-md-6 d-flex flex-column align-items-center justify-content-center p-4">
+            <div className="text-center mb-4">
+              <h1 className="display-5 fw-bold text-primary mb-2">
+                Smart <span className="text-dark">Menu</span>
+              </h1>
+              <p className="text-muted">
+                Enter your phone number and password to access Smart Menu
+                dashboard and manage your restaurant.
+              </p>
             </div>
-            {showCreateButton === true ? (
-              <div className="col-12 d-flex flex-column flex-wrap align-items-center justify-content-center mt-3">
-                <button
-                  onClick={handleCreateFirstEmployee}
-                  className="btn btn-success p-3"
-                >
-                  خاص بالمبرمج
-                </button>
+
+            <form className="w-100" onSubmit={handleAdminLogin}>
+              <div className="form-group mb-3">
+                <input
+                  type="text"
+                  className="form-control form-control-lg"
+                  placeholder="Phone Number"
+                  onChange={(e) => setPhone(e.target.value)}
+                />
               </div>
-            ) : (
-              <div className="col-12 d-flex flex-column flex-wrap align-items-center justify-content-between">
-                <h3 className="header-title">سجل دخول</h3>
-                <form className="login-form" onSubmit={adminLogin}>
-                  <div className="form-group w-100 h-auto px-3 d-flex align-items-center justify-content-start col-12">
-                    <input
-                      type="text"
-                      className="form-control border-primary m-0 p-2 h-auto"
-                      placeholder="الهاتف"
-                      onChange={(e) => setPhone(e.target.value)}
-                    />
-                  </div>
-                  <div className="form-group w-100 h-auto px-3 d-flex align-items-center justify-content-start col-12">
-                    <input
-                      type="password"
-                      className="form-control border-primary m-0 p-2 h-auto"
-                      placeholder="كلمة المرور"
-                      onChange={(e) => setPassword(e.target.value)}
-                    />
-                  </div>
-                  <div className="form-group w-100 h-auto px-3 d-flex align-items-center justify-content-center col-12">
-                    <button
-                      type="submit"
-                      className="h-100 btn btn-primary btn-block"
-                    >
-                      تسجيل دخول
-                    </button>
-                  </div>
-                </form>
+              <div className="form-group mb-4">
+                <input
+                  type="password"
+                  className="form-control form-control-lg"
+                  placeholder="Password"
+                  onChange={(e) => setPassword(e.target.value)}
+                />
               </div>
-            )}
+              <button
+                type="submit"
+                className="btn btn-primary btn-lg w-100 py-2"
+              >
+                Login
+              </button>
+            </form>
           </div>
-          <div className="col-12 col-md-6 d-flex align-items-center justify-content-center d-none d-md-block h-100">
-            <div id="demo" className="carousel slide" data-ride="carousel">
+
+          {/* ==========================
+              🔹 Image Carousel Section
+          =========================== */}
+          <div className="col-12 col-md-6 d-none d-md-flex align-items-center justify-content-center h-100">
+            <div
+              id="loginCarousel"
+              className="carousel slide w-100"
+              data-ride="carousel"
+            >
               {/* Indicators */}
               <ul className="carousel-indicators">
                 <li
-                  data-target="#demo"
+                  data-target="#loginCarousel"
                   data-slide-to="0"
                   className="active"
                 ></li>
-                <li data-target="#demo" data-slide-to="1"></li>
-                <li data-target="#demo" data-slide-to="2"></li>
+                <li data-target="#loginCarousel" data-slide-to="1"></li>
+                <li data-target="#loginCarousel" data-slide-to="2"></li>
               </ul>
 
-              {/* The slideshow */}
+              {/* Slides */}
               <div className="carousel-inner">
                 <div className="carousel-item active">
-                  <div className="slider-feature-card">
-                    <img
-                      className="d-block w-100 carousel-image"
-                      src={restaurant}
-                      alt="Smart Management"
-                    />
-                    <div className="carousel-caption d-none d-md-block">
-                      <h3 className="slider-title">إدارة المطعم بذكاء</h3>
-                      <p className="slider-description">
-                        إدارة مطعمك بشكل ذكي وحديث باستخدام تطبيق Smart Menu
-                        لتسهيل جميع عملياتك.
-                      </p>
-                    </div>
+                  <img
+                    src={restaurant}
+                    className="d-block w-100 rounded shadow-sm"
+                    alt="Smart Restaurant"
+                  />
+                  <div className="carousel-caption d-none d-md-block">
+                    <h5 className="fw-bold">Smart Restaurant Management</h5>
+                    <p>Control and monitor your restaurant efficiently.</p>
                   </div>
                 </div>
                 <div className="carousel-item">
-                  <div className="slider-feature-card">
-                    <img
-                      className="d-block w-100 carousel-image"
-                      src={menu}
-                      alt="Electronic Menu"
-                    />
-                    <div className="carousel-caption d-none d-md-block">
-                      <h3 className="slider-title">
-                        منيو إلكتروني سهل الإدارة
-                      </h3>
-                      <p className="slider-description">
-                        تحكم في قائمة الطعام إلكترونيًا بمرونة وسهولة مع تحديثات
-                        لحظية وإدارة فعالة.
-                      </p>
-                    </div>
+                  <img
+                    src={menu}
+                    className="d-block w-100 rounded shadow-sm"
+                    alt="Digital Menu"
+                  />
+                  <div className="carousel-caption d-none d-md-block">
+                    <h5 className="fw-bold">Manage your digital menu</h5>
+                    <p>Update your menu items instantly from anywhere.</p>
                   </div>
                 </div>
                 <div className="carousel-item">
-                  <div className="slider-feature-card">
-                    <img
-                      className="d-block w-100 carousel-image"
-                      src={pos}
-                      alt="Cloud-Based Service"
-                    />
-                    <div className="carousel-caption d-none d-md-block">
-                      <h3 className="slider-title">خدمة سحابية متكاملة</h3>
-                      <p className="slider-description">
-                        استقبال وإرسال الطلبات عبر السحابة، مع تقديم تجربة سلسة
-                        ومتصلة باستخدام تطبيق Smart Menu.
-                      </p>
-                    </div>
+                  <img
+                    src={pos}
+                    className="d-block w-100 rounded shadow-sm"
+                    alt="POS System"
+                  />
+                  <div className="carousel-caption d-none d-md-block">
+                    <h5 className="fw-bold">POS & Cloud System</h5>
+                    <p>Enjoy real-time synchronization and analytics.</p>
                   </div>
                 </div>
               </div>
 
-              {/* Left and right controls */}
+              {/* Controls */}
               <a
                 className="carousel-control-prev"
-                href="#demo"
+                href="#loginCarousel"
+                role="button"
                 data-slide="prev"
               >
                 <span className="carousel-control-prev-icon"></span>
               </a>
               <a
                 className="carousel-control-next"
-                href="#demo"
+                href="#loginCarousel"
+                role="button"
                 data-slide="next"
               >
                 <span className="carousel-control-next-icon"></span>
