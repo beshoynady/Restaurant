@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import { dataContext } from "../../../../App";
 import "../orders/Orders.css";
 
-const department = () => {
+const Department = () => {
   const {
     allProducts,
     setIsLoading,
@@ -525,4 +525,4 @@ const department = () => {
   );
 };
 
-export default department;
+export default Department;

@@ -38,7 +38,7 @@ const PreparationTicket = React.lazy(() =>
 const Products = React.lazy(() =>
   import("./layouts/adminLayout/adminComponent/products/Products")
 );
-const department = React.lazy(() =>
+const Department = React.lazy(() =>
   import("./layouts/adminLayout/adminComponent/products/department.jsx")
 );
 const ProductRecipe = React.lazy(() =>
@@ -2644,7 +2644,7 @@ function App() {
               path="department"
               element={
                 <Suspense fallback={<LoadingPage />}>
-                  <department />
+                  <Department />
                 </Suspense>
               }
             />
