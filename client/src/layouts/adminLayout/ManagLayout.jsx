@@ -1,11 +1,13 @@
-import React, { useContext } from "react";
-import "./ManagLayout.css";
+import React, { useContext, useState, useEffect } from "react";
+import { toast } from "react-toastify";import "./ManagLayout.css";
 import { dataContext } from "../../App";
 import { Navigate, Outlet } from "react-router-dom";
 import LoadingPage from "./adminComponent/LoadingPage/LoadingPage";
 import NavBar from "./adminComponent/navbar/NavBar";
 import SideBar from "./adminComponent/sidebar/SideBar";
 import { ToastContainer } from "react-toastify";
+import axios from "axios";
+
 import StepWelcome from "./adminComponent/Setup/StepWelcome";
 
 const ManagLayout = () => {
