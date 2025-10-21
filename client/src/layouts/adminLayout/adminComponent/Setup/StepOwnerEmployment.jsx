@@ -3,9 +3,14 @@ import { motion } from "framer-motion";
 
 const StepOwnerEmployment = ({ onNext, onBack }) => {
   const [form, setForm] = useState({
-    employeeCode: "",
-    hireDate: "",
-    contractType: "",
+    fullName: { en: "", ar: "" },
+    gender: "",
+    dateOfBirth: "",
+    nationalID: "",
+    nationality: "",
+    username: "",
+    password: "",
+    confirmPassword: "",
   });
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
@@ -119,6 +124,17 @@ const StepOwnerEmployment = ({ onNext, onBack }) => {
             name="password"
             className="w-full p-2 border rounded dark:bg-gray-700 dark:text-white"
             value={form.password}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div>
+          <label className="font-medium">Confirm Password</label>
+          <input
+            type="password"
+            name="confirmPassword"
+            className="w-full p-2 border rounded dark:bg-gray-700 dark:text-white"
+            value={form.confirmPassword}
             onChange={handleChange}
             required
           />
