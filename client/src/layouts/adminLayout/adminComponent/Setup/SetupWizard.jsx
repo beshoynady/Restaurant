@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Navbar from "./Navbar";
+import NavbarWizard from "./Navbar";
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import StepWelcome from "./StepWelcome";
@@ -33,7 +33,7 @@ const SetupWizard = () => {
 
   return (
     <div className={`${darkMode ? "bg-dark text-light" : "bg-white text-dark"} min-vh-100`}>
-      <Navbar
+      <NavbarWizard
         currentLang={currentLang}
         setCurrentLang={setCurrentLang}
         darkMode={darkMode}

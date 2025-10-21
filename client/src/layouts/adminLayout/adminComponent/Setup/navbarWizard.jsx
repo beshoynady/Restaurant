@@ -2,49 +2,80 @@ import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Sun, Moon, Globe } from "lucide-react";
 
-const Navbar = ({ lang, setLang, theme, setTheme }) => {
-  // Toggle dark/light mode
-  const toggleTheme = () => setTheme(theme === "light" ? "dark" : "light");
+/**
+ * Navbar component
+ * Provides dark/light mode toggle and language switcher
+ * Used in SetupWizard screens (first-time setup)
+ */
+const NavbarWizard = ({ lang, setLang, theme, setTheme }) => {
+  // Toggle dark/light theme and store preference in localStorage
+  const toggleTheme = () => {
+    const newTheme = theme === "light" ? "dark" : "light";
+    setTheme(newTheme);
+    localStorage.setItem("theme", newTheme);
+  };
 
-  // Toggle language
-  const toggleLang = () => setLang(lang === "en" ? "ar" : "en");
+  // Toggle language and store preference in localStorage
+  const toggleLang = () => {
+    const newLang = lang === "en" ? "ar" : "en";
+    setLang(newLang);
+    localStorage.setItem("lang", newLang);
+  };
 
+  // Apply theme to document root (for Tailwind dark mode)
   useEffect(() => {
-    document.documentElement.classList.toggle("dark", theme === "dark");
+    if (theme === "dark") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
   }, [theme]);
+
+  // Load saved preferences on mount
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme");
+    const savedLang = localStorage.getItem("lang");
+    if (savedTheme) setTheme(savedTheme);
+    if (savedLang) setLang(savedLang);
+  }, []);
 
   return (
     <motion.nav
-      className="flex justify-between items-center px-6 py-3 bg-white dark:bg-gray-900 shadow-sm"
+      className={`d-flex justify-content-between align-items-center px-4 py-2 shadow-sm ${
+        theme === "dark" ? "bg-dark text-light" : "bg-white text-dark"
+      }`}
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.4 }}
     >
-      <h1 className="text-xl font-bold text-blue-600 dark:text-blue-400">
-        Smart Menu Setup
-      </h1>
+      {/* Brand Name */}
+      <h4 className="fw-bold text-primary m-0">Smart Menu Setup</h4>
 
-      <div className="flex items-center gap-4">
-        {/* Theme toggle */}
+      {/* Controls */}
+      <div className="d-flex align-items-center gap-3">
+        {/* Theme Toggle */}
         <button
           onClick={toggleTheme}
-          className="p-2 rounded-full bg-gray-100 dark:bg-gray-800"
-          title="Toggle theme"
+          className={`btn btn-sm rounded-circle ${
+            theme === "dark" ? "btn-warning" : "btn-dark"
+          }`}
+          title="Toggle Theme"
         >
           {theme === "light" ? <Moon size={18} /> : <Sun size={18} />}
         </button>
 
-        {/* Language toggle */}
+        {/* Language Toggle */}
         <button
           onClick={toggleLang}
-          className="p-2 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center gap-1"
+          className="btn btn-outline-primary btn-sm d-flex align-items-center gap-1"
           title="Change Language"
         >
           <Globe size={16} />
-          <span className="font-medium">{lang === "en" ? "AR" : "EN"}</span>
+          <span>{lang === "en" ? "عربي" : "English"}</span>
         </button>
       </div>
     </motion.nav>
   );
 };
 
-export default Navbar;
+export default NavbarWizard;
