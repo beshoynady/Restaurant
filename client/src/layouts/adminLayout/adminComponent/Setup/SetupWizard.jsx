@@ -1,46 +1,42 @@
 // 📁 SetupWizard.jsx
 import React, { useState } from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
-import NavbarWizard from "./navbarWizard";
 import { motion } from "framer-motion";
+import "bootstrap/dist/css/bootstrap.min.css";
+
 import StepWelcome from "./StepWelcome";
-import StepOwner from "./StepOwner";
+import StepOwnerPersonal from "./StepOwnerPersonal";
+import StepOwnerContact from "./StepOwnerContact";
+import StepOwnerEmployment from "./StepOwnerEmployment";
 import StepRestaurant from "./StepRestaurant";
 import StepFinish from "./StepFinish";
 
-
 const SetupWizard = () => {
   const [step, setStep] = useState(0);
-  const [darkMode, setDarkMode] = useState(false);
-  const [currentLang, setCurrentLang] = useState("en");
 
-  const renderStep = () => {
-    switch (step) {
-      case 0:
-        return <StepWelcome onNext={() => setStep(1)} />;
-      case 1:
-        return <StepOwner onNext={() => setStep(2)} onBack={() => setStep(0)} />;
-      case 2:
-        return <StepRestaurant onNext={() => setStep(3)} onBack={() => setStep(1)} />;
-      case 3:
-        return <StepFinish />;
-      default:
-        return null;
-    }
-  };
+  const nextStep = () => setStep((prev) => prev + 1);
+  const prevStep = () => setStep((prev) => prev - 1);
+
+  const steps = [
+    <StepWelcome onNext={nextStep} key="welcome" />,
+    <StepOwnerPersonal onNext={nextStep} onBack={prevStep} key="personal" />,
+    <StepOwnerContact onNext={nextStep} onBack={prevStep} key="contact" />,
+    <StepOwnerEmployment onNext={nextStep} onBack={prevStep} key="employment" />,
+    <StepRestaurant onNext={nextStep} onBack={prevStep} key="restaurant" />,
+    <StepFinish key="finish" />,
+  ];
 
   return (
-    <div className={`${darkMode ? "bg-dark text-light" : "bg-white text-dark"} min-vh-100`}>
-      <NavbarWizard
-        currentLang={currentLang}
-        setCurrentLang={setCurrentLang}
-        darkMode={darkMode}
-        setDarkMode={setDarkMode}
-      />
-      <div className="container py-4">
-        {renderStep()}
+    <motion.div
+      className="container d-flex flex-column align-items-center justify-content-center vh-100"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.6 }}
+    >
+      <div className="w-100" style={{ maxWidth: "600px" }}>
+        {steps[step]}
       </div>
-    </div>
+      <p className="text-muted mt-4">Step {step + 1} of {steps.length}</p>
+    </motion.div>
   );
 };
 

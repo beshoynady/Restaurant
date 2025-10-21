@@ -1,26 +1,21 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { motion } from "framer-motion";
-import { useNavigate } from "react-router-dom";
 
 const StepFinish = () => {
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    setTimeout(() => navigate("/login"), 2000);
-  }, [navigate]);
-
   return (
     <motion.div
-      className="text-center p-10 bg-white dark:bg-gray-800 rounded-2xl shadow-md"
+      className="text-center p-5 bg-light rounded shadow-sm"
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.5 }}
     >
-      <h2 className="text-3xl font-bold text-green-600 mb-3">
-        ✅ Setup Complete!
-      </h2>
-      <p className="text-gray-600 dark:text-gray-300 mb-4">
-        Redirecting you to login...
+      <h3 className="text-success fw-bold mb-3">Setup Completed 🎉</h3>
+      <p className="text-muted mb-4">
+        Your restaurant and admin account are now ready. You can start using Smart Menu.
       </p>
+      <button className="btn btn-primary px-5 py-2 rounded-pill">
+        Go to Dashboard
+      </button>
     </motion.div>
   );
 };
