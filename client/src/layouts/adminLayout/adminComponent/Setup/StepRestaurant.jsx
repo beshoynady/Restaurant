@@ -1,23 +1,24 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 
-
 const StepRestaurant = ({ onNext, onBack }) => {
   const [restaurant, setRestaurant] = useState({
-    name: "",
-    address: "",
-    phone: "",
-    currency: "EGP",
+    brandName: { en: "", ar: "" },
+    description: { en: "", ar: "" },
+    logo: null,
+    coverImage: null,
+    aboutText: { en: "", ar: "" },
   });
 
-  const handleChange = (e) => setRestaurant({ ...restaurant, [e.target.name]: e.target.value });
+  const handleChange = (e) =>
+    setRestaurant({ ...restaurant, [e.target.name]: e.target.value });
 
   const handleSubmit = (e) => {
     e.preventDefault();
     onNext();
   };
 
-return (
+  return (
     <motion.form
       onSubmit={handleSubmit}
       className="max-w-2xl mx-auto p-6 bg-white dark:bg-gray-800 rounded-2xl shadow-md"
@@ -34,7 +35,7 @@ return (
           <input
             type="text"
             className="w-full p-2 border rounded dark:bg-gray-700 dark:text-white"
-            value={form.brandName.en}
+            value={restaurant.brandName.en}
             onChange={(e) => handleChange(e, "brandName", "en")}
             required
           />
@@ -46,7 +47,7 @@ return (
             dir="rtl"
             type="text"
             className="w-full p-2 border rounded dark:bg-gray-700 dark:text-white"
-            value={form.brandName.ar}
+            value={restaurant.brandName.ar}
             onChange={(e) => handleChange(e, "brandName", "ar")}
             required
           />
@@ -56,7 +57,7 @@ return (
           <label className="font-medium">Description (EN)</label>
           <textarea
             className="w-full p-2 border rounded dark:bg-gray-700 dark:text-white"
-            value={form.description.en}
+            value={restaurant.description.en}
             onChange={(e) => handleChange(e, "description", "en")}
             required
           />
@@ -67,7 +68,7 @@ return (
           <textarea
             dir="rtl"
             className="w-full p-2 border rounded dark:bg-gray-700 dark:text-white"
-            value={form.description.ar}
+            value={restaurant.description.ar}
             onChange={(e) => handleChange(e, "description", "ar")}
             required
           />
@@ -78,7 +79,7 @@ return (
           <input
             type="file"
             accept="image/*"
-            onChange={(e) => handleFile(e, "logo")}
+            // onChange={(e) => handleFile(e, "logo")}
           />
         </div>
 
