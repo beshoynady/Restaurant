@@ -24,30 +24,8 @@ const Login = () => {
   // ===============================
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
-  const [hasEmployees, setHasEmployees] = useState(null); // null = not loaded yet
 
-  // ===============================
-  // 🔹 Check if employees exist
-  // ===============================
-  const checkIfEmployeesExist = async () => {
-    setIsLoading(true);
-    try {
-      const response = await axios.get(`${apiUrl}/api/employee/count`);
-      const count = response?.data?.count || 0;
-      setHasEmployees(count > 0);
-    } catch (error) {
-      console.error("Error checking employees:", error);
-      toast.error("Network error while checking employees.");
-      setHasEmployees(false);
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
-  // ✅ Run check once on mount
-  useEffect(() => {
-    checkIfEmployeesExist();
-  }, []);
 
   // ===============================
   // 🔹 Handle Admin Login
@@ -94,21 +72,6 @@ const Login = () => {
   // 🔹 UI Render Logic
   // ===============================
 
-  // Still loading employees → show nothing yet
-  if (hasEmployees === null) {
-    return (
-      <div className="d-flex align-items-center justify-content-center vh-100">
-        <div className="spinner-border text-primary" role="status">
-          <span className="sr-only">Loading...</span>
-        </div>
-      </div>
-    );
-  }
-
-  // No employees yet → show setup wizard
-  if (hasEmployees === false) {
-    return <SetupWizard />;
-  }
 
   // Employees exist → show login screen
   return (
