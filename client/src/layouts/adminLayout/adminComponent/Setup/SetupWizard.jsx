@@ -31,7 +31,7 @@ const SetupWizard = () => {
 
   return (
     <>
-      <NavbarWizard />
+      {/* <NavbarWizard /> */}
       <motion.div
         className="container d-flex flex-column align-items-center justify-content-center vh-100"
         initial={{ opacity: 0 }}
