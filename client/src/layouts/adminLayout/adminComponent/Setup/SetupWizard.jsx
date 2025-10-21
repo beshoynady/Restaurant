@@ -1,9 +1,7 @@
 // 📁 SetupWizard.jsx
 import React, { useState } from "react";
-import { motion } from "framer-motion";
 import "bootstrap/dist/css/bootstrap.min.css";
 import NavbarWizard from "./Navbar";
-import React, { useState } from "react";
 import { motion } from "framer-motion";
 import StepWelcome from "./StepWelcome";
 import StepOwner from "./StepOwner";
