@@ -10,19 +10,22 @@ import "./ManagLayout.css";
 
 const ManagLayout = () => {
   const context = useContext(dataContext);
+  const [hasEmployees, setHasEmployees] = useState(null); // Initialize always
+  const [localLoading, setLocalLoading] = useState(false);
+
+  // If context not ready, show nothing safely (no hook condition)
   if (!context) {
-    console.error("ManagLayout must be used within a dataContext.Provider");
+    console.error("⚠️ ManagLayout must be used within a dataContext.Provider");
     return null;
   }
 
   const { employeeLoginInfo, apiUrl, isLoading, setIsLoading } = context;
-  const [hasEmployees, setHasEmployees] = useState(null);
 
   // ===============================
-  // 🔹 Check if any employee exists
+  // 🔹 Check if employees exist
   // ===============================
   const checkIfEmployeesExist = async () => {
-    setIsLoading(true);
+    setLocalLoading(true);
     try {
       const response = await axios.get(`${apiUrl}/api/employee/count`);
       const count = response?.data?.count || 0;
@@ -32,29 +35,37 @@ const ManagLayout = () => {
       toast.error("Network error while checking employees.");
       setHasEmployees(false);
     } finally {
-      setIsLoading(false);
+      setLocalLoading(false);
     }
   };
 
+  // ✅ Run check once on mount
   useEffect(() => {
     checkIfEmployeesExist();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Wait for data loading
-  if (hasEmployees === null || isLoading || !employeeLoginInfo) {
+  // ===============================
+  // 🔹 Handle loading or redirects
+  // ===============================
+  if (isLoading || localLoading) {
     return <LoadingPage />;
   }
 
-  // If no employees exist → go to setup wizard
   if (hasEmployees === false) {
     return <Navigate to="/setup" />;
   }
 
-  // If not logged in → go to login
-  if (!employeeLoginInfo?.isAdmin || !employeeLoginInfo?.isActive) {
+  const isLoggedIn =
+    hasEmployees && employeeLoginInfo?.isAdmin && employeeLoginInfo?.isActive;
+
+  if (!isLoggedIn) {
     return <Navigate to="/login" />;
   }
 
+  // ===============================
+  // 🔹 Main Layout
+  // ===============================
   return (
     <div className="manag-body">
       <ToastContainer />
