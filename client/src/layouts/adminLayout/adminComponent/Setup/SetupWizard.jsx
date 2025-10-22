@@ -18,8 +18,8 @@ const SetupWizard = () => {
 
   const steps = [
     <StepWelcome onNext={nextStep} key="welcome" />,
-    <StepOwnerPersonal onNext={nextStep} onBack={prevStep} key="personal" />,
-    <StepOwnerContact onNext={nextStep} onBack={prevStep} key="contact" />,
+    // <StepOwnerPersonal onNext={nextStep} onBack={prevStep} key="personal" />,
+    // <StepOwnerContact onNext={nextStep} onBack={prevStep} key="contact" />,
     <StepOwnerEmployment
       onNext={nextStep}
       onBack={prevStep}
