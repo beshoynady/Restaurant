@@ -13,7 +13,16 @@ const StepOwnerEmployment = ({ onNext, onBack }) => {
     confirmPassword: "",
   });
 
-  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+  const handleChange = (e, key, lang) => {
+    if (key === "fullName") {
+      setForm({
+        ...form,
+        fullName: { ...form.fullName, [lang]: e.target.value },
+      });
+    } else {
+      setForm({ ...form, [e.target.name]: e.target.value });
+    }
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -23,138 +32,168 @@ const StepOwnerEmployment = ({ onNext, onBack }) => {
   return (
     <motion.form
       onSubmit={handleSubmit}
-      className="max-w-2xl mx-auto p-6 bg-white dark:bg-gray-800 rounded-2xl shadow-md"
-      initial={{ opacity: 0, y: 25 }}
+      className="max-w-3xl mx-auto p-8 bg-gradient-to-br from-white to-blue-50 dark:from-gray-800 dark:to-gray-900 rounded-3xl shadow-xl border border-gray-200 dark:border-gray-700"
+      initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
     >
-      <h2 className="text-2xl font-semibold mb-4 text-blue-600">
+      <h2 className="text-3xl font-bold mb-6 text-center text-blue-600 dark:text-blue-400">
         👤 Owner Information
       </h2>
 
-      <div className="grid md:grid-cols-2 gap-4">
-        <div>
-          <label className="font-medium">Full Name (EN)</label>
+      <div className="grid md:grid-cols-2 gap-6">
+        <div className="flex flex-col">
+          <label className="font-medium mb-1 text-gray-700 dark:text-gray-300">
+            Full Name (EN)
+          </label>
           <input
             type="text"
-            className="w-full p-2 border rounded dark:bg-gray-700 dark:text-white"
+            className="input-style"
             value={form.fullName.en}
             onChange={(e) => handleChange(e, "fullName", "en")}
+            placeholder="Enter full name in English"
             required
           />
         </div>
 
-        <div>
-          <label className="font-medium">Full Name (AR)</label>
+        <div className="flex flex-col">
+          <label className="font-medium mb-1 text-gray-700 dark:text-gray-300">
+            Full Name (AR)
+          </label>
           <input
             type="text"
             dir="rtl"
-            className="w-full p-2 border rounded dark:bg-gray-700 dark:text-white"
+            className="input-style"
             value={form.fullName.ar}
             onChange={(e) => handleChange(e, "fullName", "ar")}
+            placeholder="ادخل الاسم بالكامل بالعربية"
             required
           />
         </div>
 
-        <div>
-          <label className="font-medium">Gender</label>
+        <div className="flex flex-col">
+          <label className="font-medium mb-1 text-gray-700 dark:text-gray-300">
+            Gender
+          </label>
           <select
             name="gender"
-            className="w-full p-2 border rounded dark:bg-gray-700 dark:text-white"
+            className="input-style"
             value={form.gender}
             onChange={handleChange}
             required
           >
             <option value="">Select Gender</option>
-            <option value="male">Male</option>
-            <option value="female">Female</option>
+            <option value="male">👨 Male</option>
+            <option value="female">👩 Female</option>
           </select>
         </div>
 
-        <div>
-          <label className="font-medium">Date of Birth</label>
+        <div className="flex flex-col">
+          <label className="font-medium mb-1 text-gray-700 dark:text-gray-300">
+            Date of Birth
+          </label>
           <input
             type="date"
             name="dateOfBirth"
-            className="w-full p-2 border rounded dark:bg-gray-700 dark:text-white"
+            className="input-style"
             value={form.dateOfBirth}
             onChange={handleChange}
             required
           />
         </div>
 
-        <div>
-          <label className="font-medium">National ID</label>
+        <div className="flex flex-col">
+          <label className="font-medium mb-1 text-gray-700 dark:text-gray-300">
+            National ID
+          </label>
           <input
             type="text"
             name="nationalID"
-            className="w-full p-2 border rounded dark:bg-gray-700 dark:text-white"
+            className="input-style"
             value={form.nationalID}
             onChange={handleChange}
+            placeholder="Enter your National ID"
             required
           />
         </div>
 
-        <div>
-          <label className="font-medium">Nationality</label>
+        <div className="flex flex-col">
+          <label className="font-medium mb-1 text-gray-700 dark:text-gray-300">
+            Nationality
+          </label>
           <input
             type="text"
             name="nationality"
-            className="w-full p-2 border rounded dark:bg-gray-700 dark:text-white"
+            className="input-style"
             value={form.nationality}
             onChange={handleChange}
+            placeholder="Enter nationality"
           />
         </div>
 
-        <div>
-          <label className="font-medium">Username</label>
+        <div className="flex flex-col">
+          <label className="font-medium mb-1 text-gray-700 dark:text-gray-300">
+            Username
+          </label>
           <input
             type="text"
             name="username"
-            className="w-full p-2 border rounded dark:bg-gray-700 dark:text-white"
+            className="input-style"
             value={form.username}
             onChange={handleChange}
+            placeholder="Choose a username"
             required
           />
         </div>
 
-        <div>
-          <label className="font-medium">Password</label>
+        <div className="flex flex-col">
+          <label className="font-medium mb-1 text-gray-700 dark:text-gray-300">
+            Password
+          </label>
           <input
             type="password"
             name="password"
-            className="w-full p-2 border rounded dark:bg-gray-700 dark:text-white"
+            className="input-style"
             value={form.password}
             onChange={handleChange}
+            placeholder="Enter password"
             required
           />
         </div>
-        <div>
-          <label className="font-medium">Confirm Password</label>
+
+        <div className="flex flex-col">
+          <label className="font-medium mb-1 text-gray-700 dark:text-gray-300">
+            Confirm Password
+          </label>
           <input
             type="password"
             name="confirmPassword"
-            className="w-full p-2 border rounded dark:bg-gray-700 dark:text-white"
+            className="input-style"
             value={form.confirmPassword}
             onChange={handleChange}
+            placeholder="Re-enter password"
             required
           />
         </div>
       </div>
 
-      <div className="flex justify-between mt-6">
-        <button
+      <div className="flex justify-between mt-10">
+        <motion.button
           type="button"
-          className="px-4 py-2 bg-gray-300 rounded dark:bg-gray-600"
+          className="btn-secondary"
+          whileTap={{ scale: 0.95 }}
           onClick={onBack}
         >
-          Back
-        </button>
-        <button
+          ⬅ Back
+        </motion.button>
+
+        <motion.button
           type="submit"
-          className="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+          className="btn-primary"
+          whileTap={{ scale: 0.95 }}
         >
-          Next
-        </button>
+          Next ➡
+        </motion.button>
       </div>
     </motion.form>
   );
