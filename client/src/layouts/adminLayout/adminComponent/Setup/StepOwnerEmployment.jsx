@@ -13,27 +13,38 @@ const StepOwnerEmployment = ({ onNext, onBack }) => {
     confirmPassword: "",
   });
 
-  const handleChange = (e, key, lang) => {
-    if (key === "fullName") {
-      setForm({
-        ...form,
-        fullName: { ...form.fullName, [lang]: e.target.value },
-      });
+  const handleChange = (e, field, langKey) => {
+    const { name, value } = e.target;
+    if (field && langKey) {
+      setForm((prev) => ({
+        ...prev,
+        [field]: { ...prev[field], [langKey]: value },
+      }));
     } else {
-      setForm({ ...form, [e.target.name]: e.target.value });
+      setForm((prev) => ({ ...prev, [name]: value }));
     }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (form.password !== form.confirmPassword) {
+      alert(
+        lang === "ar" ? "كلمتا المرور غير متطابقتين" : "Passwords do not match!"
+      );
+      return;
+    }
     onNext();
   };
+
+  // تحديد اللغة والمظهر
+  const isDark = theme === "dark";
+  const isArabic = lang === "ar";
 
   return (
     <motion.form
       onSubmit={handleSubmit}
       dir={isArabic ? "rtl" : "ltr"}
-      className={`container my-5 p-5 rounded-4 shadow-lg border
+      className={`container my-5 p-5 rounded-4 shadow-lg border transition-all duration-300
         ${
           isDark
             ? "bg-dark text-light border-secondary"
@@ -56,7 +67,7 @@ const StepOwnerEmployment = ({ onNext, onBack }) => {
         {/* Full Name EN */}
         <div className="col-md-6">
           <label className="form-label">
-            {isArabic ? "الاسم بالكامل (انجليزي)" : "Full Name (EN)"}
+            {isArabic ? "الاسم بالكامل (إنجليزي)" : "Full Name (EN)"}
           </label>
           <input
             type="text"
