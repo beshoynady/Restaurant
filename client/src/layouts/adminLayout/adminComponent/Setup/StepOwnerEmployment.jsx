@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 
-const StepOwnerEmployment = ({ onNext, onBack }) => {
+const StepOwnerEmployment = ({ onNext, onBack , lang , theme }) => {
   const [form, setForm] = useState({
     fullName: { en: "", ar: "" },
     gender: "",
@@ -39,6 +39,8 @@ const StepOwnerEmployment = ({ onNext, onBack }) => {
   // تحديد اللغة والمظهر
   const isDark = theme === "dark";
   const isArabic = lang === "ar";
+
+  
 
   return (
     <motion.form

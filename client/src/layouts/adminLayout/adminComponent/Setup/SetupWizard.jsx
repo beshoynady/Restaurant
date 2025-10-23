@@ -37,10 +37,11 @@ const SetupWizard = () => {
   // Steps configuration
   const steps = [
     <StepWelcome onNext={nextStep} key="welcome" />,
-    <StepOwnerEmployment onNext={nextStep} onBack={prevStep} key="employment" />,
-    <StepRestaurant onNext={nextStep} onBack={prevStep} key="restaurant" />,
-    <StepFinish key="finish" />,
+    <StepOwnerEmployment onNext={nextStep} onBack={prevStep} lang={lang} theme={theme} key="employment" />,
+    <StepRestaurant onNext={nextStep} onBack={prevStep} lang={lang} theme={theme} key="restaurant" />,
+    <StepFinish lang={lang} theme={theme} key="finish" />,
   ];
+
 
   return (
     <>
