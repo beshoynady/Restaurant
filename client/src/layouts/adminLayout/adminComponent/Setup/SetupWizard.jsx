@@ -66,7 +66,7 @@ const SetupWizard = () => {
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
         style={{
-          maxHeight: "calc(100vh - 60px)",
+          maxHeight: "calc(100vh)",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",

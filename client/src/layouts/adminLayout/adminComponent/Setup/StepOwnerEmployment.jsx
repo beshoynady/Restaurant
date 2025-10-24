@@ -83,7 +83,7 @@ const StepOwnerEmployment = ({ onNext, onBack, lang, theme, apiUrl }) => {
     <motion.form
       onSubmit={handleCreateOwner}
       dir={isArabic ? "rtl" : "ltr"}
-      className={`container my-5 p-5 rounded-4 shadow-lg border transition-all duration-300
+      className={`container my-2 p-2 rounded-4 shadow-lg border transition-all duration-300
         ${
           isDark
             ? "bg-dark text-light border-secondary"
@@ -99,7 +99,7 @@ const StepOwnerEmployment = ({ onNext, onBack, lang, theme, apiUrl }) => {
         animate={{ opacity: 1, y: 0, scale: 1 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
         whileHover={{ scale: 1.05 }}
-        className={`text-center fw-bold mb-6 tracking-wide relative ${
+        className={`text-center fw-bold mb-3 tracking-wide relative ${
           isDark
             ? "text-info drop-shadow-[0_0_8px_rgba(91,192,222,0.6)]"
             : "text-primary drop-shadow-[0_0_6px_rgba(0,123,255,0.4)]"
@@ -283,7 +283,7 @@ const StepOwnerEmployment = ({ onNext, onBack, lang, theme, apiUrl }) => {
       </div>
 
       {/* Buttons */}
-      <div className="d-flex justify-content-between mt-5">
+      <div className="d-flex justify-content-between mt-2">
         <motion.button
           type="button"
           className={`btn btn-lg px-4 ${
