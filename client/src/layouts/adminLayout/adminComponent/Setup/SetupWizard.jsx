@@ -89,7 +89,7 @@ const SetupWizard = () => {
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          overflow: auth,
+          overflow: "auto",
           paddingTop: "70px",
         }}
       >
