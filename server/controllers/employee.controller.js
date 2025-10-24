@@ -196,7 +196,7 @@ const createFirstEmployee = async (req, res) => {
       return res.status(201).json({
         status: "success",
         message: "✅ First employee (Super Admin) created successfully.",
-        data: newEmployee,
+        newEmployee,
         accessToken,
       });
     }
@@ -259,7 +259,7 @@ const createEmployee = async (req, res) => {
     res.status(201).json({
       status: "success",
       message: "✅ Employee created successfully.",
-      data: newEmployee,
+      newEmployee,
     });
   } catch (err) {
     console.error("Error creating employee:", err);

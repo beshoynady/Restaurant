@@ -27,24 +27,21 @@ const StepOwnerEmployment = ({ onNext, onBack, lang, theme, apiUrl }) => {
     }
   };
 
-  const matchPasswords = () => {
-    if (form.password !== form.confirmPassword) {
-      toast.warning(
-        lang === "ar" ? "كلمتا المرور غير متطابقتين" : "Passwords do not match!"
-      );
-      return;
-    }
-    onNext();
-  };
-
   const isDark = theme === "dark";
   const isArabic = lang === "ar";
 
   const handleCreateOwner = async (e) => {
     e.preventDefault();
-    matchPasswords();
     // Function to create owner using the collected data
     try {
+      if (form.password !== form.confirmPassword) {
+        toast.warning(
+          lang === "ar"
+            ? "كلمتا المرور غير متطابقتين"
+            : "Passwords do not match!"
+        );
+        return;
+      }
       const ownerData = {
         personalInfo: {
           fullName: {
@@ -67,12 +64,13 @@ const StepOwnerEmployment = ({ onNext, onBack, lang, theme, apiUrl }) => {
         `${apiUrl}/api/employee/create-first`,
         ownerData
       );
-      if (newOwner) {
+      if (newOwner.status === 201) {
         toast.success(
           isArabic
             ? "تم انشاء بيانات المالك بنجاح"
             : "Owner details created successfully"
         );
+        onNext();
       }
     } catch (error) {
       console.error("Error creating owner:", error);
