@@ -1,21 +1,23 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { motion } from "framer-motion";
-import "bootstrap/dist/css/bootstrap.min.css";
+import { toast } from "react-toastify";
 
 const StepRestaurant = ({ onNext, onBack, lang, theme }) => {
+  const {apiUrl} = useContext(dataContext);
+
   const [restaurant, setRestaurant] = useState({
     brandName: { en: "", ar: "" },
     description: { en: "", ar: "" },
+    aboutText: { en: "", ar: "" },
     logo: null,
     coverImage: null,
-    aboutText: { en: "", ar: "" },
   });
 
-  const handleChange = (e, key, langKey) => {
+  const handleChange = (e, key, value) => {
     if (key === "brandName" || key === "description" || key === "aboutText") {
       setRestaurant((prev) => ({
         ...prev,
-        [key]: { ...prev[key], [langKey]: e.target.value },
+        [key]: { ...prev[key], [value]: e.target.value },
       }));
     } else {
       setRestaurant({ ...restaurant, [e.target.name]: e.target.value });
@@ -36,24 +38,75 @@ const StepRestaurant = ({ onNext, onBack, lang, theme }) => {
   const isDark = theme === "dark";
   const isArabic = lang === "ar";
 
+  const createRestaurant = async () => {
+    // Function to create restaurant using the collected data
+    try {
+      const formData = new FormData();
+      formData.append("brandNameEn", restaurant.brandName.en);
+      formData.append("brandNameAr", restaurant.brandName.ar);
+      formData.append("descriptionEn", restaurant.description.en);
+      formData.append("descriptionAr", restaurant.description.ar);
+      formData.append("logo", restaurant.logo);
+      formData.append("coverImage", restaurant.coverImage);
+
+      // Here you would typically send formData to your backend API
+      const newRestaurant = await axios.post(
+        `${apiUrl}/api/restaurant`.config,
+        formData
+      );
+      console.log("Restaurant created successfully:", newRestaurant);
+      if (newRestaurant) {
+        toast.success(
+          isArabic
+            ? "تم انشاء بيانات المطعم بنجاح"
+            : "Restaurant details created successfully"
+        );
+      }
+    } catch (error) {
+      console.error("Error creating restaurant:", error);
+      toast.error(
+        isArabic
+          ? "حدث خطأ أثناء انشاء بيانات المطعم"
+          : "An error occurred while creating restaurant details"
+      );
+    }
+  };
+
   return (
     <motion.form
       onSubmit={handleSubmit}
       dir={isArabic ? "rtl" : "ltr"}
       className={`container my-5 p-5 rounded-4 shadow-lg border transition-all duration-300
-        ${isDark ? "bg-dark text-light border-secondary" : "bg-white text-dark border-light"}
+        ${
+          isDark
+            ? "bg-dark text-light border-secondary"
+            : "bg-white text-dark border-light"
+        }
         ${isArabic ? "text-end" : "text-start"}`}
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
     >
-      <h2
-        className={`text-center fw-bold mb-4 ${
-          isDark ? "text-success" : "text-success"
+      <motion.h2
+        initial={{ opacity: 0, y: -20, scale: 0.95 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+        whileHover={{ scale: 1.05 }}
+        className={`text-center fw-bold mb-6 tracking-wide ${
+          isDark
+            ? "text-green-400 drop-shadow-[0_0_8px_rgba(34,197,94,0.6)]"
+            : "text-green-600 drop-shadow-[0_0_6px_rgba(34,197,94,0.3)]"
         }`}
       >
-        🏢 {isArabic ? "بيانات المطعم" : "Restaurant Details"}
-      </h2>
+        <span className="inline-block animate-pulse mr-2">🏢</span>
+        <span
+          className={`relative ${
+            isDark ? "after:bg-green-400/40" : "after:bg-green-500/30"
+          } after:absolute after:-bottom-1 after:left-0 after:w-full after:h-[3px] after:rounded-full`}
+        >
+          {isArabic ? "بيانات المطعم" : "Restaurant Details"}
+        </span>
+      </motion.h2>
 
       <div className="row g-4">
         {/* Brand Name EN */}
@@ -67,7 +120,9 @@ const StepRestaurant = ({ onNext, onBack, lang, theme }) => {
             value={restaurant.brandName.en}
             onChange={(e) => handleChange(e, "brandName", "en")}
             placeholder={
-              isArabic ? "ادخل اسم المطعم بالإنجليزية" : "Enter restaurant name in English"
+              isArabic
+                ? "ادخل اسم المطعم بالإنجليزية"
+                : "Enter restaurant name in English"
             }
             required
           />
@@ -85,7 +140,9 @@ const StepRestaurant = ({ onNext, onBack, lang, theme }) => {
             value={restaurant.brandName.ar}
             onChange={(e) => handleChange(e, "brandName", "ar")}
             placeholder={
-              isArabic ? "ادخل اسم المطعم بالعربية" : "Enter restaurant name in Arabic"
+              isArabic
+                ? "ادخل اسم المطعم بالعربية"
+                : "Enter restaurant name in Arabic"
             }
             required
           />
@@ -188,7 +245,11 @@ const StepRestaurant = ({ onNext, onBack, lang, theme }) => {
                 src={URL.createObjectURL(restaurant.coverImage)}
                 alt="Cover Preview"
                 className="rounded-3 border shadow-sm mt-3"
-                style={{ width: "100%", maxHeight: "150px", objectFit: "cover" }}
+                style={{
+                  width: "100%",
+                  maxHeight: "150px",
+                  objectFit: "cover",
+                }}
               />
             )}
           </div>
@@ -199,7 +260,9 @@ const StepRestaurant = ({ onNext, onBack, lang, theme }) => {
       <div className="d-flex justify-content-between mt-5">
         <motion.button
           type="button"
-          className={`btn btn-lg px-4 ${isDark ? "btn-outline-light" : "btn-outline-secondary"}`}
+          className={`btn btn-lg px-4 ${
+            isDark ? "btn-outline-light" : "btn-outline-secondary"
+          }`}
           whileTap={{ scale: 0.95 }}
           onClick={onBack}
         >
@@ -208,7 +271,9 @@ const StepRestaurant = ({ onNext, onBack, lang, theme }) => {
 
         <motion.button
           type="submit"
-          className={`btn btn-lg px-4 ${isDark ? "btn-success" : "btn-success"}`}
+          className={`btn btn-lg px-4 ${
+            isDark ? "btn-success" : "btn-success"
+          }`}
           whileTap={{ scale: 0.95 }}
         >
           {isArabic ? "إنهاء" : "Finish"} ✅

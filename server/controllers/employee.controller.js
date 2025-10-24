@@ -146,12 +146,10 @@ const createFirstEmployee = async (req, res) => {
       ],
     });
     if (existing)
-      return res
-        .status(409)
-        .json({
-          status: "error",
-          message: "❌ Duplicate phone, username, or ID.",
-        });
+      return res.status(409).json({
+        status: "error",
+        message: "❌ Duplicate phone, username, or ID.",
+      });
 
     // 🔸 Hash password securely
     const hashedPassword = await bcrypt.hash(credentials.password, 10);
@@ -166,11 +164,44 @@ const createFirstEmployee = async (req, res) => {
       createdBy: null,
     });
 
-    return res.status(201).json({
-      status: "success",
-      message: "✅ First employee (Super Admin) created successfully.",
-      data: newEmployee,
-    });
+    if (!newEmployee) {
+      return res.status(500).json({
+        status: "error",
+        message: "❌ Failed to create the first employee.",
+      });
+    } else {
+      const accessToken = jwt.sign(
+        {
+          id: newEmployee._id,
+          username: newEmployee.credentials.username,
+          isAdmin: newEmployee.credentials.isAdmin,
+          role: newEmployee.jobTitle,
+        },
+        process.env.JWT_SECRET_KEY,
+        { expiresIn: "15m" }
+      );
+
+      const refreshToken = jwt.sign(
+        { id: employee._id },
+        process.env.JWT_REFRESH_SECRET,
+        { expiresIn: "7d" }
+      );
+
+      // 🔸 Save refresh token in cookie
+      res.cookie("refreshToken", refreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+      });
+
+      return res.status(201).json({
+        status: "success",
+        message: "✅ First employee (Super Admin) created successfully.",
+        data: newEmployee,
+        accessToken,
+      });
+    }
   } catch (err) {
     console.error("Error creating first employee:", err);
     res.status(500).json({
@@ -346,13 +377,11 @@ const loginEmployee = async (req, res) => {
     });
   } catch (err) {
     console.error("Login error:", err);
-    res
-      .status(500)
-      .json({
-        status: "error",
-        message: "Internal server error.",
-        error: err.message,
-      });
+    res.status(500).json({
+      status: "error",
+      message: "Internal server error.",
+      error: err.message,
+    });
   }
 };
 

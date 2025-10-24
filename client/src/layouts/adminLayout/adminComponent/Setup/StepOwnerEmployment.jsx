@@ -1,7 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { motion } from "framer-motion";
+import { toast } from "react-toastify";
 
-const StepOwnerEmployment = ({ onNext, onBack , lang , theme }) => {
+const StepOwnerEmployment = ({ onNext, onBack, lang, theme }) => {
+  const { apiUrl } = useContext(dataContext);
+
   const [form, setForm] = useState({
     fullName: { en: "", ar: "" },
     gender: "",
@@ -25,10 +28,10 @@ const StepOwnerEmployment = ({ onNext, onBack , lang , theme }) => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const matchPasswords = (e) => {
     e.preventDefault();
     if (form.password !== form.confirmPassword) {
-      alert(
+      toast.warning(
         lang === "ar" ? "كلمتا المرور غير متطابقتين" : "Passwords do not match!"
       );
       return;
@@ -40,11 +43,45 @@ const StepOwnerEmployment = ({ onNext, onBack , lang , theme }) => {
   const isDark = theme === "dark";
   const isArabic = lang === "ar";
 
-  
+  const handleCreateOwner = async () => {
+    matchPasswords();
+    // Function to create owner using the collected data
+    try {
+      const ownerData = {
+        fullNameEn: form.fullName.en,
+        fullNameAr: form.fullName.ar,
+        gender: form.gender,
+        dateOfBirth: form.dateOfBirth,
+        nationalID: form.nationalID,
+        nationality: form.nationality,
+        username: form.username,
+        password: form.password,
+      };
+      // Here you would typically send ownerData to your backend API
+      const newOwner = await axios.post(
+        `${apiUrl}/api/employee/create-first`,
+        ownerData
+      );
+      if (newOwner) {
+        toast.success(
+          isArabic
+            ? "تم انشاء بيانات المالك بنجاح"
+            : "Owner details created successfully"
+        );
+      }
+    } catch (error) {
+      console.error("Error creating owner:", error);
+      toast.error(
+        isArabic
+          ? "حدث خطأ أثناء انشاء بيانات المالك"
+          : "An error occurred while creating owner details"
+      );
+    }
+  };
 
   return (
     <motion.form
-      onSubmit={handleSubmit}
+      onSubmit={handleCreateOwner}
       dir={isArabic ? "rtl" : "ltr"}
       className={`container my-5 p-5 rounded-4 shadow-lg border transition-all duration-300
         ${
@@ -57,13 +94,26 @@ const StepOwnerEmployment = ({ onNext, onBack , lang , theme }) => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
     >
-      <h2
-        className={`text-center fw-bold mb-4 ${
-          isDark ? "text-info" : "text-primary"
+      <motion.h2
+        initial={{ opacity: 0, y: -15, scale: 0.95 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+        whileHover={{ scale: 1.05 }}
+        className={`text-center fw-bold mb-6 tracking-wide relative ${
+          isDark
+            ? "text-info drop-shadow-[0_0_8px_rgba(91,192,222,0.6)]"
+            : "text-primary drop-shadow-[0_0_6px_rgba(0,123,255,0.4)]"
         }`}
       >
-        👤 {isArabic ? "بيانات المالك" : "Owner Information"}
-      </h2>
+        <span className="inline-block animate-pulse mr-2">👤</span>
+        <span
+          className={`relative ${
+            isDark ? "after:bg-info/40" : "after:bg-primary/30"
+          } after:absolute after:-bottom-1 after:left-0 after:w-full after:h-[3px] after:rounded-full`}
+        >
+          {isArabic ? "بيانات المالك" : "Owner Information"}
+        </span>
+      </motion.h2>
 
       <div className="row g-4">
         {/* Full Name EN */}
