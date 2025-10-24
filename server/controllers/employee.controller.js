@@ -180,7 +180,7 @@ const createFirstEmployee = async (req, res) => {
       );
 
       const refreshToken = jwt.sign(
-        { id: employee._id },
+        { id: newEmployee._id },
         process.env.JWT_REFRESH_SECRET,
         { expiresIn: "7d" }
       );
