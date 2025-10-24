@@ -77,7 +77,7 @@ const SetupWizard = () => {
 
       {/* ⚙️ Animated Step Container */}
       <motion.div
-        className={`container-fluid py-4 w-100 ${
+        className={`container-fluid py-2 w-100 ${
           theme === "dark" ? "bg-dark text-light" : "bg-light text-dark"
         }`}
         initial={{ opacity: 0 }}
@@ -97,7 +97,7 @@ const SetupWizard = () => {
           {steps[step]}
         </div>
 
-        <p className="text-muted mt-4">
+        <p className="text-muted mt-2">
           Step {step + 1} of {steps.length}
         </p>
       </motion.div>

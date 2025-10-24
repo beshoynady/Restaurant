@@ -153,16 +153,14 @@ const StepOwnerEmployment = ({ onNext, onBack, lang, theme, apiUrl }) => {
         {/* Gender */}
         <div className="col-md-6">
           <label
-            className={`form-label fw-semibold mb-2 ${
-              isDark ? "text-light" : "text-secondary"
-            }`}
+            className="form-label fw-semibold mb-2"
           >
             {isArabic ? "النوع" : "Gender"}
           </label>
 
           <select
             name="gender"
-            className={`form-select form-select-lg rounded-4 py-3 px-3 shadow-sm border-0 ${
+            className={`form-select form-select rounded-4 py-3 px-3 shadow-sm border-0 ${
               isDark
                 ? "bg-gray-800 text-light border-gray-700 focus:bg-gray-700"
                 : "bg-white text-dark border border-gray-300 focus:border-primary"
@@ -170,9 +168,6 @@ const StepOwnerEmployment = ({ onNext, onBack, lang, theme, apiUrl }) => {
             value={form.gender}
             onChange={handleChange}
             required
-            style={{
-              height: "58px", // ✅ نفس ارتفاع الـ input-style أو form-control
-            }}
           >
             <option value="">
               {isArabic ? "اختر النوع" : "Select Gender"}
