@@ -6,10 +6,10 @@ const {
   createFirstEmployee,
   createEmployee,
   updateEmployee,
-  getOneEmployee,
   loginEmployee,
   employeeLogout,
   getAllEmployee,
+  getOneEmployee,
   getCountEmployees,
   deleteEmployee,
 } = require("../controllers/employee.controller.js");

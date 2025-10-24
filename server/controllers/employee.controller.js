@@ -114,10 +114,7 @@ const createEmployeeSchema = Joi.object({
  * =========================================================== */
 const createFirstEmployee = async (req, res) => {
   try {
-    const {
-      personalInfo,
-      credentials,
-    } = req.body;
+    const { personalInfo, credentials } = req.body;
 
     // 🔸 Validate request body
     const { error } = createFirstEmployeeSchema.validate(req.body);
@@ -423,6 +420,48 @@ const getAllEmployee = async (req, res) => {
   }
 };
 
+const getOneEmployee = async (req, res) => {
+  try {
+    const { employeeId } = req.params;
+    const employee = await EmployeeModel.findById(employeeId)
+      .populate("branch jobTitle department")
+      .populate("createdBy", "_id personalInfo.fullName credentials.username")
+      .populate("updatedBy", "_id personalInfo.fullName credentials.username");
+
+    if (!employee)
+      return res
+        .status(404)
+        .json({ status: "error", message: "Employee not found." });
+    res.status(200).json({
+      status: "success",
+      data: employee,
+    });
+  } catch (err) {
+    res.status(500).json({
+      status: "error",
+      message: "Error fetching employee.",
+      error: err.message,
+    });
+  }
+};
+
+/* ===========================================================
+ *  ✅ 9. GET COUNT OF EMPLOYEES
+ * =========================================================== */
+
+const getCountEmployees = async (req, res) => {
+  try {
+    const count = await EmployeeModel.countDocuments();
+    res.status(200).json({ status: "success", count });
+  } catch (err) {
+    res.status(500).json({
+      status: "error",
+      message: "Error fetching employee count.",
+      error: err.message,
+    });
+  }
+};
+
 /* ===========================================================
  *  ✅ 9. DELETE EMPLOYEE
  * =========================================================== */
@@ -459,5 +498,7 @@ module.exports = {
   loginEmployee,
   employeeLogout,
   getAllEmployee,
+  getOneEmployee,
+  getCountEmployees,
   deleteEmployee,
 };
