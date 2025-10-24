@@ -1,5 +1,5 @@
 // 📁 SetupWizard.jsx
-import React, { useState, useEffect, useContext} from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { motion } from "framer-motion";
 
 import StepWelcome from "./StepWelcome";
@@ -10,15 +10,14 @@ import NavbarWizard from "./navbarWizard";
 
 import { dataContext } from "../../../../App";
 
-
 /**
  * SetupWizard Component
  * Handles multi-step setup wizard for first-time configuration
  * Steps: Welcome → Owner → Restaurant → Finish
  */
 const SetupWizard = () => {
-    const { apiUrl } = useContext(dataContext);
-  
+  const { apiUrl } = useContext(dataContext);
+
   const [step, setStep] = useState(0);
 
   // App-wide settings for language and theme
@@ -35,24 +34,43 @@ const SetupWizard = () => {
   }, []);
 
   // Go to next or previous step
-  const nextStep = () => setStep((prev) => Math.min(prev + 1, steps.length - 1));
+  const nextStep = () =>
+    setStep((prev) => Math.min(prev + 1, steps.length - 1));
   const prevStep = () => setStep((prev) => Math.max(prev - 1, 0));
 
   // Steps configuration
   const steps = [
     <StepWelcome onNext={nextStep} lang={lang} theme={theme} key="welcome" />,
-    <StepOwnerEmployment onNext={nextStep} onBack={prevStep} lang={lang} theme={theme} apiUrl={apiUrl} key="employment" />,
-    <StepRestaurant onNext={nextStep} onBack={prevStep} lang={lang} theme={theme} apiUrl={apiUrl} key="restaurant" />,
+    <StepOwnerEmployment
+      onNext={nextStep}
+      onBack={prevStep}
+      lang={lang}
+      theme={theme}
+      apiUrl={apiUrl}
+      key="employment"
+    />,
+    <StepRestaurant
+      onNext={nextStep}
+      onBack={prevStep}
+      lang={lang}
+      theme={theme}
+      apiUrl={apiUrl}
+      key="restaurant"
+    />,
     <StepFinish lang={lang} theme={theme} key="finish" />,
   ];
 
-
   return (
-    <div className="w-100 min-vh-100 d-flex flex-column align-items-center justify-content-center position-relative overflow-hidden">
+    <div
+      className={`w-100 vh-100 d-flex flex-column position-relative ${
+        theme === "dark" ? "bg-dark text-light" : "bg-light text-dark"
+      }`}
+      style={{ overflow: "hidden" }}
+    >
       {/* 🌐 Top Navbar (visible on all steps) */}
       <NavbarWizard
         lang={lang}
-        setLang={setLang} 
+        setLang={setLang}
         theme={theme}
         setTheme={setTheme}
       />
@@ -71,6 +89,8 @@ const SetupWizard = () => {
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
+          overflow: auth,
+          paddingTop: "70px",
         }}
       >
         <div className="w-100" style={{ maxWidth: "600px" }}>

@@ -38,7 +38,6 @@ const StepOwnerEmployment = ({ onNext, onBack, lang, theme, apiUrl }) => {
     onNext();
   };
 
-  // تحديد اللغة والمظهر
   const isDark = theme === "dark";
   const isArabic = lang === "ar";
 

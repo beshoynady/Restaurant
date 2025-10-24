@@ -41,7 +41,7 @@ const NavbarWizard = ({ lang, setLang, theme, setTheme }) => {
 
   return (
     <motion.nav
-      className={`d-flex justify-content-between align-items-center px-4 py-2 shadow-sm position-fixed w-100 top-0 ${
+      className={`d-flex justify-content-between align-items-center px-4 py-2 shadow-sm position-fixed w-100 top-0 z-50 ${
         theme === "dark" ? "bg-dark text-light" : "bg-white text-dark"
       }`}
       initial={{ y: -20, opacity: 0 }}

@@ -33,7 +33,6 @@ const StepRestaurant = ({ onNext, onBack, lang, theme, apiUrl }) => {
     if (file) setRestaurant({ ...restaurant, [field]: file });
   };
 
-  // تحديد اللغة والمود
   const isDark = theme === "dark";
   const isArabic = lang === "ar";
 
