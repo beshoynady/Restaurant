@@ -338,10 +338,22 @@ const loginEmployee = async (req, res) => {
         .status(403)
         .json({ status: "error", message: "Employee is not active." });
 
-    if (!password || !employee.credentials?.password) {
+    if (!password) {
       return res.status(400).json({
         status: "error",
-        message: "Missing password data for comparison.",
+        message: "Password is required.",
+      });
+    }
+    if (password.trim() === "") {
+      return res.status(400).json({
+        status: "error",
+        message: "Password cannot be empty.",
+      });
+    }
+    if (!employee.credentials?.password) {
+      return res.status(400).json({
+        status: "error",
+        message: "Password not set for this employee.",
       });
     }
     // 🔸 Compare password

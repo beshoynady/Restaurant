@@ -22,7 +22,7 @@ const Login = () => {
   // ===============================
   // 🔹 Component States
   // ===============================
-  const [phone, setPhone] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [hasEmployees, setHasEmployees] = useState(null); // null = not loaded yet
 
@@ -35,6 +35,10 @@ const Login = () => {
       const response = await axios.get(`${apiUrl}/api/employee/count`);
       const count = response?.data?.count || 0;
       setHasEmployees(count > 0);
+      if(count === 0){
+        navigate("/setup");
+        toast.info("No employees found. Please set up your admin account.");
+      }
     } catch (error) {
       console.error("Error checking employees:", error);
       toast.error("Network error while checking employees.");
@@ -55,15 +59,15 @@ const Login = () => {
   const handleAdminLogin = async (e) => {
     e.preventDefault();
 
-    if (!phone.trim() || !password.trim()) {
-      toast.error("Please enter both phone number and password.");
+    if (!username.trim() || !password.trim()) {
+      toast.error("Please enter both username and password.");
       return;
     }
 
     try {
       const response = await axios.post(
         `${apiUrl}/api/employee/login`,
-        { phone, password },
+        { username, password },
         { withCredentials: true }
       );
 
@@ -134,8 +138,8 @@ const Login = () => {
                 <input
                   type="text"
                   className="form-control form-control-lg"
-                  placeholder="Phone Number"
-                  onChange={(e) => setPhone(e.target.value)}
+                  placeholder="Username"
+                  onChange={(e) => setUsername(e.target.value)}
                 />
               </div>
               <div className="form-group mb-4">
