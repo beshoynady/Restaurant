@@ -53,8 +53,8 @@ const StepRestaurant = ({ onNext, onBack, lang, theme, apiUrl }) => {
           en: restaurant.aboutText.en,
           ar: restaurant.aboutText.ar,
         },
-        logo: logo ? restaurant.logo : null,
-        coverImage: coverImage ? restaurant.coverImage : null,
+        logo: restaurant.logo ? restaurant.logo : null,
+        coverImage: restaurant.coverImage ? restaurant.coverImage : null,
       }
 
       // Here you would typically send formData to your backend API
