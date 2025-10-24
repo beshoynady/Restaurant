@@ -3,8 +3,7 @@ import { motion } from "framer-motion";
 import { toast } from "react-toastify";
 import axios from "axios";
 
-const StepOwnerEmployment = ({ onNext, onBack, lang, theme , apiUrl }) => {
-
+const StepOwnerEmployment = ({ onNext, onBack, lang, theme, apiUrl }) => {
   const [form, setForm] = useState({
     fullName: { en: "", ar: "" },
     gender: "",
@@ -43,7 +42,8 @@ const StepOwnerEmployment = ({ onNext, onBack, lang, theme , apiUrl }) => {
   const isDark = theme === "dark";
   const isArabic = lang === "ar";
 
-  const handleCreateOwner = async () => {
+  const handleCreateOwner = async (e) => {
+    e.preventDefault();
     matchPasswords();
     // Function to create owner using the collected data
     try {
@@ -153,13 +153,27 @@ const StepOwnerEmployment = ({ onNext, onBack, lang, theme , apiUrl }) => {
 
         {/* Gender */}
         <div className="col-md-6">
-          <label className="form-label">{isArabic ? "النوع" : "Gender"}</label>
+          <label
+            className={`form-label fw-semibold mb-2 ${
+              isDark ? "text-light" : "text-secondary"
+            }`}
+          >
+            {isArabic ? "النوع" : "Gender"}
+          </label>
+
           <select
             name="gender"
-            className="form-select form-select-lg"
+            className={`form-select form-select-lg rounded-4 py-3 px-3 shadow-sm border-0 ${
+              isDark
+                ? "bg-gray-800 text-light border-gray-700 focus:bg-gray-700"
+                : "bg-white text-dark border border-gray-300 focus:border-primary"
+            } transition-all`}
             value={form.gender}
             onChange={handleChange}
             required
+            style={{
+              height: "58px", // ✅ نفس ارتفاع الـ input-style أو form-control-lg
+            }}
           >
             <option value="">
               {isArabic ? "اختر النوع" : "Select Gender"}

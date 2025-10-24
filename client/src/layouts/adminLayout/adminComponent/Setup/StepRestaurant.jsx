@@ -3,13 +3,12 @@ import { motion } from "framer-motion";
 import { toast } from "react-toastify";
 import axios from "axios";
 
-/** 
- * StepRestaurant Component 
+/**
+ * StepRestaurant Component
  * Collects restaurant details during setup wizard
  */
 
 const StepRestaurant = ({ onNext, onBack, lang, theme, apiUrl }) => {
-
   const [restaurant, setRestaurant] = useState({
     brandName: { en: "", ar: "" },
     description: { en: "", ar: "" },
@@ -34,16 +33,12 @@ const StepRestaurant = ({ onNext, onBack, lang, theme, apiUrl }) => {
     if (file) setRestaurant({ ...restaurant, [field]: file });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onNext();
-  };
-
   // تحديد اللغة والمود
   const isDark = theme === "dark";
   const isArabic = lang === "ar";
 
-  const createRestaurant = async () => {
+  const createRestaurant = async (e) => {
+    e.preventDefault();
     // Function to create restaurant using the collected data
     try {
       const formData = new FormData();
@@ -66,6 +61,7 @@ const StepRestaurant = ({ onNext, onBack, lang, theme, apiUrl }) => {
             ? "تم انشاء بيانات المطعم بنجاح"
             : "Restaurant details created successfully"
         );
+        onNext();
       }
     } catch (error) {
       console.error("Error creating restaurant:", error);
@@ -79,7 +75,7 @@ const StepRestaurant = ({ onNext, onBack, lang, theme, apiUrl }) => {
 
   return (
     <motion.form
-      onSubmit={handleSubmit}
+      onSubmit={createRestaurant}
       dir={isArabic ? "rtl" : "ltr"}
       className={`container my-5 p-5 rounded-4 shadow-lg border transition-all duration-300
         ${

@@ -48,25 +48,25 @@ const SetupWizard = () => {
 
 
   return (
-    <>
+    <div className="w-100 min-vh-100 d-flex flex-column align-items-center justify-content-center position-relative overflow-hidden">
       {/* 🌐 Top Navbar (visible on all steps) */}
       <NavbarWizard
         lang={lang}
-        setLang={setLang}
+        setLang={setLang} 
         theme={theme}
         setTheme={setTheme}
       />
 
       {/* ⚙️ Animated Step Container */}
       <motion.div
-        className={`container-fluid py-4 ${
+        className={`container-fluid py-4 w-100 ${
           theme === "dark" ? "bg-dark text-light" : "bg-light text-dark"
         }`}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
         style={{
-          minHeight: "calc(100vh - 60px)",
+          maxHeight: "calc(100vh - 60px)",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -81,7 +81,7 @@ const SetupWizard = () => {
           Step {step + 1} of {steps.length}
         </p>
       </motion.div>
-    </>
+    </div>
   );
 };
 
