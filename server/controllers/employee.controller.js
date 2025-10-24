@@ -144,6 +144,13 @@ const createFirstEmployee = async (req, res) => {
         message: "❌ Duplicate phone, username, or ID.",
       });
 
+    if (!credentials?.password || credentials.password.trim() === "") {
+      return res.status(400).json({
+        status: "error",
+        message: "Password is required and cannot be empty.",
+      });
+    }
+
     // 🔸 Hash password securely
     const hashedPassword = await bcrypt.hash(credentials.password, 10);
 
@@ -231,6 +238,13 @@ const createEmployee = async (req, res) => {
         status: "error",
         message: "❌ Employee with same phone, username, or ID already exists.",
       });
+
+    if (!credentials?.password || credentials.password.trim() === "") {
+      return res.status(400).json({
+        status: "error",
+        message: "Password is required and cannot be empty.",
+      });
+    }
 
     // 🔸 Hash password
     const hashedPassword = await bcrypt.hash(credentials.password, 10);
@@ -324,6 +338,12 @@ const loginEmployee = async (req, res) => {
         .status(403)
         .json({ status: "error", message: "Employee is not active." });
 
+    if (!password || !employee.credentials?.password) {
+      return res.status(400).json({
+        status: "error",
+        message: "Missing password data for comparison.",
+      });
+    }
     // 🔸 Compare password
     const isMatch = await bcrypt.compare(
       password,
