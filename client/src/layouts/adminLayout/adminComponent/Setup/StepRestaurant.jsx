@@ -116,7 +116,7 @@ const StepRestaurant = ({ onNext, onBack, lang, theme, apiUrl }) => {
           </label>
           <input
             type="text"
-            className="form-control form-control-lg"
+            className="form-control form-control"
             value={restaurant.brandName.en}
             onChange={(e) => handleChange(e, "brandName", "en")}
             placeholder={
@@ -136,7 +136,7 @@ const StepRestaurant = ({ onNext, onBack, lang, theme, apiUrl }) => {
           <input
             type="text"
             dir="rtl"
-            className="form-control form-control-lg"
+            className="form-control form-control"
             value={restaurant.brandName.ar}
             onChange={(e) => handleChange(e, "brandName", "ar")}
             placeholder={
@@ -154,7 +154,7 @@ const StepRestaurant = ({ onNext, onBack, lang, theme, apiUrl }) => {
             {isArabic ? "الوصف (إنجليزي)" : "Description (EN)"}
           </label>
           <textarea
-            className="form-control form-control-lg"
+            className="form-control form-control"
             style={{ minHeight: "100px" }}
             value={restaurant.description.en}
             onChange={(e) => handleChange(e, "description", "en")}
@@ -174,7 +174,7 @@ const StepRestaurant = ({ onNext, onBack, lang, theme, apiUrl }) => {
           </label>
           <textarea
             dir="rtl"
-            className="form-control form-control-lg"
+            className="form-control form-control"
             style={{ minHeight: "100px" }}
             value={restaurant.description.ar}
             onChange={(e) => handleChange(e, "description", "ar")}

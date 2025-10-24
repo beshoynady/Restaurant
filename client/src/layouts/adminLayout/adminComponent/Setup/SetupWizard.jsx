@@ -62,7 +62,7 @@ const SetupWizard = () => {
 
   return (
     <div
-      className={`w-100 vh-100 d-flex flex-column position-relative ${
+      className={`w-100 vh-100 d-flex align-items-center justify-content-center flex-column position-relative ${
         theme === "dark" ? "bg-dark text-light" : "bg-light text-dark"
       }`}
       style={{ overflow: "hidden" }}

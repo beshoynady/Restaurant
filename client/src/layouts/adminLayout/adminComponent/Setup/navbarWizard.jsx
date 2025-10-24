@@ -56,7 +56,7 @@ const NavbarWizard = ({ lang, setLang, theme, setTheme }) => {
         {/* Theme Toggle */}
         <button
           onClick={toggleTheme}
-          className={`btn btn-sm rounded-circle ${
+          className={`btn btn-sm rounded-circle mx-1 ${
             theme === "dark" ? "btn-warning" : "btn-dark"
           }`}
           title="Toggle Theme"

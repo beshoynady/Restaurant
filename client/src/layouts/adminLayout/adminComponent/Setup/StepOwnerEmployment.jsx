@@ -122,7 +122,7 @@ const StepOwnerEmployment = ({ onNext, onBack, lang, theme, apiUrl }) => {
           </label>
           <input
             type="text"
-            className="form-control form-control-lg"
+            className="form-control form-control"
             value={form.fullName.en}
             onChange={(e) => handleChange(e, "fullName", "en")}
             placeholder={
@@ -140,7 +140,7 @@ const StepOwnerEmployment = ({ onNext, onBack, lang, theme, apiUrl }) => {
           <input
             type="text"
             dir="rtl"
-            className="form-control form-control-lg"
+            className="form-control form-control"
             value={form.fullName.ar}
             onChange={(e) => handleChange(e, "fullName", "ar")}
             placeholder={
@@ -171,7 +171,7 @@ const StepOwnerEmployment = ({ onNext, onBack, lang, theme, apiUrl }) => {
             onChange={handleChange}
             required
             style={{
-              height: "58px", // ✅ نفس ارتفاع الـ input-style أو form-control-lg
+              height: "58px", // ✅ نفس ارتفاع الـ input-style أو form-control
             }}
           >
             <option value="">
@@ -190,7 +190,7 @@ const StepOwnerEmployment = ({ onNext, onBack, lang, theme, apiUrl }) => {
           <input
             type="date"
             name="dateOfBirth"
-            className="form-control form-control-lg"
+            className="form-control form-control"
             value={form.dateOfBirth}
             onChange={handleChange}
             required
@@ -205,7 +205,7 @@ const StepOwnerEmployment = ({ onNext, onBack, lang, theme, apiUrl }) => {
           <input
             type="text"
             name="nationalID"
-            className="form-control form-control-lg"
+            className="form-control form-control"
             value={form.nationalID}
             onChange={handleChange}
             placeholder={
@@ -223,7 +223,7 @@ const StepOwnerEmployment = ({ onNext, onBack, lang, theme, apiUrl }) => {
           <input
             type="text"
             name="nationality"
-            className="form-control form-control-lg"
+            className="form-control form-control"
             value={form.nationality}
             onChange={handleChange}
             placeholder={isArabic ? "ادخل الجنسية" : "Enter nationality"}
@@ -238,7 +238,7 @@ const StepOwnerEmployment = ({ onNext, onBack, lang, theme, apiUrl }) => {
           <input
             type="text"
             name="username"
-            className="form-control form-control-lg"
+            className="form-control form-control"
             value={form.username}
             onChange={handleChange}
             placeholder={isArabic ? "اختر اسم المستخدم" : "Choose a username"}
@@ -254,7 +254,7 @@ const StepOwnerEmployment = ({ onNext, onBack, lang, theme, apiUrl }) => {
           <input
             type="password"
             name="password"
-            className="form-control form-control-lg"
+            className="form-control form-control"
             value={form.password}
             onChange={handleChange}
             placeholder={isArabic ? "ادخل كلمة المرور" : "Enter password"}
@@ -270,7 +270,7 @@ const StepOwnerEmployment = ({ onNext, onBack, lang, theme, apiUrl }) => {
           <input
             type="password"
             name="confirmPassword"
-            className="form-control form-control-lg"
+            className="form-control form-control"
             value={form.confirmPassword}
             onChange={handleChange}
             placeholder={
