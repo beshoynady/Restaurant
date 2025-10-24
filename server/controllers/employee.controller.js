@@ -116,10 +116,7 @@ const createFirstEmployee = async (req, res) => {
   try {
     const {
       personalInfo,
-      contactInfo,
       credentials,
-      employmentInfo,
-      financialInfo,
     } = req.body;
 
     // 🔸 Validate request body
@@ -140,7 +137,6 @@ const createFirstEmployee = async (req, res) => {
     // 🔸 Check duplicates
     const existing = await EmployeeModel.findOne({
       $or: [
-        { "contactInfo.phone": contactInfo.phone },
         { "credentials.username": credentials.username },
         { "personalInfo.nationalID": personalInfo.nationalID },
       ],
@@ -157,9 +153,7 @@ const createFirstEmployee = async (req, res) => {
     // 🔸 Create Super Admin
     const newEmployee = await EmployeeModel.create({
       personalInfo,
-      contactInfo,
-      employmentInfo,
-      financialInfo,
+      employmentInfo: { isActive: true, isVerified: true, isOwner: true },
       credentials: { ...credentials, password: hashedPassword, isAdmin: true },
       createdBy: null,
     });

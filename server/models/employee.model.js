@@ -116,6 +116,7 @@ const employeeSchema = new mongoose.Schema(
       },
       isActive: { type: Boolean, default: true },
       isVerified: { type: Boolean, default: false },
+      isOwner: { type: Boolean, default: false },
       terminationDate: { type: Date, default: null },
       terminationReason: { type: String, trim: true, maxlength: 200 },
 

@@ -47,14 +47,21 @@ const StepOwnerEmployment = ({ onNext, onBack, lang, theme, apiUrl }) => {
     // Function to create owner using the collected data
     try {
       const ownerData = {
-        fullNameEn: form.fullName.en,
-        fullNameAr: form.fullName.ar,
-        gender: form.gender,
-        dateOfBirth: form.dateOfBirth,
-        nationalID: form.nationalID,
-        nationality: form.nationality,
-        username: form.username,
-        password: form.password,
+        personalInfo: {
+          fullName: {
+            en: form.fullName.en,
+            ar: form.fullName.ar,
+          },
+          gender: form.gender,
+          dateOfBirth: form.dateOfBirth,
+          nationalID: form.nationalID,
+          nationality: form.nationality,
+        },
+
+        credentials: {
+          username: form.username,
+          password: form.password,
+        },
       };
       // Here you would typically send ownerData to your backend API
       const newOwner = await axios.post(
@@ -152,9 +159,7 @@ const StepOwnerEmployment = ({ onNext, onBack, lang, theme, apiUrl }) => {
 
         {/* Gender */}
         <div className="col-md-6">
-          <label
-            className="form-label fw-semibold mb-2"
-          >
+          <label className="form-label fw-semibold mb-2">
             {isArabic ? "النوع" : "Gender"}
           </label>
 
