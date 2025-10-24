@@ -24,7 +24,7 @@ const createRestaurantSchema = Joi.object({
   aboutText: Joi.object({
     en: Joi.string().min(20).max(1000).required(),
     ar: Joi.string().min(20).max(1000).required(),
-  }).required(),
+  }),
 
   socialMedia: Joi.array()
     .items(

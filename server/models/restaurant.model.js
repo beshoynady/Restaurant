@@ -48,13 +48,11 @@ const restaurantSchema = new mongoose.Schema(
     aboutText: {
       en: {
         type: String,
-        required: true,
         trim: true,
         maxlength: 1000,
       },
       ar: {
         type: String,
-        required: true,
         trim: true,
         maxlength: 1000,
       },
