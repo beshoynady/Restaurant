@@ -2,7 +2,7 @@ const productionRecordModel = require("../models/production-record.model");
 const productionOrderModel = require("../models/production-order.model");
 const stockItemModel = require("../models/stock-items.model");
 const recipeModel = require("../models/recipe.model");
-const departmentModel = require("../models/preparation-section.model");
+const departmentModel = require("../models/department.model");
 
 // Create and Save a new Production Record
 
