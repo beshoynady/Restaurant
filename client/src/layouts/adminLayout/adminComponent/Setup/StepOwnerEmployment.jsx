@@ -27,8 +27,7 @@ const StepOwnerEmployment = ({ onNext, onBack, lang, theme, apiUrl }) => {
     }
   };
 
-  const matchPasswords = (e) => {
-    e.preventDefault();
+  const matchPasswords = () => {
     if (form.password !== form.confirmPassword) {
       toast.warning(
         lang === "ar" ? "كلمتا المرور غير متطابقتين" : "Passwords do not match!"
@@ -167,8 +166,8 @@ const StepOwnerEmployment = ({ onNext, onBack, lang, theme, apiUrl }) => {
             name="gender"
             className={`form-select form-select w-100 rounded-4 py-2 px-3 shadow-sm border-0 ${
               isDark
-                ? "bg-gray-800 text-light border-gray-700 focus:bg-gray-700"
-                : "bg-white text-dark border border-gray-300 focus:border-primary"
+                ? "bg-gray-800 border-gray-700 focus:bg-gray-700"
+                : "border border-gray-300 focus:border-primary"
             } transition-all`}
             value={form.gender}
             onChange={handleChange}
