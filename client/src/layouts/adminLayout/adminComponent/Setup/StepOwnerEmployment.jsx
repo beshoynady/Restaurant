@@ -1,9 +1,9 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { toast } from "react-toastify";
+import axios from "axios";
 
-const StepOwnerEmployment = ({ onNext, onBack, lang, theme }) => {
-  const { apiUrl } = useContext(dataContext);
+const StepOwnerEmployment = ({ onNext, onBack, lang, theme , apiUrl }) => {
 
   const [form, setForm] = useState({
     fullName: { en: "", ar: "" },

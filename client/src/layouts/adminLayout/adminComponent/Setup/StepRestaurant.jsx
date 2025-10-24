@@ -1,9 +1,14 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { toast } from "react-toastify";
+import axios from "axios";
 
-const StepRestaurant = ({ onNext, onBack, lang, theme }) => {
-  const {apiUrl} = useContext(dataContext);
+/** 
+ * StepRestaurant Component 
+ * Collects restaurant details during setup wizard
+ */
+
+const StepRestaurant = ({ onNext, onBack, lang, theme, apiUrl }) => {
 
   const [restaurant, setRestaurant] = useState({
     brandName: { en: "", ar: "" },

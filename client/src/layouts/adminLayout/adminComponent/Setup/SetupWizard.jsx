@@ -1,7 +1,6 @@
 // 📁 SetupWizard.jsx
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import "bootstrap/dist/css/bootstrap.min.css";
 
 import StepWelcome from "./StepWelcome";
 import StepOwnerEmployment from "./StepOwnerEmployment";
@@ -9,12 +8,17 @@ import StepRestaurant from "./StepRestaurant";
 import StepFinish from "./StepFinish";
 import NavbarWizard from "./navbarWizard";
 
+import { dataContext } from "../../../../App";
+
+
 /**
  * SetupWizard Component
  * Handles multi-step setup wizard for first-time configuration
  * Steps: Welcome → Owner → Restaurant → Finish
  */
 const SetupWizard = () => {
+    const { apiUrl } = useContext(dataContext);
+  
   const [step, setStep] = useState(0);
 
   // App-wide settings for language and theme
@@ -36,9 +40,9 @@ const SetupWizard = () => {
 
   // Steps configuration
   const steps = [
-    <StepWelcome onNext={nextStep} key="welcome" />,
-    <StepOwnerEmployment onNext={nextStep} onBack={prevStep} lang={lang} theme={theme} key="employment" />,
-    <StepRestaurant onNext={nextStep} onBack={prevStep} lang={lang} theme={theme} key="restaurant" />,
+    <StepWelcome onNext={nextStep} lang={lang} theme={theme} key="welcome" />,
+    <StepOwnerEmployment onNext={nextStep} onBack={prevStep} lang={lang} theme={theme} apiUrl={apiUrl} key="employment" />,
+    <StepRestaurant onNext={nextStep} onBack={prevStep} lang={lang} theme={theme} apiUrl={apiUrl} key="restaurant" />,
     <StepFinish lang={lang} theme={theme} key="finish" />,
   ];
 
