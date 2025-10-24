@@ -40,13 +40,22 @@ const StepRestaurant = ({ onNext, onBack, lang, theme, apiUrl }) => {
     e.preventDefault();
     // Function to create restaurant using the collected data
     try {
-      const formData = new FormData();
-      formData.append("brandNameEn", restaurant.brandName.en);
-      formData.append("brandNameAr", restaurant.brandName.ar);
-      formData.append("descriptionEn", restaurant.description.en);
-      formData.append("descriptionAr", restaurant.description.ar);
-      formData.append("logo", restaurant.logo);
-      formData.append("coverImage", restaurant.coverImage);
+      const formData = {
+        brandName: {
+          en: restaurant.brandName.en,
+          ar: restaurant.brandName.ar,
+        },
+        description: {
+          en: restaurant.description.en,
+          ar: restaurant.description.ar,
+        },
+        aboutText: {
+          en: restaurant.aboutText.en,
+          ar: restaurant.aboutText.ar,
+        },
+        logo: logo ? restaurant.logo : null,
+        coverImage: coverImage ? restaurant.coverImage : null,
+      }
 
       // Here you would typically send formData to your backend API
       const newRestaurant = await axios.post(
