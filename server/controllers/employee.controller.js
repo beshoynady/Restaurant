@@ -22,7 +22,7 @@ const createFirstEmployeeSchema = Joi.object({
   }).required(),
 
   contactInfo: Joi.object({
-    phone: Joi.string().length(11).required(),
+    phone: Joi.string().required(),
     email: Joi.string().email().optional(),
   }).required(),
 
@@ -163,7 +163,7 @@ const updateEmployeeSchema = Joi.object({
  * =========================================================== */
 const createFirstEmployee = async (req, res) => {
   try {
-    const { personalInfo, credentials } = req.body;
+    const { personalInfo, contactInfo, credentials } = req.body;
 
     // 🔸 Validate request body
     const { error } = createFirstEmployeeSchema.validate(req.body);
@@ -206,6 +206,7 @@ const createFirstEmployee = async (req, res) => {
     // 🔸 Create Super Admin
     const newEmployee = await EmployeeModel.create({
       personalInfo,
+      contactInfo,
       employmentInfo: { isActive: true, isVerified: true, isOwner: true },
       credentials: { ...credentials, password: hashedPassword, isAdmin: true },
       createdBy: null,
