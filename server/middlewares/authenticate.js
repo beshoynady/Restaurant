@@ -28,8 +28,10 @@ const authenticateToken = (req, res, next) => {
     // Validate employee object
     if (
       !employee ||
-      typeof employee.role !== "string" ||
+
       typeof employee.isAdmin !== "boolean" ||
+      typeof employee.isOwner !== "boolean" ||
+      typeof employee.isVerified !== "boolean" ||
       typeof employee.isActive !== "boolean"
     ) {
       return res
@@ -38,7 +40,7 @@ const authenticateToken = (req, res, next) => {
     }
 
     // Check if employee is admin and active
-    if (!employee.isAdmin || !employee.isActive) {
+    if (!employee.isAdmin || !employee.isActive, employee.isVerified) {
       return res
         .status(403)
         .json({ message: "Forbidden: Employee not authorized" }); // Forbidden
@@ -75,12 +77,11 @@ const refreshAccessToken = async (req, res) => {
       const newAccessToken = jwt.sign(
         {
           id: findEmployee._id,
-          username: findEmployee.username,
-          isAdmin: findEmployee.isAdmin,
-          isActive: findEmployee.isActive,
-          isVerified: findEmployee.isVerified,
-          role: findEmployee.role,
-          shift: findEmployee.shift,
+          username: findEmployee.credentials.username,
+          isOwner: findEmployee.credentials.isOwner,
+          isAdmin: findEmployee.credentials.isAdmin,
+          isActive: findEmployee.employmentInfo.isActive,
+          isVerified: findEmployee.employmentInfo.isVerified
         },
         secretKey,
         { expiresIn: "15m" }

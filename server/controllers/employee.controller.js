@@ -427,7 +427,10 @@ const loginEmployee = async (req, res) => {
       {
         id: employee._id,
         username: employee.credentials.username,
+        isOwner: employee.credentials.isOwner,
         isAdmin: employee.credentials.isAdmin,
+        isActive: employee.employmentInfo.isActive,
+        isVerified: employee.employmentInfo.isVerified
         // role: employee.jobTitle,
       },
       process.env.JWT_SECRET_KEY,
