@@ -11,7 +11,7 @@ const StepOwnerEmployment = ({
   apiUrl,
 }) => {
 
-  
+
   const [form, setForm] = useState({
     fullName: { en: "", ar: "" },
     gender: "",
@@ -84,7 +84,6 @@ const StepOwnerEmployment = ({
         const { data } = newOwner;
         localStorage.setItem("token_e", data.accessToken);
         await new Promise((resolve) => setTimeout(resolve, 150));
-        await getEmployeeInfoFromToken();
         onNext();
       }
     } catch (error) {
