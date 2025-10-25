@@ -8,7 +8,7 @@ import axios from "axios";
  * Collects restaurant details during setup wizard
  */
 
-const StepRestaurant = ({ onNext, onBack, lang, theme, apiUrl }) => {
+const StepRestaurant = ({ onNext, onBack, lang, theme, apiUrl, config }) => {
 
 
   const [restaurant, setRestaurant] = useState({
