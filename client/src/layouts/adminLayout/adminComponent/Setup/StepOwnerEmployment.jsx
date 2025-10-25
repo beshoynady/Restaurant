@@ -223,7 +223,7 @@ const StepOwnerEmployment = ({ onNext, onBack, lang, theme, apiUrl }) => {
           </label>
           <input
             type="text"
-            name="phoneNumber"
+            name="phone"
             className="form-control form-control"
             value={form.phone}
             onChange={handleChange}
