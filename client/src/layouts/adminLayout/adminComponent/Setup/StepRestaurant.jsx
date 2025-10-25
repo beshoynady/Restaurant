@@ -12,9 +12,7 @@ const StepRestaurant = ({ onNext, onBack, lang, theme, apiUrl }) => {
   const [restaurant, setRestaurant] = useState({
     brandName: { en: "", ar: "" },
     description: { en: "", ar: "" },
-    aboutText: { en: "", ar: "" },
     logo: null,
-    coverImage: null,
   });
 
   const handleChange = (e, key, value) => {
@@ -49,12 +47,7 @@ const StepRestaurant = ({ onNext, onBack, lang, theme, apiUrl }) => {
           en: restaurant.description.en,
           ar: restaurant.description.ar,
         },
-        aboutText: {
-          en: restaurant.aboutText.en,
-          ar: restaurant.aboutText.ar,
-        },
         logo: restaurant.logo ? restaurant.logo : null,
-        coverImage: restaurant.coverImage ? restaurant.coverImage : null,
       }
 
       // Here you would typically send formData to your backend API
@@ -120,7 +113,7 @@ const StepRestaurant = ({ onNext, onBack, lang, theme, apiUrl }) => {
       <div className="row g-4">
         {/* Brand Name EN */}
         <div className="col-md-6">
-          <label className="form-label">
+          <label className={`form-label ${isArabic ? "text-end" : "text-start"}`}>
             {isArabic ? "اسم العلامة التجارية (إنجليزي)" : "Brand Name (EN)"}
           </label>
           <input
@@ -139,7 +132,7 @@ const StepRestaurant = ({ onNext, onBack, lang, theme, apiUrl }) => {
 
         {/* Brand Name AR */}
         <div className="col-md-6">
-          <label className="form-label">
+          <label className={`form-label ${isArabic ? "text-end" : "text-start"}`}>
             {isArabic ? "اسم العلامة التجارية (عربي)" : "Brand Name (AR)"}
           </label>
           <input
@@ -159,7 +152,7 @@ const StepRestaurant = ({ onNext, onBack, lang, theme, apiUrl }) => {
 
         {/* Description EN */}
         <div className="col-12">
-          <label className="form-label">
+          <label className={`form-label ${isArabic ? "text-end" : "text-start"}`}>
             {isArabic ? "الوصف (إنجليزي)" : "Description (EN)"}
           </label>
           <textarea
@@ -178,7 +171,7 @@ const StepRestaurant = ({ onNext, onBack, lang, theme, apiUrl }) => {
 
         {/* Description AR */}
         <div className="col-12">
-          <label className="form-label">
+          <label className={`form-label ${isArabic ? "text-end" : "text-start"}`}>
             {isArabic ? "الوصف (عربي)" : "Description (AR)"}
           </label>
           <textarea
