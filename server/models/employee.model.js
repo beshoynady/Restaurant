@@ -24,7 +24,6 @@ const employeeSchema = new mongoose.Schema(
     jobTitle: {
       type: ObjectId,
       ref: "JobTitle",
-      required: [true, "Job title reference is required"],
     },
 
     // 🔹 Personal information
@@ -50,7 +49,7 @@ const employeeSchema = new mongoose.Schema(
         enum: ["male", "female", "other"],
         required: true,
       },
-      dateOfBirth: { type: Date},
+      dateOfBirth: { type: Date },
       nationalID: {
         type: String,
         trim: true,
@@ -102,7 +101,7 @@ const employeeSchema = new mongoose.Schema(
         unique: true,
         uppercase: true,
       },
-      hireDate: { type: Date, required: true },
+      hireDate: { type: Date, default: Date.now },
       contractType: {
         type: String,
         enum: ["permanent", "temporary", "part-time", "internship"],
