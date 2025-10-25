@@ -430,8 +430,8 @@ const loginEmployee = async (req, res) => {
         isOwner: employee.credentials.isOwner,
         isAdmin: employee.credentials.isAdmin,
         isActive: employee.employmentInfo.isActive,
-        isVerified: employee.employmentInfo.isVerified
-        // role: employee.jobTitle,
+        isVerified: employee.employmentInfo.isVerified,
+        role: employee.jobTitle,
       },
       process.env.JWT_SECRET_KEY,
       { expiresIn: "15m" }
