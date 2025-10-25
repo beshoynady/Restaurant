@@ -92,7 +92,7 @@ const StepOwnerEmployment = ({ onNext, onBack, lang, theme, apiUrl }) => {
             ? "bg-dark text-light border-secondary"
             : "bg-white text-dark border-light"
         }
-        ${isArabic ? "text-end" : "text-start"}`}
+        ${isArabic ? "text-start" : "text-start"}`}
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
@@ -120,7 +120,7 @@ const StepOwnerEmployment = ({ onNext, onBack, lang, theme, apiUrl }) => {
 
       <div className="row g-4">
         {/* Full Name EN */}
-        <div className="col-md-6">
+        <div className={`col-md-6 ${isArabic ? "text-start" : ""}`}>
           <label className="form-label" >
             {isArabic ? "الاسم بالكامل (إنجليزي)" : "Full Name (EN)"}
           </label>
@@ -137,7 +137,7 @@ const StepOwnerEmployment = ({ onNext, onBack, lang, theme, apiUrl }) => {
         </div>
 
         {/* Full Name AR */}
-        <div className="col-md-6">
+        <div className={`col-md-6 ${isArabic ? "text-start" : ""}`}>
           <label className="form-label" >
             {isArabic ? "الاسم بالكامل (عربي)" : "Full Name (AR)"}
           </label>
@@ -155,7 +155,7 @@ const StepOwnerEmployment = ({ onNext, onBack, lang, theme, apiUrl }) => {
         </div>
 
         {/* Gender */}
-        <div className="col-md-6">
+        <div className={`col-md-6 ${isArabic ? "text-start" : ""}`}>
           <label className="form-label" >
             {isArabic ? "النوع" : "Gender"}
           </label>
@@ -180,7 +180,7 @@ const StepOwnerEmployment = ({ onNext, onBack, lang, theme, apiUrl }) => {
         </div>
 
         {/* Date of Birth */}
-        <div className="col-md-6">
+        <div className={`col-md-6 ${isArabic ? "text-start" : ""}`}>
           <label className="form-label" >
             {isArabic ? "تاريخ الميلاد" : "Date of Birth"}
           </label>
@@ -195,7 +195,7 @@ const StepOwnerEmployment = ({ onNext, onBack, lang, theme, apiUrl }) => {
         </div>
 
         {/* National ID */}
-        <div className="col-md-6">
+        <div className={`col-md-6 ${isArabic ? "text-start" : ""}`}>
           <label className="form-label" >
             {isArabic ? "الرقم القومي" : "National ID"}
           </label>
@@ -213,7 +213,7 @@ const StepOwnerEmployment = ({ onNext, onBack, lang, theme, apiUrl }) => {
         </div>
 
         {/* Nationality */}
-        <div className="col-md-6">
+        <div className={`col-md-6 ${isArabic ? "text-start" : ""}`}>
           <label className="form-label" >
             {isArabic ? "الجنسية" : "Nationality"}
           </label>
@@ -228,7 +228,7 @@ const StepOwnerEmployment = ({ onNext, onBack, lang, theme, apiUrl }) => {
         </div>
 
         {/* Username */}
-        <div className="col-md-6">
+        <div className={`col-md-6 ${isArabic ? "text-start" : ""}`}>
           <label className="form-label" >
             {isArabic ? "اسم المستخدم" : "Username"}
           </label>
@@ -244,7 +244,7 @@ const StepOwnerEmployment = ({ onNext, onBack, lang, theme, apiUrl }) => {
         </div>
 
         {/* Password */}
-        <div className="col-md-6">
+        <div className={`col-md-6 ${isArabic ? "text-start" : ""}`}>
           <label className="form-label" >
             {isArabic ? "كلمة المرور" : "Password"}
           </label>
@@ -260,7 +260,7 @@ const StepOwnerEmployment = ({ onNext, onBack, lang, theme, apiUrl }) => {
         </div>
 
         {/* Confirm Password */}
-        <div className="col-md-6">
+        <div className={`col-md-6 ${isArabic ? "text-start" : ""}`}>
           <label className="form-label" >
             {isArabic ? "تأكيد كلمة المرور" : "Confirm Password"}
           </label>
