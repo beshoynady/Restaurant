@@ -10,6 +10,8 @@ const StepOwnerEmployment = ({ onNext, onBack, lang, theme, apiUrl }) => {
     dateOfBirth: "",
     nationalID: "",
     nationality: "",
+    phone: "",
+    email: "",
     username: "",
     password: "",
     confirmPassword: "",
@@ -53,7 +55,10 @@ const StepOwnerEmployment = ({ onNext, onBack, lang, theme, apiUrl }) => {
           nationalID: form.nationalID,
           nationality: form.nationality,
         },
-
+        contactInfo: {
+          phone: form.phone,
+          email: form.email,
+        },
         credentials: {
           username: form.username,
           password: form.password,
@@ -85,7 +90,7 @@ const StepOwnerEmployment = ({ onNext, onBack, lang, theme, apiUrl }) => {
   return (
     <motion.form
       onSubmit={handleCreateOwner}
-      dir={isArabic ? "rtl" : "ltr"} 
+      dir={isArabic ? "rtl" : "ltr"}
       className={`container my-2 p-2 rounded-4 shadow-lg border transition-all duration-300
         ${
           isDark
@@ -118,11 +123,13 @@ const StepOwnerEmployment = ({ onNext, onBack, lang, theme, apiUrl }) => {
         </span>
       </motion.h2>
 
-      <div className="row g-4"
-      style = {{textAlign: isArabic ? "right" : "left"}}>
+      <div
+        className="row g-4"
+        style={{ textAlign: isArabic ? "right" : "left" }}
+      >
         {/* Full Name EN */}
         <div className="col-md-6">
-          <label className="form-label" >
+          <label className="form-label">
             {isArabic ? "الاسم بالكامل (إنجليزي)" : "Full Name (EN)"}
           </label>
           <input
@@ -139,7 +146,7 @@ const StepOwnerEmployment = ({ onNext, onBack, lang, theme, apiUrl }) => {
 
         {/* Full Name AR */}
         <div className="col-md-6">
-          <label className="form-label" >
+          <label className="form-label">
             {isArabic ? "الاسم بالكامل (عربي)" : "Full Name (AR)"}
           </label>
           <input
@@ -157,9 +164,7 @@ const StepOwnerEmployment = ({ onNext, onBack, lang, theme, apiUrl }) => {
 
         {/* Gender */}
         <div className="col-md-6">
-          <label className="form-label" >
-            {isArabic ? "النوع" : "Gender"}
-          </label>
+          <label className="form-label">{isArabic ? "النوع" : "Gender"}</label>
 
           <select
             name="gender"
@@ -182,7 +187,7 @@ const StepOwnerEmployment = ({ onNext, onBack, lang, theme, apiUrl }) => {
 
         {/* Date of Birth */}
         <div className="col-md-6">
-          <label className="form-label" >
+          <label className="form-label">
             {isArabic ? "تاريخ الميلاد" : "Date of Birth"}
           </label>
           <input
@@ -197,7 +202,7 @@ const StepOwnerEmployment = ({ onNext, onBack, lang, theme, apiUrl }) => {
 
         {/* National ID */}
         <div className="col-md-6">
-          <label className="form-label" >
+          <label className="form-label">
             {isArabic ? "الرقم القومي" : "National ID"}
           </label>
           <input
@@ -215,7 +220,7 @@ const StepOwnerEmployment = ({ onNext, onBack, lang, theme, apiUrl }) => {
 
         {/* Nationality */}
         <div className="col-md-6">
-          <label className="form-label" >
+          <label className="form-label">
             {isArabic ? "الجنسية" : "Nationality"}
           </label>
           <input
@@ -228,9 +233,39 @@ const StepOwnerEmployment = ({ onNext, onBack, lang, theme, apiUrl }) => {
           />
         </div>
 
+        {/* Phone Number */}
+        <div className="col-md-6">
+          <label className="form-label">
+            {isArabic ? "رقم الهاتف" : "Phone Number"}
+          </label>
+          <input
+            type="text"
+            name="phoneNumber"
+            className="form-control form-control"
+            value={form.phone}
+            onChange={handleChange}
+            placeholder={isArabic ? "اكتب رقم الهاتف" : "Enter phone number"}
+            required
+          />
+        </div>
+
+        {/* Email */}
+        <div className="col-md-6">
+          <label className="form-label">{isArabic ? "الايميل" : "Email"}</label>
+          <input
+            type="text"
+            name="email"
+            className="form-control form-control"
+            value={form.email}
+            onChange={handleChange}
+            placeholder={isArabic ? "ادخل الايميل" : "Enter email "}
+            required
+          />
+        </div>
+
         {/* Username */}
         <div className="col-md-6">
-          <label className="form-label" >
+          <label className="form-label">
             {isArabic ? "اسم المستخدم" : "Username"}
           </label>
           <input
@@ -246,7 +281,7 @@ const StepOwnerEmployment = ({ onNext, onBack, lang, theme, apiUrl }) => {
 
         {/* Password */}
         <div className="col-md-6">
-          <label className="form-label" >
+          <label className="form-label">
             {isArabic ? "كلمة المرور" : "Password"}
           </label>
           <input
@@ -262,7 +297,7 @@ const StepOwnerEmployment = ({ onNext, onBack, lang, theme, apiUrl }) => {
 
         {/* Confirm Password */}
         <div className="col-md-6">
-          <label className="form-label" >
+          <label className="form-label">
             {isArabic ? "تأكيد كلمة المرور" : "Confirm Password"}
           </label>
           <input
