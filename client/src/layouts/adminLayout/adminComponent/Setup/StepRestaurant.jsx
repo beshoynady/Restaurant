@@ -48,7 +48,7 @@ const StepRestaurant = ({ onNext, onBack, lang, theme, apiUrl }) => {
           ar: restaurant.description.ar,
         },
         logo: restaurant.logo ? restaurant.logo : null,
-      }
+      };
 
       // Here you would typically send formData to your backend API
       const newRestaurant = await axios.post(
@@ -110,9 +110,12 @@ const StepRestaurant = ({ onNext, onBack, lang, theme, apiUrl }) => {
         </span>
       </motion.h2>
 
-      <div className="row g-4">
+      <div
+        className="row g-4"
+        style={{ textAlign: isArabic ? "right" : "left" }}
+      >
         {/* Brand Name EN */}
-        <div className={`col-md-6 ${isArabic ? "text-start" : ""}`}>
+        <div className="col-md-6">
           <label className="form-label">
             {isArabic ? "اسم العلامة التجارية (إنجليزي)" : "Brand Name (EN)"}
           </label>
@@ -131,7 +134,7 @@ const StepRestaurant = ({ onNext, onBack, lang, theme, apiUrl }) => {
         </div>
 
         {/* Brand Name AR */}
-        <div className={`col-md-6 ${isArabic ? "text-start" : ""}`}>
+        <div className="col-md-6">
           <label className="form-label">
             {isArabic ? "اسم العلامة التجارية (عربي)" : "Brand Name (AR)"}
           </label>
@@ -151,7 +154,7 @@ const StepRestaurant = ({ onNext, onBack, lang, theme, apiUrl }) => {
         </div>
 
         {/* Description EN */}
-        <div className={`col-12 ${isArabic ? "text-start" : ""}`}>
+        <div className="col-12">
           <label className="form-label">
             {isArabic ? "الوصف (إنجليزي)" : "Description (EN)"}
           </label>
@@ -170,7 +173,7 @@ const StepRestaurant = ({ onNext, onBack, lang, theme, apiUrl }) => {
         </div>
 
         {/* Description AR */}
-        <div className={`col-12 ${isArabic ? "text-start" : ""}`}>
+        <div className="col-12">
           <label className="form-label">
             {isArabic ? "الوصف (عربي)" : "Description (AR)"}
           </label>
@@ -190,7 +193,7 @@ const StepRestaurant = ({ onNext, onBack, lang, theme, apiUrl }) => {
         </div>
 
         {/* Upload Logo */}
-        <div className={`col-md-6 text-center ${isArabic ? "text-start" : ""}`}>
+        <div className="col-md-6 text-center">
           <label className="form-label fw-bold">
             {isArabic ? "شعار المطعم" : "Logo"}
           </label>
@@ -222,7 +225,7 @@ const StepRestaurant = ({ onNext, onBack, lang, theme, apiUrl }) => {
         </div>
 
         {/* Upload Cover */}
-        <div className={`col-md-6 text-center ${isArabic ? "text-start" : ""}`}>
+        <div className="col-md-6 text-center">
           <label className="form-label fw-bold">
             {isArabic ? "صورة الغلاف" : "Cover Image"}
           </label>
