@@ -110,6 +110,54 @@ const createEmployeeSchema = Joi.object({
   createdBy: Joi.string().required(),
 });
 
+
+const updateEmployeeSchema = Joi.object({
+  restaurant: Joi.string().optional(),
+  branch: Joi.string().optional(),
+  department: Joi.string().optional(),
+  jobTitle: Joi.string().optional(),
+
+  personalInfo: Joi.object({
+    fullName: Joi.object({
+      en: Joi.string().min(3).max(100).optional(),
+      ar: Joi.string().min(3).max(100).optional(),
+    }),
+    gender: Joi.string().valid("male", "female", "other").optional(),
+    dateOfBirth: Joi.date().optional(),
+    nationalID: Joi.string().min(10).max(30).optional(),
+  }),
+
+  contactInfo: Joi.object({
+    phone: Joi.string().length(11).optional(),
+    email: Joi.string().email().optional(),
+  }),
+
+  employmentInfo: Joi.object({
+    employeeCode: Joi.string().optional(),
+    hireDate: Joi.date().optional(),
+    contractType: Joi.string()
+      .valid("permanent", "temporary", "part-time", "internship")
+      .optional(),
+    dailyWorkingHours: Joi.number().min(1).max(24).optional(),
+    weeklyOffDay: Joi.string().optional(),
+  }),
+
+  financialInfo: Joi.object({
+    basicSalary: Joi.number().min(0).optional(),
+    salaryType: Joi.string()
+      .valid("monthly", "weekly", "daily", "hourly")
+      .default("monthly"),
+    payDay: Joi.number().min(1).max(31).optional(),
+  }),
+
+  credentials: Joi.object({
+    username: Joi.string().min(3).max(100).optional(),
+    password: Joi.string().min(6).max(200).optional(),
+    isAdmin: Joi.boolean().default(false),
+  }),
+
+  updatedBy: Joi.string().required(),
+});
 /* ===========================================================
  *  ✅ 3. CREATE FIRST EMPLOYEE (Super Admin)
  * =========================================================== */
@@ -280,6 +328,14 @@ const updateEmployee = async (req, res) => {
     const { employeeId } = req.params;
     const updatedBy = req.employee?.id;
     const { credentials } = req.body;
+
+    // 🔸 Validate with Joi
+    const { error } = updateEmployeeSchema.validate(req.body);
+    if (error)
+      return res
+        .status(400)
+        .json({ status: "error", message: error.details[0].message });
+
 
     // 🔸 Find existing employee
     const employee = await EmployeeModel.findById(employeeId);
