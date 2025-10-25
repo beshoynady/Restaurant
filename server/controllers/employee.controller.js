@@ -16,7 +16,7 @@ const createFirstEmployeeSchema = Joi.object({
       ar: Joi.string().min(3).max(100).required(),
     }),
     gender: Joi.string().valid("male", "female", "other").required(),
-    dateOfBirth: Joi.date().required(),
+    dateOfBirth: Joi.date().optional(),
     nationalID: Joi.string().min(10).max(30).required(),
     nationality: Joi.string().optional(),
   }).required(),

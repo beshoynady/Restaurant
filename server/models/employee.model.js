@@ -50,7 +50,7 @@ const employeeSchema = new mongoose.Schema(
         enum: ["male", "female", "other"],
         required: true,
       },
-      dateOfBirth: { type: Date, required: true },
+      dateOfBirth: { type: Date},
       nationalID: {
         type: String,
         trim: true,
