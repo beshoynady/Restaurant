@@ -113,7 +113,7 @@ const StepRestaurant = ({ onNext, onBack, lang, theme, apiUrl }) => {
       <div className="row g-4">
         {/* Brand Name EN */}
         <div className="col-md-6">
-          <label className={`form-label ${isArabic ? "text-end" : "text-start"}`}>
+          <label className="form-label">
             {isArabic ? "اسم العلامة التجارية (إنجليزي)" : "Brand Name (EN)"}
           </label>
           <input
@@ -132,7 +132,7 @@ const StepRestaurant = ({ onNext, onBack, lang, theme, apiUrl }) => {
 
         {/* Brand Name AR */}
         <div className="col-md-6">
-          <label className={`form-label ${isArabic ? "text-end" : "text-start"}`}>
+          <label className="form-label">
             {isArabic ? "اسم العلامة التجارية (عربي)" : "Brand Name (AR)"}
           </label>
           <input
@@ -152,7 +152,7 @@ const StepRestaurant = ({ onNext, onBack, lang, theme, apiUrl }) => {
 
         {/* Description EN */}
         <div className="col-12">
-          <label className={`form-label ${isArabic ? "text-end" : "text-start"}`}>
+          <label className="form-label">
             {isArabic ? "الوصف (إنجليزي)" : "Description (EN)"}
           </label>
           <textarea
@@ -171,7 +171,7 @@ const StepRestaurant = ({ onNext, onBack, lang, theme, apiUrl }) => {
 
         {/* Description AR */}
         <div className="col-12">
-          <label className={`form-label ${isArabic ? "text-end" : "text-start"}`}>
+          <label className="form-label">
             {isArabic ? "الوصف (عربي)" : "Description (AR)"}
           </label>
           <textarea
