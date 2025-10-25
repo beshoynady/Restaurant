@@ -7,7 +7,6 @@ const StepOwnerEmployment = ({ onNext, onBack, lang, theme, apiUrl }) => {
   const [form, setForm] = useState({
     fullName: { en: "", ar: "" },
     gender: "",
-    dateOfBirth: "",
     nationalID: "",
     nationality: "",
     phone: "",
@@ -51,7 +50,6 @@ const StepOwnerEmployment = ({ onNext, onBack, lang, theme, apiUrl }) => {
             ar: form.fullName.ar,
           },
           gender: form.gender,
-          dateOfBirth: form.dateOfBirth,
           nationalID: form.nationalID,
           nationality: form.nationality,
         },
@@ -183,21 +181,6 @@ const StepOwnerEmployment = ({ onNext, onBack, lang, theme, apiUrl }) => {
             <option value="male">{isArabic ? "👨 ذكر" : "👨 Male"}</option>
             <option value="female">{isArabic ? "👩 أنثى" : "👩 Female"}</option>
           </select>
-        </div>
-
-        {/* Date of Birth */}
-        <div className="col-md-6">
-          <label className="form-label">
-            {isArabic ? "تاريخ الميلاد" : "Date of Birth"}
-          </label>
-          <input
-            type="date"
-            name="dateOfBirth"
-            className="form-control form-control"
-            value={form.dateOfBirth}
-            onChange={handleChange}
-            required
-          />
         </div>
 
         {/* National ID */}
