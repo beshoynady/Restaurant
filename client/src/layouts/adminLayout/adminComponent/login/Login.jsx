@@ -70,6 +70,7 @@ const Login = () => {
         { username, password },
         { withCredentials: true }
       );
+      console.log("Login Response:", response);
 
       const { data } = response;
       if (!data) return toast.error("Login failed. Try again.");

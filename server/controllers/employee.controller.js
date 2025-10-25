@@ -110,7 +110,6 @@ const createEmployeeSchema = Joi.object({
   createdBy: Joi.string().required(),
 });
 
-
 const updateEmployeeSchema = Joi.object({
   restaurant: Joi.string().optional(),
   branch: Joi.string().optional(),
@@ -336,7 +335,6 @@ const updateEmployee = async (req, res) => {
       return res
         .status(400)
         .json({ status: "error", message: error.details[0].message });
-
 
     // 🔸 Find existing employee
     const employee = await EmployeeModel.findById(employeeId);
