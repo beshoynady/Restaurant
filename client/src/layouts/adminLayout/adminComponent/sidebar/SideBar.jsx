@@ -53,10 +53,15 @@ const SideBar = () => {
     <dataContext.Consumer>
       {({ restaurantData, permissionsList, employeeLoginInfo }) => {
         const role = employeeLoginInfo ? employeeLoginInfo.role : "";
-        const isProgrammer = role === "programer";
+        const isOwner = employeeLoginInfo.isOwner || employeeLoginInfo.isAdmin;
 
         return (
           <>
+            <div className="side-bar-icon" onClick={openSidebar}>
+              <div className="side-bar-icon-content">
+                <i className="bx bx-menu text-light"></i>
+              </div>
+            </div>
             <div
               ref={sidebarRef}
               className="side-bar close"
@@ -67,7 +72,7 @@ const SideBar = () => {
                 <span className="logo_name">{restaurantData.name}</span>
               </div>
               <ul className="navlinks overflowX-hidden">
-                {(isProgrammer ||
+                {(isOwner ||
                   role === "cashier" ||
                   role === "manager" ||
                   role === "owner") && (
@@ -89,7 +94,7 @@ const SideBar = () => {
                 )}
 
                 {/* managerdashboard */}
-                {(isProgrammer || role === "manager" || role === "owner") && (
+                {(isOwner || role === "manager" || role === "owner") && (
                   <li className="list">
                     <Link to="managerdashboard">
                       <span className="material-symbols-outlined list-icon ml-2">
@@ -107,7 +112,7 @@ const SideBar = () => {
                   </li>
                 )}
                 {/* POS */}
-                {(isProgrammer ||
+                {(isOwner ||
                   role === "cashier" ||
                   role === "waiter" ||
                   role === "manager" ||
@@ -130,7 +135,7 @@ const SideBar = () => {
                 )}
 
                 {/* Kitchen */}
-                {(isProgrammer ||
+                {(isOwner ||
                   role === "chef" ||
                   role === "manager" ||
                   role === "owner") && (
@@ -152,7 +157,7 @@ const SideBar = () => {
                 )}
 
                 {/* Waiter */}
-                {(isProgrammer ||
+                {(isOwner ||
                   role === "manager" ||
                   role === "owner" ||
                   role === "waiter") && (
@@ -174,7 +179,7 @@ const SideBar = () => {
                 )}
 
                 {/* Deliveryman */}
-                {(isProgrammer ||
+                {(isOwner ||
                   role === "deliveryman" ||
                   role === "manager" ||
                   role === "owner") && (
@@ -196,7 +201,7 @@ const SideBar = () => {
                 )}
 
                 {/* Orders */}
-                {(isProgrammer ||
+                {(isOwner ||
                   permissionsList?.filter(
                     (permission) => permission.resource === "Orders"
                   )[0]?.read) && (
@@ -216,7 +221,7 @@ const SideBar = () => {
                     </ul>
                   </li>
                 )}
-                {(isProgrammer ||
+                {(isOwner ||
                   permissionsList?.filter(
                     (permission) => permission.resource === "Orders"
                   )[0]?.read) && (
@@ -238,7 +243,7 @@ const SideBar = () => {
                 )}
 
                 {/* Tables */}
-                {(isProgrammer ||
+                {(isOwner ||
                   permissionsList?.filter(
                     (permission) => permission.resource === "Tables"
                   )[0]?.read) && (
@@ -260,7 +265,7 @@ const SideBar = () => {
                       <li className="list">
                         <Link to="tables">ادارة الطاولات</Link>
                       </li>
-                      {(isProgrammer ||
+                      {(isOwner ||
                         permissionsList?.filter(
                           (permission) =>
                             permission.resource === "Table Reservations"
@@ -269,7 +274,7 @@ const SideBar = () => {
                           <Link to="reservation">حجز الطاولات</Link>
                         </li>
                       )}
-                      {(isProgrammer ||
+                      {(isOwner ||
                         permissionsList?.filter(
                           (permission) => permission.resource === "Tables"
                         )[0]?.read) && (
@@ -282,7 +287,7 @@ const SideBar = () => {
                 )}
 
                 {/* Menu */}
-                {(isProgrammer ||
+                {(isOwner ||
                   permissionsList?.filter(
                     (permission) => permission.resource === "Products"
                   )[0]?.read) && (
@@ -304,7 +309,7 @@ const SideBar = () => {
                       <li className="list">
                         <Link to="department">اقسام الاعداد</Link>
                       </li>
-                      {(isProgrammer ||
+                      {(isOwner ||
                         permissionsList?.filter(
                           (permission) =>
                             permission.resource === "Menu Categories"
@@ -313,7 +318,7 @@ const SideBar = () => {
                           <Link to="menuCategory">التصنيفات</Link>
                         </li>
                       )}
-                      {(isProgrammer ||
+                      {(isOwner ||
                         permissionsList?.filter(
                           (permission) => permission.resource === "Products"
                         )[0]?.read) && (
@@ -321,7 +326,7 @@ const SideBar = () => {
                           <Link to="products">الأطباق</Link>
                         </li>
                       )}
-                      {(isProgrammer ||
+                      {(isOwner ||
                         permissionsList?.filter(
                           (permission) => permission.resource === "Recipes"
                         )[0]?.read) && (
@@ -334,7 +339,7 @@ const SideBar = () => {
                 )}
 
                 {/* Employees */}
-                {(isProgrammer ||
+                {(isOwner ||
                   permissionsList?.filter(
                     (permission) => permission.resource === "Employees"
                   )[0]?.read ||
@@ -359,7 +364,7 @@ const SideBar = () => {
                       <li className="list">
                         <Link to="employees">البيانات</Link>
                       </li>
-                      {(isProgrammer ||
+                      {(isOwner ||
                         permissionsList?.filter(
                           (permission) => permission.resource === "Permissions"
                         )[0]?.read) && (
@@ -367,7 +372,7 @@ const SideBar = () => {
                           <Link to="permissions">الصلاحيات</Link>
                         </li>
                       )}
-                      {(isProgrammer ||
+                      {(isOwner ||
                         permissionsList?.filter(
                           (permission) => permission.resource === "Attendance"
                         )[0]?.read) && (
@@ -375,7 +380,7 @@ const SideBar = () => {
                           <Link to="attendancerecord">الحضور والانصراف</Link>
                         </li>
                       )}
-                      {(isProgrammer ||
+                      {(isOwner ||
                         permissionsList?.filter(
                           (permission) =>
                             permission.resource === "Employee Transactions"
@@ -386,7 +391,7 @@ const SideBar = () => {
                           </Link>
                         </li>
                       )}
-                      {(isProgrammer ||
+                      {(isOwner ||
                         permissionsList?.filter(
                           (permission) => permission.resource === "Payroll"
                         )[0]?.read) && (
@@ -399,7 +404,7 @@ const SideBar = () => {
                 )}
 
                 {/* Users */}
-                {(isProgrammer ||
+                {(isOwner ||
                   permissionsList?.filter(
                     (permission) => permission.resource === "Users"
                   )[0]?.read ||
@@ -427,7 +432,7 @@ const SideBar = () => {
                       <li className="list">
                         <Link to="customers">إدارة العملاء</Link>
                       </li>
-                      {(isProgrammer ||
+                      {(isOwner ||
                         permissionsList?.filter(
                           (permission) => permission.resource === "Messages"
                         )[0]?.read) && (
@@ -440,7 +445,7 @@ const SideBar = () => {
                 )}
 
                 {/* Stock */}
-                {(isProgrammer ||
+                {(isOwner ||
                   permissionsList?.filter(
                     (permission) =>
                       permission.resource === "stock Item" ||
@@ -461,7 +466,7 @@ const SideBar = () => {
                       <i className="bx bxs-chevron-down arrow"></i>
                     </div>
                     <ul className="submenu">
-                      {(isProgrammer ||
+                      {(isOwner ||
                         permissionsList?.filter(
                           (permission) => permission.resource === "store"
                         )[0]?.read) && (
@@ -469,7 +474,7 @@ const SideBar = () => {
                           <Link to="store">المخازن</Link>
                         </li>
                       )}
-                      {(isProgrammer ||
+                      {(isOwner ||
                         permissionsList?.filter(
                           (permission) =>
                             permission.resource === "stock Categories"
@@ -478,7 +483,7 @@ const SideBar = () => {
                           <Link to="categoryStock">التصنيفات</Link>
                         </li>
                       )}
-                      {(isProgrammer ||
+                      {(isOwner ||
                         permissionsList?.filter(
                           (permission) => permission.resource === "stock Item"
                         )[0]?.read) && (
@@ -486,7 +491,7 @@ const SideBar = () => {
                           <Link to="stockitem">الأصناف</Link>
                         </li>
                       )}
-                      {(isProgrammer ||
+                      {(isOwner ||
                         permissionsList?.filter(
                           (permission) =>
                             permission.resource === "stock Movement"
@@ -495,7 +500,7 @@ const SideBar = () => {
                           <Link to="StockMovement">إدارة المخزون</Link>
                         </li>
                       )}
-                      {(isProgrammer ||
+                      {(isOwner ||
                         permissionsList?.filter(
                           (permission) =>
                             permission.resource === "stock Movement"
@@ -504,7 +509,7 @@ const SideBar = () => {
                           <Link to="batchstockreport">تقرير دفعات المخزن</Link>
                         </li>
                       )}
-                      {(isProgrammer ||
+                      {(isOwner ||
                         permissionsList?.filter(
                           (permission) =>
                             permission.resource === "Section Consumption"
@@ -513,7 +518,7 @@ const SideBar = () => {
                           <Link to="SectionConsumption">الاستهلاك اليومي</Link>
                         </li>
                       )}
-                      {(isProgrammer ||
+                      {(isOwner ||
                         permissionsList?.filter(
                           (permission) =>
                             permission.resource === "Stock Production Recipes"
@@ -522,7 +527,7 @@ const SideBar = () => {
                           <Link to="productionrecipe">ريسبي التصنيع</Link>
                         </li>
                       )}
-                      {(isProgrammer ||
+                      {(isOwner ||
                         permissionsList?.filter(
                           (permission) =>
                             permission.resource === "Production Order"
@@ -531,7 +536,7 @@ const SideBar = () => {
                           <Link to="productionorder">طلبات التصنيع</Link>
                         </li>
                       )}
-                      {(isProgrammer ||
+                      {(isOwner ||
                         permissionsList?.filter(
                           (permission) =>
                             permission.resource === "Production Record"
@@ -545,7 +550,7 @@ const SideBar = () => {
                 )}
 
                 {/* Suppliers */}
-                {(isProgrammer ||
+                {(isOwner ||
                   permissionsList?.filter(
                     (permission) => permission.resource === "Supplier Data"
                   )[0]?.read) && (
@@ -567,7 +572,7 @@ const SideBar = () => {
                       <li className="list">
                         <Link to="supplier">الموردين</Link>
                       </li>
-                      {(isProgrammer ||
+                      {(isOwner ||
                         permissionsList?.filter(
                           (permission) => permission.resource === "Purchases"
                         )[0]?.read) && (
@@ -575,7 +580,7 @@ const SideBar = () => {
                           <Link to="purchase">المشتريات</Link>
                         </li>
                       )}
-                      {(isProgrammer ||
+                      {(isOwner ||
                         permissionsList?.filter(
                           (permission) =>
                             permission.resource === "Purchase Returns"
@@ -584,7 +589,7 @@ const SideBar = () => {
                           <Link to="purchasereturn">مرتجع المشتريات</Link>
                         </li>
                       )}
-                      {(isProgrammer ||
+                      {(isOwner ||
                         permissionsList?.filter(
                           (permission) =>
                             permission.resource === "Supplier Movement"
@@ -598,7 +603,7 @@ const SideBar = () => {
                 )}
 
                 {/* Expenses */}
-                {(isProgrammer ||
+                {(isOwner ||
                   permissionsList?.filter(
                     (permission) => permission.resource === "Expenses"
                   )[0]?.read) && (
@@ -620,7 +625,7 @@ const SideBar = () => {
                       <li className="list">
                         <Link to="expense">المصروفات</Link>
                       </li>
-                      {(isProgrammer ||
+                      {(isOwner ||
                         permissionsList?.filter(
                           (permission) =>
                             permission.resource === "Daily Expenses"
@@ -633,7 +638,7 @@ const SideBar = () => {
                   </li>
                 )}
 
-                {(isProgrammer ||
+                {(isOwner ||
                   permissionsList?.filter(
                     (permission) => permission.resource === "Cash Register"
                   )[0]?.read) && (
@@ -655,7 +660,7 @@ const SideBar = () => {
                       <li className="list">
                         <Link to="cashregister">الرصيد</Link>
                       </li>
-                      {(isProgrammer ||
+                      {(isOwner ||
                         permissionsList?.filter(
                           (permission) =>
                             permission.resource === "Cash Movement"
@@ -687,24 +692,24 @@ const SideBar = () => {
                         الارباح و الخسائر
                       </a>
                     </li> */}
-                {/* {(isProgrammer || permissionsList?.filter(permission => permission.resource === 'stock Categories')[0]?.read) && ( */}
+                {/* {(isOwner || permissionsList?.filter(permission => permission.resource === 'stock Categories')[0]?.read) && ( */}
                 {/* <li className="list"> */}
                 {/* <Link to="profitloss">التصنيفات</Link>
                     </li> */}
                 {/* )} */}
-                {/* {(isProgrammer || permissionsList?.filter(permission => permission.resource === 'stock Item')[0]?.read) && (
+                {/* {(isOwner || permissionsList?.filter(permission => permission.resource === 'stock Item')[0]?.read) && (
                           <li className="list"><Link to="stockitem">الأصناف</Link></li>
                         )}
-                        {(isProgrammer || permissionsList?.filter(permission => permission.resource === 'stock Movement')[0]?.read) && (
+                        {(isOwner || permissionsList?.filter(permission => permission.resource === 'stock Movement')[0]?.read) && (
                           <li className="list"><Link to="StockMovement">إدارة المخزون</Link></li>
                         )}
-                        {(isProgrammer || permissionsList?.filter(permission => permission.resource === 'Section Consumption')[0]?.read) && (
+                        {(isOwner || permissionsList?.filter(permission => permission.resource === 'Section Consumption')[0]?.read) && (
                           <li className="list"><Link to="kitchenconsumption">استهلاك المطبخ</Link></li>
                         )} */}
                 {/* </ul>
                 </li>
  */}
-                {(isProgrammer ||
+                {(isOwner ||
                   permissionsList?.filter(
                     (permission) =>
                       permission.resource === "Delivery Zones" ||
@@ -728,11 +733,6 @@ const SideBar = () => {
                   </li>
                 )}
               </ul>
-            </div>
-            <div className="side-bar-icon" onClick={openSidebar}>
-              <div className="side-bar-icon-content">
-                <i className="bx bx-menu text-light"></i>
-              </div>
             </div>
           </>
         );
