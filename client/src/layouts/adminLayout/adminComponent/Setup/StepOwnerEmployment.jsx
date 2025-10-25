@@ -73,6 +73,10 @@ const StepOwnerEmployment = ({ onNext, onBack, lang, theme, apiUrl }) => {
             ? "تم انشاء بيانات المالك بنجاح"
             : "Owner details created successfully"
         );
+        const { data } = newOwner;
+        localStorage.setItem("token_e", data.accessToken);
+        await new Promise((resolve) => setTimeout(resolve, 150));
+        await getEmployeeInfoFromToken();
         onNext();
       }
     } catch (error) {

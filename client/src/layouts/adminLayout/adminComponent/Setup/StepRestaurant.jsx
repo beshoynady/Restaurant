@@ -9,10 +9,13 @@ import axios from "axios";
  */
 
 const StepRestaurant = ({ onNext, onBack, lang, theme, apiUrl }) => {
+
+  
   const [restaurant, setRestaurant] = useState({
     brandName: { en: "", ar: "" },
     description: { en: "", ar: "" },
     logo: null,
+    coverImage: null,
   });
 
   const handleChange = (e, key, value) => {
@@ -48,11 +51,12 @@ const StepRestaurant = ({ onNext, onBack, lang, theme, apiUrl }) => {
           ar: restaurant.description.ar,
         },
         logo: restaurant.logo ? restaurant.logo : null,
+        coverImage: restaurant.coverImage ? restaurant.coverImage : null,
       };
 
       // Here you would typically send formData to your backend API
       const newRestaurant = await axios.post(
-        `${apiUrl}/api/restaurant`.config,
+        `${apiUrl}/api/restaurant`,
         formData
       );
       console.log("Restaurant created successfully:", newRestaurant);
