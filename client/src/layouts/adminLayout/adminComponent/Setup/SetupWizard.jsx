@@ -16,7 +16,7 @@ import { dataContext } from "../../../../App";
  * Steps: Welcome → Owner → Restaurant → Finish
  */
 const SetupWizard = () => {
-  const { apiUrl } = useContext(dataContext);
+  const { apiUrl, config } = useContext(dataContext);
 
   const [step, setStep] = useState(0);
 
@@ -55,6 +55,7 @@ const SetupWizard = () => {
       lang={lang}
       theme={theme}
       apiUrl={apiUrl}
+      config={config}
       key="restaurant"
     />,
     <StepFinish lang={lang} theme={theme} key="finish" />,
