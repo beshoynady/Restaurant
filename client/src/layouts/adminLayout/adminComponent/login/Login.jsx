@@ -75,8 +75,8 @@ const Login = () => {
       const { data } = response;
       if (!data) return toast.error("Login failed. Try again.");
 
-      const employee = data.findEmployee;
-      if (!employee?.isActive || !employee?.isAdmin) {
+      const employee = await data.employee;
+      if (!employee?.employmentInfo.isActive || !employee?.credentials.isAdmin) {
         return toast.error("You are not authorized to access admin panel.");
       }
 
