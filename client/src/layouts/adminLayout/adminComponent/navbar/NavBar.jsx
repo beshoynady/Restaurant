@@ -111,13 +111,18 @@ const NavBar = () => {
     setShowNotifications(false);
   };
 
-  const toggleDir = () => {
-    const html = document.documentElement;
-    const newDir = html.getAttribute("dir") === "ltr" ? "rtl" : "ltr";
-    const newLang = newDir === "rtl" ? "ar" : "en";
+  const [lang, setLang] = useState(localStorage.getItem("lang") || "ar");
 
-    html.setAttribute("dir", newDir);
-    html.setAttribute("lang", newLang);
+  useEffect(() => {
+    document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+    document.documentElement.lang = lang;
+  }, [lang]);
+
+  const toggleLang = () => {
+    const newLang = lang === "en" ? "ar" : "en";
+    setLang(newLang);
+    localStorage.setItem("lang", newLang);
+    document.documentElement.dir = newLang === "ar" ? "rtl" : "ltr";
   };
 
   const handleNotificationClick = (index) => {
@@ -202,7 +207,7 @@ const NavBar = () => {
     return localStorage.getItem("theme") === "dark";
   });
 
-   useEffect(() => {
+  useEffect(() => {
     document.body.setAttribute("data-bs-theme", isDarkMode ? "dark" : "light");
     localStorage.setItem("theme", isDarkMode ? "dark" : "light");
   }, [isDarkMode]);
@@ -320,8 +325,6 @@ const NavBar = () => {
       className="navbar w-100 navbar-expand-lg flex-row p-0 m-0 pr-2 sticky-top"
       style={{ height: "50px", backgroundColor: "#343a40" }}
     >
-      {/* <input type="checkbox" className="form-check-input form-check-input-lg" id="theme-toggle" hidden />
-      <label htmlFor="theme-toggle" className="theme-toggle" onClick={toggleDir}></label> */}
       <div className="navbar-nav flex-row align-items-center w-100 px-1 mx-1 ms-auto h-100">
         <div className="nav-item mx-1 dropdown">
           <a
@@ -461,6 +464,7 @@ const NavBar = () => {
             <i className="fa-solid fa-minimize fa-xl text-light"></i>
           )}
         </div>
+
         <div
           className="nav-item d-flex align-items-center justify-content-center mx-1"
           style={{ cursor: "pointer" }}
@@ -468,6 +472,16 @@ const NavBar = () => {
         >
           <button className="toggle-theme-btn">
             {isDarkMode ? "☀️" : "🌙"}
+          </button>
+        </div>
+
+        <div
+          className="nav-item d-flex align-items-center justify-content-center mx-1"
+          style={{ cursor: "pointer" }}
+          onClick={toggleLang}
+        >
+          <button className="btn btn-outline-info btn-sm d-flex align-items-center">
+            🌐 {lang === "ar" ? "EN" : "عربي"}
           </button>
         </div>
         {/* <form className="form-inline my-2 my-lg-0 me-auto">

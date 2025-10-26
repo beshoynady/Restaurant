@@ -20,6 +20,7 @@ const NavbarWizard = ({ lang, setLang, theme, setTheme }) => {
     const newLang = lang === "en" ? "ar" : "en";
     setLang(newLang);
     localStorage.setItem("lang", newLang);
+    document.documentElement.dir = newLang === "ar" ? "rtl" : "ltr";
   };
 
   // Apply theme to document root (for Tailwind dark mode)
