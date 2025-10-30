@@ -13,7 +13,7 @@ import { dataContext } from "../../App";
 
 const Userscreen = () => {
   const {
-    restaurantData,
+    brandInfo,
     allProducts,
     productsOffer,
     sizesOffer,
@@ -28,9 +28,9 @@ const Userscreen = () => {
       <Home />
       {(productsOffer.length > 0 || sizesOffer.length > 0) && <Offers />}
       {allProducts.length > 0 && <Menu />}
-      {restaurantData?.locationUrl && <Location />}
-      {(restaurantData?.contact || restaurantData?.socialMedia) && <Contact />}
-      {restaurantData?.usesReservationSystem && <Reservation />}
+      {brandInfo?.locationUrl && <Location />}
+      {(brandInfo?.contact || brandInfo?.socialMedia) && <Contact />}
+      {brandInfo?.usesReservationSystem && <Reservation />}
       <Footer />
     </div>
   );

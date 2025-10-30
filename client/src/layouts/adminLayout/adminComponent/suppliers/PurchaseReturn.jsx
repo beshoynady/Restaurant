@@ -7,7 +7,7 @@ import "../orders/Orders.css";
 
 const PurchaseReturn = () => {
   const {
-    restaurantData,
+    brandInfo,
     permissionsList,
     setStartDate,
     setEndDate,
@@ -36,12 +36,10 @@ const PurchaseReturn = () => {
     const config = await handleGetTokenAndConfig();
     try {
       const response = await axios.get(apiUrl + "/api/stockmovement/", config);
-      
+
       const Stockactions = await response.data;
       setAllStockactions(Stockactions.reverse());
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   };
 
   const [AllSuppliers, setAllSuppliers] = useState([]);
@@ -89,13 +87,10 @@ const PurchaseReturn = () => {
     const config = await handleGetTokenAndConfig();
     try {
       const response = await axios.get(`${apiUrl}/api/recipe`, config);
-      
+
       const allRecipe = await response.data;
       setAllRecipes(allRecipe);
-      
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   };
 
   const [StockItems, setStockItems] = useState([]);
@@ -104,7 +99,6 @@ const PurchaseReturn = () => {
     try {
       const response = await axios.get(apiUrl + "/api/stockitem/", config);
       if (response) {
-        
         setStockItems(response.data.reverse());
       }
     } catch (error) {
@@ -127,7 +121,6 @@ const PurchaseReturn = () => {
       const itemAdditionalCost = additionalCost * itemPercentage;
       const costOfItem = itemAdditionalCost + price;
       const stockItem = StockItems.filter((item) => item._id === itemId)[0];
-      
 
       // const itemName = stockItem.itemName
       const oldBalance = stockItem.currentBalance;
@@ -150,7 +143,6 @@ const PurchaseReturn = () => {
         { currentBalance, price, costPerPart },
         config
       );
-      
 
       if (changeItem.status === 200) {
         // Create a new stock action
@@ -172,8 +164,6 @@ const PurchaseReturn = () => {
           config
         );
 
-        
-
         // for (const recipe of allrecipes) {
         //   const recipeid = recipe._id;
         //   const productName = recipe.productId.name;
@@ -190,7 +180,7 @@ const PurchaseReturn = () => {
         //       return ingredient;
         //     }
         //   });
-        //   
+        //
         //   const totalcost = newIngredients.reduce((acc, curr) => {
         //     return acc + (curr.totalcostofitem || 0);
         //   }, 0);
@@ -198,7 +188,7 @@ const PurchaseReturn = () => {
         //   const updateRecipe = await axios.put(`${apiUrl}/api/recipe/${recipeid}`,
         //     { ingredients: newIngredients, totalcost }, config);
 
-        //   
+        //
 
         //   // Toast for successful update based on recipe change
         //   toast.success(`تم تحديث وصفة  ${productName}`);
@@ -212,7 +202,6 @@ const PurchaseReturn = () => {
       // Toast notification for successful creation
       toast.success("تم تسجيل حركه المخزن بنجاح");
     } catch (error) {
-      
       // Toast notification for error
       toast.error("فشل تسجيل حركه المخزن ! حاول مره اخري");
     }
@@ -257,16 +246,15 @@ const PurchaseReturn = () => {
     const updatedItems = [...returnedItems];
     updatedItems[index].itemId = stockitem._id;
     updatedItems[index].storageUnit = stockitem.storageUnit;
-    
+
     setreturnedItems(updatedItems);
   };
   const handleQuantity = (quantity, index) => {
-    
     const updatedItems = [...returnedItems];
     updatedItems[index].quantity = Number(quantity);
     updatedItems[index].cost =
       Number(quantity) * Number(updatedItems[index].price);
-    
+
     setreturnedItems(updatedItems);
     clacTotalAmount();
   };
@@ -275,14 +263,14 @@ const PurchaseReturn = () => {
     updatedItems[index].price = Number(price);
     updatedItems[index].cost =
       Number(updatedItems[index].quantity) * Number(price);
-    
+
     setreturnedItems(updatedItems);
     clacTotalAmount();
   };
   const handleExpirationDate = (date, index) => {
     const updatedItems = [...returnedItems];
     updatedItems[index].expirationDate = new Date(date);
-    
+
     setreturnedItems(updatedItems);
   };
   const [totalAmount, setTotalAmount] = useState(0);
@@ -331,7 +319,7 @@ const PurchaseReturn = () => {
     const returnInvoice = allPurchaseInvoice.filter(
       (returnInvoice) => (returnInvoice._id = id)
     )[0];
-    
+
     setreturnInvoice(returnInvoice);
     setreturnedItems(returnInvoice.items);
     setoriginalInvoice(id);
@@ -362,11 +350,10 @@ const PurchaseReturn = () => {
   const [cashRegister, setCashRegister] = useState();
   const [CashRegisterBalance, setCashRegisterBalance] = useState(0);
   const handleCashRegister = (id) => {
-    
     const filterCashRegister = AllCashRegisters.filter(
       (CashRegister) => CashRegister.employee._id === id
     );
-    
+
     setlistCashRegister(filterCashRegister);
   };
   const selectCashRegister = (id) => {
@@ -379,7 +366,6 @@ const PurchaseReturn = () => {
 
   const [paymentMethod, setPaymentMethod] = useState("");
   const handlePaymentMethod = (Method, employeeId) => {
-    
     setPaymentMethod(Method);
     handleCashRegister(employeeId);
   };
@@ -411,9 +397,9 @@ const PurchaseReturn = () => {
   //       paymentMethod,
   //       notes,
   //     }
-  //     
+  //
   //     const response = await axios.post(`${apiUrl}/api/purchasereturn`, newInvoice, config);
-  //     
+  //
   //     if (response.status === 201) {
   //       items.forEach(item => {
   //         createStockAction(item, receiverId)
@@ -474,7 +460,6 @@ const PurchaseReturn = () => {
             expirationDate: item.expirationDate,
           };
           items.push(i);
-          
         }
       });
       if (items.length === 0) {
@@ -507,13 +492,13 @@ const PurchaseReturn = () => {
         refundMethod,
         notes,
       };
-      
+
       const response = await axios.post(
         `${apiUrl}/api/purchasereturn`,
         purchasereturn,
         config
       );
-      
+
       if (response.status === 201) {
         items.forEach((item) => {
           createStockAction(item, receiverId);
@@ -526,7 +511,6 @@ const PurchaseReturn = () => {
         toast.error("فشل اضافه المشتريات ! حاول مره اخري");
       }
     } catch (error) {
-      
       toast.error("حدث خطأ اثناء اضافه المشتريات ! حاول مره اخري");
     }
   };
@@ -540,14 +524,13 @@ const PurchaseReturn = () => {
         return;
       }
       const response = await axios.get(apiUrl + "/api/purchasereturn", config);
-      
+
       if (response.status === 200) {
         setAllPurchasesReturn(response.data.reverse());
       } else {
         toast.error("فشل جلب جميع فواتير المشتريات ! اعد تحميل الصفحة");
       }
     } catch (error) {
-      
       toast.error("حدث خطأ اثناء جلب فواتير المشتريات ! اعد تحميل الصفحة");
     }
   };
@@ -557,7 +540,7 @@ const PurchaseReturn = () => {
     const config = await handleGetTokenAndConfig();
     try {
       const response = await axios.get(apiUrl + "/api/purchaseinvoice", config);
-      
+
       if (response.status === 200) {
         setAllPurchaseInvoice(response.data.reverse());
       } else {
@@ -607,8 +590,6 @@ const PurchaseReturn = () => {
         },
         config
       );
-      
-      
 
       if (cashMovement) {
         toast.success("تم تسجيل حركه الخزينه بنجاح");
@@ -630,7 +611,6 @@ const PurchaseReturn = () => {
         toast.success("حدث خطا اثنا تسجيل حركه الخزينه ! حاول مره اخري");
       }
     } catch (error) {
-      
       // Toast notification for error
       toast.error("فشل في تسجيل المصروف !حاول مره اخري");
     }
@@ -660,14 +640,12 @@ const PurchaseReturn = () => {
         notes,
       };
 
-      
-
       const response = await axios.post(
         `${apiUrl}/api/suppliertransaction`,
         requestData,
         config
       );
-      
+
       if (response.status === 201) {
         const supplierresponse = await axios.put(
           `${apiUrl}/api/supplier/${supplier}`,
@@ -679,7 +657,6 @@ const PurchaseReturn = () => {
           supplierresponse.data.updatedSupplier.currentBalance
         );
 
-        
         toast.success("تم انشاء العملية بنجاح");
       } else {
         toast.error("حدث خطأ أثناء انشاء العملية");
@@ -693,13 +670,13 @@ const PurchaseReturn = () => {
       //   const currentBalance = previousBalance - refundedAmount
       //   const requestData = { originalInvoice, supplier, transactionDate, transactionType, amount, previousBalance, currentBalance, paymentMethod, notes };
 
-      //   
+      //
 
       //   const response = await axios.post(`${apiUrl}/api/suppliertransaction`, requestData, config);
-      //   
+      //
       //   if (response.status === 201) {
       //     const supplierresponse = await axios.put(`${apiUrl}/api/supplier/${supplier}`, { currentBalance }, config);
-      //     
+      //
       //     toast.success('تم انشاء العملية بنجاح');
       //   } else {
       //     toast.error('حدث خطأ أثناء انشاء العملية');

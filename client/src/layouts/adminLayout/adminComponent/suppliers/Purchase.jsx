@@ -7,7 +7,7 @@ import "../orders/Orders.css";
 
 const Purchase = () => {
   const {
-    restaurantData,
+    brandInfo,
     permissionsList,
     setStartDate,
     setEndDate,
@@ -30,7 +30,6 @@ const Purchase = () => {
     (permission) => permission.resource === "Purchases"
   )[0];
 
-  
   const [AllSuppliers, setAllSuppliers] = useState([]);
   // Function to retrieve all suppliers
   const getAllSuppliers = async () => {
@@ -76,7 +75,6 @@ const Purchase = () => {
     try {
       const response = await axios.get(apiUrl + "/api/stockitem/", config);
       if (response) {
-        
         setStockItems(response.data.reverse());
       }
     } catch (error) {
@@ -157,8 +155,6 @@ const Purchase = () => {
         config
       );
 
-      
-
       getAllStockItems();
       toast.success("تم تسجيل حركة المخزن بنجاح");
     } catch (error) {
@@ -190,14 +186,12 @@ const Purchase = () => {
         notes,
       };
 
-      
-
       const response = await axios.post(
         `${apiUrl}/api/suppliertransaction`,
         requestData,
         config
       );
-      
+
       if (response.status === 201) {
         const supplierresponse = await axios.put(
           `${apiUrl}/api/supplier/${supplierId}`,
@@ -209,7 +203,6 @@ const Purchase = () => {
           supplierresponse.data.updatedSupplier.currentBalance
         );
 
-        
         toast.success("تم انشاء العملية بنجاح");
       } else {
         toast.error("حدث خطأ أثناء انشاء العملية");
@@ -233,21 +226,19 @@ const Purchase = () => {
           notes,
         };
 
-        
-
         const response = await axios.post(
           `${apiUrl}/api/suppliertransaction`,
           requestData,
           config
         );
-        
+
         if (response.status === 201) {
           const supplierresponse = await axios.put(
             `${apiUrl}/api/supplier/${supplierId}`,
             { currentBalance },
             config
           );
-          
+
           toast.success("تم انشاء العملية بنجاح");
         } else {
           toast.error("حدث خطأ أثناء انشاء العملية");
@@ -295,7 +286,7 @@ const Purchase = () => {
     const updatedItems = [...items];
     updatedItems[index].itemId = stockitem._id;
     updatedItems[index].storageUnit = stockitem.storageUnit;
-    
+
     setItems(updatedItems);
   };
 
@@ -304,7 +295,7 @@ const Purchase = () => {
     updatedItems[index].quantity = Number(quantity);
     updatedItems[index].cost =
       Number(quantity) * Number(updatedItems[index].price);
-    
+
     setItems(updatedItems);
     clacTotalAmount();
   };
@@ -314,7 +305,7 @@ const Purchase = () => {
     updatedItems[index].price = Number(price);
     updatedItems[index].cost =
       Number(updatedItems[index].quantity) * Number(price);
-    
+
     setItems(updatedItems);
     clacTotalAmount();
   };
@@ -322,7 +313,7 @@ const Purchase = () => {
   const handleExpirationDate = (date, index) => {
     const updatedItems = [...items];
     updatedItems[index].expirationDate = new Date(date);
-    
+
     setItems(updatedItems);
   };
   const [totalAmount, setTotalAmount] = useState(0);
@@ -392,11 +383,11 @@ const Purchase = () => {
   const [cashRegister, setCashRegister] = useState();
   const [CashRegisterBalance, setCashRegisterBalance] = useState(0);
   const handleCashRegister = (id) => {
-    // 
+    //
     const filterCashRegister = AllCashRegisters.filter(
       (CashRegister) => CashRegister.employee._id === id
     );
-    // 
+    //
     setlistCashRegister(filterCashRegister);
   };
 
@@ -410,7 +401,7 @@ const Purchase = () => {
 
   const [paymentMethod, setPaymentMethod] = useState("");
   const handlePaymentMethod = (Method, employeeId) => {
-    // 
+    //
     setPaymentMethod(Method);
     handleCashRegister(employeeId);
   };
@@ -468,19 +459,19 @@ const Purchase = () => {
         paymentMethod,
         notes,
       };
-      
+
       const response = await axios.post(
         `${apiUrl}/api/purchaseinvoice`,
         newInvoice,
         config
       );
-      
+
       if (response.status === 201 && storeId) {
         items.forEach((item) => {
           createStockAction(item);
         });
-        if(paidAmount>0){
-        await handleAddSupplierTransactionPurchase(invoiceNumber);
+        if (paidAmount > 0) {
+          await handleAddSupplierTransactionPurchase(invoiceNumber);
         }
         getAllPurchases();
         toast.success("تم اضافه المشتريات بنجاح");
@@ -488,7 +479,6 @@ const Purchase = () => {
         toast.error("فشل اضافه المشتريات ! حاول مره اخري");
       }
     } catch (error) {
-      
       toast.error("حدث خطأ اثناء اضافه المشتريات ! حاول مره اخري");
     }
   };
@@ -511,7 +501,7 @@ const Purchase = () => {
         `${apiUrl}/api/purchaseinvoice/${id}`,
         config
       );
-      
+
       if (resInvoice) {
         setinvoice(resInvoice.data);
       }
@@ -536,7 +526,7 @@ const Purchase = () => {
     const config = await handleGetTokenAndConfig();
     try {
       const response = await axios.get(apiUrl + "/api/purchaseinvoice", config);
-      
+
       if (response.status === 200) {
         setAllPurchaseInvoice(response.data.reverse());
       } else {
@@ -639,7 +629,6 @@ const Purchase = () => {
       );
 
       const cashMovement = cashMovementResponse.data.cashMovement;
-      
 
       if (cashMovementResponse) {
         toast.success("تم تسجيل حركه الخزينه بنجاح");
@@ -668,7 +657,6 @@ const Purchase = () => {
         toast.error("حدث خطأ أثناء تسجيل حركة الخزينة. حاول مرة أخرى.");
       }
     } catch (error) {
-      
       toast.error("فشل في تسجيل المصروف! حاول مرة أخرى.");
     }
   };
@@ -694,13 +682,12 @@ const Purchase = () => {
       const storesByStoreKeeper = [];
       stores.map((store) => {
         store.storekeeper.map((storekeeper) => {
-        if (storekeeper._id === employeeLoginInfo.id) {
-          storesByStoreKeeper.push(store);
-        }})
+          if (storekeeper._id === employeeLoginInfo.id) {
+            storesByStoreKeeper.push(store);
+          }
+        });
       });
       setAllStores(storesByStoreKeeper);
-
-      
     } catch (error) {
       console.error("Error fetching stores:", error);
       toast.error("حدث خطأ اثناء جلب بيانات المخزنات! اعد تحميل الصفحة");
@@ -1357,12 +1344,12 @@ const Purchase = () => {
                             <option>اختر المخزن </option>
                             {allStores &&
                               allStores.map((store, i) => {
-                                  return (
-                                    <option value={store._id}>
-                                      {store.storeName}
-                                    </option>
-                                  );
-                                })}
+                                return (
+                                  <option value={store._id}>
+                                    {store.storeName}
+                                  </option>
+                                );
+                              })}
                           </select>
                         </div>
                         <div className="input-group mb-3 d-flex align-items-center justify-content-between flex-nowrap">

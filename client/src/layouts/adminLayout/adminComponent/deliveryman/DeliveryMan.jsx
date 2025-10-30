@@ -6,10 +6,8 @@ import { useReactToPrint } from "react-to-print";
 import InvoiceComponent from "../invoice/invoice";
 
 const DeliveryMan = () => {
-  
-
   const {
-    restaurantData,
+    brandInfo,
     permissionsList,
     setStartDate,
     setEndDate,
@@ -24,9 +22,9 @@ const DeliveryMan = () => {
     endPagination,
     setStartPagination,
     setEndPagination,
-  apiUrl,
-handleGetTokenAndConfig,
-} = useContext(dataContext);
+    apiUrl,
+    handleGetTokenAndConfig,
+  } = useContext(dataContext);
 
   // // State for pending orders and payments
   // const [pendingOrders, setPendingOrders] = useState([]);
@@ -35,14 +33,14 @@ handleGetTokenAndConfig,
   // // Function to fetch pending orders and payments
   // const fetchPendingData = async () => {
   //   try{
-// const config = await handleGetTokenAndConfig();
+  // const config = await handleGetTokenAndConfig();
   //     const res = await axios.get(apiUrl+'/api/order');
   //     const recentStatus = res.data.filter((order) => order.status === 'Pending');
   //     const recentPaymentStatus = res.data.filter((order) => order.payment_status === 'Pending');
   //     setPendingOrders(recentStatus);
   //     setPendingPayments(recentPaymentStatus);
   //   } catch (error) {
-  //     
+  //
   //   }
   // };
 
@@ -61,11 +59,9 @@ handleGetTokenAndConfig,
       const deliveryOrdersData = activeOrders.filter(
         (order) => order.status === "Prepared" || order.status === "On the way"
       );
-      
+
       setDeliveryOrders(activeOrders);
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   };
 
   const updateOrderOnWay = async (e, id) => {
@@ -92,7 +88,6 @@ handleGetTokenAndConfig,
         toast.success("Order is on the way!");
       }
     } catch (error) {
-      
       toast.error("Error updating order status!");
     }
   };
@@ -123,7 +118,6 @@ handleGetTokenAndConfig,
       }
       //  fetchPendingData();
     } catch (error) {
-      
       toast.error("Error delivering order!");
     }
   };
@@ -143,7 +137,6 @@ handleGetTokenAndConfig,
         setShowModal(!showModal);
       }
     } catch (error) {
-      
       // Display toast or handle error
     }
   };

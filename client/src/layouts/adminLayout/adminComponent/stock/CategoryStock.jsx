@@ -6,7 +6,7 @@ import "../orders/Orders.css";
 
 const CategoryStock = () => {
   const {
-    restaurantData,
+    brandInfo,
     permissionsList,
     setStartDate,
     setEndDate,
@@ -64,9 +64,7 @@ const CategoryStock = () => {
       } else {
         toast.warn("حدث خطا اثناء جلب بيانات اصناف المخزن ! اعد تحميل الصفحة");
       }
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   };
 
   const createCategoryStock = async (e) => {
@@ -134,7 +132,6 @@ const CategoryStock = () => {
       getAllCategoryStock(); // Fetch updated category stock data
       getAllStockItem(); // Fetch updated stock item data
     } catch (error) {
-      
       toast.error("حدث خطأ أثناء تعديل التصنيف. يرجى المحاولة مرة أخرى.");
     }
   };
@@ -160,7 +157,6 @@ const CategoryStock = () => {
         toast.success("تم حذف التصنيف بنجاح");
       }
     } catch (error) {
-      
       toast.error("حدث خطأ أثناء حذف التصنيف. يرجى المحاولة مرة أخرى.");
     }
   };

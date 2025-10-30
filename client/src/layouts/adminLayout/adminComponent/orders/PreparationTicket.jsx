@@ -9,7 +9,7 @@ import department from "../products/department";
 
 const PreparationTicket = () => {
   const {
-    restaurantData,
+    brandInfo,
     permissionsList,
     setStartDate,
     setEndDate,

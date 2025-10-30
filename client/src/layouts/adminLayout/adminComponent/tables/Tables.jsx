@@ -8,7 +8,7 @@ import "../orders/Orders.css";
 const Tables = () => {
   const {
     permissionsList,
-    restaurantData,
+    brandInfo,
     setStartDate,
     setEndDate,
     filterByDateRange,
@@ -1155,7 +1155,7 @@ const Tables = () => {
                         fontFamily: "Noto Nastaliq Urdu , serif",
                       }}
                     >
-                      {restaurantData && restaurantData.name}
+                      {brandInfo && brandInfo.name}
                     </p>
                     {qrimage && (
                       <a href={qrimage} download>

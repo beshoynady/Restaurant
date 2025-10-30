@@ -95,9 +95,11 @@ const createEmployeeSchema = Joi.object({
 
   financialInfo: Joi.object({
     basicSalary: Joi.number().min(0).required(),
+    currency: Joi.string().default("EGP"),
     salaryType: Joi.string()
       .valid("monthly", "weekly", "daily", "hourly")
       .default("monthly"),
+      
     payDay: Joi.number().min(1).max(31).optional(),
   }),
 

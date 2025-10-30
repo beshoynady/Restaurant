@@ -10,7 +10,7 @@ import InvoiceComponent from "../invoice/invoice";
 
 const POS = () => {
   const {
-    restaurantData,
+    brandInfo,
     setsalesTax,
     salesTax,
     setserviceTax,
@@ -106,7 +106,7 @@ const POS = () => {
 
   const handelcustomerDeliveryArea = (area) => {
     const deliveryArea = JSON.parse(area);
-    // 
+    //
     setdeliveryAreaId(deliveryArea._id);
     setdeliveryAreaName(deliveryArea.name);
     setdeliveryFee(deliveryArea.delivery_fee);
@@ -116,7 +116,7 @@ const POS = () => {
     try {
       const response = await axios.get(`${apiUrl}/api/deliveryarea`);
       const data = await response.data;
-      
+
       if (data) {
         setAreas(data);
       } else {
@@ -196,7 +196,7 @@ const POS = () => {
       if (!clientname && !clientphone && !deliveryAreaId && !clientaddress) {
         toast.warn("تاكد من الاسم و الموبايل و منطقه التوصل و العنوان ");
       }
-      // 
+      //
       const response = await axios.post(
         `${apiUrl}/api/customer`,
         {
@@ -259,7 +259,7 @@ const POS = () => {
         config
       );
       const registers = response.data;
-      // 
+      //
       if (registers.length === 0) {
         toast.info("لم يتم العثور على حسابات النقدية لهذا الموظف");
         return;
@@ -337,7 +337,6 @@ const POS = () => {
         }
       }
     } catch (error) {
-      
       // إخطار المستخدم بالفشل
       toast.error("فشل في تسجيل الإيراد");
     }
@@ -377,13 +376,13 @@ const POS = () => {
 
   useEffect(() => {
     const roundedSalesTax = (
-      (costOrder * restaurantData.salesTaxRate) /
+      (costOrder * brandInfo.salesTaxRate) /
       100
     ).toFixed(2);
     setsalesTax(parseFloat(roundedSalesTax));
     if (ordertype === "Internal") {
       const roundedServiceTax = (
-        (costOrder * restaurantData.serviceTaxRate) /
+        (costOrder * brandInfo.serviceTaxRate) /
         100
       ).toFixed(2);
       setserviceTax(parseFloat(roundedServiceTax));
@@ -1170,18 +1169,17 @@ const POS = () => {
                     {costOrder > 0 ? costOrder : 0} ج
                   </span>
                 </p>
-                {ordertype === "Internal" &&
-                restaurantData.serviceTaxRate > 0 ? (
+                {ordertype === "Internal" && brandInfo.serviceTaxRate > 0 ? (
                   <p className="order-item mb-1 d-flex justify-content-between align-items-center text-black">
-                    <span className="text-dark fw-bold fs-5">{`خدمة صاله ${restaurantData.serviceTaxRate}%:`}</span>
+                    <span className="text-dark fw-bold fs-5">{`خدمة صاله ${brandInfo.serviceTaxRate}%:`}</span>
                     <span className="text-dark fw-bold fs-5 text-center">
                       {serviceTax > 0 ? serviceTax : 0} ج
                     </span>
                   </p>
                 ) : null}
-                {restaurantData.salesTaxRate > 0 ? (
+                {brandInfo.salesTaxRate > 0 ? (
                   <p className="order-item mb-1 d-flex justify-content-between align-items-center text-black">
-                    <span className="text-dark fw-bold fs-5">{`ضريبة مبيعات ${restaurantData.salesTaxRate}%:`}</span>
+                    <span className="text-dark fw-bold fs-5">{`ضريبة مبيعات ${brandInfo.salesTaxRate}%:`}</span>
                     <span className="text-dark fw-bold fs-5 text-center">
                       {salesTax > 0 ? salesTax : 0} ج
                     </span>
@@ -1537,8 +1535,8 @@ const POS = () => {
                   onChange={(e) => setpaymentMethod(e.target.value)}
                 >
                   <option>اختر طريقه الدفع</option>
-                  {restaurantData.acceptedPayments &&
-                    restaurantData.acceptedPayments.map((method, i) => (
+                  {brandInfo.acceptedPayments &&
+                    brandInfo.acceptedPayments.map((method, i) => (
                       <option value={method} key={i}>
                         {method}
                       </option>

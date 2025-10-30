@@ -6,7 +6,7 @@ import "../orders/Orders.css";
 
 const ExpenseItem = () => {
   const {
-    restaurantData,
+    brandInfo,
     permissionsList,
     setStartDate,
     setEndDate,
@@ -17,7 +17,10 @@ const ExpenseItem = () => {
     endPagination,
     setStartPagination,
     setEndPagination,
-    formatDateTime, handleGetTokenAndConfig, apiUrl } = useContext(dataContext)
+    formatDateTime,
+    handleGetTokenAndConfig,
+    apiUrl,
+  } = useContext(dataContext);
 
   const permissionExpense =
     permissionsList &&
@@ -62,14 +65,13 @@ const ExpenseItem = () => {
         { description, expenseType, isSalary },
         config
       );
-      
+
       getAllExpenses();
       toast.success("تم إنشاء المصروف بنجاح");
       toast.info(
         "لا يمكن تعديل بيانات حساب المصروفات بعد تسجيل اي مصروفات به "
       );
     } catch (error) {
-      
       toast.error("حدث خطأ أثناء إنشاء المصروف");
     }
   };
@@ -93,13 +95,12 @@ const ExpenseItem = () => {
         { description, expenseType, isSalary },
         config
       );
-      
+
       if (response.status === 200) {
         getAllExpenses();
         toast.success("تم تعديل المصروف بنجاح");
       }
     } catch (error) {
-      
       toast.error("حدث خطأ أثناء تعديل المصروف");
     }
   };
@@ -123,12 +124,10 @@ const ExpenseItem = () => {
         config
       );
       if (response.status === 200) {
-        
         getAllExpenses();
         toast.success("تم حذف المصروف بنجاح");
       }
     } catch (error) {
-      
       toast.error("حدث خطأ أثناء حذف المصروف");
     }
   };
@@ -142,10 +141,9 @@ const ExpenseItem = () => {
       }
       const response = await axios.get(apiUrl + "/api/expenses/", config);
       const expenses = await response.data.reverse();
-      
+
       setAllExpenses(expenses);
     } catch (error) {
-      
       toast.error("حدث خطأ أثناء جلب المصاريف");
     }
   };
@@ -156,11 +154,9 @@ const ExpenseItem = () => {
       const config = await handleGetTokenAndConfig();
       const response = await axios.get(apiUrl + "/api/dailyexpense/", config);
       const dailyExpenses = await response.data.reverse();
-      
+
       setAllDailyExpenses(dailyExpenses);
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   };
 
   const searchByExpense = (expense) => {
@@ -213,7 +209,7 @@ const ExpenseItem = () => {
         }
         return { ...expense, amount: total };
       });
-    
+
     setAllExpenses(updatedExpenses);
   }, [allDailyExpenses]);
 
@@ -403,8 +399,8 @@ const ExpenseItem = () => {
                           <td>{expense.amount}</td>
                           <td>{formatDateTime(expense.createdAt)}</td>
                           <td>
-                             <button
-data-target="#editExpensesModal"
+                            <button
+                              data-target="#editExpensesModal"
                               className="btn btn-sm btn-primary ml-2 "
                               data-toggle="modal"
                               onClick={() => {
@@ -422,8 +418,8 @@ data-target="#editExpensesModal"
                                 &#xE254;
                               </i>
                             </button>
-                             <button
-data-target="#deleteExpensesModal"
+                            <button
+                              data-target="#deleteExpensesModal"
                               className="btn btn-sm btn-danger"
                               data-toggle="modal"
                               onClick={() => setexpenseId(expense._id)}

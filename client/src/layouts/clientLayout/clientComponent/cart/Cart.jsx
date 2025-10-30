@@ -13,7 +13,7 @@ import html2pdf from "html2pdf.js";
 
 const Cart = (props) => {
   const {
-    restaurantData,
+    brandInfo,
     setsalesTax,
     salesTax,
     setserviceTax,
@@ -91,8 +91,8 @@ const Cart = (props) => {
   }, [id, navigate]);
 
   useEffect(() => {
-    setsalesTax((costOrder * restaurantData.salesTaxRate) / 100);
-    setserviceTax((costOrder * restaurantData.serviceTaxRate) / 100);
+    setsalesTax((costOrder * brandInfo.salesTaxRate) / 100);
+    setserviceTax((costOrder * brandInfo.serviceTaxRate) / 100);
   }, [costOrder]);
 
   return (
@@ -100,7 +100,6 @@ const Cart = (props) => {
       className="cart-section"
       style={open_cart ? { display: "flex" } : { display: "none" }}
     >
-     
       <div className="cart-wrapper">
         <div className="cart-container">
           <div className="slide-controler">
@@ -324,7 +323,7 @@ const Cart = (props) => {
                     textAlign: "center",
                   }}
                 >
-                  <h2>{restaurantData.name}</h2>
+                  <h2>{brandInfo.name}</h2>
                   <p>
                     كاشير: {myOrder.cashier && myOrder.cashier?.username}{" "}
                     |فاتوره #{myOrder.serial} |
@@ -462,14 +461,14 @@ const Cart = (props) => {
                       )}
 
                     {myOrder.orderType === "Internal" &&
-                      restaurantData.serviceTaxRate > 0 && (
+                      brandInfo.serviceTaxRate > 0 && (
                         <tr>
                           <td colSpan="3">خدمة الصاله</td>
                           <td>{myOrder.serviceTax} ج</td>
                         </tr>
                       )}
 
-                    {restaurantData.salesTaxRate > 0 && (
+                    {brandInfo.salesTaxRate > 0 && (
                       <tr>
                         <td colSpan="3">ضائب</td>
                         <td>{myOrder.salesTax} ج</td>
@@ -487,20 +486,20 @@ const Cart = (props) => {
                   className="restaurant-info text-dark"
                   style={{ marginTop: "20px", textAlign: "center" }}
                 >
-                  {restaurantData && (
+                  {brandInfo && (
                     <>
-                      <p>{restaurantData.name}</p>
+                      <p>{brandInfo.name}</p>
                       <p>
                         موبايل:{" "}
-                        {restaurantData.contact &&
-                          restaurantData.contact.phone &&
-                          restaurantData.contact.phone[0]}
+                        {brandInfo.contact &&
+                          brandInfo.contact.phone &&
+                          brandInfo.contact.phone[0]}
                       </p>
                       <p>
                         العنوان:{" "}
-                        {restaurantData.address && (
+                        {brandInfo.address && (
                           <>
-                            {`${restaurantData.address.state} ${restaurantData.address.city} ${restaurantData.address.street}`}
+                            {`${brandInfo.address.state} ${brandInfo.address.city} ${brandInfo.address.street}`}
                           </>
                         )}
                       </p>

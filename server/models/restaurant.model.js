@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
+import { Schema, model } from "mongoose";
 
-const restaurantSchema = new mongoose.Schema(
+const restaurantSchema = new Schema(
   {
     brandName: {
       en: {
@@ -113,6 +113,6 @@ const restaurantSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const RestaurantModel = mongoose.model("Restaurant", restaurantSchema);
+const RestaurantModel = model("Restaurant", restaurantSchema);
 
-module.exports = RestaurantModel;
+export default RestaurantModel;

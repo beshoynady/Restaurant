@@ -19,7 +19,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 const ManagerDash = () => {
   const {
-    restaurantData,
+    brandInfo,
     employeeLoginInfo,
     formatDate,
     setIsLoading,
@@ -1556,8 +1556,8 @@ const ManagerDash = () => {
                     onChange={(e) => setpaymentMethod(e.target.value)}
                   >
                     <option>اختر طريقه الدفع</option>
-                    {restaurantData.acceptedPayments &&
-                      restaurantData.acceptedPayments.map((method, i) => (
+                    {brandInfo.acceptedPayments &&
+                      brandInfo.acceptedPayments.map((method, i) => (
                         <option value={method} key={i}>
                           {method}
                         </option>
@@ -1647,7 +1647,7 @@ const ManagerDash = () => {
                     textAlign: "center",
                   }}
                 >
-                  <h2>{restaurantData.name}</h2>
+                  <h2>{brandInfo.name}</h2>
                   <p>
                     كاشير {orderdata.cashier && orderdata.cashier.username} |
                     فاتورة باقي #{serial} |{" "}
@@ -1821,7 +1821,7 @@ const ManagerDash = () => {
                   className="restaurant-info text-dark"
                   style={{ marginTop: "20px", textAlign: "center" }}
                 >
-                  <p>{restaurantData.name}</p>
+                  <p>{brandInfo.name}</p>
                   <p>موبايل: 01144001433</p>
                   <p>
                     العنوان: بني سويف - الفشن -أخر شارع البحر الأعظم بجوار ماركت

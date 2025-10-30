@@ -10,7 +10,7 @@ const Customers = () => {
     setEndDate,
     filterByDateRange,
     filterByTime,
-    restaurantData,
+    brandInfo,
     formatDateTime,
     permissionsList,
     setIsLoading,
@@ -51,7 +51,7 @@ const Customers = () => {
       const config = await handleGetTokenAndConfig();
 
       const response = await axios.get(`${apiUrl}/api/customer`, config);
-      
+
       const data = await response.data;
       setAllCustomers(data);
     } catch (error) {
@@ -85,7 +85,7 @@ const Customers = () => {
         customerData,
         config
       );
-      
+
       getAllCustomers();
       toast.success("تم إنشاء العميل بنجاح.");
     } catch (error) {
@@ -185,7 +185,7 @@ const Customers = () => {
     try {
       const response = await axios.get(`${apiUrl}/api/deliveryarea`);
       const data = await response.data;
-      // 
+      //
       if (data) {
         setAreas(data);
       } else {

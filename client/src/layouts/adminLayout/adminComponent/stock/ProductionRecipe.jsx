@@ -12,7 +12,7 @@ import "../orders/Orders.css";
 
 const ProductionRecipe = () => {
   const {
-    restaurantData,
+    brandInfo,
     permissionsList,
     setStartDate,
     setEndDate,
@@ -63,7 +63,7 @@ const ProductionRecipe = () => {
 
       const stockItems = response.data.reverse();
       setAllStockItems(stockItems);
-      
+
       // Notify on success
       toast.success("تم استرداد عناصر المخزون بنجاح");
       setIsLoading(false);
@@ -306,9 +306,9 @@ const ProductionRecipe = () => {
         { ingredients: newIngredients, totalcost },
         config
       );
-      const editRecipeToProductData = await editRecipeToProduct.data.ProductionRecipe;  
+      const editRecipeToProductData = await editRecipeToProduct.data
+        .ProductionRecipe;
       if (editRecipeToProductData) {
-        
         getRecipeOfStockItem(editRecipeToProductData.stockItem);
         toast.success("تم تعديل المكون بنجاح");
       } else {
@@ -397,7 +397,7 @@ const ProductionRecipe = () => {
       if (!itemId) {
         toast.error("اختر الصنف اولا.");
       }
-      
+
       setStockItemId(itemId);
       const getStockItem = stockItemFiltered.find(
         (item) => item._id === itemId
@@ -412,7 +412,6 @@ const ProductionRecipe = () => {
 
       const recipeOfStockItem = getStockItemRecipe.data;
 
-      
       if (recipeOfStockItem && recipeOfStockItem.ingredients?.length > 0) {
         setrecipeOfStockItem(recipeOfStockItem);
         setpreparationTime(recipeOfStockItem.preparationTime);
@@ -424,8 +423,7 @@ const ProductionRecipe = () => {
         calculateTotalDineInCost(serviceDetails);
         calculateTotaldeliveryCost(serviceDetails);
         calculateTotaltakeawayCost(serviceDetails);
-        
-        
+
         if (ingredients) {
           setingredients([...ingredients].reverse());
           toast.success("تم جلب مكونات الوصفة بنجاح");
@@ -462,12 +460,12 @@ const ProductionRecipe = () => {
       const newingredients = ingredients.filter(
         (ingredient) => ingredient.itemId != itemId
       );
-      
+
       let total = 0;
       for (let i = 0; i < newingredients.length; i++) {
         total += newingredients[i].totalcostofitem;
       }
-      
+
       // productionRecipe.map(rec=>totalcost = totalcost + ingredient.totalcostofitem)
       const deleteRecipetoProduct = await axios.put(
         `${apiUrl}/api/productionrecipe/${recipeOfStockItem._id}`,
@@ -479,7 +477,6 @@ const ProductionRecipe = () => {
         `${apiUrl}/api/productionrecipe/${recipeOfStockItem._id}`,
         config
       );
-      
     }
   };
 
@@ -496,8 +493,6 @@ const ProductionRecipe = () => {
           `${apiUrl}/api/productionrecipe/${recipeOfStockItem._id}`,
           config
         );
-
-        
 
         deleteRecipeToProduct.status === 200
           ? toast.success("تم حذف الوصفة بنجاح")
@@ -520,7 +515,7 @@ const ProductionRecipe = () => {
         config
       );
       const stockItemData = await getStockItem.data;
-      
+
       setname(stockItemData.itemName);
       setunit(stockItemData.ingredientUnit);
       setcostofitem(stockItemData.costPerPart);

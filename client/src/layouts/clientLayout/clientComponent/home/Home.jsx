@@ -14,7 +14,7 @@ const cashierSocket = io(`${process.env.REACT_APP_API_URL}/cashier`, {
 });
 
 const Home = () => {
-  const { restaurantData, userLoginInfo, apiUrl, handleGetTokenAndConfig } =
+  const { brandInfo, userLoginInfo, apiUrl, handleGetTokenAndConfig } =
     useContext(dataContext);
   const { id } = useParams();
   const navigate = useNavigate(); // Use useNavigate hook
@@ -137,7 +137,7 @@ const Home = () => {
           )}
           <p className="main-text">
             {" "}
-            {restaurantData.name} <br /> {restaurantData.description}
+            {brandInfo.name} <br /> {brandInfo.description}
           </p>
           <ul className="main-btn d-flex align-items-center justify-content-evenly">
             {table ? (

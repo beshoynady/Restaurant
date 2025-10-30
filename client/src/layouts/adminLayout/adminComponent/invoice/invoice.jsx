@@ -6,9 +6,12 @@ import "../orders/Orders.css";
 
 const InvoiceComponent = ({ ModalId, orderData, showModal, setShowModal }) => {
   const {
-    restaurantData,
+    brandInfo,
     formatdate,
-    formatDateTime, handleGetTokenAndConfig, apiUrl } = useContext(dataContext)
+    formatDateTime,
+    handleGetTokenAndConfig,
+    apiUrl,
+  } = useContext(dataContext);
 
   const {
     serial,
@@ -77,7 +80,7 @@ const InvoiceComponent = ({ ModalId, orderData, showModal, setShowModal }) => {
                   textAlign: "center",
                 }}
               >
-                <h2>{restaurantData.name}</h2>
+                <h2>{brandInfo.name}</h2>
                 <p>
                   كاشير:{cashier?.username} | فاتورة #{serial} |{" "}
                   {orderType === "Internal"
@@ -241,20 +244,20 @@ const InvoiceComponent = ({ ModalId, orderData, showModal, setShowModal }) => {
                 className="restaurant-info text-dark"
                 style={{ marginTop: "20px", textAlign: "center" }}
               >
-                {restaurantData && (
+                {brandInfo && (
                   <>
-                    <p>{restaurantData.name}</p>
+                    <p>{brandInfo.name}</p>
                     <p>
                       موبايل:{" "}
-                      {restaurantData.contact &&
-                        restaurantData.contact?.phone &&
-                        restaurantData.contact?.phone[0]}
+                      {brandInfo.contact &&
+                        brandInfo.contact?.phone &&
+                        brandInfo.contact?.phone[0]}
                     </p>
                     <p>
                       العنوان:{" "}
-                      {restaurantData.address && (
+                      {brandInfo.address && (
                         <>
-                          {`${restaurantData.address?.state} ${restaurantData.address?.city} ${restaurantData.address?.street}`}
+                          {`${brandInfo.address?.state} ${brandInfo.address?.city} ${brandInfo.address?.street}`}
                         </>
                       )}
                     </p>

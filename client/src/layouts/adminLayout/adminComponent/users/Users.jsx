@@ -5,14 +5,12 @@ import { toast } from "react-toastify";
 import "../orders/Orders.css";
 
 const Users = () => {
- 
-
   const {
     setStartDate,
     setEndDate,
     filterByDateRange,
     filterByTime,
-    restaurantData,
+    brandInfo,
     formatDateTime,
     permissionsList,
     setIsLoading,
@@ -23,9 +21,9 @@ const Users = () => {
     endPagination,
     setStartPagination,
     setEndPagination,
-  apiUrl,
-handleGetTokenAndConfig,
-} = useContext(dataContext);
+    apiUrl,
+    handleGetTokenAndConfig,
+  } = useContext(dataContext);
 
   const permissionUser = permissionsList?.filter(
     (permission) => permission.resource === "Users"
@@ -42,10 +40,7 @@ handleGetTokenAndConfig,
       }
       const response = await axios.get(apiUrl + "/api/user", config);
       setAllUsers(response.data);
-      
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   };
   const changeorderVarified = async (e, id) => {
     if (permissionUser && !permissionUser.update) {
@@ -57,7 +52,6 @@ handleGetTokenAndConfig,
 
       // Get the value from the event
       const isVarified = e.target.value;
-      
 
       // Send a request to update the 'isVarified' status
       const response = await axios.put(
@@ -65,7 +59,6 @@ handleGetTokenAndConfig,
         { isVarified },
         config
       );
-      
 
       // Notify success using toast
       toast.success("تم تغير الحاله بنجاح");
@@ -138,7 +131,7 @@ handleGetTokenAndConfig,
         isActive,
         isVarified,
       });
-      // 
+      //
       if (response.status === 200) {
         toast.success("تم تحديث المستخدم بنجاح");
       }
@@ -173,7 +166,7 @@ handleGetTokenAndConfig,
       const config = await handleGetTokenAndConfig();
       const response = await axios.get(`${apiUrl}/api/deliveryarea`);
       const data = await response.data;
-      // 
+      //
       if (data) {
         setAreas(data);
       } else {
@@ -385,8 +378,8 @@ handleGetTokenAndConfig,
                         </td>
                         <td>{formatDateTime(user.createdAt)}</td>
                         <td>
-                           <button
-data-target="#edituserModal"
+                          <button
+                            data-target="#edituserModal"
                             className="btn btn-sm btn-primary ml-2 "
                             data-toggle="modal"
                           >
@@ -399,10 +392,10 @@ data-target="#edituserModal"
                               }}
                             >
                               &#xE254;
-                                </i>
-                              </button>
-                           <button
-data-target="#deleteuserModal"
+                            </i>
+                          </button>
+                          <button
+                            data-target="#deleteuserModal"
                             className="btn btn-sm btn-danger"
                             data-toggle="modal"
                           >
@@ -413,8 +406,8 @@ data-target="#deleteuserModal"
                               //    onClick={() => setuserloyeeid(user._id)}
                             >
                               &#xE872;
-                                </i>
-                              </button>
+                            </i>
+                          </button>
                         </td>
                       </tr>
                     );

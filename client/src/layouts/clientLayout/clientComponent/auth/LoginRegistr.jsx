@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useContext } from "react"; 
+import React, { useState, useEffect, useRef, useContext } from "react";
 import axios from "axios";
 import { dataContext } from "../../../../App";
 import { toast } from "react-toastify";
@@ -11,7 +11,7 @@ const LoginRegistr = (props) => {
     setEndDate,
     filterByDateRange,
     filterByTime,
-    restaurantData,
+    brandInfo,
     formatDateTime,
     permissionsList,
     setIsLoading,
@@ -22,7 +22,10 @@ const LoginRegistr = (props) => {
     endPagination,
     setStartPagination,
     setEndPagination,
-    getClientInfoFromToken, handleGetTokenAndConfig, apiUrl } = useContext(dataContext)
+    getClientInfoFromToken,
+    handleGetTokenAndConfig,
+    apiUrl,
+  } = useContext(dataContext);
 
   const openlogin = props.openlogin;
   const [openform, setopenform] = useState(props.openlogin);
@@ -45,7 +48,7 @@ const LoginRegistr = (props) => {
     try {
       const response = await axios.get(`${apiUrl}/api/deliveryarea`);
       const data = await response.data;
-      
+
       if (data) {
         setAreas(data);
       } else {
@@ -64,7 +67,6 @@ const LoginRegistr = (props) => {
 
   const login = async (e, phone, password, getClientInfoFromToken) => {
     e.preventDefault();
-    
 
     try {
       // Check if phone and password are provided
@@ -78,7 +80,7 @@ const LoginRegistr = (props) => {
         phone,
         password,
       });
-      
+
       // Handle response data
       if (response && response.data) {
         const { accessToken, findUser } = response.data;
@@ -197,7 +199,9 @@ const LoginRegistr = (props) => {
             <form
               ref={loginForm}
               className="login"
-              onSubmit={(e) => login(e, phone, password, getClientInfoFromToken)}
+              onSubmit={(e) =>
+                login(e, phone, password, getClientInfoFromToken)
+              }
             >
               <div className="field">
                 <input

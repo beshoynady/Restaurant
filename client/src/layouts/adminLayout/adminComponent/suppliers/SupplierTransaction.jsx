@@ -6,7 +6,7 @@ import "../orders/Orders.css";
 
 const SupplierTransaction = () => {
   const {
-    restaurantData,
+    brandInfo,
     permissionsList,
     setStartDate,
     setEndDate,
@@ -33,7 +33,7 @@ const SupplierTransaction = () => {
         `${apiUrl}/api/suppliertransaction`,
         config
       );
-      
+
       if (response.status === 200) {
         const data = response.data;
         setAllSupplierTransaction(data.reverse());
@@ -132,14 +132,12 @@ const SupplierTransaction = () => {
         notes,
       };
 
-      
-
       const response = await axios.post(
         `${apiUrl}/api/suppliertransaction`,
         requestData,
         config
       );
-      
+
       if (response.status === 201) {
         toast.success("تم انشاء العملية بنجاح");
       } else {
@@ -195,7 +193,7 @@ const SupplierTransaction = () => {
     try {
       const config = await handleGetTokenAndConfig();
       const response = await axios.get(apiUrl + "/api/purchaseinvoice", config);
-      
+
       if (response.status === 200) {
         setAllPurchaseInvoice(response.data.reverse());
       } else {
@@ -213,7 +211,7 @@ const SupplierTransaction = () => {
     const filterPurchaseInvoice = allPurchaseInvoice.filter(
       (invoice) => invoice.supplier._id === supplier
     );
-    
+
     setAllPurchaseInvoiceFilterd(filterPurchaseInvoice);
   };
 

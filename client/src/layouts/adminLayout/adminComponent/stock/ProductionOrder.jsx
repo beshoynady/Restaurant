@@ -6,7 +6,7 @@ import "../orders/Orders.css";
 
 const ProductionOrder = () => {
   const {
-    restaurantData,
+    brandInfo,
     permissionsList,
     setStartDate,
     setEndDate,

@@ -12,7 +12,7 @@ import facebook from "../../../../image/facebook.png";
 // });
 
 const Contact = () => {
-  const { restaurantData, handleGetTokenAndConfig, apiUrl } =
+  const { brandInfo, handleGetTokenAndConfig, apiUrl } =
     useContext(dataContext);
 
   const [name, setName] = useState("");
@@ -63,7 +63,7 @@ const Contact = () => {
         </div>
         <div className="contact-content">
           <div className="right">
-            {restaurantData.socialMedia?.map((item, index) => {
+            {brandInfo.socialMedia?.map((item, index) => {
               return item.platform === "facebook" ? (
                 <p key={index}>
                   صفحتنا علي الفيس بوك
@@ -78,7 +78,7 @@ const Contact = () => {
               {" "}
               واتساب
               <a
-                href={`https://api.whatsapp.com/send?phone=+2${restaurantData.contact?.whatsapp}`}
+                href={`https://api.whatsapp.com/send?phone=+2${brandInfo.contact?.whatsapp}`}
                 target="_blank"
                 rel="noreferrer"
               >
@@ -87,8 +87,8 @@ const Contact = () => {
             </p>
             <p>
               موبايل
-              <a href={`tel:${restaurantData.contact?.phone}`}>
-                {restaurantData.contact?.phone}
+              <a href={`tel:${brandInfo.contact?.phone}`}>
+                {brandInfo.contact?.phone}
               </a>
             </p>
           </div>

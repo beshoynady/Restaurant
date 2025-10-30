@@ -7,7 +7,7 @@ import { date } from "joi";
 
 const DailyExpense = () => {
   const {
-    restaurantData,
+    brandInfo,
     permissionsList,
     setStartDate,
     setEndDate,
@@ -96,9 +96,7 @@ const DailyExpense = () => {
     try {
       const response = await axios.get(apiUrl + "/api/expenses/", config);
       setAllExpenses(response.data.reverse());
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   };
 
   const createDailyExpense = async (e) => {
@@ -206,7 +204,6 @@ const DailyExpense = () => {
         );
 
         const data = response.data;
-        
 
         const cashMovement = await axios.put(
           `${apiUrl}/api/cashMovement/${cashMovementId}`,
@@ -238,10 +235,8 @@ const DailyExpense = () => {
           }
         }
       } else {
-        
       }
     } catch (error) {
-      
       // Toast notification for error
       toast.error("Failed to update expense");
     }
@@ -290,10 +285,8 @@ const DailyExpense = () => {
           getallDailyExpenses();
         }
       } else {
-        
       }
     } catch (error) {
-      
       // Toast notification for error
       toast.error("Failed to delete expense");
     }
@@ -308,11 +301,9 @@ const DailyExpense = () => {
       }
       const response = await axios.get(apiUrl + "/api/dailyexpense/", config);
       const dailyExpenses = await response.data.reverse();
-      
+
       setAllDailyExpenses(dailyExpenses);
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   };
 
   const searchByDailyExpense = (DailyExpense) => {
@@ -567,8 +558,8 @@ const DailyExpense = () => {
                           <td>{dailyexpense.paidBy?.username}</td>
                           <td>{formatDateTime(dailyexpense.date)}</td>
                           <td>
-                             <button
-data-target="#editDailyExpensesModal"
+                            <button
+                              data-target="#editDailyExpensesModal"
                               className="btn btn-sm btn-primary ml-2 "
                               data-toggle="modal"
                               onClick={() => {
@@ -598,8 +589,8 @@ data-target="#editDailyExpensesModal"
                                 &#xE254;
                               </i>
                             </button>
-                             <button
-data-target="#deleteDailyExpensesModal"
+                            <button
+                              data-target="#deleteDailyExpensesModal"
                               className="btn btn-sm btn-danger"
                               data-toggle="modal"
                               onClick={() => {

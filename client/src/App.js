@@ -13,7 +13,6 @@ import Userscreen from "./layouts/clientLayout/Userscreen";
 import Login from "./layouts/adminLayout/adminComponent/login/Login";
 import SetupWizard from "./layouts/adminLayout/adminComponent/Setup/SetupWizard.jsx";
 
-
 const ManagLayout = React.lazy(() =>
   import("./layouts/adminLayout/ManagLayout")
 );
@@ -203,17 +202,17 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
 
   // Reataurant data //
-  const [restaurantData, setrestaurantData] = useState({});
+  const [brandInfo, setbrandInfo] = useState({});
 
   const getRestaurant = async () => {
     try {
       const config = await handleGetTokenAndConfig(); // Get the token and config
       const response = await axios.get(`${apiUrl}/api/restaurant/`, config);
       if (response.status === 200 && response.data.length > 0) {
-        const restaurantData = response.data[0];
+        const brandInfo = response.data[0];
 
         const currentDate = new Date();
-        const subscriptionEndDate = new Date(restaurantData.subscriptionEnd);
+        const subscriptionEndDate = new Date(brandInfo.subscriptionEnd);
 
         if (currentDate > subscriptionEndDate) {
           toast.error(
@@ -226,7 +225,7 @@ function App() {
           );
           // throw new Error('Subscription has ended.');
         }
-        setrestaurantData(restaurantData);
+        setbrandInfo(brandInfo);
         // toast.success('تم جلب بيانات المطعم بنجاح!');
       } else {
         toast.error("لم يتم العثور على بيانات المطعم..");
@@ -2417,7 +2416,7 @@ function App() {
     <dataContext.Provider
       value={{
         // المعلومات الأساسية
-        restaurantData,
+        brandInfo,
         clientInfo,
         apiUrl,
         clientUrl,
@@ -2567,14 +2566,14 @@ function App() {
         <Routes>
           <Route path="/" element={<Userscreen />} />
           <Route path="/:id" element={<Userscreen />} />
- {/* 🔹 Login page */}
-        <Route path="/login" element={<Login />} />
+          {/* 🔹 Login page */}
+          <Route path="/login" element={<Login />} />
 
-        {/* 🔹 Setup Wizard (for first-time setup) */}
-        <Route path="/setup" element={<SetupWizard />} />
+          {/* 🔹 Setup Wizard (for first-time setup) */}
+          <Route path="/setup" element={<SetupWizard />} />
 
-        {/* 🔹 Redirect any unknown route to login */}
-        <Route path="*" element={<Login />} />
+          {/* 🔹 Redirect any unknown route to login */}
+          <Route path="*" element={<Login />} />
           <Route
             path="/admin/*"
             element={

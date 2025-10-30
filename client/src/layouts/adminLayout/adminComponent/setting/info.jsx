@@ -4,221 +4,6 @@ import { dataContext } from "../../../../App";
 import { toast } from "react-toastify";
 
 const Info = () => {
-  const {
-    restaurantData,
-    permissionsList,
-    setStartDate,
-    setEndDate,
-    filterByDateRange,
-    filterByTime,
-    employeeLoginInfo,
-    formatDate,
-    formatDateTime,
-    setIsLoading,
-    EditPagination,
-    startPagination,
-    endPagination,
-    setStartPagination,
-    setEndPagination,
-    handleGetTokenAndConfig,
-    apiUrl,
-    clientUrl,
-  } = useContext(dataContext);
-
-  const [shifts, setShifts] = useState([]);
-
-  const getAllShifts = async () => {
-    const config = await handleGetTokenAndConfig();
-    try {
-      const response = await axios.get(`${apiUrl}/api/shift`, config);
-      const data = await response.data;
-
-      if (data) {
-        setShifts(data);
-      } else {
-        toast.error("لا يوجد بيانات للورديات ! اضف بيانات الورديات ");
-      }
-    } catch (error) {
-      toast.error("حدث خطأ اثناء جلب بيانات الورديات! اعد تحميل الصفحة");
-    }
-  };
-
-  const addShift = () => {
-    setShifts([...shifts, { shiftType: "", startTime: "", endTime: "" }]);
-  };
-
-  const removeShift = async (index, id) => {
-    const config = await handleGetTokenAndConfig();
-    const updatedShifts = shifts.filter((_, i) => i !== index);
-    if (id) {
-      const response = await axios.delete(`${apiUrl}/api/shift/${id}`, config);
-
-      if (response.status === 200) {
-        toast.success("تمت حذف الوردية بنجاح");
-      } else {
-        toast.error("حدث خطأ أثناء حذف الوردية");
-      }
-    }
-    setShifts(updatedShifts);
-  };
-
-  const handleShiftTypeChange = (index, event) => {
-    const updatedShifts = [...shifts];
-    updatedShifts[index].shiftType = event.target.value;
-    setShifts(updatedShifts);
-  };
-
-  const handleStartTimeChange = (index, event) => {
-    const updatedShifts = [...shifts];
-    updatedShifts[index].startTime = event.target.value;
-    setShifts(updatedShifts);
-  };
-
-  // تحديث حقل ميعاد نهاية الوردية
-  const handleEndTimeChange = (index, event) => {
-    const updatedShifts = [...shifts];
-    updatedShifts[index].endTime = event.target.value;
-    setShifts(updatedShifts);
-  };
-
-  const handleCreateShifts = async (e) => {
-    e.preventDefault();
-    const config = await handleGetTokenAndConfig();
-    try {
-      shifts.map(async (shift) => {
-        const id = shift._id ? shift._id : null;
-        const shiftType = shift.shiftType;
-        const startTime = shift.startTime;
-        const endTime = shift.endTime;
-        if (id && shiftType && startTime && endTime) {
-          const response = await axios.put(
-            `${apiUrl}/api/shift/${id}`,
-            { startTime, endTime, shiftType },
-            config
-          );
-
-          if (response.status === 200) {
-            toast.success("تمت تعديل بيانات الوردية بنجاح");
-          } else {
-            toast.error("حدث خطأ أثناء تعديل بيانات الوردية");
-          }
-        } else if (shiftType && startTime && endTime) {
-          const response = await axios.post(
-            `${apiUrl}/api/shift`,
-            { startTime, endTime, shiftType },
-            config
-          );
-
-          if (response.status === 201) {
-            toast.success("تمت إضافة الوردية بنجاح");
-          } else {
-            toast.error("حدث خطأ أثناء إضافة الوردية");
-          }
-        }
-      });
-      getAllShifts();
-    } catch (error) {
-      toast.error("حدث خطأ أثناء إضافة الوردية");
-      console.error("Error:", error);
-    }
-  };
-
-  const [areas, setAreas] = useState([]);
-
-  const getAllDeliveryAreas = async () => {
-    const config = await handleGetTokenAndConfig();
-    try {
-      const response = await axios.get(`${apiUrl}/api/deliveryarea`, config);
-      const data = await response.data;
-
-      if (data) {
-        setAreas(data);
-      } else {
-        toast.error(
-          "لا يوجد بيانات لمنطقه التوصيل ! اضف بيانات منطقه التوصيل "
-        );
-      }
-    } catch (error) {
-      toast.error("حدث خطأ اثناء جلب بيانات منطقه التوصيل! اعد تحميل الصفحة");
-    }
-  };
-
-  const addArea = () => {
-    setAreas([...areas, { name: "", delivery_fee: 0 }]);
-  };
-
-  const removeArea = async (index, id) => {
-    const config = await handleGetTokenAndConfig();
-    const updatedAreas = areas.filter((area, i) => i !== index);
-    if (id) {
-      const response = await axios.delete(
-        `${apiUrl}/api/deliveryarea/${id}`,
-        config
-      );
-
-      if (response.status === 200) {
-        toast.success("تمت حذف منطقه التوصيل بنجاح");
-      } else {
-        toast.error("حدث خطأ أثناء حذف منطقه التوصيل");
-      }
-    }
-    setAreas(updatedAreas);
-  };
-
-  const handleAreasNameChange = (index, event) => {
-    const updatedAreas = [...areas];
-    updatedAreas[index].name = event.target.value;
-    setAreas(updatedAreas);
-  };
-
-  // تحديث حقل تكلفة التوصيل
-  const handledeliveryFeeChange = (index, event) => {
-    const updatedAreas = [...areas];
-    updatedAreas[index].delivery_fee = Number(event.target.value);
-    setAreas(updatedAreas);
-  };
-
-  const handleDeliveryArea = async (e) => {
-    e.preventDefault();
-    const config = await handleGetTokenAndConfig();
-    try {
-      areas.map(async (area, i) => {
-        const id = area._id ? area._id : null;
-        const name = area.name;
-        const delivery_fee = area.delivery_fee;
-        if (id && name && delivery_fee) {
-          const response = await axios.put(
-            `${apiUrl}/api/deliveryarea/${id}`,
-            { name, delivery_fee },
-            config
-          );
-
-          if (response.status === 200) {
-            toast.success("تمت تعديل بيانات منطقه التوصيل بنجاح");
-          } else {
-            toast.error("حدث خطأ أثناء تعديل بيانات منطقه التوصيل");
-          }
-        } else if (name && delivery_fee) {
-          const response = await axios.post(
-            `${apiUrl}/api/deliveryarea`,
-            { name, delivery_fee },
-            config
-          );
-
-          if (response.status === 201) {
-            toast.success("تمت إضافة منطقه التوصيل بنجاح");
-          } else {
-            toast.error("حدث خطأ أثناء إضافة منطقه التوصيل");
-          }
-        }
-      });
-      getAllDeliveryAreas();
-    } catch (error) {
-      toast.error("حدث خطأ أثناء إضافة منطقه التوصيل");
-      console.error("Error:", error);
-    }
-  };
-
   const [restaurantId, setrestaurantId] = useState("");
 
   const [name, setName] = useState("");
@@ -578,41 +363,41 @@ const Info = () => {
     const config = await handleGetTokenAndConfig();
     try {
       const response = await axios.get(`${apiUrl}/api/restaurant/`, config);
-      const restaurantData = response.data[0];
-      console.log({ restaurantData });
+      const brandInfo = response.data[0];
+      console.log({ brandInfo });
 
-      if (restaurantData) {
-        setrestaurantId(restaurantData._id);
-        setName(restaurantData.name);
-        setSubscriptionStart(restaurantData.subscriptionStart);
-        setSubscriptionEnd(restaurantData.subscriptionEnd);
-        setImage(restaurantData.image);
-        setwebsite(restaurantData.website);
-        setlocationUrl(restaurantData.locationUrl);
-        setaboutText(restaurantData.aboutText);
-        setDescription(restaurantData.description);
-        setsalesTaxRate(restaurantData.salesTaxRate);
-        setserviceTaxRate(restaurantData.serviceTaxRate);
+      if (brandInfo) {
+        setrestaurantId(brandInfo._id);
+        setName(brandInfo.name);
+        setSubscriptionStart(brandInfo.subscriptionStart);
+        setSubscriptionEnd(brandInfo.subscriptionEnd);
+        setImage(brandInfo.image);
+        setwebsite(brandInfo.website);
+        setlocationUrl(brandInfo.locationUrl);
+        setaboutText(brandInfo.aboutText);
+        setDescription(brandInfo.description);
+        setsalesTaxRate(brandInfo.salesTaxRate);
+        setserviceTaxRate(brandInfo.serviceTaxRate);
 
-        setCountry(restaurantData.address.country);
-        setState(restaurantData.address.state);
-        setCity(restaurantData.address.city);
-        setStreet(restaurantData.address.street);
-        setPostalCode(restaurantData.address.postal_code);
+        setCountry(brandInfo.address.country);
+        setState(brandInfo.address.state);
+        setCity(brandInfo.address.city);
+        setStreet(brandInfo.address.street);
+        setPostalCode(brandInfo.address.postal_code);
 
-        setfeatures(restaurantData.features);
-        setacceptedPayments(restaurantData.acceptedPayments);
+        setfeatures(brandInfo.features);
+        setacceptedPayments(brandInfo.acceptedPayments);
 
-        setPhone(restaurantData.contact.phone);
-        setWhatsapp(restaurantData.contact.whatsapp);
-        setEmail(restaurantData.contact.email);
+        setPhone(brandInfo.contact.phone);
+        setWhatsapp(brandInfo.contact.whatsapp);
+        setEmail(brandInfo.contact.email);
 
-        setdineIn(restaurantData.dineIn);
-        setdeliveryService(restaurantData.deliveryService);
-        settakeAway(restaurantData.takeAway);
-        setusesReservationSystem(restaurantData.usesReservationSystem);
+        setdineIn(brandInfo.dineIn);
+        setdeliveryService(brandInfo.deliveryService);
+        settakeAway(brandInfo.takeAway);
+        setusesReservationSystem(brandInfo.usesReservationSystem);
 
-        restaurantData.socialMedia.forEach((item) => {
+        brandInfo.socialMedia.forEach((item) => {
           switch (item.platform) {
             case "facebook":
               setFacebook(item.url);
@@ -635,8 +420,8 @@ const Info = () => {
         });
 
         setworking_hours(
-          restaurantData.working_hours?.length > 0
-            ? restaurantData.working_hours
+          brandInfo.working_hours?.length > 0
+            ? brandInfo.working_hours
             : initialOpeningHours
         );
       } else {

@@ -20,7 +20,8 @@ const branchSchema = new Schema(
         minlength: 2,
       },
     },
-    manager: { type: ObjectId, ref: "Employee", required: true },
+
+    manager: { type: ObjectId, ref: "Employee"},
 
     isMainBranch: {
       type: Boolean,

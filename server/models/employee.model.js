@@ -139,6 +139,7 @@ const employeeSchema = new mongoose.Schema(
     // 🔹 Financial details
     financialInfo: {
       basicSalary: { type: Number, min: 0 },
+      currency: { type: String, default: "EGP" },
       allowance: { type: Number, min: 0, default: 0 },
       bonus: { type: Number, min: 0, default: 0 },
       taxRate: { type: Number, min: 0, max: 100, default: 0 },

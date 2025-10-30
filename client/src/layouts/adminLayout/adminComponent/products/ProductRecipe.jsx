@@ -12,7 +12,7 @@ import "../orders/Orders.css";
 
 const ProductRecipe = () => {
   const {
-    restaurantData,
+    brandInfo,
     permissionsList,
     setStartDate,
     setEndDate,
@@ -42,12 +42,10 @@ const ProductRecipe = () => {
     try {
       const response = await axios.get(apiUrl + "/api/product/");
       const products = await response.data;
-      // 
+      //
       setlistofProducts(products);
-      // 
-    } catch (error) {
-      
-    }
+      //
+    } catch (error) {}
   };
 
   const [productFilterd, setProductFilterd] = useState([]);
@@ -64,14 +62,12 @@ const ProductRecipe = () => {
     try {
       const response = await axios.get(apiUrl + "/api/menucategory/");
       if (response.status === 200) {
-        // 
+        //
         const categories = await response.data;
 
         setListOfCategories(categories);
       }
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   };
 
   const [AllStockItems, setAllStockItems] = useState([]);
@@ -80,14 +76,12 @@ const ProductRecipe = () => {
     const config = await handleGetTokenAndConfig();
     try {
       const response = await axios.get(apiUrl + "/api/stockitem/", config);
-      if(response.status === 200){
+      if (response.status === 200) {
         const StockItems = await response.data;
-        
+
         setAllStockItems(StockItems);
       }
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   };
 
   const [product, setProduct] = useState({});
@@ -147,14 +141,14 @@ const ProductRecipe = () => {
 
         if (addRecipeToProduct.status === 200) {
           const recipedata = await addRecipeToProduct.data;
-          
+
           if (size && product.hasSizes) {
             sizes.map((si) => {
               if (si._id === recipedata.sizeId) {
                 size.sizeRecipe = recipedata._id;
               }
             });
-            
+
             const updateProduct = await axios.put(
               `${apiUrl}/api/product/${productId}`,
               { sizes },
@@ -181,7 +175,7 @@ const ProductRecipe = () => {
         // If there are no existing ingredients, create a new array with the single ingredient
         newIngredients = [{ itemId, name, amount, unit, wastePercentage }];
         // newIngredients = [{ itemId, name, amount, unit, wastePercentage }];
-        
+
         // Add the new recipe to the product by sending a POST request
         const addRecipeToProduct = await axios.post(
           `${apiUrl}/api/recipe`,
@@ -200,14 +194,14 @@ const ProductRecipe = () => {
 
         if (addRecipeToProduct.status === 201) {
           const recipedata = await addRecipeToProduct.data;
-          
+
           if (size && product.hasSizes) {
             sizes.map((si) => {
               if (si._id === recipedata.sizeId) {
                 size.sizeRecipe = recipedata._id;
               }
             });
-            
+
             const updateProduct = await axios.put(
               `${apiUrl}/api/product/${productId}`,
               { sizes },
@@ -326,7 +320,7 @@ const ProductRecipe = () => {
 
   //       if (addRecipeToProduct.status === 200) {
   //         const recipedata = await addRecipeToProduct.data;
-  //         
+  //
   //         toast.success("تم تحديث الوصفة بنجاح");
   //       } else {
   //         throw new Error("Failed to update recipe");
@@ -372,7 +366,6 @@ const ProductRecipe = () => {
       );
 
       if (editRecipeToProduct) {
-        
         getProductRecipe(productId, sizeId);
         setitemId("");
         setname("");
@@ -457,7 +450,6 @@ const ProductRecipe = () => {
   };
 
   const getProductRecipe = async (productId, sizeId) => {
-    
     const config = await handleGetTokenAndConfig();
     try {
       if (productRecipePermission && !productRecipePermission.read) {
@@ -478,13 +470,11 @@ const ProductRecipe = () => {
       let recipeOfProduct;
       if (product.hasSizes) {
         const findSize = product.sizes?.find((size) => size._id === sizeId);
-        
+
         recipeOfProduct = findSize.sizeRecipe;
       } else {
         recipeOfProduct = product.productRecipe;
       }
-
-      
 
       if (recipeOfProduct && recipeOfProduct.ingredients?.length > 0) {
         setrecipeOfProduct(recipeOfProduct);
@@ -495,8 +485,7 @@ const ProductRecipe = () => {
         calculateTotalDineInCost(serviceDetails);
         calculateTotaldeliveryCost(serviceDetails);
         calculateTotaltakeawayCost(serviceDetails);
-        
-        
+
         if (ingredients) {
           setingredients([...ingredients].reverse());
           toast.success("تم جلب مكونات الوصفة بنجاح");
@@ -526,7 +515,7 @@ const ProductRecipe = () => {
   const handleSelectedProduct = (id) => {
     setProductId(id);
     const findProduct = listofProducts.find((product) => product._id === id);
-    
+
     setProductName(findProduct.name);
     setProduct(findProduct);
     if (findProduct.hasSizes) {
@@ -562,12 +551,12 @@ const ProductRecipe = () => {
       const newingredients = ingredients.filter(
         (ingredient) => ingredient.itemId != itemId
       );
-      
+
       let total = 0;
       for (let i = 0; i < newingredients.length; i++) {
         total += newingredients[i].totalCostOfItem;
       }
-      
+
       // productRecipe.map(rec=>totalcost = totalcost + ingredient.totalCostOfItem)
       const deleteRecipetoProduct = await axios.put(
         `${apiUrl}/api/recipe/${recipeOfProduct._id}`,
@@ -579,7 +568,6 @@ const ProductRecipe = () => {
         `${apiUrl}/api/recipe/${recipeOfProduct._id}`,
         config
       );
-      
     }
     getProductRecipe(productId);
   };
@@ -598,7 +586,6 @@ const ProductRecipe = () => {
           config
         );
 
-        
         getProductRecipe(productId, sizeId);
 
         deleteRecipeToProduct.status === 200

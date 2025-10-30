@@ -51,7 +51,7 @@ const SideBar = () => {
 
   return (
     <dataContext.Consumer>
-      {({ restaurantData, permissionsList, employeeLoginInfo }) => {
+      {({ brandInfo, permissionsList, employeeLoginInfo }) => {
         const role = employeeLoginInfo ? employeeLoginInfo.role : "";
         const isOwner = employeeLoginInfo.isOwner || employeeLoginInfo.isAdmin;
 
@@ -69,7 +69,7 @@ const SideBar = () => {
             >
               <div className="logo-details">
                 <i className="bx bxl-c-plus-plus"></i>
-                <span className="logo_name">{restaurantData.name}</span>
+                <span className="logo_name">{brandInfo.name}</span>
               </div>
               <ul className="navlinks overflowX-hidden">
                 {(isOwner ||

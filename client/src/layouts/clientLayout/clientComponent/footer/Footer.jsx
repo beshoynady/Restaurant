@@ -2,7 +2,7 @@ import React, { useState, useContext } from "react";
 import { dataContext } from "../../../../App";
 
 const Footer = () => {
-  const { restaurantData, handleGetTokenAndConfig, apiUrl } =
+  const { brandInfo, handleGetTokenAndConfig, apiUrl } =
     useContext(dataContext);
 
   return (
@@ -17,11 +17,11 @@ const Footer = () => {
       <div className="container p-4">
         <div className="row mt-4">
           <div className="col-lg-4 col-md-12 mb-4 mb-md-0">
-            <h5 className="text-uppercase mb-4">{restaurantData.name}</h5>
-            <p>{restaurantData.aboutText}</p>
+            <h5 className="text-uppercase mb-4">{brandInfo.name}</h5>
+            <p>{brandInfo.aboutText}</p>
             <div className="mt-4">
-              {restaurantData.socialMedia &&
-                restaurantData.socialMedia.map((item, i) =>
+              {brandInfo.socialMedia &&
+                brandInfo.socialMedia.map((item, i) =>
                   item.platform === "facebook" ? (
                     <a
                       key={i}
@@ -88,53 +88,50 @@ const Footer = () => {
               </label>
             </div>
             <ul className="fa-ul" style={{ marginRight: "1.65em" }}>
-              {restaurantData.address && (
+              {brandInfo.address && (
                 <li className="mb-3">
                   <span className="ms-2">
-                    {`${restaurantData.address.state || ""} ${
-                      restaurantData.address.city || ""
-                    } ${restaurantData.address.street || ""}`}
+                    {`${brandInfo.address.state || ""} ${
+                      brandInfo.address.city || ""
+                    } ${brandInfo.address.street || ""}`}
                   </span>
                   <span className="fa-li">
                     <i className="fas fa-home"></i>
                   </span>
                 </li>
               )}
-              {restaurantData.contact?.email && (
+              {brandInfo.contact?.email && (
                 <li className="mb-3">
                   <a
                     className="ms-2"
-                    href={`mailto:${restaurantData.contact.email}`}
+                    href={`mailto:${brandInfo.contact.email}`}
                   >
-                    {restaurantData.contact.email}
+                    {brandInfo.contact.email}
                   </a>
                   <span className="fa-li">
                     <i className="fas fa-envelope"></i>
                   </span>
                 </li>
               )}
-              {restaurantData.contact?.phone && (
+              {brandInfo.contact?.phone && (
                 <li className="mb-3">
-                  <a
-                    className="ms-2"
-                    href={`tel:${restaurantData.contact?.phone}`}
-                  >
-                    {restaurantData.contact?.phone}
+                  <a className="ms-2" href={`tel:${brandInfo.contact?.phone}`}>
+                    {brandInfo.contact?.phone}
                   </a>
                   <span className="fa-li">
                     <i className="fas fa-phone"></i>
                   </span>
                 </li>
               )}
-              {restaurantData.contact?.whatsapp && (
+              {brandInfo.contact?.whatsapp && (
                 <li className="mb-3">
                   <a
                     className="ms-2"
-                    href={`https://api.whatsapp.com/send?phone=+2${restaurantData.contact?.whatsapp}`}
+                    href={`https://api.whatsapp.com/send?phone=+2${brandInfo.contact?.whatsapp}`}
                     target="_blank"
                     rel="noreferrer"
                   >
-                    {restaurantData.contact?.whatsapp}
+                    {brandInfo.contact?.whatsapp}
                   </a>
                   <span className="fa-li">
                     <i className="fab fa-whatsapp"></i>
@@ -147,8 +144,8 @@ const Footer = () => {
             <h5 className="text-uppercase mb-4">مواعيد العمل</h5>
             <table className="table text-center text-white">
               <tbody className="font-weight-normal">
-                {restaurantData.working_hours
-                  ? restaurantData.working_hours.map((item, index) => (
+                {brandInfo.working_hours
+                  ? brandInfo.working_hours.map((item, index) => (
                       <tr key={index}>
                         <td>{item.day}:</td>
                         <td>

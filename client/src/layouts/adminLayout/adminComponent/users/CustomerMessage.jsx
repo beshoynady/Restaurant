@@ -10,7 +10,7 @@ const CustomerMessage = () => {
     setEndDate,
     filterByDateRange,
     filterByTime,
-    restaurantData,
+    brandInfo,
     formatDateTime,
     permissionsList,
     setIsLoading,
@@ -45,9 +45,7 @@ const CustomerMessage = () => {
       const config = await handleGetTokenAndConfig();
       const response = await axios.get(`${apiUrl}/api/message`, config);
       setAllCustomerMessage(response.data);
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   };
 
   const updateisSeenMessage = async (e, mes) => {
@@ -70,9 +68,7 @@ const CustomerMessage = () => {
         config
       );
       getAllCustomerMessage();
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   };
 
   const deleteCustomerMessage = async (e) => {
@@ -91,9 +87,7 @@ const CustomerMessage = () => {
         toast.success("تم حذف الرسالة بنجاح");
       }
       getAllCustomerMessage();
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   };
 
   const getCustomerMessageByPhone = async (phone) => {
@@ -126,7 +120,7 @@ const CustomerMessage = () => {
       toast.warn("ليس لك صلاحية لحذف رسائل المستخدمين");
       return;
     }
-    
+
     try {
       const config = await handleGetTokenAndConfig();
 
@@ -137,7 +131,6 @@ const CustomerMessage = () => {
       toast.success("تم حذف الرسائل المحدده");
       setSelectedIds([]);
     } catch (error) {
-      
       toast.error("فشل حذف الرسائل المحددة ! حاول مره اخري");
     }
   };

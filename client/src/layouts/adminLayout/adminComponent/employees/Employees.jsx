@@ -11,7 +11,7 @@ const Employees = () => {
 
   const {
     permissionsList,
-    restaurantData,
+    brandInfo,
     formatDateTime,
     setIsLoading,
     allTable,
@@ -179,7 +179,7 @@ const Employees = () => {
       console.error(error);
       notify("فشل انشاء حساب الموظف! حاول مرة اخرى", "error");
       setIsExecuting(false);
-    } 
+    }
   };
 
   const editEmployee = async (e) => {
@@ -239,7 +239,7 @@ const Employees = () => {
         );
         if (update.status === 200) {
           getEmployees();
-          resetFeilds()
+          resetFeilds();
           notify("تم تحديث بيانات الموظف", "success");
           // Additional logic if needed after successful update
         }
@@ -251,9 +251,8 @@ const Employees = () => {
       notify("فشل تحديث بيانات الموظف! حاول مره اخري", "error");
       console.error(error);
 
-
       setIsExecuting(false);
-    } 
+    }
   };
   const resetFeilds = () => {
     setemployeeid("");
@@ -273,8 +272,7 @@ const Employees = () => {
     setsectionNumber("");
     setemployeeShift({});
     setpassword("");
-
-  }
+  };
 
   const [employeeShift, setemployeeShift] = useState({});
   const handleEditEmployee = (employeeData) => {
