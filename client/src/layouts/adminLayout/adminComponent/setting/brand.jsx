@@ -465,7 +465,6 @@ const Brand = () => {
                     </p>
                     <form
                       className="forms-sample p-2"
-                      onSubmit={(e) => handleContactSocialmedia(e)}
                     >
                       <div
                         className="form-group  h-auto px-3 d-flex align-items-center justify-content-start col-12 "
