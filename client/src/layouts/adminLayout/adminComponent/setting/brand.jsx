@@ -157,6 +157,18 @@ const Brand = () => {
     }
   };
 
+    const [theme, setTheme] = useState("light");
+    const [lang, setLang] = useState("en");
+  
+    // Load saved preferences (theme + language)
+    useEffect(() => {
+      const savedTheme = localStorage.getItem("theme") || "light";
+      const savedLang = localStorage.getItem("lang") || "en";
+      setTheme(savedTheme);
+      setLang(savedLang);
+      document.documentElement.classList.toggle("dark", savedTheme === "dark");
+    }, []);
+
   return (
     <div className="container w-100 h-auto" dir="rtl">
       <div className="content-wrapper w-100">
@@ -468,8 +480,7 @@ const Brand = () => {
                           id="phone"
                           placeholder="ادخل رقم الهاتف"
                           required
-                          value={phone}
-                          defaultValue={phone}
+                          value={brandInfo ? brandInfo.phone : ""}
                           onChange={(e) => handleSocialMediaChange(e)}
                         />
                       </div>
@@ -490,7 +501,7 @@ const Brand = () => {
                           placeholder={lang === "en" ? "Enter whatsapp number" : "ادخل رقم الواتساب"}
                           name="whatsapp"
                           required
-                          defaultValue={whatsapp}
+                          value={brandInfo ? brandInfo.whatsapp : ""}
                           onChange={(e) => handleSocialMediaChange(e)}
                         />
                       </div>
@@ -507,7 +518,7 @@ const Brand = () => {
                           id="email"
                           name="email"
                           placeholder={lang === "en" ? "Enter email address" : "ادخل البريد الإلكتروني"}
-                          defaultValue={email}
+                          value={brandInfo ? brandInfo.email : ""}
                           onChange={(e) => handleSocialMediaChange(e)}
                         />
                       </div>
@@ -526,7 +537,7 @@ const Brand = () => {
                           className="form-control border-primary m-0 p-2 h-auto"
                           id="facebook"
                           placeholder={lang === "en" ? "Enter facebook link" : "ادخل رابط فيسبوك"}
-                          defaultValue={facebook}
+                          value={brandInfo ? brandInfo.facebook : ""}
                           name="facebook"
                           required
                           onChange={(e) => handleSocialMediaChange(e)}
@@ -545,7 +556,7 @@ const Brand = () => {
                           id="twitter"
                           placeholder={lang === "en" ? "Enter twitter link" : "ادخل رابط تويتر"}
                           name="twitter"
-                          defaultValue={twitter}
+                          value={brandInfo ? brandInfo.twitter : ""}
                           onChange={(e) => handleSocialMediaChange(e)}
                         />
                       </div>
@@ -562,7 +573,7 @@ const Brand = () => {
                           id="instagram"
                           placeholder={lang === "en" ? "Enter instagram link" : "ادخل رابط انستجرام"}
                           name="instagram"
-                          defaultValue={instagram}
+                          value={brandInfo ? brandInfo.instagram : ""}
                           onChange={(e) => handleSocialMediaChange(e)}
                         />
                       </div>
@@ -580,7 +591,7 @@ const Brand = () => {
                           id="youtube"
                           placeholder={lang === "en" ? "Enter youtube link" : "ادخل رابط يوتيوب"}
                           name="youtube"
-                          defaultValue={youtube}
+                          value={brandInfo ? brandInfo.youtube : ""}
                           onChange={(e) => handleSocialMediaChange(e)}
                         />
                       </div>
@@ -597,7 +608,7 @@ const Brand = () => {
                           id="tiktok"
                           placeholder={lang === "en" ? "tiktok link" : "ادخل رابط تيك توك"}
                           name="tiktok"
-                          defaultValue={tiktok}
+                          value={brandInfo ? brandInfo.tiktok : ""}
                           onChange={(e) => handleSocialMediaChange(e)}
                         />
                       </div>
