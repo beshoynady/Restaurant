@@ -12,6 +12,7 @@ import NoInternetPage from "./layouts/adminLayout/adminComponent/LoadingPage/NoI
 import Userscreen from "./layouts/clientLayout/Userscreen";
 import Login from "./layouts/adminLayout/adminComponent/login/Login";
 import SetupWizard from "./layouts/adminLayout/adminComponent/Setup/SetupWizard.jsx";
+import Brand from "./layouts/adminLayout/adminComponent/setting/brand.jsx";
 
 const ManagLayout = React.lazy(() =>
   import("./layouts/adminLayout/ManagLayout")
@@ -2611,7 +2612,7 @@ function App() {
               path="info"
               element={
                 <Suspense fallback={<LoadingPage />}>
-                  <Info />
+                  <Brand />
                 </Suspense>
               }
             />
