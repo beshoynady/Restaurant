@@ -266,7 +266,7 @@ const Brand = () => {
                 <h4 className="card-title">بيانات المطعم</h4>
                 <form
                   className="form-sample row d-flex flex-wrap"
-                  onSubmit={handleCreateRestaurant}
+                  onSubmit={handleBrandSubmit}
                 >
                   <div className="form-group h-auto px-3 d-flex flex-nowrap align-items-center justify-content-start col-12 col-md-6 ">
                     <label className="form-label col-3 p-0 m-0">الاسم</label>
@@ -365,14 +365,14 @@ const Brand = () => {
 
                   <div className="form-group h-auto px-3 d-flex flex-nowrap align-items-center justify-content-start col-12 col-md-6 ">
                     <label className="form-label col-3 p-0 m-0">
-                      نسبة الضريبة (%)
+                      {lang === "ar" ? "نسبة الضريبة" : "Tax Rate"} (%)
                     </label>
                     <div className="col-9">
                       <input
                         type="number"
                         className="form-control border-primary col-12 p-1"
-                        value={salesTaxRate}
-                        onChange={(e) => setsalesTaxRate(e.target.value)}
+                        value={brandInfo ? brandInfo.salesTaxRate : 0}
+                        onChange={(e) => handleInputChange(e)}
                         required
                       />
                     </div>
@@ -380,21 +380,21 @@ const Brand = () => {
 
                   <div className="form-group h-auto px-3 d-flex flex-nowrap align-items-center justify-content-start col-12 col-md-6 ">
                     <label className="form-label col-3 p-0 m-0">
-                      نسبة الخدمة (%)
+                      {lang === "ar" ? "نسبة الخدمة" : "Service Rate"} (%)
                     </label>
                     <div className="col-9">
                       <input
                         type="number"
                         className="form-control border-primary col-12 p-1"
-                        value={serviceTaxRate}
-                        onChange={(e) => setserviceTaxRate(e.target.value)}
+                        value={brandInfo ? brandInfo.serviceTaxRate : 0}
+                        onChange={(e) => handleInputChange(e)}
                         required
                       />
                     </div>
                   </div>
 
                   <div className="form-group h-auto px-3 d-flex flex-nowrap align-items-center justify-content-start col-12 col-md-6 ">
-                    <label className="form-label col-3 p-0 m-0">اللوجو</label>
+                    <label className="form-label col-3 p-0 m-0">{lang === "ar" ? "اللوجو" : "Logo"}</label>
                     <div className="d-flex flex-wrap align-items-center col-9">
                       <input
                         className="form-control border-primary m-0 p-2 h-auto"
@@ -421,7 +421,7 @@ const Brand = () => {
                   </div>
                   <div className="form-group h-auto px-3 d-flex flex-nowrap align-items-center justify-content-start col-12 col-md-6 ">
                     <label className="form-label col-3 p-0 m-0">
-                      cover image
+                      {lang === "ar" ? "صورة الغلاف" : "Cover Image"}
                     </label>
                     <div className="d-flex flex-wrap align-items-center col-9">
                       <input
