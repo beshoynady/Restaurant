@@ -1,4 +1,7 @@
-import React from "react";
+import React, { useState, useEffect, useContext } from "react";
+import axios from "axios";
+import { dataContext } from "../../../../App";
+import { toast } from "react-toastify";
 
 const Brand = () => {
   const {
@@ -166,7 +169,7 @@ const Brand = () => {
             overflowX: "hidden",
           }}
         >
-          <div className="col-12 grid-margin">
+          {/* <div className="col-12 grid-margin">
             <div className="card">
               <div className="card-body">
                 <h4 className="card-title">بيانات الاشتراك</h4>
@@ -243,7 +246,7 @@ const Brand = () => {
                 </form>
               </div>
             </div>
-          </div>
+          </div> */}
 
           <div className="col-12 grid-margin">
             <div className="card">
