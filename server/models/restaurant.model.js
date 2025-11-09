@@ -1,95 +1,128 @@
 import { Schema, model } from "mongoose";
 
-const restaurantSchema = new Schema(
+const brandSchema = new Schema(
   {
-    brandName: {
-      en: {
-        type: String,
-        required: true,
-        unique: true,
-        trim: true,
-        maxlength: 100,
-        minlength: 2,
-      },
-      ar: {
-        type: String,
-        required: true,
-        unique: true,
-        trim: true,
-        maxlength: 100,
-        minlength: 2,
+    // Dashboard Languages (for admin panel only)
+    dashboardLanguages: {
+      type: [String],
+      enum: ["en", "ar", "fr", "es", "de", "it", "zh", "ja", "ru"],
+      required: true,
+      default: ["en"],
+      validate: {
+        validator: (v) => v.length > 0 && v.length <= 2,
+        message: "Dashboard must support 1 to 2 languages only.",
       },
     },
-    description: {
-      en: {
-        type: String,
-        required: true,
-        trim: true,
-        maxlength: 500,
-      },
-      ar: {
-        type: String,
-        required: true,
-        trim: true,
-        maxlength: 500,
-      },
-    },
-    // logo and coverImage fields to store image filenames
-    logo: {
-      type: String,
-      trim: true,
 
+    // 🍽 Menu Languages (Customer-Facing)
+    menuLanguages: {
+      type: [String],
+      enum: ["en", "ar", "fr", "es", "de", "it", "zh", "ja", "ru"],
+      required: true,
+      validate: {
+        validator: (v) => v.length > 0 && v.length <= 3,
+        message: "Menu must support 1 to 3 languages only.",
+      },
     },
-    coverImage: {
-      type: String,
+
+    // 🏷 Brand Titles & About in multiple languages (only for menu languages)
+    brandName: {
+      type: Map,
+      of: String, // Example: { ar: "مطعم الوردة", en: "Rose Restaurant" }
+      required: true,
+      validate: {
+        validator: function (value) {
+          return [...value.keys()].every((key) =>
+            this.menuLanguages.includes(key)
+          );
+        },
+        message: "Brand name keys must match selected menuLanguages only.",
+      },
+    },
+    owner : {
+      type: ObjectId,
+      ref: "Employee",
+      required: true,
       trim: true,
     },
-    // aboutText field for detailed information about the restaurant 
-    aboutText: {
-      en: {
-        type: String,
-        trim: true,
-        maxlength: 1000,
-      },
-      ar: {
-        type: String,
-        trim: true,
-        maxlength: 1000,
+    
+    description: {
+      type: Map,
+      of: String,
+      validate: {
+        validator: function (value) {
+          return [...value.keys()].every((key) =>
+            this.menuLanguages.includes(key)
+          );
+        },
+        message: "Description keys must match selected menuLanguages only.",
       },
     },
-    // array of social media links 
+
+    aboutText: {
+      type: Map,
+      of: String,
+      validate: {
+        validator: function (value) {
+          return [...value.keys()].every((key) =>
+            this.menuLanguages.includes(key)
+          );
+        },
+        message: "About text keys must match selected menuLanguages only.",
+      },
+    },
+
+    // Media
+    logo: { type: String, trim: true },
+    coverImage: { type: String, trim: true },
+
+    countOfBranches: {
+      type: Number,
+      required: true,
+      min: 1,
+      max: 50,
+      default: 1,
+    },
+
+    branches: [{ type: ObjectId, ref: "Branch" }],
+
+    // Social Media
     socialMedia: [
       {
         platform: {
           type: String,
-          enum: ["facebook", "instagram", "twitter", "tiktok", "youtube"],
-          trim: true,
+          enum: ["facebook", "instagram", "twitter", "tiktok", "youtube", "other"],
           required: true,
         },
         url: {
           type: String,
           required: true,
           trim: true,
-          match: [/^https?:\/\/[^\s$.?#].[^\s]*$/, "Please enter a valid URL"],
+          match: [/^https?:\/\/[^\s$.?#].[^\s]*$/, "Invalid URL"],
         },
+        description: { type: String, trim: true },
       },
     ],
-    // website field for the restaurant's menu or homepage 
+
     website: {
       type: String,
       trim: true,
-      match: [/^https?:\/\/[^\s$.?#].[^\s]*$/, "Please enter a valid URL"],
+      required: true,
+      validate: {
+        validator: (v) => /^(https?:\/\/[^\s$.?#].[^\s]*)$/.test(v),
+        message: "Invalid URL",
+      },
+      match: [/^https?:\/\/[^\s$.?#].[^\s]*$/, "Invalid URL"],
     },
-    // tax rates 
+
+    // Taxes
     salesTaxRate: {
       type: Number,
       required: true,
       default: 0,
       max: 100,
       min: 0,
-
     },
-    // service tax rate 
     serviceTaxRate: {
       type: Number,
       required: true,
@@ -97,22 +130,29 @@ const restaurantSchema = new Schema(
       max: 100,
       min: 0,
     },
-    
-    subscriptionStart: {
-      type: Date,
-      default: Date.now,
-      
+
+    currency: {
+      type: String,
+      enum: ["USD", "SAR", "AED", "EGP", "EUR"],
+      default: "USD",
     },
-    subscriptionEnd: {
+
+    // 🗑 Soft Delete
+    isDeleted: {
+      type: Boolean,
+      default: false,
+    },
+    deletedAt: {
       type: Date,
       default: null,
-      // null means no expiration (lifetime subscription)
-
     },
   },
   { timestamps: true }
 );
 
-const RestaurantModel = model("Restaurant", restaurantSchema);
+// Indexes
+brandSchema.index({ brandName: "text" });
 
-export default RestaurantModel;
+const brandModel = model("brand", brandSchema);
+
+export default brandModel;

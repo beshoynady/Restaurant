@@ -2,81 +2,80 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const { ObjectId } = mongoose.Schema.Types;
 
+// Branch Schema
 const branchSchema = new Schema(
   {
+    // Relation to Brand
+    brand: { type: ObjectId, ref: "Brand", required: true },
+
+    // Branch Name (multi-language, must match Brand menuLanguages)
     branchName: {
-      en: {
-        type: String,
-        required: true,
-        trim: true,
-        maxlength: 100,
-        minlength: 2,
-      },
-      ar: {
-        type: String,
-        required: true,
-        trim: true,
-        maxlength: 100,
-        minlength: 2,
+      type: Map,
+      of: String,
+      required: true,
+      validate: {
+        validator: async function (value) {
+          if (!this.brand) return true;
+          const Brand = require("./Brand");
+          const brand = await Brand.findById(this.brand).select("menuLanguages");
+          if (!brand) return true;
+          const languages = brand.menuLanguages;
+          return [...value.keys()].every((key) => languages.includes(key));
+        },
+        message: "Branch name keys must match the Brand's menuLanguages only.",
       },
     },
 
-    manager: { type: ObjectId, ref: "Employee"},
-
-    isMainBranch: {
-      type: Boolean,
-      default: false,
+    // Address (multi-language, must match Brand menuLanguages)
+    address: {
+      type: Map,
+      of: new Schema({
+        country: { type: String, required: true, trim: true, maxlength: 100 },
+        stateOrProvince: { type: String, trim: true, maxlength: 100 },
+        city: { type: String, required: true, trim: true, maxlength: 100 },
+        area: { type: String, trim: true, maxlength: 100 },
+        street: { type: String, trim: true, maxlength: 150 },
+        buildingNumber: { type: String, trim: true, maxlength: 20 },
+        floor: { type: String, trim: true, maxlength: 10 },
+        landmark: { type: String, trim: true, maxlength: 150 },
+      }),
+      required: true,
+      validate: {
+        validator: async function (value) {
+          if (!this.brand) return true;
+          const Brand = require("./Brand");
+          const brand = await Brand.findById(this.brand).select("menuLanguages");
+          if (!brand) return true;
+          const languages = brand.menuLanguages;
+          return [...value.keys()].every((key) => languages.includes(key));
+        },
+        message: "Address keys must match the Brand's menuLanguages only.",
+      },
     },
 
+    postalCode: {
+      type: String,
+      trim: true,
+      maxlength: 20,
+    },
+    latitude: { type: Number, min: -90, max: 90 },
+    longitude: { type: Number, min: -180, max: 180 },
+
+    // Manager of the branch
+    manager: { type: ObjectId, ref: "Employee" },
+
+    // Branch main status
+    isMainBranch: { type: Boolean, default: false },
     status: {
       type: String,
       enum: ["active", "inactive", "under_maintenance"],
       default: "active",
     },
 
-    address: {
-      en: {
-        country: { type: String, required: true, trim: true, maxlength: 100 },
-        stateOrProvince: { type: String, trim: true, maxlength: 100 },
-        city: { type: String, required: true, trim: true, maxlength: 100 },
-        area: { type: String, trim: true, maxlength: 100 },
-        street: { type: String, trim: true, maxlength: 150 },
-        buildingNumber: { type: String, trim: true, maxlength: 20 },
-        floor: { type: String, trim: true, maxlength: 10 },
-        landmark: { type: String, trim: true, maxlength: 150 },
-        fullAddress: { type: String, trim: true, maxlength: 500 },
-      },
-      ar: {
-        country: { type: String, required: true, trim: true, maxlength: 100 },
-        stateOrProvince: { type: String, trim: true, maxlength: 100 },
-        city: { type: String, required: true, trim: true, maxlength: 100 },
-        area: { type: String, trim: true, maxlength: 100 },
-        street: { type: String, trim: true, maxlength: 150 },
-        buildingNumber: { type: String, trim: true, maxlength: 20 },
-        floor: { type: String, trim: true, maxlength: 10 },
-        landmark: { type: String, trim: true, maxlength: 150 },
-        fullAddress: { type: String, trim: true, maxlength: 500 },
-      },
-      postalCode: {
-        type: String,
-        trim: true,
-        match: [/^\d{3,10}$/, "Invalid postal code"],
-      },
-      latitude: { type: Number, min: -90, max: 90 },
-      longitude: { type: Number, min: -180, max: 180 },
-    },
-
+    // Contact details
     contact: {
-      phone: [
-        {
-          type: String,
-          trim: true,
-        },
-      ],
-      whatsapp: {
-        type: String,
-        trim: true,
-      },
+      phone: [{ type: String, trim: true }],
+      whatsapp: { type: String, trim: true },
       email: {
         type: String,
         lowercase: true,
@@ -85,6 +84,7 @@ const branchSchema = new Schema(
       },
     },
 
+    // Working hours
     working_hours: [
       {
         day: {
@@ -100,17 +100,29 @@ const branchSchema = new Schema(
             "Friday",
           ],
         },
-        openTime: { type: String, required: true }, // "08:00"
-        closeTime: { type: String, required: true }, // "23:00"
-        isClosed: { type: Boolean, default: false },
+        openTime: {
+          type: String,
+          required: true,
+          match: /^([01]\d|2[0-3]):([0-5]\d)$/, // HH:mm format
+          message: "Open time must be in HH:mm format",
+        },
+        closeTime: {
+          type: String,
+          required: true,
+          match: /^([01]\d|2[0-3]):([0-5]\d)$/, // HH:mm format
+          message: "Close time must be in HH:mm format",
+        },
+        isClosed: { type: Boolean, default: false }, // Branch closed for the day
       },
     ],
 
+    // Accepted Payments (multi-country)
     acceptedPayments: [
       {
         name: {
           type: String,
           enum: [
+            // Egypt
             "Cash",
             "Credit Card",
             "Debit Card",
@@ -119,10 +131,16 @@ const branchSchema = new Schema(
             "Orange Cash",
             "Fawry",
             "Meeza",
+            // Gulf
+            "STC Pay",
+            "Mada",
+            "Samsung Pay",
+            // Europe/USA
             "PayPal",
-            "Aman",
-            "Instapay",
+            "Stripe",
             "Apple Pay",
+            "Google Pay",
+            // Flexible
             "Other",
           ],
           required: true,
@@ -133,6 +151,7 @@ const branchSchema = new Schema(
       },
     ],
 
+    // Branch features
     features: [
       {
         name: {
@@ -147,6 +166,8 @@ const branchSchema = new Schema(
             "Kids Friendly",
             "Air Conditioning",
             "Smoking Area",
+            "Live Sports",
+            "Gaming Zone",
             "Other",
           ],
           required: true,
@@ -157,41 +178,45 @@ const branchSchema = new Schema(
       },
     ],
 
+    // Services
     dineIn: { type: Boolean, default: false },
     takeAway: { type: Boolean, default: false },
     deliveryService: { type: Boolean, default: false },
     usesReservationSystem: { type: Boolean, default: false },
 
+    // Audit
     createdBy: { type: ObjectId, ref: "Employee", required: true },
     updatedBy: { type: ObjectId, ref: "Employee" },
   },
   { timestamps: true, versionKey: false }
 );
 
-// Auto-generate full address before saving
-branchSchema.pre("save", function (next) {
-  const addr = this.address.ar || this.address.en || {};
-  this.address.ar.fullAddress = [
-    addr.buildingNumber,
-    addr.street,
-    addr.area,
-    addr.city,
-    addr.stateOrProvince,
-    addr.country,
-  ]
-    .filter(Boolean)
-    .join(", ");
+// Pre-save hook to validate branchName & address languages against Brand
+branchSchema.pre("save", async function (next) {
+  if (!this.brand) return next();
+  const Brand = require("./Brand");
+  const brand = await Brand.findById(this.brand).select("menuLanguages");
+  if (!brand) return next();
+  const languages = brand.menuLanguages;
 
-  this.address.en.fullAddress = [
-    addr.buildingNumber,
-    addr.street,
-    addr.area,
-    addr.city,
-    addr.stateOrProvince,
-    addr.country,
-  ]
-    .filter(Boolean)
-    .join(", ");
+  // Validate branchName
+  for (const lang of [...this.branchName.keys()]) {
+    if (!languages.includes(lang)) {
+      return next(
+        new Error(`Branch name key "${lang}" is not in Brand menuLanguages`)
+      );
+    }
+  }
+
+  // Validate address keys
+  for (const lang of [...this.address.keys()]) {
+    if (!languages.includes(lang)) {
+      return next(
+        new Error(`Address key "${lang}" is not in Brand menuLanguages`)
+      );
+    }
+  }
+
   next();
 });
 

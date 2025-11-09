@@ -9,9 +9,9 @@ const { ObjectId } = mongoose.Schema;
 const employeeSchema = new mongoose.Schema(
   {
     // 🔹 References
-    restaurant: {
+    brand: {
       type: ObjectId,
-      ref: "Restaurant",
+      ref: "Brand",
     },
     branch: {
       type: ObjectId,
