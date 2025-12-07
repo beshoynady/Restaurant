@@ -1,6 +1,16 @@
 const mongoose = require('mongoose');
 
 const shiftSchema = new mongoose.Schema({
+    brand: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Brand',
+        required: true,
+    },
+    branch: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Branch',
+        required: true,
+    },
     shiftType: {
         type: String,
         required: true,
@@ -16,7 +26,17 @@ const shiftSchema = new mongoose.Schema({
     hours: {
         type: Number,
         required: true,
-    }
+    },
+    createdBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Employee',
+        required: true,
+    },
+    updatedBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Employee',
+        required: true,
+    },
 }, {
     timestamps: true,
 });

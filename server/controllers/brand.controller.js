@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const BrandModel = require("../models/Brand.model");
+const BrandModel = require("../models/brand.model");
 const Joi = require("joi");
 const fs = require("fs");
 const path = require("path");

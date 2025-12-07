@@ -1,4 +1,4 @@
-const RestaurantModel = require("../models/restaurant.model");
+const RestaurantModel = require("../models/brand.model");
 const EmployeeModel = require("../models/employee.model");
 
 const checkSubscription = async (req, res, next) => {

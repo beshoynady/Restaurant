@@ -5,7 +5,9 @@ const {
   getAllBranches,
   getBranchById,
   updateBranch,
-  deleteBranch,
+  softDeleteBranch,
+  restoreBranch,
+  deleteBranchPermanently,
 } = require("../controllers/branch.controller");
 const { authenticateToken } = require("../middlewares/authenticate");
 const checkSubscription = require("../middlewares/checkSubscription");
@@ -22,6 +24,12 @@ router
   .route("/:id")
   .get(getBranchById)
   .put(authenticateToken, checkSubscription, updateBranch)
-  .delete(authenticateToken, checkSubscription, deleteBranch);
-
+  .delete(authenticateToken, checkSubscription, deleteBranchPermanently);
+router
+  .route("/:id/soft-delete")
+  .patch(authenticateToken, checkSubscription, softDeleteBranch);
+router
+  .route("/:id/restore")
+  .patch(authenticateToken, checkSubscription, restoreBranch);
+  
 module.exports = router;

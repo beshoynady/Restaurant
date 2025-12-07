@@ -9,7 +9,9 @@ const {
 
 const router = express.Router();
 
-router.route("/").post(createReservation).get(getAllReservations);
+router.route("/")
+.post(createReservation)
+.get(getAllReservations);
 router
   .route("/:id")
   .get(getReservationById)

@@ -9,7 +9,7 @@ const { Server } = require("socket.io");
 
 // Import database connection and route files
 const connectdb = require("./database/connectdb.js");
-const routeRestaurant = require("./router/restaurant.router.js");
+const routeBrand = require("./router/brand.router.js");
 const routeBranch = require("./router/branch.router.js");
 const routePermission = require("./router/permission.router.js");
 const routeAttendance = require("./router/attendance-record.router.js");
@@ -107,7 +107,7 @@ const limiter = rateLimit({
 app.use("/api", limiter); // Apply rate limiting to all API routeS
 
 // Route requests to appropriate routers
-app.use("/api/restaurant", routeRestaurant);
+app.use("/api/restaurant", routeBrand);
 app.use("/api/branch", routeBranch);
 app.use("/api/permission", routePermission);
 app.use("/api/attendance", routeAttendance);

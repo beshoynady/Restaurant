@@ -6,8 +6,17 @@ import * as XLSX from "xlsx";
 import { useReactToPrint } from "react-to-print";
 import "../orders/Orders.css";
 
+import {useTranslation} from "react-i18next";
+
 const Employees = () => {
   const [isExecuting, setIsExecuting] = useState(false);
+
+
+  const {t, i18n} = useTranslation();
+  useEffect(() => {
+    const crruntLang = localStorage.getItem("lang") || "en";
+    i18n.changeLanguage(crruntLang);
+  }, []);
 
   const {
     permissionsList,
@@ -486,7 +495,7 @@ const Employees = () => {
             <div className="w-100 d-flex flex-wrap align-items-center justify-content-between">
               <div className="col-sm-6 text-right">
                 <h2>
-                  ادارة <b>الموظفين</b>
+                  {t("Employee Management")}
                 </h2>
               </div>
               <div className="col-12 col-md-6 p-0 m-0 d-flex flex-wrap aliegn-items-center justify-content-end print-hide">
